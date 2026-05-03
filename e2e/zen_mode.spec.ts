@@ -34,9 +34,10 @@ test.describe('The Zen of Code Features', () => {
     await expect(page.getByText('Entegre Danışmanlık')).toBeVisible();
 
     await page.goto('/blog');
-    await page.waitForLoadState('networkidle');
-    // Blog page title is bilingual
-    await expect(page.getByText(/İçgörüler|Insights|Blog/i).first()).toBeVisible();
+    await page.waitForLoadState('domcontentloaded');
+    // Blog page h1 heading is bilingual — use heading role to avoid matching invisible mega-menu
+    const blogHeading = page.getByRole('heading').filter({ hasText: /İçgörüler|Insights|Blog/i }).first();
+    await expect(blogHeading).toBeVisible({ timeout: 8000 });
   });
 
 });

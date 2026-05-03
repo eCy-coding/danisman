@@ -42,8 +42,12 @@ test.describe('Services Ecosystem', () => {
         
         // Empty/No Results Search
         await searchInput.fill('NonExistentService12345XYZ');
-        await page.waitForTimeout(800);
-        // Match i18n translation, fallback text, or i18n key (any of these may show)
-        await expect(page.locator('text=/Sonuç|no_results/i').first()).toBeVisible({ timeout: 5000 });
+        // Wait for AnimatePresence + motion entry animation to complete
+        await page.waitForTimeout(1200);
+        // Use heading role to avoid invisible mega-menu text matches
+        const noResultsEl = page.getByRole('heading', { name: /Sonuç|no_results/i }).or(
+          page.locator('.col-span-full h3').filter({ hasText: /Sonuç|no_results/i })
+        );
+        await expect(noResultsEl.first()).toBeVisible({ timeout: 8000 });
     });
 });

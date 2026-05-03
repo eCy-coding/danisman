@@ -4,18 +4,21 @@ import * as fs from 'fs';
 
 test.describe('Case Studies Showcase', () => {
     test.beforeEach(async ({ page }) => {
-        test.setTimeout(120000);
-        await page.goto('/case-studies', { waitUntil: 'domcontentloaded', timeout: 60000 });
+        test.setTimeout(60000);
+        // Block external image requests to prevent networkidle timeout
+        await page.route('**images.unsplash.com/**', route => route.fulfill({ status: 200, contentType: 'image/gif', body: Buffer.from('R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7', 'base64') }));
+        await page.route('**images.pexels.com/**', route => route.fulfill({ status: 200, contentType: 'image/gif', body: Buffer.from('R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7', 'base64') }));
+        await page.goto('/case-studies', { waitUntil: 'domcontentloaded', timeout: 30000 });
     });
 
     test('should filter case studies by industry', async ({ page }) => {
-        test.setTimeout(120000);
+        test.setTimeout(60000);
         // 1. Verify initial load — actual h1 is 'Başarı Hikayeleri'
         await expect(page.locator('h1').first()).toBeVisible();
         await expect(page.getByText(/Başarı Hikayeleri|Case Studies|Succes/i).first()).toBeVisible();
         
-        // Wait for cards to load
-        await page.waitForLoadState('networkidle');
+        // Wait for cards to load — domcontentloaded suffices since images are mocked
+        await page.waitForTimeout(500);
         const cards = page.locator('article');
         await expect(cards.first()).toBeVisible({ timeout: 15000 });
         const initialCount = await cards.count();

@@ -51,7 +51,7 @@ export const MegaMenu: React.FC<MegaMenuProps> = ({
   return (
     <div
       role="region"
-      aria-label={menuId === 'services' ? 'Services mega menu' : 'Insights mega menu'}
+      aria-label={menuId === 'services' ? 'Hizmetler açılır paneli' : 'Perspektifler açılır paneli'}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
       className={`absolute top-full left-1/2 -translate-x-1/2 pt-3 w-225 max-w-[95vw] transition-all duration-250 origin-top z-50 ${
