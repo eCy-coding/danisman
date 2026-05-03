@@ -1,5 +1,6 @@
-import React, { Suspense } from 'react';
+import React, { Suspense, useState, useEffect } from 'react';
 import { HelmetProvider } from 'react-helmet-async';
+import { BookingModal } from './components/features/booking/BookingModal';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { AppProviders } from './components/providers/AppProviders';
 import { NotFoundPage } from './pages/NotFoundPage';
@@ -314,6 +315,14 @@ const App: React.FC = () => {
     };
   }, []);
 
+  const [bookingOpen, setBookingOpen] = useState(false);
+
+  useEffect(() => {
+    const handler = () => setBookingOpen(true);
+    window.addEventListener('open-booking', handler);
+    return () => window.removeEventListener('open-booking', handler);
+  }, []);
+
   return (
     <SovereignBoundary name="RootApp">
       <HelmetProvider>
@@ -330,6 +339,7 @@ const App: React.FC = () => {
               <AnimatedRoutes />
             </Suspense>
             <LiveChat />
+            <BookingModal isOpen={bookingOpen} onClose={() => setBookingOpen(false)} />
           </BrowserRouter>
         </AppProviders>
       </HelmetProvider>

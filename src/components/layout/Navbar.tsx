@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Menu, X, ChevronDown, ChevronUp, Globe } from 'lucide-react';
 import { NAV_ITEMS } from '@/data/copy/common';
+import { MegaMenu } from './MegaMenu';
 import { useScrollToSection } from '../common/useScrollToSection';
 import { trackEvent } from '../../lib/analytics';
 import { useTranslation } from '@/lib/i18n';
@@ -13,6 +14,7 @@ interface NavItem {
   href: string;
   label: MultiLang;
   icon?: React.ReactNode;
+  hasMegaMenu?: boolean;
   children?: NavItem[];
 }
 
@@ -174,8 +176,17 @@ export const Navbar: React.FC = () => {
                   }`}
                 ></span>
 
-                {/* Dropdown Panel */}
-                {isDropdown && (
+                {/* Mega-Menu or Simple Dropdown */}
+                {isDropdown && item.hasMegaMenu && (item.id === 'services' || item.id === 'insights') ? (
+                  <MegaMenu
+                    menuId={item.id as 'services' | 'insights'}
+                    isOpen={activeDropdown === item.id}
+                    lang={lang}
+                    onClose={() => setActiveDropdown(null)}
+                    onMouseEnter={() => handleDropdownEnter(item.id)}
+                    onMouseLeave={handleDropdownLeave}
+                  />
+                ) : isDropdown && !item.hasMegaMenu && (
                   <div
                     className={`absolute top-full left-1/2 -translate-x-1/2 pt-4 w-72 transition-all duration-300 transform origin-top z-50 ${
                       activeDropdown === item.id
@@ -227,14 +238,17 @@ export const Navbar: React.FC = () => {
             {lang === 'tr' ? 'ÜCRETSİZ ANALİZ' : 'FREE ANALYSIS'}
           </a>
 
-          {/* Primary CTA */}
-          <a
-            href="#contact"
-            onClick={(e) => handleNavClick(e, '#contact', 'Primary CTA')}
+          {/* Primary CTA — opens global booking modal */}
+          <button
+            data-testid="navbar-book-call"
+            onClick={() => {
+              trackEvent('Navbar', 'Click', 'Book a Call');
+              window.dispatchEvent(new CustomEvent('open-booking'));
+            }}
             className="btn-premium-gold text-xs tracking-wider uppercase shadow-[0_0_20px_rgba(212,175,55,0.3)] hover:shadow-[0_0_30px_rgba(212,175,55,0.5)]"
           >
-            {lang === 'tr' ? 'Teklif Alın' : 'Get Quote'}
-          </a>
+            {lang === 'tr' ? 'Görüşme Planla' : 'Book a Call'}
+          </button>
         </div>
 
         {/* Mobile Toggle */}
