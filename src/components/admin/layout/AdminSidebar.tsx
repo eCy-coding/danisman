@@ -5,14 +5,18 @@ import {
   FileText, 
   Settings, 
   LogOut, 
-  Briefcase 
+  Briefcase,
+  Calendar,
+  BarChart3
 } from 'lucide-react';
 import { useAdminAuth } from '../../../hooks/useAdminAuth';
 
 const MENU_ITEMS = [
-  { icon: LayoutDashboard, label: 'Dashboard', path: '/admin/dashboard' },
+  { icon: LayoutDashboard, label: 'Overview', path: '/admin/dashboard' },
+  { icon: Calendar, label: 'Bookings', path: '/admin/bookings' },
   { icon: Briefcase, label: 'Services', path: '/admin/services' },
-  { icon: FileText, label: 'Blog', path: '/admin/blog' },
+  { icon: FileText, label: 'Content', path: '/admin/blog' },
+  { icon: BarChart3, label: 'Analytics', path: '/admin/analytics' },
   { icon: Settings, label: 'Settings', path: '/admin/settings' },
 ];
 
@@ -36,7 +40,7 @@ export const AdminSidebar: React.FC = () => {
             className={({ isActive }) => `
               flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-300 group
               ${isActive 
-                ? 'bg-white/5 text-secondary border-l-2 border-secondary pl-[14px]' 
+                ? 'bg-white/5 text-secondary border-l-2 border-secondary pl-3.5' 
                 : 'text-slate-400 hover:text-white hover:bg-white/5'
               }
             `}

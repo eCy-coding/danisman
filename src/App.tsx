@@ -53,6 +53,7 @@ const AdminLoginPage = React.lazy(() => import('./pages/admin/AdminLogin').then(
 const AdminLayout = React.lazy(() => import('./components/admin/layout/AdminLayout').then(module => ({ default: module.AdminLayout })));
 const AdminDashboard = React.lazy(() => import('./pages/admin/AdminDashboard').then(module => ({ default: module.AdminDashboard })));
 const AdminServicesPage = React.lazy(() => import('./pages/admin/AdminServicesPage').then(module => ({ default: module.AdminServicesPage })));
+const AdminBookingsPage = React.lazy(() => import('./pages/admin/AdminBookingsPage').then(module => ({ default: module.AdminBookingsPage })));
 import { ProtectedRoute } from './components/admin/auth/ProtectedRoute';
 import { Navigate } from 'react-router-dom';
 
@@ -238,6 +239,11 @@ const AnimatedRoutes = () => {
                 <Route path="services" element={
                     <Suspense fallback={<LoadingFallback />}>
                         <AdminServicesPage />
+                    </Suspense>
+                } />
+                <Route path="bookings" element={
+                    <Suspense fallback={<LoadingFallback />}>
+                        <AdminBookingsPage />
                     </Suspense>
                 } />
                 {/* Future Admin Routes will go here */}
