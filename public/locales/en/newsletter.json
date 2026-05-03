@@ -1,0 +1,19 @@
+{
+  "title": "Subscribe to our monthly insights",
+  "subtitle": "Curated reading on strategy, transformation and leadership.",
+  "emailLabel": "Email address",
+  "emailPlaceholder": "you@company.com",
+  "consentLabel": "I agree to the processing of my data under privacy policy.",
+  "submit": "Subscribe",
+  "submitting": "Submitting...",
+  "status": {
+    "success": "Subscription confirmed — welcome!",
+    "alreadySubscribed": "This email is already subscribed.",
+    "resubscribed": "Welcome back — your subscription is reactivated.",
+    "invalidEmail": "Please enter a valid email address.",
+    "consentRequired": "Please tick the consent checkbox to continue.",
+    "rateLimited": "Too many attempts. Please try again in a few minutes.",
+    "serverError": "Something went wrong. Please try again later."
+  },
+  "privacyNote": "You can unsubscribe at any time."
+}

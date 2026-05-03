@@ -1,0 +1,7 @@
+{
+  "title": "Live support",
+  "description": "We can load a third-party live chat service to answer your questions in real time. Nothing is loaded until you consent.",
+  "accept": "I accept",
+  "decline": "No, thanks",
+  "revoke": "Revoke consent"
+}

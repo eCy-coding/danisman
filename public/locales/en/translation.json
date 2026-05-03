@@ -1,0 +1,24 @@
+{
+  "nav": {
+    "services": "Services",
+    "blog": "Blog",
+    "about": "About",
+    "contact": "Contact",
+    "dashboard": "Dashboard"
+  },
+  "hero": {
+    "title": "Elite Consulting Ecosystem",
+    "subtitle": "Academic Depth, Professional Solutions",
+    "cta_primary": "Start Project",
+    "cta_secondary": "Our Services"
+  },
+  "common": {
+    "read_more": "Read More",
+    "loading": "Loading...",
+    "error": "Something went wrong",
+    "zen_mode": "Zen Mode"
+  },
+  "footer": {
+    "rights": "All rights reserved."
+  }
+}

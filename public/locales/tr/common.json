@@ -1,0 +1,22 @@
+{
+  "buttons": {
+    "submit": "Gönder",
+    "cancel": "İptal",
+    "save": "Kaydet",
+    "close": "Kapat",
+    "back": "Geri",
+    "next": "İleri",
+    "viewAll": "Tümünü Gör"
+  },
+  "form": {
+    "required": "zorunlu alan",
+    "optional": "isteğe bağlı"
+  },
+  "errors": {
+    "generic": "Bir şeyler yanlış gitti. Lütfen tekrar deneyin.",
+    "network": "Ağ bağlantısı yok. Bağlantınızı kontrol edin.",
+    "unauthorized": "Bu işlem için yetkiniz yok."
+  },
+  "loading": "Yükleniyor...",
+  "noResults": "Sonuç bulunamadı."
+}

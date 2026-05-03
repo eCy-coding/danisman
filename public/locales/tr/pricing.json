@@ -1,0 +1,62 @@
+{
+  "meta": {
+    "title": "Fiyatlandırma · EcyPro",
+    "description": "Şeffaf, ölçeklenebilir paketler. İhtiyacınıza göre seçin, büyürken yükseltin."
+  },
+  "hero": {
+    "badge": "Esnek Paketler",
+    "title": "İşinize uygun paketi seçin",
+    "subtitle": "Aylık ya da yıllık. Tüm paketler 14 gün ücretsiz strateji oturumu içerir.",
+    "billingMonthly": "Aylık",
+    "billingYearly": "Yıllık",
+    "yearlyDiscount": "%20 tasarruf"
+  },
+  "tiers": {
+    "starter": {
+      "name": "Starter",
+      "tagline": "Yeni başlayan ekipler için",
+      "ctaLabel": "Başla"
+    },
+    "growth": {
+      "name": "Growth",
+      "tagline": "Ölçeklenen organizasyonlar için",
+      "ctaLabel": "Demo Talep Et",
+      "badge": "En çok tercih edilen"
+    },
+    "enterprise": {
+      "name": "Enterprise",
+      "tagline": "Kurumsal entegrasyon için",
+      "ctaLabel": "Bize Ulaşın"
+    }
+  },
+  "comparison": {
+    "title": "Detaylı karşılaştırma",
+    "subtitle": "Tüm paketlerin tam yetenek listesi.",
+    "featureColumn": "Özellik",
+    "included": "Dahil",
+    "notIncluded": "—"
+  },
+  "faq": {
+    "title": "Sıkça sorulan sorular",
+    "subtitle": "Aklınızdaki soruların cevapları.",
+    "items": [
+      {
+        "q": "Plan değişikliği yapılabilir mi?",
+        "a": "Evet. İstediğiniz an yükseltebilir ya da bir alt plana geçebilirsiniz; faturalandırma orantılı olarak yapılır."
+      },
+      {
+        "q": "Yıllık ödemede iade var mı?",
+        "a": "İlk 30 gün içinde koşulsuz iade sunuyoruz."
+      },
+      {
+        "q": "Vergi dahil mi?",
+        "a": "Listelenen fiyatlar vergi hariçtir. Faturada KDV ayrıca gösterilir."
+      }
+    ]
+  },
+  "cta": {
+    "title": "Hangi paketin size uygun olduğundan emin değil misiniz?",
+    "subtitle": "20 dakikalık ücretsiz keşif görüşmesi planlayalım.",
+    "button": "Görüşme Planla"
+  }
+}

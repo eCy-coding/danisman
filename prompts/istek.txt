@@ -1,0 +1,8 @@
+curl -fsSL https://claude.ai/install.sh | bash
+
+npm i framer-motion - npm install  motion 
+
+UI UIX Pro MAX skill e2e eksiksiz yükle.
+
+
+https://21st.dev/community/components

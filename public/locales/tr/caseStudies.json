@@ -1,0 +1,37 @@
+{
+  "meta": {
+    "title": "Vaka Çalışmaları · EcyPro",
+    "description": "Stratejiyi sonuca dönüştüren gerçek müşteri hikayeleri."
+  },
+  "hero": {
+    "badge": "Müşteri Hikayeleri",
+    "title": "Stratejiyi sonuca dönüştürdük",
+    "subtitle": "Sektör lideri kuruluşların EcyPro ile gerçekleştirdiği dönüşümler."
+  },
+  "card": {
+    "industry": "Sektör",
+    "duration": "Süre",
+    "result": "Sonuç",
+    "viewCase": "Vakayı Gör"
+  },
+  "detail": {
+    "back": "Tüm vakalar",
+    "challenge": "Zorluk",
+    "approach": "Yaklaşım",
+    "results": "Sonuçlar",
+    "kpi": {
+      "duration": "Proje Süresi",
+      "goLive": "Canlıya Geçiş"
+    },
+    "related": "İlgili vakalar",
+    "cta": {
+      "title": "Sıradaki başarı hikayesi sizin olsun",
+      "subtitle": "20 dakikalık ücretsiz keşif görüşmesi.",
+      "button": "Görüşme Planla"
+    }
+  },
+  "breadcrumb": {
+    "home": "Ana Sayfa",
+    "caseStudies": "Vaka Çalışmaları"
+  }
+}

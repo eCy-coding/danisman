@@ -1,0 +1,28 @@
+{
+  "successTitle": "Mesajınız Alındı!",
+  "successDescription": "Bizimle iletişime geçtiğiniz için teşekkürler. Ekibimiz talebinizi inceleyip 24 saat içinde dönüş yapacaktır.",
+  "successMessage": "Mesajınız başarıyla gönderildi! Sizinle iletişime geçeceğiz.",
+  "sendAnother": "Başka bir mesaj gönder",
+  "labels": {
+    "fullName": "Ad Soyad",
+    "email": "E-posta Adresi",
+    "company": "Şirket (İsteğe Bağlı)",
+    "interest": "İlgi Alanı",
+    "message": "Size nasıl yardımcı olabiliriz?"
+  },
+  "placeholders": {
+    "name": "Adınız Soyadınız",
+    "email": "ornek@sirket.com",
+    "company": "Şirket Adı",
+    "message": "Projenizden veya karşılaştığınız zorluklardan bahsedin..."
+  },
+  "options": {
+    "strategy": "Stratejik Danışmanlık",
+    "tech": "Teknoloji Uygulamaları",
+    "audit": "Güvenlik Denetimi",
+    "other": "Diğer"
+  },
+  "submit": "Mesaj Gönder",
+  "disclaimer": "Bu formu göndererek, şunları kabul etmiş olursunuz:",
+  "privacyPolicy": "Gizlilik Politikası"
+}

@@ -1,0 +1,108 @@
+# ═══════════════════════════════════════════════════════════
+# EcyPro Premium Consulting — Docker Compose (Dev + Prod)
+# ═══════════════════════════════════════════════════════════
+# Usage:
+#   Dev:  docker compose up
+#   Prod: docker compose --profile production up -d
+# ═══════════════════════════════════════════════════════════
+
+services:
+  # ── PostgreSQL Database ──────────────────────────────────
+  postgres:
+    image: postgres:17-alpine
+    container_name: ecypro-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ecypro
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-ecypro_dev_2026}
+      POSTGRES_DB: ecypro
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "5432:5432"
+    volumes:
+      - ecypro_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ecypro -d ecypro"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - ecypro-net
+
+  # ── Backend API Server ───────────────────────────────────
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: backend
+    container_name: ecypro-api
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      NODE_ENV: ${NODE_ENV:-development}
+      PORT: 3001
+      DATABASE_URL: postgresql://ecypro:${DB_PASSWORD:-ecypro_dev_2026}@postgres:5432/ecypro?schema=public
+      JWT_SECRET: ${JWT_SECRET:-change-this-to-a-long-random-string}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-7d}
+      CORS_ORIGIN: ${CORS_ORIGIN:-http://localhost:5173,http://localhost:4173,http://localhost}
+      REDIS_URL: ${REDIS_URL:-redis://ecypro-redis:6379}
+      SENTRY_DSN: ${SENTRY_DSN:-}
+    ports:
+      - "3001:3001"
+    networks:
+      - ecypro-net
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3001/api/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  # ── Frontend (Nginx) — Production Only ───────────────────
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: frontend
+    container_name: ecypro-frontend
+    restart: unless-stopped
+    profiles:
+      - production
+    depends_on:
+      api:
+        condition: service_healthy
+    ports:
+      - "80:80"
+    networks:
+      - ecypro-net
+
+  # ── Redis Cache (default-on: rate limiter + sessions rely on it) ───
+  redis:
+    image: redis:7-alpine
+    container_name: ecypro-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - ecypro_redis:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+    networks:
+      - ecypro-net
+
+volumes:
+  ecypro_pgdata:
+    driver: local
+  ecypro_redis:
+    driver: local
+
+networks:
+  ecypro-net:
+    driver: bridge

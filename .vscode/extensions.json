@@ -1,0 +1,19 @@
+{
+  "recommendations": [
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "bradlc.vscode-tailwindcss",
+    "eamodio.gitlens",
+    "dsznajder.es7-react-js-snippets",
+    "usernamehw.errorlens",
+    "wix.vscode-import-cost",
+    "christian-kohler.path-intellisense",
+    "streetsidesoftware.code-spell-checker",
+    "formulahendry.auto-rename-tag",
+    "vincaslt.highlight-matching-tag",
+    "wallabyjs.console-ninja",
+    "gruntfuggly.todo-tree",
+    "yoavbls.pretty-ts-errors",
+    "pkief.material-icon-theme"
+  ]
+}

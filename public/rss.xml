@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<channel>
+    <title>EcyPro Premium Consulting Blog</title>
+    <link>https://www.ecypro.com</link>
+    <description>Insights on Strategic Management, Digital Transformation, and Corporate Leadership.</description>
+    <language>tr</language>
+    <lastBuildDate>Sun, 03 May 2026 22:01:33 GMT</lastBuildDate>
+    <atom:link href="https://www.ecypro.com/rss.xml" rel="self" type="application/rss+xml" />
+
+    <item>
+        <title>Stratejik Dijital Dönüşüm Rehberi 2026</title>
+        <link>https://www.ecypro.com/blog/stratejik-dijital-donusum-2026</link>
+        <guid>https://www.ecypro.com/blog/stratejik-dijital-donusum-2026</guid>
+        <pubDate>Mon, 05 Jan 2026 00:00:00 GMT</pubDate>
+        <description>Yapay zeka ve otomasyon çağında işletmenizi geleceğe hazırlamak için kapsamlı bir yol haritası.</description>
+        <author>info@ecypro.com (Dr. Emre Can)</author>
+    </item>
+    <item>
+        <title>Kurumsal Yönetimde Yapay Zeka Devrimi</title>
+        <link>https://www.ecypro.com/blog/yapay-zeka-yonetim-devrimi</link>
+        <guid>https://www.ecypro.com/blog/yapay-zeka-yonetim-devrimi</guid>
+        <pubDate>Fri, 02 Jan 2026 00:00:00 GMT</pubDate>
+        <description>Yönetim kurullarından operasyonel süreçlere kadar AI&apos;nın kurumsal yapı üzerindeki dönüştürücü etkisi.</description>
+        <author>info@ecypro.com (EcyPro Analiz Ekibi)</author>
+    </item>
+    <item>
+        <title>Global Pazarlara Açılma Stratejileri</title>
+        <link>https://www.ecypro.com/blog/global-pazarlara-acilma</link>
+        <guid>https://www.ecypro.com/blog/global-pazarlara-acilma</guid>
+        <pubDate>Sun, 28 Dec 2025 00:00:00 GMT</pubDate>
+        <description>Yerel başarıdan global bir markaya dönüşmek için izlenmesi gereken stratejik adımlar ve ipuçları.</description>
+        <author>info@ecypro.com (Dr. Emre Can)</author>
+    </item>
+</channel>
+</rss>

@@ -1,0 +1,22 @@
+{
+  "buttons": {
+    "submit": "Submit",
+    "cancel": "Cancel",
+    "save": "Save",
+    "close": "Close",
+    "back": "Back",
+    "next": "Next",
+    "viewAll": "View all"
+  },
+  "form": {
+    "required": "required",
+    "optional": "optional"
+  },
+  "errors": {
+    "generic": "Something went wrong. Please try again.",
+    "network": "No network connection. Check your connection.",
+    "unauthorized": "You're not authorized to do that."
+  },
+  "loading": "Loading...",
+  "noResults": "No results found."
+}

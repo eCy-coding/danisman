@@ -1,0 +1,28 @@
+{
+  "successTitle": "Message Received!",
+  "successDescription": "Thank you for reaching out. Our team will review your inquiry and get back to you within 24 hours.",
+  "successMessage": "Message sent successfully! We'll be in touch.",
+  "sendAnother": "Send another message",
+  "labels": {
+    "fullName": "Full Name",
+    "email": "Email Address",
+    "company": "Company (Optional)",
+    "interest": "Area of Interest",
+    "message": "How can we help?"
+  },
+  "placeholders": {
+    "name": "John Doe",
+    "email": "john@company.com",
+    "company": "Acme Inc.",
+    "message": "Tell us about your project or challenges..."
+  },
+  "options": {
+    "strategy": "Strategic Consulting",
+    "tech": "Technology Implementation",
+    "audit": "Security Audit",
+    "other": "Other Inquiry"
+  },
+  "submit": "Send Message",
+  "disclaimer": "By submitting this form, you agree to our",
+  "privacyPolicy": "Privacy Policy"
+}

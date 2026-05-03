@@ -1,0 +1,9 @@
+{
+  "entryPoints": ["src/main.tsx", "server/index.ts"],
+  "out": "docs/api",
+  "name": "Ecypro Premium Consulting API",
+  "readme": "none",
+  "excludePrivate": true,
+  "excludeProtected": true,
+  "excludeExternals": true
+}

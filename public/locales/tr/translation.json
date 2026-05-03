@@ -1,0 +1,24 @@
+{
+  "nav": {
+    "services": "Hizmetler",
+    "blog": "Blog",
+    "about": "Hakkımızda",
+    "contact": "İletişim",
+    "dashboard": "Panel"
+  },
+  "hero": {
+    "title": "Elit Danışmanlık Ekosistemi",
+    "subtitle": "Akademik Derinlik, Profesyonel Çözüm",
+    "cta_primary": "Proje Başlat",
+    "cta_secondary": "Hizmetlerimiz"
+  },
+  "common": {
+    "read_more": "Devamını Oku",
+    "loading": "Yükleniyor...",
+    "error": "Bir şeyler yanlış gitti",
+    "zen_mode": "Zen Modu"
+  },
+  "footer": {
+    "rights": "Tüm hakları saklıdır."
+  }
+}

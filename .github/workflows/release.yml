@@ -1,0 +1,44 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  sentry-sourcemaps:
+    name: Sentry Source Maps
+    runs-on: ubuntu-latest
+    env:
+      SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+      SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
+      SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Build
+        run: npm run build
+        env:
+          VITE_SENTRY_DSN: ${{ secrets.VITE_SENTRY_DSN }}
+
+      - name: Upload source maps to Sentry
+        if: ${{ env.SENTRY_AUTH_TOKEN != '' }}
+        continue-on-error: true
+        run: |
+          npx sentry-cli releases new "${{ github.ref_name }}"
+          npx sentry-cli releases files "${{ github.ref_name }}" \
+            upload-sourcemaps ./dist/assets \
+            --url-prefix "~/assets" \
+            --rewrite
+          npx sentry-cli releases finalize "${{ github.ref_name }}"
+          npx sentry-cli releases deploys "${{ github.ref_name }}" new \
+            --env production

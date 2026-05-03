@@ -1,0 +1,37 @@
+{
+  "meta": {
+    "title": "Case Studies · EcyPro",
+    "description": "Real customer stories where strategy turned into measurable outcomes."
+  },
+  "hero": {
+    "badge": "Customer Stories",
+    "title": "We turned strategy into outcomes",
+    "subtitle": "Transformations that industry leaders delivered with EcyPro."
+  },
+  "card": {
+    "industry": "Industry",
+    "duration": "Duration",
+    "result": "Result",
+    "viewCase": "View Case"
+  },
+  "detail": {
+    "back": "All cases",
+    "challenge": "Challenge",
+    "approach": "Approach",
+    "results": "Results",
+    "kpi": {
+      "duration": "Project duration",
+      "goLive": "Go-live"
+    },
+    "related": "Related cases",
+    "cta": {
+      "title": "Let the next success story be yours",
+      "subtitle": "Schedule a 20-minute free discovery call.",
+      "button": "Book a Call"
+    }
+  },
+  "breadcrumb": {
+    "home": "Home",
+    "caseStudies": "Case Studies"
+  }
+}

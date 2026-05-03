@@ -1,0 +1,62 @@
+{
+  "meta": {
+    "title": "Pricing · EcyPro",
+    "description": "Transparent, scalable plans. Pick what fits today, upgrade as you grow."
+  },
+  "hero": {
+    "badge": "Flexible plans",
+    "title": "Choose the plan that fits your business",
+    "subtitle": "Monthly or yearly. All plans include a 14-day free strategy session.",
+    "billingMonthly": "Monthly",
+    "billingYearly": "Yearly",
+    "yearlyDiscount": "Save 20%"
+  },
+  "tiers": {
+    "starter": {
+      "name": "Starter",
+      "tagline": "For small, growing teams",
+      "ctaLabel": "Start"
+    },
+    "growth": {
+      "name": "Growth",
+      "tagline": "For scaling organizations",
+      "ctaLabel": "Request a demo",
+      "badge": "Most popular"
+    },
+    "enterprise": {
+      "name": "Enterprise",
+      "tagline": "For deep enterprise integration",
+      "ctaLabel": "Contact us"
+    }
+  },
+  "comparison": {
+    "title": "Detailed comparison",
+    "subtitle": "Full capability matrix across all plans.",
+    "featureColumn": "Feature",
+    "included": "Included",
+    "notIncluded": "—"
+  },
+  "faq": {
+    "title": "Frequently asked questions",
+    "subtitle": "Answers to common questions.",
+    "items": [
+      {
+        "q": "Can I change my plan later?",
+        "a": "Yes. You can upgrade or downgrade at any time; charges are prorated."
+      },
+      {
+        "q": "Do you offer refunds on yearly billing?",
+        "a": "We offer a no-questions-asked refund within the first 30 days."
+      },
+      {
+        "q": "Is tax included?",
+        "a": "Listed prices are exclusive of tax. VAT is shown separately on invoices."
+      }
+    ]
+  },
+  "cta": {
+    "title": "Not sure which plan is right for you?",
+    "subtitle": "Let's schedule a 20-minute free discovery call.",
+    "button": "Book a Call"
+  }
+}

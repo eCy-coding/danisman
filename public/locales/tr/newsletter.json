@@ -1,0 +1,19 @@
+{
+  "title": "Aylık içgörü bültenimize abone olun",
+  "subtitle": "Strateji, dönüşüm ve liderlik üzerine seçilmiş okumalar.",
+  "emailLabel": "E-posta adresi",
+  "emailPlaceholder": "ornek@sirket.com",
+  "consentLabel": "KVKK kapsamında işlenmesini kabul ediyorum.",
+  "submit": "Abone Ol",
+  "submitting": "Gönderiliyor...",
+  "status": {
+    "success": "Aboneliğiniz onaylandı. Hoş geldiniz!",
+    "alreadySubscribed": "Bu e-posta zaten kayıtlı.",
+    "resubscribed": "Tekrar hoş geldiniz — aboneliğiniz yeniden aktif.",
+    "invalidEmail": "Geçerli bir e-posta adresi giriniz.",
+    "consentRequired": "Devam etmek için onay kutusunu işaretleyiniz.",
+    "rateLimited": "Çok fazla deneme. Lütfen birkaç dakika sonra tekrar deneyin.",
+    "serverError": "Şu an bir sorun oluştu. Lütfen daha sonra tekrar deneyin."
+  },
+  "privacyNote": "İstediğiniz zaman abonelikten çıkabilirsiniz."
+}

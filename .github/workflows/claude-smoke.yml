@@ -1,0 +1,102 @@
+name: Claude Code Smoke
+
+# Light smoke test — sadece script bütünlüğü.
+# Binary install (curl|bash) CI'da çalıştırılmaz (network/güvenlik riski).
+# Mevcut ci.yml zincirine dokunmaz, paralel koşar.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/install-claude-code.sh'
+      - 'scripts/claude-doctor.sh'
+      - 'CLAUDE.md'
+      - '.claude/**'
+      - '.github/workflows/claude-smoke.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'scripts/install-claude-code.sh'
+      - 'scripts/claude-doctor.sh'
+      - 'CLAUDE.md'
+      - '.claude/**'
+      - '.github/workflows/claude-smoke.yml'
+  workflow_dispatch:
+
+jobs:
+  shellcheck:
+    name: ShellCheck + bash -n (script integrity)
+    runs-on: ubuntu-latest
+    # Non-blocking ilk iterasyon (Lighthouse ile aynı politika)
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install ShellCheck
+        run: sudo apt-get update && sudo apt-get install -y shellcheck
+
+      - name: bash -n syntax check (install script)
+        run: bash -n scripts/install-claude-code.sh
+
+      - name: bash -n syntax check (doctor script)
+        run: bash -n scripts/claude-doctor.sh
+
+      - name: ShellCheck (install script)
+        run: shellcheck -S warning scripts/install-claude-code.sh
+
+      - name: ShellCheck (doctor script)
+        run: shellcheck -S warning scripts/claude-doctor.sh
+
+  config-validate:
+    name: Validate Claude config (JSON + slash commands)
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+
+      - name: Validate .claude/settings.json
+        run: |
+          if [ -f .claude/settings.json ]; then
+            node -e "JSON.parse(require('fs').readFileSync('.claude/settings.json','utf8'))"
+            echo "✓ .claude/settings.json geçerli JSON"
+          else
+            echo "✗ .claude/settings.json bulunamadı"
+            exit 1
+          fi
+
+      - name: Validate .claude/settings.local.json.example
+        run: |
+          if [ -f .claude/settings.local.json.example ]; then
+            node -e "JSON.parse(require('fs').readFileSync('.claude/settings.local.json.example','utf8'))"
+            echo "✓ settings.local.json.example geçerli JSON"
+          fi
+
+      - name: Slash command frontmatter validation
+        run: |
+          MISSING=0
+          for f in .claude/commands/*.md; do
+            if ! head -1 "$f" | grep -q '^---$'; then
+              echo "✗ $f frontmatter yok"
+              MISSING=$((MISSING+1))
+            fi
+          done
+          if [ "$MISSING" -gt 0 ]; then
+            echo "Toplam $MISSING slash komutta frontmatter eksik"
+            exit 1
+          fi
+          COUNT=$(ls .claude/commands/*.md 2>/dev/null | wc -l)
+          echo "✓ $COUNT slash komut doğrulandı"
+
+      - name: CLAUDE.md var mı?
+        run: |
+          if [ -f CLAUDE.md ]; then
+            LINES=$(wc -l < CLAUDE.md)
+            echo "✓ CLAUDE.md mevcut ($LINES satır)"
+          else
+            echo "✗ CLAUDE.md eksik"
+            exit 1
+          fi

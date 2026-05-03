@@ -1,0 +1,186 @@
+// EcyPro Premium Consulting — Production Database Schema
+// Prisma v7 + PostgreSQL
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ─── ENUMS ───────────────────────────────────────────────
+
+enum UserRole {
+  USER
+  CLIENT
+  CONSULTANT
+  ADMIN
+  PREMIUM
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  COMPLETED
+  NO_SHOW
+}
+
+enum InteractionType {
+  PAGE_VIEW
+  CTA_CLICK
+  FORM_SUBMIT
+  BOOKING_START
+  DOWNLOAD
+  SCROLL_DEPTH
+}
+
+// ─── CORE MODELS ─────────────────────────────────────────
+
+model User {
+  id           String        @id @default(uuid())
+  email        String        @unique
+  passwordHash String?       // PBKDF2-SHA512 hash (format: salt:iterations:hash) — null for OAuth users
+  name         String?
+  avatarUrl    String?
+  role         UserRole      @default(USER)
+  isActive     Boolean       @default(true)
+  lastLoginAt  DateTime?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  // Relations
+  bookings     Booking[]
+  interactions Interaction[]
+  analytics    Analytics[]
+
+  @@index([email])
+  @@index([role])
+  @@map("users")
+}
+
+// ─── BUSINESS MODELS ─────────────────────────────────────
+
+model Service {
+  id          String    @id @default(uuid())
+  slug        String    @unique
+  titleTr     String
+  titleEn     String
+  descTr      String
+  descEn      String
+  iconName    String    @default("Briefcase")
+  isActive    Boolean   @default(true)
+  sortOrder   Int       @default(0)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  // Relations
+  bookings    Booking[]
+
+  @@index([slug])
+  @@map("services")
+}
+
+model Booking {
+  id            String        @id @default(uuid())
+  userId        String
+  serviceId     String?
+  status        BookingStatus @default(PENDING)
+  scheduledAt   DateTime
+  durationMin   Int           @default(30)
+  notesTr       String?
+  notesEn       String?
+  meetingUrl    String?
+  cancellationReason String?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  // Relations
+  user          User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  service       Service?      @relation(fields: [serviceId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([status])
+  @@index([scheduledAt])
+  @@map("bookings")
+}
+
+// ─── ANALYTICS & TRACKING ────────────────────────────────
+
+model Analytics {
+  id            String   @id @default(uuid())
+  userId        String?
+  sessionId     String
+  page          String
+  referrer      String?
+  userAgent     String?
+  country       String?
+  city          String?
+  deviceType    String?  // desktop | mobile | tablet
+  durationMs    Int?
+  createdAt     DateTime @default(now())
+
+  // Relations
+  user          User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([sessionId])
+  @@index([page])
+  @@index([createdAt])
+  @@map("analytics")
+}
+
+model Interaction {
+  id            String          @id @default(uuid())
+  userId        String?
+  sessionId     String
+  type          InteractionType
+  target        String          // e.g. "hero-cta", "contact-form"
+  metadata      Json?           // flexible payload
+  createdAt     DateTime        @default(now())
+
+  // Relations
+  user          User?           @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([sessionId])
+  @@index([type])
+  @@index([createdAt])
+  @@map("interactions")
+}
+
+// ─── CONTACT & LEADS ─────────────────────────────────────
+
+model ContactSubmission {
+  id          String   @id @default(uuid())
+  fullName    String
+  email       String
+  company     String?
+  phone       String?
+  service     String?
+  messageTr   String?
+  messageEn   String?
+  source      String?  // utm_source / referrer
+  isRead      Boolean  @default(false)
+  createdAt   DateTime @default(now())
+
+  @@index([email])
+  @@index([isRead])
+  @@map("contact_submissions")
+}
+
+// ─── NEWSLETTER ──────────────────────────────────────────
+// Phase 20 (Phase 17 G2 closure): persist subscribers; in-memory Map removed.
+model NewsletterSubscriber {
+  id              String    @id @default(uuid())
+  email           String    @unique
+  consent         Boolean   @default(false)
+  source          String?   // utm_source / referrer / footer
+  ip              String?   // IPv4/v6 captured at signup (for abuse audit)
+  userAgent       String?
+  subscribedAt    DateTime  @default(now())
+  unsubscribedAt  DateTime?
+
+  @@index([email])
+  @@index([subscribedAt])
+  @@map("newsletter_subscribers")
+}

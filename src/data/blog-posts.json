@@ -1,0 +1,47 @@
+[
+  {
+    "slug": "stratejik-dijital-donusum-2026",
+    "title": "Stratejik Dijital Dönüşüm Rehberi 2026",
+    "excerpt": "Yapay zeka ve otomasyon çağında işletmenizi geleceğe hazırlamak için kapsamlı bir yol haritası.",
+    "date": "2026-01-05T00:00:00.000Z",
+    "author": "Dr. Emre Can",
+    "coverImage": "https://images.pexels.com/photos/3183150/pexels-photo-3183150.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+    "category": "Strateji",
+    "tags": [
+      "Dijital Dönüşüm",
+      "Strateji",
+      "Yapay Zeka"
+    ],
+    "readingTime": "7 min read"
+  },
+  {
+    "slug": "yapay-zeka-yonetim-devrimi",
+    "title": "Kurumsal Yönetimde Yapay Zeka Devrimi",
+    "excerpt": "Yönetim kurullarından operasyonel süreçlere kadar AI'nın kurumsal yapı üzerindeki dönüştürücü etkisi.",
+    "date": "2026-01-02T00:00:00.000Z",
+    "author": "EcyPro Analiz Ekibi",
+    "coverImage": "https://images.pexels.com/photos/8386440/pexels-photo-8386440.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+    "category": "Teknoloji",
+    "tags": [
+      "Yapay Zeka",
+      "Yönetim",
+      "İnovasyon"
+    ],
+    "readingTime": "5 min read"
+  },
+  {
+    "slug": "global-pazarlara-acilma",
+    "title": "Global Pazarlara Açılma Stratejileri",
+    "excerpt": "Yerel başarıdan global bir markaya dönüşmek için izlenmesi gereken stratejik adımlar ve ipuçları.",
+    "date": "2025-12-28T00:00:00.000Z",
+    "author": "Dr. Emre Can",
+    "coverImage": "https://images.pexels.com/photos/1267338/pexels-photo-1267338.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+    "category": "Pazarlama",
+    "tags": [
+      "Globalleşme",
+      "İhracat",
+      "Marka Yönetimi"
+    ],
+    "readingTime": "6 min read"
+  }
+]

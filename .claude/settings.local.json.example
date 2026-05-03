@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "_comment": [
+    "Bu dosya kullanıcıya özel override şablonudur.",
+    "Kullanım:",
+    "  cp .claude/settings.local.json.example .claude/settings.local.json",
+    "  # Sonra aşağıdaki alanları kendi tercihinize göre düzenleyin.",
+    "Bu dosyanın gerçek hali (.claude/settings.local.json) .gitignore'da olduğu için commit edilmez.",
+    "Buradaki ayarlar paylaşılan .claude/settings.json üzerine override eder."
+  ],
+  "permissions": {
+    "allow": [],
+    "deny": []
+  },
+  "env": {}
+}
