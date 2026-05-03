@@ -128,8 +128,47 @@ export default defineConfig(() => {
         registerType: 'autoUpdate',
         includeAssets: ['favicon.ico', 'apple-touch-icon.png'],
         workbox: {
-           maximumFileSizeToCacheInBytes: 4 * 1024 * 1024,
-           cleanupOutdatedCaches: true,
+          maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
+          cleanupOutdatedCaches: true,
+          runtimeCaching: [
+            {
+              urlPattern: /\/api\//,
+              handler: 'NetworkFirst',
+              options: {
+                cacheName: 'api-cache',
+                networkTimeoutSeconds: 5,
+                expiration: { maxEntries: 30, maxAgeSeconds: 60 * 5 },
+                cacheableResponse: { statuses: [0, 200] },
+              },
+            },
+            {
+              urlPattern: /\/locales\//,
+              handler: 'StaleWhileRevalidate',
+              options: {
+                cacheName: 'i18n-cache',
+                expiration: { maxEntries: 40, maxAgeSeconds: 60 * 60 * 24 },
+                cacheableResponse: { statuses: [0, 200] },
+              },
+            },
+            {
+              urlPattern: /\.(woff2|woff|ttf)$/,
+              handler: 'CacheFirst',
+              options: {
+                cacheName: 'font-cache',
+                expiration: { maxEntries: 20, maxAgeSeconds: 60 * 60 * 24 * 365 },
+                cacheableResponse: { statuses: [0, 200] },
+              },
+            },
+            {
+              urlPattern: /\.(png|jpg|jpeg|webp|svg|ico)$/,
+              handler: 'CacheFirst',
+              options: {
+                cacheName: 'image-cache',
+                expiration: { maxEntries: 60, maxAgeSeconds: 60 * 60 * 24 * 30 },
+                cacheableResponse: { statuses: [0, 200] },
+              },
+            },
+          ],
         },
         manifest: {
           name: 'EcyPro Premium Consulting',

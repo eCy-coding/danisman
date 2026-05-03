@@ -1,6 +1,7 @@
 import React, { Suspense, useState, useEffect } from 'react';
 import { HelmetProvider } from 'react-helmet-async';
 import { BookingModal } from './components/features/booking/BookingModal';
+import { OfflineStatus } from './components/ui/OfflineStatus';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { AppProviders } from './components/providers/AppProviders';
 import { NotFoundPage } from './pages/NotFoundPage';
@@ -346,6 +347,7 @@ const App: React.FC = () => {
             </Suspense>
             <LiveChat />
             <BookingModal isOpen={bookingOpen} onClose={() => setBookingOpen(false)} />
+            <OfflineStatus />
           </BrowserRouter>
         </AppProviders>
       </HelmetProvider>
