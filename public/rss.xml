@@ -5,9 +5,33 @@
     <link>https://www.ecypro.com</link>
     <description>Insights on Strategic Management, Digital Transformation, and Corporate Leadership.</description>
     <language>tr</language>
-    <lastBuildDate>Sun, 03 May 2026 22:13:46 GMT</lastBuildDate>
+    <lastBuildDate>Sun, 03 May 2026 22:18:12 GMT</lastBuildDate>
     <atom:link href="https://www.ecypro.com/rss.xml" rel="self" type="application/rss+xml" />
 
+    <item>
+        <title>Dijital Dönüşümde Değişim Yönetimi: İnsan Faktörü</title>
+        <link>https://www.ecypro.com/blog/organizasyonel-degisim-yonetimi</link>
+        <guid>https://www.ecypro.com/blog/organizasyonel-degisim-yonetimi</guid>
+        <pubDate>Sun, 01 Mar 2026 00:00:00 GMT</pubDate>
+        <description>Teknoloji projelerinin %70&apos;i insani direnç nedeniyle başarısız olur. Değişim yönetiminin temel prensipleri ve EcyPro&apos;nun ADAPT çerçevesi.</description>
+        <author>info@ecypro.com (Selin Yıldız)</author>
+    </item>
+    <item>
+        <title>Yapay Zeka Yatırımının ROI&apos;sini Hesaplamak: CFO Rehberi</title>
+        <link>https://www.ecypro.com/blog/ai-yatirim-roi-hesaplama</link>
+        <guid>https://www.ecypro.com/blog/ai-yatirim-roi-hesaplama</guid>
+        <pubDate>Tue, 10 Feb 2026 00:00:00 GMT</pubDate>
+        <description>AI projelerinin gerçek finansal etkisini ölçmek için kanıtlanmış bir çerçeve. Maliyet, fayda ve risk analizi ile net değer hesabı.</description>
+        <author>info@ecypro.com (Dr. Emre Can)</author>
+    </item>
+    <item>
+        <title>Measuring AI Investment ROI: The CFO Framework</title>
+        <link>https://www.ecypro.com/blog/measuring-ai-investment-roi</link>
+        <guid>https://www.ecypro.com/blog/measuring-ai-investment-roi</guid>
+        <pubDate>Tue, 10 Feb 2026 00:00:00 GMT</pubDate>
+        <description>A proven framework to quantify the real financial impact of AI projects. Cost-benefit analysis, risk quantification, and net value calculation.</description>
+        <author>info@ecypro.com (Dr. Emre Can)</author>
+    </item>
     <item>
         <title>Stratejik Dijital Dönüşüm Rehberi 2026</title>
         <link>https://www.ecypro.com/blog/stratejik-dijital-donusum-2026</link>

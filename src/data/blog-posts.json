@@ -1,5 +1,53 @@
 [
   {
+    "slug": "organizasyonel-degisim-yonetimi",
+    "title": "Dijital Dönüşümde Değişim Yönetimi: İnsan Faktörü",
+    "excerpt": "Teknoloji projelerinin %70'i insani direnç nedeniyle başarısız olur. Değişim yönetiminin temel prensipleri ve EcyPro'nun ADAPT çerçevesi.",
+    "date": "2026-03-01T00:00:00.000Z",
+    "author": "Selin Yıldız",
+    "coverImage": "https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+    "category": "Liderlik",
+    "tags": [
+      "Değişim Yönetimi",
+      "İnsan Kaynakları",
+      "Dönüşüm",
+      "Liderlik"
+    ],
+    "readingTime": "6 min read"
+  },
+  {
+    "slug": "ai-yatirim-roi-hesaplama",
+    "title": "Yapay Zeka Yatırımının ROI'sini Hesaplamak: CFO Rehberi",
+    "excerpt": "AI projelerinin gerçek finansal etkisini ölçmek için kanıtlanmış bir çerçeve. Maliyet, fayda ve risk analizi ile net değer hesabı.",
+    "date": "2026-02-10T00:00:00.000Z",
+    "author": "Dr. Emre Can",
+    "coverImage": "https://images.pexels.com/photos/8386440/pexels-photo-8386440.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+    "category": "Finans",
+    "tags": [
+      "Yapay Zeka",
+      "ROI",
+      "CFO",
+      "Yatırım"
+    ],
+    "readingTime": "8 min read"
+  },
+  {
+    "slug": "measuring-ai-investment-roi",
+    "title": "Measuring AI Investment ROI: The CFO Framework",
+    "excerpt": "A proven framework to quantify the real financial impact of AI projects. Cost-benefit analysis, risk quantification, and net value calculation.",
+    "date": "2026-02-10T00:00:00.000Z",
+    "author": "Dr. Emre Can",
+    "coverImage": "https://images.pexels.com/photos/8386440/pexels-photo-8386440.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+    "category": "Finance",
+    "tags": [
+      "Artificial Intelligence",
+      "ROI",
+      "CFO",
+      "Investment"
+    ],
+    "readingTime": "8 min read"
+  },
+  {
     "slug": "stratejik-dijital-donusum-2026",
     "title": "Stratejik Dijital Dönüşüm Rehberi 2026",
     "excerpt": "Yapay zeka ve otomasyon çağında işletmenizi geleceğe hazırlamak için kapsamlı bir yol haritası.",

@@ -106,6 +106,21 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://www.ecypro.com/blog/organizasyonel-degisim-yonetimi</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.ecypro.com/blog/ai-yatirim-roi-hesaplama</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.ecypro.com/blog/measuring-ai-investment-roi</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://www.ecypro.com/blog/stratejik-dijital-donusum-2026</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
@@ -131,6 +146,11 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://www.ecypro.com/blog/net-zero-eylem-plani</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://www.ecypro.com/case-studies/global-retail-transformation</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
@@ -142,6 +162,21 @@
   </url>
   <url>
     <loc>https://www.ecypro.com/case-studies/manufacturing-optimization</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.ecypro.com/case-studies/healthcare-ai-platform</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.ecypro.com/case-studies/energy-transition-strategy</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.ecypro.com/case-studies/saas-product-led-growth</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
