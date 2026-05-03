@@ -1,7 +1,5 @@
 import React, { Suspense, useState, useEffect } from 'react';
-import { HelmetProvider } from 'react-helmet-async';
 import { BookingModal } from './components/features/booking/BookingModal';
-import { OfflineStatus } from './components/ui/OfflineStatus';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { AppProviders } from './components/providers/AppProviders';
 import { NotFoundPage } from './pages/NotFoundPage';
@@ -274,7 +272,7 @@ import { personalization } from './lib/director/personalization';
 import { sentry } from './lib/sentry';
 import { processDirectorActions } from './lib/notifications/toast-manager';
 import { initPerformance } from './lib/performance';
-import { Toaster } from './components/ui/Toast';
+
 
 const App: React.FC = () => {
   useWebVitals();
@@ -332,7 +330,6 @@ const App: React.FC = () => {
 
   return (
     <SovereignBoundary name="RootApp">
-      <HelmetProvider>
         <AppProviders>
           <BrowserRouter>
             <MissionControl />
@@ -347,11 +344,8 @@ const App: React.FC = () => {
             </Suspense>
             <LiveChat />
             <BookingModal isOpen={bookingOpen} onClose={() => setBookingOpen(false)} />
-            <OfflineStatus />
           </BrowserRouter>
         </AppProviders>
-      </HelmetProvider>
-      <Toaster position="bottom-right" richColors closeButton />
     </SovereignBoundary>
   );
 };
