@@ -15,7 +15,8 @@ test.describe('Newsletter footer form', () => {
   });
 
   test('happy path: email + consent → success status', async ({ page }) => {
-    // Intercept newsletter API call — proxy reliability varies per env
+    test.setTimeout(60_000);
+    // Route must be registered BEFORE navigation to avoid WebKit parallel-mode race
     await page.route('**/api/newsletter/subscribe', route =>
       route.fulfill({
         status: 201,
@@ -23,6 +24,11 @@ test.describe('Newsletter footer form', () => {
         body: JSON.stringify({ status: 'ok', code: 'SUBSCRIBED', message: 'Subscription confirmed' }),
       })
     );
+
+    // Re-navigate with mock already in place
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
+    await page.waitForTimeout(500);
+    await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
 
     const emailInput = page.getByTestId('newsletter-email');
     await emailInput.scrollIntoViewIfNeeded();
@@ -36,7 +42,7 @@ test.describe('Newsletter footer form', () => {
     await submit.click();
 
     // Either green success or "already subscribed" (idempotent endpoint) is OK.
-    await expect(status).toContainText(/(teşekkür|thanks|zaten|already)/i, { timeout: 5000 });
+    await expect(status).toContainText(/(teşekkür|thanks|zaten|already)/i, { timeout: 10_000 });
   });
 
   test('invalid email blocks submission via aria-invalid feedback', async ({ page }) => {

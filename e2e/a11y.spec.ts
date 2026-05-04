@@ -31,16 +31,20 @@ test.describe('Accessibility Audit (WCAG 2.2 AAA)', () => {
 
   test('Services Page should pass accessibility checks', async ({ page }) => {
     test.setTimeout(120000);
-    await page.goto('/services');
-    await page.waitForLoadState('networkidle');
-    
+    // Block external images to avoid networkidle hanging in WebKit
+    await page.route(/images\.unsplash\.com|via\.placeholder|pexels\.com|picsum\.photos/, r =>
+      r.fulfill({ status: 200, contentType: 'image/svg+xml', body: '<svg xmlns="http://www.w3.org/2000/svg"/>' })
+    );
+    await page.goto('/services', { waitUntil: 'domcontentloaded' });
+    await page.waitForTimeout(1500);
+
     await page.evaluate(async () => {
       window.scrollTo(0, document.body.scrollHeight);
       await new Promise(resolve => setTimeout(resolve, 500));
       window.scrollTo(0, 0);
     });
 
-    await page.waitForTimeout(3000);
+    await page.waitForTimeout(1500);
 
     const accessibilityScanResults = await new AxeBuilder({ page })
       .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa', 'best-practice'])
