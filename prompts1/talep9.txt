@@ -1,0 +1,54 @@
+# TALEP 9 — Güvenlik Sertleştirme & Monitoring
+# Faz: Phase 7 + 9 / Öncelik: KRİTİK
+# Durum: ✅ TAMAMLANDI
+# ─────────────────────────────────────────────────────────
+
+## Tamamlanan Güvenlik Katmanları
+
+### Rate Limiting (server/middleware/rateLimiter.ts)
+- Genel API: 100 istek/15dk
+- Auth: 10 istek/15dk (brute-force koruması)
+- İletişim formu: 5 istek/saat (spam önleme)
+- SSE: 3 istek/dk
+
+### Auth (server/routes/auth.ts)
+- PBKDF2 + salt şifreleme
+- JWT access + refresh token
+- Zod validasyon (tüm input)
+- Timing-safe şifre karşılaştırma
+
+### Security Headers (nginx.conf + netlify.toml)
+- X-Frame-Options: DENY
+- X-Content-Type-Options: nosniff
+- Referrer-Policy: strict-origin-when-cross-origin
+- Content-Security-Policy (dev mode'da gevşek)
+
+### Sentry Integration (src/lib/sentry.ts)
+- Error capture
+- Performance monitoring
+- Source maps upload (CI release.yml)
+- Breadcrumb tracking
+
+### CI/CD Güvenlik (.github/workflows/ci.yml)
+- gitleaks secret scanning
+- npm audit
+- TypeScript strict mode
+- ESLint security rules
+
+## Env Değişkenleri (.env.example)
+```
+DATABASE_URL=postgresql://...
+JWT_SECRET=<min-32-char>
+CORS_ORIGIN=https://ecypro.com
+SENTRY_DSN=https://...
+VITE_SENTRY_DSN=https://...
+REDIS_URL=redis://...
+VITE_GA_TRACKING_ID=G-...
+```
+
+## Sıradaki Adımlar (Phase 31+)
+- JWT blacklist (Redis) + logout endpoint
+- Email verification flow
+- 2FA (TOTP) admin panel
+- CSP strict mode (nonce-based)
+- OWASP ZAP automated scan CI

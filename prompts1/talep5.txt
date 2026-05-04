@@ -1,0 +1,43 @@
+# TALEP 5 — İçerik Derinliği & Bilingual CMS
+# Faz: Phase 28 / Öncelik: ORTA
+# Durum: ✅ TAMAMLANDI (6 case study, 8 blog)
+# ─────────────────────────────────────────────────────────
+
+## Hedef
+McKinsey Insights kalitesinde içerik. TR + EN bilingual.
+Sitemap'te ≥ 40 URL. Organik SEO için yeterli içerik kütlesi.
+
+## Tamamlanan İçerikler
+
+### Case Studies (src/data/mockCaseStudies.ts) — 6 adet
+1. healthcare-ai-platform — AI tabanlı hasta journey (€28M tasarruf)
+2. energy-transition-strategy — Net Zero geçiş yol haritası (%40 karbon ↓)
+3. saas-product-led-growth — PLG dönüşümü (3× ARR)
+4. m-a-value-creation — M&A değer yaratma
+5. digital-operations-transform — Dijital operasyon
+6. strategic-intelligence-platform — Stratejik zeka platformu
+
+### Blog Posts (src/content/blog/) — 8 adet
+1. stratejik-dijital-donusum-2026.mdx (TR)
+2. ai-yatirim-roi-hesaplama.mdx (TR) — CFO ROI çerçevesi
+3. measuring-ai-investment-roi.mdx (EN) — CFO ROI framework
+4. organizasyonel-degisim-yonetimi.mdx (TR) — ADAPT framework
+5. yapay-zeka-yonetim-devrimi.mdx (TR)
+6. global-pazarlara-acilma.mdx (TR)
+7. lean-ai-operational-excellence.mdx (EN)
+8. boardroom-agility-uncertainty.mdx (EN)
+
+### Constants (constants_generated.ts)
+- GENERATED_BLOG_POSTS: 8 bilingual entry
+- Her entry: id, category, date, readTime, title, excerpt, image, slug
+
+## Sitemap Sonucu
+```
+✅ Sitemap generated at public/sitemap.xml with 41 URLs.
+✅ RSS Feed generated at public/rss.xml with 6 items.
+```
+
+## Sıradaki Adımlar (Phase 31+)
+- Blog için otomatik içerik üretimi (gen:content script)
+- Case study için video testimonial entegrasyonu
+- Newsletter ile içerik dağıtımı

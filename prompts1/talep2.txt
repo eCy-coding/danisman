@@ -1,0 +1,31 @@
+# TALEP 2 — Performans Optimizasyonu & Core Web Vitals
+# Faz: Phase 26-27 / Öncelik: YÜKSEK
+# Durum: ✅ TAMAMLANDI (LCP ↓, BP 100, Perf 73 local)
+# ─────────────────────────────────────────────────────────
+
+## Hedef
+Lighthouse Performance ≥ 85 (CDN deploy), local ≥ 70.
+LCP ≤ 2.5s, INP ≤ 200ms, CLS ≤ 0.1.
+
+## Tamamlanan Görevler
+1. App Shell Pre-render — index.html içinde hero skeleton
+2. Lazy LandingPage — React.lazy() ile kod ayrımı
+3. Font Self-host — @fontsource/inter + @fontsource/playfair-display
+4. Google Fonts CDN kaldırıldı
+5. Font preload hints — link[rel=preload] woff2
+6. i18n chunk ayrımı — i18next ayrı bundle (46KB)
+7. Brotli serving plugin — Vite preview'da .br dosyaları
+8. htmlCharsetPlugin — HTML için charset=utf-8
+9. rel=modulepreload (eski rel=prefetch as=script yerine)
+10. Hero animation opacity:0 kaldırıldı (LCP bloker)
+11. Workbox runtimeCaching — CacheFirst/NetworkFirst/StaleWhileRevalidate
+
+## Metrikler (local preview)
+- FCP: ~0.8s
+- LCP: ~1.2s (App Shell)
+- Bundle ana: 537KB → 187KB (-65%)
+
+## Sıradaki İyileştirme (Phase 31+)
+- CDN (Vercel Edge Network) → Performance ≥ 85 bekleniyor
+- Image optimization: next-gen WebP/AVIF format
+- Critical CSS inlining

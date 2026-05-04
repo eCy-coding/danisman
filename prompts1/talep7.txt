@@ -1,0 +1,54 @@
+# TALEP 7 — PWA Offline & Service Worker Stratejisi
+# Faz: Phase 28-29 / Öncelik: ORTA
+# Durum: ✅ TAMAMLANDI
+# ─────────────────────────────────────────────────────────
+
+## Hedef
+Offline-first PWA. Kullanıcı çevrimdışıyken temel içerik erişilebilir.
+E2E testlerde SW intercept problemi çözülecek.
+
+## Workbox Caching Stratejileri (vite.config.ts)
+
+```javascript
+runtimeCaching: [
+  // API: NetworkFirst (5s timeout, 5dk cache)
+  { urlPattern: /\/api\//, handler: 'NetworkFirst',
+    options: { networkTimeoutSeconds: 5, maxAgeSeconds: 300 } },
+
+  // i18n çeviri dosyaları: StaleWhileRevalidate (24sa cache)
+  { urlPattern: /\/locales\//, handler: 'StaleWhileRevalidate',
+    options: { maxAgeSeconds: 86400 } },
+
+  // Font dosyaları: CacheFirst (1 yıl)
+  { urlPattern: /\.(woff2|woff|ttf)$/, handler: 'CacheFirst',
+    options: { maxAgeSeconds: 31536000 } },
+
+  // Görseller: CacheFirst (30 gün, max 60 entry)
+  { urlPattern: /\.(png|jpg|jpeg|webp|svg|ico)$/, handler: 'CacheFirst',
+    options: { maxEntries: 60, maxAgeSeconds: 2592000 } },
+]
+```
+
+## OfflineStatus Bileşeni
+- AppProviders içinde render edilir
+- window.addEventListener('online'/'offline') dinler
+- Framer Motion AnimatePresence ile animated toast
+- Bottom-right, z-9999
+
+## E2E Test Konfigürasyonu
+```javascript
+// playwright.config.ts — SW E2E'de engellendi
+use: {
+  serviceWorkers: 'block'  // page.route() mock'ları çalışır
+}
+```
+
+## PWA Manifest
+- name: 'EcyPro Premium Consulting'
+- theme_color: '#050810'
+- icons: 192×192, 512×512 (any maskable)
+
+## Sıradaki Adımlar
+- Offline fallback sayfası (/offline.html)
+- Background sync for form submissions
+- Push notification infrastructure

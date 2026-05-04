@@ -3,6 +3,7 @@ import authRoutes from './auth';
 import bookingRoutes from './bookings';
 import analyticsRoutes from './analytics';
 import newsletterRoutes from './newsletter';
+import aiRoutes from './ai';
 import { openApiSpec } from '../config/openapi';
 import { redis } from '../config/redis';
 import { prisma } from '../config/db';
@@ -88,5 +89,6 @@ router.use('/auth', authRoutes);
 router.use('/bookings', bookingRoutes);
 router.use('/analytics', analyticsRoutes);
 router.use('/newsletter', newsletterRoutes);
+router.use('/ai', aiRoutes);
 
 export default router;

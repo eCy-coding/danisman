@@ -1,0 +1,40 @@
+# TALEP 3 — E2E Test Stabilitesi & Multi-Browser
+# Faz: Phase 29 / Öncelik: KRİTİK
+# Durum: ✅ TAMAMLANDI (285/285 Chromium+Firefox+WebKit)
+# ─────────────────────────────────────────────────────────
+
+## Hedef
+Tüm 3 browser'da 0 E2E failure. Flaky test = 0.
+Playwright chromium + firefox + webkit: 285/285 yeşil.
+
+## Kök Neden & Düzeltmeler
+| # | Hata | Kök Neden | Çözüm |
+|---|------|-----------|-------|
+| 1 | Newsletter "Ağ hatası" | PWA SW NetworkFirst → page.route() bypass | serviceWorkers:'block' |
+| 2 | Mobile nav strict mode | MegaMenu aria-label /Menu|Menü/ çakışması | Türkçe label |
+| 3 | Zen mode blog hidden | invisible mega-menu text match | getByRole('heading') |
+| 4 | Services no-results | AnimatePresence opacity:0 timing | heading role + timeout |
+| 5 | Case studies timeout | Unsplash networkidle 1.5dk | image mock + domcontentloaded |
+
+## Kritik Konfigürasyon
+```javascript
+// playwright.config.ts
+use: {
+  serviceWorkers: 'block',  // SW NetworkFirst bypass önlenir
+  timeout: 60_000,
+  expect: { timeout: 8000 },
+}
+```
+
+## Komutlar
+```bash
+npx playwright test --project=chromium           # Chromium
+npx playwright test --project=firefox            # Firefox
+npx playwright test --project=webkit             # Safari
+npx playwright test                              # Tüm browser
+npx playwright test e2e/sanity_check.spec.ts     # Hızlı smoke
+```
+
+## FV4 Matriks
+- typecheck: 0/0 ✅ | lint: 0 ✅ | test: 29/29 ✅
+- build: 41 URL ✅ | E2E: 285/285 ✅ | prisma: ✅

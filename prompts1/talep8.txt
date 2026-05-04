@@ -1,0 +1,48 @@
+# TALEP 8 — SEO & Yapısal Veri (JSON-LD)
+# Faz: Phase 20.5 + 24α-E / Öncelik: YÜKSEK
+# Durum: ✅ TAMAMLANDI (Lighthouse SEO 100)
+# ─────────────────────────────────────────────────────────
+
+## Hedef
+Lighthouse SEO 100. Google Rich Results Test "valid".
+Her önemli sayfada BreadcrumbList + uygun @type schema.
+
+## JSON-LD Coverage
+
+| Sayfa | Schema Türleri |
+|-------|---------------|
+| / (Homepage) | WebSite, Organization, FAQPage |
+| /services | ItemList (services), BreadcrumbList |
+| /services/:slug | Service, BreadcrumbList |
+| /industries | ItemList (industries), BreadcrumbList |
+| /case-studies | ItemList (case studies), BreadcrumbList |
+| /case-studies/:slug | Article, BreadcrumbList |
+| /blog | Blog, BreadcrumbList |
+| /blog/:slug | BlogPosting, BreadcrumbList |
+| /about | Organization, BreadcrumbList |
+| /contact | ContactPage, BreadcrumbList |
+| /methodology | WebPage, BreadcrumbList |
+| /pricing | PriceSpecification, BreadcrumbList |
+
+## Sitemap
+- 41 URL (public/sitemap.xml)
+- Otomatik generate: npm run build → scripts/generate-sitemap.ts
+- RSS feed: public/rss.xml (6 blog item)
+
+## Meta Tags (react-helmet-async)
+- title (TR/EN bilingual)
+- description
+- canonical
+- og:title, og:description, og:image, og:type
+- twitter:card, twitter:title, twitter:description
+
+## Teknik SEO
+- robots.txt: Allow all, sitemap link
+- netlify.toml: Content-Type charset=utf-8
+- nginx.conf: charset utf-8
+
+## Sıradaki Adımlar (Phase 31+)
+- LocalBusiness schema (İstanbul + Londra ofisleri)
+- Event schema (webinarlar)
+- Product/Service review schema
+- Hreflang tags (TR/EN)

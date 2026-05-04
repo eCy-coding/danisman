@@ -1,0 +1,36 @@
+# TALEP 6 — Admin Panel & CRUD Operasyonları
+# Faz: Phase 28-30 / Öncelik: YÜKSEK
+# Durum: ✅ TEMELLEŞTİ (Dashboard, Bookings, Services)
+# ─────────────────────────────────────────────────────────
+
+## Tamamlanan Admin Sayfaları
+- /admin/dashboard — KPI + SSE gerçek zamanlı metrikler + Recharts
+- /admin/bookings  — Görüşme talepleri CRUD (✅ Phase 28)
+- /admin/services  — Hizmet listesi yönetimi
+- /admin/blog      — (route mevcut, içerik Phase 31)
+- /admin/analytics — (route mevcut, içerik Phase 31)
+
+## AdminBookingsPage Özellikleri
+- Arama: ad, e-posta, şirket
+- Filtre: tüm / bekliyor / onaylı / tamamlandı / iptal
+- Durum badges (renk kodlu)
+- Satır seçince yan panel detay açılır
+- Durum güncelleme: Onayla / İptal / Tamamlandı
+- Toplam / Bekleyen / Onaylı / Tamamlanan sayaçlar
+
+## AdminSidebar Yapısı
+```
+Overview    → /admin/dashboard
+Bookings    → /admin/bookings   ← YENİ
+Services    → /admin/services
+Content     → /admin/blog
+Analytics   → /admin/analytics  ← YENİ
+Settings    → /admin/settings
+```
+
+## Sıradaki Admin Görevleri (Phase 31+)
+- AdminBlogPage: MDX dosya listesi, inline önizleme
+- AdminAnalyticsPage: SSE gerçek zamanlı dashboard
+- AdminSettingsPage: Site config, e-posta, API keys
+- Backend CRUD API bağlantısı (şu an mock data)
+- JWT admin auth refresh token

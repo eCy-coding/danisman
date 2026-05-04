@@ -22,6 +22,7 @@ import {
 import { Activity, Users, Eye, ArrowUpRight, Wifi, WifiOff, RefreshCw } from 'lucide-react';
 import { useSSE, type DashboardMetrics } from '../../hooks/useSSE';
 import { motion } from 'motion/react';
+import { PromptTaskBoard } from '../../components/admin/PromptTaskBoard';
 
 // ─── Default Data (before SSE connects) ──────────────────
 
@@ -215,6 +216,11 @@ export const AdminDashboard: React.FC = () => {
             </ResponsiveContainer>
           </div>
         </div>
+      </div>
+
+      {/* Prompt Optimization Board */}
+      <div className="mt-8">
+        <PromptTaskBoard />
       </div>
     </div>
   );

@@ -1,0 +1,30 @@
+# TALEP 1 — Erişilebilirlik (A11y) & WCAG 2.2 AAA Uyumu
+# Faz: Phase 24α-A / Öncelik: KRİTİK
+# Durum: ✅ TAMAMLANDI (Lighthouse A11y 100/100)
+# ─────────────────────────────────────────────────────────
+
+## Hedef
+Tüm sayfalarda WCAG 2.2 AA (minimum) ve mümkün olan yerlerde AAA uyumu.
+Lighthouse Accessibility skoru ≥ 98.
+
+## Tamamlanan Görevler
+1. Footer Newsletter form — htmlFor + id + aria-label bağlantısı
+2. WCAG AA kontrast — slate-400 → slate-300/slate-200 düzeltmesi
+3. Heading order — h1 → h2 → h3 cascade, atlama yok
+4. Icon-only button'lara aria-label eklendi
+5. ARIA role children — Pricing tier cards semantik <ul>/<li>
+6. CookieBanner: useId, role=dialog, aria-modal, aria-labelledby
+7. DataFlowBackground SVG aria-hidden
+8. Newsletter form: aria-busy/invalid/describedby/live/atomic
+9. MegaMenu: role="region", aria-label, aria-expanded
+
+## Doğrulama Komutları
+```bash
+npx @axe-core/cli http://localhost:4173 --tags wcag2a,wcag2aa
+npm run test:e2e:fast
+```
+
+## Kabul Kriterleri
+- axe-core: 0 kritik ihlal
+- Lighthouse A11y ≥ 98
+- tsc: 0 hata

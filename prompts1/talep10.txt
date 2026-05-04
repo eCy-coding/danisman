@@ -1,0 +1,79 @@
+# TALEP 10 — Production Deployment & CI/CD
+# Faz: Phase 4 + 31 (devam) / Öncelik: KRİTİK
+# Durum: ⚡ HAZIR (deploy edilmeyi bekliyor)
+# ─────────────────────────────────────────────────────────
+
+## Deployment Seçenekleri
+
+### Seçenek A: Vercel + Render (Önerilen)
+```bash
+# Frontend → Vercel (otomatik CDN, Edge Functions)
+vercel --prod
+
+# Backend → Render (managed PostgreSQL + Node.js)
+render deploy
+
+# Veritabanı
+npx prisma migrate deploy
+```
+
+### Seçenek B: Docker Compose (Self-hosted)
+```bash
+docker compose --profile production up -d
+# Frontend: nginx (port 80/443)
+# Backend: Node.js (port 3001)
+# Database: PostgreSQL (port 5432)
+# Cache: Redis (port 6379)
+```
+
+### Seçenek C: Netlify (Sadece Frontend)
+```bash
+# netlify.toml zaten yapılandırılmış
+netlify deploy --prod
+```
+
+## CI/CD Pipeline (.github/workflows/ci.yml)
+```yaml
+jobs:
+  quality:
+    - typecheck (frontend + server)
+    - lint (ESLint)
+    - test (Vitest 29/29)
+
+  build:
+    - npm run build
+    - sitemap generate (41 URL)
+
+  e2e:
+    - Playwright chromium (95/95)
+    - # firefox + webkit opsiyonel
+
+  release:
+    - Sentry source maps upload (tag push)
+```
+
+## Go-Live Checklist
+- [ ] DATABASE_URL production PostgreSQL
+- [ ] JWT_SECRET ≥ 32 karakter
+- [ ] CORS_ORIGIN = https://ecypro.com
+- [ ] VITE_API_URL = https://api.ecypro.com
+- [ ] REDIS_URL (opsiyonel, SSE için)
+- [ ] SENTRY_DSN + VITE_SENTRY_DSN
+- [ ] VITE_GA_TRACKING_ID
+- [ ] npx prisma migrate deploy
+- [ ] DNS A kaydı
+- [ ] SSL sertifikası (Vercel/Netlify otomatik)
+
+## Altyapı (IaC)
+- infrastructure/vercel/vercel-frontend.tf — Vercel Terraform
+- infrastructure/render/render-backend.tf — Render Terraform
+- render.yaml — Backend service config
+- netlify.toml — Frontend headers + redirects
+- nginx.conf — Self-hosted nginx config
+- Dockerfile — Multi-stage build
+- docker-compose.yml — Tam orkestrasyon
+
+## Performans Beklentisi (Production CDN)
+- Lighthouse Performance: ≥ 85 (Brotli + CDN + Edge)
+- TTFB: < 200ms (Vercel Edge)
+- LCP: < 2.5s
