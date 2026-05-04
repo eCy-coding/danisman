@@ -1,12 +1,3 @@
-
-import { CHART_STYLES } from '../../constants/styles';
-
-// ... inside component ...
-                <Tooltip 
-                  contentStyle={CHART_STYLES.tooltip}
-                  itemStyle={CHART_STYLES.item}
-                />
-
 import React, { useState, useCallback } from 'react';
 import { 
   AreaChart, 
@@ -176,7 +167,7 @@ export const AdminDashboard: React.FC = () => {
         {/* Main Chart */}
         <div className="lg:col-span-2 bg-[#0A101F]/80 border border-white/5 rounded-2xl p-6 backdrop-blur-sm">
           <h3 className="text-lg font-serif text-white mb-6">Traffic Analysis</h3>
-          <div className="h-[300px] w-full">
+          <div className="h-75 w-full">
             <ResponsiveContainer width="100%" height="100%" minWidth={1} minHeight={1}>
               <AreaChart data={DEFAULT_TRAFFIC_DATA}>
                 <defs>
@@ -201,7 +192,7 @@ export const AdminDashboard: React.FC = () => {
         {/* Side Chart */}
         <div className="bg-[#0A101F]/80 border border-white/5 rounded-2xl p-6 backdrop-blur-sm">
           <h3 className="text-lg font-serif text-white mb-6">Service Demand</h3>
-          <div className="h-[300px] w-full">
+          <div className="h-75 w-full">
             <ResponsiveContainer width="100%" height="100%" minWidth={1} minHeight={1}>
               <BarChart data={SERVICE_PERFORMANCE} layout="vertical">
                 <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#ffffff10" />

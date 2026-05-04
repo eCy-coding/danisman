@@ -7,7 +7,8 @@ import {
   LogOut, 
   Briefcase,
   Calendar,
-  BarChart3
+  BarChart3,
+  Bot
 } from 'lucide-react';
 import { useAdminAuth } from '../../../hooks/useAdminAuth';
 
@@ -16,8 +17,9 @@ const MENU_ITEMS = [
   { icon: Calendar, label: 'Bookings', path: '/admin/bookings' },
   { icon: Briefcase, label: 'Services', path: '/admin/services' },
   { icon: FileText, label: 'Content', path: '/admin/blog' },
+  { icon: Bot,      label: 'AI Creator', path: '/admin/ai' },
   { icon: BarChart3, label: 'Analytics', path: '/admin/analytics' },
-  { icon: Settings, label: 'Settings', path: '/admin/settings' },
+  { icon: Settings,  label: 'Settings',  path: '/admin/settings' },
 ];
 
 export const AdminSidebar: React.FC = () => {
