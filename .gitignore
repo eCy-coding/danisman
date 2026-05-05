@@ -172,3 +172,21 @@ dumps/
 ecypro-theme.zip
 microweber.zip
 dev.db
+
+# SEO secrets (API keys)
+secrets/
+audits/
+
+# Lighthouse CI output
+.lighthouseci/
+
+# Database backups (never commit)
+backups/
+
+# Scrapling crowler (venv + reports)
+crowler/.venv/
+crowler/reports/
+crowler/mcp_config.json
+crowler/__pycache__/
+crowler/scripts/__pycache__/
+crowler/*.pyc

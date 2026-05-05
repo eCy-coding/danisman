@@ -45,7 +45,7 @@ export default defineConfig({
       timeout: 120000,
     },
     {
-      command: 'node server/mock-server.js',
+      command: 'node server/mock-server.mjs',
       url: 'http://localhost:3001/__health',
       reuseExistingServer: !process.env.CI,
       timeout: 10000,
