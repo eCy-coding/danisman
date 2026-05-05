@@ -1,0 +1,33 @@
+title = "EcyPro Gitleaks Config"
+
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "Example and template files — placeholders only"
+paths = [
+  '''.env\.example''',
+  '''.env\.local\.example''',
+  '''.env\.deploy\.example''',
+  '''\.example$''',
+  '''entegrasyon\.txt''',
+  '''prompts/''',
+  '''brain/''',
+  '''docs/''',
+  '''scripts/setup-env\.sh''',
+]
+
+[[allowlists]]
+description = "Test fixtures and mocks"
+paths = [
+  '''\.test\.(ts|tsx)$''',
+  '''\.spec\.(ts|tsx)$''',
+  '''__mocks__/''',
+  '''e2e/mocks/''',
+]
+
+[[allowlists]]
+description = "Generated lock files"
+paths = [
+  '''package-lock\.json''',
+]

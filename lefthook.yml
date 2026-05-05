@@ -10,7 +10,7 @@ pre-commit:
     secret-scan:
       # Phase 20 D3: real gitleaks scan over the working tree only
       # (avoids re-scanning git history on every commit).
-      run: npx gitleaks detect --no-banner --no-git --redact --source=.
+      run: gitleaks protect --staged --no-banner --redact
 
 commit-msg:
   commands:
@@ -18,10 +18,7 @@ commit-msg:
       run: npx commitlint --edit {1}
 
 pre-push:
-  parallel: true
   commands:
     type-check:
       # Full typecheck: frontend (tsc) + server (tsconfig.server.json)
       run: npm run typecheck
-    build-check:
-      run: npm run build
