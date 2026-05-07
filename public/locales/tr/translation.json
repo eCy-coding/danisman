@@ -4,7 +4,12 @@
     "blog": "Blog",
     "about": "Hakkımızda",
     "contact": "İletişim",
-    "dashboard": "Panel"
+    "dashboard": "Panel",
+    "overview": "Genel Bakış",
+    "analytics": "Analizler",
+    "consulting": "Danışmanlık",
+    "settings": "Ayarlar",
+    "language": "English"
   },
   "hero": {
     "title": "Elit Danışmanlık Ekosistemi",
@@ -16,9 +21,64 @@
     "read_more": "Devamını Oku",
     "loading": "Yükleniyor...",
     "error": "Bir şeyler yanlış gitti",
-    "zen_mode": "Zen Modu"
+    "zen_mode": "Zen Modu",
+    "search": "Ara..."
   },
   "footer": {
     "rights": "Tüm hakları saklıdır."
+  },
+  "dashboard": {
+    "title": "Müşteri Deneyimi Paneli",
+    "panel": "Panel"
+  },
+  "auth": {
+    "logout": "Çıkış Yap"
+  },
+  "analytics": {
+    "total_revenue": "Toplam Gelir",
+    "active_clients": "Aktif Danışanlar",
+    "activity_rate": "Etkinlik Oranı",
+    "revenue_analysis": "Gelir Analizi",
+    "session_stats": "Oturum İstatistikleri",
+    "restricted_title": "Veriler Gizlendi",
+    "restricted_desc": "Bu bilgilere erişim yetkiniz bulunmamaktadır.",
+    "admin_only": "Yönetici",
+    "restricted_chart": "Finansal grafikler sadece yetkili yöneticiler tarafından görüntülenebilir."
+  },
+  "consulting": {
+    "title": "Danışmanlık Takvimi",
+    "subtitle": "Yaklaşan oturumlarınızı yönetin.",
+    "new_session": "Yeni Oturum",
+    "save": "Kaydet",
+    "cancel": "İptal",
+    "delete_confirm": "Bu oturumu silmek istediğinize emin misiniz?",
+    "table": {
+      "client": "Müşteri",
+      "type": "Hizmet Tipi",
+      "date": "Tarih",
+      "time": "Saat",
+      "status": "Durum"
+    },
+    "dialog": {
+      "new_title": "Yeni Oturum Planla",
+      "edit_title": "Oturumu Düzenle"
+    },
+    "form": {
+      "client": "Müşteri Adı",
+      "type": "Hizmet Tipi",
+      "date": "Tarih",
+      "time": "Saat",
+      "status": "Durum"
+    }
+  },
+  "toast": {
+    "session_deleted": "Oturum silindi.",
+    "session_created": "Yeni oturum oluşturuldu.",
+    "session_updated": "Oturum güncellendi.",
+    "error_loading": "Veriler yüklenirken bir hata oluştu."
+  },
+  "ai": {
+    "analyzing": "Analiz ediliyor...",
+    "insight_title": "AI Strateji Analizi"
   }
 }
