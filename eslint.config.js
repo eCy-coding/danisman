@@ -13,6 +13,11 @@ export default tseslint.config(
       'test-results',
       'coverage',
       'browser-profile',
+      // Claude Code worktrees + MCP managed directories
+      '.claude',
+      // Python venv + Scrapling crawler (third-party)
+      'crowler/.venv',
+      'crowler/Scrapling-main',
       // Root-level ad-hoc CJS/JS helpers (not part of the app runtime):
       'check-scores.cjs',
       'fix-ts.cjs',
@@ -45,6 +50,8 @@ export default tseslint.config(
           caughtErrorsIgnorePattern: '^_',
         },
       ],
+      // Phase 101: TypeScript strict contract — no implicit/explicit any
+      '@typescript-eslint/no-explicit-any': 'error',
       'no-console': ['warn', { allow: ['warn', 'error'] }],
     },
   },
@@ -66,6 +73,8 @@ export default tseslint.config(
           caughtErrorsIgnorePattern: '^_',
         },
       ],
+      // Phase 101: TypeScript strict contract — no implicit/explicit any
+      '@typescript-eslint/no-explicit-any': 'error',
       // Server uses Winston; console.* are errors (excluded for scripts/* via override below).
       'no-console': ['error', { allow: ['warn', 'error'] }],
     },

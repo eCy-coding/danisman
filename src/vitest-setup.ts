@@ -4,6 +4,13 @@
 
 import { vi } from 'vitest';
 
+declare global {
+  var IS_REACT_ACT_ENVIRONMENT: boolean;
+}
+
+// React 19: configure act() support for the jsdom environment
+globalThis.IS_REACT_ACT_ENVIRONMENT = true;
+
 // Mock matchMedia
 Object.defineProperty(window, 'matchMedia', {
   writable: true,

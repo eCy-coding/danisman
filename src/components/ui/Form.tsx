@@ -1,5 +1,13 @@
 import React from 'react';
-import { useFormContext, Controller, FieldValues, Path, RegisterOptions } from 'react-hook-form';
+import {
+  useFormContext,
+  Controller,
+  FieldValues,
+  FieldError,
+  Path,
+  RegisterOptions,
+  get,
+} from 'react-hook-form';
 import { Input } from './Input';
 import { cn } from '@/lib/utils';
 
@@ -20,14 +28,16 @@ export const FormField = <T extends FieldValues>({
   type = 'text',
   className,
 }: FormFieldProps<T>) => {
-  const { control, formState: { errors } } = useFormContext<T>();
+  const {
+    control,
+    formState: { errors },
+  } = useFormContext<T>();
 
-  // Extract error message potentially nested
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const error = (errors as any)[name];
+  // Use react-hook-form's `get` helper for dot-path nested error access
+  const error = get(errors, name) as FieldError | undefined;
 
   return (
-    <div className={cn("space-y-2", className)}>
+    <div className={cn('space-y-2', className)}>
       {label && (
         <label htmlFor={name} className="text-sm font-medium text-slate-400">
           {label}
