@@ -1,8 +1,9 @@
 import { useEffect } from 'react';
 import { usePersonalizationStore } from '@/lib/stores/personalizationStore';
+import { Logger } from '@/lib/logger';
 
 export const useInterestTracker = (tags: string[], pageId: string) => {
-  const trackVisit = usePersonalizationStore(state => state.trackVisit);
+  const trackVisit = usePersonalizationStore((state) => state.trackVisit);
 
   useEffect(() => {
     // Skip tracking for SSR/testing/automation to avoid noisy console output and heavy state writes
@@ -17,7 +18,7 @@ export const useInterestTracker = (tags: string[], pageId: string) => {
       } catch (e) {
         // Silently fail in tests; log only for real users to keep traces clean
         if (!isAutomation) {
-          console.warn('[InterestTracker] Failed to track visit:', e);
+          Logger.warn('[InterestTracker] Failed to track visit', e);
         }
       }
     }

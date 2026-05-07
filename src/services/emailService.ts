@@ -1,8 +1,8 @@
-/* eslint-disable no-console */
 /**
  * Notification Service (formerly EmailService)
  * Uses Telegram Bot API for instant notifications instead of EmailJS
  */
+import { Logger } from '@/lib/logger';
 
 const TELEGRAM_TOKEN = import.meta.env.VITE_TELEGRAM_BOT_TOKEN;
 const TELEGRAM_CHAT_ID = import.meta.env.VITE_TELEGRAM_CHAT_ID;
@@ -25,7 +25,6 @@ export interface EmailResponse {
  */
 export async function sendContactEmail(data: ContactFormData): Promise<EmailResponse> {
   try {
-    // Validate required fields
     if (!data.name || !data.email || !data.message) {
       return {
         success: false,
@@ -33,7 +32,6 @@ export async function sendContactEmail(data: ContactFormData): Promise<EmailResp
       };
     }
 
-    // Format Message for Telegram
     const text = `
 📬 *New EcyPro Lead*
 👤 *Name:* ${data.name}
@@ -45,18 +43,16 @@ export async function sendContactEmail(data: ContactFormData): Promise<EmailResp
 ${data.message}
     `;
 
-    // Check configuration
     if (!TELEGRAM_TOKEN || !TELEGRAM_CHAT_ID) {
-      console.warn('⚠️ Telegram Keys Missing! Falling back to Demo Mode.');
-      console.log('Would send:', text);
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      Logger.warn('Telegram Keys Missing — falling back to Demo Mode');
+      Logger.debug('[Telegram demo] would send', text);
+      await new Promise((resolve) => setTimeout(resolve, 1000));
       return {
         success: true,
         message: 'Demo Modu: Mesaj simüle edildi (Telegram anahtarlarını .env dosyasına ekleyin).',
       };
     }
 
-    // Send to Telegram
     const url = `https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`;
     const response = await fetch(url, {
       method: 'POST',
@@ -76,11 +72,11 @@ ${data.message}
         message: 'Mesajınız başarıyla iletildi. En kısa sürede size dönüş yapacağız.',
       };
     } else {
-      console.error('Telegram Error:', result);
+      Logger.error('Telegram Error', result);
       throw new Error(result.description || 'Telegram API Error');
     }
   } catch (error) {
-    console.error('Notification error:', error);
+    Logger.error('Notification error', error);
     return {
       success: false,
       message: 'Bir hata oluştu. Lütfen daha sonra tekrar deneyin.',
@@ -112,9 +108,9 @@ export async function submitBooking(data: BookingData): Promise<EmailResponse> {
     `;
 
     if (!TELEGRAM_TOKEN || !TELEGRAM_CHAT_ID) {
-      console.warn('⚠️ Telegram Keys Missing! Falling back to Demo Mode.');
-      console.log('Would send:', text);
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      Logger.warn('Telegram Keys Missing — falling back to Demo Mode');
+      Logger.debug('[Telegram demo] would send', text);
+      await new Promise((resolve) => setTimeout(resolve, 1000));
       return { success: true, message: 'Demo Modu' };
     }
 
@@ -137,7 +133,7 @@ export async function submitBooking(data: BookingData): Promise<EmailResponse> {
       throw new Error(result.description || 'Telegram API Error');
     }
   } catch (error) {
-    console.error('Booking notification error:', error);
+    Logger.error('Booking notification error', error);
     return { success: false, message: 'Error' };
   }
 }

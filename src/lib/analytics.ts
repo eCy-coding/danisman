@@ -1,3 +1,5 @@
+import { Logger } from './logger';
+
 declare global {
   interface Window {
     gtag?: (...args: unknown[]) => void;
@@ -16,8 +18,7 @@ function _push(eventName: string, params: Record<string, unknown>): void {
   }
 
   if (import.meta.env.DEV || (typeof window !== 'undefined' && window.TEST_MODE)) {
-    // eslint-disable-next-line no-console
-    console.log(`[Analytics] %c${eventName}`, 'color:#10b981;font-weight:bold;', payload);
+    Logger.debug(`[Analytics] ${eventName}`, payload);
     if (typeof window !== 'undefined') {
       window._last_analytics_event = { action: eventName, ...payload };
     }

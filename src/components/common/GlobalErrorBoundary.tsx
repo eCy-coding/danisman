@@ -1,5 +1,6 @@
 import React, { Component, ErrorInfo, ReactNode } from 'react';
 import { AlertTriangle, RefreshCw } from 'lucide-react';
+import { Logger } from '@/lib/logger';
 
 interface Props {
   children?: ReactNode;
@@ -13,7 +14,7 @@ interface State {
 
 export class GlobalErrorBoundary extends Component<Props, State> {
   public state: State = {
-    hasError: false
+    hasError: false,
   };
 
   public static getDerivedStateFromError(error: Error): State {
@@ -21,8 +22,7 @@ export class GlobalErrorBoundary extends Component<Props, State> {
   }
 
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error('Uncaught error:', error, errorInfo);
-    // Here you would log to a monitoring service (Sentry, etc.)
+    Logger.error('Uncaught error', error, { componentStack: errorInfo.componentStack });
   }
 
   public render() {
@@ -37,16 +37,16 @@ export class GlobalErrorBoundary extends Component<Props, State> {
             <div className="w-16 h-16 rounded-full bg-red-500/10 flex items-center justify-center mx-auto mb-6">
               <AlertTriangle className="text-red-500 w-8 h-8" />
             </div>
-            
+
             <h2 className="text-2xl font-bold text-white mb-2">Something went wrong</h2>
             <p className="text-gray-400 mb-6 text-sm">
               We encountered an unexpected error. Our team has been notified.
             </p>
 
             <div className="bg-black/20 rounded-lg p-4 mb-6 text-left overflow-hidden">
-               <p className="font-mono text-xs text-red-300 break-all">
-                 {this.state.error?.message || 'Unknown Error'}
-               </p>
+              <p className="font-mono text-xs text-red-300 break-all">
+                {this.state.error?.message || 'Unknown Error'}
+              </p>
             </div>
 
             <div className="flex gap-4 w-full">

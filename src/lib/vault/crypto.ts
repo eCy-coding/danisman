@@ -22,7 +22,7 @@ export class VaultCrypto {
         await this.storeKey(this.key);
       }
     } catch (e) {
-      console.error('[Vault] Crypto Init Failed:', e);
+      Logger.error('[Vault] Crypto Init Failed', e);
       throw e;
     }
   }
@@ -40,7 +40,7 @@ export class VaultCrypto {
         iv: iv,
       },
       this.key!,
-      encodedData
+      encodedData,
     );
 
     return { iv, content };
@@ -57,13 +57,13 @@ export class VaultCrypto {
           iv: iv,
         },
         this.key!,
-        content
+        content,
       );
 
       const decoded = new TextDecoder().decode(decrypted);
       return JSON.parse(decoded) as T;
     } catch (e) {
-      console.error('[Vault] Decryption Failed:', e);
+      Logger.error('[Vault] Decryption Failed', e);
       throw new Error('Decryption failed. Key mismatch or corrupted data.');
     }
   }
@@ -77,7 +77,7 @@ export class VaultCrypto {
         length: 256,
       },
       false, // non-extractable (security feature)
-      ['encrypt', 'decrypt']
+      ['encrypt', 'decrypt'],
     );
   }
 

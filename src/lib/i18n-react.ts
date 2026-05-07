@@ -11,16 +11,36 @@
  *
  * Side-effect-only import: pull this in once from `src/main.tsx`.
  */
+/**
+ * P39-T07: i18next ICU MessageFormat Plugin
+ *
+ * ICU syntax enables:
+ *   - Plural forms:  "{count, plural, one {# item} other {# items}}"
+ *   - Gender:        "{gender, select, male {He} female {She} other {They}}"
+ *   - Number format: "{amount, number, currency}" (locale-aware)
+ *   - Date format:   "{date, date, long}"
+ *
+ * TR plural note: Turkish has no grammatical plural for count nouns,
+ * so most TR strings use "other" only. ICU still normalizes the API.
+ *
+ * Usage in locale JSON:
+ *   { "bookingDuration": "{count, plural, one {# saat} other {# saat}}" }
+ *   { "items": "{count, plural, one {# item} other {# items}}" }
+ * Usage in component:
+ *   t('bookingDuration', { count: 2 }) → "2 saat" (TR) / "2 hours" (EN)
+ */
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import HttpBackend from 'i18next-http-backend';
 import LanguageDetector from 'i18next-browser-languagedetector';
+import ICU from 'i18next-icu';
+import { Logger } from './logger';
 
 export const SUPPORTED_LANGS = ['tr', 'en'] as const;
 export const DEFAULT_LANG = 'tr';
 
 export const NAMESPACES = [
-  'translation',  // legacy default — already shipping
+  'translation', // legacy default — already shipping
   'blog',
   'contact',
   'services',
@@ -33,6 +53,7 @@ export const NAMESPACES = [
 ] as const;
 
 i18n
+  .use(ICU)
   .use(HttpBackend)
   .use(LanguageDetector)
   .use(initReactI18next)
@@ -58,7 +79,7 @@ i18n
   })
   .catch((err) => {
     // Don't throw — failing to initialize i18n should still let the app boot.
-    if (typeof console !== 'undefined') console.warn('[i18n] init failed:', err);
+    Logger.warn('[i18n] init failed', err);
   });
 
 export default i18n;

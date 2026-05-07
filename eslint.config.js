@@ -52,7 +52,16 @@ export default tseslint.config(
       ],
       // Phase 101: TypeScript strict contract — no implicit/explicit any
       '@typescript-eslint/no-explicit-any': 'error',
-      'no-console': ['warn', { allow: ['warn', 'error'] }],
+      // Phase 103: Logger is the single console sink — frontend code must use Logger.*
+      'no-console': 'error',
+    },
+  },
+
+  // ── Phase 103: Logger module is the single console sink ──
+  {
+    files: ['src/lib/logger.ts'],
+    rules: {
+      'no-console': 'off',
     },
   },
 

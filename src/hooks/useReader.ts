@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { Logger } from '@/lib/logger';
 
 export interface UseReaderProps {
   text: string;
@@ -21,7 +22,11 @@ export interface UseReaderReturn {
   selectedVoice: SpeechSynthesisVoice | null;
 }
 
-export function useReader({ text, lang = 'en-US', autoPlay: _autoPlay = false }: UseReaderProps): UseReaderReturn {
+export function useReader({
+  text,
+  lang = 'en-US',
+  autoPlay: _autoPlay = false,
+}: UseReaderProps): UseReaderReturn {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [currentSentence, setCurrentSentence] = useState('');
@@ -36,7 +41,12 @@ export function useReader({ text, lang = 'en-US', autoPlay: _autoPlay = false }:
   const sentenceIndexRef = useRef(0);
 
   useEffect(() => {
-    if (typeof window !== 'undefined' && 'speechSynthesis' in window && 'Intl' in window && 'Segmenter' in (Intl as unknown as { Segmenter: unknown })) {
+    if (
+      typeof window !== 'undefined' &&
+      'speechSynthesis' in window &&
+      'Intl' in window &&
+      'Segmenter' in (Intl as unknown as { Segmenter: unknown })
+    ) {
       setSupported(true);
       synthRef.current = window.speechSynthesis;
 
@@ -44,9 +54,12 @@ export function useReader({ text, lang = 'en-US', autoPlay: _autoPlay = false }:
         const availableVoices = synthRef.current?.getVoices() || [];
         setVoices(availableVoices);
         // Heuristic: Prefer "Google" or "Microsoft" voices for better quality
-        const preferredVoice = availableVoices.find(v => v.lang === lang && (v.name.includes('Google') || v.name.includes('Microsoft'))) || availableVoices.find(v => v.lang === lang);
+        const preferredVoice =
+          availableVoices.find(
+            (v) => v.lang === lang && (v.name.includes('Google') || v.name.includes('Microsoft')),
+          ) || availableVoices.find((v) => v.lang === lang);
         if (preferredVoice) {
-            setSelectedVoice(preferredVoice);
+          setSelectedVoice(preferredVoice);
         }
       };
 
@@ -60,26 +73,29 @@ export function useReader({ text, lang = 'en-US', autoPlay: _autoPlay = false }:
   // Segment text into sentences using Intl.Segmenter
   useEffect(() => {
     if (supported && text) {
-        try {
-            interface IntlSegmenter {
-              new(locale: string, options: { granularity: 'sentence' | 'word' }): {
-                segment(input: string): Iterable<{ segment: string }>;
-              };
-            }
-            const Segmenter = (Intl as unknown as { Segmenter: IntlSegmenter }).Segmenter;
-            const segmenter = new Segmenter(lang, { granularity: 'sentence' });
-            const segments = segmenter.segment(text);
-            const sentences: string[] = [];
-            for (const { segment } of segments) {
-                if (segment.trim().length > 0) {
-                    sentences.push(segment.trim());
-                }
-            }
-            sentencesRef.current = sentences;
-        } catch (e) {
-            console.warn('Intl.Segmenter failed, falling back to split', e);
-            sentencesRef.current = text.match(/[^.!?]+[.!?]+/g) || [text];
+      try {
+        interface IntlSegmenter {
+          new (
+            locale: string,
+            options: { granularity: 'sentence' | 'word' },
+          ): {
+            segment(input: string): Iterable<{ segment: string }>;
+          };
         }
+        const Segmenter = (Intl as unknown as { Segmenter: IntlSegmenter }).Segmenter;
+        const segmenter = new Segmenter(lang, { granularity: 'sentence' });
+        const segments = segmenter.segment(text);
+        const sentences: string[] = [];
+        for (const { segment } of segments) {
+          if (segment.trim().length > 0) {
+            sentences.push(segment.trim());
+          }
+        }
+        sentencesRef.current = sentences;
+      } catch (e) {
+        Logger.warn('Intl.Segmenter failed, falling back to split', e);
+        sentencesRef.current = text.match(/[^.!?]+[.!?]+/g) || [text];
+      }
     }
   }, [text, lang, supported]);
 
@@ -96,11 +112,11 @@ export function useReader({ text, lang = 'en-US', autoPlay: _autoPlay = false }:
   }, [supported]);
 
   const pause = useCallback(() => {
-     if (!supported) return;
-     synthRef.current?.pause();
-     setIsPlaying(false);
-     isPlayingRef.current = false;
-     setIsPaused(true);
+    if (!supported) return;
+    synthRef.current?.pause();
+    setIsPlaying(false);
+    isPlayingRef.current = false;
+    setIsPaused(true);
   }, [supported]);
 
   const resume = useCallback(() => {
@@ -111,47 +127,51 @@ export function useReader({ text, lang = 'en-US', autoPlay: _autoPlay = false }:
     setIsPaused(false);
   }, [supported]);
 
-  const speakSentence = useCallback((index: number) => {
-    if (!synthRef.current || index >= sentencesRef.current.length) {
+  const speakSentence = useCallback(
+    (index: number) => {
+      if (!synthRef.current || index >= sentencesRef.current.length) {
         setIsPlaying(false);
         isPlayingRef.current = false;
         setCurrentSentence('');
         setProgress(100);
         return;
-    }
+      }
 
-    const sentence = sentencesRef.current[index];
-    setCurrentSentence(sentence || '');
-    setProgress((index / sentencesRef.current.length) * 100);
-    sentenceIndexRef.current = index;
+      const sentence = sentencesRef.current[index];
+      setCurrentSentence(sentence || '');
+      setProgress((index / sentencesRef.current.length) * 100);
+      sentenceIndexRef.current = index;
 
-    const utterance = new SpeechSynthesisUtterance(sentence);
-    utterance.lang = lang;
-    if (selectedVoice) {
+      const utterance = new SpeechSynthesisUtterance(sentence);
+      utterance.lang = lang;
+      if (selectedVoice) {
         utterance.voice = selectedVoice;
-    }
-    
-    utterance.onend = () => {
-        if (isPlayingRef.current) { // Use ref to avoid stale closure
-             speakSentence(index + 1);
+      }
+
+      utterance.onend = () => {
+        if (isPlayingRef.current) {
+          // Use ref to avoid stale closure
+          speakSentence(index + 1);
         }
-    };
-    
-    utterance.onerror = (e) => {
-        console.error('TTS Error', e);
+      };
+
+      utterance.onerror = (e) => {
+        Logger.error('TTS Error', e);
         setIsPlaying(false);
         isPlayingRef.current = false;
-    };
+      };
 
-    utteranceRef.current = utterance;
-    synthRef.current.speak(utterance);
-  }, [lang, selectedVoice]); // removed isPlaying from dependencies
+      utteranceRef.current = utterance;
+      synthRef.current.speak(utterance);
+    },
+    [lang, selectedVoice],
+  ); // removed isPlaying from dependencies
 
   const speak = useCallback(() => {
     if (!supported) return;
     if (isPaused) {
-        resume();
-        return;
+      resume();
+      return;
     }
     synthRef.current?.cancel();
     setIsPlaying(true);
@@ -161,7 +181,7 @@ export function useReader({ text, lang = 'en-US', autoPlay: _autoPlay = false }:
   }, [supported, isPaused, speakSentence, resume]);
 
   const setVoice = useCallback((voice: SpeechSynthesisVoice) => {
-      setSelectedVoice(voice);
+    setSelectedVoice(voice);
   }, []);
 
   return {
@@ -176,6 +196,6 @@ export function useReader({ text, lang = 'en-US', autoPlay: _autoPlay = false }:
     supported,
     voices,
     setVoice,
-    selectedVoice
+    selectedVoice,
   };
 }

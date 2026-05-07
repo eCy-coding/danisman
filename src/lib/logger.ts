@@ -1,8 +1,14 @@
+/**
+ * Centralized DEV-gated logger with optional Sentry capture for errors.
+ * P103: replaces direct console.* across src/* (logger is the single sink).
+ */
+import * as Sentry from '@sentry/react';
+
 export enum LogLevel {
   DEBUG,
   INFO,
   WARN,
-  ERROR
+  ERROR,
 }
 
 class LoggerService {
@@ -10,20 +16,18 @@ class LoggerService {
 
   constructor() {
     if (import.meta.env.MODE === 'test') {
-      this.level = LogLevel.ERROR; // Silence almost everything during tests
+      this.level = LogLevel.ERROR;
     }
   }
 
   debug(message: string, ...args: unknown[]) {
     if (this.level <= LogLevel.DEBUG) {
-      // eslint-disable-next-line no-console
       console.debug(`%c[DEBUG] ${message}`, 'color: #94A3B8', ...args);
     }
   }
 
   info(message: string, ...args: unknown[]) {
     if (this.level <= LogLevel.INFO) {
-      // eslint-disable-next-line no-console
       console.info(`%c[INFO] ${message}`, 'color: #3B82F6', ...args);
     }
   }
@@ -34,15 +38,22 @@ class LoggerService {
     }
   }
 
-  error(message: string, error?: unknown) {
+  error(message: string, error?: unknown, extra?: Record<string, unknown>) {
     if (this.level <= LogLevel.ERROR) {
-      console.error(`%c[ERROR] ${message}`, 'color: #EF4444', error || '');
+      console.error(`%c[ERROR] ${message}`, 'color: #EF4444', error ?? '', extra ?? '');
+    }
+    // No-op when Sentry is not initialized; safe to call always.
+    if (error instanceof Error) {
+      Sentry.captureException(error, { extra: { logMessage: message, ...extra } });
+    } else if (error !== undefined) {
+      Sentry.captureMessage(`${message}: ${String(error)}`, 'error');
+    } else {
+      Sentry.captureMessage(message, 'error');
     }
   }
 
   success(message: string) {
     if (this.level <= LogLevel.INFO) {
-      // eslint-disable-next-line no-console
       console.log(`%c[SUCCESS] ${message}`, 'color: #10B981; font-weight: bold');
     }
   }

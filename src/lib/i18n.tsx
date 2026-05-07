@@ -1,5 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 import React, { createContext, useContext, useState, ReactNode } from 'react';
+import { Logger } from './logger';
 
 export type Language = 'tr' | 'en';
 export type MultiLang = { tr: string; en: string };
@@ -28,7 +29,7 @@ export const translations: Translations = {
     'common.search': 'Ara...',
     'auth.logout': 'Çıkış Yap',
     'dashboard.panel': 'Panel',
-    
+
     // Analytics
     'analytics.total_revenue': 'Toplam Gelir',
     'analytics.active_clients': 'Aktif Danışanlar',
@@ -38,7 +39,8 @@ export const translations: Translations = {
     'analytics.restricted_title': 'Veriler Gizlendi',
     'analytics.restricted_desc': 'Bu bilgilere erişim yetkiniz bulunmamaktadır.',
     'analytics.admin_only': 'Yönetici',
-    'analytics.restricted_chart': 'Finansal grafikler sadece yetkili yöneticiler tarafından görüntülenebilir.',
+    'analytics.restricted_chart':
+      'Finansal grafikler sadece yetkili yöneticiler tarafından görüntülenebilir.',
 
     // Consulting
     'consulting.title': 'Danışmanlık Takvimi',
@@ -59,13 +61,13 @@ export const translations: Translations = {
     'consulting.save': 'Kaydet',
     'consulting.cancel': 'İptal',
     'consulting.delete_confirm': 'Bu oturumu silmek istediğinize emin misiniz?',
-    
+
     // Toasts & System
     'toast.session_deleted': 'Oturum silindi.',
     'toast.session_created': 'Yeni oturum oluşturuldu.',
     'toast.session_updated': 'Oturum güncellendi.',
     'toast.error_loading': 'Veriler yüklenirken bir hata oluştu.',
-    
+
     // AI Widget
     'ai.analyzing': 'Analyzing...', // Keep technical terms sometimes or translate
     'ai.insight_title': 'AI Strateji Analizi',
@@ -91,7 +93,8 @@ export const translations: Translations = {
     'analytics.restricted_title': 'Data Hidden',
     'analytics.restricted_desc': 'You do not have permission to access this data.',
     'analytics.admin_only': 'Admin Only',
-    'analytics.restricted_chart': 'Financial charts can only be viewed by authorized administrators.',
+    'analytics.restricted_chart':
+      'Financial charts can only be viewed by authorized administrators.',
 
     // Consulting
     'consulting.title': 'Consulting Calendar',
@@ -112,7 +115,7 @@ export const translations: Translations = {
     'consulting.save': 'Save',
     'consulting.cancel': 'Cancel',
     'consulting.delete_confirm': 'Are you sure you want to delete this session?',
-    
+
     // Toasts & System
     'toast.session_deleted': 'Session deleted.',
     'toast.session_created': 'New session created.',
@@ -122,7 +125,7 @@ export const translations: Translations = {
     // AI Widget
     'ai.analyzing': 'Analyzing...',
     'ai.insight_title': 'AI Strategy Analysis',
-  }
+  },
 };
 
 interface I18nContextType {
@@ -142,10 +145,10 @@ export const I18nProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     try {
       if (typeof window !== 'undefined') {
         const saved = localStorage.getItem('ecypro-lang');
-        return (saved === 'tr' || saved === 'en') ? saved : 'tr';
+        return saved === 'tr' || saved === 'en' ? saved : 'tr';
       }
     } catch (_e) {
-      console.warn('Failed to load language preference');
+      Logger.warn('Failed to load language preference');
     }
     return 'tr';
   });
@@ -154,7 +157,7 @@ export const I18nProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     try {
       localStorage.setItem('ecypro-lang', language);
     } catch (_e) {
-      console.warn('Failed to save language preference');
+      Logger.warn('Failed to save language preference');
     }
   }, [language]);
 
@@ -163,16 +166,18 @@ export const I18nProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   };
 
   const toggleLanguage = () => {
-    setLanguage(prev => prev === 'tr' ? 'en' : 'tr');
+    setLanguage((prev) => (prev === 'tr' ? 'en' : 'tr'));
   };
 
   return (
-    <I18nContext.Provider value={{ 
-      language, 
-      t, 
-      toggleLanguage,
-      i18n: { language, changeLanguage: setLanguage } 
-    }}>
+    <I18nContext.Provider
+      value={{
+        language,
+        t,
+        toggleLanguage,
+        i18n: { language, changeLanguage: setLanguage },
+      }}
+    >
       {children}
     </I18nContext.Provider>
   );
