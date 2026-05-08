@@ -107,13 +107,32 @@ export const animations = {
 };
 
 /**
- * Common CSS classes for reuse (e.g., glassmorphism)
+ * Phase 102: AI Studio Tech surface tokens.
+ * Replaces the previous `classes.glass` / `classes.glassDark` (glassmorphism
+ * is forbidden by the design doctrine in CLAUDE.md). All four `surfaces`
+ * variants are opaque, blur-free, and use a thin border + subtle shadow
+ * for depth — matching the Linear / Vercel / M3 reference set.
+ */
+export const surfaces = {
+  /** Page background — flat, no border, no shadow. */
+  base: 'bg-surface',
+  /** Card / panel — slightly raised on the surface stack. */
+  flat: 'bg-surface border border-white/5',
+  /** Default card — clear separation from the page background. */
+  elevated: 'bg-surface-high border border-white/10 shadow-2xl',
+  /** Modals + popovers — sits above everything else. */
+  overlay: 'bg-neutral-950/95 border border-white/15 shadow-2xl',
+};
+
+/**
+ * Common CSS classes for reuse.
+ * Note: `classes.glass` / `glassDark` were removed in Phase 102 — use
+ * `surfaces.elevated` / `surfaces.overlay` instead.
  */
 export const classes = {
-  glass: 'bg-white/10 backdrop-blur-md border border-white/20 shadow-xl',
-  glassDark: 'bg-black/40 backdrop-blur-xl border border-white/10 shadow-2xl',
   cardHover: 'transition-all duration-300 hover:-translate-y-1 hover:shadow-xl',
-  focusRing: 'focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 focus:ring-offset-neutral-900',
+  focusRing:
+    'focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 focus:ring-offset-neutral-900',
 };
 
 export const theme = {
@@ -122,6 +141,7 @@ export const theme = {
   breakpoints,
   animations,
   classes,
+  surfaces,
 };
 
 export default theme;
