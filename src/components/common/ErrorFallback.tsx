@@ -1,14 +1,10 @@
-
 import React from 'react';
 import { RefreshCw, AlertTriangle } from 'lucide-react';
 import { motion } from 'motion/react';
+import type { FallbackProps } from 'react-error-boundary';
 
-interface ErrorFallbackProps {
-  error: Error;
-  resetErrorBoundary: () => void;
-}
-
-export const ErrorFallback: React.FC<ErrorFallbackProps> = ({ error, resetErrorBoundary }) => {
+export const ErrorFallback: React.FC<FallbackProps> = ({ error, resetErrorBoundary }) => {
+  const message = error instanceof Error ? error.message : String(error);
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-neutral-950 text-slate-200 p-6">
       <motion.div
@@ -23,18 +19,17 @@ export const ErrorFallback: React.FC<ErrorFallbackProps> = ({ error, resetErrorB
           </div>
         </div>
 
-        <h1 className="text-3xl font-bold font-display tracking-tight">
-          System Interrupted
-        </h1>
-        
+        <h1 className="text-3xl font-bold font-display tracking-tight">System Interrupted</h1>
+
         <p className="text-slate-400 leading-relaxed">
-          The application encountered an unexpected state. Our invisible shield has caught this, but we need your help to realign the system.
+          The application encountered an unexpected state. Our invisible shield has caught this, but
+          we need your help to realign the system.
         </p>
 
         {process.env.NODE_ENV === 'development' && (
-           <div className="p-4 bg-white/5 rounded-lg text-left overflow-auto max-h-48 text-xs font-mono text-red-400">
-             {error.message}
-           </div>
+          <div className="p-4 bg-white/5 rounded-lg text-left overflow-auto max-h-48 text-xs font-mono text-red-400">
+            {message}
+          </div>
         )}
 
         <button

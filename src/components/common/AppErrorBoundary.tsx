@@ -8,9 +8,8 @@ interface AppErrorBoundaryProps {
 }
 
 export const AppErrorBoundary: React.FC<AppErrorBoundaryProps> = ({ children }) => {
-  const logError = (error: Error, info: ErrorInfo) => {
-    // In production, this would send to Sentry/LogRocket
-    Logger.error('Caught by AppErrorBoundary:', { error, stack: info.componentStack });
+  const logError = (error: unknown, info: ErrorInfo) => {
+    Logger.error('Caught by AppErrorBoundary', error, { stack: info.componentStack });
   };
 
   return (
