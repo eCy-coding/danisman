@@ -57,23 +57,22 @@ export default tseslint.config(
       '@typescript-eslint/no-explicit-any': 'error',
       // Phase 103: Logger is the single console sink — frontend code must use Logger.*
       'no-console': 'error',
-      // Phase 106a: a11y enforcement.
-      // Critical rules stay at error (gates new code).
+      // Phase 106a/b: a11y enforcement — all critical + previously-warn
+      // rules now block CI. Inline `eslint-disable-next-line` is reserved
+      // for legitimate cases (modal click-outside-to-close, mouse-only
+      // dropdown hover, conditional role on a wrapper div).
       'jsx-a11y/alt-text': 'error',
       'jsx-a11y/aria-props': 'error',
       'jsx-a11y/aria-role': 'error',
       'jsx-a11y/role-has-required-aria-props': 'error',
       'jsx-a11y/role-supports-aria-props': 'error',
-      // Recommended-set rules with existing baseline violations are downgraded
-      // to warn so CI stays green; they will be tightened to error in P114
-      // after their respective fixes land.
-      'jsx-a11y/anchor-is-valid': 'warn',
-      'jsx-a11y/click-events-have-key-events': 'warn',
-      'jsx-a11y/heading-has-content': 'warn',
-      'jsx-a11y/label-has-associated-control': 'warn',
-      'jsx-a11y/no-autofocus': 'warn',
-      'jsx-a11y/no-static-element-interactions': 'warn',
-      'jsx-a11y/no-redundant-roles': 'warn',
+      'jsx-a11y/anchor-is-valid': 'error',
+      'jsx-a11y/click-events-have-key-events': 'error',
+      'jsx-a11y/heading-has-content': 'error',
+      'jsx-a11y/label-has-associated-control': 'error',
+      'jsx-a11y/no-autofocus': 'error',
+      'jsx-a11y/no-static-element-interactions': 'error',
+      'jsx-a11y/no-redundant-roles': 'error',
     },
   },
 

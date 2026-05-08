@@ -71,6 +71,9 @@ export const CardTitle = React.forwardRef<
   HTMLParagraphElement,
   React.HTMLAttributes<HTMLHeadingElement>
 >(({ className, ...props }, ref) => (
+  // Heading content is provided by call sites via `children` (passed through
+  // {...props}); jsx-a11y can't statically prove it for a forwardRef wrapper.
+  // eslint-disable-next-line jsx-a11y/heading-has-content
   <h3
     ref={ref}
     className={`font-semibold leading-none tracking-tight ${className || ''}`}

@@ -1,6 +1,6 @@
-import * as React from "react"
+import * as React from 'react';
 
-import { cn } from "../../lib/utils"
+import { cn } from '../../lib/utils';
 
 // Since Radix UI Dialog is not installed, we implement a simple custom Dialog
 // This relies on the parent managing open state and conditional rendering
@@ -38,32 +38,57 @@ import { cn } from "../../lib/utils"
 // BUT, maybe I want to reuse it later?
 // I will provide a simple mock implementation of Dialog components just to satisfy the file existence and potential future use.
 
-const Dialog = ({ children }: { children: React.ReactNode }) => <>{children}</>
-const DialogTrigger = ({ children }: { children: React.ReactNode }) => <>{children}</>
-const DialogContent = ({ children, className }: { children: React.ReactNode; className?: string }) => (
-    <div className={cn("fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border border-white/10 bg-neutral-900 p-6 shadow-lg sm:rounded-lg text-white", className)}>
-        {children}
-    </div>
-)
+const Dialog = ({ children }: { children: React.ReactNode }) => <>{children}</>;
+const DialogTrigger = ({ children }: { children: React.ReactNode }) => <>{children}</>;
+const DialogContent = ({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) => (
+  <div
+    className={cn(
+      'fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border border-white/10 bg-neutral-900 p-6 shadow-lg sm:rounded-lg text-white',
+      className,
+    )}
+  >
+    {children}
+  </div>
+);
 const DialogHeader = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
-  <div className={cn("flex flex-col space-y-1.5 text-center sm:text-left", className)} {...props} />
-)
+  <div className={cn('flex flex-col space-y-1.5 text-center sm:text-left', className)} {...props} />
+);
 const DialogFooter = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
-  <div className={cn("flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2", className)} {...props} />
-)
-const DialogTitle = React.forwardRef<HTMLHeadingElement, React.HTMLAttributes<HTMLHeadingElement>>(({ className, ...props }, ref) => (
-  <h2 ref={ref} className={cn("text-lg font-semibold leading-none tracking-tight", className)} {...props} />
-))
-DialogTitle.displayName = "DialogTitle"
+  <div
+    className={cn('flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2', className)}
+    {...props}
+  />
+);
+const DialogTitle = React.forwardRef<HTMLHeadingElement, React.HTMLAttributes<HTMLHeadingElement>>(
+  ({ className, ...props }, ref) => (
+    // Children flow through {...props}; jsx-a11y can't statically verify.
+    // eslint-disable-next-line jsx-a11y/heading-has-content
+    <h2
+      ref={ref}
+      className={cn('text-lg font-semibold leading-none tracking-tight', className)}
+      {...props}
+    />
+  ),
+);
+DialogTitle.displayName = 'DialogTitle';
 
-const DialogDescription = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<HTMLParagraphElement>>(({ className, ...props }, ref) => (
-  <p ref={ref} className={cn("text-sm text-muted-foreground", className)} {...props} />
-))
-DialogDescription.displayName = "DialogDescription"
+const DialogDescription = React.forwardRef<
+  HTMLParagraphElement,
+  React.HTMLAttributes<HTMLParagraphElement>
+>(({ className, ...props }, ref) => (
+  <p ref={ref} className={cn('text-sm text-muted-foreground', className)} {...props} />
+));
+DialogDescription.displayName = 'DialogDescription';
 
-const DialogClose = ({ children }: { children: React.ReactNode }) => <>{children}</>
-const DialogOverlay = () => <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm" />
-const DialogPortal = ({ children }: { children: React.ReactNode }) => <>{children}</>
+const DialogClose = ({ children }: { children: React.ReactNode }) => <>{children}</>;
+const DialogOverlay = () => <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm" />;
+const DialogPortal = ({ children }: { children: React.ReactNode }) => <>{children}</>;
 
 export {
   Dialog,
@@ -76,4 +101,4 @@ export {
   DialogFooter,
   DialogTitle,
   DialogDescription,
-}
+};

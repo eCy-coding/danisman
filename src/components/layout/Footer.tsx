@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 import { trackEvent } from '../../lib/analytics';
 import { useTranslation } from '../../lib/i18n';
 import { FOOTER_COPY } from '../../constants';
+import { CountrySelector } from '../common/CountrySelector';
+import { EcyLogo } from '@/components/ui/EcyLogo';
 
 type NewsletterState = { status: 'idle' | 'loading' | 'success' | 'error'; message?: string };
 
@@ -34,13 +36,22 @@ export const Footer: React.FC = () => {
       }
       setState({
         status: 'success',
-        message: data.code === 'ALREADY_SUBSCRIBED'
-          ? (lang === 'tr' ? 'Zaten aboneydiniz.' : 'You are already subscribed.')
-          : (lang === 'tr' ? 'Teşekkürler! Kaydınız onaylandı.' : 'Thanks! Your subscription is confirmed.'),
+        message:
+          data.code === 'ALREADY_SUBSCRIBED'
+            ? lang === 'tr'
+              ? 'Zaten aboneydiniz.'
+              : 'You are already subscribed.'
+            : lang === 'tr'
+              ? 'Teşekkürler! Kaydınız onaylandı.'
+              : 'Thanks! Your subscription is confirmed.',
       });
       setEmail('');
     } catch {
-      setState({ status: 'error', message: lang === 'tr' ? 'Ağ hatası, lütfen tekrar deneyin.' : 'Network error, please retry.' });
+      setState({
+        status: 'error',
+        message:
+          lang === 'tr' ? 'Ağ hatası, lütfen tekrar deneyin.' : 'Network error, please retry.',
+      });
     }
   };
 
@@ -56,39 +67,38 @@ export const Footer: React.FC = () => {
             <Link
               to="/"
               className="inline-block outline-none focus-visible:ring-2 focus-visible:ring-secondary rounded"
+              aria-label="EcyPro Anasayfa"
             >
-              <h3 className="text-3xl font-sans font-medium tracking-tight">
-                EcyPro<span className="text-secondary">.</span>
-              </h3>
+              <EcyLogo size="md" variant="full" />
             </Link>
             <p className="text-slate-300 text-sm leading-relaxed font-light">
               {FOOTER_COPY.description[lang]}
             </p>
             <div className="flex space-x-4">
-              <a
-                href="#"
+              <button
+                type="button"
                 onClick={() => trackEvent('Social', 'Click', 'LinkedIn')}
                 aria-label="LinkedIn"
                 className="text-slate-300 hover:text-white transition-colors border border-slate-700 p-2.5 rounded-full hover:bg-slate-800 outline-none focus-visible:ring-2 focus-visible:ring-secondary"
               >
-                <Linkedin size={18} />
-              </a>
-              <a
-                href="#"
+                <Linkedin size={18} aria-hidden="true" />
+              </button>
+              <button
+                type="button"
                 onClick={() => trackEvent('Social', 'Click', 'Twitter')}
                 aria-label="Twitter"
                 className="text-slate-300 hover:text-white transition-colors border border-slate-700 p-2.5 rounded-full hover:bg-slate-800 outline-none focus-visible:ring-2 focus-visible:ring-secondary"
               >
-                <Twitter size={18} />
-              </a>
-              <a
-                href="#"
+                <Twitter size={18} aria-hidden="true" />
+              </button>
+              <button
+                type="button"
                 onClick={() => trackEvent('Social', 'Click', 'Instagram')}
                 aria-label="Instagram"
                 className="text-slate-300 hover:text-white transition-colors border border-slate-700 p-2.5 rounded-full hover:bg-slate-800 outline-none focus-visible:ring-2 focus-visible:ring-secondary"
               >
-                <Instagram size={18} />
-              </a>
+                <Instagram size={18} aria-hidden="true" />
+              </button>
             </div>
           </div>
 
@@ -99,22 +109,34 @@ export const Footer: React.FC = () => {
             </h4>
             <ul className="space-y-3 text-sm text-slate-300">
               <li>
-                <Link to="/services" className="hover:text-secondary transition-colors block outline-none focus-visible:text-secondary">
+                <Link
+                  to="/services"
+                  className="hover:text-secondary transition-colors block outline-none focus-visible:text-secondary"
+                >
                   {lang === 'tr' ? 'Tüm Hizmetler' : 'All Services'}
                 </Link>
               </li>
               <li>
-                <Link to="/industries" className="hover:text-secondary transition-colors block outline-none focus-visible:text-secondary">
+                <Link
+                  to="/industries"
+                  className="hover:text-secondary transition-colors block outline-none focus-visible:text-secondary"
+                >
                   {lang === 'tr' ? 'Sektör Çözümleri' : 'Industry Solutions'}
                 </Link>
               </li>
               <li>
-                <Link to="/methodology" className="hover:text-secondary transition-colors block outline-none focus-visible:text-secondary">
+                <Link
+                  to="/methodology"
+                  className="hover:text-secondary transition-colors block outline-none focus-visible:text-secondary"
+                >
                   {lang === 'tr' ? 'Metodoloji' : 'Methodology'}
                 </Link>
               </li>
               <li>
-                <Link to="/events" className="hover:text-secondary transition-colors block outline-none focus-visible:text-secondary">
+                <Link
+                  to="/events"
+                  className="hover:text-secondary transition-colors block outline-none focus-visible:text-secondary"
+                >
                   {FOOTER_COPY.events[lang]}
                 </Link>
               </li>
@@ -128,32 +150,50 @@ export const Footer: React.FC = () => {
             </h4>
             <ul className="space-y-3 text-sm text-slate-300">
               <li>
-                <Link to="/about" className="hover:text-secondary transition-colors block outline-none focus-visible:text-secondary">
-                   {lang === 'tr' ? 'Hakkımızda' : 'About Us'}
+                <Link
+                  to="/about"
+                  className="hover:text-secondary transition-colors block outline-none focus-visible:text-secondary"
+                >
+                  {lang === 'tr' ? 'Hakkımızda' : 'About Us'}
                 </Link>
               </li>
               <li>
-                <Link to="/case-studies" className="hover:text-secondary transition-colors block outline-none focus-visible:text-secondary">
+                <Link
+                  to="/case-studies"
+                  className="hover:text-secondary transition-colors block outline-none focus-visible:text-secondary"
+                >
                   {lang === 'tr' ? 'Başarı Hikayeleri' : 'Case Studies'}
                 </Link>
               </li>
               <li>
-                <Link to="/blog" className="hover:text-secondary transition-colors block outline-none focus-visible:text-secondary">
+                <Link
+                  to="/blog"
+                  className="hover:text-secondary transition-colors block outline-none focus-visible:text-secondary"
+                >
                   {FOOTER_COPY.blog[lang]}
                 </Link>
               </li>
               <li>
-                <Link to="/careers" className="hover:text-secondary transition-colors block outline-none focus-visible:text-secondary">
+                <Link
+                  to="/careers"
+                  className="hover:text-secondary transition-colors block outline-none focus-visible:text-secondary"
+                >
                   {FOOTER_COPY.careers[lang]}
                 </Link>
               </li>
               <li>
-                <Link to="/contact" className="hover:text-secondary transition-colors block outline-none focus-visible:text-secondary">
+                <Link
+                  to="/contact"
+                  className="hover:text-secondary transition-colors block outline-none focus-visible:text-secondary"
+                >
                   {lang === 'tr' ? 'İletişim' : 'Contact'}
                 </Link>
               </li>
               <li>
-                <Link to="/locations" className="hover:text-secondary transition-colors block outline-none focus-visible:text-secondary">
+                <Link
+                  to="/locations"
+                  className="hover:text-secondary transition-colors block outline-none focus-visible:text-secondary"
+                >
                   {FOOTER_COPY.locations[lang]}
                 </Link>
               </li>
@@ -215,7 +255,9 @@ export const Footer: React.FC = () => {
                 className="bg-secondary text-neutral px-5 py-3 rounded-lg text-sm font-bold hover:bg-white hover:text-neutral transition-colors uppercase tracking-wide outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-secondary focus-visible:ring-offset-neutral disabled:opacity-60 disabled:cursor-not-allowed motion-reduce:transition-none"
               >
                 {state.status === 'loading'
-                  ? (lang === 'tr' ? 'Kaydediliyor…' : 'Subscribing…')
+                  ? lang === 'tr'
+                    ? 'Kaydediliyor…'
+                    : 'Subscribing…'
                   : FOOTER_COPY.subscribe[lang]}
               </button>
               <div
@@ -242,10 +284,11 @@ export const Footer: React.FC = () => {
           </div>
         </div>
 
-        <div className="flex flex-col md:flex-row justify-between items-center text-xs text-slate-300 border-t border-white/5 pt-10">
+        <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-slate-300 border-t border-white/5 pt-10">
           <p>
             &copy; {new Date().getFullYear()} EcyPro. {FOOTER_COPY.rights[lang]}
           </p>
+          <CountrySelector />
           <div className="flex space-x-6 mt-4 md:mt-0">
             <Link to="/privacy" className="hover:text-white transition-colors">
               {FOOTER_COPY.privacy[lang]}

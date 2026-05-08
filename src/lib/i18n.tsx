@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 /**
  * Phase 107a: thin wrapper over react-i18next.
  *

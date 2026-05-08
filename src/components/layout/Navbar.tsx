@@ -8,6 +8,7 @@ import { useTranslation } from '@/lib/i18n';
 import { useBodyLock } from '@/hooks/useBodyLock';
 import { useKeyPress } from '@/hooks/useKeyPress';
 import { type MultiLang } from '@/lib/i18n';
+import { EcyLogo } from '@/components/ui/EcyLogo';
 
 interface NavItem {
   id: string;
@@ -24,7 +25,6 @@ export const Navbar: React.FC = () => {
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [mobileExpanded, setMobileExpanded] = useState<string | null>(null);
   const [activeSection, setActiveSection] = useState<string>('');
-
 
   const { i18n } = useTranslation();
   const lang = ((i18n.language || 'en').startsWith('tr') ? 'tr' : 'en') as 'tr' | 'en';
@@ -102,7 +102,7 @@ export const Navbar: React.FC = () => {
     <nav
       className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 border-b ${
         scrolled
-          ? 'glass shadow-glow border-white/5 py-3' 
+          ? 'glass shadow-glow border-white/5 py-3'
           : 'bg-transparent border-transparent py-6'
       }`}
       role="navigation"
@@ -113,18 +113,10 @@ export const Navbar: React.FC = () => {
         <a
           href="#hero"
           onClick={(e) => handleNavClick(e, '#hero', 'Logo')}
-          className="flex items-center h-full group relative z-50 outline-none -ml-2 gap-3"
+          className="flex items-center h-full group relative z-50 outline-none -ml-2"
           aria-label="EcyPro Anasayfa"
         >
-           {/* Tech-style block logo hint */}
-           <div className="w-8 h-8 rounded-lg bg-linear-to-br from-primary to-primary-dark shadow-lg shadow-primary/30 flex items-center justify-center text-white font-serif font-bold text-lg">
-             E
-           </div>
-          <span className={`text-xl md:text-2xl font-serif font-bold tracking-tight transition-colors ${
-            scrolled ? 'text-white' : 'text-white'
-          }`}>
-            EcyPro<span className="text-secondary">.</span>
-          </span>
+          <EcyLogo size="sm" variant="full" />
         </a>
 
         {/* Desktop Menu */}
@@ -134,6 +126,7 @@ export const Navbar: React.FC = () => {
             const isActive = activeSection === item.href.substring(1);
 
             return (
+              // eslint-disable-next-line jsx-a11y/no-static-element-interactions
               <div
                 key={item.id}
                 className="relative h-full flex items-center"
@@ -142,24 +135,30 @@ export const Navbar: React.FC = () => {
               >
                 <a
                   href={item.href}
-                  onClick={(e) => !isDropdown && handleNavClick(e, item.href, item.label[lang] || '')}
+                  onClick={(e) =>
+                    !isDropdown && handleNavClick(e, item.href, item.label[lang] || '')
+                  }
                   className={`text-sm font-medium transition-all duration-300 flex items-center gap-1 py-4 tracking-wide outline-none ${
-                    isActive 
-                        ? 'text-secondary' 
-                        : 'text-gray-300 hover:text-secondary hover:shadow-[0_0_20px_rgba(212,175,55,0.4)]'
+                    isActive
+                      ? 'text-secondary'
+                      : 'text-gray-300 hover:text-secondary hover:shadow-[0_0_20px_rgba(212,175,55,0.4)]'
                   }`}
                   aria-haspopup={isDropdown}
                   aria-expanded={activeDropdown === item.id}
                   aria-current={isActive ? 'page' : undefined}
                 >
-                  <div className={`
+                  <div
+                    className={`
                   w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300
-                  ${isActive 
-                    ? 'bg-linear-to-br from-primary to-primary-dark text-white shadow-glow' 
-                    : 'bg-white/5 text-gray-400 group-hover:bg-white/10 group-hover:text-white'}
-                `}>
-                  {item.icon}
-                </div>
+                  ${
+                    isActive
+                      ? 'bg-linear-to-br from-primary to-primary-dark text-white shadow-glow'
+                      : 'bg-white/5 text-gray-400 group-hover:bg-white/10 group-hover:text-white'
+                  }
+                `}
+                  >
+                    {item.icon}
+                  </div>
                   {item.label[lang]}
                   {isDropdown && (
                     <ChevronDown
@@ -172,12 +171,16 @@ export const Navbar: React.FC = () => {
                 {/* Active Indicator (Premium Underline) */}
                 <span
                   className={`absolute bottom-2 left-0 h-0.5 bg-linear-to-r from-secondary to-orange-400 transition-all duration-300 ${
-                    isActive ? 'w-full shadow-[0_0_10px_rgba(212,175,55,0.5)]' : 'w-0 group-hover:w-full'
+                    isActive
+                      ? 'w-full shadow-[0_0_10px_rgba(212,175,55,0.5)]'
+                      : 'w-0 group-hover:w-full'
                   }`}
                 ></span>
 
                 {/* Mega-Menu or Simple Dropdown */}
-                {isDropdown && item.hasMegaMenu && (item.id === 'services' || item.id === 'insights') ? (
+                {isDropdown &&
+                item.hasMegaMenu &&
+                (item.id === 'services' || item.id === 'insights') ? (
                   <MegaMenu
                     menuId={item.id as 'services' | 'insights'}
                     isOpen={activeDropdown === item.id}
@@ -186,31 +189,34 @@ export const Navbar: React.FC = () => {
                     onMouseEnter={() => handleDropdownEnter(item.id)}
                     onMouseLeave={handleDropdownLeave}
                   />
-                ) : isDropdown && !item.hasMegaMenu && (
-                  <div
-                    className={`absolute top-full left-1/2 -translate-x-1/2 pt-4 w-72 transition-all duration-300 transform origin-top z-50 ${
-                      activeDropdown === item.id
-                        ? 'opacity-100 scale-100 visible translate-y-0'
-                        : 'opacity-0 scale-95 invisible -translate-y-2'
-                    }`}
-                    role="menu"
-                  >
-                    <div className="bg-surface/95 backdrop-blur-xl rounded-xl shadow-2xl border border-white/10 overflow-hidden py-2 ring-1 ring-black/5">
-                      {item.children!.map((child) => (
-                        <a
-                          key={child.id}
-                          href={child.href}
-                          onClick={(e) => handleNavClick(e, child.href, child.label[lang] || '')}
-                          className="block px-6 py-3 text-sm text-gray-300 hover:text-white hover:bg-white/5 transition-colors font-medium border-l-2 border-transparent hover:border-secondary outline-none group"
-                          role="menuitem"
-                        >
-                          <span className="group-hover:translate-x-1 transition-transform duration-200 block">
-                            {child.label[lang]}
-                          </span>
-                        </a>
-                      ))}
+                ) : (
+                  isDropdown &&
+                  !item.hasMegaMenu && (
+                    <div
+                      className={`absolute top-full left-1/2 -translate-x-1/2 pt-4 w-72 transition-all duration-300 transform origin-top z-50 ${
+                        activeDropdown === item.id
+                          ? 'opacity-100 scale-100 visible translate-y-0'
+                          : 'opacity-0 scale-95 invisible -translate-y-2'
+                      }`}
+                      role="menu"
+                    >
+                      <div className="bg-surface/95 backdrop-blur-xl rounded-xl shadow-2xl border border-white/10 overflow-hidden py-2 ring-1 ring-black/5">
+                        {item.children!.map((child) => (
+                          <a
+                            key={child.id}
+                            href={child.href}
+                            onClick={(e) => handleNavClick(e, child.href, child.label[lang] || '')}
+                            className="block px-6 py-3 text-sm text-gray-300 hover:text-white hover:bg-white/5 transition-colors font-medium border-l-2 border-transparent hover:border-secondary outline-none group"
+                            role="menuitem"
+                          >
+                            <span className="group-hover:translate-x-1 transition-transform duration-200 block">
+                              {child.label[lang]}
+                            </span>
+                          </a>
+                        ))}
+                      </div>
                     </div>
-                  </div>
+                  )
                 )}
               </div>
             );
