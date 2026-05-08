@@ -46,6 +46,40 @@
   /* Precision Shadows */
   --shadow-glow: 0 0 40px rgba(255, 255, 255, 0.03);
   --shadow-tactile: 0 1px 2px 0 rgba(0, 0, 0, 0.4), inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
+
+  /* ═══════════════════════════════════════════════════════════
+     Phase 104a: Fibonacci Spacing Scale
+     ───────────────────────────────────────────────────────────
+     Tailwind v4 emits matching utilities (p-fib-3, gap-fib-8,
+     m-fib-21, etc.) automatically once these custom names land
+     in the spacing namespace. Pure Fibonacci sequence in px:
+       1→4, 2→8, 3→12, 5→20, 8→32, 13→52, 21→84, 34→136, 55→220.
+     The 4-px grid (CLAUDE.md doctrine) is preserved by every
+     value being a multiple of 4. Existing p-1/p-2/p-3/p-5/p-8
+     utilities already cover the small end of the scale; the new
+     -fib-13 / -fib-21 / -fib-34 / -fib-55 fill the gap that
+     non-Fib magic numbers (p-12, p-16, p-20) used to occupy.
+     Migration of 387 magic-class call sites lives in P104b.
+     ═══════════════════════════════════════════════════════════ */
+  --spacing-fib-1: 0.25rem;   /*   4px */
+  --spacing-fib-2: 0.5rem;    /*   8px */
+  --spacing-fib-3: 0.75rem;   /*  12px */
+  --spacing-fib-5: 1.25rem;   /*  20px */
+  --spacing-fib-8: 2rem;      /*  32px */
+  --spacing-fib-13: 3.25rem;  /*  52px */
+  --spacing-fib-21: 5.25rem;  /*  84px */
+  --spacing-fib-34: 8.5rem;   /* 136px */
+  --spacing-fib-55: 13.75rem; /* 220px */
+
+  /* Phase 104a: Golden-ratio type scale (φ = 1.61803398875).
+     Base = 1rem (16 px). Each step multiplies by φ.
+     Tailwind v4 emits text-golden-base, text-golden-lg, etc. */
+  --text-golden-sm: 0.618rem;     /* 16 / φ  ≈  9.9 px */
+  --text-golden-base: 1rem;       /* 16 px (anchor) */
+  --text-golden-lg: 1.618rem;     /* 16 × φ  ≈ 25.9 px */
+  --text-golden-xl: 2.618rem;     /* 16 × φ² ≈ 41.9 px */
+  --text-golden-2xl: 4.236rem;    /* 16 × φ³ ≈ 67.8 px */
+  --text-golden-3xl: 6.854rem;    /* 16 × φ⁴ ≈ 109.7 px */
 }
 
 @layer utilities {

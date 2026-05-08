@@ -114,6 +114,7 @@
     "i18n:audit": "npx tsx scripts/i18n-suggest.ts --audit",
     "i18n:stats": "npx tsx scripts/i18n-suggest.ts --stats",
     "i18n:parity": "npx tsx scripts/i18n-audit.ts",
+    "audit:spacing": "npx tsx scripts/audit-spacing.ts",
     "seo:broken-links": "npx tsx scripts/broken-link-outreach.ts",
     "audit:broken-links": "npx tsx scripts/audit-broken-links.ts",
     "backlinks:monitor": "npx tsx scripts/backlink-monitor.ts",
