@@ -1,3 +1,4 @@
+import './env'; // MUST be first — loads .env + .env.local before any module reads process.env
 import * as Sentry from '@sentry/node';
 import { nodeProfilingIntegration } from '@sentry/profiling-node';
 import express from 'express';
@@ -5,15 +6,14 @@ import corsMiddleware from 'cors';
 import apiRoutes from './routes';
 import { errorHandler } from './middleware/error';
 import { securityHeaders, structuredLogger, corsPreflight } from './middleware/security';
+import { originGuard } from './middleware/originGuard';
 import { generalLimiter, sseLimiter } from './middleware/rateLimiter';
 import { sentryErrorHandler } from './middleware/sentry';
 
 if (process.env.SENTRY_DSN) {
   Sentry.init({
     dsn: process.env.SENTRY_DSN,
-    integrations: [
-      nodeProfilingIntegration(),
-    ],
+    integrations: [nodeProfilingIntegration()],
     tracesSampleRate: 1.0,
     profilesSampleRate: 1.0,
   });
@@ -38,18 +38,31 @@ app.use(securityHeaders);
 app.use(structuredLogger);
 app.use(corsPreflight);
 
-app.use(corsMiddleware({
-  origin: process.env.CORS_ORIGIN
-    ? process.env.CORS_ORIGIN.split(',').map(s => s.trim())
-    : ['http://localhost:5173', 'http://localhost:4173'],
-  credentials: true,
-}));
+app.use(
+  corsMiddleware({
+    origin: process.env.CORS_ORIGIN
+      ? process.env.CORS_ORIGIN.split(',').map((s) => s.trim())
+      : ['http://localhost:5173', 'http://localhost:4173', 'http://localhost:4175'],
+    credentials: true,
+  }),
+);
+
+// Phase 109a: Origin/Referer guard for state-changing methods.
+// Webhooks + health probes carry no Origin → bypass via prefix list.
+app.use(
+  originGuard({
+    ignore: ['/api/webhooks', '/api/health', '/api/sse', '/__health'],
+  }),
+);
 
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 
 // Rate limiting on all API endpoints
 app.use('/api', generalLimiter);
+
+// ─── Playwright webServer probe (mock-server compat) ─────
+app.get('/__health', (_req, res) => res.json({ ok: true }));
 
 // ─── Health Check Endpoint ───────────────────────────────
 app.get('/api/health', (_req, res) => {
@@ -76,7 +89,7 @@ app.get('/api/sse/dashboard', sseLimiter, (req, res) => {
   res.writeHead(200, {
     'Content-Type': 'text/event-stream',
     'Cache-Control': 'no-cache',
-    'Connection': 'keep-alive',
+    Connection: 'keep-alive',
     'X-Accel-Buffering': 'no',
   });
 
@@ -124,6 +137,15 @@ app.use(errorHandler);
 // ─── Graceful Shutdown ───────────────────────────────────
 import { logger } from './config/logger';
 
+// P37-T04: Start booking reminder cron job (non-blocking)
+import { startReminderJob } from './jobs/booking-reminders';
+import { notifyServerStart, notifyCriticalError } from './lib/telegram';
+import { startLeadPipeline, stopLeadPipeline } from './services/lead-pipeline';
+if (process.env.NODE_ENV !== 'test') {
+  startReminderJob();
+  startLeadPipeline();
+}
+
 const server = app.listen(PORT, () => {
   logger.info(`🚀 EcyPro API Server running on http://localhost:${PORT}`);
   logger.info(`📊 Health check: http://localhost:${PORT}/api/health`);
@@ -135,11 +157,15 @@ const server = app.listen(PORT, () => {
   logger.info(`🔒 Rate limiting: Active (Redis backed)`);
   logger.info(`🛡️ Security headers: Active`);
   logger.info(`🐛 Sentry error handler: Active`);
+  notifyServerStart(PORT).catch(() => {});
 });
 
 // Graceful shutdown handler
 const shutdown = (signal: string) => {
   logger.info(`[${signal}] Graceful shutdown initiated...`);
+
+  // Stop background services
+  stopLeadPipeline();
 
   // Close all SSE connections
   for (const client of sseClients) {
@@ -165,7 +191,7 @@ process.on('SIGINT', () => shutdown('SIGINT'));
 // Handle uncaught errors
 process.on('uncaughtException', (err) => {
   logger.error('[FATAL] Uncaught Exception:', { message: err.message, stack: err.stack });
-  shutdown('UNCAUGHT_EXCEPTION');
+  notifyCriticalError(err, 'uncaughtException').finally(() => shutdown('UNCAUGHT_EXCEPTION'));
 });
 
 process.on('unhandledRejection', (reason) => {
