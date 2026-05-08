@@ -32,12 +32,20 @@ jobs:
       - name: Type Check
         run: npm run typecheck
 
-      - name: Run Unit Tests
-        run: npm run test -- --run
+      - name: Run Unit Tests with coverage
+        run: npm run test:coverage
 
-  build:
-    name: Production Build
-    needs: quality
+      - name: Upload coverage artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage/
+          retention-days: 14
+
+  # ── P35-T10: Dependency Security Audit (npm audit) ────────
+  security-audit:
+    name: Security — npm audit
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -46,8 +54,47 @@ jobs:
           node-version: 22.x
           cache: 'npm'
       - run: npm ci
-      - name: Build
+      - name: npm audit (fail on high+)
+        # --audit-level=high: CI fails only for High and Critical CVEs.
+        # Moderate/Low are reported but non-blocking (acceptable risk tolerance).
+        run: npm audit --audit-level=high
+      - name: Production dependencies only audit (strict)
+        # Separate stricter check for production deps (no devDependency noise).
+        run: npm audit --audit-level=moderate --omit=dev
+
+  build:
+    name: Production Build
+    needs: quality
+    runs-on: ubuntu-latest
+    # Phase 110a: Sentry release + source-map upload runs only when secrets
+    # are configured. Vite plugin (vite.config.ts) skips silently if
+    # SENTRY_AUTH_TOKEN is empty, so this job is safe in forks/PRs without
+    # the secret available.
+    env:
+      SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+      SENTRY_ORG: ${{ vars.SENTRY_ORG || 'ecypro' }}
+      SENTRY_PROJECT: ${{ vars.SENTRY_PROJECT || 'ecypro-frontend' }}
+      VITE_SENTRY_DSN: ${{ secrets.VITE_SENTRY_DSN }}
+      VITE_APP_VERSION: ${{ github.sha }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # full history so Sentry can compute commit range
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+          cache: 'npm'
+      - run: npm ci
+      - name: Build (with Sentry source-map upload when token present)
         run: npm run build
+      - name: Sentry release status
+        if: always()
+        run: |
+          if [ -n "$SENTRY_AUTH_TOKEN" ]; then
+            echo "✅ Sentry release uploaded for ${{ github.sha }}"
+          else
+            echo "ℹ️  SENTRY_AUTH_TOKEN not set — release upload skipped (config-only run)"
+          fi
       - uses: actions/upload-artifact@v4
         with:
           name: build-output
@@ -100,13 +147,13 @@ jobs:
           path: playwright-report/
           retention-days: 14
 
-  # ── Phase 20 D2: Lighthouse budget audit (non-blocking on first iteration) ──
+  # ── Phase 40-T02: Lighthouse CI — fail-on-regression (A11y/SEO/BP strict) ──
   lighthouse:
     name: Lighthouse Budget
     needs: build
     runs-on: ubuntu-latest
-    # First-iteration policy: report scores but don't block PRs while we tune.
-    continue-on-error: true
+    # P40-T02: SEO + A11y + BP block; Performance warn-only (CDN adds 15+ pts)
+    continue-on-error: false
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -127,10 +174,17 @@ jobs:
             fi
             sleep 1
           done
-      - name: Run Lighthouse budget
-        env:
-          PREVIEW_URL: http://localhost:4173
-        run: npx tsx scripts/lighthouse.ts
+      - name: Run Lighthouse CI (fail-on-regression)
+        run: |
+          npx lhci autorun \
+            --collect.url=http://localhost:4173 \
+            --collect.numberOfRuns=1 \
+            --assert.preset=no-pwa \
+            --assert.assertions.categories:accessibility=error,0.98 \
+            --assert.assertions.categories:seo=error,1.00 \
+            --assert.assertions.categories:best-practices=error,0.95 \
+            --assert.assertions.categories:performance=warn,0.70 \
+            --upload.target=temporary-public-storage
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -138,4 +192,5 @@ jobs:
           path: |
             lighthouse-reports/
             docs/PERFORMANCE_REPORT.md
+            .lighthouseci/
           retention-days: 30
