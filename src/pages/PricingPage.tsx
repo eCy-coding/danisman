@@ -8,6 +8,8 @@ import { PageWrapper } from '../components/layout/PageWrapper';
 import { useTranslation } from '@/lib/i18n';
 import { trackEvent } from '../lib/analytics';
 import { JsonLd } from '../components/seo/JsonLd';
+import { useCurrencyStore } from '../stores/currencyStore';
+import { CurrencySwitcher } from '../components/ui/CurrencySwitcher';
 import { buildFaqSchema, buildBreadcrumbSchema } from '../lib/structured-data';
 
 type Billing = 'monthly' | 'annual';
@@ -29,7 +31,10 @@ const TIERS: Tier[] = [
   {
     id: 'starter',
     name: { tr: 'Başlangıç', en: 'Starter' },
-    tagline: { tr: 'Hızlı bir değerlendirme ile başlayın', en: 'Kickstart with a rapid assessment' },
+    tagline: {
+      tr: 'Hızlı bir değerlendirme ile başlayın',
+      en: 'Kickstart with a rapid assessment',
+    },
     priceMonthly: 1490,
     priceAnnual: 14900,
     currency: '€',
@@ -45,7 +50,10 @@ const TIERS: Tier[] = [
   {
     id: 'growth',
     name: { tr: 'Büyüme', en: 'Growth' },
-    tagline: { tr: 'Dijital dönüşümünüzü hızlandırın', en: 'Accelerate your digital transformation' },
+    tagline: {
+      tr: 'Dijital dönüşümünüzü hızlandırın',
+      en: 'Accelerate your digital transformation',
+    },
     priceMonthly: 4990,
     priceAnnual: 49900,
     currency: '€',
@@ -81,38 +89,92 @@ const TIERS: Tier[] = [
 ];
 
 const COMPARISON_ROWS = [
-  { feature: { tr: 'Olgunluk Değerlendirmesi', en: 'Maturity Assessment' }, starter: true, growth: true, enterprise: true },
-  { feature: { tr: 'Aylık strateji görüşmesi', en: 'Monthly strategy call' }, starter: '1', growth: '8', enterprise: 'Unlimited' },
-  { feature: { tr: 'Gerçek zamanlı KPI panosu', en: 'Realtime KPI dashboard' }, starter: false, growth: true, enterprise: true },
-  { feature: { tr: 'Özel yol haritası', en: 'Custom roadmap' }, starter: false, growth: true, enterprise: true },
-  { feature: { tr: 'Yanıt SLA', en: 'Response SLA' }, starter: '48 h', growth: '4 h', enterprise: '1 h' },
-  { feature: { tr: 'SOC 2 / ISO 27001 danışmanlık', en: 'SOC 2 / ISO 27001 advisory' }, starter: false, growth: false, enterprise: true },
-  { feature: { tr: 'Yerinde çalıştaylar', en: 'On-site workshops' }, starter: false, growth: false, enterprise: true },
-  { feature: { tr: 'KVKK / GDPR DPA', en: 'GDPR / DPA' }, starter: false, growth: 'Standard', enterprise: 'Custom' },
+  {
+    feature: { tr: 'Olgunluk Değerlendirmesi', en: 'Maturity Assessment' },
+    starter: true,
+    growth: true,
+    enterprise: true,
+  },
+  {
+    feature: { tr: 'Aylık strateji görüşmesi', en: 'Monthly strategy call' },
+    starter: '1',
+    growth: '8',
+    enterprise: 'Unlimited',
+  },
+  {
+    feature: { tr: 'Gerçek zamanlı KPI panosu', en: 'Realtime KPI dashboard' },
+    starter: false,
+    growth: true,
+    enterprise: true,
+  },
+  {
+    feature: { tr: 'Özel yol haritası', en: 'Custom roadmap' },
+    starter: false,
+    growth: true,
+    enterprise: true,
+  },
+  {
+    feature: { tr: 'Yanıt SLA', en: 'Response SLA' },
+    starter: '48 h',
+    growth: '4 h',
+    enterprise: '1 h',
+  },
+  {
+    feature: { tr: 'SOC 2 / ISO 27001 danışmanlık', en: 'SOC 2 / ISO 27001 advisory' },
+    starter: false,
+    growth: false,
+    enterprise: true,
+  },
+  {
+    feature: { tr: 'Yerinde çalıştaylar', en: 'On-site workshops' },
+    starter: false,
+    growth: false,
+    enterprise: true,
+  },
+  {
+    feature: { tr: 'KVKK / GDPR DPA', en: 'GDPR / DPA' },
+    starter: false,
+    growth: 'Standard',
+    enterprise: 'Custom',
+  },
 ];
 
 const FAQS = [
   {
     q: { tr: 'Sözleşme süresi nedir?', en: 'What is the contract length?' },
-    a: { tr: 'Aylık veya yıllık olarak seçilebilir. Yıllıkta %17 indirim uygulanır.', en: 'Monthly or annual billing. Annual plans get 17% discount.' },
+    a: {
+      tr: 'Aylık veya yıllık olarak seçilebilir. Yıllıkta %17 indirim uygulanır.',
+      en: 'Monthly or annual billing. Annual plans get 17% discount.',
+    },
   },
   {
     q: { tr: 'İstediğim zaman iptal edebilir miyim?', en: 'Can I cancel anytime?' },
-    a: { tr: 'Evet, aylık planlar 30 gün ihbarla iptal edilebilir.', en: 'Yes, monthly plans can be cancelled with 30 days notice.' },
+    a: {
+      tr: 'Evet, aylık planlar 30 gün ihbarla iptal edilebilir.',
+      en: 'Yes, monthly plans can be cancelled with 30 days notice.',
+    },
   },
   {
     q: { tr: 'Ödeme yöntemleri?', en: 'Payment methods?' },
-    a: { tr: 'Kredi kartı, banka transferi (SEPA) ve özel sözleşmelerde fatura.', en: 'Credit card, bank transfer (SEPA), invoice for enterprise.' },
+    a: {
+      tr: 'Kredi kartı, banka transferi (SEPA) ve özel sözleşmelerde fatura.',
+      en: 'Credit card, bank transfer (SEPA), invoice for enterprise.',
+    },
   },
   {
     q: { tr: 'Verilerim nerede saklanır?', en: 'Where is my data stored?' },
-    a: { tr: 'AB içi (Frankfurt) Render + Vercel altyapısı. KVKK + GDPR uyumlu.', en: 'EU region (Frankfurt) on Render + Vercel. GDPR/KVKK compliant.' },
+    a: {
+      tr: 'AB içi (Frankfurt) Render + Vercel altyapısı. KVKK + GDPR uyumlu.',
+      en: 'EU region (Frankfurt) on Render + Vercel. GDPR/KVKK compliant.',
+    },
   },
 ];
 
 const CellIcon: React.FC<{ v: boolean | string }> = ({ v }) => {
-  if (v === true) return <Check className="w-5 h-5 text-emerald-400 mx-auto" aria-label="included" />;
-  if (v === false) return <X className="w-5 h-5 text-slate-600 mx-auto" aria-label="not included" />;
+  if (v === true)
+    return <Check className="w-5 h-5 text-emerald-400 mx-auto" aria-label="included" />;
+  if (v === false)
+    return <X className="w-5 h-5 text-slate-600 mx-auto" aria-label="not included" />;
   return <span className="text-slate-200 text-sm font-medium">{v}</span>;
 };
 
@@ -137,14 +199,19 @@ export const PricingPage: React.FC = () => {
     feature: { tr: 'Özellik', en: 'Feature' },
     faqTitle: { tr: 'Sıkça Sorulan Sorular', en: 'Frequently Asked Questions' },
     readyTitle: { tr: 'Hazır mısınız?', en: 'Ready to get started?' },
-    readySub: { tr: '15 dakikalık ücretsiz strateji görüşmesi.', en: '15-minute free strategy call.' },
+    readySub: {
+      tr: '15 dakikalık ücretsiz strateji görüşmesi.',
+      en: '15-minute free strategy call.',
+    },
     bookCall: { tr: 'Görüşme Ayarlayın', en: 'Book a Call' },
   };
 
+  const { formatPrice } = useCurrencyStore();
+
   const getPrice = (tier: Tier) => {
     if (tier.priceMonthly === 0) return t.custom[lang];
-    const value = billing === 'annual' ? Math.round(tier.priceAnnual / 12) : tier.priceMonthly;
-    return `${tier.currency}${new Intl.NumberFormat(lang === 'tr' ? 'tr-TR' : 'en-US').format(value)}`;
+    const baseTRY = billing === 'annual' ? Math.round(tier.priceAnnual / 12) : tier.priceMonthly;
+    return formatPrice(baseTRY);
   };
 
   return (
@@ -180,8 +247,14 @@ export const PricingPage: React.FC = () => {
               </p>
             </FadeIn>
 
+            {/* Billing + Currency controls */}
+            <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
+              {/* Currency switcher — right of billing toggle */}
+              <CurrencySwitcher />
+            </div>
+
             {/* Billing toggle */}
-            <div className="mt-10 inline-flex items-center gap-2 p-1 rounded-full bg-white/5 border border-white/10">
+            <div className="mt-3 inline-flex items-center gap-2 p-1 rounded-full bg-white/5 border border-white/10">
               {(['monthly', 'annual'] as Billing[]).map((b) => (
                 <button
                   key={b}
@@ -209,7 +282,11 @@ export const PricingPage: React.FC = () => {
           </div>
 
           {/* Tier grid */}
-          <div className="grid md:grid-cols-3 gap-6 lg:gap-8 mb-24" role="list" aria-label="Fiyatlandırma paketleri">
+          <div
+            className="grid md:grid-cols-3 gap-6 lg:gap-8 mb-24"
+            role="list"
+            aria-label="Fiyatlandırma paketleri"
+          >
             {TIERS.map((tier, idx) => (
               <motion.div
                 key={tier.id}
@@ -234,7 +311,9 @@ export const PricingPage: React.FC = () => {
                 </div>
                 <p className="text-sm text-slate-400 mb-6 min-h-10">{tier.tagline[lang]}</p>
                 <div className="mb-8">
-                  <span className="text-5xl font-bold text-white tracking-tight">{getPrice(tier)}</span>
+                  <span className="text-5xl font-bold text-white tracking-tight">
+                    {getPrice(tier)}
+                  </span>
                   {tier.priceMonthly > 0 && (
                     <span className="text-sm text-slate-400 ml-2">{t.perMonth[lang]}</span>
                   )}
@@ -242,7 +321,10 @@ export const PricingPage: React.FC = () => {
                 <ul className="space-y-3 mb-8 grow">
                   {tier.features.map((f, i) => (
                     <li key={i} className="flex items-start gap-3 text-sm text-slate-200">
-                      <Check className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" aria-hidden="true" />
+                      <Check
+                        className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5"
+                        aria-hidden="true"
+                      />
                       <span>{f[lang]}</span>
                     </li>
                   ))}
@@ -265,7 +347,10 @@ export const PricingPage: React.FC = () => {
 
           {/* Comparison table */}
           <section aria-labelledby="compare-heading" className="mb-24">
-            <h2 id="compare-heading" className="text-3xl font-serif font-bold text-white text-center mb-10">
+            <h2
+              id="compare-heading"
+              className="text-3xl font-serif font-bold text-white text-center mb-10"
+            >
               {t.compare[lang]}
             </h2>
             <div className="overflow-x-auto rounded-2xl border border-white/10 bg-white/5">
@@ -286,9 +371,15 @@ export const PricingPage: React.FC = () => {
                   {COMPARISON_ROWS.map((row, i) => (
                     <tr key={i} className="border-b border-white/5 last:border-0">
                       <td className="p-4 text-slate-300">{row.feature[lang]}</td>
-                      <td className="p-4 text-center"><CellIcon v={row.starter} /></td>
-                      <td className="p-4 text-center"><CellIcon v={row.growth} /></td>
-                      <td className="p-4 text-center"><CellIcon v={row.enterprise} /></td>
+                      <td className="p-4 text-center">
+                        <CellIcon v={row.starter} />
+                      </td>
+                      <td className="p-4 text-center">
+                        <CellIcon v={row.growth} />
+                      </td>
+                      <td className="p-4 text-center">
+                        <CellIcon v={row.enterprise} />
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -298,7 +389,10 @@ export const PricingPage: React.FC = () => {
 
           {/* FAQ */}
           <section aria-labelledby="faq-heading" className="mb-20 max-w-3xl mx-auto">
-            <h2 id="faq-heading" className="text-3xl font-serif font-bold text-white text-center mb-10">
+            <h2
+              id="faq-heading"
+              className="text-3xl font-serif font-bold text-white text-center mb-10"
+            >
               {t.faqTitle[lang]}
             </h2>
             <div className="space-y-3">
@@ -307,7 +401,10 @@ export const PricingPage: React.FC = () => {
                 const panelId = `faq-panel-${i}`;
                 const triggerId = `faq-trigger-${i}`;
                 return (
-                  <div key={i} className="rounded-xl border border-white/10 bg-white/5 overflow-hidden">
+                  <div
+                    key={i}
+                    className="rounded-xl border border-white/10 bg-white/5 overflow-hidden"
+                  >
                     <button
                       type="button"
                       id={triggerId}
@@ -317,7 +414,12 @@ export const PricingPage: React.FC = () => {
                       onClick={() => setOpenFaq(open ? null : i)}
                     >
                       <span>{f.q[lang]}</span>
-                      <span aria-hidden="true" className={`transition-transform ${open ? 'rotate-45' : ''}`}>+</span>
+                      <span
+                        aria-hidden="true"
+                        className={`transition-transform ${open ? 'rotate-45' : ''}`}
+                      >
+                        +
+                      </span>
                     </button>
                     <div
                       id={panelId}
@@ -336,7 +438,9 @@ export const PricingPage: React.FC = () => {
 
           {/* CTA */}
           <section className="rounded-3xl p-10 md:p-14 text-center bg-linear-to-br from-primary/20 via-white/5 to-secondary/10 border border-white/10">
-            <h2 className="text-3xl md:text-4xl font-serif font-bold text-white mb-3">{t.readyTitle[lang]}</h2>
+            <h2 className="text-3xl md:text-4xl font-serif font-bold text-white mb-3">
+              {t.readyTitle[lang]}
+            </h2>
             <p className="text-slate-300 mb-8">{t.readySub[lang]}</p>
             <Link
               to="/contact"

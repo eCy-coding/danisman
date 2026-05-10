@@ -1,14 +1,14 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { Calendar, Clock, ArrowRight } from 'lucide-react';
-import { BlogPost } from '../../types/blog';
+import { BlogCategory, BLOG_CATEGORY_META } from '../../types/blog';
+import type { BlogPost } from '../../schemas/blog';
 import { Link } from 'react-router-dom';
 
 interface BlogCardProps {
   post: BlogPost;
   index: number;
 }
-
 
 interface MetaItemProps {
   icon: React.ElementType;
@@ -42,35 +42,37 @@ const BlogCard: React.FC<BlogCardProps> = ({ post, index }) => {
             loading="lazy"
           />
           <div className="absolute inset-0 bg-linear-to-t from-[#0a0f1c] to-transparent opacity-80" />
-          
-          <div className="absolute top-4 left-4 flex gap-2">
-            {post.tags.slice(0, 1).map((tag) => (
-              <span key={tag} className="backdrop-blur-md bg-white/10 border border-white/20 text-white/90 text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded">
-                {tag}
+
+          <div className="absolute top-4 left-4 flex gap-2 flex-wrap max-w-[75%]">
+            {post.category && (
+              <span
+                className={`backdrop-blur-md border text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded ${BLOG_CATEGORY_META[post.category as BlogCategory]?.bg ?? 'bg-white/10'} ${BLOG_CATEGORY_META[post.category as BlogCategory]?.border ?? 'border-white/20'} ${BLOG_CATEGORY_META[post.category as BlogCategory]?.color ?? 'text-white/90'}`}
+              >
+                {post.category}
               </span>
-            ))}
+            )}
           </div>
         </div>
 
         {/* Content */}
         <div className="flex-1 p-6 flex flex-col">
           <div className="flex items-center gap-4 text-xs text-slate-400 mb-4 font-medium">
-            <MetaItem 
-              icon={Calendar} 
-              text={new Date(post.date).toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' })}
+            <MetaItem
+              icon={Calendar}
+              text={new Date(post.date).toLocaleDateString('tr-TR', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric',
+              })}
               className="text-blue-400"
             />
-            <MetaItem 
-              icon={Clock} 
-              text={post.readingTime}
-              className="text-yellow-500"
-            />
+            <MetaItem icon={Clock} text={post.readingTime} className="text-yellow-500" />
           </div>
 
           <h3 className="text-xl font-serif text-white mb-3 leading-snug group-hover:text-blue-400 transition-colors">
             {post.title}
           </h3>
-          
+
           <p className="text-slate-400 text-sm leading-relaxed mb-6 line-clamp-3 flex-1">
             {post.excerpt}
           </p>

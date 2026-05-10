@@ -2,7 +2,8 @@ import React, { useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import BlogCard from './BlogCard';
 import { getBlogPosts } from '../../lib/data';
-import { BlogPost, BlogCategory, BLOG_CATEGORIES } from '../../types/blog';
+import { BlogCategory, BLOG_CATEGORIES, BLOG_CATEGORY_META } from '../../types/blog';
+import type { BlogPost } from '../../schemas/blog';
 
 const blogPosts = getBlogPosts() as BlogPost[];
 
@@ -24,7 +25,7 @@ const BlogList: React.FC = () => {
     const cats = new Set<BlogCategory>();
     const tagSet = new Set<string>();
     for (const p of blogPosts) {
-      if (p.category) cats.add(p.category);
+      if (p.category) cats.add(p.category as BlogCategory);
       for (const t of p.tags) tagSet.add(t);
     }
     return {
@@ -74,7 +75,7 @@ const BlogList: React.FC = () => {
                       aria-pressed={active}
                       className={`rounded-full border px-3 py-1 text-xs font-medium transition ${
                         active
-                          ? 'border-blue-400 bg-blue-500/20 text-blue-100'
+                          ? `${BLOG_CATEGORY_META[cat as BlogCategory]?.border ?? 'border-blue-400'} ${BLOG_CATEGORY_META[cat as BlogCategory]?.bg ?? 'bg-blue-500/20'} ${BLOG_CATEGORY_META[cat as BlogCategory]?.color ?? 'text-blue-100'}`
                           : 'border-white/10 bg-white/5 text-slate-300 hover:border-white/30'
                       }`}
                     >

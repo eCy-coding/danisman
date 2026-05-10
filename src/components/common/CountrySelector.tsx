@@ -70,7 +70,7 @@ export const CountrySelector: React.FC = () => {
     refetchOnWindowFocus: false,
   });
 
-  const countries = useMemo<Country[]>(() => data?.data.items ?? [], [data]);
+  const countries = useMemo<Country[]>(() => data?.data?.items ?? [], [data]);
 
   const filtered = useMemo(() => {
     if (!search) return countries;

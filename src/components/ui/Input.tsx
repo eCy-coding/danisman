@@ -7,11 +7,12 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className = '', label, error, id, ...props }, ref) => {
+    const errorId = id ? `${id}-error` : undefined;
     return (
       <div className="w-full">
         {label && (
-          <label 
-            htmlFor={id} 
+          <label
+            htmlFor={id}
             className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2"
           >
             {label}
@@ -20,9 +21,11 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
         <input
           id={id}
           ref={ref}
+          aria-invalid={error ? true : undefined}
+          aria-describedby={error && errorId ? errorId : undefined}
           className={`
-            w-full bg-white/5 border rounded-lg px-4 py-3 text-white 
-            focus:outline-none focus:ring-1 focus:ring-secondary focus:border-secondary 
+            w-full bg-white/5 border rounded-lg px-4 py-3 text-white
+            focus:outline-none focus:ring-1 focus:ring-secondary focus:border-secondary
             transition-all shadow-sm placeholder-slate-500 disabled:opacity-50 disabled:bg-white/5
             ${error ? 'border-red-400/50 focus:ring-red-500 focus:border-red-500' : 'border-white/10'}
             ${className}
@@ -30,11 +33,13 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
           {...props}
         />
         {error && (
-          <p className="mt-1 text-sm text-red-500">{error}</p>
+          <p id={errorId} role="alert" className="mt-1 text-sm text-red-500">
+            {error}
+          </p>
         )}
       </div>
     );
-  }
+  },
 );
 
 Input.displayName = 'Input';

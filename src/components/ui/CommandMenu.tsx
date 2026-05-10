@@ -1,21 +1,20 @@
-
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useState } from 'react';
 import { Command } from 'cmdk';
 import { useNavigate } from 'react-router-dom';
-import { 
-  Calculator, 
-  Calendar, 
-  CreditCard, 
-  Settings, 
-  User, 
+import {
+  Calculator,
+  Calendar,
+  CreditCard,
+  Settings,
+  User,
   Search,
   FileText,
   Home,
   Briefcase,
   Users,
   MapPin,
-  HelpCircle
+  HelpCircle,
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
@@ -51,18 +50,21 @@ export const CommandMenu = () => {
     >
       <div className="flex items-center border-b border-white/10 px-4">
         <Search className="w-5 h-5 text-slate-400 mr-2" />
-        <Command.Input 
+        <Command.Input
           className="w-full h-14 bg-transparent outline-none text-white placeholder:text-slate-400 text-[16px]"
-          placeholder={t('nav.search') || "Type a command or search..."}
+          placeholder={t('nav.search') || 'Type a command or search...'}
         />
       </div>
-      
+
       <Command.List className="max-h-[300px] overflow-y-auto overflow-x-hidden p-2 scroll-py-2">
         <Command.Empty className="py-6 text-center text-sm text-slate-400">
           No results found.
         </Command.Empty>
 
-        <Command.Group heading="Navigation" className="px-2 py-1.5 text-xs font-medium text-slate-400 mb-2">
+        <Command.Group
+          heading="Navigation"
+          className="px-2 py-1.5 text-xs font-medium text-slate-400 mb-2"
+        >
           <Command.Item
             onSelect={() => runCommand(() => navigate('/'))}
             className="flex items-center gap-2 px-3 py-2.5 text-sm text-slate-300 rounded-md aria-selected:bg-white/10 aria-selected:text-white cursor-pointer"
@@ -86,15 +88,18 @@ export const CommandMenu = () => {
           </Command.Item>
         </Command.Group>
 
-        <Command.Group heading="Resources" className="px-2 py-1.5 text-xs font-medium text-slate-400 mb-2">
+        <Command.Group
+          heading="Resources"
+          className="px-2 py-1.5 text-xs font-medium text-slate-400 mb-2"
+        >
           <Command.Item
-            onSelect={() => runCommand(() => navigate('/insights'))}
+            onSelect={() => runCommand(() => navigate('/blog'))}
             className="flex items-center gap-2 px-3 py-2.5 text-sm text-slate-300 rounded-md aria-selected:bg-white/10 aria-selected:text-white cursor-pointer"
           >
             <FileText className="w-4 h-4" />
             <span>Insights / Blog</span>
           </Command.Item>
-           <Command.Item
+          <Command.Item
             onSelect={() => runCommand(() => navigate('/contact'))}
             className="flex items-center gap-2 px-3 py-2.5 text-sm text-slate-300 rounded-md aria-selected:bg-white/10 aria-selected:text-white cursor-pointer"
           >
@@ -104,8 +109,8 @@ export const CommandMenu = () => {
         </Command.Group>
 
         <Command.Group heading="Actions" className="px-2 py-1.5 text-xs font-medium text-slate-400">
-           <Command.Item
-            onSelect={() => runCommand(() => window.location.href = 'mailto:info@ecypro.com')}
+          <Command.Item
+            onSelect={() => runCommand(() => (window.location.href = 'mailto:info@ecypro.com'))}
             className="flex items-center gap-2 px-3 py-2.5 text-sm text-slate-300 rounded-md aria-selected:bg-white/10 aria-selected:text-white cursor-pointer"
           >
             <HelpCircle className="w-4 h-4" />
@@ -114,14 +119,14 @@ export const CommandMenu = () => {
         </Command.Group>
       </Command.List>
 
-        <div className="border-t border-white/10 px-4 py-2 text-[10px] text-slate-400 flex justify-between">
-            <span>Navigation</span>
-            <div className="flex gap-2">
-                <span>Cmd K to close</span>
-                <span>↑↓ to navigate</span>
-                <span>Enter to select</span>
-            </div>
+      <div className="border-t border-white/10 px-4 py-2 text-[10px] text-slate-400 flex justify-between">
+        <span>Navigation</span>
+        <div className="flex gap-2">
+          <span>Cmd K to close</span>
+          <span>↑↓ to navigate</span>
+          <span>Enter to select</span>
         </div>
+      </div>
     </Command.Dialog>
   );
 };

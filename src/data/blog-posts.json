@@ -1,5 +1,273 @@
 [
   {
+    "slug": "stratejik-planlama-rehberi",
+    "title": "Stratejik Planlama Nasıl Yapılır? Kurumsal Liderler için Kapsamlı Rehber",
+    "excerpt": "Yıllık stratejik planlama sürecinin adım adım metodolojisi: hedef belirleme, kaynak tahsisi, uygulama ve ölçüm.",
+    "date": "2026-05-09T00:00:00.000Z",
+    "author": "EcyPro Consulting",
+    "coverImage": "/images/blog-default.jpg",
+    "category": "Strateji",
+    "tags": [],
+    "readingTime": "5 min read"
+  },
+  {
+    "slug": "tedarik-zinciri-optimizasyonu-lean-six-sigma",
+    "title": "Untitled",
+    "excerpt": "",
+    "date": "2026-05-08T10:39:40.144Z",
+    "author": "EcyPro Team",
+    "coverImage": "/images/blog-default.jpg",
+    "tags": [],
+    "readingTime": "5 min read"
+  },
+  {
+    "slug": "uluslararasi-pazar-giris-stratejisi-turquality",
+    "title": "Untitled",
+    "excerpt": "",
+    "date": "2026-05-08T10:39:40.144Z",
+    "author": "EcyPro Team",
+    "coverImage": "/images/blog-default.jpg",
+    "tags": [],
+    "readingTime": "5 min read"
+  },
+  {
+    "slug": "veri-yonetisimi-kvkk-gdpr-uyum",
+    "title": "Untitled",
+    "excerpt": "",
+    "date": "2026-05-08T10:39:40.144Z",
+    "author": "EcyPro Team",
+    "coverImage": "/images/blog-default.jpg",
+    "tags": [],
+    "readingTime": "5 min read"
+  },
+  {
+    "slug": "net-zero-eylem-plani",
+    "title": "Untitled",
+    "excerpt": "",
+    "date": "2026-05-08T10:39:40.142Z",
+    "author": "EcyPro Team",
+    "coverImage": "/images/blog-default.jpg",
+    "tags": [],
+    "readingTime": "5 min read"
+  },
+  {
+    "slug": "noropazarlama-tuketici-davranisi-stratejisi",
+    "title": "Untitled",
+    "excerpt": "",
+    "date": "2026-05-08T10:39:40.142Z",
+    "author": "EcyPro Team",
+    "coverImage": "/images/blog-default.jpg",
+    "tags": [],
+    "readingTime": "5 min read"
+  },
+  {
+    "slug": "lean-ai-operational-excellence",
+    "title": "Untitled",
+    "excerpt": "",
+    "date": "2026-05-08T10:39:40.141Z",
+    "author": "EcyPro Team",
+    "coverImage": "/images/blog-default.jpg",
+    "tags": [],
+    "readingTime": "5 min read"
+  },
+  {
+    "slug": "ma-degerleme-due-diligence-rehberi",
+    "title": "Untitled",
+    "excerpt": "",
+    "date": "2026-05-08T10:39:40.141Z",
+    "author": "EcyPro Team",
+    "coverImage": "/images/blog-default.jpg",
+    "tags": [],
+    "readingTime": "5 min read"
+  },
+  {
+    "slug": "makroekonomik-risk-yonetimi-2026",
+    "title": "Untitled",
+    "excerpt": "",
+    "date": "2026-05-08T10:39:40.141Z",
+    "author": "EcyPro Team",
+    "coverImage": "/images/blog-default.jpg",
+    "tags": [],
+    "readingTime": "5 min read"
+  },
+  {
+    "slug": "akilli-sehirler-kamu-politikasi-dijital-yonetim",
+    "title": "Untitled",
+    "excerpt": "",
+    "date": "2026-05-08T10:39:40.139Z",
+    "author": "EcyPro Team",
+    "coverImage": "/images/blog-default.jpg",
+    "tags": [],
+    "readingTime": "5 min read"
+  },
+  {
+    "slug": "boardroom-agility-uncertainty",
+    "title": "Untitled",
+    "excerpt": "",
+    "date": "2026-05-08T10:39:40.139Z",
+    "author": "EcyPro Team",
+    "coverImage": "/images/blog-default.jpg",
+    "tags": [],
+    "readingTime": "5 min read"
+  },
+  {
+    "slug": "endustriyel-iliskiler-toplu-sozlesme-stratejisi",
+    "title": "Untitled",
+    "excerpt": "",
+    "date": "2026-05-08T10:39:40.139Z",
+    "author": "EcyPro Team",
+    "coverImage": "/images/blog-default.jpg",
+    "tags": [],
+    "readingTime": "5 min read"
+  },
+  {
+    "slug": "esg-strateji-kurumsal-surdurulebilirlik",
+    "title": "Untitled",
+    "excerpt": "",
+    "date": "2026-05-08T10:39:40.139Z",
+    "author": "EcyPro Team",
+    "coverImage": "/images/blog-default.jpg",
+    "tags": [],
+    "readingTime": "5 min read"
+  },
+  {
+    "slug": "aile-sirketleri-kurumsallasma-yonetisim",
+    "title": "Untitled",
+    "excerpt": "",
+    "date": "2026-05-08T10:39:40.138Z",
+    "author": "EcyPro Team",
+    "coverImage": "/images/blog-default.jpg",
+    "tags": [],
+    "readingTime": "5 min read"
+  },
+  {
+    "slug": "surecler-nasil-standardize-edilir",
+    "title": "İş Süreçleri Nasıl Standardize Edilir? Adım Adım Metodoloji",
+    "excerpt": "Süreç standardizasyonu nedir, neden gereklidir ve kurumunuzda nasıl uygulanır? Pratik araçlar ve şablonlarla tam rehber.",
+    "date": "2026-05-08T00:00:00.000Z",
+    "author": "EcyPro Consulting",
+    "coverImage": "/images/blog-default.jpg",
+    "category": "Operasyon",
+    "tags": [],
+    "readingTime": "5 min read"
+  },
+  {
+    "slug": "kurumsal-kultur-donusumu",
+    "title": "Kurumsal Kültür Dönüşümü: Adımlar, Engeller ve Başarı Kriterleri",
+    "excerpt": "Kültür değişimi neden bu kadar zordur? Kurumsal kültür dönüşümünü başarıyla yönetmek için kanıtlanmış çerçeve ve pratik adımlar.",
+    "date": "2026-05-07T00:00:00.000Z",
+    "author": "EcyPro Consulting",
+    "coverImage": "/images/blog-default.jpg",
+    "category": "İnsan Kaynakları",
+    "tags": [],
+    "readingTime": "5 min read"
+  },
+  {
+    "slug": "veri-odakli-karar-verme",
+    "title": "Veri Odaklı Karar Verme: Kurumsal Yöneticiler için Pratik Rehber",
+    "excerpt": "Sezgiden veriye geçiş: kurumsal karar süreçlerini data-driven yaklaşımla nasıl dönüştürürsünüz?",
+    "date": "2026-05-06T00:00:00.000Z",
+    "author": "EcyPro Consulting",
+    "coverImage": "/images/blog-default.jpg",
+    "category": "Analitik",
+    "tags": [],
+    "readingTime": "5 min read"
+  },
+  {
+    "slug": "dijital-donusum-stratejisi-nasil-olusturulur",
+    "title": "Dijital Dönüşüm Stratejisi Nasıl Oluşturulur? 7 Adımlı Kurumsal Rehber",
+    "excerpt": "Kurumsal dijital dönüşüm stratejisi oluştururken kaçınılması gereken 5 hata ve başarılı dönüşümün 7 kritik adımı.",
+    "date": "2026-05-05T00:00:00.000Z",
+    "author": "EcyPro Consulting",
+    "coverImage": "/images/blog-default.jpg",
+    "category": "Dijital Dönüşüm",
+    "tags": [
+      "dijital dönüşüm",
+      "strateji",
+      "kurumsal",
+      "operasyonel verimlilik"
+    ],
+    "readingTime": "5 min read"
+  },
+  {
+    "slug": "kpi-belirleme-ve-olcme-yontemleri",
+    "title": "KPI Belirleme ve Ölçme Yöntemleri: Kapsamlı Kurumsal Rehber",
+    "excerpt": "KPI belirleme sürecinde sık yapılan hatalar ve veri odaklı performans göstergelerini doğru seçmek için adım adım metodoloji.",
+    "date": "2026-05-05T00:00:00.000Z",
+    "author": "EcyPro Consulting",
+    "coverImage": "/images/blog-default.jpg",
+    "category": "Strateji",
+    "tags": [],
+    "readingTime": "5 min read"
+  },
+  {
+    "slug": "stratejik-danismanlik-hizmetleri-secim-kilavuzu",
+    "title": "Stratejik Danışmanlık Firması Nasıl Seçilir? Kurumsal Alıcı Rehberi 2026",
+    "excerpt": "Doğru stratejik danışmanlık firmasını seçmek için değerlendirmeniz gereken 9 kriter ve sormak zorunda olduğunuz 15 soru.",
+    "date": "2026-05-04T00:00:00.000Z",
+    "author": "EcyPro Consulting",
+    "coverImage": "/images/blog-default.jpg",
+    "category": "Stratejik Danışmanlık",
+    "tags": [
+      "stratejik danışmanlık",
+      "danışmanlık hizmetleri",
+      "kurumsal",
+      "seçim kriterleri"
+    ],
+    "readingTime": "5 min read"
+  },
+  {
+    "slug": "operasyonel-verimlilik-nasil-arttirilir",
+    "title": "Operasyonel Verimlilik Nasıl Artırılır? Kurumlar İçin Kanıtlanmış 6 Strateji",
+    "excerpt": "Operasyonel verimlilik artışının matematiksel boyutu, kâr üzerindeki orantısız etkisi ve kurumsal uygulamada kanıtlanmış 6 metodoloji.",
+    "date": "2026-05-03T00:00:00.000Z",
+    "author": "EcyPro Consulting",
+    "coverImage": "/images/blog-default.jpg",
+    "category": "Operasyonel Verimlilik",
+    "tags": [
+      "operasyonel verimlilik",
+      "süreç optimizasyonu",
+      "lean",
+      "six sigma",
+      "kurumsal"
+    ],
+    "readingTime": "5 min read"
+  },
+  {
+    "slug": "insan-kaynaklari-stratejisi-talent-management",
+    "title": "İnsan Kaynakları Stratejisi: Yetenek Yönetimi ile Rekabet Avantajı Oluşturma",
+    "excerpt": "Modern yetenek yönetiminin 5 bileşeni, Türkiye'de işveren markası oluşturma stratejileri ve ölçülebilir HR sonuçları için veri odaklı yaklaşım.",
+    "date": "2026-05-02T00:00:00.000Z",
+    "author": "EcyPro Consulting",
+    "coverImage": "/images/blog-default.jpg",
+    "category": "İnsan Kaynakları",
+    "tags": [
+      "insan kaynakları",
+      "yetenek yönetimi",
+      "işveren markası",
+      "hr strateji",
+      "çalışan deneyimi"
+    ],
+    "readingTime": "5 min read"
+  },
+  {
+    "slug": "yapay-zeka-ile-is-sureclerini-optimize-etme",
+    "title": "Yapay Zeka ile İş Süreçlerini Optimize Etme: Kurumsal Rehber 2026",
+    "excerpt": "Üretici yapay zekanın iş süreçlerindeki gerçek ROI'si, uygulama tuzakları ve kurumsal AI dönüşümü için 5 aşamalı çerçeve.",
+    "date": "2026-05-01T00:00:00.000Z",
+    "author": "EcyPro Consulting",
+    "coverImage": "/images/blog-default.jpg",
+    "category": "Yapay Zeka",
+    "tags": [
+      "yapay zeka",
+      "ai",
+      "süreç optimizasyonu",
+      "generative ai",
+      "kurumsal ai"
+    ],
+    "readingTime": "5 min read"
+  },
+  {
     "slug": "organizasyonel-degisim-yonetimi",
     "title": "Dijital Dönüşümde Değişim Yönetimi: İnsan Faktörü",
     "excerpt": "Teknoloji projelerinin %70'i insani direnç nedeniyle başarısız olur. Değişim yönetiminin temel prensipleri ve EcyPro'nun ADAPT çerçevesi.",

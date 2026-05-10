@@ -1,8 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const ADMIN_TOKEN_KEY = 'ecypro_admin_token';
-const MOCK_TOKEN = 'ecy_golden_key_2025';
+const TOKEN_KEY = 'ecypro_admin_session';
+
+function getAdminPassword(): string | undefined {
+  return import.meta.env.VITE_ADMIN_PASSWORD as string | undefined;
+}
 
 export const useAdminAuth = () => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
@@ -10,23 +13,21 @@ export const useAdminAuth = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const checkAuth = () => {
-      const token = localStorage.getItem(ADMIN_TOKEN_KEY);
-      if (token === MOCK_TOKEN) {
-        setIsAuthenticated(true);
-      } else {
-        setIsAuthenticated(false);
-      }
-      setIsLoading(false);
-    };
-
-    checkAuth();
+    const session = sessionStorage.getItem(TOKEN_KEY);
+    setIsAuthenticated(!!session && session.length > 8);
+    setIsLoading(false);
   }, []);
 
-  const login = (password: string) => {
-    // Mock password check
-    if (password === 'admin123') { // Temporary hardcoded password
-      localStorage.setItem(ADMIN_TOKEN_KEY, MOCK_TOKEN);
+  const login = (password: string): boolean => {
+    const adminPassword = getAdminPassword();
+    if (!adminPassword) {
+      // No admin password configured — deny access in all environments
+      return false;
+    }
+    if (password === adminPassword) {
+      // Session token: random UUID stored in sessionStorage (cleared on tab close)
+      const sessionToken = crypto.randomUUID();
+      sessionStorage.setItem(TOKEN_KEY, sessionToken);
       setIsAuthenticated(true);
       return true;
     }
@@ -34,7 +35,7 @@ export const useAdminAuth = () => {
   };
 
   const logout = () => {
-    localStorage.removeItem(ADMIN_TOKEN_KEY);
+    sessionStorage.removeItem(TOKEN_KEY);
     setIsAuthenticated(false);
     navigate('/admin/login');
   };

@@ -5,6 +5,7 @@ import { Logger } from '../lib/logger';
 export const STORAGE_KEYS = {
   SESSIONS: 'ecypro_sessions',
   SETTINGS: 'ecypro_settings',
+  ROI_CALCULATOR: 'ecypro_roi_calc',
 } as const;
 
 // Generic wrapper for LocalStorage with Zod validation
@@ -25,7 +26,7 @@ export class LocalPersistenceService {
 
   // Alias for setItem to match usage in ConsultingModule
   static setItem<T>(key: string, data: T): void {
-      this.save(key, data);
+    this.save(key, data);
   }
 
   /**
@@ -44,7 +45,10 @@ export class LocalPersistenceService {
       const result = schema.safeParse(parsed);
 
       if (!result.success) {
-        Logger.warn(`LocalPersistenceService Warning: Data for ${key} invalid, using default.`, result.error);
+        Logger.warn(
+          `LocalPersistenceService Warning: Data for ${key} invalid, using default.`,
+          result.error,
+        );
         return defaultValue;
       }
 
@@ -58,13 +62,13 @@ export class LocalPersistenceService {
   // Alias for getItem (needs to be generic/inferred, but easier to just use load with schema in component if possible, or cast here)
   // To avoid breaking component signature requesting generic:
   static getItem<T>(key: string): T | null {
-       try {
-          const item = localStorage.getItem(key);
-          if (!item) return null;
-          return JSON.parse(item) as T;
-       } catch (_e) {
-           return null;
-       }
+    try {
+      const item = localStorage.getItem(key);
+      if (!item) return null;
+      return JSON.parse(item) as T;
+    } catch (_e) {
+      return null;
+    }
   }
 
   /**
@@ -81,16 +85,20 @@ export const SessionSchema = z.object({
   id: z.string(),
   // Allow 'client' OR 'clientId' to match different usages if needed, picking one standard is better.
   // Component uses clientId, mock uses client.
-  clientId: z.string().min(2, "Müşteri adı en az 2 karakter olmalıdır.").optional().or(z.literal('')), 
+  clientId: z
+    .string()
+    .min(2, 'Müşteri adı en az 2 karakter olmalıdır.')
+    .optional()
+    .or(z.literal('')),
   client: z.string().optional(),
-  
+
   type: z.string().optional(),
   date: z.string().optional(), // YYYY-MM-DD
   time: z.string().optional(), // HH:MM
-  
+
   // Mixed English/Turkish status support
   status: z.enum(['Planlandı', 'Tamamlandı', 'Beklemede', 'active', 'completed', 'pending']),
-  
+
   notes: z.string().optional(),
   startTime: z.number().optional(),
   endTime: z.number().optional(),
