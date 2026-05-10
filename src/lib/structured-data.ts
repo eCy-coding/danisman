@@ -1,7 +1,13 @@
 /**
- * src/lib/structured-data.ts — Phase 20.5 H1
+ * src/lib/structured-data.ts — Phase 20.5 H1 + P39-T05
  *
  * schema.org JSON-LD builders. Used by per-page `JsonLd` injections.
+ *
+ * P39-T05 additions (International SEO):
+ *   - buildOrganizationSchema() — full Organization with address, areaServed,
+ *     availableLanguage (TR+EN), contactPoint
+ *   - GSC validation: https://search.google.com/test/rich-results
+ *   - ISO 3166-1 alpha-2 country codes for areaServed
  *
  * Why builders (not raw objects)?
  *   - Ensure required fields are always set (Google rich-results validation).
@@ -14,6 +20,100 @@
 
 const SITE_URL = 'https://ecypro.com';
 const ORG_ID = `${SITE_URL}#organization`;
+
+// ─── P39-T05: International Organization Schema ──────────────
+
+/**
+ * Full Organization JSON-LD for the homepage / global scope.
+ *
+ * Includes:
+ *   - address: Istanbul, Türkiye (schema.org PostalAddress)
+ *   - areaServed: TR, EU, US — signals global availability
+ *   - availableLanguage: tr-TR + en-US
+ *   - contactPoint: booking form + email
+ *   - sameAs: social profiles for entity disambiguation
+ *
+ * GSC validation: https://search.google.com/test/rich-results
+ *   → Type: Organization → "Items detected" + 0 errors
+ */
+export function buildOrganizationSchema(): Record<string, unknown> {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'ProfessionalService',
+    '@id': ORG_ID,
+    name: 'EcyPro Premium Consulting',
+    alternateName: 'EcyPro',
+    url: SITE_URL,
+    logo: {
+      '@type': 'ImageObject',
+      url: `${SITE_URL}/pwa-512x512.png`,
+      width: 512,
+      height: 512,
+    },
+    image: `${SITE_URL}/og-image.png`,
+    description:
+      'Stratejik danışmanlık, operasyonel verimlilik ve dijital dönüşüm için premium konsültasyon hizmetleri.',
+    foundingDate: '2024',
+
+    // P39-T05: Physical address (İstanbul)
+    address: {
+      '@type': 'PostalAddress',
+      addressLocality: 'İstanbul',
+      addressRegion: 'İstanbul',
+      addressCountry: 'TR',
+    },
+
+    // P39-T05: Areas served (ISO 3166-1 alpha-2)
+    areaServed: [
+      {
+        '@type': 'Country',
+        '@id': 'https://www.wikidata.org/entity/Q43',
+        name: 'Türkiye',
+        identifier: 'TR',
+      },
+      {
+        '@type': 'Country',
+        '@id': 'https://www.wikidata.org/entity/Q458',
+        name: 'Avrupa Birliği',
+        identifier: 'EU',
+      },
+      {
+        '@type': 'Country',
+        '@id': 'https://www.wikidata.org/entity/Q30',
+        name: 'Amerika Birleşik Devletleri',
+        identifier: 'US',
+      },
+    ],
+
+    // P39-T05: Languages offered
+    availableLanguage: [
+      { '@type': 'Language', name: 'Turkish', alternateName: 'tr-TR' },
+      { '@type': 'Language', name: 'English', alternateName: 'en-US' },
+    ],
+
+    // Contact
+    contactPoint: [
+      {
+        '@type': 'ContactPoint',
+        contactType: 'customer service',
+        availableLanguage: ['Turkish', 'English'],
+        contactOption: 'TollFree',
+        url: `${SITE_URL}/contact`,
+      },
+    ],
+
+    // Social entity disambiguation (sameAs)
+    sameAs: [
+      'https://www.linkedin.com/company/ecypro',
+      'https://twitter.com/ecypro',
+      'https://www.crunchbase.com/organization/ecypro',
+    ],
+
+    priceRange: '₺₺₺',
+    currenciesAccepted: 'TRY, USD, EUR',
+    paymentAccepted: 'Invoice, Bank Transfer',
+  };
+}
 
 export interface ArticleSchemaInput {
   url: string;
