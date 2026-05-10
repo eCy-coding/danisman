@@ -1,44 +1,52 @@
-import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAppStore } from '@/store/useAppStore';
+import { authApi } from '@/lib/api';
 
-const TOKEN_KEY = 'ecypro_admin_session';
-
-function getAdminPassword(): string | undefined {
-  return import.meta.env.VITE_ADMIN_PASSWORD as string | undefined;
+interface LoginResult {
+  requiresTotp: boolean;
 }
 
 export const useAdminAuth = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const { user, token, totpRequired, totpVerified, setAuth, logout: storeLogout } = useAppStore();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const session = sessionStorage.getItem(TOKEN_KEY);
-    setIsAuthenticated(!!session && session.length > 8);
-    setIsLoading(false);
-  }, []);
+  const isAuthenticated =
+    !!user && !!token && user.role === 'ADMIN' && (!totpRequired || totpVerified);
 
-  const login = (password: string): boolean => {
-    const adminPassword = getAdminPassword();
-    if (!adminPassword) {
-      // No admin password configured — deny access in all environments
-      return false;
+  const login = async (email: string, password: string): Promise<LoginResult> => {
+    const res = await authApi.login({ email, password });
+    const { user: apiUser, token: apiToken, refreshToken: apiRefresh } = res.data.data;
+
+    if (apiUser.role !== 'ADMIN') {
+      throw new Error('FORBIDDEN_NOT_ADMIN');
     }
-    if (password === adminPassword) {
-      // Session token: random UUID stored in sessionStorage (cleared on tab close)
-      const sessionToken = crypto.randomUUID();
-      sessionStorage.setItem(TOKEN_KEY, sessionToken);
-      setIsAuthenticated(true);
-      return true;
-    }
-    return false;
+
+    setAuth({
+      user: {
+        id: apiUser.id,
+        email: apiUser.email,
+        name: apiUser.name ?? '',
+        role: apiUser.role as 'ADMIN',
+        avatarUrl: apiUser.avatarUrl,
+        totpEnabled: apiUser.totpEnabled ?? false,
+      },
+      token: apiToken,
+      refreshToken: apiRefresh,
+      totpRequired: apiUser.totpEnabled ?? false,
+    });
+
+    return { requiresTotp: apiUser.totpEnabled ?? false };
   };
 
-  const logout = () => {
-    sessionStorage.removeItem(TOKEN_KEY);
-    setIsAuthenticated(false);
+  const logout = async () => {
+    try {
+      await authApi.logout();
+    } catch {
+      // best-effort: always clear local state even if server call fails
+    }
+    storeLogout();
     navigate('/admin/login');
   };
 
-  return { isAuthenticated, isLoading, login, logout };
+  return { isAuthenticated, isLoading: false, login, logout };
 };

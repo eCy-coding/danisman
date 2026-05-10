@@ -1,51 +1,62 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { authApi, bookingsApi, analyticsApi, type LoginPayload, type RegisterPayload, type BookingPayload, type ContactPayload } from '@/lib/api';
+import {
+  authApi,
+  apiClient,
+  bookingsApi,
+  analyticsApi,
+  type LoginPayload,
+  type RegisterPayload,
+  type BookingPayload,
+  type ContactPayload,
+} from '@/lib/api';
 import { useAppStore } from '@/store/useAppStore';
 
 // ─── Auth Hooks ──────────────────────────────────────────
 
 export function useLogin() {
-  const login = useAppStore((s) => s.login);
+  const setAuth = useAppStore((s) => s.setAuth);
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: (data: LoginPayload) => authApi.login(data),
     onSuccess: (response) => {
-      const { user } = response.data.data;
-      login({
-        id: user.id,
-        email: user.email,
-        name: user.name ?? '',
-        role: user.role as 'admin' | 'consultant' | 'client' | 'premium',
-        avatarUrl: user.avatarUrl,
+      const { user, token, refreshToken } = response.data.data;
+      setAuth({
+        user: {
+          id: user.id,
+          email: user.email,
+          name: user.name ?? '',
+          role: user.role as 'USER' | 'CLIENT' | 'CONSULTANT' | 'ADMIN' | 'PREMIUM',
+          avatarUrl: user.avatarUrl ?? undefined,
+          totpEnabled: user.totpEnabled ?? false,
+        },
+        token,
+        refreshToken,
+        totpRequired: user.totpEnabled ?? false,
       });
-      // Store token separately for API interceptor
-      const stored = localStorage.getItem('ecypro-app-storage');
-      if (stored) {
-        try {
-          const parsed = JSON.parse(stored);
-          parsed.state = { ...parsed.state, token: response.data.data.token };
-          localStorage.setItem('ecypro-app-storage', JSON.stringify(parsed));
-        } catch { /* ignore */ }
-      }
       queryClient.invalidateQueries({ queryKey: ['auth', 'me'] });
     },
   });
 }
 
 export function useRegister() {
-  const login = useAppStore((s) => s.login);
+  const setAuth = useAppStore((s) => s.setAuth);
 
   return useMutation({
     mutationFn: (data: RegisterPayload) => authApi.register(data),
     onSuccess: (response) => {
-      const { user } = response.data.data;
-      login({
-        id: user.id,
-        email: user.email,
-        name: user.name ?? '',
-        role: user.role as 'admin' | 'consultant' | 'client' | 'premium',
-        avatarUrl: user.avatarUrl,
+      const { user, token, refreshToken } = response.data.data;
+      setAuth({
+        user: {
+          id: user.id,
+          email: user.email,
+          name: user.name ?? '',
+          role: user.role as 'USER' | 'CLIENT' | 'CONSULTANT' | 'ADMIN' | 'PREMIUM',
+          avatarUrl: user.avatarUrl ?? undefined,
+          totpEnabled: user.totpEnabled ?? false,
+        },
+        token,
+        refreshToken,
       });
     },
   });
@@ -60,6 +71,41 @@ export function useCurrentUser() {
     enabled: isAuthenticated,
     staleTime: 5 * 60 * 1000, // 5 minutes
     retry: 1,
+  });
+}
+
+// ─── Admin Auth Hooks ────────────────────────────────────
+
+export function useAdminLogin() {
+  const setAuth = useAppStore((s) => s.setAuth);
+
+  return useMutation({
+    mutationFn: ({ email, password }: LoginPayload) => authApi.login({ email, password }),
+    onSuccess: (response) => {
+      const { user, token, refreshToken } = response.data.data;
+      setAuth({
+        user: {
+          id: user.id,
+          email: user.email,
+          name: user.name ?? '',
+          role: user.role as 'USER' | 'CLIENT' | 'CONSULTANT' | 'ADMIN' | 'PREMIUM',
+          avatarUrl: user.avatarUrl ?? undefined,
+          totpEnabled: user.totpEnabled ?? false,
+        },
+        token,
+        refreshToken,
+        totpRequired: user.totpEnabled ?? false,
+      });
+    },
+  });
+}
+
+export function useTotpValidate() {
+  const setTotpVerified = useAppStore((s) => s.setTotpVerified);
+
+  return useMutation({
+    mutationFn: (code: string) => apiClient.post('/totp/validate', { code }),
+    onSuccess: () => setTotpVerified(true),
   });
 }
 

@@ -5,9 +5,9 @@ interface User {
   id: string;
   name: string;
   email: string;
-  // Added 'premium' to role type to match RoleGuard usage
-  role: 'admin' | 'consultant' | 'client' | 'premium';
+  role: 'USER' | 'CLIENT' | 'CONSULTANT' | 'ADMIN' | 'PREMIUM';
   avatarUrl?: string;
+  totpEnabled: boolean;
 }
 
 export interface AppState {
@@ -18,8 +18,18 @@ export interface AppState {
 
   // Session State
   user: User | null;
+  token: string | null;
+  refreshToken: string | null;
+  totpRequired: boolean;
+  totpVerified: boolean;
   isAuthenticated: boolean;
-  login: (user: User) => void;
+  setAuth: (payload: {
+    user: User;
+    token: string;
+    refreshToken: string;
+    totpRequired?: boolean;
+  }) => void;
+  setTotpVerified: (verified: boolean) => void;
   logout: () => void;
 }
 
@@ -31,24 +41,49 @@ export const useAppStore = create<AppState>()(
       toggleSidebar: () => set((state) => ({ isSidebarOpen: !state.isSidebarOpen })),
       closeSidebar: () => set({ isSidebarOpen: false }),
 
-      // Session Defaults
-      user: import.meta.env.DEV ? {
-        id: '1',
-        name: 'Emre Can',
-        email: 'admin@ecypro.com',
-        role: 'admin',
-        avatarUrl: 'https://github.com/shadcn.png'
-      } : null,
-      isAuthenticated: import.meta.env.DEV,
-      login: (user) => set({ user, isAuthenticated: true }),
-      logout: () => set({ user: null, isAuthenticated: false }),
+      // Session Defaults — no DEV fixture (security: removed)
+      user: null,
+      token: null,
+      refreshToken: null,
+      totpRequired: false,
+      totpVerified: false,
+      isAuthenticated: false,
+
+      setAuth: ({ user, token, refreshToken, totpRequired = false }) =>
+        set({
+          user,
+          token,
+          refreshToken,
+          totpRequired,
+          totpVerified: false,
+          isAuthenticated: !totpRequired,
+        }),
+
+      setTotpVerified: (verified) =>
+        set((state) => ({
+          totpVerified: verified,
+          isAuthenticated: !!state.user && !!state.token && verified,
+        })),
+
+      logout: () =>
+        set({
+          user: null,
+          token: null,
+          refreshToken: null,
+          totpRequired: false,
+          totpVerified: false,
+          isAuthenticated: false,
+        }),
     }),
     {
       name: 'ecypro-app-storage',
-      partialize: (state) => ({ 
-        user: state.user, 
-        isAuthenticated: state.isAuthenticated 
-      }), 
-    }
-  )
+      partialize: (state) => ({
+        user: state.user,
+        token: state.token,
+        refreshToken: state.refreshToken,
+        totpVerified: state.totpVerified,
+        isAuthenticated: state.isAuthenticated,
+      }),
+    },
+  ),
 );

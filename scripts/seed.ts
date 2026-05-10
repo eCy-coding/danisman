@@ -1,4 +1,3 @@
- 
 /**
  * EcyPro — Database Seed Script
  *
@@ -38,22 +37,32 @@ function hashPassword(password: string): string {
 async function main() {
   console.log('🌱 Starting database seed...\n');
 
-  // 1. Admin User
-  const adminEmail = 'admin@ecypro.com';
-  const existingAdmin = await prisma.user.findUnique({ where: { email: adminEmail } });
+  // 1. Admin User — env-driven, idempotent upsert
+  const adminEmail = process.env.SEED_ADMIN_EMAIL ?? 'admin@ecypro.com';
+  const adminPassword = process.env.SEED_ADMIN_PASSWORD;
 
-  if (!existingAdmin) {
-    const admin = await prisma.user.create({
-      data: {
+  if (!adminPassword) {
+    console.warn('⚠️  SEED_ADMIN_PASSWORD not set — skipping admin upsert');
+    console.warn(
+      '   Run: SEED_ADMIN_EMAIL=admin@ecypro.com SEED_ADMIN_PASSWORD=<strong> npm run db:seed',
+    );
+  } else {
+    await prisma.user.upsert({
+      where: { email: adminEmail },
+      update: {
+        passwordHash: hashPassword(adminPassword),
+        role: 'ADMIN',
+        emailVerified: true,
+      },
+      create: {
         email: adminEmail,
         name: 'EcyPro Admin',
-        passwordHash: hashPassword('admin123!Ecypro'),
+        passwordHash: hashPassword(adminPassword),
         role: 'ADMIN',
+        emailVerified: true,
       },
     });
-    console.log(`✅ Admin user created: ${admin.email}`);
-  } else {
-    console.log(`⏭️  Admin user already exists: ${adminEmail}`);
+    console.log(`✅ Admin user upserted: ${adminEmail}`);
   }
 
   // 2. Demo User
