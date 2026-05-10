@@ -179,6 +179,8 @@ audits/
 
 # Lighthouse CI output
 .lighthouseci/
+lighthouse-reports/
+e2e_health.json
 
 # Database backups (never commit)
 backups/
