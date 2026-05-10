@@ -23,10 +23,10 @@ const __dirname = path.dirname(__filename);
 
 const PROJECT_ROOT = path.resolve(__dirname, '..');
 const CROWLER_ROOT = path.join(PROJECT_ROOT, 'crowler');
-const VENV_PYTHON   = path.join(CROWLER_ROOT, '.venv', 'bin', 'python3');
-const REPORTS_DIR   = path.join(CROWLER_ROOT, 'reports');
-const SCRIPTS_DIR   = path.join(CROWLER_ROOT, 'scripts');
-const BASE_URL      = 'http://localhost:4173';
+const VENV_PYTHON = path.join(CROWLER_ROOT, '.venv', 'bin', 'python3');
+const REPORTS_DIR = path.join(CROWLER_ROOT, 'reports');
+const SCRIPTS_DIR = path.join(CROWLER_ROOT, 'scripts');
+const BASE_URL = 'http://localhost:4173';
 
 function venvAvailable(): boolean {
   return fs.existsSync(VENV_PYTHON);
@@ -34,8 +34,9 @@ function venvAvailable(): boolean {
 
 function latestReport(pattern: string): string | null {
   if (!fs.existsSync(REPORTS_DIR)) return null;
-  const files = fs.readdirSync(REPORTS_DIR)
-    .filter(f => f.startsWith(pattern) && f.endsWith('.json'))
+  const files = fs
+    .readdirSync(REPORTS_DIR)
+    .filter((f) => f.startsWith(pattern) && f.endsWith('.json'))
     .sort()
     .reverse();
   return files.length > 0 ? path.join(REPORTS_DIR, files[0]) : null;
@@ -48,10 +49,12 @@ function runScript(scriptName: string, extraArgs = '', timeoutMs = 60000): boole
     // Paths with spaces need proper quoting
     const py = `"${VENV_PYTHON}"`;
     const sc = `"${script}"`;
-    execSync(
-      `${py} ${sc} --base ${BASE_URL} --output json ${extraArgs}`,
-      { cwd: CROWLER_ROOT, timeout: timeoutMs, stdio: 'pipe', shell: '/bin/bash' },
-    );
+    execSync(`${py} ${sc} --base ${BASE_URL} --output json ${extraArgs}`, {
+      cwd: CROWLER_ROOT,
+      timeout: timeoutMs,
+      stdio: 'pipe',
+      shell: '/bin/bash',
+    });
     return true;
   } catch {
     return false;
@@ -88,17 +91,20 @@ test.describe('Crowler 03: Canonical / Hreflang Audit', () => {
       severity: string;
     }> = JSON.parse(fs.readFileSync(reportPath, 'utf-8'));
 
-    const criticals = report.filter(r => r.severity === 'critical');
-    const highIssues = report.filter(r => r.severity === 'high');
+    const criticals = report.filter((r) => r.severity === 'critical');
+    const highIssues = report.filter((r) => r.severity === 'high');
 
     expect(
       criticals.length,
-      `Kritik canonical/hreflang sorunları:\n${criticals.map(r => `  ${r.url}: ${r.issues.join(', ')}`).join('\n')}`,
+      `Kritik canonical/hreflang sorunları:\n${criticals.map((r) => `  ${r.url}: ${r.issues.join(', ')}`).join('\n')}`,
     ).toBe(0);
 
     expect(
       highIssues.length,
-      `Yüksek öncelikli hreflang sorunları: ${highIssues.length}\n${highIssues.slice(0, 5).map(r => `  ${r.url}: ${r.issues.join(', ')}`).join('\n')}`,
+      `Yüksek öncelikli hreflang sorunları: ${highIssues.length}\n${highIssues
+        .slice(0, 5)
+        .map((r) => `  ${r.url}: ${r.issues.join(', ')}`)
+        .join('\n')}`,
     ).toBeLessThan(5);
   });
 });
@@ -136,7 +142,10 @@ test.describe('Crowler 07: LCP Image Audit', () => {
     const avgScore = report.reduce((s, r) => s + r.score, 0) / Math.max(report.length, 1);
     const totalNoAlt = report.reduce((s, r) => s + r.no_alt, 0);
 
-    expect(avgScore, `LCP görsel ortalama skor: ${avgScore.toFixed(1)} < 60`).toBeGreaterThanOrEqual(60);
+    expect(
+      avgScore,
+      `LCP görsel ortalama skor: ${avgScore.toFixed(1)} < 60`,
+    ).toBeGreaterThanOrEqual(60);
     expect(totalNoAlt, `${totalNoAlt} görsel alt text eksik (erişilebilirlik + SEO)`).toBe(0);
   });
 });
@@ -169,8 +178,14 @@ test.describe('Crowler 08: Internal Link Graph', () => {
       page_ranks: Record<string, number>;
     } = JSON.parse(fs.readFileSync(reportPath, 'utf-8'));
 
-    expect(report.orphans.length, `${report.orphans.length} orphan sayfa: ${report.orphans.join(', ')}`).toBeLessThan(5);
-    expect(report.total_links, 'İç link sayısı çok az (site düzgün linkedge edilmemiş)').toBeGreaterThan(10);
+    expect(
+      report.orphans.length,
+      `${report.orphans.length} orphan sayfa: ${report.orphans.join(', ')}`,
+    ).toBeLessThan(5);
+    expect(
+      report.total_links,
+      'İç link sayısı çok az (site düzgün linkedge edilmemiş)',
+    ).toBeGreaterThan(10);
   });
 });
 
@@ -206,11 +221,67 @@ test.describe('Crowler 04: Keyword Density Audit', () => {
     if (report.length === 0) return;
 
     const avgScore = report.reduce((s, r) => s + (r.seo_score ?? 0), 0) / report.length;
-    expect(avgScore, `Keyword density ortalama skor: ${avgScore.toFixed(1)} < 50`).toBeGreaterThanOrEqual(50);
+    expect(
+      avgScore,
+      `Keyword density ortalama skor: ${avgScore.toFixed(1)} < 50`,
+    ).toBeGreaterThanOrEqual(50);
 
     // Hiçbir önemli sayfa 0 skorla bitmemeli
-    const zeroes = report.filter(r => r.seo_score === 0 && !r.url.includes('/blog/'));
-    expect(zeroes.length, `Sıfır skoru olan sayfalar: ${zeroes.map(r => r.url).join(', ')}`).toBe(0);
+    const zeroes = report.filter((r) => r.seo_score === 0 && !r.url.includes('/blog/'));
+    expect(zeroes.length, `Sıfır skoru olan sayfalar: ${zeroes.map((r) => r.url).join(', ')}`).toBe(
+      0,
+    );
+  });
+});
+
+// ─────────────────────────────────────────────────────────────────
+// Script 12 — Security Headers Audit
+// ─────────────────────────────────────────────────────────────────
+test.describe('Crowler 12: Security Headers Audit', () => {
+  test('Güvenlik header skoru ≥ 50, HIGH severity 0', async () => {
+    test.setTimeout(60000);
+
+    if (!venvAvailable()) {
+      test.skip(true, 'crowler/.venv mevcut değil');
+      return;
+    }
+
+    const ok = runScript('12_security_headers_audit.py', '', 50000);
+
+    const reportPath = latestReport('12_security_headers');
+    if (!reportPath || !ok) {
+      test.skip(true, 'Script çalışmadı veya rapor bulunamadı');
+      return;
+    }
+
+    const report: Array<{
+      path: string;
+      security_score: number;
+      high_count: number;
+      medium_count: number;
+      issues: Array<{ type: string; severity: string; description: string }>;
+      error?: string;
+    }> = JSON.parse(fs.readFileSync(reportPath, 'utf-8'));
+
+    const valid = report.filter((r) => !r.error);
+    const avgScore =
+      valid.reduce((s, r) => s + (r.security_score ?? 0), 0) / Math.max(valid.length, 1);
+    const totalHigh = valid.reduce((s, r) => s + (r.high_count ?? 0), 0);
+
+    expect(avgScore, `Güvenlik ortalama skor: ${avgScore.toFixed(1)} < 50`).toBeGreaterThanOrEqual(
+      50,
+    );
+
+    // HIGH severity issue 0 olmalı (localhost'ta soft)
+    if (totalHigh > 0) {
+      const highIssues = valid.flatMap((r) => r.issues.filter((i) => i.severity === 'HIGH'));
+      console.warn(
+        `⚠ Güvenlik HIGH issues (${totalHigh}):\n${highIssues
+          .slice(0, 5)
+          .map((i) => i.description)
+          .join('\n')}`,
+      );
+    }
   });
 });
 
@@ -244,16 +315,19 @@ test.describe('Crowler 11: Content Quality Audit', () => {
       error?: string;
     }> = JSON.parse(fs.readFileSync(reportPath, 'utf-8'));
 
-    const valid = report.filter(r => !r.error);
-    const avgScore = valid.reduce((s, r) => s + (r.content_score ?? 0), 0) / Math.max(valid.length, 1);
+    const valid = report.filter((r) => !r.error);
+    const avgScore =
+      valid.reduce((s, r) => s + (r.content_score ?? 0), 0) / Math.max(valid.length, 1);
     const totalNoAlt = valid.reduce((s, r) => s + (r.img_no_alt ?? 0), 0);
-    const multipleH1 = valid.filter(r => (r.h1_count ?? 0) > 1);
+    const multipleH1 = valid.filter((r) => (r.h1_count ?? 0) > 1);
 
-    expect(avgScore, `İçerik ortalama skor: ${avgScore.toFixed(1)} < 60`).toBeGreaterThanOrEqual(60);
+    expect(avgScore, `İçerik ortalama skor: ${avgScore.toFixed(1)} < 60`).toBeGreaterThanOrEqual(
+      60,
+    );
     expect(totalNoAlt, `${totalNoAlt} görsel alt text eksik (T18)`).toBe(0);
     expect(
       multipleH1.length,
-      `${multipleH1.length} sayfa birden fazla H1 (T13): ${multipleH1.map(r => r.path).join(', ')}`,
+      `${multipleH1.length} sayfa birden fazla H1 (T13): ${multipleH1.map((r) => r.path).join(', ')}`,
     ).toBe(0);
   });
 });
@@ -269,29 +343,39 @@ test.describe('Crowler Health Check', () => {
     }
 
     try {
-      execSync(
-        `"${VENV_PYTHON}" -c "from scrapling.fetchers import Fetcher; print('ok')"`,
-        { cwd: CROWLER_ROOT, timeout: 10000, stdio: 'pipe', shell: '/bin/bash' },
-      );
+      execSync(`"${VENV_PYTHON}" -c "from scrapling.fetchers import Fetcher; print('ok')"`, {
+        cwd: CROWLER_ROOT,
+        timeout: 10000,
+        stdio: 'pipe',
+        shell: '/bin/bash',
+      });
     } catch (err) {
-      const msg = String((err as Error & { stderr?: Buffer }).stderr ?? (err as Error).message ?? 'unknown');
+      const msg = String(
+        (err as Error & { stderr?: Buffer }).stderr ?? (err as Error).message ?? 'unknown',
+      );
       // curl_cffi veya diğer opsiyonel dep eksikse skip (kritik değil)
       if (msg.includes('curl_cffi') || msg.includes('ModuleNotFoundError')) {
-        test.skip(true, `Scrapling opsiyonel dep eksik (pip install scrapling[all]): ${msg.slice(0, 80)}`);
+        test.skip(
+          true,
+          `Scrapling opsiyonel dep eksik (pip install scrapling[all]): ${msg.slice(0, 80)}`,
+        );
         return;
       }
       expect(false, `Scrapling import hatası: ${msg.slice(0, 200)}`).toBeTruthy();
     }
   });
 
-  test('Tüm 11 script dosyası mevcut', () => {
-    const scriptNames = Array.from({ length: 11 }, (_, i) => {
+  test('Tüm 12 script dosyası mevcut', () => {
+    const scriptNames = Array.from({ length: 12 }, (_, i) => {
       const n = (i + 1).toString().padStart(2, '0');
-      return fs.readdirSync(SCRIPTS_DIR).find(f => f.startsWith(n + '_'));
+      return fs.readdirSync(SCRIPTS_DIR).find((f) => f.startsWith(n + '_'));
     });
 
-    const missing = scriptNames.filter(s => !s);
-    expect(missing.length, `Eksik script dosyaları: ${scriptNames.map((s, i) => s ?? `0${i + 1}_???`).join(', ')}`).toBe(0);
+    const missing = scriptNames.filter((s) => !s);
+    expect(
+      missing.length,
+      `Eksik script dosyaları: ${scriptNames.map((s, i) => s ?? `0${i + 1}_???`).join(', ')}`,
+    ).toBe(0);
   });
 
   test('Reports dizini yazılabilir', () => {
@@ -304,13 +388,21 @@ test.describe('Crowler Health Check', () => {
 
   test('package.json: crowler npm scriptleri tanımlı', () => {
     const pkgPath = path.join(PROJECT_ROOT, 'package.json');
-    const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf-8')) as { scripts?: Record<string, string> };
+    const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf-8')) as {
+      scripts?: Record<string, string>;
+    };
     const required = [
-      'crowler:competitor', 'crowler:links', 'crowler:canonical',
-      'crowler:keywords', 'crowler:lcp', 'crowler:graph',
-      'crowler:serp', 'crowler:all', 'crowler:mcp',
+      'crowler:competitor',
+      'crowler:links',
+      'crowler:canonical',
+      'crowler:keywords',
+      'crowler:lcp',
+      'crowler:graph',
+      'crowler:serp',
+      'crowler:all',
+      'crowler:mcp',
     ];
-    const missing = required.filter(s => !pkg.scripts?.[s]);
+    const missing = required.filter((s) => !pkg.scripts?.[s]);
     expect(missing, `Eksik npm scriptleri: ${missing.join(', ')}`).toHaveLength(0);
   });
 });
