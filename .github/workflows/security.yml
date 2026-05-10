@@ -1,0 +1,112 @@
+name: Security Audit
+
+on:
+  schedule:
+    - cron: '0 2 * * 1'  # Every Monday at 02:00 UTC
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  # ── P35-T10: npm audit + dependency vulnerability scan ──────────────────────
+  dependency-audit:
+    name: Dependency Audit (npm audit + Snyk)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+          cache: npm
+      - run: npm ci --legacy-peer-deps
+
+      - name: npm audit (High+Critical)
+        run: npm audit --audit-level=high --omit=dev
+        continue-on-error: true   # Report only — Snyk is primary blocker
+
+      - name: Snyk vulnerability scan
+        uses: snyk/actions/node@master
+        continue-on-error: true   # Non-blocking until Snyk token available
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          args: --severity-threshold=high
+
+  # ── P35-T06: OWASP ZAP Baseline Scan (API + Frontend) ───────────────────────
+  zap-scan:
+    name: OWASP ZAP Baseline Scan
+    runs-on: ubuntu-latest
+    needs: dependency-audit
+    # Only run on PRs + main push (skip for forks without secrets)
+    if: github.actor != 'dependabot[bot]'
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+          cache: npm
+
+      - name: Install & Build
+        run: |
+          npm ci --legacy-peer-deps
+          npm run build
+
+      - name: Start preview server
+        run: |
+          npx vite preview --port 4173 > /tmp/preview.log 2>&1 &
+          for i in $(seq 1 30); do
+            if curl -sSf http://localhost:4173 > /dev/null 2>&1; then
+              echo "Preview ready after ${i}s"
+              break
+            fi
+            sleep 1
+          done
+
+      - name: Start mock API server
+        run: |
+          node server/mock-server.js > /tmp/api.log 2>&1 &
+          sleep 3
+
+      - name: OWASP ZAP — Frontend Baseline Scan
+        uses: zaproxy/action-baseline@v0.12.0
+        with:
+          target: 'http://localhost:4173'
+          rules_file_name: '.zap/rules.tsv'
+          cmd_options: '-a -j'
+          allow_issue_writing: false
+          fail_action: false       # Warn-only on baseline (no custom rules yet)
+
+      - name: OWASP ZAP — API Baseline Scan
+        uses: zaproxy/action-baseline@v0.12.0
+        with:
+          target: 'http://localhost:3001/api/health'
+          rules_file_name: '.zap/api-rules.tsv'
+          cmd_options: '-a -j'
+          allow_issue_writing: false
+          fail_action: false
+
+      - name: Upload ZAP reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: zap-reports
+          path: |
+            report_html.html
+            report_json.json
+          retention-days: 30
+
+  # ── Secret scanning (gitleaks) ───────────────────────────────────────────────
+  secret-scan:
+    name: Secret Scan (Gitleaks)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full history for gitleaks
+
+      - name: Gitleaks — detect secrets in git history
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

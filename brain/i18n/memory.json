@@ -1,0 +1,331 @@
+{
+  "_meta": {
+    "version": "1.0",
+    "description": "EcyPro Translation Memory — single source of truth for TR/EN string pairs",
+    "lastUpdated": "2026-05-05",
+    "totalPairs": 40
+  },
+  "pairs": [
+    {
+      "id": "TM001",
+      "context": "hero.cta.primary",
+      "source": { "lang": "tr", "text": "Ücretsiz Strateji Görüşmesi" },
+      "target": { "lang": "en", "text": "Free Strategy Consultation" },
+      "approved": true,
+      "variants": ["Strateji Görüşmesi Planla", "Görüşme Planla"]
+    },
+    {
+      "id": "TM002",
+      "context": "hero.headline",
+      "source": { "lang": "tr", "text": "İşletmenizi Geleceğe Taşıyoruz" },
+      "target": { "lang": "en", "text": "We Take Your Business to the Future" },
+      "approved": true,
+      "variants": []
+    },
+    {
+      "id": "TM003",
+      "context": "nav.services",
+      "source": { "lang": "tr", "text": "Hizmetler" },
+      "target": { "lang": "en", "text": "Services" },
+      "approved": true,
+      "variants": []
+    },
+    {
+      "id": "TM004",
+      "context": "nav.about",
+      "source": { "lang": "tr", "text": "Hakkımızda" },
+      "target": { "lang": "en", "text": "About" },
+      "approved": true,
+      "variants": []
+    },
+    {
+      "id": "TM005",
+      "context": "nav.contact",
+      "source": { "lang": "tr", "text": "İletişim" },
+      "target": { "lang": "en", "text": "Contact" },
+      "approved": true,
+      "variants": []
+    },
+    {
+      "id": "TM006",
+      "context": "services.strategic",
+      "source": { "lang": "tr", "text": "Stratejik Yönetim" },
+      "target": { "lang": "en", "text": "Strategic Management" },
+      "approved": true,
+      "variants": []
+    },
+    {
+      "id": "TM007",
+      "context": "services.hr",
+      "source": { "lang": "tr", "text": "İnsan Kaynakları" },
+      "target": { "lang": "en", "text": "Human Resources" },
+      "approved": true,
+      "variants": []
+    },
+    {
+      "id": "TM008",
+      "context": "services.digital",
+      "source": { "lang": "tr", "text": "Dijital Dönüşüm" },
+      "target": { "lang": "en", "text": "Digital Transformation" },
+      "approved": true,
+      "variants": []
+    },
+    {
+      "id": "TM009",
+      "context": "blog.readMore",
+      "source": { "lang": "tr", "text": "Devamını Oku" },
+      "target": { "lang": "en", "text": "Read More" },
+      "approved": true,
+      "variants": ["Okumaya Devam Et", "Daha Fazlası"]
+    },
+    {
+      "id": "TM010",
+      "context": "booking.cta",
+      "source": { "lang": "tr", "text": "Randevu Al" },
+      "target": { "lang": "en", "text": "Book a Meeting" },
+      "approved": true,
+      "variants": ["Görüşme Planla", "Görüşme Al"]
+    },
+    {
+      "id": "TM011",
+      "context": "case-studies.title",
+      "source": { "lang": "tr", "text": "Başarı Hikayeleri" },
+      "target": { "lang": "en", "text": "Case Studies" },
+      "approved": true,
+      "variants": ["Vaka Çalışmaları"],
+      "note": "TR: 'Başarı Hikayeleri' more idiomatic than literal 'Vaka Çalışmaları'"
+    },
+    {
+      "id": "TM012",
+      "context": "pricing.title",
+      "source": { "lang": "tr", "text": "Fiyatlandırma" },
+      "target": { "lang": "en", "text": "Pricing" },
+      "approved": true,
+      "variants": []
+    },
+    {
+      "id": "TM013",
+      "context": "pricing.enterprise",
+      "source": { "lang": "tr", "text": "Kurumsal" },
+      "target": { "lang": "en", "text": "Enterprise" },
+      "approved": true,
+      "variants": []
+    },
+    {
+      "id": "TM014",
+      "context": "common.loading",
+      "source": { "lang": "tr", "text": "Yükleniyor..." },
+      "target": { "lang": "en", "text": "Loading..." },
+      "approved": true,
+      "variants": []
+    },
+    {
+      "id": "TM015",
+      "context": "common.submit",
+      "source": { "lang": "tr", "text": "Gönder" },
+      "target": { "lang": "en", "text": "Submit" },
+      "approved": true,
+      "variants": ["Kaydet", "Tamam"]
+    },
+    {
+      "id": "TM016",
+      "context": "footer.rights",
+      "source": { "lang": "tr", "text": "Tüm hakları saklıdır" },
+      "target": { "lang": "en", "text": "All rights reserved" },
+      "approved": true,
+      "variants": []
+    },
+    {
+      "id": "TM017",
+      "context": "contact.message",
+      "source": { "lang": "tr", "text": "Mesajınız" },
+      "target": { "lang": "en", "text": "Your Message" },
+      "approved": true,
+      "variants": []
+    },
+    {
+      "id": "TM018",
+      "context": "roi.title",
+      "source": { "lang": "tr", "text": "Yatırım Getirisi Hesaplayıcı" },
+      "target": { "lang": "en", "text": "ROI Calculator" },
+      "approved": true,
+      "variants": ["ROI Hesaplayıcı"]
+    },
+    {
+      "id": "TM019",
+      "context": "newsletter.subscribe",
+      "source": { "lang": "tr", "text": "Bültene Abone Ol" },
+      "target": { "lang": "en", "text": "Subscribe to Newsletter" },
+      "approved": true,
+      "variants": []
+    },
+    {
+      "id": "TM020",
+      "context": "errors.generic",
+      "source": { "lang": "tr", "text": "Bir şeyler yanlış gitti. Lütfen tekrar deneyin." },
+      "target": { "lang": "en", "text": "Something went wrong. Please try again." },
+      "approved": true,
+      "variants": []
+    },
+    {
+      "id": "TM021",
+      "context": "methodology.title",
+      "source": { "lang": "tr", "text": "Metodolojimiz" },
+      "target": { "lang": "en", "text": "Our Methodology" },
+      "approved": true,
+      "variants": []
+    },
+    {
+      "id": "TM022",
+      "context": "careers.title",
+      "source": { "lang": "tr", "text": "Kariyer" },
+      "target": { "lang": "en", "text": "Careers" },
+      "approved": true,
+      "variants": []
+    },
+    {
+      "id": "TM023",
+      "context": "blog.minRead",
+      "source": { "lang": "tr", "text": "dk okuma" },
+      "target": { "lang": "en", "text": "min read" },
+      "approved": true,
+      "variants": []
+    },
+    {
+      "id": "TM024",
+      "context": "team.title",
+      "source": { "lang": "tr", "text": "Ekibimiz" },
+      "target": { "lang": "en", "text": "Our Team" },
+      "approved": true,
+      "variants": []
+    },
+    {
+      "id": "TM025",
+      "context": "assessment.title",
+      "source": { "lang": "tr", "text": "Dijital Olgunluk Değerlendirmesi" },
+      "target": { "lang": "en", "text": "Digital Maturity Assessment" },
+      "approved": true,
+      "variants": []
+    },
+    {
+      "id": "TM026",
+      "context": "booking.confirmSuccess",
+      "source": { "lang": "tr", "text": "Görüşmeniz onaylandı!" },
+      "target": { "lang": "en", "text": "Your meeting has been confirmed!" },
+      "approved": true,
+      "variants": []
+    },
+    {
+      "id": "TM027",
+      "context": "industries.title",
+      "source": { "lang": "tr", "text": "Sektörler" },
+      "target": { "lang": "en", "text": "Industries" },
+      "approved": true,
+      "variants": []
+    },
+    {
+      "id": "TM028",
+      "context": "partners.title",
+      "source": { "lang": "tr", "text": "İş Ortaklarımız" },
+      "target": { "lang": "en", "text": "Our Partners" },
+      "approved": true,
+      "variants": ["Partnerlerimiz"]
+    },
+    {
+      "id": "TM029",
+      "context": "kpi.clients",
+      "source": { "lang": "tr", "text": "Mutlu Müşteri" },
+      "target": { "lang": "en", "text": "Happy Clients" },
+      "approved": true,
+      "variants": []
+    },
+    {
+      "id": "TM030",
+      "context": "kpi.projects",
+      "source": { "lang": "tr", "text": "Tamamlanan Proje" },
+      "target": { "lang": "en", "text": "Completed Projects" },
+      "approved": true,
+      "variants": []
+    },
+    {
+      "id": "TM031",
+      "context": "seo.defaultTitle",
+      "source": { "lang": "tr", "text": "EcyPro | Premium Stratejik Danışmanlık" },
+      "target": { "lang": "en", "text": "EcyPro | Premium Strategic Consulting" },
+      "approved": true,
+      "variants": []
+    },
+    {
+      "id": "TM032",
+      "context": "seo.defaultDescription",
+      "source": { "lang": "tr", "text": "Türkiye'nin önde gelen stratejik yönetim danışmanlığı. Kurumsal dönüşüm, dijital strateji ve insan kaynakları uzmanlığı." },
+      "target": { "lang": "en", "text": "Turkey's leading strategic management consulting firm. Corporate transformation, digital strategy, and human resources expertise." },
+      "approved": true,
+      "variants": []
+    },
+    {
+      "id": "TM033",
+      "context": "auth.login",
+      "source": { "lang": "tr", "text": "Giriş Yap" },
+      "target": { "lang": "en", "text": "Log In" },
+      "approved": true,
+      "variants": ["Oturum Aç"]
+    },
+    {
+      "id": "TM034",
+      "context": "auth.logout",
+      "source": { "lang": "tr", "text": "Çıkış Yap" },
+      "target": { "lang": "en", "text": "Log Out" },
+      "approved": true,
+      "variants": []
+    },
+    {
+      "id": "TM035",
+      "context": "privacy.title",
+      "source": { "lang": "tr", "text": "Gizlilik Politikası" },
+      "target": { "lang": "en", "text": "Privacy Policy" },
+      "approved": true,
+      "variants": []
+    },
+    {
+      "id": "TM036",
+      "context": "terms.title",
+      "source": { "lang": "tr", "text": "Kullanım Şartları" },
+      "target": { "lang": "en", "text": "Terms of Service" },
+      "approved": true,
+      "variants": []
+    },
+    {
+      "id": "TM037",
+      "context": "faq.title",
+      "source": { "lang": "tr", "text": "Sık Sorulan Sorular" },
+      "target": { "lang": "en", "text": "Frequently Asked Questions" },
+      "approved": true,
+      "variants": ["SSS"]
+    },
+    {
+      "id": "TM038",
+      "context": "admin.dashboard",
+      "source": { "lang": "tr", "text": "Yönetim Paneli" },
+      "target": { "lang": "en", "text": "Admin Dashboard" },
+      "approved": true,
+      "variants": ["Panel"]
+    },
+    {
+      "id": "TM039",
+      "context": "currency.try",
+      "source": { "lang": "tr", "text": "Türk Lirası" },
+      "target": { "lang": "en", "text": "Turkish Lira" },
+      "approved": true,
+      "variants": []
+    },
+    {
+      "id": "TM040",
+      "context": "roi.payback",
+      "source": { "lang": "tr", "text": "Geri ödeme süresi" },
+      "target": { "lang": "en", "text": "Payback period" },
+      "approved": true,
+      "variants": []
+    }
+  ]
+}

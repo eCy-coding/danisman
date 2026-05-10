@@ -1,0 +1,27 @@
+[tools]
+node = "22"
+pnpm = "latest"
+
+[tasks.dev]
+run = "pnpm dev"
+
+[tasks.build]
+run = "pnpm build"
+
+[tasks.test]
+run = "pnpm test"
+
+[tasks.lint]
+run = "pnpm lint && pnpm type-check"
+
+[tasks.format]
+run = "pnpm prettier --write ."
+
+[tasks.db-push]
+run = "pnpm prisma db push"
+
+[tasks.db-studio]
+run = "pnpm prisma studio"
+
+[env]
+NODE_ENV = "development"

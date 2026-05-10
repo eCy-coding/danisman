@@ -1,0 +1,208 @@
+{
+  "version": "1.0",
+  "project": "EcyPro Premium Consulting",
+  "scope": "Phase 31 (SEO) + Phase 35 (Auth/Security)",
+  "updated": "2026-05-05T14:00:00.000Z",
+  "totalTodos": 20,
+  "streams": {
+    "S1": {
+      "name": "SEO External Setup",
+      "status": "blocked_external",
+      "todos": ["T01", "T02", "T03", "T08"],
+      "blocker": "External service panels — user must complete (GSC, GA4, Bing, Yandex)"
+    },
+    "S2": {
+      "name": "SEO Baseline + IndexNow",
+      "status": "done",
+      "todos": ["T06", "T09"],
+      "notes": "seo-weekly-diff.ts created 2026-05-05 + indexnow-push.ts"
+    },
+    "S3": {
+      "name": "SEO Indexing Scripts",
+      "status": "done",
+      "todos": ["T04", "T07"],
+      "notes": "audit-canonical.ts + indexing-api-push.ts both exist"
+    },
+    "S4": {
+      "name": "SEO Frontend + Schema",
+      "status": "done",
+      "todos": ["T05", "T10"],
+      "notes": "analytics.ts helpers + audit-jsonld.ts both exist"
+    },
+    "S5": {
+      "name": "Auth Core — JWT + Session",
+      "status": "done",
+      "todos": ["T41", "T49"],
+      "notes": "jwt-blacklist.ts + auth.ts + sessions.ts + authController logout/login — all wired"
+    },
+    "S6": {
+      "name": "Auth Identity — Refresh + Email",
+      "status": "done",
+      "todos": ["T42", "T43"],
+      "notes": "refresh-token.ts + authController refresh/verifyEmail + Prisma models"
+    },
+    "S7": {
+      "name": "Auth UX — 2FA + CSP",
+      "status": "done",
+      "todos": ["T44", "T45"],
+      "notes": "totp.ts + totp routes + cspNonce.ts middleware (SPA mode)"
+    },
+    "S8": {
+      "name": "Security CI — OWASP+HIBP+Rate+Snyk",
+      "status": "done",
+      "todos": ["T46", "T47", "T48", "T50"],
+      "notes": "security-zap.yml + rateLimiter Lua atomic + hibp.ts wired in register + ci.yml npm audit"
+    }
+  },
+  "todos": {
+    "T01": {
+      "phase": 31,
+      "title": "GSC Property Verification",
+      "status": "external_user_task",
+      "effort": 1,
+      "notes": "External: DNS TXT record + GSC dashboard"
+    },
+    "T02": {
+      "phase": 31,
+      "title": "GA4 Property + .env",
+      "status": "code_ready_needs_env",
+      "effort": 2,
+      "notes": "ga4-loader.ts + AnalyticsProvider.tsx done. Needs VITE_GA_TRACKING_ID in .env"
+    },
+    "T03": {
+      "phase": 31,
+      "title": "GSC Sitemap Submit",
+      "status": "external_user_task",
+      "effort": 1,
+      "notes": "External: GSC Sitemaps UI after T01"
+    },
+    "T04": {
+      "phase": 31,
+      "title": "robots.txt + Canonical Audit",
+      "status": "done",
+      "effort": 2,
+      "notes": "audit-canonical.ts exists + package.json audit:canonical script"
+    },
+    "T05": {
+      "phase": 31,
+      "title": "GA4 Custom Event Tracking",
+      "status": "done",
+      "effort": 3,
+      "notes": "analytics.ts: trackCTA, trackScrollDepth, trackForm, trackROICalc, trackBooking"
+    },
+    "T06": {
+      "phase": 31,
+      "title": "GSC Baseline + Weekly Diff",
+      "status": "done",
+      "effort": 2,
+      "notes": "seo-weekly-diff.ts created — auto-detects latest 2 CSVs, delta report, --save flag"
+    },
+    "T07": {
+      "phase": 31,
+      "title": "Google Indexing API",
+      "status": "done",
+      "effort": 3,
+      "notes": "indexing-api-push.ts exists with JWT auth + sitemap parse + bulk push"
+    },
+    "T08": {
+      "phase": 31,
+      "title": "Bing + Yandex Webmaster",
+      "status": "external_user_task",
+      "effort": 1,
+      "notes": "External: bing.com/webmasters + webmaster.yandex.com"
+    },
+    "T09": {
+      "phase": 31,
+      "title": "IndexNow Protocol",
+      "status": "done",
+      "effort": 2,
+      "notes": "indexnow-push.ts exists + seo:indexnow npm script"
+    },
+    "T10": {
+      "phase": 31,
+      "title": "Schema.org Rich Results Audit",
+      "status": "done",
+      "effort": 3,
+      "notes": "audit-jsonld.ts exists — parses dist/ HTML and validates JSON-LD"
+    },
+    "T41": {
+      "phase": 35,
+      "title": "JWT Blacklist Redis + Logout",
+      "status": "done",
+      "effort": 4,
+      "notes": "jwt-blacklist.ts Redis+memory + logout in authController + isBlacklisted check in auth.ts"
+    },
+    "T42": {
+      "phase": 35,
+      "title": "Refresh Token Rotation",
+      "status": "done",
+      "effort": 4,
+      "notes": "refresh-token.ts + RefreshToken Prisma model + authController refresh endpoint"
+    },
+    "T43": {
+      "phase": 35,
+      "title": "Email Verification Flow",
+      "status": "done",
+      "effort": 3,
+      "notes": "EmailVerification Prisma model + sendVerifyEmail/verifyEmail in authController"
+    },
+    "T44": {
+      "phase": 35,
+      "title": "2FA TOTP Admin",
+      "status": "done",
+      "effort": 3,
+      "notes": "totp.ts (speakeasy) + totp.test.ts + /api/auth/2fa routes + User.totpSecret/totpEnabled"
+    },
+    "T45": {
+      "phase": 35,
+      "title": "CSP Strict Mode Nonce",
+      "status": "done",
+      "effort": 3,
+      "notes": "cspNonce.ts middleware — nonce-based in production, unsafe-inline in dev"
+    },
+    "T46": {
+      "phase": 35,
+      "title": "OWASP ZAP CI Scan",
+      "status": "done",
+      "effort": 2,
+      "notes": "security-zap.yml — weekly cron + workflow_dispatch, fail on HIGH"
+    },
+    "T47": {
+      "phase": 35,
+      "title": "Redis Distributed Rate Limiter",
+      "status": "done",
+      "effort": 2,
+      "notes": "rateLimiter.ts Lua atomic script — O(1) single RTT, multi-instance safe"
+    },
+    "T48": {
+      "phase": 35,
+      "title": "HIBP Password Breach",
+      "status": "done",
+      "effort": 2,
+      "notes": "hibp.ts + checkPasswordBreached wired in register controller"
+    },
+    "T49": {
+      "phase": 35,
+      "title": "Admin Session Dashboard",
+      "status": "done",
+      "effort": 3,
+      "notes": "sessions.ts routes + Session Prisma model + login/register upsert in authController"
+    },
+    "T50": {
+      "phase": 35,
+      "title": "npm audit + Snyk CI",
+      "status": "done",
+      "effort": 2,
+      "notes": "security-audit job in ci.yml — npm audit --audit-level=high + prod-only moderate check"
+    }
+  },
+  "summary": {
+    "phase31_code_done": ["T04", "T05", "T07", "T09", "T10"],
+    "phase31_external_user": ["T01", "T03", "T08"],
+    "phase31_code_partial": ["T06"],
+    "phase31_code_ready_needs_env": ["T02"],
+    "phase35_all_done": ["T41", "T42", "T43", "T44", "T45", "T46", "T47", "T48", "T49", "T50"],
+    "action_required_code": ["T06"],
+    "action_required_user": ["T01", "T02", "T03", "T08"]
+  }
+}

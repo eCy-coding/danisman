@@ -11,7 +11,30 @@ This file is the single source of truth for the project's state. Any AI agent ta
 - **Strictness:** `tsconfig.json` has `strict: true`. `npx tsc --noEmit` passes with ZERO errors.
 - **PWA:** Service worker auto-generated via `vite-plugin-pwa` (60 entries precached).
 
-## 🟢 Completed Phases
+## �️ Yol Haritası — Phase 31-40 (100 Todo)
+
+**Dosya:** `brain/roadmap/README.md` + `roadmap_10.md` → `roadmap_100.md` (10 dosya × 10 todo = 100)
+
+**Sentez:** `istek3.txt` (arkadaş SEO analizi) bu roadmap'in kurucu bloğudur. Site Google'da indexlenmemiş — trafik üretimi #1 öncelik. 10 faz önceliklendirme formülü: `Skor = (Etki × Aciliyet × Stratejik) / Çaba`.
+
+| Faz | Konu                     | Tier | Skor | Süre    |
+| --- | ------------------------ | ---- | ---- | ------- |
+| 31  | SEO + GSC/GA4 + Indexing | T1   | 12.0 | 1h      |
+| 32  | Keyword + Content        | T1   | 9.0  | 1-2h    |
+| 33  | LCP + Performance ≥90    | T1   | 7.5  | 1h      |
+| 34  | Conversion + Analytics   | T2   | 5.4  | 1h      |
+| 35  | Auth + Security          | T2   | 5.0  | 1h      |
+| 36  | Admin Panel + CMS        | T2   | 4.2  | 1-2h    |
+| 37  | Booking + Calendar       | T2   | 3.6  | 1h      |
+| 38  | Backlink + Authority     | T3   | 2.8  | sürekli |
+| 39  | i18n + International     | T3   | 2.4  | 1h      |
+| 40  | Observability + DevOps   | T3   | 2.0  | 1h      |
+
+**Başlangıç:** `roadmap_10.md` → P31-T01 (GSC Property Doğrulama).
+
+---
+
+## �🟢 Completed Phases
 
 ### [Phase 24α] Residual Closure ✅ (Tamamlandı)
 

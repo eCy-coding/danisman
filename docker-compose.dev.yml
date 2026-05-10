@@ -1,0 +1,101 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# EcyPro Dev Stack — Postgres + Redis + Mailpit
+# ═══════════════════════════════════════════════════════════════════════════
+# Sadece geliştirme için. Production docker-compose.yml ayrı.
+#
+# Kullanım:
+#   docker compose -f docker-compose.dev.yml up -d         # başlat
+#   docker compose -f docker-compose.dev.yml logs -f       # log tail
+#   docker compose -f docker-compose.dev.yml down          # durdur
+#   docker compose -f docker-compose.dev.yml down -v       # + volumes sil
+#
+# NPM kısayolları:  npm run dev:db, npm run dev:db:down
+# ═══════════════════════════════════════════════════════════════════════════
+
+services:
+  # ── PostgreSQL — Geliştirme veritabanı ───────────────────────────────
+  postgres-dev:
+    image: postgres:17-alpine
+    container_name: ecypro-postgres-dev
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ecypro
+      POSTGRES_PASSWORD: ecypro_dev_2026
+      POSTGRES_DB: ecypro_dev
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "5432:5432"
+    volumes:
+      - ecypro_dev_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ecypro -d ecypro_dev"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - ecypro-dev-net
+
+  # ── Redis — Rate limiter, JWT blacklist, refresh tokens ──────────────
+  redis-dev:
+    image: redis:7-alpine
+    container_name: ecypro-redis-dev
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - ecypro_dev_redis:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+    networks:
+      - ecypro-dev-net
+
+  # ── Mailpit — SMTP test sunucusu (Resend yerine geliştirmede) ───────
+  # SMTP: localhost:1025 | UI: http://localhost:8025
+  mailpit:
+    image: axllent/mailpit:latest
+    container_name: ecypro-mailpit-dev
+    restart: unless-stopped
+    ports:
+      - "1025:1025"   # SMTP
+      - "8025:8025"   # Web UI
+    environment:
+      MP_MAX_MESSAGES: 5000
+      MP_DATABASE: /data/mailpit.db
+      MP_SMTP_AUTH_ACCEPT_ANY: 1
+      MP_SMTP_AUTH_ALLOW_INSECURE: 1
+    volumes:
+      - ecypro_dev_mailpit:/data
+    networks:
+      - ecypro-dev-net
+
+  # ── Adminer — Postgres UI (opsiyonel, profile=tools) ────────────────
+  adminer:
+    image: adminer:4
+    container_name: ecypro-adminer-dev
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      ADMINER_DEFAULT_SERVER: postgres-dev
+    depends_on:
+      - postgres-dev
+    profiles:
+      - tools
+    networks:
+      - ecypro-dev-net
+
+volumes:
+  ecypro_dev_pgdata:
+    driver: local
+  ecypro_dev_redis:
+    driver: local
+  ecypro_dev_mailpit:
+    driver: local
+
+networks:
+  ecypro-dev-net:
+    driver: bridge

@@ -1,0 +1,121 @@
+Bu prompt'a göre projemizde çalışması gereken terminalleri ileri düzey e2e hesapla ve bu çalışma disipliniyle e2e projeyi e2e ileri düzey inşa etmeye kritik noktalardan inşa etmeye devam et, ; #!/usr/bin/env bash
+# --------------------------------------------------------------
+# 15‑Pane E2E Build Script
+# --------------------------------------------------------------
+# 1) Bu script bir tmux oturumu (koksal‑proj) başlatır.
+# 2) Oturumu 15 eş‑zamanlı pane’e (terminal) bölerek
+#    aşağıdaki alanları (backend, frontend, db, …) çalıştırır.
+# 3) Her pane’in adı (title) görevine göre ayarlanır, böylece
+#    tmux içinde “select‑pane -t X” komutlarıyla hızlıca
+#    odaklanabilirsiniz.
+# --------------------------------------------------------------
+# Gereksinimler:
+#   - tmux >= 3.2
+#   - Docker + Docker‑Compose
+#   - Node.js >= 18 (nvm tavsiye edilir)
+#   - git
+# --------------------------------------------------------------
+
+# ---------- 1️⃣ TMUX OTURUMU OLUŞTUR ----------
+SESSION="koksal-proj"
+tmux new-session -d -s "$SESSION" -n main
+
+# ---------- 2️⃣ PANE’LERİ OLUŞTUR ----------
+# 15 pane -> 5 satır x 3 sütun (özelleştirilebilir)
+# Sütun (horizontal) bölümü
+tmux split-window -h -p 66   # pane 0 → sağa %66 (bölüm A)
+tmux split-window -h -p 50   # pane 1 → sağa %50 (bölüm B)
+# İlk satırı 3 eşit parçaya böl
+tmux select-pane -t 0
+tmux split-window -v -p 50   # pane 2 (alt)
+tmux split-window -v -p 50   # pane 3 (üst)
+# İkinci satır (pane 1) 3 eşit parçaya böl
+tmux select-pane -t 1
+tmux split-window -v -p 50   # pane 4
+tmux split-window -v -p 50   # pane 5
+# Üçüncü sütun (pane 2) 3 eşit parçaya böl
+tmux select-pane -t 2
+tmux split-window -v -p 50   # pane 6
+tmux split-window -v -p 50   # pane 7
+
+# Şimdi her ana sütuna iki ek satır daha ekleyerek 15’e ulaşıyoruz
+# (bu adım, layout’u “tiled” hâle getirince otomatik ızgara olur)
+tmux select-layout tiled
+
+# ---------- 3️⃣ PANELERİ ADLANDIR ----------
+tmux rename-pane -t 0  "🖥️ Frontend‑Dev"
+tmux rename-pane -t 1  "🛠️ Backend‑API"
+tmux rename-pane -t 2  "💾 DB‑Postgres"
+tmux rename-pane -t 3  "🧪 E2E‑Cypress"
+tmux rename-pane -t 4  "🔎 SEO‑Geo‑Admin"
+tmux rename-pane -t 5  "🎨 UI‑Storybook"
+tmux rename-pane -t 6  "📦 Media‑Watcher"
+tmux rename-pane -t 7  "⚙️ CI‑Lighthouse"
+tmux rename-pane -t 8  "🗒️ Log‑Tail"
+tmux rename-pane -t 9  "📈 Analytics‑Dev"
+tmux rename-pane -t 10 "🔐 Sec‑Watch"
+tmux rename-pane -t 11 "🚀 Deploy‑Watch"
+tmux rename-pane -t 12 "🏗️ UI‑Designer"
+tmux rename-pane -t 13 "🧭 Geo‑Manager"
+tmux rename-pane -t 14 "🧑‍💼 Lead‑CRM"
+
+# ---------- 4️⃣ GEREKLİ KLASÖRLER / DEPENDENCY YÜKLEME ----------
+# Her pane’e aynı başlangıç komutları gönderiyoruz; her biri
+# kendi klasöründe çalıştırılacak. (Git repo’nuzun root’u)
+tmux send-keys -t "🖥️ Frontend‑Dev"   "cd ~/projects/koksal && npm ci && npm run dev" C-m
+tmux send-keys -t "🛠️ Backend‑API"    "cd ~/projects/koksal && npm ci && npm run start:dev" C-m
+tmux send-keys -t "💾 DB‑Postgres"   "cd ~/projects/koksal && docker compose up -d db && npx prisma migrate dev --skip-seed" C-m
+tmux send-keys -t "🧪 E2E‑Cypress"   "cd ~/projects/koksal && npm ci && npm run test:e2e:watch" C-m
+tmux send-keys -t "🔎 SEO‑Geo‑Admin" "cd ~/projects/koksal && npm ci && npm run seo:watch" C-m
+tmux send-keys -t "🎨 UI‑Storybook"  "cd ~/projects/koksal && npm ci && npm run storybook" C-m
+tmux send-keys -t "📦 Media‑Watcher"  "cd ~/projects/koksal && node scripts/watch-media.js" C-m
+tmux send-keys -t "⚙️ CI‑Lighthouse" "cd ~/projects/koksal && npx lighthouse-ci autorun" C-m
+tmux send-keys -t "🗒️ Log‑Tail"       "docker logs -f koksal_app & docker logs -f koksal_db" C-m
+tmux send-keys -t "📈 Analytics‑Dev"  "cd ~/projects/koksal && node scripts/analytics-dev.js" C-m
+tmux send-keys -t "🔐 Sec‑Watch"      "cd ~/projects/koksal && npm audit --audit-level=high && snyk test" C-m
+tmux send-keys -t "🚀 Deploy‑Watch"   "cd ~/projects/koksal && npm run deploy:watch" C-m
+tmux send-keys -t "🏗️ UI‑Designer"   "cd ~/projects/koksal && npx figma-to-react --watch" C-m
+tmux send-keys -t "🧭 Geo‑Manager"    "cd ~/projects/koksal && node scripts/geo-manager.js --watch" C-m
+tmux send-keys -t "🧑‍💼 Lead‑CRM"      "cd ~/projects/koksal && node scripts/crm-sync.js --watch" C-m
+
+# ---------- 5️⃣ TODO / PHASE LIST (kritik öncelik) ----------
+# Bu bölümü bir README.md’ye kopyalayabilir ya da tmux içinde
+# bir “notes” pane’i açıp oraya yapıştırabilirsiniz.
+cat <<'EOF' > ~/projects/koksal/TODO.md
+# 🚀 Kök Sağlam Danışmanlık – 15‑Pane E2E Build
+## ✅ Phase 1 – Çekirdek Altyapı (Critical)
+1️⃣ Docker‑Compose up (db, redis, maildev)  
+2️⃣ Backend API (NestJS/Express) – npm run start:dev  
+3️⃣ Frontend dev server (Vite/Next) – npm run dev  
+4️⃣ Prisma migration – npx prisma migrate dev  
+
+## ✅ Phase 2 – UI/UX & Component Library (High)
+5️⃣ Storybook – npm run storybook  
+6️⃣ UI‑Designer (Figma → React) – npx figma-to-react --watch  
+
+## ✅ Phase 3 – Media & Asset Pipeline (Medium)
+7️⃣ Media‑Watcher – node scripts/watch-media.js (optimize → WebP/AVIF)  
+
+## ✅ Phase 4 – SEO & Geo (High)
+8️⃣ SEO‑Geo‑Admin – otomatik meta + hreflang + JSON‑LD (npm run seo:watch)  
+9️⃣ Geo‑Manager – IP‑lookup, harita, lokasyon‑banner (node scripts/geo-manager.js)  
+
+## ✅ Phase 5 – Test & Quality (Critical)
+🔟 E2E‑Cypress – npm run test:e2e:watch  
+1️⃣1️⃣ CI‑Lighthouse – npx lighthouse-ci autorun  
+1️⃣2️⃣ Security Scan – npm audit && snyk test  
+
+## ✅ Phase 6 – Observability (Medium)
+1️⃣3️⃣ Log‑Tail – docker logs -f app db  
+1️⃣4️⃣ Analytics‑Dev – fake GTM/GA4 dev server  
+
+## ✅ Phase 7 – Ops & Deploy (Low)
+1️⃣5️⃣ Deploy‑Watch – npm run deploy:watch (GitHub Actions, Cloudflare Workers)
+
+### 🎯 Kritikalite Sırası
+1️⃣ Critical → 2 High → 3 Medium → 4 Low  
+Başlangıçta Phase 1‑5′i tamamlayıp ardından Phase 6‑7’ye geçilir.
+EOF
+
+# ---------- 6️⃣ OTURUMU GÖSTER ----------
+tmux attach-session -t "$SESSION"

@@ -1,0 +1,5 @@
+10202	IGNORE	(Cookie Without SameSite Attribute)	Dev server cookies
+10038	IGNORE	(Content Security Policy Header Not Set)	SPA - CSP in index.html
+10063	IGNORE	(Permissions Policy Header Not Set)	Not implemented yet
+10036	IGNORE	(Server Leaks Version Information via "Server" HTTP Response Header Field)	Local preview only
+10021	IGNORE	(X-Content-Type-Options Header Missing)	Set by Vite preview

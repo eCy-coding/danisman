@@ -1,0 +1,118 @@
+name: Docker CI/CD (GHCR)
+
+# P40-T08: Build + push multi-arch Docker image to GitHub Container Registry
+# Triggers on git tags (release) + main branch push
+
+on:
+  push:
+    branches: [main]
+    tags:
+      - 'v*.*.*'
+  pull_request:
+    branches: [main]
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  build-and-push:
+    name: Build & Push Docker Image
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      attestations: write
+      id-token: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 'Set up QEMU (multi-arch: arm64 for Apple Silicon hosting)'
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract Docker metadata (tags + labels)
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            # Tag branch pushes as :main
+            type=ref,event=branch
+            # Tag PRs as :pr-N
+            type=ref,event=pr
+            # Tag releases as :v1.2.3, :1.2, :1, :latest
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=semver,pattern={{major}}
+            # Short SHA for traceability
+            type=sha,prefix=sha-,format=short
+          labels: |
+            org.opencontainers.image.title=EcyPro Premium Consulting
+            org.opencontainers.image.description=Premium management consulting platform
+            org.opencontainers.image.vendor=EcyPro
+
+      - name: Build and push Docker image
+        id: push
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./Dockerfile
+          platforms: linux/amd64,linux/arm64
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          # Layer caching: GitHub Actions cache backend (fastest for mono-repo)
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          build-args: |
+            VITE_API_URL=${{ secrets.VITE_API_URL }}
+            VITE_SENTRY_DSN=${{ secrets.VITE_SENTRY_DSN }}
+
+      # Attest the build provenance (SLSA level 3 — supply chain security)
+      - name: Generate artifact attestation
+        if: ${{ github.event_name != 'pull_request' }}
+        uses: actions/attest-build-provenance@v1
+        with:
+          subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          subject-digest: ${{ steps.push.outputs.digest }}
+          push-to-registry: true
+
+  # ── Smoke test: pull + run the pushed image ──────────────
+  smoke-test:
+    name: Docker Smoke Test
+    runs-on: ubuntu-latest
+    needs: build-and-push
+    if: github.event_name != 'pull_request'
+    steps:
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Pull + run container health check
+        run: |
+          IMAGE="ghcr.io/${{ github.repository }}:main"
+          docker pull $IMAGE
+          docker run -d --name ecypro-test \
+            -e DATABASE_URL="postgresql://test:test@localhost:5432/test" \
+            -e JWT_SECRET="smoke-test-secret-32chars-minimum" \
+            -e NODE_ENV=production \
+            -p 3001:3001 \
+            $IMAGE
+          sleep 5
+          curl -sSf http://localhost:3001/api/health | grep '"status":"ok"'
+          docker stop ecypro-test
+          docker rm ecypro-test

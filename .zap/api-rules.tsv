@@ -1,0 +1,4 @@
+10202	IGNORE	(Cookie Without SameSite Attribute)	API endpoints
+10038	IGNORE	(Content Security Policy Header Not Set)	API responses - not HTML
+10036	IGNORE	(Server Leaks Version Information)	Dev only
+10021	IGNORE	(X-Content-Type-Options Header Missing)	Set by helmet
