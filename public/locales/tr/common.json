@@ -18,5 +18,12 @@
     "unauthorized": "Bu işlem için yetkiniz yok."
   },
   "loading": "Yükleniyor...",
-  "noResults": "Sonuç bulunamadı."
+  "noResults": "Sonuç bulunamadı.",
+  "plurals": {
+    "bookingDuration": "{count, plural, one {# saat} other {# saat}}",
+    "meetingCount": "{count, plural, one {# görüşme} other {# görüşme}}",
+    "daysAgo": "{count, plural, one {# gün önce} other {# gün önce}}",
+    "items": "{count, plural, one {# öğe} other {# öğe}}",
+    "results": "{count, plural, one {# sonuç} other {# sonuç}}"
+  }
 }

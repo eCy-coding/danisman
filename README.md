@@ -62,11 +62,28 @@ cp .env.example .env.local
 
 ### 3. Development Server
 
+#### Hızlı (3 paralel servis)
+
 ```bash
 npm run dev
 ```
 
 Visit `http://localhost:5173`.
+
+#### Tam Stack — 15-Pane Orchestrator (önerilen)
+
+İstek5 disiplininde tüm dev stack'i tek komutla:
+
+```bash
+npm run dev:up      # Docker (Postgres+Redis+Mailpit) + tmux 15-pane
+npm run dev:down    # her şeyi kapat
+npm run dev:full    # tmux yoksa concurrently fallback (CI uyumlu)
+```
+
+15 pane: Frontend, Backend, DB, E2E, SEO-Watch, Media-Watcher, LHCI, Logs,
+Analytics-Dev, Sec-Watch, Deploy-Watch, Geo-Watch, CRM-Watch, Status.
+
+Detay: [`docs/ORCHESTRATOR.md`](docs/ORCHESTRATOR.md).
 
 ### 4. Production Build
 

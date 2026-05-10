@@ -23,5 +23,5 @@
     "noEmit": true
   },
   "include": ["src", "types"],
-  "exclude": ["node_modules", "scripts", "**/*.spec.ts", "**/*.test.ts", "**/*.test.tsx"]
+  "exclude": ["node_modules", "scripts", "**/*.spec.ts", "**/*.test.ts", "**/*.test.tsx", "**/*.stories.ts", "**/*.stories.tsx", "**/*.story.ts", "**/*.story.tsx", ".storybook"]
 }

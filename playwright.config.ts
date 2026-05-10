@@ -13,26 +13,36 @@ const CONSENT_SEED = JSON.stringify({
 export default defineConfig({
   testDir: './e2e',
   testIgnore: '*bash_commands.test.ts',
-  timeout: 60_000,
-  workers: 4,
+  globalSetup: './e2e/global-setup.ts',
+  snapshotDir: './e2e/snapshots',
+  timeout: 90_000,
+  globalTimeout: 30 * 60_000,
+  retries: process.env.CI ? 2 : 1,
+  workers: process.env.CI ? 2 : 6,
   expect: {
-    timeout: 8000,
+    timeout: 15_000,
+    toHaveScreenshot: { maxDiffPixelRatio: 0.05 },
+    toMatchSnapshot: { threshold: 0.2 },
   },
   fullyParallel: true,
-  reporter: [['list'], ['html', { open: 'never' }]],
+  reporter: [
+    ['list'],
+    ['html', { open: 'never' }],
+    ['json', { outputFile: 'test-results/results.json' }],
+  ],
   use: {
     baseURL: 'http://localhost:4173',
     trace: 'on-first-retry',
     video: 'retain-on-failure',
     serviceWorkers: 'block',
+    actionTimeout: 15_000,
+    navigationTimeout: 30_000,
     storageState: {
       cookies: [],
       origins: [
         {
           origin: 'http://localhost:4173',
-          localStorage: [
-            { name: 'ecypro_cookie_consent', value: CONSENT_SEED },
-          ],
+          localStorage: [{ name: 'ecypro_cookie_consent', value: CONSENT_SEED }],
         },
       ],
     },
@@ -45,8 +55,8 @@ export default defineConfig({
       timeout: 120000,
     },
     {
-      command: 'node server/mock-server.mjs',
-      url: 'http://localhost:3001/__health',
+      command: 'MOCK_PORT=3099 MOCK_CAL_SECRET=e2e-test-webhook-secret node server/mock-server.mjs',
+      url: 'http://localhost:3099/__health',
       reuseExistingServer: !process.env.CI,
       timeout: 10000,
     },

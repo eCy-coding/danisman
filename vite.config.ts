@@ -7,12 +7,17 @@ import viteCompression from 'vite-plugin-compression';
 import { visualizer } from 'rollup-plugin-visualizer';
 import { ViteImageOptimizer } from 'vite-plugin-image-optimizer';
 import { VitePWA } from 'vite-plugin-pwa';
+import { sentryVitePlugin } from '@sentry/vite-plugin';
 import { IncomingMessage, ServerResponse } from 'http';
 
 // Serve pre-compressed Brotli/gzip assets in preview — mirrors production behaviour
 const compressionServePlugin = {
   name: 'compression-serve',
-  configurePreviewServer(server: { middlewares: { use: (fn: (req: IncomingMessage, res: ServerResponse, next: () => void) => void) => void } }) {
+  configurePreviewServer(server: {
+    middlewares: {
+      use: (fn: (req: IncomingMessage, res: ServerResponse, next: () => void) => void) => void;
+    };
+  }) {
     const DIST = path.resolve(__dirname, 'dist');
     const MIME: Record<string, string> = {
       js: 'application/javascript',
@@ -42,7 +47,11 @@ const compressionServePlugin = {
 // Adds charset=utf-8 ONLY to text/html responses — prevents JS MIME type corruption
 const htmlCharsetPlugin = {
   name: 'html-charset',
-  configurePreviewServer(server: { middlewares: { use: (fn: (req: IncomingMessage, res: ServerResponse, next: () => void) => void) => void } }) {
+  configurePreviewServer(server: {
+    middlewares: {
+      use: (fn: (req: IncomingMessage, res: ServerResponse, next: () => void) => void) => void;
+    };
+  }) {
     server.middlewares.use((_req: IncomingMessage, res: ServerResponse, next: () => void) => {
       const orig = res.setHeader.bind(res);
       res.setHeader = (name: string, value: string | number | readonly string[]) => {
@@ -62,14 +71,14 @@ const htmlCharsetPlugin = {
 };
 
 const wasmContentTypePlugin = {
-  name: "wasm-content-type-plugin",
+  name: 'wasm-content-type-plugin',
   configureServer(server: ViteDevServer) {
-      server.middlewares.use((req: IncomingMessage, res: ServerResponse, next: () => void) => {
-          if (req.url?.endsWith(".wasm")) {
-              res.setHeader("Content-Type", "application/wasm");
-          }
-          next();
-      });
+    server.middlewares.use((req: IncomingMessage, res: ServerResponse, next: () => void) => {
+      if (req.url?.endsWith('.wasm')) {
+        res.setHeader('Content-Type', 'application/wasm');
+      }
+      next();
+    });
   },
 };
 
@@ -122,7 +131,9 @@ export default defineConfig(() => {
       ViteImageOptimizer({
         png: { quality: 80 },
         jpeg: { quality: 80 },
-        webp: { quality: 80, lossless: true },
+        webp: { quality: 80, lossless: false },
+        avif: { quality: 65, effort: 6 },
+        svg: { multipass: true },
       }),
       VitePWA({
         registerType: 'autoUpdate',
@@ -160,11 +171,11 @@ export default defineConfig(() => {
               },
             },
             {
-              urlPattern: /\.(png|jpg|jpeg|webp|svg|ico)$/,
+              urlPattern: /\.(png|jpg|jpeg|webp|avif|svg|ico)$/,
               handler: 'CacheFirst',
               options: {
                 cacheName: 'image-cache',
-                expiration: { maxEntries: 60, maxAgeSeconds: 60 * 60 * 24 * 30 },
+                expiration: { maxEntries: 80, maxAgeSeconds: 60 * 60 * 24 * 30 },
                 cacheableResponse: { statuses: [0, 200] },
               },
             },
@@ -181,18 +192,40 @@ export default defineConfig(() => {
               src: 'pwa-192x192.png',
               sizes: '192x192',
               type: 'image/png',
-              purpose: 'any maskable'
+              purpose: 'any maskable',
             },
             {
               src: 'pwa-512x512.png',
               sizes: '512x512',
               type: 'image/png',
-              purpose: 'any maskable'
-            }
-          ]
-        }
+              purpose: 'any maskable',
+            },
+          ],
+        },
       }),
       wasmContentTypePlugin,
+      // P40-T91: Sentry Source Maps CI
+      // sentryVitePlugin activates only when SENTRY_AUTH_TOKEN is set in CI.
+      // In local dev / preview without token → plugin is silently skipped (no-op).
+      ...(process.env.SENTRY_AUTH_TOKEN
+        ? [
+            sentryVitePlugin({
+              org: process.env.SENTRY_ORG ?? 'ecypro',
+              project: process.env.SENTRY_PROJECT ?? 'ecypro-frontend',
+              authToken: process.env.SENTRY_AUTH_TOKEN,
+              sourcemaps: {
+                assets: './dist/**',
+                ignore: ['node_modules'],
+              },
+              release: {
+                name: process.env.npm_package_version ?? 'latest',
+                deploy: {
+                  env: process.env.NODE_ENV ?? 'production',
+                },
+              },
+            }),
+          ]
+        : []),
     ],
     // SECURITY: secrets like GEMINI_API_KEY must NEVER be inlined into the client bundle.
     // Prior versions of this file did `define: { 'process.env.GEMINI_API_KEY': ... }`,
@@ -226,15 +259,35 @@ export default defineConfig(() => {
             return 'assets/[name]-[hash].js';
           },
           manualChunks: {
-             vendor: ['react', 'react-dom', 'react-router-dom', 'react-helmet-async'],
-             ui: ['motion', 'lucide-react', 'clsx', 'tailwind-merge', '@radix-ui/react-slider', 'sonner'],
-             i18n: ['i18next', 'react-i18next'],
-             utils: ['dayjs', 'axios', 'zod', 'zustand'],
-             markdown: ['react-markdown', 'marked'],
-             monitoring: ['web-vitals'],
-          }
-        }
-      }
-    }
+            // Core framework — always needed, preloaded
+            vendor: ['react', 'react-dom', 'react-router-dom', 'react-helmet-async'],
+            // Motion (large ~80KB brotli) — separated for route-level lazy benefit
+            motion: ['motion'],
+            // UI primitives (sans motion)
+            ui: ['lucide-react', 'clsx', 'tailwind-merge', '@radix-ui/react-slider', 'sonner'],
+            // i18n — locale-specific, SWR cached
+            i18n: ['i18next', 'react-i18next'],
+            // Data + validation utilities
+            utils: ['dayjs', 'axios', 'zod', 'zustand'],
+            // Markdown rendering (blog/MDX)
+            markdown: ['react-markdown', 'marked'],
+            // Charts (recharts ~150KB) — LandingPage ROI + admin dashboard shared
+            charts: ['recharts'],
+            // Web Vitals monitoring
+            monitoring: ['web-vitals'],
+            // Async state management — split from main to enable independent caching
+            query: ['@tanstack/react-query'],
+            // Error monitoring — large SDK, rarely changes
+            sentry: ['@sentry/react'],
+            // Form handling
+            forms: ['react-hook-form'],
+            // Drag & drop (admin UI only)
+            dnd: ['@dnd-kit/core', '@dnd-kit/sortable', '@dnd-kit/utilities'],
+            // A/B testing & feature flags
+            ab: ['@growthbook/growthbook-react'],
+          },
+        },
+      },
+    },
   };
 });

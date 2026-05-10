@@ -18,5 +18,12 @@
     "unauthorized": "You're not authorized to do that."
   },
   "loading": "Loading...",
-  "noResults": "No results found."
+  "noResults": "No results found.",
+  "plurals": {
+    "bookingDuration": "{count, plural, one {# hour} other {# hours}}",
+    "meetingCount": "{count, plural, one {# meeting} other {# meetings}}",
+    "daysAgo": "{count, plural, one {# day ago} other {# days ago}}",
+    "items": "{count, plural, one {# item} other {# items}}",
+    "results": "{count, plural, one {# result} other {# results}}"
+  }
 }

@@ -73,6 +73,7 @@ typings/
 .env
 .env.test
 .env.production
+entegrasyon.txt
 
 # parcel-bundler cache (https://parceljs.org/)
 .cache
@@ -144,6 +145,7 @@ constants_generated.ts
 .claude/sessions/
 .claude/settings.local.json
 .claude/.credentials.json
+.claude/worktrees/
 
 # EcyPro project-specific bloat (Phase 16 cleanup)
 browser-profile/
@@ -192,3 +194,5 @@ crowler/mcp_config.json
 crowler/__pycache__/
 crowler/scripts/__pycache__/
 crowler/*.pyc
+crowler/Scrapling-main/
+crowler/Scrapling-main.zip

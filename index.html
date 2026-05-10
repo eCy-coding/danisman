@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="tr">
+<html lang="tr" dir="ltr">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -13,6 +13,9 @@
       content="Yönetim Danışmanlığı, Kurumsal Etkinlik, Dijital Pazarlama, Stratejik Planlama, İnsan Kaynakları"
     />
     <meta name="author" content="EcyPro Danışmanlık A.Ş." />
+    <meta name="robots" content="index, follow" />
+    <meta name="format-detection" content="telephone=no" />
+    <link rel="canonical" href="https://www.ecypro.com/" />
     <meta
       http-equiv="Content-Security-Policy"
       content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://www.google-analytics.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https: blob:; font-src 'self' data:; connect-src 'self' https://huggingface.co https://cdn-lfs.huggingface.co https://www.google-analytics.com https://api.emailjs.com https://*.google-analytics.com https://*.ingest.sentry.io https://api.ecypro.com https://*.ecypro.com wss://* http://localhost:* ws://localhost:* ws://127.0.0.1:*; worker-src 'self' blob:; frame-src 'self'; object-src 'none'; base-uri 'self';"
@@ -20,16 +23,57 @@
     <meta http-equiv="X-Content-Type-Options" content="nosniff" />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
 
-    <!-- Performance: Critical font preload (stable paths, no hash) -->
-    <link rel="preload" href="/fonts/inter-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href="/fonts/inter-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin />
+    <!-- i18n hreflang alternate links -->
+    <link rel="alternate" hreflang="tr" href="https://www.ecypro.com/tr/" />
+    <link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/" />
+    <link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/" />
 
-    <!-- Preload LandingPage + LandingContent lazy chunks (stable names) — parsed in background -->
+    <!-- P33-T25: Critical font preload — fetchpriority=high blocks FOIT for above-fold h1 -->
+    <link
+      rel="preload"
+      href="/fonts/inter-latin-400-normal.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+      fetchpriority="high"
+    />
+    <link
+      rel="preload"
+      href="/fonts/inter-latin-700-normal.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+      fetchpriority="high"
+    />
+    <link
+      rel="preload"
+      href="/fonts/playfair-display-latin-400-normal.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+
+    <!-- P33-T06: Preconnect to analytics origins — DNS + TLS resolved before gtag fires -->
+    <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin />
+    <link rel="preconnect" href="https://www.google-analytics.com" crossorigin />
+    <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+
+    <!-- P33-T22: Modulepreload critical chunks — browser parses in parallel with render -->
     <link rel="modulepreload" href="/assets/lp.js" />
     <link rel="modulepreload" href="/assets/lc.js" />
 
+    <!-- DNS prefetch for backend + CDN origins -->
+    <link rel="dns-prefetch" href="https://api.ecypro.com" />
+    <link rel="dns-prefetch" href="https://cdn.ecypro.com" />
+    <link rel="preconnect" href="https://api.ecypro.com" crossorigin />
+
     <!-- PWA & Mobile -->
-    <meta name="theme-color" content="#050810" />
+    <meta name="theme-color" content="#050810" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="EcyPro" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
 
@@ -53,24 +97,122 @@
     />
     <meta property="twitter:image" content="https://www.ecypro.com/og-image.jpg" />
 
-    <!-- CSP managed via Headers (vercel.json / netlify.toml) to reduce HTML bloat -->
-    <link rel="stylesheet" href="/index.css" />
+    <!-- P33-T03: Non-blocking stylesheet — print media trick defers parse until after FCP.
+         noscript fallback ensures CSS loads for bots/old browsers.
+         NOTE: App Shell inline styles above-fold render before CSS parses. -->
+    <link rel="preload" href="/index.css" as="style" />
+    <link rel="stylesheet" href="/index.css" media="print" onload="this.media='all'" />
+    <noscript><link rel="stylesheet" href="/index.css" /></noscript>
   </head>
   <body class="bg-neutral text-slate-900 font-sans">
+    <!-- Skip to main content — W3Schools WCAG 2.1 accessibility pattern -->
+    <a
+      href="#main-content"
+      class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-blue-600 focus:text-white focus:rounded-lg focus:font-semibold"
+      style="position:absolute;top:-999px;left:-999px;"
+      onfocus="this.style.top='1rem';this.style.left='1rem';"
+      onblur="this.style.top='-999px';this.style.left='-999px';"
+    >Ana içeriğe geç / Skip to main content</a>
     <div id="root">
       <!-- App Shell: Inline pre-render for instant FCP/LCP — React replaces on mount -->
-      <main id="app-shell" role="main" aria-label="EcyPro Ana İçerik" style="min-height:100vh;background:#050810;display:flex;align-items:center;justify-content:center;padding:1.5rem;box-sizing:border-box;">
-        <div style="text-align:center;max-width:900px;width:100%;">
-          <div style="display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(255,255,255,0.12);border-radius:9999px;padding:6px 14px;margin-bottom:1.75rem;color:#94a3b8;font-size:0.8125rem;font-family:system-ui,sans-serif;">&#9679;&nbsp;Strategic Leadership</div>
-          <h1 style="color:#fff;font-size:clamp(3rem,5.5vw,5.5rem);line-height:1.05;margin:0 0 1.5rem;font-weight:700;font-family:Georgia,serif;letter-spacing:-0.02em;">
-            Scale Your<br>
-            <span style="background:linear-gradient(135deg,#2563eb,#38bdf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Enterprise</span><br>
+      <main
+        id="main-content"
+        role="main"
+        aria-label="EcyPro Ana İçerik"
+        style="
+          min-height: 100vh;
+          background: #050810;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 1.5rem;
+          box-sizing: border-box;
+        "
+      >
+        <div style="text-align: center; max-width: 900px; width: 100%">
+          <div
+            style="
+              display: inline-flex;
+              align-items: center;
+              gap: 8px;
+              border: 1px solid rgba(255, 255, 255, 0.12);
+              border-radius: 9999px;
+              padding: 6px 14px;
+              margin-bottom: 1.75rem;
+              color: #94a3b8;
+              font-size: 0.8125rem;
+              font-family: system-ui, sans-serif;
+            "
+          >
+            &#9679;&nbsp;Strategic Leadership
+          </div>
+          <h1
+            style="
+              color: #fff;
+              font-size: clamp(3rem, 5.5vw, 5.5rem);
+              line-height: 1.05;
+              margin: 0 0 1.5rem;
+              font-weight: 700;
+              font-family: Georgia, serif;
+              letter-spacing: -0.02em;
+            "
+          >
+            Scale Your<br />
+            <span
+              style="
+                background: linear-gradient(135deg, #2563eb, #38bdf8);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+              "
+              >Enterprise</span
+            ><br />
             Vision
           </h1>
-          <p style="color:#94a3b8;font-size:1.0625rem;line-height:1.75;max-width:580px;margin:0 auto 2.5rem;font-family:system-ui,sans-serif;">Accelerate growth and reduce operational costs by 40% with data-driven insights and strategic consulting.</p>
-          <div style="display:flex;gap:0.875rem;justify-content:center;flex-wrap:wrap;">
-            <a href="/contact" data-testid="hero-cta-primary" style="background:#2563eb;color:#fff;padding:0.875rem 1.75rem;border-radius:0.75rem;text-decoration:none;font-weight:600;font-size:0.9375rem;font-family:system-ui,sans-serif;">Book Discovery Call &#8594;</a>
-            <a href="/services" data-testid="hero-cta-secondary" style="border:1px solid rgba(255,255,255,0.18);color:#fff;padding:0.875rem 1.75rem;border-radius:0.75rem;text-decoration:none;font-weight:600;font-size:0.9375rem;font-family:system-ui,sans-serif;">Explore Services</a>
+          <p
+            style="
+              color: #94a3b8;
+              font-size: 1.0625rem;
+              line-height: 1.75;
+              max-width: 580px;
+              margin: 0 auto 2.5rem;
+              font-family: system-ui, sans-serif;
+            "
+          >
+            Accelerate growth and reduce operational costs by 40% with data-driven insights and
+            strategic consulting.
+          </p>
+          <div style="display: flex; gap: 0.875rem; justify-content: center; flex-wrap: wrap">
+            <a
+              href="/contact"
+              data-testid="hero-cta-primary"
+              style="
+                background: #2563eb;
+                color: #fff;
+                padding: 0.875rem 1.75rem;
+                border-radius: 0.75rem;
+                text-decoration: none;
+                font-weight: 600;
+                font-size: 0.9375rem;
+                font-family: system-ui, sans-serif;
+              "
+              >Book Discovery Call &#8594;</a
+            >
+            <a
+              href="/services"
+              data-testid="hero-cta-secondary"
+              style="
+                border: 1px solid rgba(255, 255, 255, 0.18);
+                color: #fff;
+                padding: 0.875rem 1.75rem;
+                border-radius: 0.75rem;
+                text-decoration: none;
+                font-weight: 600;
+                font-size: 0.9375rem;
+                font-family: system-ui, sans-serif;
+              "
+              >Explore Services</a
+            >
           </div>
         </div>
       </main>

@@ -50,10 +50,21 @@ model User {
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
 
+  // P35-T03: Email verification
+  emailVerified Boolean   @default(false)
+
+  // P35-T04: 2FA TOTP fields
+  totpSecret    String?   // encrypted TOTP secret (speakeasy base32)
+  totpEnabled   Boolean   @default(false)
+  backupCodes   String?   // JSON array of hashed backup codes
+
   // Relations
-  bookings     Booking[]
-  interactions Interaction[]
-  analytics    Analytics[]
+  bookings           Booking[]
+  interactions       Interaction[]
+  analytics          Analytics[]
+  refreshTokens      RefreshToken[]
+  emailVerifications EmailVerification[]
+  sessions           Session[]           // P35-T09
 
   @@index([email])
   @@index([role])
@@ -93,12 +104,20 @@ model Booking {
   notesEn       String?
   meetingUrl    String?
   cancellationReason String?
+  // P37-T01: Cal.com external booking UID (for webhook sync)
+  calcomUid     String?   @unique
+  // P37-T04: Reminder email idempotency flags
+  reminder24hSent Boolean @default(false)
+  reminder1hSent  Boolean @default(false)
+  // P37-T10: NPS feedback email sent flag
+  feedbackEmailSent Boolean @default(false)
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
 
   // Relations
-  user          User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  service       Service?      @relation(fields: [serviceId], references: [id], onDelete: SetNull)
+  user          User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  service       Service?        @relation(fields: [serviceId], references: [id], onDelete: SetNull)
+  feedback      BookingFeedback?
 
   @@index([userId])
   @@index([status])
@@ -166,6 +185,113 @@ model ContactSubmission {
   @@index([email])
   @@index([isRead])
   @@map("contact_submissions")
+}
+
+// ─── AUTH SECURITY (Phase 35) ────────────────────────────
+
+model RefreshToken {
+  id          String    @id @default(uuid())
+  userId      String
+  tokenHash   String    @unique
+  family      String    // Rotation family — all revoked if reuse detected
+  expiresAt   DateTime
+  revokedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  ip          String?
+  userAgent   String?
+
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([family])
+  @@index([expiresAt])
+  @@map("refresh_tokens")
+}
+
+model EmailVerification {
+  id          String    @id @default(uuid())
+  userId      String
+  tokenHash   String    @unique
+  expiresAt   DateTime
+  usedAt      DateTime?
+  createdAt   DateTime  @default(now())
+
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("email_verifications")
+}
+
+// ─── ADMIN OPERATIONS (Phase 36) ─────────────────────────
+
+// ─── USER SESSION TRACKING (P35-T09) ─────────────────────
+
+model Session {
+  id          String    @id @default(uuid())
+  userId      String
+  jti         String    @unique
+  userAgent   String?
+  ip          String?
+  createdAt   DateTime  @default(now())
+  lastSeenAt  DateTime  @default(now())
+  revokedAt   DateTime?
+
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([jti])
+  @@map("sessions")
+}
+
+model AuditLog {
+  id          String   @id @default(uuid())
+  adminId     String
+  action      String   // e.g. "USER_ROLE_CHANGE", "SETTING_UPDATE", "BOOKING_STATUS"
+  targetType  String?  // e.g. "User", "Booking", "Service"
+  targetId    String?
+  oldValue    Json?
+  newValue    Json?
+  ip          String?
+  userAgent   String?
+  createdAt   DateTime @default(now())
+
+  @@index([adminId])
+  @@index([action])
+  @@index([createdAt])
+  @@map("audit_logs")
+}
+
+model SiteConfig {
+  id        String   @id @default(uuid())
+  key       String   @unique
+  value     String
+  type      String   @default("string") // string | boolean | number | json
+  label     String?
+  updatedAt DateTime @updatedAt
+  updatedBy String?
+
+  @@index([key])
+  @@map("site_configs")
+}
+
+// ─── P37-T10: POST-BOOKING NPS FEEDBACK ─────────────────
+// Sent 1h after meeting end. Score 0-10 (NPS standard).
+// Promoters (9-10), Passives (7-8), Detractors (0-6).
+// NPS = %Promoters - %Detractors (range -100 to +100)
+model BookingFeedback {
+  id          String   @id @default(uuid())
+  bookingId   String   @unique   // one feedback per booking
+  score       Int                // 0-10 NPS score
+  comment     String?            // optional free-text
+  submittedAt DateTime @default(now())
+  token       String   @unique   // HMAC token (single-use, 7d TTL)
+  tokenUsed   Boolean  @default(false)
+
+  booking     Booking  @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+
+  @@index([bookingId])
+  @@index([submittedAt])
+  @@map("booking_feedbacks")
 }
 
 // ─── NEWSLETTER ──────────────────────────────────────────

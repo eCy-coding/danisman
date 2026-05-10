@@ -1,3 +1,7 @@
 User-agent: *
 Allow: /
+
+Sitemap: https://www.ecypro.com/sitemap-index.xml
 Sitemap: https://www.ecypro.com/sitemap.xml
+Sitemap: https://www.ecypro.com/sitemap-tr.xml
+Sitemap: https://www.ecypro.com/sitemap-en.xml
