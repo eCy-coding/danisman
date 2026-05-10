@@ -16,9 +16,9 @@ interface RateLimitEntry {
 }
 
 interface RateLimiterOptions {
-  windowMs: number;      // Time window in milliseconds
-  maxRequests: number;    // Max requests per window
-  message?: string;       // Custom error message
+  windowMs: number; // Time window in milliseconds
+  maxRequests: number; // Max requests per window
+  message?: string; // Custom error message
   keyGenerator?: (req: Request) => string; // Custom key extractor
 }
 
@@ -62,30 +62,58 @@ export function createRateLimiter(options: RateLimiterOptions) {
     let resetSeconds = Math.ceil(windowMs / 1000);
 
     try {
-      // E1: accept a brief reconnecting window to avoid Redis→memory thrashing
-      // during transient hiccups. Anything else (end/close/wait) falls back below.
-      const usable = redis.status === 'ready' || redis.status === 'connecting' || redis.status === 'reconnecting';
-      if (usable) {
-        // Use Redis
-        const pipeline = redis.pipeline();
-        pipeline.incr(key);
-        pipeline.pttl(key);
-        const results = await pipeline.exec();
-        
-        if (results && results[0] && results[1]) {
-          currentCount = results[0][1] as number;
-          const pttl = results[1][1] as number;
-          
-          if (currentCount === 1 || pttl === -1) {
-            await redis.pexpire(key, windowMs);
-            resetSeconds = Math.ceil(windowMs / 1000);
-          } else {
-            resetSeconds = Math.ceil(pttl / 1000);
-          }
-        }
-      } else {
-        throw new Error('Redis not ready, falling back to memory.');
-      }
+      /**
+       * P35-T07: Lua atomic rate limiter — true atomicity via single EVAL call.
+       *
+       * Problem with pipeline: INCR + PTTL are two separate round-trips.
+       * Between them, a concurrent request can read stale PTTL (-1) and
+       * incorrectly reset the window. Under high concurrency this allows
+       * burst traffic to bypass limits.
+       *
+       * Solution: Single Lua script executed atomically in Redis.
+       * Redis Lua scripts are single-threaded — no interleaving possible.
+       *
+       * Script logic (Lua):
+       *   1. GET current count (or 0 if missing)
+       *   2. If count == 0: SET key 1 PX windowMs → new window started
+       *   3. Else: INCR key (count++) → existing window
+       *   4. If PTTL == -1 (key exists but no expiry): PEXPIRE key windowMs
+       *   5. Return {count, pttl} as a two-element array
+       *
+       * Complexity: O(1) — single atomic operation
+       * Latency: one RTT instead of two (pipeline → EVAL)
+       */
+      const LUA_SCRIPT = `
+        local key = KEYS[1]
+        local window_ms = tonumber(ARGV[1])
+
+        local count = tonumber(redis.call('GET', key) or '0')
+        if count == 0 then
+          redis.call('SET', key, 1, 'PX', window_ms)
+          return {1, window_ms}
+        end
+
+        count = tonumber(redis.call('INCR', key))
+        local pttl = tonumber(redis.call('PTTL', key))
+
+        if pttl == nil or pttl == -1 then
+          redis.call('PEXPIRE', key, window_ms)
+          pttl = window_ms
+        end
+
+        return {count, pttl}
+      `;
+
+      const usable =
+        redis.status === 'ready' ||
+        redis.status === 'connecting' ||
+        redis.status === 'reconnecting';
+      if (!usable) throw new Error('Redis not ready');
+
+      const result = (await redis.eval(LUA_SCRIPT, 1, key, windowMs)) as [number, number];
+      currentCount = result[0];
+      const pttlMs = result[1];
+      resetSeconds = Math.ceil(pttlMs / 1000);
     } catch (_err) {
       // Fallback to memory
       let entry = fallbackStore.get(key);
@@ -146,4 +174,38 @@ export const sseLimiter = createRateLimiter({
   windowMs: 60 * 1000,
   maxRequests: 3,
   message: 'Too many SSE connection attempts.',
+});
+
+/**
+ * NPS Feedback submission: 3 per 24h per IP
+ * Rationale: feedback is a 1-time action post-meeting.
+ * 3 allows for accidental double-clicks + re-submission attempts.
+ * Key: IP-based (not user-based — unauthenticated endpoint)
+ */
+export const feedbackLimiter = createRateLimiter({
+  windowMs: 24 * 60 * 60 * 1000, // 24 hours
+  maxRequests: 3,
+  message: 'Feedback submission limit reached. Please try again tomorrow.',
+});
+
+/**
+ * Public booking creation: 10 per day per IP
+ * Rationale: prevents spam bookings that create guest users.
+ * 10 is generous enough for legitimate retries, tight enough to block bots.
+ */
+export const publicBookingLimiter = createRateLimiter({
+  windowMs: 24 * 60 * 60 * 1000, // 24 hours
+  maxRequests: 10,
+  message: 'Too many booking attempts. Please try again tomorrow or contact us directly.',
+});
+
+/**
+ * Booking slots fetch: 60 per hour per IP (calendar browsing)
+ * Rationale: users browse multiple months → need generous limit.
+ * Cal.com free tier: 100 req/min → our 60/hour is safe.
+ */
+export const slotsFetchLimiter = createRateLimiter({
+  windowMs: 60 * 60 * 1000, // 1 hour
+  maxRequests: 60,
+  message: 'Too many calendar requests. Please wait before browsing more dates.',
 });

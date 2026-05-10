@@ -4,9 +4,20 @@ import jwt from 'jsonwebtoken';
 import { z } from 'zod';
 import crypto from 'crypto';
 import { HttpError } from '../middleware/error';
+import { blacklistToken } from '../lib/jwt-blacklist';
+import { sendEmailVerification } from '../lib/email';
+import { checkPasswordBreached } from '../lib/hibp';
+import {
+  ACCESS_TOKEN_EXPIRES_IN,
+  generateRefreshToken,
+  newFamily,
+  rotateRefreshToken,
+  revokeAllUserTokens,
+  storeRefreshToken,
+} from '../lib/refresh-token';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'super-secret-default-key-for-dev-only-change-in-prod';
-const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '7d';
+const JWT_EXPIRES_IN = ACCESS_TOKEN_EXPIRES_IN;
 
 // ─── Input Schemas ───────────────────────────────────────
 
@@ -76,10 +87,27 @@ export async function verifyPassword(password: string, storedHash: string): Prom
 // ─── Helpers ─────────────────────────────────────────────
 
 function generateToken(userId: string, role: string): string {
-  return jwt.sign({ id: userId, role }, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN } as jwt.SignOptions);
+  const jti = crypto.randomUUID();
+  return jwt.sign({ id: userId, role, jti }, JWT_SECRET, {
+    expiresIn: JWT_EXPIRES_IN,
+  } as jwt.SignOptions);
 }
 
-function sanitizeUser(user: { id: string; email: string; name: string | null; role: string; avatarUrl?: string | null }) {
+function decodeTokenUnsafe(token: string): { jti?: string; exp?: number; id?: string } | null {
+  try {
+    return jwt.decode(token) as { jti?: string; exp?: number; id?: string };
+  } catch {
+    return null;
+  }
+}
+
+function sanitizeUser(user: {
+  id: string;
+  email: string;
+  name: string | null;
+  role: string;
+  avatarUrl?: string | null;
+}) {
   return {
     id: user.id,
     email: user.email,
@@ -103,7 +131,6 @@ export const login = async (req: Request, res: Response, next: NextFunction): Pr
     const { email, password } = loginSchema.parse(req.body);
     const user = await prisma.user.findUnique({ where: { email } });
 
-    // ALWAYS run verifyPassword once, even when user is missing, to equalize timings.
     const hashToCompare = user?.passwordHash ?? DUMMY_HASH;
     const isValid = await verifyPassword(password, hashToCompare);
 
@@ -111,15 +138,37 @@ export const login = async (req: Request, res: Response, next: NextFunction): Pr
       throw new HttpError(401, 'INVALID_CREDENTIALS', 'Invalid credentials');
     }
 
-    await prisma.user.update({
-      where: { id: user.id },
-      data: { lastLoginAt: new Date() },
-    });
+    await prisma.user.update({ where: { id: user.id }, data: { lastLoginAt: new Date() } });
 
-    const token = generateToken(user.id, user.role);
+    const accessToken = generateToken(user.id, user.role);
+    const decoded = jwt.decode(accessToken) as { jti?: string } | null;
+    const { raw: refreshRaw, hash: refreshHash } = generateRefreshToken();
+    const family = newFamily();
+    await storeRefreshToken(
+      user.id,
+      refreshHash,
+      family,
+      req.ip ?? undefined,
+      req.headers['user-agent'] ?? undefined,
+    );
+
+    // P35-T09: upsert Session record for session management dashboard
+    if (decoded?.jti) {
+      await prisma.session.upsert({
+        where: { jti: decoded.jti },
+        create: {
+          userId: user.id,
+          jti: decoded.jti,
+          ip: req.ip ?? null,
+          userAgent: req.headers['user-agent'] ?? null,
+        },
+        update: { lastSeenAt: new Date() },
+      });
+    }
+
     res.json({
       status: 'success',
-      data: { token, user: sanitizeUser(user) },
+      data: { token: accessToken, refreshToken: refreshRaw, user: sanitizeUser(user) },
     });
   } catch (error) {
     next(error);
@@ -135,16 +184,177 @@ export const register = async (req: Request, res: Response, next: NextFunction):
       throw new HttpError(409, 'EMAIL_ALREADY_EXISTS', 'An account with this email already exists');
     }
 
-    const passwordHash = await hashPassword(password);
-    const user = await prisma.user.create({
-      data: { email, name: name ?? null, passwordHash },
-    });
+    // P35-T08: HIBP breach check — fail-open (does not block registration if API down)
+    const { breached, count } = await checkPasswordBreached(password);
+    if (breached) {
+      throw new HttpError(
+        422,
+        'PASSWORD_BREACHED',
+        `This password has appeared in ${count.toLocaleString()} data breaches. Please choose a different password.`,
+      );
+    }
 
-    const token = generateToken(user.id, user.role);
+    const passwordHash = await hashPassword(password);
+    const user = await prisma.user.create({ data: { email, name: name ?? null, passwordHash } });
+
+    const accessToken = generateToken(user.id, user.role);
+    const regDecoded = jwt.decode(accessToken) as { jti?: string } | null;
+    const { raw: refreshRaw, hash: refreshHash } = generateRefreshToken();
+    const family = newFamily();
+    await storeRefreshToken(
+      user.id,
+      refreshHash,
+      family,
+      req.ip ?? undefined,
+      req.headers['user-agent'] ?? undefined,
+    );
+
+    // P35-T09: create Session record
+    if (regDecoded?.jti) {
+      await prisma.session.create({
+        data: {
+          userId: user.id,
+          jti: regDecoded.jti,
+          ip: req.ip ?? null,
+          userAgent: req.headers['user-agent'] ?? null,
+        },
+      });
+    }
+
+    // P35-T03: send email verification (non-blocking, fail-open)
+    void sendVerificationEmail(user.id, user.email);
+
     res.status(201).json({
       status: 'success',
-      data: { token, user: sanitizeUser(user) },
+      data: { token: accessToken, refreshToken: refreshRaw, user: sanitizeUser(user) },
     });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// P35-T01: Logout — blacklist access token + revoke all refresh tokens
+export const logout = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  try {
+    const authHeader = req.headers.authorization;
+    if (authHeader?.startsWith('Bearer ')) {
+      const token = authHeader.slice(7);
+      const decoded = decodeTokenUnsafe(token);
+      if (decoded?.jti && decoded.exp) {
+        await blacklistToken(decoded.jti, decoded.exp * 1000);
+      }
+      if (decoded?.id) {
+        await revokeAllUserTokens(decoded.id);
+      }
+    }
+    res.json({ status: 'success', message: 'Logged out successfully' });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// P35-T02: Refresh token rotation
+export const refresh = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  try {
+    const rawToken = z.string().min(1).parse(req.body.refreshToken);
+    const result = await rotateRefreshToken(rawToken);
+
+    if (!result.ok) {
+      const msg =
+        result.reason === 'FAMILY_REVOKED'
+          ? 'Security alert: refresh token reuse detected. All sessions revoked.'
+          : 'Refresh token invalid or expired. Please log in again.';
+      throw new HttpError(401, result.reason ?? 'INVALID_TOKEN', msg);
+    }
+
+    const user = await prisma.user.findUnique({ where: { id: result.userId! } });
+    if (!user) throw new HttpError(401, 'USER_NOT_FOUND', 'User no longer exists');
+
+    const accessToken = generateToken(user.id, user.role);
+    const { raw: refreshRaw, hash: refreshHash } = generateRefreshToken();
+
+    // Inherit same family for chain tracking
+    const oldDecoded = decodeTokenUnsafe(rawToken) ?? {};
+    const family = (oldDecoded as { family?: string }).family ?? newFamily();
+    await storeRefreshToken(
+      user.id,
+      refreshHash,
+      family,
+      req.ip ?? undefined,
+      req.headers['user-agent'] ?? undefined,
+    );
+
+    res.json({
+      status: 'success',
+      data: { token: accessToken, refreshToken: refreshRaw, user: sanitizeUser(user) },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// ─── P35-T03: Email Verification ────────────────────────
+
+async function sendVerificationEmail(userId: string, email: string): Promise<void> {
+  const raw = crypto.randomBytes(32).toString('hex');
+  const tokenHash = crypto.createHash('sha256').update(raw).digest('hex');
+  const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000);
+
+  await prisma.emailVerification.create({ data: { userId, tokenHash, expiresAt } });
+
+  const prodUrl = process.env.VITE_PROD_URL ?? 'https://www.ecypro.com';
+  const verifyUrl = `${prodUrl}/verify-email?token=${raw}`;
+  await sendEmailVerification(email, verifyUrl);
+}
+
+export const sendVerifyEmail = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
+  try {
+    const userId = (req as Request & { user?: { id: string } }).user?.id;
+    if (!userId) throw new HttpError(401, 'UNAUTHENTICATED', 'Not authenticated');
+
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { email: true, emailVerified: true },
+    });
+    if (!user) throw new HttpError(404, 'USER_NOT_FOUND', 'User not found');
+    if (user.emailVerified) throw new HttpError(409, 'ALREADY_VERIFIED', 'Email already verified');
+
+    await sendVerificationEmail(userId, user.email);
+    res.json({ status: 'success', message: 'Verification email sent' });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const verifyEmail = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
+  try {
+    const { token } = req.query as { token?: string };
+    if (!token || typeof token !== 'string') {
+      throw new HttpError(400, 'MISSING_TOKEN', 'Verification token required');
+    }
+
+    const tokenHash = crypto.createHash('sha256').update(token).digest('hex');
+    const record = await prisma.emailVerification.findUnique({ where: { tokenHash } });
+
+    if (!record) throw new HttpError(400, 'INVALID_TOKEN', 'Invalid or expired token');
+    if (record.usedAt) throw new HttpError(409, 'TOKEN_USED', 'Token already used');
+    if (new Date() > record.expiresAt)
+      throw new HttpError(400, 'TOKEN_EXPIRED', 'Token expired — request a new one');
+
+    await prisma.$transaction([
+      prisma.emailVerification.update({ where: { id: record.id }, data: { usedAt: new Date() } }),
+      prisma.user.update({ where: { id: record.userId }, data: { emailVerified: true } }),
+    ]);
+
+    res.json({ status: 'success', message: 'Email verified successfully' });
   } catch (error) {
     next(error);
   }

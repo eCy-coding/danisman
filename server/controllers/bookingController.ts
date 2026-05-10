@@ -3,6 +3,10 @@ import { prisma } from '../config/db';
 import { z } from 'zod';
 import type { AuthRequest } from '../middleware/auth';
 import { HttpError } from '../middleware/error';
+import { sendBookingConfirmation } from '../lib/email';
+import { generateICS, googleCalendarUrl } from '../lib/calendar';
+import { bookingManageUrl } from '../lib/hmac';
+import { logger } from '../config/logger';
 
 // ─── Input Schemas ───────────────────────────────────────
 
@@ -20,7 +24,11 @@ const updateBookingStatusSchema = z.object({
 
 // ─── Controllers ─────────────────────────────────────────
 
-export const createBooking = async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
+export const createBooking = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
   try {
     const data = createBookingSchema.parse(req.body);
     const userId = req.user?.id;
@@ -36,8 +44,59 @@ export const createBooking = async (req: AuthRequest, res: Response, next: NextF
         durationMin: data.durationMin,
         notesTr: data.notes ?? null,
       },
-      include: { service: true },
+      include: {
+        service: true,
+        user: { select: { email: true, name: true } },
+      },
     });
+
+    // P37-T02/T03: Async confirmation email + ICS attachment (non-blocking)
+    void (async () => {
+      try {
+        const scheduledAt = booking.scheduledAt;
+        const dateStr = scheduledAt.toLocaleDateString('tr-TR', {
+          dateStyle: 'full',
+          timeZone: 'Europe/Istanbul',
+        });
+        const timeStr = scheduledAt.toLocaleTimeString('tr-TR', {
+          timeStyle: 'short',
+          timeZone: 'Europe/Istanbul',
+        });
+        const manageUrl = bookingManageUrl(booking.id);
+        const attendeeName = (booking.user.name ?? booking.user.email.split('@')[0]) as string;
+        const ORGANIZER_EMAIL = process.env.EMAIL_FROM_ADDRESS ?? 'noreply@ecypro.com';
+
+        const calInput = {
+          uid: booking.id,
+          title: `EcyPro — Stratejik Danışmanlık Görüşmesi`,
+          startDate: scheduledAt,
+          durationMinutes: booking.durationMin,
+          organizerEmail: ORGANIZER_EMAIL,
+          organizerName: 'EcyPro Premium Consulting',
+          attendeeEmail: booking.user.email,
+          attendeeName,
+          meetingUrl: booking.meetingUrl ?? undefined,
+        };
+
+        const icsContent = generateICS(calInput);
+        const gcalUrl = googleCalendarUrl(calInput);
+
+        await sendBookingConfirmation({
+          to: booking.user.email as string,
+          name: attendeeName,
+          date: dateStr,
+          time: timeStr,
+          timezone: 'Europe/Istanbul (UTC+3)',
+          meetingUrl: booking.meetingUrl ?? undefined,
+          manageUrl: `${manageUrl}&gcal=${encodeURIComponent(gcalUrl)}`,
+          icsContent: icsContent ?? undefined,
+        });
+      } catch (emailErr) {
+        logger.warn('[Booking] Confirmation email failed (non-fatal)', {
+          message: (emailErr as Error).message,
+        });
+      }
+    })();
 
     res.status(201).json({ status: 'success', data: { booking } });
   } catch (error) {
@@ -45,7 +104,11 @@ export const createBooking = async (req: AuthRequest, res: Response, next: NextF
   }
 };
 
-export const listBookings = async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
+export const listBookings = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
   try {
     const userId = req.user?.id;
     const userRole = req.user?.role;
@@ -55,9 +118,7 @@ export const listBookings = async (req: AuthRequest, res: Response, next: NextFu
     }
 
     // Admins/Consultants can see all bookings; users see only theirs
-    const whereClause = (userRole === 'ADMIN' || userRole === 'CONSULTANT')
-      ? {}
-      : { userId };
+    const whereClause = userRole === 'ADMIN' || userRole === 'CONSULTANT' ? {} : { userId };
 
     const page = Math.max(1, parseInt(req.query.page as string) || 1);
     const limit = Math.min(50, Math.max(1, parseInt(req.query.limit as string) || 10));
@@ -87,7 +148,11 @@ export const listBookings = async (req: AuthRequest, res: Response, next: NextFu
  * GET /api/bookings/:id  — Phase 20 C1
  * Owner OR ADMIN/CONSULTANT can fetch; everyone else gets 403.
  */
-export const getBookingById = async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
+export const getBookingById = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
   try {
     const userId = req.user?.id;
     const userRole = req.user?.role;
@@ -117,7 +182,11 @@ export const getBookingById = async (req: AuthRequest, res: Response, next: Next
  * Soft-cancel for the booking owner: status → CANCELLED + reason.
  * Hard-delete for ADMIN. Returns 204 No Content on success.
  */
-export const deleteBooking = async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
+export const deleteBooking = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
   try {
     const userId = req.user?.id;
     const userRole = req.user?.role;
@@ -140,7 +209,8 @@ export const deleteBooking = async (req: AuthRequest, res: Response, next: NextF
         where: { id },
         data: {
           status: 'CANCELLED',
-          cancellationReason: (req.body?.cancellationReason as string | undefined) ?? 'Cancelled by user',
+          cancellationReason:
+            (req.body?.cancellationReason as string | undefined) ?? 'Cancelled by user',
         },
       });
     }
@@ -151,7 +221,11 @@ export const deleteBooking = async (req: AuthRequest, res: Response, next: NextF
   }
 };
 
-export const updateBookingStatus = async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
+export const updateBookingStatus = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
   try {
     const data = updateBookingStatusSchema.parse(req.body);
     const { id } = req.params;

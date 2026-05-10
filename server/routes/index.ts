@@ -4,10 +4,21 @@ import bookingRoutes from './bookings';
 import analyticsRoutes from './analytics';
 import newsletterRoutes from './newsletter';
 import aiRoutes from './ai';
+import adminRoutes from './admin';
+import webhookRoutes from './webhooks';
+import manageRoutes from './manage';
+import totpRoutes from './totp';
+import sessionRoutes from './sessions';
+import leadRoutes from './leads';
+import feedbackRoutes from './feedback';
+import geoRoutes from './geo';
+import crmRoutes from './crm';
+import devAnalyticsRoutes from './dev-analytics';
 import { openApiSpec } from '../config/openapi';
 import { redis } from '../config/redis';
 import { prisma } from '../config/db';
 import { logger } from '../config/logger';
+import { checkAllServices } from '../lib/health';
 
 const router = Router();
 
@@ -79,9 +90,149 @@ router.get('/metrics', (_req, res) => {
   res.send(lines + '\n');
 });
 
+// ─── Deep service health (all external integrations) ────────────────────────
+// Async-checks DB, Redis, Cal.com, Telegram, Resend, Logtail, Gemini, Docker
+router.get('/health/services', async (_req, res) => {
+  try {
+    const report = await checkAllServices();
+    const httpStatus = report.overall === 'critical' ? 503 : 200;
+    res.status(httpStatus).json(report);
+  } catch (err) {
+    logger.error('[health/services] check failed', { message: (err as Error).message });
+    res.status(503).json({ overall: 'critical', error: 'Health check failed' });
+  }
+});
+
 // OpenAPI Documentation
 router.get('/docs', (_req, res) => {
   res.json(openApiSpec);
+});
+
+// ─── P36-T02: SSE Analytics Real-Time Stream ─────────────────────────────────
+// Streams live interaction events + aggregated KPIs to AdminAnalyticsPage.
+// No auth required for connection (frontend proxied, token validated below).
+const analyticsClients = new Set<import('express').Response>();
+
+router.get('/sse/analytics', async (req, res) => {
+  res.writeHead(200, {
+    'Content-Type': 'text/event-stream',
+    'Cache-Control': 'no-cache',
+    Connection: 'keep-alive',
+    'X-Accel-Buffering': 'no',
+  });
+
+  // Send initial snapshot
+  try {
+    const [contacts, subscribers, bookings, interactions] = await Promise.all([
+      prisma.contactSubmission.count({ where: { isRead: false } }),
+      prisma.newsletterSubscriber.count({ where: { unsubscribedAt: null } }),
+      prisma.booking.count({ where: { status: 'PENDING' } }),
+      prisma.interaction.count({
+        where: { createdAt: { gte: new Date(Date.now() - 5 * 60_000) } },
+      }),
+    ]);
+
+    res.write(
+      `data: ${JSON.stringify({
+        type: 'snapshot',
+        timestamp: Date.now(),
+        kpi: {
+          unreadContacts: contacts,
+          activeSubscribers: subscribers,
+          pendingBookings: bookings,
+          activeNow: interactions,
+        },
+      })}\n\n`,
+    );
+  } catch {
+    res.write(`data: ${JSON.stringify({ type: 'connected', timestamp: Date.now() })}\n\n`);
+  }
+
+  analyticsClients.add(res);
+  logger.info(`[SSE/analytics] client connected. total=${analyticsClients.size}`);
+
+  const keepAlive = setInterval(() => res.write(': keepalive\n\n'), 25_000);
+
+  // Heartbeat with fresh KPIs every 30s
+  const kpiPoll = setInterval(async () => {
+    try {
+      const [contacts, subscribers, bookings, interactions] = await Promise.all([
+        prisma.contactSubmission.count({ where: { isRead: false } }),
+        prisma.newsletterSubscriber.count({ where: { unsubscribedAt: null } }),
+        prisma.booking.count({ where: { status: 'PENDING' } }),
+        prisma.interaction.count({
+          where: { createdAt: { gte: new Date(Date.now() - 5 * 60_000) } },
+        }),
+      ]);
+      res.write(
+        `data: ${JSON.stringify({
+          type: 'kpi',
+          timestamp: Date.now(),
+          kpi: {
+            unreadContacts: contacts,
+            activeSubscribers: subscribers,
+            pendingBookings: bookings,
+            activeNow: interactions,
+          },
+        })}\n\n`,
+      );
+    } catch {
+      /* DB unavailable — skip */
+    }
+  }, 30_000);
+
+  req.on('close', () => {
+    clearInterval(keepAlive);
+    clearInterval(kpiPoll);
+    analyticsClients.delete(res);
+    logger.info(`[SSE/analytics] client disconnected. total=${analyticsClients.size}`);
+  });
+});
+
+// Broadcast analytics event to all connected clients (called from analytics routes)
+export function broadcastAnalyticsEvent(type: string, data: unknown): void {
+  const payload = `event: ${type}\ndata: ${JSON.stringify(data)}\n\n`;
+  for (const client of analyticsClients) {
+    client.write(payload);
+  }
+}
+
+// ─── P40-T95: Status Page API ─────────────────────────────────────────────────
+router.get('/status', async (_req, res) => {
+  try {
+    const [dbOk, redisOk] = await Promise.all([
+      prisma.$queryRaw`SELECT 1`.then(() => true).catch(() => false),
+      redis
+        .ping()
+        .then(() => true)
+        .catch(() => false),
+    ]);
+
+    const components = [
+      { name: 'API', status: 'operational' as const },
+      { name: 'Database', status: dbOk ? ('operational' as const) : ('degraded' as const) },
+      { name: 'Cache', status: redisOk ? ('operational' as const) : ('degraded' as const) },
+    ];
+
+    const overall = components.every((c) => c.status === 'operational')
+      ? 'operational'
+      : 'degraded';
+    res.json({
+      page: { name: 'EcyPro API', url: 'https://ecypro.com' },
+      status: {
+        indicator: overall,
+        description: overall === 'operational' ? 'All Systems Operational' : 'Degraded Service',
+      },
+      components,
+      updatedAt: new Date().toISOString(),
+    });
+  } catch (err) {
+    logger.error('[status] check failed', { message: (err as Error).message });
+    res.status(503).json({
+      status: { indicator: 'critical', description: 'Major Outage' },
+      updatedAt: new Date().toISOString(),
+    });
+  }
 });
 
 // API Routes
@@ -90,5 +241,15 @@ router.use('/bookings', bookingRoutes);
 router.use('/analytics', analyticsRoutes);
 router.use('/newsletter', newsletterRoutes);
 router.use('/ai', aiRoutes);
+router.use('/admin', adminRoutes);
+router.use('/webhooks', webhookRoutes);
+router.use('/manage', manageRoutes);
+router.use('/auth/2fa', totpRoutes);
+router.use('/sessions', sessionRoutes);
+router.use('/leads', leadRoutes);
+router.use('/feedback', feedbackRoutes);
+router.use('/geo', geoRoutes);
+router.use('/crm', crmRoutes);
+router.use('/dev/analytics', devAnalyticsRoutes);
 
 export default router;

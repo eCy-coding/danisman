@@ -10,7 +10,8 @@ export const openApiSpec = {
   info: {
     title: 'EcyPro Premium Consulting API',
     version: '1.0.0',
-    description: 'RESTful API for the EcyPro Premium Consulting SAAS platform. Provides authentication, booking management, analytics tracking, and real-time dashboard streaming.',
+    description:
+      'RESTful API for the EcyPro Premium Consulting SAAS platform. Provides authentication, booking management, analytics tracking, and real-time dashboard streaming.',
     contact: {
       name: 'EcyPro Support',
       email: 'support@ecypro.com',
@@ -336,10 +337,332 @@ export const openApiSpec = {
         type: 'object',
         required: ['serviceType', 'date'],
         properties: {
-          serviceType: { type: 'string', enum: ['STRATEGY', 'TECHNOLOGY', 'OPERATIONS', 'FINANCE', 'HR'] },
+          serviceType: {
+            type: 'string',
+            enum: ['STRATEGY', 'TECHNOLOGY', 'OPERATIONS', 'FINANCE', 'HR'],
+          },
           date: { type: 'string', format: 'date-time' },
           notes: { type: 'string' },
         },
+      },
+      PublicBookingInput: {
+        type: 'object',
+        required: ['name', 'email', 'scheduledAt'],
+        properties: {
+          name: { type: 'string', example: 'Ahmet Yılmaz' },
+          email: { type: 'string', format: 'email', example: 'ahmet@company.com' },
+          company: { type: 'string', example: 'ACME Corp' },
+          notes: { type: 'string', maxLength: 1000 },
+          scheduledAt: { type: 'string', format: 'date-time', example: '2026-06-15T10:00:00Z' },
+          durationMin: { type: 'integer', minimum: 15, maximum: 120, default: 30 },
+        },
+      },
+      SlotDay: {
+        type: 'object',
+        properties: {
+          date: { type: 'string', format: 'date', example: '2026-06-10' },
+          slots: {
+            type: 'array',
+            items: {
+              type: 'object',
+              properties: {
+                start: {
+                  type: 'string',
+                  format: 'date-time',
+                  description: 'UTC ISO-8601 slot start',
+                },
+                end: { type: 'string', format: 'date-time', description: 'UTC ISO-8601 slot end' },
+              },
+            },
+          },
+        },
+      },
+      FeedbackSubmission: {
+        type: 'object',
+        required: ['token', 'score'],
+        properties: {
+          token: { type: 'string', description: 'HMAC-signed feedback token from email link' },
+          score: {
+            type: 'integer',
+            minimum: 0,
+            maximum: 10,
+            description: 'NPS score (0=Detractor, 9-10=Promoter)',
+          },
+          comment: { type: 'string', maxLength: 1000, description: 'Optional qualitative comment' },
+        },
+      },
+      NpsSummary: {
+        type: 'object',
+        properties: {
+          nps: {
+            type: 'integer',
+            nullable: true,
+            description: 'Net Promoter Score = Promoters% - Detractors%',
+          },
+          total: { type: 'integer' },
+          promoters: { type: 'integer' },
+          passives: { type: 'integer' },
+          detractors: { type: 'integer' },
+          promoterPct: { type: 'number' },
+          detractorPct: { type: 'number' },
+          avgScore: { type: 'number' },
+        },
+      },
+      Session: {
+        type: 'object',
+        properties: {
+          id: { type: 'string', format: 'uuid' },
+          jti: { type: 'string', description: 'JWT ID' },
+          userAgent: { type: 'string', nullable: true },
+          ip: { type: 'string', nullable: true },
+          createdAt: { type: 'string', format: 'date-time' },
+          lastSeenAt: { type: 'string', format: 'date-time' },
+          isCurrent: { type: 'boolean', description: 'True if this is the calling session' },
+        },
+      },
+      TotpSetup: {
+        type: 'object',
+        properties: {
+          secret: { type: 'string', description: 'Base32 TOTP secret (store securely)' },
+          otpauthUrl: { type: 'string', description: 'otpauth:// URI for QR code' },
+          qrCodeDataUrl: { type: 'string', description: 'data:image/png;base64,... QR code image' },
+        },
+      },
+    },
+  },
+  // ─── Phase 35-37 New Endpoints ────────────────────────────────────
+  // Appended to openApiSpec.paths via Object.assign at serve time.
+  // These endpoints were added in Phase 35 (Auth), Phase 36 (Admin), Phase 37 (Booking).
+  newPaths: {
+    '/auth/verify-email': {
+      get: {
+        tags: ['Auth'],
+        summary: 'P35-T03: Verify email token',
+        description:
+          'Validates a 256-bit hex email verification token. Marks emailVerified=true on success.',
+        parameters: [{ in: 'query', name: 'token', required: true, schema: { type: 'string' } }],
+        responses: {
+          '200': { description: 'Email verified successfully' },
+          '400': { description: 'INVALID_TOKEN | TOKEN_EXPIRED | TOKEN_USED | MISSING_TOKEN' },
+        },
+      },
+    },
+    '/auth/send-verify-email': {
+      post: {
+        tags: ['Auth'],
+        summary: 'P35-T03: Resend email verification',
+        security: [{ BearerAuth: [] }],
+        responses: {
+          '200': { description: 'Verification email sent' },
+          '409': { description: 'ALREADY_VERIFIED' },
+        },
+      },
+    },
+    '/auth/2fa/setup': {
+      post: {
+        tags: ['Auth'],
+        summary: 'P35-T04: Generate new TOTP secret + QR code',
+        security: [{ BearerAuth: [] }],
+        responses: {
+          '200': {
+            description: 'TOTP setup data',
+            content: { 'application/json': { schema: { $ref: '#/components/schemas/TotpSetup' } } },
+          },
+        },
+      },
+    },
+    '/auth/2fa/verify-setup': {
+      post: {
+        tags: ['Auth'],
+        summary: 'P35-T04: Confirm TOTP code and enable 2FA',
+        security: [{ BearerAuth: [] }],
+        requestBody: {
+          required: true,
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                required: ['code'],
+                properties: { code: { type: 'string', pattern: '^[0-9]{6}$' } },
+              },
+            },
+          },
+        },
+        responses: {
+          '200': { description: '2FA enabled' },
+          '401': { description: 'Invalid TOTP code' },
+        },
+      },
+    },
+    '/sessions': {
+      get: {
+        tags: ['Auth'],
+        summary: 'P35-T09: List own active sessions',
+        security: [{ BearerAuth: [] }],
+        responses: {
+          '200': {
+            description: 'Session list',
+            content: {
+              'application/json': {
+                schema: { type: 'array', items: { $ref: '#/components/schemas/Session' } },
+              },
+            },
+          },
+        },
+      },
+      delete: {
+        tags: ['Auth'],
+        summary: 'P35-T09: Revoke all sessions except current',
+        security: [{ BearerAuth: [] }],
+        responses: { '200': { description: 'All other sessions revoked' } },
+      },
+    },
+    '/sessions/{id}': {
+      delete: {
+        tags: ['Auth'],
+        summary: 'P35-T09: Revoke a specific session',
+        security: [{ BearerAuth: [] }],
+        parameters: [
+          { in: 'path', name: 'id', required: true, schema: { type: 'string', format: 'uuid' } },
+        ],
+        responses: {
+          '200': { description: 'Session revoked' },
+          '404': { description: 'SESSION_NOT_FOUND' },
+        },
+      },
+    },
+    '/bookings/slots': {
+      get: {
+        tags: ['Bookings'],
+        summary: 'P37-T01: Get available booking slots (Cal.com proxy)',
+        description:
+          'Returns available 30-min slots. Proxies Cal.com API; falls back to static business-hours slots if Cal.com is unavailable.',
+        parameters: [
+          {
+            in: 'query',
+            name: 'startDate',
+            schema: { type: 'string', format: 'date' },
+            example: '2026-06-01',
+          },
+          {
+            in: 'query',
+            name: 'endDate',
+            schema: { type: 'string', format: 'date' },
+            example: '2026-06-14',
+          },
+        ],
+        responses: {
+          '200': {
+            description: 'Slots by day',
+            content: {
+              'application/json': {
+                schema: { type: 'array', items: { $ref: '#/components/schemas/SlotDay' } },
+              },
+            },
+          },
+          '400': { description: 'Date range >60 days or invalid' },
+        },
+      },
+    },
+    '/bookings/public': {
+      post: {
+        tags: ['Bookings'],
+        summary: 'P37-T01: Create booking (no login required)',
+        description:
+          'Guest booking flow. Finds or creates user by email, sends ICS + confirmation email.',
+        requestBody: {
+          required: true,
+          content: {
+            'application/json': { schema: { $ref: '#/components/schemas/PublicBookingInput' } },
+          },
+        },
+        responses: {
+          '201': { description: 'Booking created' },
+          '400': { description: 'Validation error or past date' },
+          '429': { description: 'Rate limit exceeded (10 bookings/24h per IP)' },
+        },
+      },
+    },
+    '/bookings/analytics': {
+      get: {
+        tags: ['Bookings'],
+        summary: 'P37-T09: Booking analytics (ADMIN)',
+        security: [{ BearerAuth: [] }],
+        description:
+          'Returns aggregate booking metrics: total, by status, 90-day trend, by service.',
+        responses: { '200': { description: 'Booking analytics' } },
+      },
+    },
+    '/feedback/{bookingId}': {
+      get: {
+        tags: ['Bookings'],
+        summary: 'P37-T10: Validate feedback token + get booking info',
+        parameters: [
+          {
+            in: 'path',
+            name: 'bookingId',
+            required: true,
+            schema: { type: 'string', format: 'uuid' },
+          },
+          { in: 'query', name: 'token', required: true, schema: { type: 'string' } },
+        ],
+        responses: {
+          '200': { description: 'Token valid — booking info returned' },
+          '400': { description: 'Invalid/expired token' },
+          '409': { description: 'Feedback already submitted' },
+        },
+      },
+      post: {
+        tags: ['Bookings'],
+        summary: 'P37-T10: Submit NPS feedback score',
+        description: 'Rate limited: 3 submissions per 24h per IP.',
+        parameters: [
+          {
+            in: 'path',
+            name: 'bookingId',
+            required: true,
+            schema: { type: 'string', format: 'uuid' },
+          },
+        ],
+        requestBody: {
+          required: true,
+          content: {
+            'application/json': { schema: { $ref: '#/components/schemas/FeedbackSubmission' } },
+          },
+        },
+        responses: {
+          '200': { description: 'Feedback recorded' },
+          '429': { description: 'Rate limit exceeded' },
+        },
+      },
+    },
+    '/feedback/nps-summary': {
+      get: {
+        tags: ['Bookings'],
+        summary: 'P37-T10: Aggregate NPS score (ADMIN)',
+        security: [{ BearerAuth: [] }],
+        description: 'Computes NPS = Promoters(≥9)% - Detractors(≤6)% over all submitted feedback.',
+        responses: {
+          '200': {
+            description: 'NPS summary',
+            content: {
+              'application/json': { schema: { $ref: '#/components/schemas/NpsSummary' } },
+            },
+          },
+        },
+      },
+    },
+    '/admin/audit-log': {
+      get: {
+        tags: ['Admin'],
+        summary: 'P36-T07: Paginated audit log (ADMIN)',
+        security: [{ BearerAuth: [] }],
+        parameters: [
+          { in: 'query', name: 'page', schema: { type: 'integer', default: 1 } },
+          { in: 'query', name: 'limit', schema: { type: 'integer', default: 20, maximum: 50 } },
+          { in: 'query', name: 'action', schema: { type: 'string', example: 'USER_ROLE_CHANGE' } },
+        ],
+        responses: { '200': { description: 'Audit log entries with pagination' } },
       },
     },
   },

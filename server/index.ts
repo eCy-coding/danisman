@@ -9,6 +9,8 @@ import { securityHeaders, structuredLogger, corsPreflight } from './middleware/s
 import { originGuard } from './middleware/originGuard';
 import { generalLimiter, sseLimiter } from './middleware/rateLimiter';
 import { sentryErrorHandler } from './middleware/sentry';
+import { authenticate } from './middleware/auth';
+import { logger } from './config/logger';
 
 if (process.env.SENTRY_DSN) {
   Sentry.init({
@@ -38,14 +40,17 @@ app.use(securityHeaders);
 app.use(structuredLogger);
 app.use(corsPreflight);
 
-app.use(
-  corsMiddleware({
-    origin: process.env.CORS_ORIGIN
-      ? process.env.CORS_ORIGIN.split(',').map((s) => s.trim())
-      : ['http://localhost:5173', 'http://localhost:4173', 'http://localhost:4175'],
-    credentials: true,
-  }),
-);
+const corsOrigins = process.env.CORS_ORIGIN
+  ? process.env.CORS_ORIGIN.split(',').map((s) => s.trim())
+  : ['http://localhost:5173', 'http://localhost:4173', 'http://localhost:4175'];
+
+if (process.env.NODE_ENV === 'production' && !process.env.CORS_ORIGIN) {
+  logger.warn(
+    '[cors] CORS_ORIGIN env not set in production — falling back to localhost origins (likely wrong)',
+  );
+}
+
+app.use(corsMiddleware({ origin: corsOrigins, credentials: true }));
 
 // Phase 109a: Origin/Referer guard for state-changing methods.
 // Webhooks + health probes carry no Origin → bypass via prefix list.
@@ -84,7 +89,7 @@ app.get('/api/health', (_req, res) => {
 // ─── SSE: Real-Time Dashboard Stream ─────────────────────
 const sseClients = new Set<express.Response>();
 
-app.get('/api/sse/dashboard', sseLimiter, (req, res) => {
+app.get('/api/sse/dashboard', sseLimiter, authenticate as express.RequestHandler, (req, res) => {
   // Set SSE headers
   res.writeHead(200, {
     'Content-Type': 'text/event-stream',
@@ -135,7 +140,6 @@ app.use(sentryErrorHandler());
 app.use(errorHandler);
 
 // ─── Graceful Shutdown ───────────────────────────────────
-import { logger } from './config/logger';
 
 // P37-T04: Start booking reminder cron job (non-blocking)
 import { startReminderJob } from './jobs/booking-reminders';
