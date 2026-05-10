@@ -154,14 +154,6 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.ecypro.com/tr/blog/stratejik-planlama-rehberi</loc>
-    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/blog/stratejik-planlama-rehberi" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/blog/stratejik-planlama-rehberi" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/blog/stratejik-planlama-rehberi" />
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://www.ecypro.com/tr/blog/tedarik-zinciri-optimizasyonu-lean-six-sigma</loc>
     <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/blog/tedarik-zinciri-optimizasyonu-lean-six-sigma" />
     <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/blog/tedarik-zinciri-optimizasyonu-lean-six-sigma" />
@@ -262,6 +254,14 @@
     <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/blog/aile-sirketleri-kurumsallasma-yonetisim" />
     <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/blog/aile-sirketleri-kurumsallasma-yonetisim" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/blog/aile-sirketleri-kurumsallasma-yonetisim" />
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.ecypro.com/tr/blog/stratejik-planlama-rehberi</loc>
+    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/blog/stratejik-planlama-rehberi" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/blog/stratejik-planlama-rehberi" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/blog/stratejik-planlama-rehberi" />
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
