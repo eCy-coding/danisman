@@ -78,7 +78,8 @@ function slugify(input: string): string {
 }
 
 async function fetchPexelsImage(query: string): Promise<string> {
-  if (!PEXELS_KEY) return 'https://images.unsplash.com/photo-1556740758-90de374c12ad?auto=format&fit=crop&q=80&w=1200';
+  if (!PEXELS_KEY)
+    return 'https://images.unsplash.com/photo-1556740758-90de374c12ad?auto=format&fit=crop&q=80&w=1200';
   try {
     const res = await fetch(
       `https://api.pexels.com/v1/search?query=${encodeURIComponent(query)}&per_page=1&orientation=landscape`,
@@ -93,7 +94,10 @@ async function fetchPexelsImage(query: string): Promise<string> {
   }
 }
 
-async function callOpenAI(systemPrompt: string, userPrompt: string): Promise<Record<string, unknown>> {
+async function callOpenAI(
+  systemPrompt: string,
+  userPrompt: string,
+): Promise<Record<string, unknown>> {
   if (!OPENAI_KEY) throw new Error('OPENAI_API_KEY missing');
   const url = `${BASE_URL ?? 'https://api.openai.com/v1'}/chat/completions`;
   const res = await fetch(url, {
@@ -175,15 +179,32 @@ import type { CaseStudy, BlogPost } from './src/types/legacy_types';\n\n`;
   );
 }
 
+async function sequential<T>(
+  items: string[],
+  fn: (item: string, idx: number) => Promise<T>,
+  delayMs = 4200,
+): Promise<T[]> {
+  const results: T[] = [];
+  for (const [i, item] of items.entries()) {
+    if (i > 0) await new Promise((r) => setTimeout(r, delayMs));
+    results.push(await fn(item, i));
+  }
+  return results;
+}
+
 async function main(): Promise<void> {
   if (!OPENAI_KEY) {
-    console.log('ℹ️  OPENAI_API_KEY missing — keeping the inline fallback `constants_generated.ts` unchanged.');
-    console.log('   To regenerate, set OPENAI_API_KEY (and optionally PEXELS_API_KEY) and rerun `npm run gen:content`.');
+    console.log(
+      'ℹ️  OPENAI_API_KEY missing — keeping the inline fallback `constants_generated.ts` unchanged.',
+    );
+    console.log(
+      '   To regenerate, set OPENAI_API_KEY (and optionally PEXELS_API_KEY) and rerun `npm run gen:content`.',
+    );
     return;
   }
-  console.log('🚀 Generating bilingual content via OpenAI…');
-  const blogs = await Promise.all(BLOG_TOPICS.map(buildBlogPost));
-  const cases = await Promise.all(CASE_TOPICS.map(buildCaseStudy));
+  console.log('🚀 Generating bilingual content via OpenAI… (sequential, 4s delay between calls)');
+  const blogs = await sequential(BLOG_TOPICS, buildBlogPost);
+  const cases = await sequential(CASE_TOPICS, buildCaseStudy);
   fs.writeFileSync(OUT_PATH, renderModule(blogs, cases), 'utf8');
   console.log(`✅ Wrote ${blogs.length} blog posts + ${cases.length} case studies → ${OUT_PATH}`);
 }
