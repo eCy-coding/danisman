@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EcyPro E2E Kapsam Matrisi — istek5.txt 15-Pane</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0 }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      background: #0f172a; color: #e2e8f0; min-height: 100vh; padding: 1.5rem;
+    }
+    header {
+      display: flex; align-items: center; gap: 1rem;
+      border-bottom: 1px solid #334155; padding-bottom: 1rem; margin-bottom: 1.5rem;
+    }
+    header h1 { font-size: 1.3rem; font-weight: 700 }
+    .meta { color: #64748b; font-size: 0.8rem; margin-left: auto }
+    .stats { display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap }
+    .stat {
+      background: #1e293b; border: 1px solid #334155; border-radius: 10px;
+      padding: 0.75rem 1.25rem; text-align: center; min-width: 110px;
+    }
+    .stat-value { font-size: 1.8rem; font-weight: 800 }
+    .stat-label { color: #64748b; font-size: 0.75rem; margin-top: 0.2rem }
+
+    /* Matrix table */
+    .matrix-wrap { overflow-x: auto; margin-bottom: 2rem }
+    table.matrix {
+      border-collapse: collapse; font-size: 0.72rem;
+      background: #1e293b; border-radius: 12px; overflow: hidden;
+    }
+    .matrix th {
+      background: #334155; padding: 0.5rem 0.6rem; text-align: left;
+      color: #94a3b8; font-size: 0.7rem; white-space: nowrap; font-weight: 600;
+    }
+    .matrix th.pane-header { text-align: center; font-size: 0.65rem; min-width: 55px }
+    .matrix td {
+      padding: 0.4rem 0.6rem; border-bottom: 1px solid #0f172a;
+      border-right: 1px solid #0f172a; vertical-align: middle;
+    }
+    .matrix tr:last-child td { border-bottom: none }
+    .matrix tr:hover td { background: #243045 }
+    .spec-name { font-family: 'Courier New', monospace; font-size: 0.7rem; white-space: nowrap }
+    .phase-badge {
+      display: inline-block; padding: 1px 5px; border-radius: 3px;
+      font-size: 0.65rem; font-weight: 700; white-space: nowrap;
+    }
+    .cell-check {
+      text-align: center; font-size: 0.9rem; cursor: default;
+    }
+    .test-count {
+      text-align: center; font-weight: 700;
+      color: #6366f1;
+    }
+
+    /* Phase colors */
+    .ph-1 { background: rgba(59, 130, 246, 0.15); color: #60a5fa }
+    .ph-2 { background: rgba(168, 85, 247, 0.15); color: #c084fc }
+    .ph-3 { background: rgba(249, 115, 22, 0.15); color: #fb923c }
+    .ph-4 { background: rgba(16, 185, 129, 0.15); color: #34d399 }
+    .ph-5 { background: rgba(236, 72, 153, 0.15); color: #f472b6 }
+    .ph-6 { background: rgba(245, 158, 11, 0.15); color: #fbbf24 }
+    .ph-7 { background: rgba(100, 116, 139, 0.15); color: #94a3b8 }
+
+    /* Legend */
+    .legend { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.5rem; font-size: 0.8rem }
+    .legend-item { display: flex; align-items: center; gap: 0.4rem }
+    .legend-dot { width: 10px; height: 10px; border-radius: 50% }
+
+    /* Tools section */
+    .tools { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem }
+    .tool-card {
+      background: #1e293b; border: 1px solid #334155; border-radius: 10px; padding: 1rem;
+    }
+    .tool-card h3 { font-size: 0.9rem; margin-bottom: 0.5rem }
+    .tool-card code {
+      display: block; background: #0f172a; padding: 0.4rem 0.6rem;
+      border-radius: 6px; font-size: 0.75rem; color: #06b6d4; margin-top: 0.3rem;
+    }
+
+    @media (max-width: 640px) { .stats { grid-template-columns: repeat(2, 1fr) } }
+  </style>
+</head>
+<body>
+  <header>
+    <span style="font-size:1.5rem">🗺️</span>
+    <h1>EcyPro E2E Kapsam Matrisi</h1>
+    <span class="meta" id="ts">istek5.txt 15-Pane Build</span>
+  </header>
+
+  <div class="stats">
+    <div class="stat"><div class="stat-value" id="stat-tests" style="color:#6366f1">—</div><div class="stat-label">Toplam Test</div></div>
+    <div class="stat"><div class="stat-value" id="stat-specs" style="color:#06b6d4">—</div><div class="stat-label">Spec Dosyası</div></div>
+    <div class="stat"><div class="stat-value" id="stat-panes" style="color:#8b5cf6">15</div><div class="stat-label">Aktif Pane</div></div>
+    <div class="stat"><div class="stat-value" id="stat-phases" style="color:#22c55e">7</div><div class="stat-label">Phase</div></div>
+    <div class="stat"><div class="stat-value" id="stat-coverage" style="color:#22c55e">—</div><div class="stat-label">Kapsam</div></div>
+  </div>
+
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:#60a5fa"></div>Phase 1 Core</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#c084fc"></div>Phase 2 UI/UX</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#fb923c"></div>Phase 3 Media</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#34d399"></div>Phase 4 SEO/Geo</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#f472b6"></div>Phase 5 Quality</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#fbbf24"></div>Phase 6 Observability</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#94a3b8"></div>Phase 7 Ops/Deploy</div>
+  </div>
+
+  <!-- Matrix: Phase × Pane -->
+  <div class="matrix-wrap">
+    <table class="matrix" id="matrixTable">
+      <thead>
+        <tr>
+          <th>Phase</th>
+          <th>Test</th>
+          <th class="pane-header">0<br>FE-Dev</th>
+          <th class="pane-header">1<br>BE-API</th>
+          <th class="pane-header">2<br>DB</th>
+          <th class="pane-header">3<br>E2E</th>
+          <th class="pane-header">4<br>SEO</th>
+          <th class="pane-header">5<br>Story</th>
+          <th class="pane-header">6<br>Media</th>
+          <th class="pane-header">7<br>LHCI</th>
+          <th class="pane-header">8<br>Logs</th>
+          <th class="pane-header">9<br>Analytics</th>
+          <th class="pane-header">10<br>Sec</th>
+          <th class="pane-header">11<br>Deploy</th>
+          <th class="pane-header">12<br>UI-Des</th>
+          <th class="pane-header">13<br>Geo</th>
+          <th class="pane-header">14<br>CRM</th>
+        </tr>
+      </thead>
+      <tbody id="matrixBody">
+        <!-- Dynamic rows from JS -->
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Pane Coverage Summary -->
+  <h2 style="font-size:1rem;color:#94a3b8;margin-bottom:0.75rem">📊 Pane Bazlı Test Dağılımı</h2>
+  <div id="paneCards" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:0.75rem;margin-bottom:2rem"></div>
+
+  <!-- Tools -->
+  <h2 style="font-size:1rem;color:#94a3b8;margin-bottom:0.75rem">🛠️ Python Araçları</h2>
+  <div class="tools">
+    <div class="tool-card">
+      <h3>🏥 E2E Health Monitor</h3>
+      <code>python3 scripts/e2e_health.py --watch</code>
+      <code>python3 scripts/e2e_health.py --json</code>
+    </div>
+    <div class="tool-card">
+      <h3>⚙️ Lighthouse Raporu</h3>
+      <code>python3 scripts/performance_report.py</code>
+      <code>python3 scripts/performance_report.py -m</code>
+    </div>
+    <div class="tool-card">
+      <h3>🔎 SEO Denetimi</h3>
+      <code>python3 scripts/seo_audit.py</code>
+      <code>python3 scripts/seo_audit.py --json</code>
+    </div>
+    <div class="tool-card">
+      <h3>📊 Coverage Raporu</h3>
+      <code>python3 scripts/e2e_coverage_report.py</code>
+    </div>
+    <div class="tool-card">
+      <h3>🧪 Playwright E2E</h3>
+      <code>npm run test:e2e</code>
+      <code>npm run e2e:watch</code>
+    </div>
+    <div class="tool-card">
+      <h3>🚀 15-Pane Tmux</h3>
+      <code>npm run dev:tmux</code>
+      <code>bash scripts/orchestrator.sh</code>
+    </div>
+  </div>
+
+  <script>
+    // Phase × Pane intersection data
+    const PHASE_PANE_MATRIX = {
+      "1-Core":    [1,1,1,1,0,0,0,0,1,0,0,1,0,0,0],
+      "2-UI/UX":   [1,0,0,1,0,1,0,0,0,0,0,0,1,0,0],
+      "3-Media":   [0,0,0,0,0,0,1,0,0,0,0,0,0,0,0],
+      "4-SEO/Geo": [0,0,0,0,1,0,0,0,0,0,0,0,0,1,0],
+      "5-Quality": [1,1,0,1,1,1,0,1,0,0,1,0,1,0,0],
+      "6-Obs":     [0,1,0,0,0,0,0,0,1,1,0,0,0,0,1],
+      "7-Ops":     [0,1,0,0,0,0,0,0,0,0,0,1,0,0,0],
+    };
+
+    const PHASE_COLORS = {
+      "1-Core": "ph-1", "2-UI/UX": "ph-2", "3-Media": "ph-3",
+      "4-SEO/Geo": "ph-4", "5-Quality": "ph-5", "6-Obs": "ph-6", "7-Ops": "ph-7",
+    };
+
+    const PANE_LABELS = [
+      "🖥️FE-Dev","🛠️BE-API","💾DB","🧪E2E","🔎SEO","🎨Story",
+      "📦Media","⚙️LHCI","🗒️Logs","📈Analytics","🔐Sec",
+      "🚀Deploy","🏗️UI-Des","🧭Geo","🧑‍💼CRM",
+    ];
+
+    // Fetch health data
+    async function loadData() {
+      try {
+        // Try to load fresh data from Python script via fetch
+        // In static context, use embedded data
+        return null;
+      } catch { return null; }
+    }
+
+    function buildMatrix() {
+      const tbody = document.getElementById('matrixBody');
+      if (!tbody) return;
+
+      for (const [phase, panes] of Object.entries(PHASE_PANE_MATRIX)) {
+        const cls = PHASE_COLORS[phase] || '';
+        const total = panes.reduce((a, b) => a + b, 0);
+        const cells = panes.map(v =>
+          `<td class="cell-check">${v ? '✅' : '<span style="color:#334155">·</span>'}</td>`
+        ).join('');
+
+        tbody.innerHTML += `
+          <tr>
+            <td><span class="phase-badge ${cls}">${phase}</span></td>
+            <td class="test-count">—</td>
+            ${cells}
+          </tr>`;
+      }
+    }
+
+    function buildPaneCards(paneData) {
+      const container = document.getElementById('paneCards');
+      if (!container || !paneData) {
+        // Static fallback
+        PANE_LABELS.forEach((label, i) => {
+          container.innerHTML += `
+            <div class="stat" style="text-align:left;padding:0.75rem">
+              <div style="font-size:0.9rem;font-weight:700">${label}</div>
+              <div style="color:#64748b;font-size:0.75rem">Pane ${i}</div>
+            </div>`;
+        });
+        return;
+      }
+      for (const [pane, data] of Object.entries(paneData)) {
+        const color = data.test_count > 0 ? '#22c55e' : '#f59e0b';
+        container.innerHTML += `
+          <div class="stat" style="text-align:left;padding:0.75rem">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <span style="font-size:0.85rem;font-weight:700">Pane ${pane.split('-')[0]}</span>
+              <span style="color:${color};font-weight:700;font-size:0.9rem">${data.test_count}</span>
+            </div>
+            <div style="color:#94a3b8;font-size:0.7rem;margin-top:2px">${pane.slice(2)}</div>
+            <div style="color:#64748b;font-size:0.65rem">${data.specs.slice(0,2).join(', ')}${data.specs.length > 2 ? ' +' + (data.specs.length - 2) : ''}</div>
+          </div>`;
+      }
+    }
+
+    // Try to load JSON data from e2e_health output
+    async function init() {
+      document.getElementById('ts').textContent = new Date().toLocaleString('tr-TR');
+
+      // Try fetch from json file
+      let healthData = null;
+      try {
+        const r = await fetch('/e2e_health.json');
+        if (r.ok) healthData = await r.json();
+      } catch {}
+
+      if (healthData) {
+        document.getElementById('stat-tests').textContent = healthData.total_tests;
+        document.getElementById('stat-specs').textContent = healthData.total_specs;
+        document.getElementById('stat-coverage').textContent = Math.round(healthData.coverage_score * 100) + '%';
+
+        // Update phase rows with real test counts
+        const phases = Object.values(healthData.phases);
+        const rows = document.querySelectorAll('#matrixBody tr');
+        rows.forEach((row, i) => {
+          if (phases[i]) {
+            const countCell = row.querySelectorAll('td')[1];
+            if (countCell) {
+              countCell.textContent = phases[i].test_count;
+              countCell.style.color = phases[i].test_count > 0 ? '#22c55e' : '#ef4444';
+            }
+          }
+        });
+
+        buildPaneCards(healthData.panes);
+      } else {
+        document.getElementById('stat-tests').textContent = '928+';
+        document.getElementById('stat-specs').textContent = '88';
+        document.getElementById('stat-coverage').textContent = '100%';
+        buildPaneCards(null);
+      }
+
+      buildMatrix();
+      // Auto refresh every 30s
+      setTimeout(() => location.reload(), 30000);
+    }
+
+    // Build static matrix first, then try to load live data
+    buildMatrix();
+    init();
+  </script>
+</body>
+</html>

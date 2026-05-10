@@ -1,0 +1,356 @@
+{
+  "countries": [
+    {
+      "code": "TR",
+      "tr": "Türkiye",
+      "en": "Turkey",
+      "currency": "TRY",
+      "flag": "🇹🇷"
+    },
+    {
+      "code": "US",
+      "tr": "Amerika",
+      "en": "United States",
+      "currency": "USD",
+      "flag": "🇺🇸"
+    },
+    {
+      "code": "GB",
+      "tr": "Birleşik Krallık",
+      "en": "United Kingdom",
+      "currency": "GBP",
+      "flag": "🇬🇧"
+    },
+    {
+      "code": "DE",
+      "tr": "Almanya",
+      "en": "Germany",
+      "currency": "EUR",
+      "flag": "🇩🇪"
+    },
+    {
+      "code": "FR",
+      "tr": "Fransa",
+      "en": "France",
+      "currency": "EUR",
+      "flag": "🇫🇷"
+    },
+    {
+      "code": "NL",
+      "tr": "Hollanda",
+      "en": "Netherlands",
+      "currency": "EUR",
+      "flag": "🇳🇱"
+    },
+    {
+      "code": "AE",
+      "tr": "BAE",
+      "en": "UAE",
+      "currency": "AED",
+      "flag": "🇦🇪"
+    },
+    {
+      "code": "SA",
+      "tr": "Suudi Arabistan",
+      "en": "Saudi Arabia",
+      "currency": "SAR",
+      "flag": "🇸🇦"
+    },
+    {
+      "code": "AZ",
+      "tr": "Azerbaycan",
+      "en": "Azerbaijan",
+      "currency": "AZN",
+      "flag": "🇦🇿"
+    },
+    {
+      "code": "CA",
+      "tr": "Kanada",
+      "en": "Canada",
+      "currency": "CAD",
+      "flag": "🇨🇦"
+    },
+    {
+      "code": "AU",
+      "tr": "Avustralya",
+      "en": "Australia",
+      "currency": "AUD",
+      "flag": "🇦🇺"
+    },
+    {
+      "code": "IT",
+      "tr": "İtalya",
+      "en": "Italy",
+      "currency": "EUR",
+      "flag": "🇮🇹"
+    },
+    {
+      "code": "ES",
+      "tr": "İspanya",
+      "en": "Spain",
+      "currency": "EUR",
+      "flag": "🇪🇸"
+    },
+    {
+      "code": "CH",
+      "tr": "İsviçre",
+      "en": "Switzerland",
+      "currency": "CHF",
+      "flag": "🇨🇭"
+    },
+    {
+      "code": "AT",
+      "tr": "Avusturya",
+      "en": "Austria",
+      "currency": "EUR",
+      "flag": "🇦🇹"
+    },
+    {
+      "code": "BE",
+      "tr": "Belçika",
+      "en": "Belgium",
+      "currency": "EUR",
+      "flag": "🇧🇪"
+    },
+    {
+      "code": "SE",
+      "tr": "İsveç",
+      "en": "Sweden",
+      "currency": "SEK",
+      "flag": "🇸🇪"
+    },
+    {
+      "code": "NO",
+      "tr": "Norveç",
+      "en": "Norway",
+      "currency": "NOK",
+      "flag": "🇳🇴"
+    },
+    {
+      "code": "DK",
+      "tr": "Danimarka",
+      "en": "Denmark",
+      "currency": "DKK",
+      "flag": "🇩🇰"
+    },
+    {
+      "code": "PL",
+      "tr": "Polonya",
+      "en": "Poland",
+      "currency": "PLN",
+      "flag": "🇵🇱"
+    },
+    {
+      "code": "CZ",
+      "tr": "Çekya",
+      "en": "Czechia",
+      "currency": "CZK",
+      "flag": "🇨🇿"
+    },
+    {
+      "code": "GR",
+      "tr": "Yunanistan",
+      "en": "Greece",
+      "currency": "EUR",
+      "flag": "🇬🇷"
+    },
+    {
+      "code": "BG",
+      "tr": "Bulgaristan",
+      "en": "Bulgaria",
+      "currency": "BGN",
+      "flag": "🇧🇬"
+    },
+    {
+      "code": "RO",
+      "tr": "Romanya",
+      "en": "Romania",
+      "currency": "RON",
+      "flag": "🇷🇴"
+    },
+    {
+      "code": "EG",
+      "tr": "Mısır",
+      "en": "Egypt",
+      "currency": "EGP",
+      "flag": "🇪🇬"
+    },
+    {
+      "code": "QA",
+      "tr": "Katar",
+      "en": "Qatar",
+      "currency": "QAR",
+      "flag": "🇶🇦"
+    },
+    {
+      "code": "KW",
+      "tr": "Kuveyt",
+      "en": "Kuwait",
+      "currency": "KWD",
+      "flag": "🇰🇼"
+    },
+    {
+      "code": "IL",
+      "tr": "İsrail",
+      "en": "Israel",
+      "currency": "ILS",
+      "flag": "🇮🇱"
+    },
+    {
+      "code": "IN",
+      "tr": "Hindistan",
+      "en": "India",
+      "currency": "INR",
+      "flag": "🇮🇳"
+    },
+    {
+      "code": "JP",
+      "tr": "Japonya",
+      "en": "Japan",
+      "currency": "JPY",
+      "flag": "🇯🇵"
+    },
+    {
+      "code": "KR",
+      "tr": "Güney Kore",
+      "en": "South Korea",
+      "currency": "KRW",
+      "flag": "🇰🇷"
+    },
+    {
+      "code": "CN",
+      "tr": "Çin",
+      "en": "China",
+      "currency": "CNY",
+      "flag": "🇨🇳"
+    },
+    {
+      "code": "SG",
+      "tr": "Singapur",
+      "en": "Singapore",
+      "currency": "SGD",
+      "flag": "🇸🇬"
+    },
+    {
+      "code": "BR",
+      "tr": "Brezilya",
+      "en": "Brazil",
+      "currency": "BRL",
+      "flag": "🇧🇷"
+    },
+    {
+      "code": "MX",
+      "tr": "Meksika",
+      "en": "Mexico",
+      "currency": "MXN",
+      "flag": "🇲🇽"
+    },
+    {
+      "code": "AR",
+      "tr": "Arjantin",
+      "en": "Argentina",
+      "currency": "ARS",
+      "flag": "🇦🇷"
+    },
+    {
+      "code": "ZA",
+      "tr": "Güney Afrika",
+      "en": "South Africa",
+      "currency": "ZAR",
+      "flag": "🇿🇦"
+    },
+    {
+      "code": "NG",
+      "tr": "Nijerya",
+      "en": "Nigeria",
+      "currency": "NGN",
+      "flag": "🇳🇬"
+    },
+    {
+      "code": "KE",
+      "tr": "Kenya",
+      "en": "Kenya",
+      "currency": "KES",
+      "flag": "🇰🇪"
+    },
+    {
+      "code": "MA",
+      "tr": "Fas",
+      "en": "Morocco",
+      "currency": "MAD",
+      "flag": "🇲🇦"
+    },
+    {
+      "code": "PT",
+      "tr": "Portekiz",
+      "en": "Portugal",
+      "currency": "EUR",
+      "flag": "🇵🇹"
+    },
+    {
+      "code": "IE",
+      "tr": "İrlanda",
+      "en": "Ireland",
+      "currency": "EUR",
+      "flag": "🇮🇪"
+    },
+    {
+      "code": "FI",
+      "tr": "Finlandiya",
+      "en": "Finland",
+      "currency": "EUR",
+      "flag": "🇫🇮"
+    },
+    {
+      "code": "HU",
+      "tr": "Macaristan",
+      "en": "Hungary",
+      "currency": "HUF",
+      "flag": "🇭🇺"
+    },
+    {
+      "code": "UA",
+      "tr": "Ukrayna",
+      "en": "Ukraine",
+      "currency": "UAH",
+      "flag": "🇺🇦"
+    },
+    {
+      "code": "GE",
+      "tr": "Gürcistan",
+      "en": "Georgia",
+      "currency": "GEL",
+      "flag": "🇬🇪"
+    },
+    {
+      "code": "RU",
+      "tr": "Rusya",
+      "en": "Russia",
+      "currency": "RUB",
+      "flag": "🇷🇺"
+    },
+    {
+      "code": "TH",
+      "tr": "Tayland",
+      "en": "Thailand",
+      "currency": "THB",
+      "flag": "🇹🇭"
+    },
+    {
+      "code": "ID",
+      "tr": "Endonezya",
+      "en": "Indonesia",
+      "currency": "IDR",
+      "flag": "🇮🇩"
+    },
+    {
+      "code": "MY",
+      "tr": "Malezya",
+      "en": "Malaysia",
+      "currency": "MYR",
+      "flag": "🇲🇾"
+    }
+  ],
+  "updatedAt": "2026-05-06T10:51:02.997Z",
+  "version": "1.0"
+}

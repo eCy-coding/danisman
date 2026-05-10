@@ -1,0 +1,122 @@
+/**
+ * src/styles/print.css
+ * Print stylesheet — consulting documents printable
+ * W3Schools standards: https://www.w3schools.com/css/css_rwd_mediaqueries.asp
+ */
+
+@media print {
+  /* Hide non-content elements */
+  nav,
+  header nav,
+  .cookie-banner,
+  .live-chat,
+  [data-testid="cookie-banner"],
+  [data-testid="geo-banner"],
+  [aria-label*="navigation"],
+  [aria-label*="chat"],
+  .mobile-bottom-nav,
+  .back-to-top,
+  button:not([data-print-show]),
+  .cta-section,
+  .booking-modal,
+  video,
+  [data-noprint] {
+    display: none !important;
+  }
+
+  /* Base print styles */
+  *,
+  *::before,
+  *::after {
+    background: transparent !important;
+    color: #000 !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  body {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 12pt;
+    line-height: 1.5;
+    color: #000;
+    background: #fff;
+  }
+
+  /* Page margins */
+  @page {
+    margin: 2cm;
+  }
+
+  @page :first {
+    margin-top: 3cm;
+  }
+
+  /* Typography */
+  h1, h2, h3, h4, h5, h6 {
+    page-break-after: avoid;
+    font-family: Georgia, serif;
+    color: #000 !important;
+  }
+
+  h1 { font-size: 24pt; }
+  h2 { font-size: 18pt; }
+  h3 { font-size: 14pt; }
+
+  /* Prevent orphans and widows */
+  p {
+    orphans: 3;
+    widows: 3;
+  }
+
+  /* Links — show URL */
+  a[href]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.8em;
+    color: #555 !important;
+  }
+
+  /* Don't show URLs for internal links or JS links */
+  a[href^="#"]::after,
+  a[href^="javascript:"]::after {
+    content: "";
+  }
+
+  /* Images */
+  img {
+    max-width: 100% !important;
+    page-break-inside: avoid;
+  }
+
+  /* Tables */
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    page-break-inside: auto;
+  }
+
+  tr {
+    page-break-inside: avoid;
+    page-break-after: auto;
+  }
+
+  th, td {
+    border: 1px solid #999;
+    padding: 6pt 8pt;
+    text-align: left;
+  }
+
+  thead {
+    display: table-header-group;
+  }
+
+  /* EcyPro branding */
+  .footer-print-logo {
+    display: block !important;
+    margin-top: 2cm;
+    padding-top: 0.5cm;
+    border-top: 1px solid #ccc;
+    font-size: 9pt;
+    color: #666 !important;
+    text-align: center;
+  }
+}

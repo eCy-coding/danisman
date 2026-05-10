@@ -1,0 +1,323 @@
+/**
+ * src/styles/a11y.css
+ * WCAG 2.1 AA Erişilebilirlik Yardımcı Sınıflar
+ * istek5.txt Pane 5 — UI-Storybook (a11y addon)
+ *
+ * Kullanım:
+ *   @import './styles/a11y.css';
+ *
+ * Tüm sınıflar: screen reader, focus, motion, contrast
+ */
+
+/* ═══════════════════════════════════════════════════════════
+   1. SCREEN READER YARDIMCILARI
+   ═══════════════════════════════════════════════════════════ */
+
+/** Sadece ekran okuyuculara görünür, görsel olarak gizli */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/** focus alındığında görünür hale gelir (skip-to-content için) */
+.sr-only-focusable:focus {
+  position: static;
+  width: auto;
+  height: auto;
+  padding: inherit;
+  margin: inherit;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+}
+
+/** Ekran okuyucudan tamamen gizle */
+.aria-hidden {
+  visibility: hidden;
+}
+[aria-hidden="true"] {
+  pointer-events: none;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   2. SKIP-TO-CONTENT (WCAG 2.4.1)
+   ═══════════════════════════════════════════════════════════ */
+.skip-link {
+  position: fixed;
+  top: -100%;
+  left: var(--space-4, 1rem);
+  z-index: 9999;
+  padding: var(--space-3, 0.75rem) var(--space-6, 1.5rem);
+  background: var(--color-brand-500, #6366f1);
+  color: #fff;
+  font-weight: 700;
+  font-size: var(--text-sm, 0.875rem);
+  border-radius: 0 0 var(--radius-lg, 12px) var(--radius-lg, 12px);
+  text-decoration: none;
+  transition: top 0.2s ease;
+}
+.skip-link:focus {
+  top: 0;
+  outline: 3px solid white;
+  outline-offset: 3px;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   3. FOCUS GÖRÜNÜRLÜĞÜ (WCAG 2.4.7, 2.4.11)
+   ═══════════════════════════════════════════════════════════ */
+
+/* Tüm interaktif elementler için güçlü focus ring */
+:focus-visible {
+  outline: 2px solid var(--color-brand-500, #6366f1);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* Butonlar */
+button:focus-visible,
+[role="button"]:focus-visible {
+  outline: 2px solid var(--color-brand-500, #6366f1);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2);
+}
+
+/* Linkler */
+a:focus-visible {
+  outline: 2px solid var(--color-brand-500, #6366f1);
+  outline-offset: 2px;
+  text-decoration: underline;
+}
+
+/* Input/select/textarea */
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--color-brand-500, #6366f1);
+  outline-offset: 0;
+  border-color: var(--color-brand-500, #6366f1);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+}
+
+/* Checkbox / Radio */
+input[type="checkbox"]:focus-visible,
+input[type="radio"]:focus-visible {
+  outline: 2px solid var(--color-brand-500, #6366f1);
+  outline-offset: 3px;
+}
+
+/* Focus ring utility */
+.focus-ring:focus-visible {
+  outline: 2px solid var(--color-brand-500, #6366f1);
+  outline-offset: 3px;
+}
+.focus-ring-inset:focus-visible {
+  outline: 2px solid var(--color-brand-500, #6366f1);
+  outline-offset: -2px;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   4. KONTRAST (WCAG 1.4.3, 1.4.6)
+   ═══════════════════════════════════════════════════════════ */
+
+/** High contrast mode destek */
+@media (forced-colors: active) {
+  * {
+    border-color: ButtonText;
+  }
+  a, button, [role="button"] {
+    color: ButtonText;
+  }
+  :focus-visible {
+    outline: 2px solid ButtonText;
+  }
+}
+
+/** Yüksek kontrast mod yardımcıları */
+.hcm-border {
+  border: 1px solid transparent;
+}
+@media (forced-colors: active) {
+  .hcm-border { border-color: ButtonText; }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   5. HAREKET AZALTILMIŞ (WCAG 2.3.3, prefers-reduced-motion)
+   ═══════════════════════════════════════════════════════════ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* Framer Motion / CSS animation class override */
+  [data-framer-motion],
+  .motion-safe\:transition-all,
+  .motion-safe\:animate-bounce,
+  .motion-safe\:animate-spin,
+  .motion-safe\:animate-pulse {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/** Animasyon sadece motion-safe'de çalışır */
+.motion-safe-animate {
+  animation: none;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .motion-safe-animate {
+    animation: var(--animate, none);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   6. RENKLERİ SINIRLA (prefers-color-scheme)
+   ═══════════════════════════════════════════════════════════ */
+
+@media (prefers-contrast: more) {
+  :root {
+    --color-border-default: var(--color-neutral-400);
+    --color-text-muted: var(--color-neutral-300);
+  }
+  a { text-decoration: underline; }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   7. KEYBOARD NAVIGATION GÖSTERGESİ
+   ═══════════════════════════════════════════════════════════ */
+
+/** Tıklandığında focus gösterme (sadece klavyede) */
+.focus-keyboard-only {
+  outline: none;
+}
+.focus-keyboard-only:focus-visible {
+  outline: 2px solid var(--color-brand-500, #6366f1);
+  outline-offset: 3px;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   8. FORM ERİŞİLEBİLİRLİĞİ
+   ═══════════════════════════════════════════════════════════ */
+
+/** Hata durumu (aria-invalid) */
+[aria-invalid="true"] {
+  border-color: var(--color-error-500, #ef4444) !important;
+  box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2);
+}
+[aria-invalid="true"]:focus-visible {
+  outline-color: var(--color-error-500, #ef4444);
+}
+
+/** Zorunlu alan (*) işareti */
+.required-indicator::after {
+  content: ' *';
+  color: var(--color-error-500, #ef4444);
+  font-weight: bold;
+  aria-hidden: true;
+}
+
+/** Hata mesajı bölgesi */
+.error-message {
+  color: var(--color-error-400, #f87171);
+  font-size: var(--text-sm, 0.875rem);
+  margin-top: var(--space-1, 0.25rem);
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-1, 0.25rem);
+}
+
+/** Başarı mesajı */
+.success-message {
+  color: var(--color-success-400, #4ade80);
+  font-size: var(--text-sm, 0.875rem);
+  margin-top: var(--space-1, 0.25rem);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   9. TABLO ERİŞİLEBİLİRLİĞİ
+   ═══════════════════════════════════════════════════════════ */
+
+/** Responsive tablo wrapper */
+.table-responsive {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.table-responsive:focus {
+  outline: 2px solid var(--color-brand-500, #6366f1);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   10. MODAL / DIALOG ERİŞİLEBİLİRLİĞİ
+   ═══════════════════════════════════════════════════════════ */
+
+/** Body scroll lock when modal open */
+body.modal-open {
+  overflow: hidden;
+}
+
+/** Dialog backdrop */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: var(--z-overlay, 50);
+}
+@media (forced-colors: active) {
+  .modal-backdrop { background: Canvas; }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   11. LİVE REGION YARDIMCILARI
+   ═══════════════════════════════════════════════════════════ */
+
+/** Yükleme durumu — screen reader announce */
+.a11y-announce {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/** Toast/notification live region */
+.toast-region {
+  position: fixed;
+  bottom: var(--space-4, 1rem);
+  right: var(--space-4, 1rem);
+  z-index: var(--z-toast, 70);
+  pointer-events: none;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   12. GÖRSEL BAŞLIK DÜZENİ (Heading Hierarchy)
+   ═══════════════════════════════════════════════════════════ */
+
+/** Görsel olarak h2 görünsün ama semantik h1 */
+.visually-h1 {
+  font-size: var(--text-4xl, 2.25rem);
+  font-weight: var(--font-extrabold, 800);
+  line-height: var(--leading-tight, 1.25);
+}
+.visually-h2 {
+  font-size: var(--text-3xl, 1.875rem);
+  font-weight: var(--font-bold, 700);
+  line-height: var(--leading-tight, 1.25);
+}
+.visually-h3 {
+  font-size: var(--text-2xl, 1.5rem);
+  font-weight: var(--font-semibold, 600);
+  line-height: var(--leading-snug, 1.375);
+}

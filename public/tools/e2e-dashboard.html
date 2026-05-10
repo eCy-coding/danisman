@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EcyPro E2E Sağlık Dashboard</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0 }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      background: #0f172a; color: #e2e8f0; min-height: 100vh;
+    }
+    header {
+      background: #1e293b; border-bottom: 1px solid #334155;
+      padding: 1.5rem 2rem; display: flex; align-items: center; gap: 1rem;
+    }
+    header h1 { font-size: 1.5rem; font-weight: 700 }
+    header .ts { color: #64748b; font-size: 0.85rem; margin-left: auto }
+    main { max-width: 1400px; margin: 0 auto; padding: 2rem }
+    /* Hero metrics */
+    .metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem }
+    .metric {
+      background: #1e293b; border: 1px solid #334155; border-radius: 12px;
+      padding: 1.5rem; text-align: center;
+    }
+    .metric-value { font-size: 2.5rem; font-weight: 800; line-height: 1 }
+    .metric-label { color: #64748b; font-size: 0.85rem; margin-top: 0.5rem }
+    /* Phase table */
+    section { margin-bottom: 2rem }
+    h2 { font-size: 1.2rem; font-weight: 600; margin-bottom: 1rem; color: #94a3b8 }
+    table { width: 100%; border-collapse: collapse; background: #1e293b; border-radius: 12px; overflow: hidden }
+    th { background: #334155; padding: 0.75rem 1rem; text-align: left; font-size: 0.85rem; color: #94a3b8 }
+    td { padding: 0.75rem 1rem; border-bottom: 1px solid #1e293b; font-size: 0.9rem }
+    tr:last-child td { border-bottom: none }
+    tr:hover td { background: #243045 }
+    .bar { background: #334155; border-radius: 4px; height: 8px; width: 150px }
+    .bar-fill { height: 100%; border-radius: 4px; transition: width 0.3s }
+    /* Pane cards */
+    .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem }
+    .card { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 1.25rem }
+    .card-header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem }
+    .card-icon { font-size: 1.25rem }
+    .card-title { font-weight: 600; flex: 1; font-size: 0.9rem }
+    .badge { padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.8rem; font-weight: 700; color: #fff }
+    .card-specs { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 0.5rem }
+    .tag { background: #334155; padding: 0.15rem 0.5rem; border-radius: 4px; font-size: 0.75rem; color: #94a3b8 }
+    .tag.gray { background: #1e293b; border: 1px solid #334155 }
+    .card-status { font-size: 0.8rem; color: #64748b }
+    /* Warnings */
+    .warnings-list { display: flex; flex-direction: column; gap: 0.5rem }
+    .warning { background: #451a03; border: 1px solid #78350f; border-radius: 8px; padding: 0.75rem 1rem; font-size: 0.9rem }
+    .ok { background: #052e16; border: 1px solid #14532d; border-radius: 8px; padding: 0.75rem 1rem; font-size: 0.9rem }
+    /* Score ring */
+    .score-ring { position: relative; width: 120px; height: 120px; margin: 0 auto 0.5rem }
+    .score-ring svg { transform: rotate(-90deg) }
+    .score-text {
+      position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+      font-size: 1.8rem; font-weight: 800;
+    }
+    /* Responsive */
+    @media (max-width: 640px) { .metrics { grid-template-columns: 1fr 1fr } }
+  </style>
+</head>
+<body>
+  <header>
+    <span style="font-size:1.5rem">🏥</span>
+    <h1>EcyPro E2E Sağlık Dashboard</h1>
+    <span class="ts">2026-05-06 14:22:53</span>
+  </header>
+  <main>
+    <!-- Hero Metrics -->
+    <div class="metrics">
+      <div class="metric">
+        <div class="metric-value" style="color:#6366f1">1003</div>
+        <div class="metric-label">Toplam Test</div>
+      </div>
+      <div class="metric">
+        <div class="metric-value" style="color:#06b6d4">94</div>
+        <div class="metric-label">Spec Dosyası</div>
+      </div>
+      <div class="metric">
+        <div class="metric-value" style="color:#8b5cf6">15</div>
+        <div class="metric-label">Aktif Pane</div>
+      </div>
+      <div class="metric">
+        <div class="score-ring">
+          <svg viewBox="0 0 120 120" width="120" height="120">
+            <circle cx="60" cy="60" r="50" fill="none" stroke="#334155" stroke-width="10"/>
+            <circle cx="60" cy="60" r="50" fill="none" stroke="#22c55e"
+              stroke-width="10" stroke-dasharray="314,314"
+              stroke-linecap="round"/>
+          </svg>
+          <div class="score-text" style="color:#22c55e">100%</div>
+        </div>
+        <div class="metric-label">Kapsam Skoru</div>
+      </div>
+    </div>
+
+    <!-- Phase Table -->
+    <section>
+      <h2>📦 Phase Bazlı Analiz</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Phase</th><th>Spec</th><th>Test</th><th>Yoğunluk</th><th>Durum</th>
+          </tr>
+        </thead>
+        <tbody>
+            <tr>
+              <td>🔵 1-Core (Critical)</td>
+              <td>14</td>
+              <td style="color:#22c55e;font-weight:700">93</td>
+              <td>
+                <div class="bar"><div class="bar-fill" style="width:18%;background:#22c55e"></div></div>
+              </td>
+              <td>✅</td>
+            </tr>
+            <tr>
+              <td>🎨 2-UI/UX (High)</td>
+              <td>20</td>
+              <td style="color:#22c55e;font-weight:700">160</td>
+              <td>
+                <div class="bar"><div class="bar-fill" style="width:32%;background:#22c55e"></div></div>
+              </td>
+              <td>✅</td>
+            </tr>
+            <tr>
+              <td>📦 3-Media (Medium)</td>
+              <td>2</td>
+              <td style="color:#22c55e;font-weight:700">30</td>
+              <td>
+                <div class="bar"><div class="bar-fill" style="width:6%;background:#22c55e"></div></div>
+              </td>
+              <td>✅</td>
+            </tr>
+            <tr>
+              <td>🔎 4-SEO/Geo (High)</td>
+              <td>14</td>
+              <td style="color:#22c55e;font-weight:700">150</td>
+              <td>
+                <div class="bar"><div class="bar-fill" style="width:30%;background:#22c55e"></div></div>
+              </td>
+              <td>✅</td>
+            </tr>
+            <tr>
+              <td>🧪 5-Test/Quality (Crit)</td>
+              <td>19</td>
+              <td style="color:#22c55e;font-weight:700">189</td>
+              <td>
+                <div class="bar"><div class="bar-fill" style="width:37%;background:#22c55e"></div></div>
+              </td>
+              <td>✅</td>
+            </tr>
+            <tr>
+              <td>📈 6-Observability (Med)</td>
+              <td>15</td>
+              <td style="color:#22c55e;font-weight:700">161</td>
+              <td>
+                <div class="bar"><div class="bar-fill" style="width:32%;background:#22c55e"></div></div>
+              </td>
+              <td>✅</td>
+            </tr>
+            <tr>
+              <td>🚀 7-Ops/Deploy (Low)</td>
+              <td>10</td>
+              <td style="color:#22c55e;font-weight:700">220</td>
+              <td>
+                <div class="bar"><div class="bar-fill" style="width:44%;background:#22c55e"></div></div>
+              </td>
+              <td>✅</td>
+            </tr></tbody>
+      </table>
+    </section>
+
+    <!-- Pane Cards -->
+    <section>
+      <h2>🖥️ 15-Pane Kapsam</h2>
+      <div class="cards">
+            <div class="card">
+              <div class="card-header">
+                <span class="card-icon">🖥️</span>
+                <span class="card-title">Pane 0-Frontend-Dev</span>
+                <span class="badge" style="background:#22c55e">73 test</span>
+              </div>
+              <div class="card-specs"><span class='tag'>crawl_ux_critical</span><span class='tag'>crawl_ux2_critical</span><span class='tag'>crawl_ux3_critical</span><span class='tag'>crawl_ux4_critical</span><span class='tag gray'>+7</span></div>
+              <div class="card-status">✅</div>
+            </div>
+            <div class="card">
+              <div class="card-header">
+                <span class="card-icon">🛠️</span>
+                <span class="card-title">Pane 1-Backend-API</span>
+                <span class="badge" style="background:#22c55e">59 test</span>
+              </div>
+              <div class="card-specs"><span class='tag'>api_integration</span><span class='tag'>crawl_api_calibration</span><span class='tag'>crawl_api_security</span><span class='tag'>consulting_production</span><span class='tag gray'>+2</span></div>
+              <div class="card-status">✅</div>
+            </div>
+            <div class="card">
+              <div class="card-header">
+                <span class="card-icon">💾</span>
+                <span class="card-title">Pane 2-DB-Postgres</span>
+                <span class="badge" style="background:#22c55e">31 test</span>
+              </div>
+              <div class="card-specs"><span class='tag'>crawl_db_integration</span><span class='tag'>critical_flows</span></div>
+              <div class="card-status">✅</div>
+            </div>
+            <div class="card">
+              <div class="card-header">
+                <span class="card-icon">🧪</span>
+                <span class="card-title">Pane 3-E2E-Cypress</span>
+                <span class="badge" style="background:#22c55e">72 test</span>
+              </div>
+              <div class="card-specs"><span class='tag'>crawl_booking_flow</span><span class='tag'>crawl_conversion_funnel</span><span class='tag'>critical_flows</span><span class='tag'>crawl_runtime_stress</span><span class='tag gray'>+4</span></div>
+              <div class="card-status">✅</div>
+            </div>
+            <div class="card">
+              <div class="card-header">
+                <span class="card-icon">🔎</span>
+                <span class="card-title">Pane 4-SEO-Geo-Admin</span>
+                <span class="badge" style="background:#22c55e">92 test</span>
+              </div>
+              <div class="card-specs"><span class='tag'>crawl_seo_audit</span><span class='tag'>crawl_authority_seo</span><span class='tag'>crawl_schema_deep</span><span class='tag'>crawl_geo_banner</span><span class='tag gray'>+5</span></div>
+              <div class="card-status">✅</div>
+            </div>
+            <div class="card">
+              <div class="card-header">
+                <span class="card-icon">🎨</span>
+                <span class="card-title">Pane 5-UI-Storybook</span>
+                <span class="badge" style="background:#22c55e">44 test</span>
+              </div>
+              <div class="card-specs"><span class='tag'>crawl_a11y_wcag</span><span class='tag'>crawl_ui_components</span><span class='tag'>a11y</span><span class='tag'>accessibility</span><span class='tag gray'>+2</span></div>
+              <div class="card-status">✅</div>
+            </div>
+            <div class="card">
+              <div class="card-header">
+                <span class="card-icon">📦</span>
+                <span class="card-title">Pane 6-Media-Watcher</span>
+                <span class="badge" style="background:#22c55e">30 test</span>
+              </div>
+              <div class="card-specs"><span class='tag'>crawl_image_lcp</span><span class='tag'>crawl_media_optimization</span></div>
+              <div class="card-status">✅</div>
+            </div>
+            <div class="card">
+              <div class="card-header">
+                <span class="card-icon">⚙️</span>
+                <span class="card-title">Pane 7-CI-Lighthouse</span>
+                <span class="badge" style="background:#22c55e">27 test</span>
+              </div>
+              <div class="card-specs"><span class='tag'>crawl_performance_vitals</span><span class='tag'>performance</span></div>
+              <div class="card-status">✅</div>
+            </div>
+            <div class="card">
+              <div class="card-header">
+                <span class="card-icon">🗒️</span>
+                <span class="card-title">Pane 8-Log-Tail</span>
+                <span class="badge" style="background:#22c55e">39 test</span>
+              </div>
+              <div class="card-specs"><span class='tag'>crawl_observability</span><span class='tag'>diagnostic</span><span class='tag'>terminal_ui</span><span class='tag'>antigravity_terminal</span><span class='tag gray'>+1</span></div>
+              <div class="card-status">✅</div>
+            </div>
+            <div class="card">
+              <div class="card-header">
+                <span class="card-icon">📈</span>
+                <span class="card-title">Pane 9-Analytics-Dev</span>
+                <span class="badge" style="background:#22c55e">38 test</span>
+              </div>
+              <div class="card-specs"><span class='tag'>analytics</span><span class='tag'>crawl_analytics_dev</span><span class='tag'>ai_assessment</span><span class='tag'>roi_calculator</span><span class='tag gray'>+2</span></div>
+              <div class="card-status">✅</div>
+            </div>
+            <div class="card">
+              <div class="card-header">
+                <span class="card-icon">🔐</span>
+                <span class="card-title">Pane 10-Sec-Watch</span>
+                <span class="badge" style="background:#22c55e">55 test</span>
+              </div>
+              <div class="card-specs"><span class='tag'>crawl_security_headers</span><span class='tag'>crawl_link_integrity</span><span class='tag'>crawl_api_security</span><span class='tag'>security</span><span class='tag gray'>+2</span></div>
+              <div class="card-status">✅</div>
+            </div>
+            <div class="card">
+              <div class="card-header">
+                <span class="card-icon">🚀</span>
+                <span class="card-title">Pane 11-Deploy-Watch</span>
+                <span class="badge" style="background:#22c55e">182 test</span>
+              </div>
+              <div class="card-specs"><span class='tag'>crawl_deployment_flow</span><span class='tag'>crawl_url_integrity</span><span class='tag'>crawl_pwa_deep</span><span class='tag'>crawl_python</span><span class='tag gray'>+3</span></div>
+              <div class="card-status">✅</div>
+            </div>
+            <div class="card">
+              <div class="card-header">
+                <span class="card-icon">🏗️</span>
+                <span class="card-title">Pane 12-UI-Designer</span>
+                <span class="badge" style="background:#22c55e">47 test</span>
+              </div>
+              <div class="card-specs"><span class='tag'>crawl_ux3_critical</span><span class='tag'>crawl_forms_validation</span><span class='tag'>crawl_ui_components</span><span class='tag'>conversion-elements</span><span class='tag gray'>+1</span></div>
+              <div class="card-status">✅</div>
+            </div>
+            <div class="card">
+              <div class="card-header">
+                <span class="card-icon">🧭</span>
+                <span class="card-title">Pane 13-Geo-Manager</span>
+                <span class="badge" style="background:#22c55e">65 test</span>
+              </div>
+              <div class="card-specs"><span class='tag'>crawl_i18n_international</span><span class='tag'>crawl_geo_banner</span><span class='tag'>crawl_seo_deep</span><span class='tag'>content</span><span class='tag gray'>+1</span></div>
+              <div class="card-status">✅</div>
+            </div>
+            <div class="card">
+              <div class="card-header">
+                <span class="card-icon">🧑‍💼</span>
+                <span class="card-title">Pane 14-Lead-CRM</span>
+                <span class="badge" style="background:#22c55e">46 test</span>
+              </div>
+              <div class="card-specs"><span class='tag'>crawl_admin_crm</span><span class='tag'>crawl_admin_rbac</span><span class='tag'>director</span><span class='tag'>sovereign_matrix</span><span class='tag gray'>+3</span></div>
+              <div class="card-status">✅</div>
+            </div></div>
+    </section>
+
+    <!-- Warnings -->
+    <section>
+      <h2>⚠️ Uyarılar & Öneriler</h2>
+      <div class="warnings-list"><div class='ok'>✅ Uyarı yok — sistem sağlıklı</div></div>
+    </section>
+  </main>
+  <script>
+    // Auto-refresh every 30 seconds
+    setTimeout(() => location.reload(), 30000);
+    console.log('[E2E Dashboard] 1003 test, 94 spec. Coverage: 100%');
+  </script>
+</body>
+</html>
