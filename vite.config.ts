@@ -121,7 +121,7 @@ const wasmContentTypePlugin = {
   },
 };
 
-export default defineConfig(() => {
+export default defineConfig(({ mode }) => {
   // NOTE: We deliberately do NOT forward server-side secrets (GEMINI_API_KEY, JWT_SECRET,
   // DATABASE_URL, SENTRY_DSN server-only) to the frontend bundle. Vite already exposes
   // any variable prefixed with `VITE_` via `import.meta.env.*`, which is the safe path.
@@ -278,6 +278,13 @@ export default defineConfig(() => {
       alias: {
         '@': path.resolve(__dirname, './src'),
       },
+    },
+    // P7 Round C — strip console.* and debugger statements from production
+    // bundles via esbuild. Drops ~2-3KB pre-gzip from main + scattered chunks,
+    // and saves ~10-30ms TBT on Slow 4G mobile where each console call costs
+    // a microtask + string allocation. Dev builds keep all logs.
+    esbuild: {
+      drop: mode === 'production' ? ['console', 'debugger'] : [],
     },
     build: {
       target: 'esnext', // Modern browsers for smaller bundle
