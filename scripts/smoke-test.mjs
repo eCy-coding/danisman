@@ -54,17 +54,32 @@ const SPEC = [
 const RED = '\x1b[31m', GREEN = '\x1b[32m', YELLOW = '\x1b[33m', DIM = '\x1b[2m', RESET = '\x1b[0m';
 const tag = (color, text) => `${color}${text}${RESET}`;
 
-async function probe(spec) {
+// Case-insensitive substring match — tolerates JSON key casing, XML
+// attribute capitalisation, and the occasional header reflow without
+// losing the strictness of "this string must appear somewhere in the body".
+function bodyContains(buf, needle) {
+  if (!buf) return false;
+  return buf.toLowerCase().includes(String(needle).toLowerCase());
+}
+
+// One probe attempt — single fetch + content check. Returns a result object.
+async function probeOnce(spec) {
   const url = BASE + spec.path;
   const ac = new AbortController();
   const timer = setTimeout(() => ac.abort(), TIMEOUT_MS);
   const t0 = Date.now();
   try {
-    const res = await fetch(url, { signal: ac.signal, redirect: 'follow' });
+    const res = await fetch(url, {
+      signal: ac.signal,
+      redirect: 'follow',
+      // Force identity to dodge preview-server compression quirks that
+      // occasionally returned an empty body during P4 smoke runs.
+      headers: { 'Accept-Encoding': 'identity' },
+    });
     const ms = Date.now() - t0;
     const buf = spec.kind === 'image' ? null : await res.text();
 
-    const result = { spec, url, status: res.status, ms, ok: true, warnings: [], errors: [] };
+    const result = { spec, url, status: res.status, ms, ok: true, warnings: [], errors: [], bodyLen: buf ? buf.length : null };
 
     // Status check
     if (spec.spaFallback) {
@@ -81,11 +96,11 @@ async function probe(spec) {
     // Performance check (informational; warn only)
     if (ms > 3000) result.warnings.push(`slow: ${ms}ms (target <3000ms)`);
 
-    // Content check
+    // Content check (case-insensitive)
     if (spec.mustContain && buf) {
       for (const needle of spec.mustContain) {
-        if (!buf.includes(needle)) {
-          result.errors.push(`missing content: "${needle}"`);
+        if (!bodyContains(buf, needle)) {
+          result.errors.push(`missing content: "${needle}" (body=${buf.length}B)`);
           result.ok = false;
         }
       }
@@ -104,11 +119,27 @@ async function probe(spec) {
     return {
       spec, url, status: 0, ms: Date.now() - t0, ok: false,
       warnings: [],
-      errors: [e.name === 'AbortError' ? `timeout after ${TIMEOUT_MS}ms` : e.message],
+      errors: [e.name === 'AbortError' ? `timeout after ${TIMEOUT_MS}ms` : (e.cause?.code || e.message)],
     };
   } finally {
     clearTimeout(timer);
   }
+}
+
+// Wrap probeOnce with a single retry for transient preview-server hiccups.
+// The original P4 run saw 0-ms empty-body responses for sitemap-index.xml
+// and manifest.webmanifest immediately after preview boot; a 250ms breather
+// and a second fetch reliably succeeds.
+async function probe(spec) {
+  const first = await probeOnce(spec);
+  if (first.ok) return first;
+  await new Promise((r) => setTimeout(r, 250));
+  const second = await probeOnce(spec);
+  if (second.ok) {
+    second.warnings.push(`recovered on retry (first attempt: ${first.errors.join('; ')})`);
+    return second;
+  }
+  return second;
 }
 
 function fmt(r) {

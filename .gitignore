@@ -202,3 +202,4 @@ crowler/scripts/__pycache__/
 crowler/*.pyc
 crowler/Scrapling-main/
 crowler/Scrapling-main.zip
+test-env.cjs

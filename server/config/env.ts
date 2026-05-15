@@ -104,8 +104,16 @@ function validate(): Env {
     if (process.env.NODE_ENV === 'production') {
       process.exit(1);
     }
-    // Non-prod: surface but do not exit; relaxed default returned with re-parse
-    return envSchema.parse({ ...process.env, NODE_ENV: 'development' });
+    // Non-prod: surface but do not exit. Strip the offending fields so the
+    // relaxed re-parse cannot rethrow on the same Zod issues (every offending
+    // field in this schema is .optional() — removing it is safe in dev/test).
+    const cleaned: Record<string, string | undefined> = { ...process.env };
+    for (const issue of parsed.error.issues) {
+      const key = issue.path[0];
+      if (typeof key === 'string') delete cleaned[key];
+    }
+    cleaned.NODE_ENV = 'development';
+    return envSchema.parse(cleaned);
   }
   const data = parsed.data;
 

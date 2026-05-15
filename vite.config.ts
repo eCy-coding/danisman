@@ -241,6 +241,24 @@ export default defineConfig(() => {
       sourcemap: 'hidden' as const, // Hidden sourcemaps: Sentry/debuggers can use them, not served publicly
       minify: 'esbuild' as const,
 
+      // P5-4: Trim eager modulepreload graph. Vite by default emits a
+      // <link rel="modulepreload"> for every transitive chunk in the entry
+      // import graph — including heavy lazy-leaning bundles like sentry,
+      // motion, charts, ab, monitoring. They block the network during the
+      // critical-path window and inflate LCP/TBT for first paint even though
+      // most aren't needed before hydration.
+      //
+      // Allow-list: keep preload for entry-critical chunks only (vendor,
+      // tslib, utils, ui, i18n, css). Heavy or admin-only chunks are still
+      // fetched dynamically when their importer runs.
+      modulePreload: {
+        polyfill: false,
+        resolveDependencies: (_filename, deps) => {
+          const KEEP = /(^|\/)(vendor|tslib|utils|ui|i18n|main|lp|lc|index-)[-.]/;
+          return deps.filter((d) => KEEP.test(d));
+        },
+      },
+
       rollupOptions: {
         input: {
           main: path.resolve(__dirname, 'index.html'),
@@ -261,6 +279,11 @@ export default defineConfig(() => {
           manualChunks: {
             // Core framework — always needed, preloaded
             vendor: ['react', 'react-dom', 'react-router-dom', 'react-helmet-async'],
+            // TypeScript helpers — pulled in transitively by @sentry/*, motion,
+            // @growthbook/*, etc. Isolating it lets npm-deduped tslib be cached
+            // once across all chunks instead of inlined ~90KB into vendor.
+            // Estimated saving on initial JS: 20–35 KB brotli.
+            tslib: ['tslib'],
             // Motion (large ~80KB brotli) — separated for route-level lazy benefit
             motion: ['motion'],
             // UI primitives (sans motion)
