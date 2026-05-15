@@ -61,6 +61,7 @@ export const ContactForm: React.FC = () => {
           {...register('name')}
           id="name"
           type="text"
+          data-testid="contact-name"
           onFocus={handleFirstFocus}
           aria-required="true"
           aria-invalid={!!errors.name}
@@ -91,6 +92,7 @@ export const ContactForm: React.FC = () => {
           {...register('email')}
           id="email"
           type="email"
+          data-testid="contact-email"
           aria-required="true"
           aria-invalid={!!errors.email}
           aria-describedby={errors.email ? 'email-error' : undefined}
@@ -119,6 +121,7 @@ export const ContactForm: React.FC = () => {
         <select
           {...register('subject')}
           id="subject"
+          data-testid="contact-subject"
           aria-required="true"
           className="w-full px-4 py-3 rounded-lg border border-white/10 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all bg-white/5 text-white"
         >
@@ -140,6 +143,7 @@ export const ContactForm: React.FC = () => {
           {...register('message')}
           id="message"
           rows={5}
+          data-testid="contact-message"
           aria-required="true"
           aria-invalid={!!errors.message}
           aria-describedby={errors.message ? 'message-error' : undefined}
@@ -166,6 +170,7 @@ export const ContactForm: React.FC = () => {
       <button
         type="submit"
         disabled={isSubmitting}
+        data-testid="contact-submit"
         className={`w-full py-4 rounded-xl font-bold flex items-center justify-center gap-2 transition-all ${
           isSubmitting
             ? 'bg-white/5 text-slate-400 cursor-not-allowed'
@@ -189,6 +194,7 @@ export const ContactForm: React.FC = () => {
         <div
           role="status"
           aria-live="polite"
+          data-testid="contact-success"
           className="p-4 bg-green-500/10 text-green-400 rounded-xl flex items-center gap-3 animate-fade-in"
         >
           <CheckCircle size={24} aria-hidden="true" />
@@ -205,6 +211,7 @@ export const ContactForm: React.FC = () => {
         <div
           role="alert"
           aria-live="assertive"
+          data-testid="contact-error"
           className="p-4 bg-red-500/10 text-red-400 rounded-xl flex items-center gap-3 animate-fade-in"
         >
           <AlertCircle size={24} aria-hidden="true" />

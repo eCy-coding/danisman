@@ -30,8 +30,12 @@ test.describe('CRO Elements', () => {
     await page.evaluate(() => window.scrollTo(0, 500));
     
     // Wait for transition using state assertion
-    // Playwright auto-waits for visibility
-    const cta = page.getByRole('link', { name: /Book|Discovery|Consultation/i }).first();
+    // Playwright auto-waits for visibility.
+    // Prefer the stable data-testid; fall back to role-based locator for legacy builds.
+    const cta = page
+      .getByTestId('smart-cta-link')
+      .or(page.getByRole('link', { name: /Book|Discovery|Consultation/i }))
+      .first();
     await expect(cta).toBeVisible({ timeout: 5000 });
     
     // Opacity check is less reliable; skip it for now

@@ -36,6 +36,8 @@ export const ServiceFilter: React.FC<ServiceFilterProps> = ({ departments, selec
                         <button
                             key={dept.id}
                             onClick={() => onSelectCategory(dept.id)}
+                            data-testid={`services-filter-${dept.id}`}
+                            data-active={isActive ? 'true' : 'false'}
                             className={`
                                 relative px-5 py-2.5 rounded-full text-xs font-bold tracking-wider uppercase transition-all duration-300
                                 border flex items-center gap-2 whitespace-nowrap

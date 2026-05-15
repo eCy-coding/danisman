@@ -16,6 +16,7 @@ export const LanguageToggle: React.FC = () => {
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
       onClick={toggleLanguage}
+      data-testid="language-toggle"
       className={`
         fixed bottom-6 left-20 z-50 p-3 rounded-full shadow-lg backdrop-blur-sm transition-all duration-300
         bg-neutral-900/80 text-slate-200 border border-white/10 hover:bg-white/10

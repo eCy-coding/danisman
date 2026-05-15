@@ -291,6 +291,8 @@ export const PricingPage: React.FC = () => {
               <motion.div
                 key={tier.id}
                 role="listitem"
+                data-testid={`pricing-tier-${tier.id}`}
+                data-highlight={tier.highlight ? 'true' : 'false'}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: idx * 0.1 }}
@@ -332,6 +334,7 @@ export const PricingPage: React.FC = () => {
                 <Link
                   to={tier.priceMonthly === 0 ? '/contact' : `/contact?plan=${tier.id}`}
                   onClick={() => trackEvent('Pricing', 'CtaClick', tier.id)}
+                  data-testid={`pricing-cta-${tier.id}`}
                   className={`w-full text-center px-6 py-3 rounded-xl font-semibold text-sm transition-all flex items-center justify-center gap-2 ${
                     tier.highlight
                       ? 'bg-white text-neutral hover:bg-slate-100'

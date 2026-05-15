@@ -25,8 +25,11 @@ test.describe('i18n — language switching', () => {
     await page.goto('/');
     await page.waitForLoadState('networkidle');
 
-    // Look for language switcher
-    const langToggle = page.getByRole('button', { name: /EN|TR|🇬🇧|🇹🇷|English|Türkçe/i }).first();
+    // Look for language switcher (stable via data-testid; falls back to role-based locator if absent).
+    const langToggle = page
+      .getByTestId('language-toggle')
+      .or(page.getByRole('button', { name: /EN|TR|🇬🇧|🇹🇷|English|Türkçe/i }))
+      .first();
     if (!(await langToggle.isVisible())) {
       // No toggle found — skip gracefully
       test.skip();

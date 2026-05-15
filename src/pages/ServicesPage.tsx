@@ -124,10 +124,11 @@ export const ServicesPage: React.FC = () => {
                          <div className="max-w-2xl mx-auto">
                             <div className="relative group">
                                 <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-secondary transition-colors duration-300 w-5 h-5 pointer-events-none" />
-                                <input 
-                                    type="text" 
-                                    placeholder="Hizmetlerde arayın..." 
-                                    className="w-full pl-12 pr-6 py-4 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl 
+                                <input
+                                    type="text"
+                                    placeholder="Hizmetlerde arayın..."
+                                    data-testid="services-search-input"
+                                    className="w-full pl-12 pr-6 py-4 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl
                                              focus:outline-none focus:border-secondary/50 focus:bg-white/10 focus:shadow-glow
                                              text-white placeholder-slate-500 transition-all duration-300 font-sans shadow-lg"
                                     value={searchQuery}
@@ -173,10 +174,16 @@ export const ServicesPage: React.FC = () => {
                                     <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-white/5 mb-6">
                                         <Search className="w-6 h-6 text-slate-400" />
                                     </div>
-                                    <h3 className="text-xl font-serif text-slate-300 mb-2">{t('no_results') || 'Sonuç Bulunamadı'}</h3>
+                                    <h3
+                                        data-testid="services-no-results"
+                                        className="text-xl font-serif text-slate-300 mb-2"
+                                    >
+                                        {t('no_results') || 'Sonuç Bulunamadı'}
+                                    </h3>
                                     <p className="text-slate-300 mb-6">"{searchQuery}"...</p>
-                                    <button 
+                                    <button
                                         onClick={() => { setSearchQuery(''); setSelectedCategory('all'); }}
+                                        data-testid="services-filter-clear"
                                         className="px-6 py-2.5 bg-secondary text-neutral font-bold rounded-lg hover:bg-white transition-colors text-sm tracking-wide"
                                     >
                                         {t('filter_clear') || 'Filtreleri Temizle'}

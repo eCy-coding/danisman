@@ -39,8 +39,9 @@ export const SmartCTA = () => {
           <X size={12} />
         </button>
 
-        <a 
+        <a
           href="/contact"
+          data-testid="smart-cta-link"
           className="flex items-center space-x-3 bg-gray-900 text-white px-6 py-4 rounded-full shadow-2xl hover:bg-black hover:scale-105 transition-all border border-gray-800"
         >
           <div className="relative">

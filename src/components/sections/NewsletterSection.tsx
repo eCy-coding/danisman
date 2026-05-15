@@ -180,6 +180,7 @@ export const NewsletterSection: React.FC = () => {
                         <input
                           id="nl-email"
                           type="email"
+                          data-testid="newsletter-email"
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
                           required
@@ -197,6 +198,7 @@ export const NewsletterSection: React.FC = () => {
                       <div className="relative mt-0.5 shrink-0">
                         <input
                           type="checkbox"
+                          data-testid="newsletter-consent"
                           checked={consent}
                           onChange={(e) => setConsent(e.target.checked)}
                           className="sr-only"
@@ -235,6 +237,7 @@ export const NewsletterSection: React.FC = () => {
                     {/* Submit */}
                     <button
                       type="submit"
+                      data-testid="newsletter-submit"
                       disabled={!email || !consent || status === 'loading'}
                       className="w-full flex items-center justify-center gap-2 bg-secondary hover:bg-secondary/90 disabled:opacity-50 text-white font-semibold py-3 rounded-xl transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-secondary"
                     >

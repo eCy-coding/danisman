@@ -138,6 +138,8 @@ export const Navbar: React.FC = () => {
                   onClick={(e) =>
                     !isDropdown && handleNavClick(e, item.href, item.label[lang] || '')
                   }
+                  data-testid={`navbar-link-${item.id}`}
+                  data-active={isActive ? 'true' : 'false'}
                   className={`text-sm font-medium transition-all duration-300 flex items-center gap-1 py-4 tracking-wide outline-none ${
                     isActive
                       ? 'text-secondary'
