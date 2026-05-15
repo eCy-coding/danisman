@@ -203,3 +203,4 @@ crowler/*.pyc
 crowler/Scrapling-main/
 crowler/Scrapling-main.zip
 test-env.cjs
+public/_test
