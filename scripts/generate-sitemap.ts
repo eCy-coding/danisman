@@ -93,6 +93,10 @@ async function generateSitemap() {
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:xhtml="http://www.w3.org/1999/xhtml">`;
 
+  // Build date used as <lastmod> for every URL entry — freshness signal for crawlers.
+  // Single timestamp per build keeps the file deterministic + diffable.
+  const buildDate = new Date().toISOString().split('T')[0];
+
   // Helper: build a single <url> entry with bilingual hreflang
   const buildUrl = (path: string, changefreq: string, priority: string): string => {
     const canonicalUrl = `${BASE_URL}/${path}`;
@@ -103,6 +107,7 @@ async function generateSitemap() {
     <xhtml:link rel="alternate" hreflang="en" href="${canonicalUrl}" />
     <xhtml:link rel="alternate" hreflang="tr-TR" href="${trUrl}" />
     <xhtml:link rel="alternate" hreflang="x-default" href="${canonicalUrl}" />
+    <lastmod>${buildDate}</lastmod>
     <changefreq>${changefreq}</changefreq>
     <priority>${priority}</priority>
   </url>`;
@@ -187,6 +192,7 @@ async function generateSitemap() {
     <xhtml:link rel="alternate" hreflang="${hreflangSelf}" href="${selfUrl}" />
     <xhtml:link rel="alternate" hreflang="${hreflangOther}" href="${otherUrl}" />
     <xhtml:link rel="alternate" hreflang="x-default" href="${defaultUrl}" />
+    <lastmod>${buildDate}</lastmod>
     <changefreq>${changefreq}</changefreq>
     <priority>${priority}</priority>
   </url>`;
