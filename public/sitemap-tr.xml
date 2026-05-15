@@ -200,55 +200,10 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.ecypro.com/tr/blog/net-zero-eylem-plani</loc>
-    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/blog/net-zero-eylem-plani" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/blog/net-zero-eylem-plani" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/blog/net-zero-eylem-plani" />
-    <lastmod>2026-05-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.ecypro.com/tr/blog/noropazarlama-tuketici-davranisi-stratejisi</loc>
-    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/blog/noropazarlama-tuketici-davranisi-stratejisi" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/blog/noropazarlama-tuketici-davranisi-stratejisi" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/blog/noropazarlama-tuketici-davranisi-stratejisi" />
-    <lastmod>2026-05-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.ecypro.com/tr/blog/lean-ai-operational-excellence</loc>
-    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/blog/lean-ai-operational-excellence" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/blog/lean-ai-operational-excellence" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/blog/lean-ai-operational-excellence" />
-    <lastmod>2026-05-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.ecypro.com/tr/blog/ma-degerleme-due-diligence-rehberi</loc>
-    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/blog/ma-degerleme-due-diligence-rehberi" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/blog/ma-degerleme-due-diligence-rehberi" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/blog/ma-degerleme-due-diligence-rehberi" />
-    <lastmod>2026-05-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.ecypro.com/tr/blog/makroekonomik-risk-yonetimi-2026</loc>
-    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/blog/makroekonomik-risk-yonetimi-2026" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/blog/makroekonomik-risk-yonetimi-2026" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/blog/makroekonomik-risk-yonetimi-2026" />
-    <lastmod>2026-05-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.ecypro.com/tr/blog/esg-strateji-kurumsal-surdurulebilirlik</loc>
-    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/blog/esg-strateji-kurumsal-surdurulebilirlik" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/blog/esg-strateji-kurumsal-surdurulebilirlik" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/blog/esg-strateji-kurumsal-surdurulebilirlik" />
+    <loc>https://www.ecypro.com/tr/blog/aile-sirketleri-kurumsallasma-yonetisim</loc>
+    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/blog/aile-sirketleri-kurumsallasma-yonetisim" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/blog/aile-sirketleri-kurumsallasma-yonetisim" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/blog/aile-sirketleri-kurumsallasma-yonetisim" />
     <lastmod>2026-05-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
@@ -281,10 +236,55 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.ecypro.com/tr/blog/aile-sirketleri-kurumsallasma-yonetisim</loc>
-    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/blog/aile-sirketleri-kurumsallasma-yonetisim" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/blog/aile-sirketleri-kurumsallasma-yonetisim" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/blog/aile-sirketleri-kurumsallasma-yonetisim" />
+    <loc>https://www.ecypro.com/tr/blog/esg-strateji-kurumsal-surdurulebilirlik</loc>
+    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/blog/esg-strateji-kurumsal-surdurulebilirlik" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/blog/esg-strateji-kurumsal-surdurulebilirlik" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/blog/esg-strateji-kurumsal-surdurulebilirlik" />
+    <lastmod>2026-05-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.ecypro.com/tr/blog/lean-ai-operational-excellence</loc>
+    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/blog/lean-ai-operational-excellence" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/blog/lean-ai-operational-excellence" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/blog/lean-ai-operational-excellence" />
+    <lastmod>2026-05-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.ecypro.com/tr/blog/ma-degerleme-due-diligence-rehberi</loc>
+    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/blog/ma-degerleme-due-diligence-rehberi" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/blog/ma-degerleme-due-diligence-rehberi" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/blog/ma-degerleme-due-diligence-rehberi" />
+    <lastmod>2026-05-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.ecypro.com/tr/blog/makroekonomik-risk-yonetimi-2026</loc>
+    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/blog/makroekonomik-risk-yonetimi-2026" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/blog/makroekonomik-risk-yonetimi-2026" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/blog/makroekonomik-risk-yonetimi-2026" />
+    <lastmod>2026-05-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.ecypro.com/tr/blog/net-zero-eylem-plani</loc>
+    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/blog/net-zero-eylem-plani" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/blog/net-zero-eylem-plani" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/blog/net-zero-eylem-plani" />
+    <lastmod>2026-05-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.ecypro.com/tr/blog/noropazarlama-tuketici-davranisi-stratejisi</loc>
+    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/blog/noropazarlama-tuketici-davranisi-stratejisi" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/blog/noropazarlama-tuketici-davranisi-stratejisi" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/blog/noropazarlama-tuketici-davranisi-stratejisi" />
     <lastmod>2026-05-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
