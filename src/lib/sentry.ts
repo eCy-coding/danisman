@@ -38,13 +38,60 @@ class SentryClient {
       integrations: [
         Sentry.browserTracingIntegration(),
         Sentry.replayIntegration({
-          maskAllText: false,
-          blockAllMedia: false,
+          // P8 — privacy hardening: session replay must NOT capture user-visible
+          // text or form inputs. Otherwise EmailJS forms / login fields leak.
+          maskAllText: true,
+          maskAllInputs: true,
+          blockAllMedia: true,
         }),
       ],
       tracesSampleRate: import.meta.env.MODE === 'production' ? 0.1 : 1.0,
       replaysSessionSampleRate: 0.1,
       replaysOnErrorSampleRate: 1.0,
+      // P8 — restrict trace propagation to first-party origins so cross-origin
+      // 3rd-parties (EmailJS, GA, Sentry CDN) don't receive sentry-trace headers.
+      tracePropagationTargets: [
+        /^\//,
+        /^https:\/\/(www\.|api\.)?ecypro\.com/,
+      ],
+      // P8 — scrub PII before any event leaves the browser.
+      // Strategy: keep error fingerprint useful but strip anything that could
+      // identify a real user (email, IP, auth tokens, full URL with query).
+      beforeSend(event) {
+        try {
+          if (event.user) {
+            if (event.user.email) event.user.email = '[redacted]';
+            if (event.user.ip_address) event.user.ip_address = '[redacted]';
+            if (event.user.username) event.user.username = '[redacted]';
+          }
+          if (event.request) {
+            if (event.request.cookies) delete event.request.cookies;
+            if (event.request.headers) {
+              const h = event.request.headers as Record<string, string>;
+              if (h.Authorization) h.Authorization = '[redacted]';
+              if (h.authorization) h.authorization = '[redacted]';
+              if (h.Cookie) h.Cookie = '[redacted]';
+              if (h.cookie) h.cookie = '[redacted]';
+            }
+            // Drop query string — may contain reset tokens, OAuth state etc.
+            if (typeof event.request.url === 'string') {
+              const idx = event.request.url.indexOf('?');
+              if (idx >= 0) event.request.url = event.request.url.slice(0, idx) + '?[redacted]';
+            }
+          }
+        } catch {
+          /* never let a scrubber error drop an event */
+        }
+        return event;
+      },
+      beforeBreadcrumb(breadcrumb) {
+        // Drop console.* breadcrumbs in prod — they may contain debug strings
+        // with PII or tokens. Network/UI breadcrumbs are kept.
+        if (import.meta.env.MODE === 'production' && breadcrumb.category === 'console') {
+          return null;
+        }
+        return breadcrumb;
+      },
     });
 
     this.initialized = true;
@@ -74,7 +121,13 @@ class SentryClient {
 
   setUser(user: { id?: string; email?: string } | null): void {
     if (!this.initialized) return;
-    Sentry.setUser(user);
+    // P8 — never send raw email/username to Sentry; only opaque id.
+    // beforeSend hook redacts these anyway, but we save the bandwidth + risk.
+    if (user) {
+      Sentry.setUser({ id: user.id });
+    } else {
+      Sentry.setUser(null);
+    }
   }
 
   setTag(key: string, value: string): void {

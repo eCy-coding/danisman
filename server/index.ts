@@ -35,6 +35,39 @@ if (process.env.SENTRY_DSN) {
     integrations: [nodeProfilingIntegration()],
     tracesSampleRate: Number.parseFloat(process.env.SENTRY_TRACES_SAMPLE_RATE ?? '0.1') || 0.1,
     profilesSampleRate: Number.parseFloat(process.env.SENTRY_PROFILES_SAMPLE_RATE ?? '0.1') || 0.1,
+    // P8 — server-side PII scrubbing. We never want raw request bodies,
+    // Authorization/Cookie headers, or query strings reaching Sentry.
+    beforeSend(event) {
+      try {
+        if (event.user) {
+          if (event.user.email) event.user.email = '[redacted]';
+          if (event.user.ip_address) event.user.ip_address = '[redacted]';
+          if (event.user.username) event.user.username = '[redacted]';
+        }
+        if (event.request) {
+          if (event.request.cookies) delete event.request.cookies;
+          if (event.request.data) event.request.data = '[redacted]';
+          if (event.request.headers) {
+            const h = event.request.headers as Record<string, string>;
+            if (h.Authorization) h.Authorization = '[redacted]';
+            if (h.authorization) h.authorization = '[redacted]';
+            if (h.Cookie) h.Cookie = '[redacted]';
+            if (h.cookie) h.cookie = '[redacted]';
+            if (h['x-api-key']) h['x-api-key'] = '[redacted]';
+          }
+          if (typeof event.request.url === 'string') {
+            const idx = event.request.url.indexOf('?');
+            if (idx >= 0) event.request.url = event.request.url.slice(0, idx) + '?[redacted]';
+          }
+          if (typeof event.request.query_string === 'string') {
+            event.request.query_string = '[redacted]';
+          }
+        }
+      } catch {
+        /* never let scrubbing fail the event */
+      }
+      return event;
+    },
   });
 }
 
