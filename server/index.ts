@@ -2,22 +2,39 @@ import './env'; // MUST be first — loads .env + .env.local before any module r
 import * as Sentry from '@sentry/node';
 import { nodeProfilingIntegration } from '@sentry/profiling-node';
 import express from 'express';
-import corsMiddleware from 'cors';
 import apiRoutes from './routes';
 import { errorHandler } from './middleware/error';
 import { securityHeaders, structuredLogger, corsPreflight } from './middleware/security';
+import { corsProd } from './middleware/cors';
 import { originGuard } from './middleware/originGuard';
 import { generalLimiter, sseLimiter } from './middleware/rateLimiter';
 import { sentryErrorHandler } from './middleware/sentry';
 import { authenticate } from './middleware/auth';
 import { logger } from './config/logger';
 
+// BE-8: Sentry — environment + release tracking + tunable sampling.
+//   - `release` reads from RELEASE_VERSION (set by Render/Railway build) or
+//     npm_package_version when launched via npm scripts; this lets Sentry
+//     tag every event with a deployable artifact ID so source-map upload
+//     and "first seen in" queries work end-to-end.
+//   - `environment` defaults to NODE_ENV so prod / staging / preview each
+//     get their own Sentry environment filter.
+//   - tracesSampleRate dropped to 0.1 (10%) to control quota at scale;
+//     SENTRY_TRACES_SAMPLE_RATE env can override per environment.
 if (process.env.SENTRY_DSN) {
+  const release =
+    process.env.SENTRY_RELEASE ||
+    process.env.RELEASE_VERSION ||
+    process.env.npm_package_version ||
+    undefined;
+
   Sentry.init({
     dsn: process.env.SENTRY_DSN,
+    environment: process.env.SENTRY_ENVIRONMENT || process.env.NODE_ENV || 'development',
+    release,
     integrations: [nodeProfilingIntegration()],
-    tracesSampleRate: 1.0,
-    profilesSampleRate: 1.0,
+    tracesSampleRate: Number.parseFloat(process.env.SENTRY_TRACES_SAMPLE_RATE ?? '0.1') || 0.1,
+    profilesSampleRate: Number.parseFloat(process.env.SENTRY_PROFILES_SAMPLE_RATE ?? '0.1') || 0.1,
   });
 }
 
@@ -40,17 +57,9 @@ app.use(securityHeaders);
 app.use(structuredLogger);
 app.use(corsPreflight);
 
-const corsOrigins = process.env.CORS_ORIGIN
-  ? process.env.CORS_ORIGIN.split(',').map((s) => s.trim())
-  : ['http://localhost:5173', 'http://localhost:4173', 'http://localhost:4175'];
-
-if (process.env.NODE_ENV === 'production' && !process.env.CORS_ORIGIN) {
-  logger.warn(
-    '[cors] CORS_ORIGIN env not set in production — falling back to localhost origins (likely wrong)',
-  );
-}
-
-app.use(corsMiddleware({ origin: corsOrigins, credentials: true }));
+// BE-4: Production-ready CORS — explicit origin allowlist + methods/headers
+// whitelist + credentials + 24h preflight cache. See middleware/cors.ts.
+app.use(corsProd());
 
 // Phase 109a: Origin/Referer guard for state-changing methods.
 // Webhooks + health probes carry no Origin → bypass via prefix list.
