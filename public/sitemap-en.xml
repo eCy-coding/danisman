@@ -173,15 +173,6 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.ecypro.com/en/blog/veri-yonetisimi-kvkk-gdpr-uyum</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/blog/veri-yonetisimi-kvkk-gdpr-uyum" />
-    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/blog/veri-yonetisimi-kvkk-gdpr-uyum" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/blog/veri-yonetisimi-kvkk-gdpr-uyum" />
-    <lastmod>2026-05-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://www.ecypro.com/en/blog/aile-sirketleri-kurumsallasma-yonetisim</loc>
     <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/blog/aile-sirketleri-kurumsallasma-yonetisim" />
     <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/blog/aile-sirketleri-kurumsallasma-yonetisim" />
@@ -285,6 +276,15 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/blog/uluslararasi-pazar-giris-stratejisi-turquality" />
     <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/blog/uluslararasi-pazar-giris-stratejisi-turquality" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/blog/uluslararasi-pazar-giris-stratejisi-turquality" />
+    <lastmod>2026-05-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.ecypro.com/en/blog/veri-yonetisimi-kvkk-gdpr-uyum</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/blog/veri-yonetisimi-kvkk-gdpr-uyum" />
+    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/blog/veri-yonetisimi-kvkk-gdpr-uyum" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/blog/veri-yonetisimi-kvkk-gdpr-uyum" />
     <lastmod>2026-05-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
