@@ -9,7 +9,8 @@
     "analytics": "Analytics",
     "consulting": "Consulting",
     "settings": "Settings",
-    "language": "Türkçe"
+    "language": "Türkçe",
+    "search": "Search..."
   },
   "hero": {
     "title": "Elite Consulting Ecosystem",
@@ -32,7 +33,10 @@
     "panel": "Panel"
   },
   "auth": {
-    "logout": "Logout"
+    "logout": "Logout",
+    "register": "Register",
+    "create_account": "Create Account",
+    "enter_details": "Enter your details to get started."
   },
   "analytics": {
     "total_revenue": "Total Revenue",
@@ -80,5 +84,54 @@
   "ai": {
     "analyzing": "Analyzing...",
     "insight_title": "AI Strategy Analysis"
-  }
+  },
+  "contact": {
+    "title": "Let's Bring",
+    "subtitle": "Your Projects to Life",
+    "intro": "Let us co-design your vision. Our team is ready to understand your needs and deliver the most fitting solution.",
+    "form_title": "Send a Message",
+    "form": {
+      "name": "Full Name",
+      "name_placeholder": "Your full name",
+      "email": "Email Address",
+      "subject": "Subject",
+      "subjects": {
+        "general": "General Inquiry",
+        "project": "Project Proposal",
+        "partnership": "Partnership",
+        "career": "Careers"
+      },
+      "message": "Your Message",
+      "message_placeholder": "How can we help?",
+      "sending": "Sending...",
+      "submit": "Send Message",
+      "success_title": "Message Sent!",
+      "success_desc": "We will get back to you as soon as possible.",
+      "error_title": "Something Went Wrong",
+      "error_desc": "Please try again or contact us by phone."
+    }
+  },
+  "cookies": {
+    "title": "Cookie Policy",
+    "metaDescription": "EcyPro cookie policy — which cookies are used, their purposes, and how to manage them.",
+    "manageBtn": "Manage Cookie Settings"
+  },
+  "privacy": {
+    "title": "Privacy Policy",
+    "metaDescription": "EcyPro KVKK and GDPR compliant privacy policy — how your personal data is collected, processed, and protected."
+  },
+  "terms": {
+    "title": "Terms of Service",
+    "metaDescription": "EcyPro terms of service — rights, obligations, payment and refund policy."
+  },
+  "title": "Live support",
+  "description": "We can load a third-party live chat service to answer your questions in real time. Nothing is loaded until you consent.",
+  "accept": "I accept",
+  "decline": "No, thanks",
+  "revoke": "Revoke consent",
+  "noServices": "No services to display.",
+  "placeholder": "The final text of this section will be added following review by qualified legal counsel.",
+  "no_results": "No Results Found",
+  "filter_clear": "Clear Filters",
+  "bookingDuration": "{count, plural, one {# hour} other {# hours}}"
 }

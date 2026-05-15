@@ -9,7 +9,8 @@
     "analytics": "Analizler",
     "consulting": "Danışmanlık",
     "settings": "Ayarlar",
-    "language": "English"
+    "language": "English",
+    "search": "Ara..."
   },
   "hero": {
     "title": "Elit Danışmanlık Ekosistemi",
@@ -32,7 +33,10 @@
     "panel": "Panel"
   },
   "auth": {
-    "logout": "Çıkış Yap"
+    "logout": "Çıkış Yap",
+    "register": "Kayıt Ol",
+    "create_account": "Hesap Oluştur",
+    "enter_details": "Başlamak için bilgilerinizi girin."
   },
   "analytics": {
     "total_revenue": "Toplam Gelir",
@@ -80,5 +84,54 @@
   "ai": {
     "analyzing": "Analiz ediliyor...",
     "insight_title": "AI Strateji Analizi"
-  }
+  },
+  "contact": {
+    "title": "Projelerinizi",
+    "subtitle": "Hayata Geçirelim",
+    "intro": "Vizyonunuzu birlikte tasarlayalım. Ekibimiz, ihtiyaçlarınızı anlamak ve size en uygun çözümü sunmak için hazır.",
+    "form_title": "Mesaj Gönderin",
+    "form": {
+      "name": "Ad Soyad",
+      "name_placeholder": "Adınız Soyadınız",
+      "email": "E-posta Adresi",
+      "subject": "Konu",
+      "subjects": {
+        "general": "Genel Bilgi",
+        "project": "Proje Teklifi",
+        "partnership": "İş Ortaklığı",
+        "career": "Kariyer"
+      },
+      "message": "Mesajınız",
+      "message_placeholder": "Size nasıl yardımcı olabiliriz?",
+      "sending": "Gönderiliyor...",
+      "submit": "Mesajı Gönder",
+      "success_title": "Mesajınız İletildi!",
+      "success_desc": "En kısa sürede size dönüş yapacağız.",
+      "error_title": "Bir Hata Oluştu",
+      "error_desc": "Lütfen tekrar deneyiniz veya telefon ile ulaşınız."
+    }
+  },
+  "cookies": {
+    "title": "Çerez Politikası",
+    "metaDescription": "EcyPro çerez politikası — hangi çerezlerin kullanıldığı, amaçları ve nasıl yönetileceği.",
+    "manageBtn": "Çerez Ayarlarını Yönet"
+  },
+  "privacy": {
+    "title": "Gizlilik Politikası",
+    "metaDescription": "EcyPro KVKK ve GDPR uyumlu gizlilik politikası — kişisel verilerinizin nasıl toplandığı, işlendiği ve korunduğu hakkında bilgi."
+  },
+  "terms": {
+    "title": "Kullanım Koşulları",
+    "metaDescription": "EcyPro hizmet kullanım koşulları — haklar, yükümlülükler, ödeme ve iade politikası."
+  },
+  "title": "Canlı destek",
+  "description": "Sorularınızı anlık olarak yanıtlamak için üçüncü taraf bir canlı sohbet hizmeti yükleyebiliriz. Onaylamadan hiçbir betik yüklenmez.",
+  "accept": "Onaylıyorum",
+  "decline": "Hayır, teşekkürler",
+  "revoke": "Onayı geri al",
+  "noServices": "Listelenecek hizmet bulunamadı.",
+  "placeholder": "Bu bölümün nihai metni hukuki danışman incelemesi sonrasında eklenecektir.",
+  "no_results": "Sonuç Bulunamadı",
+  "filter_clear": "Filtreleri Temizle",
+  "bookingDuration": "{count, plural, one {# saat} other {# saat}}"
 }
