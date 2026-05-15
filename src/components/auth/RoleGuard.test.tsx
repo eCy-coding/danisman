@@ -25,13 +25,13 @@ describe('RoleGuard', () => {
       <MemoryRouter initialEntries={['/protected']}>
         <Routes>
           <Route path="/" element={<div>Login Page</div>} />
-          <Route 
-            path="/protected" 
+          <Route
+            path="/protected"
             element={
-              <RoleGuard allowedRoles={['admin']} fallback={<div>Login Page</div>}>
+              <RoleGuard allowedRoles={['ADMIN']} fallback={<div>Login Page</div>}>
                 <div>Protected Content</div>
               </RoleGuard>
-            } 
+            }
           />
         </Routes>
       </MemoryRouter>
@@ -41,20 +41,20 @@ describe('RoleGuard', () => {
   });
 
   it('should redirect if user role is not allowed', () => {
-    // Mock user with client role
-    useAppStoreMock.mockImplementation((selector: (state: AppState) => unknown) => selector({ user: { role: 'client' } } as AppState));
+    // Mock user with client role — UserRole is uppercase post-FE refactor
+    useAppStoreMock.mockImplementation((selector: (state: AppState) => unknown) => selector({ user: { role: 'CLIENT' } } as AppState));
 
     render(
       <MemoryRouter initialEntries={['/protected']}>
         <Routes>
           <Route path="/" element={<div>Home Page</div>} />
-          <Route 
-            path="/protected" 
+          <Route
+            path="/protected"
             element={
-              <RoleGuard allowedRoles={['admin']} fallback={<div>Home Page</div>}>
+              <RoleGuard allowedRoles={['ADMIN']} fallback={<div>Home Page</div>}>
                 <div>Protected Content</div>
               </RoleGuard>
-            } 
+            }
           />
         </Routes>
       </MemoryRouter>
@@ -64,11 +64,11 @@ describe('RoleGuard', () => {
   });
 
   it('should render children if user role is allowed', () => {
-    useAppStoreMock.mockImplementation((selector: (state: AppState) => unknown) => selector({ user: { role: 'admin' } } as AppState));
+    useAppStoreMock.mockImplementation((selector: (state: AppState) => unknown) => selector({ user: { role: 'ADMIN' } } as AppState));
 
     render(
       <MemoryRouter initialEntries={['/protected']}>
-        <RoleGuard allowedRoles={['admin']} fallback={<div>Home Page</div>}>
+        <RoleGuard allowedRoles={['ADMIN']} fallback={<div>Home Page</div>}>
           <div>Protected Content</div>
         </RoleGuard>
       </MemoryRouter>
@@ -78,7 +78,7 @@ describe('RoleGuard', () => {
   });
 
   it('AdminOnly should allow admins', () => {
-    useAppStoreMock.mockImplementation((selector: (state: AppState) => unknown) => selector({ user: { role: 'admin' } } as AppState));
+    useAppStoreMock.mockImplementation((selector: (state: AppState) => unknown) => selector({ user: { role: 'ADMIN' } } as AppState));
      render(
       <MemoryRouter>
         <AdminOnly>
@@ -90,7 +90,7 @@ describe('RoleGuard', () => {
   });
 
    it('AdminOnly should block clients', () => {
-    useAppStoreMock.mockImplementation((selector: (state: AppState) => unknown) => selector({ user: { role: 'client' } } as AppState));
+    useAppStoreMock.mockImplementation((selector: (state: AppState) => unknown) => selector({ user: { role: 'CLIENT' } } as AppState));
      render(
       <MemoryRouter initialEntries={['/admin']}>
          <Routes>
