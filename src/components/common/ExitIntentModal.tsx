@@ -153,7 +153,6 @@ export const ExitIntentModal: React.FC = () => {
       previousFocusRef.current?.focus?.();
     };
     // handleClose is stable (closure over setOpen/trackEvent only).
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
 
   const handleSubmit = async (e: React.FormEvent): Promise<void> => {
@@ -329,7 +328,7 @@ export const ExitIntentModal: React.FC = () => {
                       <button
                         type="submit"
                         disabled={!email || status === 'loading'}
-                        className="w-full flex items-center justify-center gap-2 bg-secondary hover:bg-secondary/90 disabled:opacity-50 text-white font-semibold py-3 rounded-xl transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-secondary"
+                        className="w-full flex items-center justify-center gap-2 bg-secondary hover:bg-secondary/90 disabled:opacity-50 text-neutral font-semibold py-3 rounded-xl transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-secondary"
                       >
                         {status === 'loading' ? (
                           <div

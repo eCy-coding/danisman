@@ -131,7 +131,7 @@ export const ConversionBanner: React.FC<ConversionBannerProps> = ({
                 to={primaryCta.href}
                 onClick={() => trackEvent('ConversionBanner', 'Click', 'primary-cta')}
                 data-testid="conversion-banner-primary-cta"
-                className="inline-flex items-center gap-2 bg-secondary hover:bg-secondary/90 text-white font-semibold px-6 py-3 rounded-xl transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-secondary shadow-lg shadow-secondary/20 hover:shadow-secondary/40"
+                className="inline-flex items-center gap-2 bg-secondary hover:bg-secondary/90 text-neutral font-semibold px-6 py-3 rounded-xl transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-secondary shadow-lg shadow-secondary/20 hover:shadow-secondary/40"
               >
                 <Calendar size={16} aria-hidden="true" />
                 {lang === 'tr' ? primaryCta.tr : primaryCta.en}

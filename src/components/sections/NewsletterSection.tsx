@@ -239,7 +239,7 @@ export const NewsletterSection: React.FC = () => {
                       type="submit"
                       data-testid="newsletter-submit"
                       disabled={!email || !consent || status === 'loading'}
-                      className="w-full flex items-center justify-center gap-2 bg-secondary hover:bg-secondary/90 disabled:opacity-50 text-white font-semibold py-3 rounded-xl transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-secondary"
+                      className="w-full flex items-center justify-center gap-2 bg-secondary hover:bg-secondary/90 disabled:opacity-50 text-neutral font-semibold py-3 rounded-xl transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-secondary"
                     >
                       {status === 'loading' ? (
                         <div

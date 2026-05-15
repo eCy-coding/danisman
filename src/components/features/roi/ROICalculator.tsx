@@ -193,7 +193,7 @@ export const ROICalculator: React.FC = () => {
             )}
             <button
               onClick={handleCTAClick}
-              className="inline-flex items-center gap-2 px-8 py-3.5 bg-secondary text-white font-semibold rounded-xl hover:bg-secondary/90 transition-all active:scale-95 shadow-lg shadow-secondary/25"
+              className="inline-flex items-center gap-2 px-8 py-3.5 bg-secondary text-neutral font-semibold rounded-xl hover:bg-secondary/90 transition-all active:scale-95 shadow-lg shadow-secondary/25"
             >
               Bu sonucu gerçeğe dönüştür
               <ArrowRight size={18} />

@@ -236,7 +236,7 @@ export const ProcessTimeline: React.FC = () => {
         >
           <Link
             to="/contact"
-            className="inline-flex items-center gap-2 bg-secondary hover:bg-secondary/90 text-white font-semibold px-6 py-3 rounded-xl transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2 focus-visible:ring-offset-neutral"
+            className="inline-flex items-center gap-2 bg-secondary hover:bg-secondary/90 text-neutral font-semibold px-6 py-3 rounded-xl transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2 focus-visible:ring-offset-neutral"
           >
             {lang === 'tr' ? 'Süreci Başlat' : 'Start the Process'}
             <ArrowRight size={16} aria-hidden="true" />

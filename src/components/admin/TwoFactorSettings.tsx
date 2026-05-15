@@ -155,7 +155,7 @@ export const TwoFactorSettings: React.FC = () => {
         <button
           onClick={() => setupMutation.mutate()}
           disabled={setupMutation.isPending}
-          className="flex items-center gap-2 px-4 py-2 bg-secondary text-white rounded-lg text-sm font-medium hover:bg-secondary/90 transition-colors disabled:opacity-50"
+          className="flex items-center gap-2 px-4 py-2 bg-secondary text-neutral rounded-lg text-sm font-medium hover:bg-secondary/90 transition-colors disabled:opacity-50"
         >
           {setupMutation.isPending ? (
             <Loader2 size={14} className="animate-spin" />
@@ -211,7 +211,7 @@ export const TwoFactorSettings: React.FC = () => {
           </div>
           <button
             onClick={() => setStep('setup-verify')}
-            className="w-full px-4 py-2 bg-secondary text-white rounded-lg text-sm font-medium hover:bg-secondary/90 transition-colors"
+            className="w-full px-4 py-2 bg-secondary text-neutral rounded-lg text-sm font-medium hover:bg-secondary/90 transition-colors"
           >
             QR Taradım → Kodu Girin
           </button>
@@ -246,7 +246,7 @@ export const TwoFactorSettings: React.FC = () => {
               disabled={
                 token.length !== 6 || verifySetupMutation.isPending || disableMutation.isPending
               }
-              className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-secondary text-white rounded-lg text-sm font-medium hover:bg-secondary/90 transition-colors disabled:opacity-50"
+              className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-secondary text-neutral rounded-lg text-sm font-medium hover:bg-secondary/90 transition-colors disabled:opacity-50"
             >
               {verifySetupMutation.isPending || disableMutation.isPending ? (
                 <Loader2 size={14} className="animate-spin" />
