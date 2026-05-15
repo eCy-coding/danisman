@@ -22,9 +22,21 @@ import { checkAllServices } from '../lib/health';
 
 const router = Router();
 
+// BE-7: SERVICE_VERSION pulled from npm_package_version (set by node when run
+// via `npm`/`pnpm`) → falls back to RELEASE_VERSION env (set by Render) → "1.0.0".
+const SERVICE_VERSION =
+  process.env.npm_package_version || process.env.RELEASE_VERSION || '1.0.0';
+
 // ─── Basic health check ──────────────────────────────────
+// Fast path — NO DB/Redis calls. For platform liveness probes.
 router.get('/health', (_req, res) => {
-  res.json({ status: 'ok', timestamp: new Date().toISOString(), version: '1.0.0' });
+  res.json({
+    status: 'ok',
+    service: 'ecypro-api',
+    version: SERVICE_VERSION,
+    uptime: process.uptime(),
+    timestamp: new Date().toISOString(),
+  });
 });
 
 // ─── Deep readiness probe ────────────────────────────────
@@ -33,6 +45,7 @@ router.get('/ready', async (_req, res) => {
   const checks: Record<string, 'ok' | 'degraded' | 'down'> = {
     db: 'down',
     redis: 'down',
+    sentry: process.env.SENTRY_DSN ? 'ok' : 'degraded',
   };
 
   // DB ping — 1.5s timeout
@@ -61,6 +74,9 @@ router.get('/ready', async (_req, res) => {
   const isReady = checks.db === 'ok';
   res.status(isReady ? 200 : 503).json({
     status: isReady ? 'ok' : 'not_ready',
+    service: 'ecypro-api',
+    version: SERVICE_VERSION,
+    uptime: process.uptime(),
     checks,
     timestamp: new Date().toISOString(),
   });
@@ -103,10 +119,64 @@ router.get('/health/services', async (_req, res) => {
   }
 });
 
-// OpenAPI Documentation
-router.get('/docs', (_req, res) => {
+// ─── BE-12: OpenAPI Documentation ──────────────────────────────────────────
+// /api/docs.json — raw OpenAPI 3 JSON (machine consumers, Postman import)
+router.get('/docs.json', (_req, res) => {
   res.json(openApiSpec);
 });
+
+// /api/docs — Swagger UI rendered from CDN (no extra npm dep).
+// Production gate: require an admin JWT to view interactive docs in prod.
+// Dev/test: open. Set DOCS_PUBLIC=1 to keep open in prod (e.g. for partners).
+router.get('/docs', (req, res, next) => {
+  const isProd = process.env.NODE_ENV === 'production';
+  const isPublic = process.env.DOCS_PUBLIC === '1';
+  if (!isProd || isPublic) return renderSwaggerUI(req, res);
+
+  // Production + private → require Bearer token. Reuse the auth middleware
+  // lazily so we don't pull it into the hot path for /health etc.
+  return import('../middleware/auth').then(({ authenticate, requireRole }) => {
+    authenticate(req, res, () => {
+      requireRole('ADMIN')(
+        req as Parameters<ReturnType<typeof requireRole>>[0],
+        res,
+        () => renderSwaggerUI(req, res),
+      );
+    });
+  }).catch(next);
+});
+
+function renderSwaggerUI(_req: import('express').Request, res: import('express').Response): void {
+  // Single-file HTML; loads Swagger UI assets from cdnjs (Anthropic-allowlisted CDN
+  // already used elsewhere in the project for browser artifacts).
+  const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>EcyPro API — Swagger UI</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.17.14/swagger-ui.min.css" />
+  <style>body{margin:0;background:#1E1F20;}</style>
+</head>
+<body>
+  <div id="swagger-ui"></div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.17.14/swagger-ui-bundle.min.js" crossorigin></script>
+  <script>
+    window.addEventListener('load', () => {
+      window.ui = SwaggerUIBundle({
+        url: '/api/docs.json',
+        dom_id: '#swagger-ui',
+        deepLinking: true,
+        presets: [SwaggerUIBundle.presets.apis],
+        layout: 'BaseLayout',
+        persistAuthorization: true,
+      });
+    });
+  </script>
+</body>
+</html>`;
+  res.setHeader('Content-Type', 'text/html; charset=utf-8');
+  res.send(html);
+}
 
 // ─── P36-T02: SSE Analytics Real-Time Stream ─────────────────────────────────
 // Streams live interaction events + aggregated KPIs to AdminAnalyticsPage.
