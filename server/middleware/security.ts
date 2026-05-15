@@ -39,6 +39,7 @@ export function securityHeaders(req: Request, res: Response, next: NextFunction)
 
 // ─── Structured Request Logger ───────────────────────────
 
+import * as Sentry from '@sentry/node';
 import { logger } from '../config/logger';
 
 interface RequestLog {
@@ -54,7 +55,7 @@ interface RequestLog {
 
 export function structuredLogger(req: Request, res: Response, next: NextFunction): void {
   const start = Date.now();
-  const requestId = req.headers['x-request-id'] as string || 'unknown';
+  const requestId = (req.headers['x-request-id'] as string) || 'unknown';
 
   // Capture response finish
   res.on('finish', () => {
@@ -76,6 +77,29 @@ export function structuredLogger(req: Request, res: Response, next: NextFunction
       logger.warn('Request client error', logData);
     } else {
       logger.info('Request success', logData);
+    }
+
+    // BE-3: Forward HTTP request as Sentry breadcrumb (only if SDK initialized).
+    // Breadcrumbs make every captured exception self-contained: the engineer
+    // sees the request path/status/duration that led to the failure without
+    // having to grep Winston logs.
+    if (process.env.SENTRY_DSN) {
+      try {
+        Sentry.addBreadcrumb({
+          category: 'http',
+          type: 'http',
+          level: logData.statusCode >= 500 ? 'error' : logData.statusCode >= 400 ? 'warning' : 'info',
+          data: {
+            url: req.originalUrl ?? req.url,
+            method: logData.method,
+            status_code: logData.statusCode,
+            duration_ms: logData.durationMs,
+            request_id: logData.requestId,
+          },
+        });
+      } catch {
+        /* never let observability break the request */
+      }
     }
   });
 

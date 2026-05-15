@@ -101,3 +101,15 @@ export const logger = winston.createLogger({
   format: combine(redactFormat(), timestamp(), activeFormat),
   transports,
 });
+
+/**
+ * BE-3: Child logger helper — bind metadata (e.g. requestId, userId) to a
+ * sub-logger so every emit downstream is automatically correlated.
+ *
+ * Usage:
+ *   const log = childLogger({ requestId, userId });
+ *   log.info('processing payment', { orderId });
+ */
+export function childLogger(bindings: Record<string, unknown>): winston.Logger {
+  return logger.child(bindings);
+}
