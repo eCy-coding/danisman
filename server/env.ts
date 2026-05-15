@@ -23,12 +23,13 @@ for (const file of ['.env', '.env.local']) {
   }
 }
 
-// Required in production — fail fast before any module loads
-if (process.env.NODE_ENV === 'production') {
-  const REQUIRED = ['JWT_SECRET', 'DATABASE_URL'] as const;
-  const missing = REQUIRED.filter((k) => !process.env[k]);
-  if (missing.length > 0) {
-    console.error(`[env] FATAL: Missing required env vars: ${missing.join(', ')}`);
-    process.exit(1);
-  }
-}
+// BE-2: Zod-based fail-fast validation of process.env.
+// Importing this module triggers `validate()` as a side effect, AFTER the
+// dotenv load above so .env / .env.local values are visible.
+//
+//   - Production: schema violation OR missing
+//     (DATABASE_URL | JWT_SECRET | CORS_ORIGIN) → process.exit(1).
+//   - Dev/test: warns to console and continues with safe defaults.
+//
+// Use `import { env } from './config/env'` for typed access elsewhere.
+import './config/env';
