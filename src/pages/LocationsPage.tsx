@@ -22,10 +22,10 @@ export const LocationsPage: React.FC = () => {
                     <div className="grid md:grid-cols-3 gap-8">
                         {LOCATIONS_COPY.offices.map((office, idx) => (
                             <div key={idx} className="glass-card p-8 rounded-xl border-t-4 border-primary">
-                                <h3 className="text-xl font-bold text-primary mb-4 flex items-center gap-2">
+                                <h2 className="text-xl font-bold text-primary mb-4 flex items-center gap-2">
                                     <MapPin size={20} className="text-secondary" />
                                     {getLang(office.city as MultiLang, lang)}
-                                </h3>
+                                </h2>
                                 <p className="text-slate-400 mb-4 leading-relaxed">{getLang(office.address as MultiLang, lang)}</p>
                                 <div className="flex items-center gap-2 text-slate-400 text-sm">
                                     <Phone size={16} />

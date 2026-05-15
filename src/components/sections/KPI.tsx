@@ -141,17 +141,18 @@ export const KPI: React.FC = () => {
           </FadeIn>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-6 lg:gap-8" role="list">
+        <ul className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-6 lg:gap-8 list-none p-0 m-0">
           {KPI_ITEMS.map((item, idx) => (
-            <KPIItem
-              key={item.id}
-              item={item}
-              delay={idx * 150}
-              lang={lang}
-              span={getSpanForItem(idx)}
-            />
+            <li key={item.id} className="contents">
+              <KPIItem
+                item={item}
+                delay={idx * 150}
+                lang={lang}
+                span={getSpanForItem(idx)}
+              />
+            </li>
           ))}
-        </div>
+        </ul>
       </div>
     </section>
   );

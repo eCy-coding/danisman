@@ -27,7 +27,7 @@ export const IndustriesPage: React.FC = () => {
                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                         {['FinTech', 'HealthTech', 'Energy', 'Retail', 'Public Sector'].map((ind, i) => (
                             <div key={i} className="glass-card p-6 rounded-xl hover:border-white/20 transition-all">
-                                <h3 className="font-bold text-lg text-primary mb-2">{ind}</h3>
+                                <h2 className="font-bold text-lg text-primary mb-2">{ind}</h2>
                                 <p className="text-sm text-slate-400">
                                     {lang === 'tr' ? `${ind} alanında küresel uzmanlık ve yenilikçi çözümler.` : `Global expertise and innovative solutions in ${ind}.`}
                                 </p>

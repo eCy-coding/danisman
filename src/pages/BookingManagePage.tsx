@@ -77,6 +77,7 @@ export const BookingManagePage: React.FC = () => {
       </Helmet>
 
       <main className="min-h-screen bg-neutral flex items-center justify-center px-4 py-16">
+        <h1 className="sr-only">Görüşme Yönetimi / Booking Management</h1>
         <div className="w-full max-w-md">
           {/* Brand */}
           <div className="text-center mb-8">
