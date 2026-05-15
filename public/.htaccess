@@ -1,8 +1,240 @@
+# =============================================================================
+# eCyPro Premium Consulting — Apache .htaccess (Hostinger shared)
+# Generated: 2026-05-15 | Phase 22 publish-readiness
+#
+# Sections:
+#   1. SPA Fallback (REQUIRED — preserved from baseline)
+#   2. Security Headers (HSTS, X-Content-Type-Options, X-Frame-Options,
+#      Referrer-Policy, Permissions-Policy)
+#   3. MIME types (modern formats — webmanifest, webp, avif, br, gz)
+#   4. Compression — pre-compressed brotli/gzip negotiation + mod_deflate gzip
+#   5. Cache headers — 1y immutable for hashed assets, no-cache for HTML/SW
+#   6. Misc (charset, ETag disable for hashed assets)
+#
+# Note: CSP is defined via <meta http-equiv> in index.html — NOT duplicated
+# here to avoid double-CSP conflicts in browsers.
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# 1) SPA FALLBACK — must come first so other rules don't interfere
+# -----------------------------------------------------------------------------
 <IfModule mod_rewrite.c>
   RewriteEngine On
   RewriteBase /
+
+  # Skip rewrite for actual files/dirs and pre-compressed variants.
   RewriteRule ^index\.html$ - [L]
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
+
+  # Skip rewrite for static assets and the API path (kept future-proof for hybrid).
+  RewriteCond %{REQUEST_URI} !^/api/
+  RewriteCond %{REQUEST_URI} !^/assets/
+  RewriteCond %{REQUEST_URI} !^/fonts/
+  RewriteCond %{REQUEST_URI} !^/locales/
+  RewriteCond %{REQUEST_URI} !\.(js|css|map|json|xml|txt|ico|png|jpe?g|gif|webp|avif|svg|woff2?|ttf|otf|eot|mp4|webm|mp3|pdf|webmanifest|br|gz)$ [NC]
+
   RewriteRule . /index.html [L]
 </IfModule>
+
+# -----------------------------------------------------------------------------
+# 2) SECURITY HEADERS
+# -----------------------------------------------------------------------------
+<IfModule mod_headers.c>
+  # HSTS — 2 year max-age, includeSubDomains, preload-eligible.
+  # NOTE: only send on HTTPS to avoid breaking dev/preview.
+  <If "%{HTTPS} == 'on'">
+    Header always set Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
+  </If>
+
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=(), usb=(), magnetometer=(), gyroscope=(), fullscreen=(self)"
+
+  # COOP — relaxed to keep 3rd-party scripts (EmailJS, Sentry, GA4) working.
+  Header always set Cross-Origin-Opener-Policy "same-origin-allow-popups"
+
+  # Hide server signature / version (defense-in-depth; Hostinger may already mask).
+  Header always unset X-Powered-By
+  Header always unset Server
+</IfModule>
+
+# -----------------------------------------------------------------------------
+# 3) MIME TYPES (modern formats — Hostinger Apache sometimes ships outdated)
+# -----------------------------------------------------------------------------
+<IfModule mod_mime.c>
+  AddType application/manifest+json    .webmanifest
+  AddType application/json             .json
+  AddType image/webp                   .webp
+  AddType image/avif                   .avif
+  AddType image/svg+xml                .svg
+  AddType font/woff2                   .woff2
+  AddType font/woff                    .woff
+  AddType application/javascript       .mjs
+  AddType text/xml                     .xml
+  AddType application/rss+xml          .rss
+
+  # Encodings for pre-compressed variants
+  AddEncoding br   .br
+  AddEncoding gzip .gz
+</IfModule>
+
+# -----------------------------------------------------------------------------
+# 4) COMPRESSION — pre-compressed brotli/gzip negotiation
+# -----------------------------------------------------------------------------
+<IfModule mod_rewrite.c>
+  # Brotli (.br) if client supports.
+  RewriteCond %{HTTP:Accept-Encoding} br
+  RewriteCond %{REQUEST_FILENAME}.br -f
+  RewriteRule ^(.*)$ $1.br [QSA,L]
+
+  # Gzip (.gz) fallback if client supports gzip but not brotli (or .br missing).
+  RewriteCond %{HTTP:Accept-Encoding} gzip
+  RewriteCond %{REQUEST_FILENAME}.gz -f
+  RewriteRule ^(.*)$ $1.gz [QSA,L]
+</IfModule>
+
+<IfModule mod_headers.c>
+  # When serving a *.br/*.gz file, fix Content-Encoding + Vary headers.
+  <FilesMatch "\.js\.br$">
+    Header set Content-Encoding br
+    Header append Vary Accept-Encoding
+    Header set Content-Type "application/javascript"
+  </FilesMatch>
+  <FilesMatch "\.css\.br$">
+    Header set Content-Encoding br
+    Header append Vary Accept-Encoding
+    Header set Content-Type "text/css"
+  </FilesMatch>
+  <FilesMatch "\.svg\.br$">
+    Header set Content-Encoding br
+    Header append Vary Accept-Encoding
+    Header set Content-Type "image/svg+xml"
+  </FilesMatch>
+  <FilesMatch "\.(html|json|xml|webmanifest)\.br$">
+    Header set Content-Encoding br
+    Header append Vary Accept-Encoding
+  </FilesMatch>
+
+  <FilesMatch "\.js\.gz$">
+    Header set Content-Encoding gzip
+    Header append Vary Accept-Encoding
+    Header set Content-Type "application/javascript"
+  </FilesMatch>
+  <FilesMatch "\.css\.gz$">
+    Header set Content-Encoding gzip
+    Header append Vary Accept-Encoding
+    Header set Content-Type "text/css"
+  </FilesMatch>
+  <FilesMatch "\.(html|json|xml|webmanifest|svg)\.gz$">
+    Header set Content-Encoding gzip
+    Header append Vary Accept-Encoding
+  </FilesMatch>
+</IfModule>
+
+# Fallback gzip on-the-fly when no pre-compressed file exists.
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript
+  AddOutputFilterByType DEFLATE application/javascript application/json application/xml
+  AddOutputFilterByType DEFLATE application/rss+xml application/atom+xml application/manifest+json
+  AddOutputFilterByType DEFLATE image/svg+xml font/woff2 font/woff
+</IfModule>
+
+# -----------------------------------------------------------------------------
+# 5) CACHE HEADERS
+# -----------------------------------------------------------------------------
+<IfModule mod_expires.c>
+  ExpiresActive On
+
+  # HTML — short, must revalidate (deploys ship new HTML)
+  ExpiresByType text/html                       "access plus 0 seconds"
+
+  # Service worker — never cache (handled below by Files block too)
+  <Files "sw.js">
+    ExpiresDefault                              "access plus 0 seconds"
+  </Files>
+  <Files "registerSW.js">
+    ExpiresDefault                              "access plus 0 seconds"
+  </Files>
+
+  # Web manifest, robots, sitemaps — short
+  ExpiresByType application/manifest+json       "access plus 1 week"
+  ExpiresByType text/xml                        "access plus 1 day"
+  ExpiresByType application/xml                 "access plus 1 day"
+  ExpiresByType text/plain                      "access plus 1 day"
+
+  # Fonts — 1 year
+  ExpiresByType font/woff2                      "access plus 1 year"
+  ExpiresByType font/woff                       "access plus 1 year"
+  ExpiresByType font/ttf                        "access plus 1 year"
+
+  # Images — 1 month default, longer for hashed
+  ExpiresByType image/png                       "access plus 1 month"
+  ExpiresByType image/jpeg                      "access plus 1 month"
+  ExpiresByType image/webp                      "access plus 1 month"
+  ExpiresByType image/avif                      "access plus 1 month"
+  ExpiresByType image/svg+xml                   "access plus 1 month"
+  ExpiresByType image/x-icon                    "access plus 1 year"
+</IfModule>
+
+<IfModule mod_headers.c>
+  # Hashed asset files (Vite uses 8-char content hash like `main-Ah1C6Bu1.js`).
+  # 1 year + immutable — safe because filename changes on content change.
+  <FilesMatch "-[a-zA-Z0-9_-]{8,}\.(js|css|woff2?|png|jpe?g|webp|avif|svg)(\.br|\.gz)?$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+
+  # HTML must always revalidate
+  <FilesMatch "\.html$">
+    Header set Cache-Control "no-cache, must-revalidate"
+  </FilesMatch>
+
+  # Service worker must always revalidate (PWA correctness)
+  <Files "sw.js">
+    Header set Cache-Control "no-cache, must-revalidate"
+  </Files>
+
+  # Webmanifest — 1w, public
+  <FilesMatch "\.webmanifest$">
+    Header set Cache-Control "public, max-age=604800"
+  </FilesMatch>
+
+  # Sitemaps/RSS/robots — 1 day, public
+  <FilesMatch "(sitemap.*\.xml|rss\.xml|robots\.txt)$">
+    Header set Cache-Control "public, max-age=86400"
+  </FilesMatch>
+</IfModule>
+
+# -----------------------------------------------------------------------------
+# 6) MISC
+# -----------------------------------------------------------------------------
+# UTF-8 default for text
+AddDefaultCharset UTF-8
+
+# Disable ETag (rely on Cache-Control + Last-Modified)
+<IfModule mod_headers.c>
+  Header unset ETag
+</IfModule>
+FileETag None
+
+# Block hidden dotfiles (.git, .env, etc.) — defense-in-depth even though
+# they shouldn't be in public_html.
+<FilesMatch "^\.">
+  Require all denied
+</FilesMatch>
+
+# Allow well-known (Let's Encrypt http-01 challenges etc.)
+<IfModule mod_alias.c>
+  <Directory "/.well-known">
+    Require all granted
+  </Directory>
+</IfModule>
+
+# Block backup/source files if accidentally uploaded
+<FilesMatch "\.(bak|swp|orig|tmp|log|sql)$">
+  Require all denied
+</FilesMatch>
+
+# 404 → SPA handles it (rewrite above); ensure default ErrorDocument is set
+ErrorDocument 404 /index.html
