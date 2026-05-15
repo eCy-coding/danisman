@@ -187,6 +187,12 @@ e2e_health.json
 # Database backups (never commit)
 backups/
 
+# Cowork agent outputs (local reports — not source of truth)
+outputs/
+
+# Preview/sandbox build artifacts
+dist-preview/
+
 # Scrapling crowler (venv + reports)
 crowler/.venv/
 crowler/reports/
