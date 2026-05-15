@@ -35,6 +35,29 @@ export class HttpError extends Error {
     super(message);
     this.name = 'HttpError';
   }
+
+  // BE-6: Ergonomic factories — keep call sites short and code stable.
+  static badRequest(message = 'Bad request', issues?: ApiErrorEnvelope['issues']): HttpError {
+    return new HttpError(400, 'BAD_REQUEST', message, issues);
+  }
+  static unauthorized(message = 'Authentication required'): HttpError {
+    return new HttpError(401, 'UNAUTHORIZED', message);
+  }
+  static forbidden(message = 'Insufficient permissions'): HttpError {
+    return new HttpError(403, 'FORBIDDEN', message);
+  }
+  static notFound(message = 'Resource not found'): HttpError {
+    return new HttpError(404, 'NOT_FOUND', message);
+  }
+  static conflict(message = 'Resource already exists'): HttpError {
+    return new HttpError(409, 'CONFLICT', message);
+  }
+  static tooManyRequests(message = 'Too many requests'): HttpError {
+    return new HttpError(429, 'RATE_LIMITED', message);
+  }
+  static internal(message = 'Internal server error'): HttpError {
+    return new HttpError(500, 'INTERNAL_ERROR', message);
+  }
 }
 
 function normalizeZod(err: ZodError): ApiErrorEnvelope['issues'] {
