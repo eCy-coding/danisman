@@ -18,14 +18,17 @@
     <link rel="canonical" href="https://www.ecypro.com/" />
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://www.google-analytics.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https: blob:; font-src 'self' data:; connect-src 'self' https://huggingface.co https://cdn-lfs.huggingface.co https://www.google-analytics.com https://api.emailjs.com https://*.google-analytics.com https://*.ingest.sentry.io https://api.ecypro.com https://*.ecypro.com wss://* http://localhost:* ws://localhost:* ws://127.0.0.1:*; worker-src 'self' blob:; frame-src 'self'; object-src 'none'; base-uri 'self';"
+      content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://www.googletagmanager.com https://www.google-analytics.com https://browser.sentry-cdn.com https://*.sentry.io https://api.emailjs.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https: blob:; font-src 'self' data:; connect-src 'self' https://huggingface.co https://cdn-lfs.huggingface.co https://www.googletagmanager.com https://www.google-analytics.com https://*.google-analytics.com https://browser.sentry-cdn.com https://*.sentry.io https://*.ingest.sentry.io https://api.emailjs.com https://api.ecypro.com https://*.ecypro.com wss://* http://localhost:* ws://localhost:* ws://127.0.0.1:*; worker-src 'self' blob:; frame-src 'self'; object-src 'none'; base-uri 'self';"
     />
     <meta http-equiv="X-Content-Type-Options" content="nosniff" />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
 
-    <!-- i18n hreflang alternate links -->
+    <!-- i18n hreflang alternate links — bcp47 codes, both bare and region-tagged
+         variants improve discoverability for regional Googlebots. -->
     <link rel="alternate" hreflang="tr" href="https://www.ecypro.com/tr/" />
+    <link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/" />
     <link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/" />
+    <link rel="alternate" hreflang="en-US" href="https://www.ecypro.com/en/" />
     <link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/" />
 
     <!-- P33-T25: Critical font preload — fetchpriority=high blocks FOIT for above-fold h1 -->
@@ -96,6 +99,118 @@
       content="Global ölçekte stratejik büyüme ve dijital dönüşüm ortağınız."
     />
     <meta property="twitter:image" content="https://www.ecypro.com/og-image.jpg" />
+
+    <!-- Structured Data (schema.org) — crawler-first inline JSON-LD.
+         Pre-JS-render readable for Bingbot, Yandex, and Googlebot's HTML pass. -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "@id": "https://www.ecypro.com/#organization",
+        "name": "EcyPro Premium Consulting",
+        "alternateName": "EcyPro",
+        "url": "https://www.ecypro.com",
+        "logo": "https://www.ecypro.com/pwa-512x512.png",
+        "image": "https://www.ecypro.com/og-image.jpg",
+        "email": "info@ecypro.com",
+        "description": "Global standartlarda kurumsal yönetim danışmanlığı, etkinlik yönetimi ve dijital marka çözümleri.",
+        "knowsLanguage": ["tr", "en"],
+        "contactPoint": [
+          {
+            "@type": "ContactPoint",
+            "email": "info@ecypro.com",
+            "contactType": "customer support",
+            "availableLanguage": ["Turkish", "English"],
+            "areaServed": ["TR", "EU", "Worldwide"]
+          }
+        ]
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "@id": "https://www.ecypro.com/#website",
+        "url": "https://www.ecypro.com",
+        "name": "EcyPro | Stratejik Yönetim Danışmanlığı",
+        "description": "EcyPro Premium Consulting — strategic management, event, and digital brand solutions.",
+        "publisher": { "@id": "https://www.ecypro.com/#organization" },
+        "inLanguage": ["tr-TR", "en-US"],
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "https://www.ecypro.com/search?q={search_term_string}",
+          "query-input": "required name=search_term_string"
+        }
+      }
+    </script>
+
+    <!-- BreadcrumbList — homepage anchors the breadcrumb trail; deeper pages
+         override this with route-scoped JSON-LD via react-helmet. -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "@id": "https://www.ecypro.com/#breadcrumb",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Anasayfa",
+            "item": "https://www.ecypro.com/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Hizmetler",
+            "item": "https://www.ecypro.com/services"
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "name": "Blog",
+            "item": "https://www.ecypro.com/blog"
+          }
+        ]
+      }
+    </script>
+
+    <!-- FAQPage — homepage FAQ blob. Crawlers surface these as rich results.
+         Keep questions in the dominant audience language (TR); EN visitors
+         still receive a valid schema. Per Google guidelines the questions and
+         answers must match content visible on the page. -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "@id": "https://www.ecypro.com/#faq",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "EcyPro hangi hizmetleri sunar?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "EcyPro Premium Consulting; kurumsal yönetim danışmanlığı, etkinlik yönetimi ve dijital marka çözümleri sunar. Hizmet kapsamı her müşteri için ayrı düzenlenen sözleşmede tanımlanır."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Veri gizliliği KVKK ve GDPR'a uygun mu?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Evet. Kişisel veriler 6698 sayılı KVKK ve GDPR çerçevesinde işlenir. Detaylı gizlilik politikası ve veri sahibi hakları için /privacy sayfasına bakınız."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "İletişim için en hızlı yol nedir?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "info@ecypro.com adresine e-posta gönderebilir veya /contact sayfasındaki iletişim formunu kullanabilirsiniz. 24 saat içinde dönüş yapılır."
+            }
+          }
+        ]
+      }
+    </script>
 
     <!-- P33-T03: Non-blocking stylesheet — print media trick defers parse until after FCP.
          noscript fallback ensures CSS loads for bots/old browsers.
