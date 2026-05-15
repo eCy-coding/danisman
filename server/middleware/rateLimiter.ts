@@ -149,23 +149,36 @@ export function createRateLimiter(options: RateLimiterOptions) {
 
 // ─── Pre-configured Limiters ─────────────────────────────
 
-/** General API: 100 requests per 15 minutes */
+/**
+ * General API: 100 requests per 15 minutes.
+ * BE-5: Window/max can be overridden via `RATE_LIMIT_WINDOW_MS` /
+ * `RATE_LIMIT_MAX` env vars without touching code.
+ */
 export const generalLimiter = createRateLimiter({
-  windowMs: 15 * 60 * 1000,
-  maxRequests: 100,
+  windowMs: Number.parseInt(process.env.RATE_LIMIT_WINDOW_MS ?? '', 10) || 15 * 60 * 1000,
+  maxRequests: Number.parseInt(process.env.RATE_LIMIT_MAX ?? '', 10) || 100,
 });
 
-/** Auth endpoints: 10 requests per 15 minutes (brute-force protection) */
+/**
+ * BE-5: Auth endpoints — 5 requests per 15 minutes (brute-force protection).
+ * Tightened from 10/15min per P3 backend hardening: login/register/refresh
+ * are the highest-value targets and 5 attempts/15min still allows a real
+ * user 4 typo retries while crushing credential stuffing.
+ */
 export const authLimiter = createRateLimiter({
   windowMs: 15 * 60 * 1000,
-  maxRequests: 10,
+  maxRequests: 5,
   message: 'Too many authentication attempts. Please wait 15 minutes.',
 });
 
-/** Contact form: 5 per hour */
+/**
+ * BE-5: Contact form — 3 per hour per IP.
+ * Contact + newsletter subscribe share this limiter. 3/hour stops bots
+ * cold while leaving room for one legitimate submission + two retries.
+ */
 export const contactLimiter = createRateLimiter({
   windowMs: 60 * 60 * 1000,
-  maxRequests: 5,
+  maxRequests: 3,
   message: 'Too many contact form submissions. Please try again later.',
 });
 
