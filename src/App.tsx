@@ -815,16 +815,32 @@ const App: React.FC = () => {
   React.useEffect(() => {
     initMonitoring();
 
-    // Initialize Sentry Error Reporting
-    sentry.init();
-    sentry.addBreadcrumb({ category: 'lifecycle', message: 'App mounted', level: 'info' });
+    // P7 Round A — Sentry boot-time path moved to requestIdleCallback so it
+    // does NOT block first-paint hydration. Error reporting trades the first
+    // ~1-2s of capture (which is dominated by build-time errors we already
+    // catch in CI) for measurable TBT/FCP gains on cold start.
+    const idle: (cb: () => void) => void =
+      typeof window !== 'undefined' && 'requestIdleCallback' in window
+        ? (cb) =>
+            (
+              window as unknown as {
+                requestIdleCallback: (cb: () => void, opts?: { timeout: number }) => number;
+              }
+            ).requestIdleCallback(cb, { timeout: 2000 })
+        : (cb) => setTimeout(cb, 1500);
 
-    // Initialize The Automatic Director
+    idle(() => {
+      // Initialize Sentry Error Reporting (deferred)
+      sentry.init();
+      sentry.addBreadcrumb({ category: 'lifecycle', message: 'App mounted', level: 'info' });
+    });
+
+    // Initialize The Automatic Director (kept eager — required for ONE_TIME task scheduling)
     Logger.info('[App] Initializing Director...');
     director.init();
     director.scheduleTask('ONE_TIME', { status: 'DRAFT', daysSinceUpdate: 45 }, 5000);
 
-    // Initialize Analytics Consumer + Personalization Engine
+    // Initialize Analytics Consumer + Personalization Engine — also deferred to idle
     Logger.info('[App] Starting Analytics Consumer...');
     personalization.onAction((actions) => {
       // Route personalization actions to Sonner toast notifications
@@ -840,7 +856,9 @@ const App: React.FC = () => {
         });
       }
     });
-    analyticsConsumer.start();
+    idle(() => {
+      analyticsConsumer.start();
+    });
 
     // Initialize Performance Optimizations (resource hints, prefetch, lazy images)
     initPerformance();
