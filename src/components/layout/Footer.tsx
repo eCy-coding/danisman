@@ -79,7 +79,7 @@ export const Footer: React.FC = () => {
                 type="button"
                 onClick={() => trackEvent('Social', 'Click', 'LinkedIn')}
                 aria-label="LinkedIn"
-                className="text-slate-300 hover:text-white transition-colors border border-slate-700 p-2.5 rounded-full hover:bg-slate-800 outline-none focus-visible:ring-2 focus-visible:ring-secondary"
+                className="text-slate-300 hover:text-white transition-colors border border-slate-700 p-3 min-w-11 min-h-11 inline-flex items-center justify-center rounded-full hover:bg-slate-800 outline-none focus-visible:ring-2 focus-visible:ring-secondary"
               >
                 <Linkedin size={18} aria-hidden="true" />
               </button>
@@ -87,7 +87,7 @@ export const Footer: React.FC = () => {
                 type="button"
                 onClick={() => trackEvent('Social', 'Click', 'Twitter')}
                 aria-label="Twitter"
-                className="text-slate-300 hover:text-white transition-colors border border-slate-700 p-2.5 rounded-full hover:bg-slate-800 outline-none focus-visible:ring-2 focus-visible:ring-secondary"
+                className="text-slate-300 hover:text-white transition-colors border border-slate-700 p-3 min-w-11 min-h-11 inline-flex items-center justify-center rounded-full hover:bg-slate-800 outline-none focus-visible:ring-2 focus-visible:ring-secondary"
               >
                 <Twitter size={18} aria-hidden="true" />
               </button>
@@ -95,7 +95,7 @@ export const Footer: React.FC = () => {
                 type="button"
                 onClick={() => trackEvent('Social', 'Click', 'Instagram')}
                 aria-label="Instagram"
-                className="text-slate-300 hover:text-white transition-colors border border-slate-700 p-2.5 rounded-full hover:bg-slate-800 outline-none focus-visible:ring-2 focus-visible:ring-secondary"
+                className="text-slate-300 hover:text-white transition-colors border border-slate-700 p-3 min-w-11 min-h-11 inline-flex items-center justify-center rounded-full hover:bg-slate-800 outline-none focus-visible:ring-2 focus-visible:ring-secondary"
               >
                 <Instagram size={18} aria-hidden="true" />
               </button>
@@ -111,7 +111,7 @@ export const Footer: React.FC = () => {
               <li>
                 <Link
                   to="/services"
-                  className="hover:text-secondary transition-colors block outline-none focus-visible:text-secondary"
+                  className="hover:text-secondary transition-colors block min-h-11 py-2 outline-none focus-visible:text-secondary"
                 >
                   {lang === 'tr' ? 'Tüm Hizmetler' : 'All Services'}
                 </Link>
@@ -119,7 +119,7 @@ export const Footer: React.FC = () => {
               <li>
                 <Link
                   to="/industries"
-                  className="hover:text-secondary transition-colors block outline-none focus-visible:text-secondary"
+                  className="hover:text-secondary transition-colors block min-h-11 py-2 outline-none focus-visible:text-secondary"
                 >
                   {lang === 'tr' ? 'Sektör Çözümleri' : 'Industry Solutions'}
                 </Link>
@@ -127,7 +127,7 @@ export const Footer: React.FC = () => {
               <li>
                 <Link
                   to="/methodology"
-                  className="hover:text-secondary transition-colors block outline-none focus-visible:text-secondary"
+                  className="hover:text-secondary transition-colors block min-h-11 py-2 outline-none focus-visible:text-secondary"
                 >
                   {lang === 'tr' ? 'Metodoloji' : 'Methodology'}
                 </Link>
@@ -135,7 +135,7 @@ export const Footer: React.FC = () => {
               <li>
                 <Link
                   to="/events"
-                  className="hover:text-secondary transition-colors block outline-none focus-visible:text-secondary"
+                  className="hover:text-secondary transition-colors block min-h-11 py-2 outline-none focus-visible:text-secondary"
                 >
                   {FOOTER_COPY.events[lang]}
                 </Link>
@@ -152,7 +152,7 @@ export const Footer: React.FC = () => {
               <li>
                 <Link
                   to="/about"
-                  className="hover:text-secondary transition-colors block outline-none focus-visible:text-secondary"
+                  className="hover:text-secondary transition-colors block min-h-11 py-2 outline-none focus-visible:text-secondary"
                 >
                   {lang === 'tr' ? 'Hakkımızda' : 'About Us'}
                 </Link>
@@ -160,7 +160,7 @@ export const Footer: React.FC = () => {
               <li>
                 <Link
                   to="/case-studies"
-                  className="hover:text-secondary transition-colors block outline-none focus-visible:text-secondary"
+                  className="hover:text-secondary transition-colors block min-h-11 py-2 outline-none focus-visible:text-secondary"
                 >
                   {lang === 'tr' ? 'Başarı Hikayeleri' : 'Case Studies'}
                 </Link>
@@ -168,7 +168,7 @@ export const Footer: React.FC = () => {
               <li>
                 <Link
                   to="/blog"
-                  className="hover:text-secondary transition-colors block outline-none focus-visible:text-secondary"
+                  className="hover:text-secondary transition-colors block min-h-11 py-2 outline-none focus-visible:text-secondary"
                 >
                   {FOOTER_COPY.blog[lang]}
                 </Link>
@@ -176,7 +176,7 @@ export const Footer: React.FC = () => {
               <li>
                 <Link
                   to="/careers"
-                  className="hover:text-secondary transition-colors block outline-none focus-visible:text-secondary"
+                  className="hover:text-secondary transition-colors block min-h-11 py-2 outline-none focus-visible:text-secondary"
                 >
                   {FOOTER_COPY.careers[lang]}
                 </Link>
@@ -184,7 +184,7 @@ export const Footer: React.FC = () => {
               <li>
                 <Link
                   to="/contact"
-                  className="hover:text-secondary transition-colors block outline-none focus-visible:text-secondary"
+                  className="hover:text-secondary transition-colors block min-h-11 py-2 outline-none focus-visible:text-secondary"
                 >
                   {lang === 'tr' ? 'İletişim' : 'Contact'}
                 </Link>
@@ -192,7 +192,7 @@ export const Footer: React.FC = () => {
               <li>
                 <Link
                   to="/locations"
-                  className="hover:text-secondary transition-colors block outline-none focus-visible:text-secondary"
+                  className="hover:text-secondary transition-colors block min-h-11 py-2 outline-none focus-visible:text-secondary"
                 >
                   {FOOTER_COPY.locations[lang]}
                 </Link>
@@ -234,12 +234,12 @@ export const Footer: React.FC = () => {
                 aria-describedby="newsletter-status"
                 className="bg-white/5 border border-white/10 text-white px-5 py-3 rounded-lg focus:outline-none focus:ring-1 focus:ring-secondary focus:border-secondary text-sm transition-all placeholder:text-slate-400 disabled:opacity-60"
               />
-              <label className="flex items-start gap-2 text-xs text-slate-400 cursor-pointer select-none">
+              <label className="flex items-start gap-3 text-xs text-slate-400 cursor-pointer select-none min-h-11 py-1">
                 <input
                   type="checkbox"
                   checked={consent}
                   onChange={(e) => setConsent(e.target.checked)}
-                  className="mt-0.5 accent-secondary"
+                  className="mt-0.5 accent-secondary w-6 h-6 shrink-0"
                   aria-label={lang === 'tr' ? 'KVKK onayı' : 'Consent'}
                 />
                 <span>
