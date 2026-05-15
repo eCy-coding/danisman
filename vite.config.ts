@@ -312,11 +312,10 @@ export default defineConfig(() => {
           manualChunks: {
             // Core framework — always needed, preloaded
             vendor: ['react', 'react-dom', 'react-router-dom', 'react-helmet-async'],
-            // TypeScript helpers — pulled in transitively by @sentry/*, motion,
-            // @growthbook/*, etc. Isolating it lets npm-deduped tslib be cached
-            // once across all chunks instead of inlined ~90KB into vendor.
-            // Estimated saving on initial JS: 20–35 KB brotli.
-            tslib: ['tslib'],
+            // NOTE — P5-4 tried adding an explicit `tslib: ['tslib']` entry
+            // here; the chunk-name change (`tslib.es6-*.js` → `tslib-*.js`)
+            // coincided with a Lighthouse regression on /services (P=0).
+            // Reverted to let rollup auto-name the tslib chunk as in P4.
             // Motion (large ~80KB brotli) — separated for route-level lazy benefit
             motion: ['motion'],
             // UI primitives (sans motion)
