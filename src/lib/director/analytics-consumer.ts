@@ -53,6 +53,14 @@ export class AnalyticsConsumer {
   private evaluationTimer: ReturnType<typeof setInterval> | null = null;
   private sessionStart: number;
   private isRunning = false;
+  // P8 — replace MutationObserver(document.body, subtree:true) with History API
+  // patch + popstate. The original observer fired on every DOM mutation during
+  // hydration (200+ events for ServicesPage's 29 cards) which contributed to
+  // Lighthouse PAGE_HUNG on /services under Slow 4G + 4× CPU throttling.
+  private pageChangePollTimer: ReturnType<typeof setInterval> | null = null;
+  private originalPushState: typeof history.pushState | null = null;
+  private originalReplaceState: typeof history.replaceState | null = null;
+  private popstateHandler: (() => void) | null = null;
 
   constructor() {
     incrementVisitCount();
@@ -106,19 +114,40 @@ export class AnalyticsConsumer {
     this.isRunning = false;
     if (this.idleTimer) clearInterval(this.idleTimer);
     if (this.evaluationTimer) clearInterval(this.evaluationTimer);
+    if (this.pageChangePollTimer) clearInterval(this.pageChangePollTimer);
+    // Restore History API
+    if (this.originalPushState) {
+      history.pushState = this.originalPushState;
+      this.originalPushState = null;
+    }
+    if (this.originalReplaceState) {
+      history.replaceState = this.originalReplaceState;
+      this.originalReplaceState = null;
+    }
+    if (this.popstateHandler) {
+      window.removeEventListener('popstate', this.popstateHandler);
+      this.popstateHandler = null;
+    }
     Logger.debug('[AnalyticsConsumer] Stopped');
   }
 
   /**
-   * Track page view changes
+   * Track page view changes via History API + popstate.
+   *
+   * P8 hotfix: previously used MutationObserver(document.body, {subtree:true})
+   * which fired on every DOM mutation during hydration. On ServicesPage with
+   * 29 motion-cards this produced 200+ mutation records → Lighthouse PAGE_HUNG
+   * under Slow 4G + 4× CPU throttling (CPU idle gate never reached).
+   *
+   * The History API approach hooks the same SPA navigation events React Router
+   * uses internally (pushState/replaceState/popstate) — zero DOM observation.
    */
   private trackPageViews(): void {
     // Initial page view
     this.context.pageViews++;
     this.context.currentPage = window.location.pathname;
 
-    // Listen for route changes (SPA)
-    const observer = new MutationObserver(() => {
+    const checkPathChange = () => {
       const newPath = window.location.pathname;
       if (newPath !== this.context.currentPage) {
         this.context.currentPage = newPath;
@@ -126,9 +155,27 @@ export class AnalyticsConsumer {
         this.context.scrollDepth = 0; // Reset scroll on page change
         Logger.debug(`[AnalyticsConsumer] Page: ${newPath} (views: ${this.context.pageViews})`);
       }
-    });
+    };
 
-    observer.observe(document.body, { childList: true, subtree: true });
+    // Patch history.pushState / replaceState — React Router calls these for
+    // every client-side navigation. We restore them in stop().
+    this.originalPushState = history.pushState;
+    this.originalReplaceState = history.replaceState;
+
+    const originalPush = this.originalPushState;
+    const originalReplace = this.originalReplaceState;
+    history.pushState = (...args: Parameters<History['pushState']>) => {
+      originalPush.apply(history, args);
+      queueMicrotask(checkPathChange);
+    };
+    history.replaceState = (...args: Parameters<History['replaceState']>) => {
+      originalReplace.apply(history, args);
+      queueMicrotask(checkPathChange);
+    };
+
+    // Browser back/forward
+    this.popstateHandler = checkPathChange;
+    window.addEventListener('popstate', this.popstateHandler);
   }
 
   /**
