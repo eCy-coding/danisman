@@ -81,7 +81,14 @@ COPY --from=builder /app/dist/server ./dist/server
 COPY --from=builder /app/dist/package.json ./dist/package.json
 COPY prisma ./prisma
 
-RUN npx prisma generate \
+# BE-11: entrypoint script runs `prisma migrate deploy` then exec's node.
+# Render/Railway override CMD via their own startCommand and run migrations
+# at build time, so the entrypoint is a no-op there. For docker-compose +
+# VPS deploys, this is the migration gate.
+COPY scripts/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh \
+    && npx prisma generate \
     && chown -R ecypro:ecypro /app
 
 USER ecypro
@@ -94,4 +101,4 @@ EXPOSE 3001
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
   CMD wget --no-verbose --tries=1 --spider http://localhost:3001/api/health || exit 1
 
-CMD ["node", "dist/server/server/index.js"]
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
