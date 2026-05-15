@@ -1,6 +1,21 @@
 import axios, { type InternalAxiosRequestConfig } from 'axios';
+import { Logger } from './logger';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
+/**
+ * Resolve the API base URL in priority order:
+ *   1. VITE_API_URL — Plan C hybrid (e.g. https://api.ecypro.com/api).
+ *   2. Empty string  — Plan A static-only / simulation mode (client falls back
+ *      to in-memory mocks via `axios` 404 paths).
+ *   3. Localhost dev — only when nothing is provided AND DEV mode is active.
+ */
+const RAW_BASE_URL = import.meta.env.VITE_API_URL;
+const IS_DEV = import.meta.env.DEV === true;
+const API_BASE_URL =
+  typeof RAW_BASE_URL === 'string' && RAW_BASE_URL.trim().length > 0
+    ? RAW_BASE_URL.trim()
+    : IS_DEV
+      ? 'http://localhost:3001/api'
+      : '';
 
 export const apiClient = axios.create({
   baseURL: API_BASE_URL,
@@ -9,6 +24,51 @@ export const apiClient = axios.create({
     'Content-Type': 'application/json',
   },
 });
+
+/**
+ * Indicates the client is running in simulation mode (no backend reachable
+ * from the browser bundle). Consumers can branch on this to mount mock
+ * adapters instead of hitting a non-existent endpoint.
+ */
+export const IS_SIMULATION_MODE = API_BASE_URL === '';
+
+/**
+ * Production startup health-check probe. Fires once shortly after hydration
+ * when a real backend is wired (Plan C). Result is logged but never thrown —
+ * a failing health check downgrades the UI to simulation mode without
+ * blocking initial render.
+ */
+let healthCheckScheduled = false;
+export function scheduleHealthCheck(): void {
+  if (healthCheckScheduled) return;
+  healthCheckScheduled = true;
+  if (IS_SIMULATION_MODE) return; // nothing to probe
+  if (IS_DEV) return; // dev server has its own log surface
+  if (typeof window === 'undefined') return; // SSR / build context
+
+  const run = () => {
+    apiClient
+      .get('/health', { timeout: 3_000 })
+      .then((res) => {
+        Logger.info('[api] health-check ok', { status: res.status, baseURL: API_BASE_URL });
+      })
+      .catch((err: unknown) => {
+        // Treat as soft-fail — the UI keeps working from cache/simulation
+        // adapters; the operator is alerted via Sentry breadcrumb.
+        Logger.warn('[api] health-check failed', { baseURL: API_BASE_URL, err });
+      });
+  };
+
+  // Defer to idle to avoid contending with hydration.
+  const idle = (window as typeof window & {
+    requestIdleCallback?: (cb: () => void, opts?: { timeout?: number }) => number;
+  }).requestIdleCallback;
+  if (idle) {
+    idle(run, { timeout: 5_000 });
+  } else {
+    window.setTimeout(run, 2_000);
+  }
+}
 
 // ─── Request Interceptor: Attach JWT ─────────────────────
 // Read token from Zustand persisted storage (avoids circular import by reading

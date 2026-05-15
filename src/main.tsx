@@ -22,10 +22,15 @@ import { initWebVitals } from './utils/monitoring';
 import { GlobalErrorBoundary } from './components/common/GlobalErrorBoundary';
 import { AppProviders } from './components/providers/AppProviders';
 import { Logger } from './lib/logger';
+import { scheduleHealthCheck } from './lib/api';
 
 // Initialize performance monitoring in production
 if (import.meta.env.PROD) {
   initWebVitals();
+  // Plan C hybrid: probe api.ecypro.com once after hydration so operators see
+  // a clear breadcrumb when the backend is unreachable. No-ops in simulation
+  // mode (VITE_API_URL unset) or in DEV.
+  scheduleHealthCheck();
 }
 
 const rootElement = document.getElementById('root');
