@@ -128,8 +128,8 @@ if [ -d prisma/migrations/baseline_p3_2026_05_15 ]; then
   echo "✓ Baseline migration directory already exists — skipping migrate dev"
 else
   echo "▶ Running prisma migrate dev (name: baseline_p3_2026_05_15)"
-  npx --no-install prisma migrate dev --name baseline_p3_2026_05_15 --skip-seed \
-    || npx prisma migrate dev --name baseline_p3_2026_05_15 --skip-seed
+  npx --no-install prisma migrate dev --name baseline_p3_2026_05_15 \
+    || npx prisma migrate dev --name baseline_p3_2026_05_15
 fi
 
 # ----------------------------------------------------------------------------
