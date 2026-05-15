@@ -1,5 +1,4 @@
-import React, { useState, useMemo } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import React, { useState, useMemo, useEffect, useRef, Suspense } from 'react';
 import { Search } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
 import { JsonLd } from '../components/seo/JsonLd';
@@ -8,12 +7,53 @@ import { FadeIn } from '../components/common/FadeIn';
 import { ServiceCard } from '../components/services/ServiceCard';
 import { ServiceFilter } from '../components/services/ServiceFilter';
 import { DEPARTMENTS, SERVICES } from '@/data/services';
-import { GrowthCalculator } from '@/components/features/interactive/GrowthCalculator';
-import { BookingWizard } from '@/components/features/interactive/BookingWizard';
 import { useInterestTracker } from '@/hooks/useInterestTracker';
 import { usePersonalizationStore } from '@/lib/stores/personalizationStore';
 import { useTranslation } from 'react-i18next';
 import { PageWrapper } from '../components/layout/PageWrapper';
+
+// P6 — below-fold heavy components are lazy + intersection-gated so Lighthouse
+// can reach CPU idle on this route (previously PAGE_HUNG across 4 consecutive
+// runs because GrowthCalculator's recharts ResponsiveContainer + BookingWizard
+// hydration kept the main thread busy past the navigation budget).
+const GrowthCalculator = React.lazy(() =>
+  import('@/components/features/interactive/GrowthCalculator').then((m) => ({ default: m.GrowthCalculator })),
+);
+const BookingWizard = React.lazy(() =>
+  import('@/components/features/interactive/BookingWizard').then((m) => ({ default: m.BookingWizard })),
+);
+
+const InteractiveLazyMount: React.FC<{ children: React.ReactNode; placeholderHeight?: number }> = ({
+  children,
+  placeholderHeight = 480,
+}) => {
+  const ref = useRef<HTMLDivElement | null>(null);
+  const [shouldMount, setShouldMount] = useState(false);
+  useEffect(() => {
+    if (typeof window === 'undefined' || !('IntersectionObserver' in window)) {
+      setShouldMount(true);
+      return;
+    }
+    const node = ref.current;
+    if (!node) return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          setShouldMount(true);
+          io.disconnect();
+        }
+      },
+      { rootMargin: '320px' },
+    );
+    io.observe(node);
+    return () => io.disconnect();
+  }, []);
+  return (
+    <div ref={ref} style={{ minHeight: shouldMount ? undefined : placeholderHeight }}>
+      {shouldMount ? <Suspense fallback={<div style={{ minHeight: placeholderHeight }} />}>{children}</Suspense> : null}
+    </div>
+  );
+};
 
 export const ServicesPage: React.FC = () => {
     const { t, i18n } = useTranslation();
@@ -56,14 +96,6 @@ export const ServicesPage: React.FC = () => {
 
         return filtered;
     }, [selectedCategory, searchQuery, scores]);
-
-    const containerVariants = {
-        hidden: { opacity: 0 },
-        visible: {
-            opacity: 1,
-            transition: { staggerChildren: 0.1 }
-        }
-    };
 
     const itemVariants = {
         hidden: { opacity: 0, y: 30 },
@@ -145,53 +177,44 @@ export const ServicesPage: React.FC = () => {
                         />
                     </div>
 
-                    {/* Services Grid */}
+                    {/* Services Grid — P6 — no motion wrapper to prevent Lighthouse PAGE_HUNG.
+                        Cards still use motion internally with whileHover (event-driven). */}
                     <h2 className="sr-only">Hizmetlerimiz</h2>
-                    <AnimatePresence mode="popLayout">
-                        <motion.div 
-                            key={selectedCategory + searchQuery}
-                            variants={containerVariants}
-                            initial="hidden"
-                            animate="visible"
-                            exit="hidden"
-                            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8"
-                        >
-                            {filteredServices.length > 0 ? (
-                                filteredServices.map((service) => (
-                                    <ServiceCard 
-                                        key={service.id} 
-                                        service={service} 
-                                        categoryLabel={getCategoryLabel(service.category)}
-                                        variants={itemVariants}
-                                    />
-                                ))
-                            ) : (
-                                <motion.div 
-                                    initial={{ opacity: 0, scale: 0.9 }} 
-                                    animate={{ opacity: 1, scale: 1 }}
-                                    className="col-span-full py-24 text-center border border-dashed border-white/10 rounded-3xl bg-white/5"
+                    <div
+                        key={selectedCategory + searchQuery}
+                        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8"
+                    >
+                        {filteredServices.length > 0 ? (
+                            filteredServices.map((service) => (
+                                <ServiceCard
+                                    key={service.id}
+                                    service={service}
+                                    categoryLabel={getCategoryLabel(service.category)}
+                                    variants={itemVariants}
+                                />
+                            ))
+                        ) : (
+                            <div className="col-span-full py-24 text-center border border-dashed border-white/10 rounded-3xl bg-white/5">
+                                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-white/5 mb-6">
+                                    <Search className="w-6 h-6 text-slate-400" />
+                                </div>
+                                <h3
+                                    data-testid="services-no-results"
+                                    className="text-xl font-serif text-slate-300 mb-2"
                                 >
-                                    <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-white/5 mb-6">
-                                        <Search className="w-6 h-6 text-slate-400" />
-                                    </div>
-                                    <h3
-                                        data-testid="services-no-results"
-                                        className="text-xl font-serif text-slate-300 mb-2"
-                                    >
-                                        {t('no_results') || 'Sonuç Bulunamadı'}
-                                    </h3>
-                                    <p className="text-slate-300 mb-6">"{searchQuery}"...</p>
-                                    <button
-                                        onClick={() => { setSearchQuery(''); setSelectedCategory('all'); }}
-                                        data-testid="services-filter-clear"
-                                        className="px-6 py-2.5 bg-secondary text-neutral font-bold rounded-lg hover:bg-white transition-colors text-sm tracking-wide"
-                                    >
-                                        {t('filter_clear') || 'Filtreleri Temizle'}
-                                    </button>
-                                </motion.div>
-                            )}
-                        </motion.div>
-                    </AnimatePresence>
+                                    {t('no_results') || 'Sonuç Bulunamadı'}
+                                </h3>
+                                <p className="text-slate-300 mb-6">"{searchQuery}"...</p>
+                                <button
+                                    onClick={() => { setSearchQuery(''); setSelectedCategory('all'); }}
+                                    data-testid="services-filter-clear"
+                                    className="px-6 py-2.5 bg-secondary text-neutral font-bold rounded-lg hover:bg-white transition-colors text-sm tracking-wide"
+                                >
+                                    {t('filter_clear') || 'Filtreleri Temizle'}
+                                </button>
+                            </div>
+                        )}
+                    </div>
                 </div>
 
                 {/* Interactive Tools Section */}
@@ -207,7 +230,9 @@ export const ServicesPage: React.FC = () => {
                                     Dijital dönüşüm ve stratejik optimizasyonun işletmenize katacağı değeri şimdiden görün.
                                 </p>
                             </div>
-                            <GrowthCalculator />
+                            <InteractiveLazyMount placeholderHeight={520}>
+                                <GrowthCalculator />
+                            </InteractiveLazyMount>
                         </div>
 
                         {/* Interactive Booking */}
@@ -220,7 +245,9 @@ export const ServicesPage: React.FC = () => {
                                     İhtiyaçlarınızı belirleyin, bütçenizi seçin ve uzman ekibimizle hemen iletişime geçin.
                                 </p>
                             </div>
-                            <BookingWizard />
+                            <InteractiveLazyMount placeholderHeight={520}>
+                                <BookingWizard />
+                            </InteractiveLazyMount>
                         </div>
                     </div>
                 </div>

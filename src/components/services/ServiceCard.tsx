@@ -14,7 +14,6 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({ service, categoryLabel
   return (
     <motion.div
       variants={variants}
-      layout
       whileHover={{ y: -6, transition: { duration: 0.3, ease: 'easeOut' } }}
       data-testid="service-card"
       data-service-id={service.id}
