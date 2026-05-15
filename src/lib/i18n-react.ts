@@ -50,6 +50,7 @@ export const NAMESPACES = [
   'newsletter',
   'liveChat',
   'common',
+  'legal',
 ] as const;
 
 i18n

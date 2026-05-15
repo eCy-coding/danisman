@@ -304,47 +304,8 @@ export const CONTACT_CONFIG = {
   },
 };
 
-export const LEGAL_COPY = {
-  privacyTitle: { tr: 'Gizlilik Politikası', en: 'Privacy Policy' },
-  termsTitle: { tr: 'Kullanım Koşulları', en: 'Terms of Use' },
-  cookiesTitle: { tr: 'Çerez Politikası', en: 'Cookie Policy' },
-  lastUpdated: { tr: 'Son Güncelleme', en: 'Last Updated' },
-  date: '01.01.2026',
-
-  privacy: {
-    title: { tr: 'Gizlilik Politikası', en: 'Privacy Policy' },
-    lastUpdated: { tr: 'Son Güncelleme', en: 'Last Updated' },
-    date: '01.01.2026',
-    sections: [
-      {
-        heading: { tr: '1. Veri Toplama', en: '1. Data Collection' },
-        content: {
-          tr: 'Kişisel verileriniz (KVKK kapsamında) titizlikle korunmaktadır.',
-          en: 'Your personal data is strictly protected.',
-        },
-      },
-    ],
-  },
-  terms: {
-    title: { tr: 'Kullanım Koşulları', en: 'Terms of Use' },
-    termsTitle: { tr: 'Kullanım Koşulları', en: 'Terms of Use' },
-    lastUpdated: { tr: 'Son Güncelleme', en: 'Last Updated' },
-    sections: [
-      {
-        heading: { tr: '1. Hizmet Kullanımı', en: '1. Service Usage' },
-        content: {
-          tr: 'Hizmetlerimiz fikri mülkiyet haklarına tabidir.',
-          en: 'Our services are subject to intellectual property rights.',
-        },
-      },
-    ],
-  },
-  cookies: {
-    title: { tr: 'Çerez Politikası', en: 'Cookie Policy' },
-    lastUpdated: { tr: 'Son Güncelleme', en: 'Last Updated' },
-    sections: [],
-  },
-};
+// LEGAL_COPY removed — superseded by LegalLayout + `legal` i18n namespace
+// (public/locales/{tr,en}/legal.json). Migration completed in P0 commit 1.
 
 export const FOOTER_COPY = {
   copyright: {

@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useId } from 'react';
+import { Link } from 'react-router-dom';
 import { X } from 'lucide-react';
 import { trackEvent } from '../../lib/analytics';
 import { useTranslation } from '../../lib/i18n';
 import { COOKIE_BANNER_COPY } from '@/data/copy/common';
 
 export const CookieBanner: React.FC = () => {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const lang = ((i18n.language || 'en').startsWith('tr') ? 'tr' : 'en') as 'tr' | 'en';
   const modalTitleId = useId();
   const analyticsId = useId();
@@ -23,6 +24,16 @@ export const CookieBanner: React.FC = () => {
     if (!consent) {
       setIsVisible(true);
     }
+  }, []);
+
+  // Allow other components (e.g. CookiePage "Çerez Ayarları" button) to re-open the modal.
+  useEffect(() => {
+    const handler = () => {
+      setIsVisible(true);
+      setShowSettings(true);
+    };
+    window.addEventListener('ecypro:open-cookie-settings', handler);
+    return () => window.removeEventListener('ecypro:open-cookie-settings', handler);
   }, []);
 
   const handleAcceptAll = () => {
@@ -55,10 +66,16 @@ export const CookieBanner: React.FC = () => {
     <>
       {/* Main Banner */}
       {!showSettings && (
-        <div className="fixed bottom-0 left-0 w-full bg-neutral/95 backdrop-blur-xl border-t border-white/10 p-6 z-50 animate-in slide-in-from-bottom-5 shadow-[0_-4px_20px_rgba(0,0,0,0.3)]">
+        <div className="fixed bottom-0 left-0 w-full bg-neutral border-t border-white/10 p-6 z-50 animate-in slide-in-from-bottom-5 shadow-[0_-4px_20px_rgba(0,0,0,0.3)]">
           <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
             <p className="text-sm text-slate-400 font-light max-w-2xl text-center md:text-left">
-              {COOKIE_BANNER_COPY.text[lang]}
+              {COOKIE_BANNER_COPY.text[lang]}{' '}
+              <Link
+                to="/cookies"
+                className="text-secondary underline underline-offset-2 hover:opacity-80 transition-opacity"
+              >
+                {t('legal:cookies.bannerLink')}
+              </Link>
             </p>
             <div className="flex space-x-4 whitespace-nowrap">
               <button

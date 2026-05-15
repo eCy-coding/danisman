@@ -1,23 +1,62 @@
+/**
+ * CookiePage — Cookie Policy page.
+ * Skeleton sections rendered via i18n `legal` namespace.
+ * Real legal copy to be filled by qualified counsel before P1.
+ */
+
 import React from 'react';
-import { FadeIn } from '../components/common/FadeIn';
-import { useTranslation, getLang, MultiLang } from '../lib/i18n';
-import { LEGAL_COPY } from '../constants';
-import { SEO } from '../components/common/SEO';
+import { useTranslation } from 'react-i18next';
+import { LegalLayout } from '@/components/legal/LegalLayout';
+
+const LAST_UPDATED_ISO = '2026-05-10';
+const LAST_UPDATED_DISPLAY = '10.05.2026';
+
+const SECTION_KEYS = [
+  'what',
+  'types',
+  'thirdParty',
+  'management',
+  'consent',
+  'contact',
+] as const;
+
+/**
+ * Dispatches a custom event the CookieBanner can listen for to re-open
+ * the settings modal from anywhere on the site.
+ */
+const openCookieSettings = (): void => {
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(new CustomEvent('ecypro:open-cookie-settings'));
+  }
+};
 
 export const CookiePage: React.FC = () => {
-    const { language: lang } = useTranslation();
-    return (
-        <div className="min-h-screen bg-neutral">
-            <SEO title={getLang(LEGAL_COPY.cookiesTitle as MultiLang, lang)} />
-            <FadeIn>
-                <div className="max-w-4xl mx-auto px-6 py-12">
-                    <h1 className="text-3xl font-bold text-primary mb-2">{getLang(LEGAL_COPY.cookiesTitle as MultiLang, lang)}</h1>
-                    <p className="text-sm text-slate-400 mb-8">{getLang(LEGAL_COPY.lastUpdated as MultiLang, lang)}: 01.01.2024</p>
-                    <div className="prose max-w-none text-slate-600">
-                        <p>Cookie Policy Content Compliance Placeholder...</p>
-                    </div>
-                </div>
-            </FadeIn>
-        </div>
-    );
+  const { t } = useTranslation('legal');
+
+  return (
+    <LegalLayout
+      title={t('cookies.title')}
+      lastUpdated={LAST_UPDATED_ISO}
+      lastUpdatedDisplay={LAST_UPDATED_DISPLAY}
+      schemaName={t('cookies.title')}
+      description={t('cookies.metaDescription')}
+    >
+      <div className="mb-8">
+        <button
+          type="button"
+          onClick={openCookieSettings}
+          className="inline-flex items-center px-6 py-3 rounded-lg bg-secondary text-neutral font-semibold text-sm hover:bg-secondary/90 focus:outline-none focus:ring-2 focus:ring-secondary focus:ring-offset-2 focus:ring-offset-neutral transition-colors"
+        >
+          {t('cookies.manageBtn')}
+        </button>
+      </div>
+
+      {SECTION_KEYS.map((key) => (
+        <section key={key} className="mb-12">
+          <h2>{t(`cookies.sections.${key}`)}</h2>
+          <p>{t(`cookies.content.${key}`, { defaultValue: t('placeholder') })}</p>
+        </section>
+      ))}
+    </LegalLayout>
+  );
 };
