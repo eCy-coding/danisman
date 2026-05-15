@@ -10,6 +10,45 @@ import { VitePWA } from 'vite-plugin-pwa';
 import { sentryVitePlugin } from '@sentry/vite-plugin';
 import { IncomingMessage, ServerResponse } from 'http';
 
+// P5-3 — vite-plugin-pwa and the SPA-fallback rule in vite preview have a
+// known interaction where requests for /manifest.webmanifest and certain
+// non-html-but-no-recognised-mime paths (e.g. /sitemap-index.xml) get caught
+// by the history fallback and rewritten to index.html. That's why P4 smoke
+// kept reporting "missing content" for these exact two URLs even though the
+// files exist on disk and contain the expected content. This middleware runs
+// BEFORE the SPA fallback and serves a small allow-list of static files
+// directly from dist with the correct MIME type.
+const staticOverridePlugin = {
+  name: 'static-override-preview',
+  configurePreviewServer(server: {
+    middlewares: {
+      use: (fn: (req: IncomingMessage, res: ServerResponse, next: () => void) => void) => void;
+    };
+  }) {
+    const DIST = path.resolve(__dirname, 'dist');
+    const STATIC_MIME: Record<string, string> = {
+      '/manifest.webmanifest': 'application/manifest+json; charset=utf-8',
+      '/sitemap-index.xml': 'application/xml; charset=utf-8',
+      '/sitemap.xml': 'application/xml; charset=utf-8',
+      '/sitemap-tr.xml': 'application/xml; charset=utf-8',
+      '/sitemap-en.xml': 'application/xml; charset=utf-8',
+      '/rss.xml': 'application/rss+xml; charset=utf-8',
+      '/robots.txt': 'text/plain; charset=utf-8',
+      '/health.json': 'application/json; charset=utf-8',
+    };
+    server.middlewares.use((req: IncomingMessage, res: ServerResponse, next: () => void) => {
+      const url = (req.url || '').split('?')[0];
+      const mime = STATIC_MIME[url];
+      if (!mime) return next();
+      const file = path.join(DIST, url);
+      if (!fs.existsSync(file)) return next();
+      res.setHeader('Content-Type', mime);
+      res.setHeader('Cache-Control', 'public,max-age=0,must-revalidate');
+      fs.createReadStream(file).pipe(res as unknown as import('stream').Writable);
+    });
+  },
+};
+
 // Serve pre-compressed Brotli/gzip assets in preview — mirrors production behaviour
 const compressionServePlugin = {
   name: 'compression-serve',
@@ -110,6 +149,10 @@ export default defineConfig(() => {
       },
     },
     plugins: [
+      // staticOverride must run before any plugin that installs the SPA-fallback
+      // middleware (vite preview, vite-plugin-pwa) so it can intercept
+      // /manifest.webmanifest and /sitemap-index.xml before they get rewritten.
+      staticOverridePlugin,
       compressionServePlugin,
       htmlCharsetPlugin,
       mdx(),
