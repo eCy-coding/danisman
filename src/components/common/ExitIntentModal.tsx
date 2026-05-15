@@ -56,6 +56,11 @@ export const ExitIntentModal: React.FC = () => {
   const [errorMsg, setErrorMsg] = useState('');
   const passiveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const triggeredRef = useRef(false);
+  // A11y: focus management — capture trigger element to restore focus on close,
+  // and seed initial focus on the modal's first interactive element when shown.
+  const previousFocusRef = useRef<HTMLElement | null>(null);
+  const modalRef = useRef<HTMLDivElement | null>(null);
+  const closeBtnRef = useRef<HTMLButtonElement | null>(null);
 
   const shouldMount = SHOWN_ON_PATHS.some((p) =>
     p === '/' ? location.pathname === '/' : location.pathname.startsWith(p),
@@ -99,6 +104,57 @@ export const ExitIntentModal: React.FC = () => {
     setOpen(false);
     trackEvent('ExitIntent', 'Close', 'modal');
   };
+
+  // A11y: keyboard + focus management lifecycle for the dialog.
+  useEffect(() => {
+    if (!open) return;
+
+    // Stash the element that was focused before the modal opened so we can
+    // restore focus when the user closes it (WCAG 2.4.3 Focus Order).
+    previousFocusRef.current = (document.activeElement as HTMLElement) ?? null;
+
+    // Seed initial focus on the dismiss button — it is always present in both
+    // success and form states, so it's a reliable focus anchor.
+    const seedFocus = window.setTimeout(() => {
+      closeBtnRef.current?.focus();
+    }, 0);
+
+    const handleKeyDown = (e: KeyboardEvent): void => {
+      if (e.key === 'Escape') {
+        e.stopPropagation();
+        handleClose();
+        return;
+      }
+      // Minimal focus trap: cycle Tab inside the dialog only.
+      if (e.key !== 'Tab' || !modalRef.current) return;
+      const focusables = modalRef.current.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])',
+      );
+      if (focusables.length === 0) return;
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      if (!first || !last) return;
+      const active = document.activeElement as HTMLElement | null;
+      if (e.shiftKey && active === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && active === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.clearTimeout(seedFocus);
+      document.removeEventListener('keydown', handleKeyDown);
+      // Restore focus to the element that opened the modal so screen readers
+      // and keyboard users land back in context.
+      previousFocusRef.current?.focus?.();
+    };
+    // handleClose is stable (closure over setOpen/trackEvent only).
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open]);
 
   const handleSubmit = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
@@ -145,6 +201,7 @@ export const ExitIntentModal: React.FC = () => {
 
           {/* Modal */}
           <motion.div
+            ref={modalRef}
             role="dialog"
             aria-modal="true"
             aria-label={lang === 'tr' ? 'Ücretsiz danışmanlık teklifi' : 'Free consultation offer'}
@@ -169,10 +226,11 @@ export const ExitIntentModal: React.FC = () => {
               <div className="relative p-8">
                 {/* Close */}
                 <button
+                  ref={closeBtnRef}
                   type="button"
                   onClick={handleClose}
                   aria-label={lang === 'tr' ? 'Kapat' : 'Close'}
-                  className="absolute top-5 right-5 p-2 rounded-xl text-slate-500 hover:text-white hover:bg-white/5 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-secondary"
+                  className="absolute top-5 right-5 p-2 rounded-xl text-slate-400 hover:text-white hover:bg-white/5 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-secondary"
                 >
                   <X size={18} aria-hidden="true" />
                 </button>
