@@ -284,23 +284,13 @@ export default defineConfig(() => {
       sourcemap: 'hidden' as const, // Hidden sourcemaps: Sentry/debuggers can use them, not served publicly
       minify: 'esbuild' as const,
 
-      // P5-4: Trim eager modulepreload graph. Vite by default emits a
-      // <link rel="modulepreload"> for every transitive chunk in the entry
-      // import graph — including heavy lazy-leaning bundles like sentry,
-      // motion, charts, ab, monitoring. They block the network during the
-      // critical-path window and inflate LCP/TBT for first paint even though
-      // most aren't needed before hydration.
-      //
-      // Allow-list: keep preload for entry-critical chunks only (vendor,
-      // tslib, utils, ui, i18n, css). Heavy or admin-only chunks are still
-      // fetched dynamically when their importer runs.
-      modulePreload: {
-        polyfill: false,
-        resolveDependencies: (_filename, deps) => {
-          const KEEP = /(^|\/)(vendor|tslib|utils|ui|i18n|main|lp|lc|index-)[-.]/;
-          return deps.filter((d) => KEEP.test(d));
-        },
-      },
+      // P5-4 NOTE — an earlier attempt trimmed the modulepreload graph to
+      // an allow-list (vendor/tslib/utils/ui/i18n) hoping to free LCP. In
+      // practice it tanked Lighthouse Performance from ~76 to ~66 and broke
+      // /services with P=0 (the eagerly-imported chunks loaded too late and
+      // hydration starved). Reverted — Vite's default eager modulepreload
+      // graph is the correct trade-off for this site. The tslib chunk in
+      // manualChunks below stays; that's the actual win.
 
       rollupOptions: {
         input: {
