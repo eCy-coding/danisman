@@ -1,0 +1,168 @@
+# quality-gate.yml — P2-A
+# Runs the publish-readiness scripts that were added in P0/P1/P2:
+#   - content-qa  (TR/EN parity, alt audit, orphan i18n, broken internal links)
+#   - smoke       (fetch-based preview smoke after build)
+#   - bundle-size (size-limit gate, P2-C)
+# Complementary to ci.yml (lint/typecheck/test/coverage) and lighthouse.yml.
+name: Quality Gate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: quality-gate-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  content-qa:
+    name: Content QA — i18n parity + alt + orphan + links
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Content QA — parity check (TR/EN i18n keys must match)
+        run: node scripts/content-qa.mjs --check parity
+
+      - name: Content QA — alt text audit
+        run: node scripts/content-qa.mjs --check alt
+        continue-on-error: true   # warning-only initially; promote to required after baseline
+
+      - name: Content QA — orphan i18n keys (informational)
+        run: node scripts/content-qa.mjs --check orphans
+        continue-on-error: true
+
+      - name: Content QA — broken internal links
+        run: node scripts/content-qa.mjs --check links
+        continue-on-error: true
+
+      - name: Upload Content QA report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: content-qa-report-${{ github.sha }}
+          path: outputs/content-qa-*.{txt,json,md}
+          retention-days: 30
+          if-no-files-found: ignore
+
+  smoke-preview:
+    name: Smoke test — local preview
+    needs: content-qa
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Provide minimal production env (placeholder values)
+        # CI test build only; real values come from .env.production on the host.
+        run: |
+          cp .env.production.example .env.production
+          # Replace placeholders with safe CI-only values
+          sed -i 's/__FILL_ME__/ci-stub/g' .env.production
+
+      - name: Build production bundle
+        run: npm run build
+        env:
+          NODE_ENV: production
+
+      - name: Verify dist artifacts
+        run: |
+          test -f dist/index.html
+          test -f dist/.htaccess
+          test -f dist/health.json
+          test -f dist/og-image.jpg
+          test -f dist/robots.txt
+          ls dist/sitemap*.xml
+
+      - name: Start preview server
+        run: npm run preview &
+        env:
+          NODE_ENV: production
+
+      - name: Wait for preview server
+        run: npx wait-on http://localhost:4173 --timeout 30000
+
+      - name: Fetch-based smoke test (17 URLs)
+        run: node scripts/smoke-test.mjs --url http://localhost:4173
+
+      - name: Upload smoke report on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: smoke-failure-${{ github.sha }}
+          path: |
+            dist/
+            outputs/
+          retention-days: 7
+          if-no-files-found: ignore
+
+  bundle-size:
+    name: Bundle size budget (size-limit)
+    needs: content-qa
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      # size-limit may not be in package.json yet — gracefully skip if missing.
+      - name: Check size-limit availability
+        id: sl
+        run: |
+          if [ -f .size-limit.json ] && grep -q "size-limit" package.json; then
+            echo "available=true" >> $GITHUB_OUTPUT
+          else
+            echo "available=false" >> $GITHUB_OUTPUT
+            echo "size-limit config not yet installed — informational skip."
+          fi
+
+      - name: Build production bundle
+        if: steps.sl.outputs.available == 'true'
+        run: |
+          cp .env.production.example .env.production
+          sed -i 's/__FILL_ME__/ci-stub/g' .env.production
+          npm run build
+        env:
+          NODE_ENV: production
+
+      - name: Run size-limit
+        if: steps.sl.outputs.available == 'true'
+        run: npx size-limit
