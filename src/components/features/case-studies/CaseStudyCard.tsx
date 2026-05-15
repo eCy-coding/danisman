@@ -35,10 +35,12 @@ export const CaseStudyCard: React.FC<CaseStudyCardProps> = ({ study }) => {
     >
       {study.image && (
           <div className="h-48 overflow-hidden relative">
-              <img 
-                  src={study.image} 
-                  alt={study.title} 
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
+              <img
+                  src={study.image}
+                  alt={study.title}
+                  loading="lazy"
+                  decoding="async"
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
               />
               <div className="absolute inset-0 bg-linear-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
           </div>

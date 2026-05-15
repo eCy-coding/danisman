@@ -80,6 +80,8 @@ export const Insights: React.FC = () => {
                   <img
                     src={filteredPosts[0].image}
                     alt={filteredPosts[0].title[lang]}
+                    loading="lazy"
+                    decoding="async"
                     className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
                   />
                 )}

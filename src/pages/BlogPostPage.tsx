@@ -128,6 +128,9 @@ const BlogPostPage: React.FC = () => {
                     <img
                       src={post.coverImage}
                       alt={post.title}
+                      loading="eager"
+                      fetchPriority="high"
+                      decoding="async"
                       className="w-full h-full object-cover"
                     />
                     <div className="absolute inset-0 bg-linear-to-t from-[#050810] via-transparent to-transparent opacity-60" />
