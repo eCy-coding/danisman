@@ -1,0 +1,42 @@
+# ─── Railway Deployment Manifest ──────────────────────────────────────────
+# Deploy: https://docs.railway.com/reference/config-as-code
+#
+# BE-10 — Hybrid hosting alternative to render.yaml.
+# Pick one platform; both manifests are kept in repo so the cutover
+# decision can be made at deploy time without re-architecting.
+
+[build]
+builder = "nixpacks"
+buildCommand = "npm ci && npx prisma generate && npx prisma migrate deploy && npx tsc -p tsconfig.server.json"
+
+[deploy]
+startCommand = "node dist/server/index.js"
+healthcheckPath = "/api/health"
+healthcheckTimeout = 30
+restartPolicyType = "on_failure"
+restartPolicyMaxRetries = 5
+numReplicas = 1
+
+[deploy.envs]
+# Railway injects DATABASE_URL automatically when a Postgres plugin is attached.
+# All other env vars must be set via Railway dashboard or `railway variables set`.
+#
+# Required (set in Railway dashboard):
+#   NODE_ENV=production
+#   JWT_SECRET=<32+ chars>
+#   CORS_ORIGIN=https://www.ecypro.com,https://ecypro.com
+#   PORT=3001
+#   TRUST_PROXY=1
+#
+# Observability:
+#   SENTRY_DSN, SENTRY_ENVIRONMENT=production, SENTRY_TRACES_SAMPLE_RATE=0.1
+#   LOG_LEVEL=info, LOGTAIL_SOURCE_TOKEN (optional)
+#
+# Integrations:
+#   REDIS_URL (Railway Redis plugin URL)
+#   CALCOM_API_KEY, CALCOM_EVENT_TYPE_ID
+#   RESEND_API_KEY, EMAIL_FROM
+#   GEMINI_API_KEY
+#   WEBHOOK_HMAC_SECRET
+#   TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID
+#   HIBP_API_KEY (optional)

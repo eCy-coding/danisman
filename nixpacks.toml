@@ -1,0 +1,19 @@
+# ─── Nixpacks Build Configuration (Railway) ───────────────────────────────
+# BE-10 — Sidecar to railway.toml. Pins the Node version + ensures Prisma
+# engines compile against the right libc.
+
+[phases.setup]
+nixPkgs = ["nodejs_22", "openssl"]
+
+[phases.install]
+cmds = ["npm ci"]
+
+[phases.build]
+cmds = [
+  "npx prisma generate",
+  "npx prisma migrate deploy",
+  "npx tsc -p tsconfig.server.json",
+]
+
+[start]
+cmd = "node dist/server/index.js"
