@@ -9,10 +9,12 @@ import { sendEmailVerification } from '../lib/email';
 import { checkPasswordBreached } from '../lib/hibp';
 import {
   ACCESS_TOKEN_EXPIRES_IN,
+  REFRESH_TOKEN_EXPIRES_DAYS,
   generateRefreshToken,
   newFamily,
   rotateRefreshToken,
   revokeAllUserTokens,
+  revokeAllUserSessions,
   storeRefreshToken,
 } from '../lib/refresh-token';
 
@@ -195,34 +197,64 @@ export const register = async (req: Request, res: Response, next: NextFunction):
     }
 
     const passwordHash = await hashPassword(password);
-    const user = await prisma.user.create({ data: { email, name: name ?? null, passwordHash } });
 
-    const accessToken = generateToken(user.id, user.role);
-    const regDecoded = jwt.decode(accessToken) as { jti?: string } | null;
+    // P15-BE: Atomic user + refresh-token + session creation.
+    // Previously these were three independent writes — if user.create
+    // succeeded but session.create failed (DB hiccup / network), the
+    // platform was left with an orphan account the user could never log
+    // back into. Wrapping in $transaction guarantees all-or-nothing.
     const { raw: refreshRaw, hash: refreshHash } = generateRefreshToken();
     const family = newFamily();
-    await storeRefreshToken(
-      user.id,
-      refreshHash,
-      family,
-      req.ip ?? undefined,
-      req.headers['user-agent'] ?? undefined,
-    );
+    const refreshExpiresAt = new Date(Date.now() + REFRESH_TOKEN_EXPIRES_DAYS * 24 * 60 * 60 * 1000);
 
-    // P35-T09: create Session record
-    if (regDecoded?.jti) {
-      await prisma.session.create({
+    const { user, accessToken } = await prisma.$transaction(async (tx) => {
+      const createdUser = await tx.user.create({
+        data: { email, name: name ?? null, passwordHash },
+      });
+
+      const token = generateToken(createdUser.id, createdUser.role);
+      const decoded = jwt.decode(token) as { jti?: string } | null;
+
+      await tx.refreshToken.create({
         data: {
-          userId: user.id,
-          jti: regDecoded.jti,
+          userId: createdUser.id,
+          tokenHash: refreshHash,
+          family,
+          expiresAt: refreshExpiresAt,
           ip: req.ip ?? null,
           userAgent: req.headers['user-agent'] ?? null,
         },
       });
-    }
+
+      // P35-T09: create Session record inside same tx
+      if (decoded?.jti) {
+        await tx.session.create({
+          data: {
+            userId: createdUser.id,
+            jti: decoded.jti,
+            ip: req.ip ?? null,
+            userAgent: req.headers['user-agent'] ?? null,
+          },
+        });
+      }
+
+      return { user: createdUser, accessToken: token };
+    });
 
     // P35-T03: send email verification (non-blocking, fail-open)
     void sendVerificationEmail(user.id, user.email);
+
+    // P17 BE Track 2 / Aşama 2: queued welcome email — moved off the
+    // request hot path so a Resend hiccup never blocks signup. Inline
+    // execution falls back when Redis/BullMQ are unavailable.
+    void import('../lib/mailer')
+      .then(({ queueWelcome }) => {
+        const displayName = user.name ?? user.email.split('@')[0] ?? user.email;
+        return queueWelcome(user.email, displayName, 'tr');
+      })
+      .catch(() => {
+        /* mailer fallback already logs; never throw out of signup */
+      });
 
     res.status(201).json({
       status: 'success',
@@ -355,6 +387,107 @@ export const verifyEmail = async (
     ]);
 
     res.json({ status: 'success', message: 'Email verified successfully' });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// ─── P14-BE: Password Change ────────────────────────────────
+// Requires the current password (not just a valid JWT — defense in depth
+// against stolen-laptop / unlocked-tab scenarios) and revokes EVERY
+// session and refresh token the user owns, including the calling one.
+// The client must re-login after this call returns 200.
+
+const changePasswordSchema = z.object({
+  currentPassword: z.string().min(8, 'Current password required'),
+  newPassword: z
+    .string()
+    .min(12, 'New password must be at least 12 characters')
+    .max(256, 'New password too long'),
+});
+
+export const changePassword = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
+  try {
+    const userId = (req as Request & { user?: { id: string } }).user?.id;
+    if (!userId) throw new HttpError(401, 'UNAUTHENTICATED', 'Not authenticated');
+
+    const { currentPassword, newPassword } = changePasswordSchema.parse(req.body);
+    if (currentPassword === newPassword) {
+      throw new HttpError(
+        422,
+        'PASSWORD_UNCHANGED',
+        'New password must differ from current password',
+      );
+    }
+
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { id: true, passwordHash: true },
+    });
+    if (!user?.passwordHash) {
+      // OAuth-only accounts cannot use this endpoint
+      throw new HttpError(400, 'NO_PASSWORD_SET', 'Password change unavailable for this account');
+    }
+
+    const validCurrent = await verifyPassword(currentPassword, user.passwordHash);
+    if (!validCurrent) {
+      // Match login's 401 error code so the client can reuse its UX
+      throw new HttpError(401, 'INVALID_CREDENTIALS', 'Current password is incorrect');
+    }
+
+    // HIBP gate on the new password too
+    const { breached, count } = await checkPasswordBreached(newPassword);
+    if (breached) {
+      throw new HttpError(
+        422,
+        'PASSWORD_BREACHED',
+        `This password has appeared in ${count.toLocaleString()} data breaches. Please choose another.`,
+      );
+    }
+
+    const newHash = await hashPassword(newPassword);
+
+    // P15-BE: Atomic password rotation. Previously user.update succeeded
+    // and revokeAllUserSessions ran as a separate awaited call — if the
+    // DB connection dropped between the two, the password changed but
+    // sessions stayed valid, leaving a window where a stolen access
+    // token would keep working against the new password. Wrapping both
+    // writes inside the same $transaction keeps the invariant
+    // "password rotated ⇒ every session revoked" atomic.
+    //
+    // Note: jti blacklist (Redis) writes are deliberately kept outside
+    // this tx — they have an independent failure mode that should not
+    // roll back the DB. revokeAllUserSessions handles that split.
+    const liveSessions = await prisma.$transaction(async (tx) => {
+      await tx.user.update({ where: { id: userId }, data: { passwordHash: newHash } });
+      const sessions = await tx.session.findMany({
+        where: { userId, revokedAt: null },
+        select: { jti: true },
+      });
+      await tx.refreshToken.updateMany({
+        where: { userId, revokedAt: null },
+        data: { revokedAt: new Date() },
+      });
+      await tx.session.updateMany({
+        where: { userId, revokedAt: null },
+        data: { revokedAt: new Date() },
+      });
+      return sessions;
+    });
+
+    // Blacklist outside the tx (Redis hiccup must not roll back DB).
+    const expiresAtMs = Date.now() + REFRESH_TOKEN_EXPIRES_DAYS * 24 * 60 * 60 * 1000;
+    await Promise.all(liveSessions.map((s) => blacklistToken(s.jti, expiresAtMs)));
+    void revokeAllUserSessions; // kept exported for admin-force-logout path
+
+    res.json({
+      status: 'success',
+      message: 'Password changed. All sessions have been signed out — please log in again.',
+    });
   } catch (error) {
     next(error);
   }

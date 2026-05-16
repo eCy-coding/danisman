@@ -204,30 +204,40 @@ router.post(
         return;
       }
 
-      // Find or create user by email (guest flow — no password required)
-      let user = await prisma.user.findUnique({ where: { email: emailLower } });
-      if (!user) {
-        user = await prisma.user.create({
+      // P15-BE: Atomic guest user + booking creation.
+      // Previously two independent writes — if the user was newly created
+      // but booking.create then failed (validation, DB connection drop),
+      // the platform held a passwordless ghost account with no booking
+      // attached. Wrapping in a Prisma $transaction restores the
+      // all-or-nothing invariant.
+      const { user, booking } = await prisma.$transaction(async (tx) => {
+        let found = await tx.user.findUnique({ where: { email: emailLower } });
+        if (!found) {
+          found = await tx.user.create({
+            data: {
+              email: emailLower,
+              name: name.trim(),
+              passwordHash: '', // guest user — no password
+              role: 'USER',
+            },
+          });
+        }
+
+        const created = await tx.booking.create({
           data: {
-            email: emailLower,
-            name: name.trim(),
-            passwordHash: '', // guest user — no password
-            role: 'USER',
+            userId: found.id,
+            scheduledAt: ts,
+            durationMin: Math.min(Math.max(durationMin, 15), 120),
+            notesTr: notes ?? (company ? `Şirket: ${company}` : null),
+          },
+          include: {
+            user: { select: { email: true, name: true } },
           },
         });
-      }
 
-      const booking = await prisma.booking.create({
-        data: {
-          userId: user.id,
-          scheduledAt: ts,
-          durationMin: Math.min(Math.max(durationMin, 15), 120),
-          notesTr: notes ?? (company ? `Şirket: ${company}` : null),
-        },
-        include: {
-          user: { select: { email: true, name: true } },
-        },
+        return { user: found, booking: created };
       });
+      void user; // booking already carries user via include
 
       // Async confirmation email (fail-open — don't block response)
       void (async () => {
