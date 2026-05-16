@@ -12,8 +12,13 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import request from 'supertest';
 import express from 'express';
 
-// Mocks must be declared before the router import so vitest hoists them
-const notifyMock = vi.fn(async () => undefined);
+// P25 BE Track 2 / Aşama 3 — `vi.mock` factories are hoisted ABOVE local
+// `const` declarations, so referencing a top-level `notifyMock` inside
+// the factory used to crash with "Cannot access before initialization".
+// `vi.hoisted` lifts the mock fn into the same hoist phase as `vi.mock`.
+const { notifyMock } = vi.hoisted(() => ({
+  notifyMock: vi.fn(async () => undefined),
+}));
 vi.mock('../lib/telegram', () => ({ notify: notifyMock }));
 
 // In-memory rate limiter requires redis client; mock it
@@ -27,6 +32,7 @@ vi.mock('../config/redis', () => ({
 
 import contactRoutes from './contact';
 import { errorHandler } from '../middleware/error';
+import { __resetFallbackStoreForTests } from '../middleware/rateLimiter';
 
 function makeApp() {
   const app = express();
@@ -41,6 +47,9 @@ describe('POST /api/contact', () => {
 
   beforeEach(() => {
     notifyMock.mockClear();
+    // P26-BE Aşama 3 — clear in-memory rate-limit fallback so each test
+    // starts with a fresh 3/h budget for the shared contactLimiter.
+    __resetFallbackStoreForTests();
     process.env = { ...originalEnv };
   });
 

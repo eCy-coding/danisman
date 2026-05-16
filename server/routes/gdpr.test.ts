@@ -14,7 +14,13 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import request from 'supertest';
 import express from 'express';
 
-const notifyMock = vi.fn(async () => undefined);
+// P26-BE Aşama 3 — `vi.mock` factories are hoisted ABOVE local `const`
+// declarations, so referencing a top-level `notifyMock` inside the
+// factory crashes with "Cannot access before initialization".
+// `vi.hoisted` lifts the mock fn into the same hoist phase as `vi.mock`.
+const { notifyMock } = vi.hoisted(() => ({
+  notifyMock: vi.fn(async () => undefined),
+}));
 vi.mock('../lib/telegram', () => ({ notify: notifyMock }));
 
 import gdprRoutes, { _testing as gdprTest } from './gdpr';
