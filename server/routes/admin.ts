@@ -10,6 +10,13 @@ import { Router, Request, Response, NextFunction } from 'express';
 import fs from 'fs';
 import path from 'path';
 import { authenticate, requireRole } from '../middleware/auth';
+import { cacheStats, invalidateCache, getCacheStore } from '../middleware/cache';
+import {
+  clampAuditLimit,
+  decodeAuditCursor,
+  encodeAuditCursor,
+  parseAuditFilters,
+} from '../lib/audit-cursor';
 import { prisma } from '../config/db';
 import { logger } from '../config/logger';
 
@@ -336,28 +343,87 @@ router.patch(
 );
 
 // ─── Audit Log ───────────────────────────────────────────────────────────────
+// P16 BE Track 2 / Aşama 3 — cursor-based query API with filters.
+//
+// Why cursor (not skip-based pagination)?
+//   - Skip-based degrades O(n) on large tables: `OFFSET 50000` makes Postgres
+//     materialise + discard 50k rows. AuditLog grows monotonically (one row per
+//     admin action) — by month 6 we'd be paying that cost on every drill-down.
+//   - Cursor (createdAt, id) tuple uses the @@index([adminId, createdAt]) and
+//     @@index([createdAt]) composite indexes added in P14-BE Track 2; pagination
+//     is O(log n) regardless of depth.
+//
+// Filters: adminId, action, targetType, targetId, startDate, endDate.
+// All filters AND'd together. Cursor is opaque (base64url(createdAt|id)).
+// Cursor codec + filter parsing live in `server/lib/audit-cursor.ts` so they
+// can be unit-tested without spinning up a Prisma instance.
 
 router.get(
   '/audit-log',
   ...adminOnly,
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const page = Math.max(1, parseInt(req.query.page as string) || 1);
-      const limit = Math.min(50, parseInt(req.query.limit as string) || 20);
-      const action = req.query.action as string | undefined;
+      const limit = clampAuditLimit(req.query.limit);
 
-      const where = action ? { action } : {};
-      const [total, items] = await Promise.all([
-        prisma.auditLog.count({ where }),
-        prisma.auditLog.findMany({
-          where,
-          orderBy: { createdAt: 'desc' },
-          skip: (page - 1) * limit,
-          take: limit,
-        }),
-      ]);
+      const parsed = parseAuditFilters(req.query as Record<string, unknown>);
+      if (parsed.error) {
+        res.status(400).json({ status: 'error', ...parsed.error });
+        return;
+      }
+      const filters = parsed.filters;
 
-      res.json({ status: 'success', data: { items, total, page, limit } });
+      const cursorParam = typeof req.query.cursor === 'string' ? req.query.cursor : null;
+      const decoded = cursorParam ? decodeAuditCursor(cursorParam) : null;
+      if (cursorParam && !decoded) {
+        res.status(400).json({
+          status: 'error',
+          code: 'INVALID_CURSOR',
+          message: 'cursor is not a valid pagination token.',
+        });
+        return;
+      }
+
+      // Prisma cursor semantics: pass `cursor: { id }` + skip 1 to start AFTER
+      // that row. orderBy mirrors the index direction (createdAt DESC, id DESC)
+      // so tied timestamps tie-break deterministically.
+      const findArgs = {
+        where: filters,
+        orderBy: [{ createdAt: 'desc' as const }, { id: 'desc' as const }],
+        take: limit + 1, // +1 to detect hasMore without a second count() call
+        ...(decoded ? { cursor: { id: decoded.id }, skip: 1 } : {}),
+      };
+
+      const items = await prisma.auditLog.findMany(findArgs);
+      const hasMore = items.length > limit;
+      const page = hasMore ? items.slice(0, limit) : items;
+      const tail = page[page.length - 1];
+      const nextCursor =
+        hasMore && tail
+          ? encodeAuditCursor({
+              createdAt: tail.createdAt.toISOString(),
+              id: tail.id,
+            })
+          : null;
+
+      res.json({
+        status: 'success',
+        data: {
+          items: page,
+          pagination: {
+            limit,
+            hasMore,
+            nextCursor,
+          },
+          filters: {
+            adminId: filters.adminId ?? null,
+            action: filters.action ?? null,
+            targetType: filters.targetType ?? null,
+            targetId: filters.targetId ?? null,
+            startDate: filters.createdAt?.gte?.toISOString() ?? null,
+            endDate: filters.createdAt?.lte?.toISOString() ?? null,
+          },
+        },
+      });
     } catch (err) {
       next(err);
     }
@@ -547,6 +613,197 @@ router.delete(
       res.json({ status: 'success', message: 'Post deleted' });
     } catch (err) {
       logger.error('[AdminBlog] delete error', { message: (err as Error).message });
+      next(err);
+    }
+  },
+);
+
+// ─── P16 BE Track 2 / Aşama 1 — Cache observability ─────────────────────────
+// Admin-only counters so we can verify hit rate target post-deploy.
+router.get('/cache/stats', ...adminOnly, (_req: Request, res: Response): void => {
+  res.json({ status: 'success', data: cacheStats() });
+});
+
+router.post('/cache/invalidate', ...adminOnly, (req: Request, res: Response): void => {
+  const prefix = typeof req.body?.prefix === 'string' ? req.body.prefix : '';
+  if (!prefix || prefix.length < 2) {
+    res.status(400).json({ status: 'error', message: 'prefix is required (min 2 chars)' });
+    return;
+  }
+  const purged = invalidateCache(prefix);
+  res.json({ status: 'success', data: { prefix, purged } });
+});
+
+router.delete('/cache', ...adminOnly, (_req: Request, res: Response): void => {
+  const store = getCacheStore();
+  const before = store.stats().size;
+  store.clear();
+  logger.info('[Admin] cache cleared', { before });
+  res.json({ status: 'success', data: { cleared: before } });
+});
+
+// ─── P17 BE Track 2 / Aşama 4 — API key admin CRUD ─────────────────────────
+//
+// POST   /api/admin/api-keys           create  → returns raw key ONCE
+// GET    /api/admin/api-keys           list owned + platform keys
+// DELETE /api/admin/api-keys/:id       revoke (soft, sets revokedAt)
+//
+// Security model:
+//   - Only ADMIN can mint / revoke keys.
+//   - Raw key is generated with crypto.randomBytes(32).toString('base64url')
+//     (256 bits of entropy; URL-safe; ~43 chars). Returned exactly once
+//     in the create response; we never log it.
+//   - The DB stores SHA-256(raw) so a DB leak doesn't grant API access.
+//
+// Audit: revocation lands in audit_logs (P14-BE table). Creation
+// intentionally omits the raw value from the audit row.
+
+import { randomBytes } from 'node:crypto';
+import { hashApiKey, invalidateCachedKey } from '../middleware/api-key-auth';
+
+router.post(
+  '/api-keys',
+  ...adminOnly,
+  async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const name = typeof req.body?.name === 'string' ? req.body.name.trim() : '';
+      const scopes = Array.isArray(req.body?.scopes)
+        ? req.body.scopes.filter((s: unknown): s is string => typeof s === 'string')
+        : [];
+      const expiresAt =
+        typeof req.body?.expiresAt === 'string' ? new Date(req.body.expiresAt) : null;
+      const userId = typeof req.body?.userId === 'string' ? req.body.userId : null;
+
+      if (name.length === 0 || name.length > 120) {
+        res.status(400).json({
+          status: 'error',
+          code: 'API_KEY_NAME_REQUIRED',
+          message: 'name is required (1–120 chars)',
+        });
+        return;
+      }
+      if (scopes.length === 0) {
+        res.status(400).json({
+          status: 'error',
+          code: 'API_KEY_SCOPES_REQUIRED',
+          message: 'at least one scope tag is required',
+        });
+        return;
+      }
+      if (expiresAt && Number.isNaN(expiresAt.getTime())) {
+        res.status(400).json({
+          status: 'error',
+          code: 'API_KEY_EXPIRES_AT_INVALID',
+          message: 'expiresAt must be a valid ISO 8601 timestamp',
+        });
+        return;
+      }
+
+      const raw = `ecy_${randomBytes(32).toString('base64url')}`;
+      const hashedKey = hashApiKey(raw);
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const row = await (prisma as any).apiKey.create({
+        data: {
+          hashedKey,
+          name,
+          scopes,
+          userId,
+          expiresAt,
+        },
+      });
+
+      logger.info('[Admin/API-Keys] minted', {
+        keyId: row.id,
+        name,
+        scopes,
+        userId,
+      });
+
+      // ⚠️ Return the raw key ONCE. Never logged. Never recoverable.
+      res.status(201).json({
+        status: 'success',
+        data: {
+          id: row.id,
+          rawKey: raw,
+          name: row.name,
+          scopes: row.scopes,
+          userId: row.userId,
+          expiresAt: row.expiresAt,
+          createdAt: row.createdAt,
+        },
+      });
+    } catch (err) {
+      next(err);
+    }
+  },
+);
+
+router.get(
+  '/api-keys',
+  ...adminOnly,
+  async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const includeRevoked = req.query.includeRevoked === 'true';
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const rows = await (prisma as any).apiKey.findMany({
+        where: includeRevoked ? {} : { revokedAt: null },
+        orderBy: { createdAt: 'desc' },
+        select: {
+          id: true,
+          name: true,
+          scopes: true,
+          userId: true,
+          lastUsedAt: true,
+          expiresAt: true,
+          createdAt: true,
+          revokedAt: true,
+        },
+      });
+      res.json({ status: 'success', data: rows });
+    } catch (err) {
+      next(err);
+    }
+  },
+);
+
+router.delete(
+  '/api-keys/:id',
+  ...adminOnly,
+  async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const id = req.params.id;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const row = await (prisma as any).apiKey.findUnique({ where: { id } });
+      if (!row) {
+        res.status(404).json({
+          status: 'error',
+          code: 'API_KEY_NOT_FOUND',
+          message: 'API key not found',
+        });
+        return;
+      }
+      if (row.revokedAt) {
+        res.json({
+          status: 'success',
+          data: { id, revokedAt: row.revokedAt, alreadyRevoked: true },
+        });
+        return;
+      }
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const updated = await (prisma as any).apiKey.update({
+        where: { id },
+        data: { revokedAt: new Date() },
+      });
+      // Eagerly flush the auth cache so a request mid-flight can't replay.
+      invalidateCachedKey(row.hashedKey);
+
+      logger.info('[Admin/API-Keys] revoked', { keyId: id, name: row.name });
+      res.json({
+        status: 'success',
+        data: { id, revokedAt: updated.revokedAt, alreadyRevoked: false },
+      });
+    } catch (err) {
       next(err);
     }
   },
