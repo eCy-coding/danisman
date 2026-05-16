@@ -4,19 +4,29 @@ import { PrismaPg } from '@prisma/adapter-pg';
 import { logger } from './logger';
 
 /**
- * P13/1 — Tuned Postgres connection pool.
+ * P13/1 + P20 — Tuned Postgres connection pool (mathematically sized).
  *
- * Defaults are conservative so a single Render small instance (0.5 vCPU) does
- * not exhaust managed Postgres connection caps. Overridable via env so prod
- * can grow without redeploy.
+ * Sizing formula (PostgreSQL Wiki + Render limits):
+ *   pool = (cpu_cores × 2) + effective_spindle_count
  *
- * Env knobs:
+ *   Tier            vCPU  RAM     Safe pool   Aggressive  Render PG limit
+ *   Render Starter  0.5   512MB   5           10          97 connections
+ *   Render Standard 1     2 GB    15          20          197 connections
+ *   Render Pro      2     4 GB    30          50          497 connections
+ *
+ * Memory cost ≈ 10 MB / Postgres backend → pool 10 ≈ 100 MB DB-side RAM.
+ *
+ * Env knobs (validated by config/env.ts in P20):
  *   PG_POOL_MAX         — hard ceiling on concurrent connections. Default 10.
  *   PG_POOL_MIN         — warm minimum to keep ready. Default 0 (serverless).
  *   PG_POOL_IDLE_MS     — close idle conns after N ms. Default 30s.
  *   PG_POOL_CONN_MS     — abort acquisition after N ms. Default 30s.
  *   PG_POOL_QUERY_MS    — single query timeout. Default 10s.
  *   PG_STATEMENT_MS     — Postgres `statement_timeout`. Default 15s.
+ *
+ * Read replica (P20): see `server/lib/db/read-replica.ts` for a thin
+ * wrapper that routes read-only queries to DATABASE_URL_REPLICA when set.
+ * This module always returns the primary client (write-capable).
  */
 
 const globalForPrisma = global as unknown as {

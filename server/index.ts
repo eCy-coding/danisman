@@ -144,6 +144,16 @@ app.use('/api', generalLimiter);
 //    inline AFTER `authenticate`.
 app.use('/api', tierRateLimiter);
 
+// P23 BE Track 2 / Aşama 5 — CDN Cache-Control + Vary defaults.
+// Method-aware policy:
+//   POST/PUT/PATCH/DELETE → no-store
+//   GET + auth (Bearer/cookie) → private, must-revalidate
+//   GET anonymous → public, max-age=60, s-maxage=300
+// Individual routes may overwrite via `setCache(res, …)` before the
+// response body is sent — this middleware only sets defaults.
+import { defaultCacheByMethod } from './middleware/cache-control';
+app.use('/api', defaultCacheByMethod());
+
 // P13/1 — Drain-aware health endpoint. Once SIGTERM lands we flip
 // `isShuttingDown` and the probe returns 503 with Retry-After so the
 // load-balancer stops sending traffic before we cut the listener.
@@ -272,12 +282,18 @@ import { startLeadPipeline, stopLeadPipeline } from './services/lead-pipeline';
 //   we can set DISABLE_INLINE_WORKERS=1 to keep the API process pure HTTP.
 import { startAllWorkers, stopAllWorkers } from './workers';
 import { closeQueues } from './queues';
+// P23 BE Track 2 / Aşama 1 — topic-based SSE pub/sub + BullMQ bridge.
+import { getSseManager } from './lib/realtime/sse-manager';
+import { attachJobBridge } from './lib/realtime/publish';
 if (process.env.NODE_ENV !== 'test') {
   startReminderJob();
   startLeadPipeline();
   if (process.env.DISABLE_INLINE_WORKERS !== '1') {
     startAllWorkers();
   }
+  // Wire job-completion notifications onto the SSE manager. Safe to call
+  // even when BullMQ is unavailable (no-op + log).
+  attachJobBridge();
 }
 
 const server = app.listen(PORT, () => {
@@ -343,6 +359,16 @@ const shutdown = (signal: string): Promise<void> => {
       }
     }
     sseClients.clear();
+
+    // P23 BE Track 2 / Aşama 1 — drain the topic-based SSE manager. Sends a
+    // `server_shutdown` event so the browser EventSource reconnects against
+    // the new instance instead of retrying the old (closing) one in tight
+    // loop.
+    try {
+      getSseManager().drain('shutdown');
+    } catch (err) {
+      logger.warn(`[shutdown] sse drain failed: ${(err as Error).message}`);
+    }
 
     // 3) Stop accepting new connections + wait for in-flight to drain.
     const httpClosed = new Promise<void>((resolve) => {
