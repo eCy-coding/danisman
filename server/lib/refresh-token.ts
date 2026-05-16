@@ -18,6 +18,7 @@
 import crypto from 'crypto';
 import { prisma } from '../config/db';
 import { logger } from '../config/logger';
+import { blacklistToken } from './jwt-blacklist';
 
 export const ACCESS_TOKEN_EXPIRES_IN = '15m';
 export const REFRESH_TOKEN_EXPIRES_DAYS = 7;
@@ -74,15 +75,45 @@ export async function rotateRefreshToken(rawToken: string): Promise<RotateResult
   if (!stored) return { ok: false, reason: 'NOT_FOUND' };
 
   if (stored.revokedAt !== null) {
-    // Reuse detected — revoke entire family (all devices)
-    logger.warn('[RefreshToken] Reuse detected — revoking family', {
+    // Reuse detected — revoke entire family (all devices). P14-BE: also
+    // revoke every active Session row owned by the user so the access
+    // tokens issued alongside the refresh chain stop working immediately
+    // (otherwise an attacker would still hold a valid 15-minute access
+    // token after the family was nuked).
+    logger.warn('[RefreshToken] Reuse detected — revoking family + sessions', {
       userId: stored.userId,
       family: stored.family,
     });
-    await prisma.refreshToken.updateMany({
-      where: { family: stored.family, revokedAt: null },
-      data: { revokedAt: new Date() },
+
+    // P15-BE: Atomic family-revoke. Previously findMany was inside the tx
+    // but the follow-up session.updateMany ran OUTSIDE it — a concurrent
+    // login could insert a new Session row between the snapshot and the
+    // update, leaving an attacker session alive after reuse detection
+    // fired. The interactive callback form keeps every write in the same
+    // serialisable boundary.
+    const sessions = await prisma.$transaction(async (tx) => {
+      await tx.refreshToken.updateMany({
+        where: { family: stored.family, revokedAt: null },
+        data: { revokedAt: new Date() },
+      });
+      const liveSessions = await tx.session.findMany({
+        where: { userId: stored.userId, revokedAt: null },
+        select: { jti: true },
+      });
+      await tx.session.updateMany({
+        where: { userId: stored.userId, revokedAt: null },
+        data: { revokedAt: new Date() },
+      });
+      return liveSessions;
     });
+
+    // Push every live jti into the blacklist (TTL = remaining refresh
+    // window so we never leak a stale entry forever). Blacklist writes
+    // intentionally happen OUTSIDE the DB tx because Redis has its own
+    // failure modes and we never want to roll back the DB tx on a Redis
+    // hiccup — defense-in-depth: DB tutarlılığı > blacklist tutarlılığı.
+    const expiresAtMs = Date.now() + REFRESH_TOKEN_EXPIRES_DAYS * 24 * 60 * 60 * 1000;
+    await Promise.all(sessions.map((s) => blacklistToken(s.jti, expiresAtMs)));
     return { ok: false, reason: 'FAMILY_REVOKED' };
   }
 
@@ -106,6 +137,55 @@ export async function revokeAllUserTokens(userId: string): Promise<void> {
   await prisma.refreshToken.updateMany({
     where: { userId, revokedAt: null },
     data: { revokedAt: new Date() },
+  });
+}
+
+/**
+ * P14-BE: Hard "sign out everywhere" — revoke EVERY refresh token, EVERY
+ * Session row, AND push every live access-token jti onto the blacklist.
+ *
+ * Use this on:
+ *   - Password change / reset
+ *   - Suspected account compromise
+ *   - Admin force-logout from the dashboard
+ *
+ * The operation is intentionally chatty in the logs because it represents
+ * a security-sensitive state change.
+ */
+export async function revokeAllUserSessions(userId: string, reason: string): Promise<void> {
+  const sessions = await prisma.session.findMany({
+    where: { userId, revokedAt: null },
+    select: { jti: true },
+  });
+
+  await prisma.$transaction([
+    prisma.refreshToken.updateMany({
+      where: { userId, revokedAt: null },
+      data: { revokedAt: new Date() },
+    }),
+    prisma.session.updateMany({
+      where: { userId, revokedAt: null },
+      data: { revokedAt: new Date() },
+    }),
+  ]);
+
+  // Blacklist outside the tx because the Redis backend has its own
+  // failure modes and we don't want to roll back the DB tx on a Redis hiccup.
+  //
+  // P15-BE bug fix: blacklistToken() expects an ABSOLUTE epoch-ms timestamp
+  // (it does `expiresAtMs - Date.now()`). Previously this passed
+  // `REFRESH_TOKEN_EXPIRES_DAYS * 86_400_000` which equals 604_800_000 — a
+  // duration in ms, not an absolute clock value — so the helper computed a
+  // huge negative TTL and short-circuited, silently NEVER blacklisting the
+  // jti. The earlier call-site on line 104 already used `Date.now() + …`
+  // correctly; this branch was missed during P14-BE Aşama 2.
+  const expiresAtMs = Date.now() + REFRESH_TOKEN_EXPIRES_DAYS * 24 * 60 * 60 * 1000;
+  await Promise.all(sessions.map((s) => blacklistToken(s.jti, expiresAtMs)));
+
+  logger.warn('[Auth] Full session revocation', {
+    userId,
+    reason,
+    sessionCount: sessions.length,
   });
 }
 
