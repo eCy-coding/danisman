@@ -34,6 +34,12 @@ export interface CircuitBreakerOptions {
   openMs?: number;
   /** Optional per-call timeout enforced on top of any caller timeout. */
   callTimeoutMs?: number;
+  /**
+   * P21-BE: jitter ratio applied to the OPEN→HALF_OPEN cooldown.
+   * `0` reproduces the deterministic legacy behaviour; default `0.2` (±20%)
+   * is the AWS-recommended setting for anti-thundering-herd.
+   */
+  cooldownJitterRatio?: number;
 }
 
 export class CircuitOpenError extends Error {
@@ -52,11 +58,20 @@ export class CircuitBreaker {
   private readonly openMs: number;
   private readonly callTimeoutMs: number | undefined;
 
+  /**
+   * P21-BE: jitter ratio applied to the half-open cooldown. 0 = deterministic
+   * (legacy behaviour), 0.2 = uniform ±20% noise. Eliminates the case where
+   * N independent breakers, all tripped by the same downstream outage, probe
+   * at exactly the same instant and re-trip the dependency (thundering herd).
+   */
+  private readonly jitterRatio: number;
+
   constructor(opts: CircuitBreakerOptions) {
     this.name = opts.name;
     this.failureThreshold = opts.failureThreshold ?? 5;
     this.openMs = opts.openMs ?? 30_000;
     this.callTimeoutMs = opts.callTimeoutMs;
+    this.jitterRatio = clampRatio(opts.cooldownJitterRatio ?? 0.2);
   }
 
   /**
@@ -107,11 +122,16 @@ export class CircuitBreaker {
 
   private trip(err: unknown): void {
     this.state = 'OPEN';
-    this.nextProbeAt = Date.now() + this.openMs;
+    // P21-BE: ±jitterRatio × openMs noise on the cooldown so that N breakers
+    // tripped by the same upstream outage don't probe in lock-step.
+    const noise = this.jitterRatio === 0 ? 0 : (Math.random() * 2 - 1) * this.jitterRatio * this.openMs;
+    const cooldown = Math.max(0, Math.round(this.openMs + noise));
+    this.nextProbeAt = Date.now() + cooldown;
     logger.warn('[CircuitBreaker] OPEN — tripping', {
       name: this.name,
       failures: this.failures,
       openMs: this.openMs,
+      cooldownMs: cooldown,
       lastError: (err as Error).message?.slice(0, 200),
     });
   }
@@ -127,6 +147,12 @@ export class CircuitBreaker {
     this.failures = 0;
     this.nextProbeAt = 0;
   }
+}
+
+function clampRatio(r: number): number {
+  if (!Number.isFinite(r) || r < 0) return 0;
+  if (r > 1) return 1;
+  return r;
 }
 
 async function withTimeout<T>(p: Promise<T>, ms: number, label: string): Promise<T> {
