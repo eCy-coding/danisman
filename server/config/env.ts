@@ -61,6 +61,54 @@ const envSchema = z.object({
     .transform((v) => (v ? Number.parseInt(v, 10) : undefined))
     .pipe(z.number().int().positive().optional()),
 
+  // ── P20: Connection pool sizing (mathematical capacity guards) ──────────
+  // Formula: pool = (cpu_cores × 2) + effective_spindle_count
+  //   Render Starter  (0.5 vCPU, 512 MB) → 5  (safe)  / 10 (aggressive)
+  //   Render Standard (1   vCPU, 2  GB)  → 15 (safe)  / 20 (aggressive)
+  //   Render Pro      (2   vCPU, 4  GB)  → 30 (safe)  / 50 (aggressive)
+  // Hard ceiling: 100 (Postgres max_connections in Render Starter PG = 97).
+  PG_POOL_MAX: z
+    .string()
+    .optional()
+    .transform((v) => (v ? Number.parseInt(v, 10) : undefined))
+    .pipe(z.number().int().min(1).max(100).optional()),
+  PG_POOL_MIN: z
+    .string()
+    .optional()
+    .transform((v) => (v ? Number.parseInt(v, 10) : undefined))
+    .pipe(z.number().int().min(0).max(50).optional()),
+  PG_POOL_IDLE_MS: z
+    .string()
+    .optional()
+    .transform((v) => (v ? Number.parseInt(v, 10) : undefined))
+    .pipe(z.number().int().positive().optional()),
+  PG_POOL_CONN_MS: z
+    .string()
+    .optional()
+    .transform((v) => (v ? Number.parseInt(v, 10) : undefined))
+    .pipe(z.number().int().positive().optional()),
+  PG_POOL_QUERY_MS: z
+    .string()
+    .optional()
+    .transform((v) => (v ? Number.parseInt(v, 10) : undefined))
+    .pipe(z.number().int().positive().optional()),
+  PG_STATEMENT_MS: z
+    .string()
+    .optional()
+    .transform((v) => (v ? Number.parseInt(v, 10) : undefined))
+    .pipe(z.number().int().positive().optional()),
+
+  // ── P20: Read replica routing (optional, falls back to primary) ─────────
+  DATABASE_URL_REPLICA: z
+    .string()
+    .url('DATABASE_URL_REPLICA must be a valid Postgres URL (postgresql://...)')
+    .startsWith('postgres', 'DATABASE_URL_REPLICA must use postgres:// scheme')
+    .optional(),
+
+  // ── P20: Cache warm-up endpoint (post-deploy hook) ──────────────────────
+  CACHE_WARMUP_TOKEN: z.string().min(16).optional(),
+  CACHE_WARMUP_BASE_URL: z.string().url().optional(),
+
   // ── Optional integrations ───────────────────────────────
   LOGTAIL_SOURCE_TOKEN: z.string().optional(),
   TELEGRAM_BOT_TOKEN: z.string().optional(),
