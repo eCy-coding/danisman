@@ -1,0 +1,111 @@
+# P18 BE Track 2 / Aşama 5 — DB migration safety + drift gate.
+#
+# Runs on every PR that touches Prisma artifacts. Two-pass check:
+#
+#   1. `prisma validate`             — schema parse + relation sanity
+#   2. `prisma migrate diff` wrapper — drift detection (both directions)
+#   3. migration safety analyzer     — DROP/TRUNCATE/etc. risk class
+#
+# Risk class:
+#   - A/B → auto-approve
+#   - C   → PR comment + manual "migration:approved" label required
+#   - D   → hard fail (TRUNCATE / DROP DATABASE / unscoped DELETE)
+#
+# Operators can override the C/D gate by setting the
+# `migration:approved` label on the PR.
+
+name: db-migration-gate
+
+on:
+  pull_request:
+    paths:
+      - 'prisma/schema.prisma'
+      - 'prisma/migrations/**'
+      - 'scripts/check-migration-safety.mjs'
+      - 'scripts/check-migration-drift.mjs'
+      - '.github/workflows/db-migration-gate.yml'
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  validate-schema:
+    name: prisma validate + format
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+
+      - name: prisma validate
+        run: npx prisma validate
+
+      - name: prisma format --check
+        run: npx prisma format --check
+
+  drift:
+    name: migration ↔ schema drift
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    needs: validate-schema
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Drift detection
+        env:
+          STRICT: '1'
+          DATABASE_URL: 'postgresql://placeholder:placeholder@localhost:5432/placeholder?schema=public'
+        run: node scripts/check-migration-drift.mjs
+
+  safety:
+    name: migration safety analyzer
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    needs: validate-schema
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Detect risky DDL
+        id: safety
+        run: |
+          set +e
+          node scripts/check-migration-safety.mjs --since=20260516200000 | tee safety.json
+          # Re-run in strict mode to set the exit code separately.
+          STRICT=1 MIGRATION_SAFETY_THRESHOLD=D node scripts/check-migration-safety.mjs --since=20260516200000
+          d_exit=$?
+          STRICT=1 MIGRATION_SAFETY_THRESHOLD=C node scripts/check-migration-safety.mjs --since=20260516200000
+          c_exit=$?
+          echo "d_exit=$d_exit" >> "$GITHUB_OUTPUT"
+          echo "c_exit=$c_exit" >> "$GITHUB_OUTPUT"
+
+      - name: Hard fail on class-D
+        if: steps.safety.outputs.d_exit != '0'
+        run: |
+          echo "::error::Class-D (catastrophic) DDL detected in this PR."
+          exit 1
+
+      - name: Soft gate on class-C (requires migration:approved label)
+        if: steps.safety.outputs.c_exit != '0' && !contains(github.event.pull_request.labels.*.name, 'migration:approved')
+        run: |
+          echo "::error::Class-C (irreversible) DDL detected. Add the 'migration:approved' label after manual review."
+          exit 1
