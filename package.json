@@ -47,7 +47,7 @@
     "build": "npm run gen:blog && vite build",
     "build:server": "tsc -p tsconfig.server.json",
     "build:all": "npm run build && npm run build:server",
-    "postbuild": "npx tsx scripts/generate-sitemap.ts && npx tsx scripts/generate-rss.ts && npm run gen:og-image",
+    "postbuild": "node scripts/p28-css-nonblocking.mjs && npx tsx scripts/generate-sitemap.ts && npx tsx scripts/generate-rss.ts && npm run gen:og-image",
     "preview": "vite preview --port 4173",
     "start:prod": "npm run build:all && pm2 start ecosystem.config.cjs --env production",
     "pm2:reload": "pm2 reload ecosystem.config.cjs --env production",
@@ -291,6 +291,7 @@
     ]
   },
   "overrides": {
-    "estree-walker": "2.0.2"
+    "estree-walker": "2.0.2",
+    "brace-expansion": "^2.0.3"
   }
 }
