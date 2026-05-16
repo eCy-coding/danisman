@@ -115,6 +115,32 @@
     <link rel="preload" href="/index.css" as="style" />
     <link rel="stylesheet" href="/index.css" media="print" onload="this.media='all'" />
     <noscript><link rel="stylesheet" href="/index.css" /></noscript>
+    <!-- P20 — JS disabled fallback styles. SovereignBoundary + App Shell
+         hero zaten inline CSS; bu blok sadece üst banner için. -->
+    <noscript>
+      <style>
+        .ecy-noscript-banner {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          z-index: 9999;
+          background: #1e293b;
+          color: #fff;
+          padding: 12px 16px;
+          font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+          font-size: 14px;
+          line-height: 1.5;
+          text-align: center;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .ecy-noscript-banner strong { color: #38bdf8; }
+        .ecy-noscript-banner a {
+          color: #38bdf8;
+          text-decoration: underline;
+        }
+      </style>
+    </noscript>
   </head>
   <body class="bg-neutral text-slate-900 font-sans">
     <!-- Skip to main content — W3Schools WCAG 2.1 accessibility pattern -->
@@ -125,6 +151,17 @@
       onfocus="this.style.top='1rem';this.style.left='1rem';"
       onblur="this.style.top='-999px';this.style.left='-999px';"
     >Ana içeriğe geç / Skip to main content</a>
+    <!-- P20 — JS devre dışı durum bildirimi: tam işlevsellik için JS gerekir.
+         App Shell hero altta görünür kalır, kullanıcı /contact ve /services
+         linklerine düz HTML olarak erişebilir. -->
+    <noscript>
+      <div class="ecy-noscript-banner" role="alert" aria-live="polite">
+        <strong>JavaScript devre dışı / JavaScript is disabled.</strong>
+        Tam etkileşim, form gönderimi ve panel için JavaScript'i etkinleştirin.
+        For full interactivity, forms and the dashboard, please enable JavaScript.
+        &mdash; <a href="mailto:info@ecypro.com">info@ecypro.com</a>
+      </div>
+    </noscript>
     <div id="root">
       <!-- App Shell: Inline pre-render for instant FCP/LCP — React replaces on mount -->
       <main
