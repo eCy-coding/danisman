@@ -239,14 +239,21 @@ async function generateSitemap() {
   fs.writeFileSync(path.join(publicDir, 'sitemap-en.xml'), enSitemap);
   fs.writeFileSync(path.join(publicDir, 'sitemap-index.xml'), sitemapIndex);
 
-  // Robots.txt — point to sitemap index
+  // Robots.txt — production-grade: admin/app/api isolated, sitemaps + security policy ref
+  // P43: merge'lendi — admin/app/api disallow + tüm sitemap referansları + security.txt yorum satırı.
   const robots = `User-agent: *
 Allow: /
+Disallow: /admin/
+Disallow: /app/
+Disallow: /api/
 
 Sitemap: ${BASE_URL}/sitemap-index.xml
 Sitemap: ${BASE_URL}/sitemap.xml
 Sitemap: ${BASE_URL}/sitemap-tr.xml
 Sitemap: ${BASE_URL}/sitemap-en.xml
+
+# Security policy
+# ${BASE_URL}/.well-known/security.txt
 `;
   fs.writeFileSync(path.join(publicDir, 'robots.txt'), robots);
 

@@ -1,0 +1,9 @@
+/* TEAM */
+Founder & CEO: Emre Canyağmur
+Site: https://ecypro.com
+
+/* SITE */
+Last Update: 2026-05-16
+Standards: HTML5, Tailwind v4, React 19, TypeScript Strict
+Components: Vite 6, React Router 7, Motion, Recharts
+Languages: Turkish, English

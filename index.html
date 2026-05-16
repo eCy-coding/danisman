@@ -95,7 +95,11 @@
       property="og:description"
       content="Global ölçekte stratejik büyüme ve dijital dönüşüm ortağınız. Yönetim, etkinlik ve dijital çözümler."
     />
-    <meta property="og:image" content="https://www.ecypro.com/og-image.jpg" />
+    <meta property="og:image" content="https://www.ecypro.com/og-image.svg" />
+    <meta property="og:image:type" content="image/svg+xml" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="EcyPro Premium Consulting" />
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image" />
@@ -105,13 +109,42 @@
       property="twitter:description"
       content="Global ölçekte stratejik büyüme ve dijital dönüşüm ortağınız."
     />
-    <meta property="twitter:image" content="https://www.ecypro.com/og-image.jpg" />
+    <meta property="twitter:image" content="https://www.ecypro.com/twitter-card.svg" />
+    <meta property="twitter:image:alt" content="EcyPro Premium Consulting" />
 
     <!-- P7 Round B: Structured Data moved to body-end below.
          Rationale: 4× JSON-LD blocks added ~4KB to <head> parse on Slow 4G
          (16-25ms per block on 4× CPU throttle). Schema.org crawlers (Google,
          Bing, Yandex) read body-end JSON-LD identically. Frees head parse
-         budget for FCP. -->
+         budget for FCP.
+         P43: 70e4761 merge conflict resolved — fake placeholder addr/phone
+         JSON-LD discarded; SeoManager (react-helmet-async) is single
+         source-of-truth for dynamic JSON-LD per route. -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": ["Organization", "ProfessionalService"],
+      "@id": "https://www.ecypro.com/#organization",
+      "name": "EcyPro Premium Consulting",
+      "alternateName": "eCyverse · Premium Consulting",
+      "url": "https://www.ecypro.com",
+      "logo": "https://www.ecypro.com/pwa-512x512.png",
+      "image": "https://www.ecypro.com/og-image.jpg",
+      "description": "Premium kurumsal danışmanlık. Organizasyonel dönüşüm, stratejik danışmanlık ve kültür mühendisliği.",
+      "email": "info@ecypro.com",
+      "founder": {
+        "@type": "Person",
+        "name": "Emre Can Yalçın",
+        "jobTitle": "Founder, Premium Consulting Strategist"
+      },
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "customer service",
+        "availableLanguage": ["tr", "en"]
+      },
+      "areaServed": ["TR", "EU"]
+    }
+    </script>
 
     <!-- P33-T03: Non-blocking stylesheet — print media trick defers parse until after FCP.
          noscript fallback ensures CSS loads for bots/old browsers.

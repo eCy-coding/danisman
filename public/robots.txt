@@ -1,7 +1,13 @@
 User-agent: *
 Allow: /
+Disallow: /admin/
+Disallow: /app/
+Disallow: /api/
 
 Sitemap: https://www.ecypro.com/sitemap-index.xml
 Sitemap: https://www.ecypro.com/sitemap.xml
 Sitemap: https://www.ecypro.com/sitemap-tr.xml
 Sitemap: https://www.ecypro.com/sitemap-en.xml
+
+# Security policy
+# https://www.ecypro.com/.well-known/security.txt

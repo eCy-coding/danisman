@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg-glow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#080808"/>
+      <stop offset="50%" stop-color="#0a0a0a"/>
+      <stop offset="100%" stop-color="#080808"/>
+    </linearGradient>
+    <linearGradient id="amber-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fbbf24"/>
+      <stop offset="100%" stop-color="#d97706"/>
+    </linearGradient>
+    <radialGradient id="corner-glow" cx="100%" cy="100%" r="50%">
+      <stop offset="0%" stop-color="#d97706" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#d97706" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg-glow)"/>
+  <circle cx="1050" cy="560" r="280" fill="url(#corner-glow)"/>
+
+  <!-- Top-left domain -->
+  <text x="60" y="60" font-family="system-ui, -apple-system, sans-serif" font-size="20" fill="#94a3b8" font-weight="500" letter-spacing="3">ECYPRO.COM</text>
+
+  <!-- Top-left amber accent dot -->
+  <circle cx="46" cy="54" r="4" fill="#d97706"/>
+
+  <!-- Main brand title -->
+  <text x="600" y="300" font-family="Georgia, 'Times New Roman', serif" font-size="120" font-weight="700" fill="#ffffff" text-anchor="middle" letter-spacing="-2">EcyPro</text>
+
+  <!-- Subtitle -->
+  <text x="600" y="380" font-family="system-ui, -apple-system, sans-serif" font-size="48" font-weight="600" fill="url(#amber-gradient)" text-anchor="middle" letter-spacing="2">Premium Consulting</text>
+
+  <!-- Tagline -->
+  <text x="600" y="450" font-family="system-ui, -apple-system, sans-serif" font-size="26" fill="#94a3b8" text-anchor="middle" letter-spacing="6">STRATEGIC · DIGITAL · SUSTAINABLE</text>
+
+  <!-- Bottom amber line -->
+  <rect x="500" y="500" width="200" height="3" fill="url(#amber-gradient)" rx="1.5"/>
+
+  <!-- Bottom-right brand mark -->
+  <circle cx="1130" cy="590" r="14" fill="url(#amber-gradient)"/>
+  <circle cx="1130" cy="590" r="7" fill="#080808"/>
+</svg>
