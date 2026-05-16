@@ -21,6 +21,10 @@ import uploadRoutes from './upload';
 import uploadsGetRoutes from './uploads-get';
 import metricsRoutes from './metrics';
 import adminQueuesRoutes from './admin-queues';
+// P23 BE Track 2 / Aşama 1 — topic-based SSE pub/sub
+import streamRoutes from './stream';
+// P23 BE Track 2 / Aşama 2 — outbound webhook admin CRUD
+import adminWebhookRoutes from './admin-webhooks';
 import { openApiSpec } from '../config/openapi';
 import { redis } from '../config/redis';
 import { prisma } from '../config/db';
@@ -377,6 +381,8 @@ router.use('/admin', adminRoutes);
 // `/admin/queues` so the public path is `/api/admin/queues/*`. Auth +
 // IP allowlist enforced inside the subrouter.
 router.use('/admin/queues', adminQueuesRoutes);
+// P23 BE Track 2 / Aşama 2 — partner-facing event push subscriptions.
+router.use('/admin/webhooks', adminWebhookRoutes);
 router.use('/webhooks', webhookRoutes);
 router.use('/manage', manageRoutes);
 router.use('/auth/2fa', totpRoutes);
@@ -394,5 +400,8 @@ router.use('/search', searchRoutes);
 //   GET  /api/uploads/get?... → HMAC-signed read (local adapter only)
 router.use('/upload', uploadRoutes);
 router.use('/uploads', uploadsGetRoutes);
+
+// P23 BE Track 2 / Aşama 1 — `/api/stream`, `/api/stream/publish`, `/api/stream/_stats`.
+router.use('/', streamRoutes);
 
 export default router;
