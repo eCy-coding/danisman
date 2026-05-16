@@ -25,6 +25,9 @@ import {
 import { registerInlineHandler, type CronJobPayload } from '../queues';
 import { logger } from '../config/logger';
 import { metrics } from '../observability/metrics';
+// P23 BE Track 2 / Aşama 4 — distributed lock so multi-instance deploys
+// only run each cron task once per scheduled tick.
+import { withLock } from '../lib/lock/redis-lock';
 
 const QUEUE_NAME = 'cron';
 const QUEUE_PREFIX = 'ecypro:q';
@@ -60,10 +63,20 @@ async function processCronJob(payload: CronJobPayload): Promise<void> {
     // P18 BE Track 2 / Aşama 4 — delegated to the audit-archive worker
     // module so the heavy archival flow (storage write + idempotent
     // pointer row + hot-table delete) lives in one place.
+    //
+    // P23 BE Track 2 / Aşama 4 — wrap in distributed lock so multi-instance
+    // deploys (API + workers + standalone dyno) don't all run archival in
+    // parallel. TTL 5 min covers worst-case archival run; renew at 100s.
     case 'audit-log-archive': {
-      const { archiveAuditLogs } = await import('./audit-archive-worker');
-      const summary = await archiveAuditLogs({ retentionDays: payload.retentionDays });
-      logger.info('[workers/cron] audit-log-archive done', summary);
+      const outcome = await withLock('lock:cron:audit-archive', 5 * 60 * 1000, async () => {
+        const { archiveAuditLogs } = await import('./audit-archive-worker');
+        return archiveAuditLogs({ retentionDays: payload.retentionDays });
+      });
+      if (!outcome.acquired) {
+        logger.info('[workers/cron] audit-log-archive skipped — another instance owns the lock');
+        return;
+      }
+      logger.info('[workers/cron] audit-log-archive done', outcome.value);
       return;
     }
 

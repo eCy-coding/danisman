@@ -22,6 +22,11 @@ import {
   startAuditArchiveWorker,
   stopAuditArchiveWorker,
 } from './audit-archive-worker';
+// P23 BE Track 2 / Aşama 2 — outbound webhook delivery worker.
+import {
+  startWebhookDeliveryWorker,
+  stopWebhookDeliveryWorker,
+} from './webhook-delivery-worker';
 import { logger } from '../config/logger';
 
 export function startAllWorkers(): void {
@@ -35,8 +40,10 @@ export function startAllWorkers(): void {
   startImageResizeWorker();
   // P18 BE Track 2 / Aşama 4 — weekly audit-log archival cron registrar.
   startAuditArchiveWorker();
+  // P23 BE Track 2 / Aşama 2 — partner-facing event push.
+  startWebhookDeliveryWorker();
   logger.info(
-    '[workers] all queue workers started (email, gdpr-export, cron, image-resize, audit-archive)',
+    '[workers] all queue workers started (email, gdpr-export, cron, image-resize, audit-archive, webhook-out)',
   );
 }
 
@@ -47,6 +54,7 @@ export async function stopAllWorkers(): Promise<void> {
     stopCronWorker(),
     stopImageResizeWorker(),
     stopAuditArchiveWorker(),
+    stopWebhookDeliveryWorker(),
   ]);
   logger.info('[workers] all queue workers stopped');
 }
