@@ -5,12 +5,17 @@ import express from 'express';
 import apiRoutes from './routes';
 import { errorHandler } from './middleware/error';
 import { securityHeaders, structuredLogger, corsPreflight } from './middleware/security';
+import { requestId } from './middleware/request-id';
+import { httpMetricsMiddleware } from './observability/http-metrics-middleware';
 import { corsProd } from './middleware/cors';
 import { originGuard } from './middleware/originGuard';
 import { generalLimiter, sseLimiter } from './middleware/rateLimiter';
+import { tierRateLimiter } from './middleware/rate-limit-tier';
 import { sentryErrorHandler } from './middleware/sentry';
 import { authenticate } from './middleware/auth';
+import { requestTimeout } from './middleware/timeout';
 import { logger } from './config/logger';
+import { shutdownDatabase } from './config/db';
 
 // BE-8: Sentry — environment + release tracking + tunable sampling.
 //   - `release` reads from RELEASE_VERSION (set by Render/Railway build) or
@@ -86,6 +91,13 @@ if (trustProxyEnv === 'true' || trustProxyEnv === 'false') {
 }
 
 // ─── Security & Middleware ───────────────────────────────
+// P14-BE: request-id MUST be the very first middleware so every later
+// log entry, Sentry breadcrumb, rate-limit denial, and error response
+// can correlate against the same trace identifier.
+app.use(requestId);
+// P18 BE Track 2 / Aşama 2 — Prometheus emission BEFORE auth/rate-limit
+// so even rejected requests show up in `http_requests_total{status="429"}`.
+app.use(httpMetricsMiddleware);
 app.use(securityHeaders);
 app.use(structuredLogger);
 app.use(corsPreflight);
@@ -102,17 +114,55 @@ app.use(
   }),
 );
 
-app.use(express.json({ limit: '10mb' }));
+// P15-BE Aşama 6: capture raw body for HMAC webhook verification.
+// Without this hook every webhook handler that recomputes a signature
+// would have to operate on JSON.stringify(req.body), which loses
+// byte-perfect fidelity (key order, whitespace) and silently fails
+// verification for valid requests. See server/middleware/verify-webhook.ts.
+import { captureRawBody } from './middleware/verify-webhook';
+app.use(express.json({ limit: '10mb', verify: captureRawBody }));
 app.use(express.urlencoded({ extended: true }));
 
+// P13/1 — Per-request hard timeout. Skips SSE + health.
+app.use(
+  requestTimeout({
+    ms: Number.parseInt(process.env.REQUEST_TIMEOUT_MS ?? '30000', 10) || 30_000,
+    uploadMs: Number.parseInt(process.env.UPLOAD_TIMEOUT_MS ?? '60000', 10) || 60_000,
+  }),
+);
+
 // Rate limiting on all API endpoints
+// 1) Per-IP cheap door-keeper (existing) — first line of defense.
 app.use('/api', generalLimiter);
+// 2) P16 BE Track 2 / Aşama 2 — Tier-based per-user limiter.
+//    Classifies the caller (anonymous / auth / admin / api-key) and applies
+//    a tier-specific budget. Mounted GLOBALLY after the IP limiter so
+//    authenticated requests still benefit when individual routes don't add
+//    per-route auth before this point — those will fall into the
+//    `anonymous` tier (stricter, still safe). Routes that need a tighter
+//    or looser per-tier budget can mount `tierRateLimit({ budgets })`
+//    inline AFTER `authenticate`.
+app.use('/api', tierRateLimiter);
+
+// P13/1 — Drain-aware health endpoint. Once SIGTERM lands we flip
+// `isShuttingDown` and the probe returns 503 with Retry-After so the
+// load-balancer stops sending traffic before we cut the listener.
+let isShuttingDown = false;
 
 // ─── Playwright webServer probe (mock-server compat) ─────
 app.get('/__health', (_req, res) => res.json({ ok: true }));
 
 // ─── Health Check Endpoint ───────────────────────────────
 app.get('/api/health', (_req, res) => {
+  if (isShuttingDown) {
+    res.setHeader('Retry-After', '15');
+    res.status(503).json({
+      status: 'shutting_down',
+      service: 'ecypro-api',
+      message: 'Server is draining connections',
+    });
+    return;
+  }
   res.json({
     status: 'ok',
     service: 'ecypro-api',
@@ -167,7 +217,36 @@ export function broadcastSSE(event: string, data: unknown): void {
 }
 
 // ─── API Routes ──────────────────────────────────────────
-app.use('/api', apiRoutes);
+// P15-BE Aşama 4: URI-based versioning.
+//
+// New canonical prefix: `/api/v1/*` — every contracted v1 surface.
+// Legacy alias: `/api/*` — same router, kept live until 2026-12-01 sunset
+// per docs/API_VERSIONING.md. The alias attaches a `Deprecation` and
+// `Sunset` header so SDK consumers see the migration window in logs.
+//
+// Frontend (VITE_API_URL) is intentionally NOT changed in this sprint
+// because a parallel FE task is in flight — backwards-compatibility keeps
+// the legacy callers green during the rollover.
+const DEPRECATION_SUNSET_DATE = 'Tue, 01 Dec 2026 00:00:00 GMT';
+app.use('/api/v1', apiRoutes);
+app.use(
+  '/api',
+  (req, res, next) => {
+    // Don't tag /api/v1/* — it would double-fire under express subrouting,
+    // and that path is the canonical one anyway.
+    if (req.path.startsWith('/v1/') || req.path === '/v1') {
+      return next();
+    }
+    res.setHeader('Deprecation', 'true');
+    res.setHeader('Sunset', DEPRECATION_SUNSET_DATE);
+    res.setHeader(
+      'Link',
+      '</api/v1>; rel="successor-version", </docs/API_VERSIONING.md>; rel="deprecation"',
+    );
+    return next();
+  },
+  apiRoutes,
+);
 
 // ─── 404 Handler ─────────────────────────────────────────
 app.use((_req, res) => {
@@ -187,9 +266,18 @@ app.use(errorHandler);
 import { startReminderJob } from './jobs/booking-reminders';
 import { notifyServerStart, notifyCriticalError } from './lib/telegram';
 import { startLeadPipeline, stopLeadPipeline } from './services/lead-pipeline';
+// P17 BE Track 2 / Aşama 1 — BullMQ queue workers.
+//   In single-process dev the API container also hosts the workers; in
+//   prod the worker dyno bootstraps via `server/workers/standalone.ts` and
+//   we can set DISABLE_INLINE_WORKERS=1 to keep the API process pure HTTP.
+import { startAllWorkers, stopAllWorkers } from './workers';
+import { closeQueues } from './queues';
 if (process.env.NODE_ENV !== 'test') {
   startReminderJob();
   startLeadPipeline();
+  if (process.env.DISABLE_INLINE_WORKERS !== '1') {
+    startAllWorkers();
+  }
 }
 
 const server = app.listen(PORT, () => {
@@ -206,33 +294,96 @@ const server = app.listen(PORT, () => {
   notifyServerStart(PORT).catch(() => {});
 });
 
-// Graceful shutdown handler
-const shutdown = (signal: string) => {
-  logger.info(`[${signal}] Graceful shutdown initiated...`);
+// P13/1 — Drain timeline:
+//   t+0    SIGTERM/SIGINT received
+//          → flip readiness probe to 503 (load balancer stops sending)
+//   t+0    stop background jobs (lead pipeline, cron)
+//   t+0    close SSE clients (long-lived)
+//   t+0    server.close() — finish in-flight HTTP, refuse new sockets
+//   t+30s  hard ceiling — Render aborts container at ~30s on rolling deploys.
+//   between: prisma.$disconnect + pgPool.end + Sentry.flush (in parallel)
+const SHUTDOWN_TIMEOUT_MS = Number.parseInt(process.env.SHUTDOWN_TIMEOUT_MS ?? '30000', 10) || 30_000;
 
-  // Stop background services
-  stopLeadPipeline();
+let shuttingDownPromise: Promise<void> | null = null;
 
-  // Close all SSE connections
-  for (const client of sseClients) {
-    client.end();
-  }
-  sseClients.clear();
+const shutdown = (signal: string): Promise<void> => {
+  if (shuttingDownPromise) return shuttingDownPromise;
 
-  server.close(() => {
-    logger.info('✅ Server closed cleanly.');
+  shuttingDownPromise = (async () => {
+    logger.info(`[${signal}] Graceful shutdown initiated (ceiling ${SHUTDOWN_TIMEOUT_MS}ms)…`);
+    isShuttingDown = true;
+
+    // 1) Stop background services so we don't enqueue more work mid-drain.
+    try {
+      stopLeadPipeline();
+    } catch (err) {
+      logger.warn(`[shutdown] stopLeadPipeline failed: ${(err as Error).message}`);
+    }
+
+    // P17 BE Track 2 / Aşama 1 — drain BullMQ workers + producer registry.
+    // Stop accepting new jobs first (workers close), then close the queues
+    // so any in-flight enqueue completes before connection teardown.
+    try {
+      await stopAllWorkers();
+    } catch (err) {
+      logger.warn(`[shutdown] stopAllWorkers failed: ${(err as Error).message}`);
+    }
+    try {
+      await closeQueues();
+    } catch (err) {
+      logger.warn(`[shutdown] closeQueues failed: ${(err as Error).message}`);
+    }
+
+    // 2) Close SSE clients — keep-alive streams will never satisfy server.close.
+    for (const client of sseClients) {
+      try {
+        client.end();
+      } catch {
+        /* socket may already be gone */
+      }
+    }
+    sseClients.clear();
+
+    // 3) Stop accepting new connections + wait for in-flight to drain.
+    const httpClosed = new Promise<void>((resolve) => {
+      server.close((err) => {
+        if (err) logger.warn(`[shutdown] server.close emitted: ${err.message}`);
+        else logger.info('[shutdown] HTTP server closed.');
+        resolve();
+      });
+    });
+
+    const hardCeiling = new Promise<void>((resolve) =>
+      setTimeout(() => {
+        logger.warn(`[shutdown] HTTP drain hit ${SHUTDOWN_TIMEOUT_MS}ms ceiling — forcing close`);
+        resolve();
+      }, SHUTDOWN_TIMEOUT_MS).unref?.(),
+    );
+
+    await Promise.race([httpClosed, hardCeiling]);
+
+    // 4) Drain databases + flush observability in parallel — bounded.
+    await Promise.allSettled([
+      shutdownDatabase(8_000),
+      Sentry.flush(4_000).then(
+        () => logger.info('[shutdown] Sentry flushed.'),
+        (err) => logger.warn(`[shutdown] Sentry flush failed: ${(err as Error).message}`),
+      ),
+    ]);
+
+    logger.info('✅ Shutdown complete — exiting 0.');
     process.exit(0);
-  });
+  })();
 
-  // Force shutdown after 10s
-  setTimeout(() => {
-    logger.error('⚠️ Force shutdown after timeout.');
-    process.exit(1);
-  }, 10_000);
+  return shuttingDownPromise;
 };
 
-process.on('SIGTERM', () => shutdown('SIGTERM'));
-process.on('SIGINT', () => shutdown('SIGINT'));
+process.on('SIGTERM', () => {
+  void shutdown('SIGTERM');
+});
+process.on('SIGINT', () => {
+  void shutdown('SIGINT');
+});
 
 // Handle uncaught errors
 process.on('uncaughtException', (err) => {
