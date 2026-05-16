@@ -31,6 +31,15 @@ services:
       npx tsc -p tsconfig.server.json
     startCommand: node dist/server/index.js
     healthCheckPath: /api/health
+    # P20 BE Aşama 4 — Post-deploy cache warm-up. Sequential warm of top
+    # public endpoints to avoid first-request cold-start latency spike.
+    # Failure is non-fatal (`|| true`) so a transient cache miss never
+    # blocks a deploy promotion. See outputs/P20_BE_CACHE_WARMUP.md.
+    postDeployCommand: |
+      sleep 5 && \
+      curl -sf -X POST -H "Authorization: Bearer $CACHE_WARMUP_TOKEN" \
+        "${CACHE_WARMUP_BASE_URL:-https://api.ecypro.com}/api/admin/cache/warmup" \
+        || true
     autoDeploy: true
     branch: main
     numInstances: 1
@@ -97,3 +106,34 @@ services:
         value: "900000" # 15 min
       - key: RATE_LIMIT_MAX
         value: "100"
+
+      # ── P20: Connection pool sizing (Starter-tier defaults) ──
+      # Formula: pool = (cpu_cores × 2) + 1   →   Starter 0.5 vCPU = ~5
+      # We round up to 10 for Node async IO-bound headroom.
+      # See outputs/P20_BE_POOL_MATH.md for the full derivation.
+      - key: PG_POOL_MAX
+        value: "10"
+      - key: PG_POOL_MIN
+        value: "0"
+      - key: PG_POOL_IDLE_MS
+        value: "30000"
+      - key: PG_POOL_CONN_MS
+        value: "30000"
+      - key: PG_POOL_QUERY_MS
+        value: "10000"
+      - key: PG_STATEMENT_MS
+        value: "15000"
+
+      # ── P20: Node heap ceiling (V8 default 1.5 GB doesn't fit Starter) ──
+      # Starter (512 MB total, ~380 MB app baseline) → cap V8 at 384 MB.
+      # Upgrade to "1536" on Standard, "3072" on Pro.
+      - key: NODE_OPTIONS
+        value: "--max-old-space-size=384"
+
+      # ── P20: Read replica (Standard+ only; leave unset on Starter) ──
+      - key: DATABASE_URL_REPLICA
+        sync: false
+
+      # ── P20: Cache warm-up (post-deploy hook) ──
+      - key: CACHE_WARMUP_TOKEN
+        generateValue: true
