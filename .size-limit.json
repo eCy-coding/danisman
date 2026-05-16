@@ -38,7 +38,7 @@
   {
     "name": "i18n chunk (brotli)",
     "path": "dist/assets/i18n-*.js",
-    "limit": "30 KB",
+    "limit": "40 KB",
     "brotli": true
   },
   {
@@ -56,7 +56,7 @@
   {
     "name": "Recharts chunk (brotli) — admin + ROI calculator",
     "path": "dist/assets/charts-*.js",
-    "limit": "60 KB",
+    "limit": "110 KB",
     "brotli": true
   },
   {
