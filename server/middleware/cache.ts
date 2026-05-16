@@ -114,6 +114,35 @@ function deriveTier(req: AuthLikeRequest, configured?: CacheTier): CacheTier {
   return req.user || req.headers.authorization ? 'private' : 'public';
 }
 
+/**
+ * P21-BE: Cache stampede protection — apply ±jitterRatio noise to the stored TTL.
+ *
+ * Without jitter, every cached entry created at request time T expires at exactly
+ * T + ttl. When the route is hot (many parallel readers caching the same key),
+ * a synchronised wave of misses re-hydrates from the origin at the same instant —
+ * the "cache stampede". A ±10% spread on TTL desynchronises expiries across keys
+ * so the origin sees an even trickle of revalidations rather than a burst.
+ *
+ * Note: the *Cache-Control* header still uses the configured `ttlMs` (clients
+ * shouldn't see the random server-side noise). Jitter is server-internal only.
+ */
+const CACHE_TTL_JITTER_RATIO = clampRatio(
+  Number.parseFloat(process.env.CACHE_TTL_JITTER_RATIO ?? '0.1'),
+);
+
+function clampRatio(r: number): number {
+  if (!Number.isFinite(r) || r < 0) return 0;
+  if (r > 1) return 1;
+  return r;
+}
+
+export function jitteredTtl(ttlMs: number, ratio: number = CACHE_TTL_JITTER_RATIO): number {
+  if (ttlMs <= 0 || ratio === 0) return ttlMs;
+  // Uniform noise in [-ratio, +ratio] × ttlMs, clamped to ≥ 1ms.
+  const noise = (Math.random() * 2 - 1) * ratio * ttlMs;
+  return Math.max(1, Math.round(ttlMs + noise));
+}
+
 function cacheControlHeader(tier: CacheTier, ttlMs: number, swrMs: number): string {
   if (tier === 'none' || ttlMs <= 0) return 'no-store, no-cache, must-revalidate';
   const maxAge = Math.floor(ttlMs / 1000);
@@ -193,6 +222,8 @@ export function cache(options: CacheOptions = {}) {
       const status = res.statusCode;
       if (status >= 200 && status < 300) {
         try {
+          // P21-BE: ±10% TTL jitter eliminates synchronised expiry waves
+          // (cache stampede) when N readers cache the same key at the same T.
           responseStore.set(
             key,
             {
@@ -201,7 +232,7 @@ export function cache(options: CacheOptions = {}) {
               contentType: (res.getHeader('Content-Type') as string | undefined) ?? undefined,
               storedAt: Date.now(),
             },
-            ttlMs,
+            jitteredTtl(ttlMs),
           );
         } catch (err) {
           logger.warn('[cache] store.set failed', { message: (err as Error).message });
