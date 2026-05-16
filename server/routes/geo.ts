@@ -13,6 +13,7 @@ import fs from 'fs/promises';
 import path from 'path';
 import { lookupGeo, extractIp, getCacheStats } from '../lib/geoip';
 import { authenticate, requireRole } from '../middleware/auth';
+import { cache } from '../middleware/cache';
 import { logger } from '../config/logger';
 
 const router = Router();
@@ -107,15 +108,22 @@ router.get('/banner', async (req: Request, res: Response): Promise<void> => {
 });
 
 // ── GET /api/geo/countries ──────────────────────────────────
-router.get('/countries', async (_req: Request, res: Response): Promise<void> => {
-  try {
-    const countries = await loadCountries();
-    res.json({ status: 'success', data: { items: countries, total: countries.length } });
-  } catch (err) {
-    logger.error('[geo/countries] error', { message: (err as Error).message });
-    res.status(500).json({ status: 'error', message: 'Countries list failed' });
-  }
-});
+// P16 BE Track 2: country list is fully public & rarely changes → public 15min
+// TTL with stale-while-revalidate to keep traffic near-zero round-tripping
+// disk. Per-IP scope isn't needed (same list for everyone).
+router.get(
+  '/countries',
+  cache({ tier: 'public', ttlMs: 15 * 60_000, staleWhileRevalidateMs: 30 * 60_000 }),
+  async (_req: Request, res: Response): Promise<void> => {
+    try {
+      const countries = await loadCountries();
+      res.json({ status: 'success', data: { items: countries, total: countries.length } });
+    } catch (err) {
+      logger.error('[geo/countries] error', { message: (err as Error).message });
+      res.status(500).json({ status: 'error', message: 'Countries list failed' });
+    }
+  },
+);
 
 // ── GET /api/geo/cache/stats (admin) ────────────────────────
 router.get(
