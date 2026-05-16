@@ -88,15 +88,19 @@ describe('GET /api/ready', () => {
     vi.clearAllMocks();
   });
 
-  it('returns 200 when DB ping succeeds', async () => {
+  it('returns 200 when DB ping succeeds, with per-check latency', async () => {
     const app = await buildApp();
     const res = await request(app).get('/api/ready');
     expect(res.status).toBe(200);
     expect(res.body.status).toBe('ok');
-    expect(res.body.checks.db).toBe('ok');
+    // P16/4 — checks are objects, not strings, and include latencyMs
+    expect(res.body.checks.db.status).toBe('ok');
+    expect(typeof res.body.checks.db.latencyMs).toBe('number');
+    expect(res.body.checks.redis.status).toBe('ok');
+    expect(res.body.overall).toBe('ready');
   });
 
-  it('returns 503 when DB ping fails', async () => {
+  it('returns 503 with overall=not_ready when DB ping fails', async () => {
     const { prisma } = (await import('../config/db')) as unknown as {
       prisma: { $queryRaw: ReturnType<typeof vi.fn> };
     };
@@ -105,7 +109,32 @@ describe('GET /api/ready', () => {
     const res = await request(app).get('/api/ready');
     expect(res.status).toBe(503);
     expect(res.body.status).toBe('not_ready');
-    expect(res.body.checks.db).toBe('down');
+    expect(res.body.overall).toBe('not_ready');
+    expect(res.body.checks.db.status).toBe('down');
+  });
+
+  it('marks sentry as unconfigured when SENTRY_DSN missing', async () => {
+    const prevDsn = process.env.SENTRY_DSN;
+    delete process.env.SENTRY_DSN;
+    try {
+      const app = await buildApp();
+      const res = await request(app).get('/api/ready');
+      expect(res.body.checks.sentry.status).toBe('unconfigured');
+    } finally {
+      if (prevDsn !== undefined) process.env.SENTRY_DSN = prevDsn;
+    }
+  });
+
+  it('marks telegram as unconfigured when TELEGRAM_BOT_TOKEN missing', async () => {
+    const prevToken = process.env.TELEGRAM_BOT_TOKEN;
+    delete process.env.TELEGRAM_BOT_TOKEN;
+    try {
+      const app = await buildApp();
+      const res = await request(app).get('/api/ready');
+      expect(res.body.checks.telegram.status).toBe('unconfigured');
+    } finally {
+      if (prevToken !== undefined) process.env.TELEGRAM_BOT_TOKEN = prevToken;
+    }
   });
 });
 
