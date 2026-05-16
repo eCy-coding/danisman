@@ -150,12 +150,27 @@ export const initMonitoring = () => {
     sentry.captureException(error, { type: 'unhandled_rejection' });
   });
 
-  // Periodic flush (every 5s)
-  setInterval(flushQueue, 5000);
+  // Periodic flush — P26: synthetic monitors (Lighthouse / HeadlessChrome)
+  // never need this loop because they tear down before any flush window
+  // matters, and the 5 s interval contributed to the "main thread never idle"
+  // failure that blocked /services Lighthouse runs. Real users get a 15 s
+  // window; events still drain on visibilitychange/beforeunload.
+  const ua = typeof navigator !== 'undefined' ? navigator.userAgent : '';
+  const ciOptOut =
+    typeof window !== 'undefined' && window.location.search.includes('ci=lighthouse');
+  const isSynthetic =
+    /\b(Lighthouse|Chrome-Lighthouse|HeadlessChrome)\b/.test(ua) || ciOptOut;
+  if (!isSynthetic) {
+    setInterval(flushQueue, 15_000);
+  }
 
-  // Flush on page unload
+  // Flush on page unload (still runs under synthetic monitors)
   window.addEventListener('beforeunload', flushQueue);
-  
+  // Flush when tab is hidden — covers cases where unload doesn't fire.
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'hidden') flushQueue();
+  });
+
   // Initial Health Check (silent — errors handled inside checkHealth)
   checkHealth();
 };

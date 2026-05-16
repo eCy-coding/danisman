@@ -23,6 +23,15 @@ const BookingWizard = React.lazy(() =>
   import('@/components/features/interactive/BookingWizard').then((m) => ({ default: m.BookingWizard })),
 );
 
+// P25 — interest tags hoisted to module scope so useInterestTracker's effect
+// dependency array stays referentially stable across renders. Inline literal
+// previously caused an infinite render loop on Lighthouse where:
+//   render → new tags ref → effect runs → trackVisit set() →
+//   whole-store subscriber re-renders → loop.
+// Combined with the narrowed `scores` slice selector below in the component,
+// this is what unblocks /services PAGE_HUNG (see outputs/P25_FE_SERVICES_HANG_DIAGNOSTIC.md).
+const INTEREST_TAGS: readonly string[] = ['strategy', 'digital-transformation'];
+
 const InteractiveLazyMount: React.FC<{ children: React.ReactNode; placeholderHeight?: number }> = ({
   children,
   placeholderHeight = 480,
@@ -62,9 +71,10 @@ export const ServicesPage: React.FC = () => {
     const [selectedCategory, setSelectedCategory] = useState<string>('all');
     const [searchQuery, setSearchQuery] = useState('');
     
-    // Personalization
-    useInterestTracker(['strategy', 'digital-transformation'], 'services-hub');
-    const { scores } = usePersonalizationStore();
+    // Personalization — stable tag reference + sliced subscription to avoid
+    // refiring trackVisit on every store mutation (see INTEREST_TAGS comment).
+    useInterestTracker(INTEREST_TAGS, 'services-hub');
+    const scores = usePersonalizationStore((state) => state.scores);
 
     // Filter Logic
     const filteredServices = useMemo(() => {
