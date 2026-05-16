@@ -204,3 +204,7 @@ crowler/Scrapling-main/
 crowler/Scrapling-main.zip
 test-env.cjs
 public/_test
+
+# Apply recipe scripts (host-side commit chain runners)
+APPLY_P*.command
+_smoke.ts
