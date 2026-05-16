@@ -53,7 +53,7 @@ import { metrics } from '../observability/metrics';
 
 // ── Queue names (union type for compile-time safety) ─────────────────────────
 
-export type QueueName = 'email' | 'gdpr-export' | 'cron' | 'image-resize';
+export type QueueName = 'email' | 'gdpr-export' | 'cron' | 'image-resize' | 'webhook-out';
 
 // ── Payload contracts (one discriminated union per queue) ────────────────────
 
@@ -101,6 +101,18 @@ export type ImageResizeJobPayload = {
   sourceKey: string;
 };
 
+// P23 BE Track 2 / Aşama 2 — Outbound webhook delivery. One job per
+// (subscription × event) pair. The job carries the delivery row id and
+// the event type; the dispatcher reads the secret + URL fresh from the DB
+// on every attempt so a subscription URL/secret rotation is honoured
+// mid-flight without restarting the worker.
+export type WebhookOutJobPayload = {
+  deliveryId: string;
+  subscriptionId: string;
+  eventType: string;
+  payload: unknown;
+};
+
 export type JobPayloadFor<N extends QueueName> = N extends 'email'
   ? EmailJobPayload
   : N extends 'gdpr-export'
@@ -109,7 +121,9 @@ export type JobPayloadFor<N extends QueueName> = N extends 'email'
       ? CronJobPayload
       : N extends 'image-resize'
         ? ImageResizeJobPayload
-        : never;
+        : N extends 'webhook-out'
+          ? WebhookOutJobPayload
+          : never;
 
 // ── BullMQ connection adapter ────────────────────────────────────────────────
 //
@@ -186,6 +200,16 @@ const DEFAULTS: Record<QueueName, MinimalJobsOptions> = {
     attempts: 3,
     backoff: { type: 'exponential', delay: 3_000 },
     removeOnComplete: { age: 24 * 3600, count: 500 },
+    removeOnFail: false,
+  },
+  // P23 BE Track 2 / Aşama 2 — Outbound webhooks.
+  // 5 attempts × exponential 30s base → 30s, 2m, 8m, 30m, 2h spread.
+  // After all attempts the delivery stays in the failed set; the admin
+  // panel exposes manual retry via POST /admin/webhooks/:id/retry/:dId.
+  'webhook-out': {
+    attempts: 5,
+    backoff: { type: 'exponential', delay: 30_000 },
+    removeOnComplete: { age: 7 * 24 * 3600, count: 5_000 },
     removeOnFail: false,
   },
 };
