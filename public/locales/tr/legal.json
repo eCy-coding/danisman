@@ -2,7 +2,8 @@
   "lastUpdated": "Son Güncelleme",
   "disclaimer": {
     "title": "TASLAK — AVUKAT ONAYINDAN GEÇMEMİŞTİR",
-    "body": "Bu doküman taslak niteliğindedir. KVKK + GDPR çerçevesinde hazırlanmış olmakla birlikte yayınlanmadan önce uzman avukat tarafından incelenmesi zorunludur."
+    "body": "Bu doküman taslak niteliğindedir. KVKK + GDPR çerçevesinde hazırlanmış olmakla birlikte yayınlanmadan önce uzman avukat tarafından incelenmesi zorunludur.",
+    "dismissAriaLabel": "Yasal taslak uyarısını kapat"
   },
   "tocHeading": "İçindekiler",
   "printBtn": "Yazdır",

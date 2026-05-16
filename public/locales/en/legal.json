@@ -2,7 +2,8 @@
   "lastUpdated": "Last Updated",
   "disclaimer": {
     "title": "DRAFT — NOT REVIEWED BY LEGAL COUNSEL",
-    "body": "This document is a draft prepared under the KVKK + GDPR framework. It must be reviewed by qualified legal counsel before publication."
+    "body": "This document is a draft prepared under the KVKK + GDPR framework. It must be reviewed by qualified legal counsel before publication.",
+    "dismissAriaLabel": "Dismiss legal draft notice"
   },
   "tocHeading": "Contents",
   "printBtn": "Print",
