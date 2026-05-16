@@ -143,8 +143,11 @@ model Booking {
   service       Service?        @relation(fields: [serviceId], references: [id], onDelete: SetNull)
   feedback      BookingFeedback?
 
-  @@index([userId])
-  @@index([status])
+  // P21-BE: explicit @@index([userId]) removed — leftmost-prefix of
+  // @@index([userId, status, scheduledAt]) already covers it. See
+  // outputs/P21_BE_INDEX_PROOF.md.
+  // P21-BE: explicit @@index([status]) removed — leftmost-prefix of
+  // @@index([status, scheduledAt, reminder24hSent]) already covers it.
   @@index([scheduledAt])
   // P14-BE: hot composite indexes for the reminder + NPS cron queries
   // (server/jobs/booking-reminders.ts). Without these, each scan is a
@@ -224,7 +227,8 @@ model ContactSubmission {
   deletedAt   DateTime?
 
   @@index([email])
-  @@index([isRead])
+  // P21-BE: explicit @@index([isRead]) removed — leftmost-prefix of
+  // @@index([isRead, createdAt]) already covers it.
   // Hot path: CRM inbox ordered "newest unread first"
   @@index([isRead, createdAt])
   @@index([createdAt])
@@ -284,7 +288,8 @@ model Session {
   user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
-  @@index([jti])
+  // P21-BE: explicit @@index([jti]) removed — `jti` is already @unique
+  // (Postgres auto-creates a btree). See outputs/P21_BE_INDEX_PROOF.md.
   @@map("sessions")
 }
 
@@ -300,7 +305,8 @@ model AuditLog {
   userAgent   String?
   createdAt   DateTime @default(now())
 
-  @@index([adminId])
+  // P21-BE: explicit @@index([adminId]) removed — leftmost-prefix of
+  // @@index([adminId, createdAt]) already covers it.
   @@index([action])
   @@index([createdAt])
   // P14-BE Track 2: "all audit events for resource X" — dashboard drill-down
@@ -322,7 +328,7 @@ model SiteConfig {
   updatedAt DateTime @updatedAt
   updatedBy String?
 
-  @@index([key])
+  // P21-BE: explicit @@index([key]) removed — `key` is already @unique.
   @@map("site_configs")
 }
 
@@ -341,7 +347,7 @@ model BookingFeedback {
 
   booking     Booking  @relation(fields: [bookingId], references: [id], onDelete: Cascade)
 
-  @@index([bookingId])
+  // P21-BE: explicit @@index([bookingId]) removed — `bookingId` is already @unique.
   @@index([submittedAt])
   @@map("booking_feedbacks")
 }
@@ -380,6 +386,63 @@ model WebhookEvent {
   @@index([source, receivedAt])
   @@index([processedAt])
   @@map("webhook_events")
+}
+
+// ─── P23 BE Track 2 / Aşama 2: OUTBOUND WEBHOOK SUBSCRIPTIONS ──
+// Partner-facing event push.
+//
+// `secret` is the shared HMAC key — never returned by GET endpoints once
+// the subscription is created. Rotated via a dedicated endpoint that
+// returns the new value once. `events` lists the event types the
+// subscription wants delivered (e.g. ['user.created', 'booking.completed']).
+//
+// `failureCount` is consulted by the delivery worker: 10 consecutive
+// failures auto-deactivates the subscription and emits an admin alert.
+model WebhookSubscription {
+  id           String    @id @default(cuid())
+  userId       String
+  url          String
+  events       String[]
+  secret       String
+  active       Boolean   @default(true)
+  failureCount Int       @default(0)
+  lastSuccess  DateTime?
+  lastFailure  DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  deliveries WebhookDelivery[]
+
+  @@index([userId])
+  @@index([active])
+  @@map("webhook_subscriptions")
+}
+
+// ─── P23 BE Track 2 / Aşama 2: OUTBOUND WEBHOOK DELIVERIES ──
+// One row per attempted delivery. Persisted (not Redis-only) so an
+// operator can replay a delivery after the BullMQ retention window
+// expires, and so the admin UI can show per-event history.
+//
+// `responseBodySnip` is truncated to 4 KB — full bodies live in cold
+// storage if needed. Status transitions: pending → success | failed | dlq.
+model WebhookDelivery {
+  id               String    @id @default(cuid())
+  subscriptionId   String
+  eventType        String
+  payload          Json
+  status           String    @default("pending")
+  attemptCount     Int       @default(0)
+  lastAttemptAt    DateTime?
+  responseStatus   Int?
+  responseBodySnip String?
+  errorMessage     String?
+  createdAt        DateTime  @default(now())
+
+  subscription WebhookSubscription @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
+
+  @@index([subscriptionId, createdAt])
+  @@index([status, createdAt])
+  @@map("webhook_deliveries")
 }
 
 // ─── P17 BE Track 2 / Aşama 4: API KEYS ──────────────────
