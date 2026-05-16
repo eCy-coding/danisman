@@ -134,7 +134,7 @@ export const ServicesPage: React.FC = () => {
                     {/* Header Section */}
                     <div className="text-center mb-16">
                         <FadeIn>
-                            <span className="inline-block py-1 px-3 rounded-full bg-white/5 border border-white/10 text-[10px] font-bold tracking-[0.2em] text-slate-400 uppercase mb-6 backdrop-blur-sm">
+                            <span className="inline-block py-1 px-3 rounded-full bg-white/5 border border-white/10 text-[10px] font-bold tracking-[0.2em] text-slate-400 uppercase mb-6">
                                 Akademik Derinlik, Profesyonel Çözüm
                             </span>
                             <h1 className="text-4xl md:text-6xl font-serif font-medium text-white mb-6 leading-tight">
@@ -160,7 +160,7 @@ export const ServicesPage: React.FC = () => {
                                     type="text"
                                     placeholder="Hizmetlerde arayın..."
                                     data-testid="services-search-input"
-                                    className="w-full pl-12 pr-6 py-4 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl
+                                    className="w-full pl-12 pr-6 py-4 bg-white/5 border border-white/10 rounded-2xl
                                              focus:outline-none focus:border-secondary/50 focus:bg-white/10 focus:shadow-glow
                                              text-white placeholder-slate-500 transition-all duration-300 font-sans shadow-lg"
                                     value={searchQuery}
@@ -205,7 +205,7 @@ export const ServicesPage: React.FC = () => {
                                     {t('no_results') || 'Sonuç Bulunamadı'}
                                 </h3>
                                 <p className="text-slate-300 mb-6">"{searchQuery}"...</p>
-                                <button
+                                <button type="button"
                                     onClick={() => { setSearchQuery(''); setSelectedCategory('all'); }}
                                     data-testid="services-filter-clear"
                                     className="px-6 py-2.5 bg-secondary text-neutral font-bold rounded-lg hover:bg-white transition-colors text-sm tracking-wide"
