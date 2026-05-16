@@ -125,10 +125,18 @@ jobs:
           if-no-files-found: ignore
 
   bundle-size:
-    name: Bundle size budget (size-limit)
+    name: Bundle size budget (size-limit, hard gate)
     needs: content-qa
     runs-on: ubuntu-latest
-    timeout-minutes: 6
+    timeout-minutes: 8
+
+    # P12/5 — devops-publisher: bundle-size is now a HARD gate.
+    # The previous opt-in "skip if missing" pattern is removed: .size-limit.json
+    # is checked into the repo, size-limit lives in devDependencies, and any
+    # regression beyond the documented budgets fails the workflow.
+    permissions:
+      contents: read
+      pull-requests: write
 
     steps:
       - name: Checkout
@@ -143,19 +151,12 @@ jobs:
       - name: Install dependencies
         run: npm ci --legacy-peer-deps
 
-      # size-limit may not be in package.json yet — gracefully skip if missing.
-      - name: Check size-limit availability
-        id: sl
+      - name: Verify size-limit wiring
         run: |
-          if [ -f .size-limit.json ] && grep -q "size-limit" package.json; then
-            echo "available=true" >> $GITHUB_OUTPUT
-          else
-            echo "available=false" >> $GITHUB_OUTPUT
-            echo "size-limit config not yet installed — informational skip."
-          fi
+          test -f .size-limit.json || (echo "::error::.size-limit.json missing" && exit 1)
+          grep -q '"size-limit"' package.json || (echo "::error::size-limit not in package.json" && exit 1)
 
       - name: Build production bundle
-        if: steps.sl.outputs.available == 'true'
         run: |
           cp .env.production.example .env.production
           sed -i 's/__FILL_ME__/ci-stub/g' .env.production
@@ -163,6 +164,13 @@ jobs:
         env:
           NODE_ENV: production
 
-      - name: Run size-limit
-        if: steps.sl.outputs.available == 'true'
+      - name: Run size-limit (hard fail on regression)
         run: npx size-limit
+
+      - name: size-limit action — PR comment + regression diff
+        if: github.event_name == 'pull_request'
+        uses: andresz1/size-limit-action@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          skip_step: install
+          build_script: build
