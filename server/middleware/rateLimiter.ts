@@ -222,3 +222,14 @@ export const slotsFetchLimiter = createRateLimiter({
   maxRequests: 60,
   message: 'Too many calendar requests. Please wait before browsing more dates.',
 });
+
+// P26-BE Aşama 3 — test-only helper.
+// When Redis is mocked out (status !== 'ready'), the limiter falls back to
+// the module-level `fallbackStore` Map which leaks state across tests under
+// the same module instance. Suite-level vi.mock + multiple requests would
+// trip the contactLimiter (3/h) after just three calls. Exposing a reset
+// hook keeps the test surface minimal without baking test-only branches
+// into the hot path.
+export const __resetFallbackStoreForTests = (): void => {
+  fallbackStore.clear();
+};
