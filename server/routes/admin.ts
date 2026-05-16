@@ -642,6 +642,51 @@ router.delete('/cache', ...adminOnly, (_req: Request, res: Response): void => {
   res.json({ status: 'success', data: { cleared: before } });
 });
 
+// ─── P20 BE Aşama 4 — Cache warm-up (post-deploy hook) ──────────────────────
+//
+// Two auth modes:
+//   1. CACHE_WARMUP_TOKEN bearer (preferred — runnable from Render's
+//      postDeployCommand which doesn't have an admin JWT).
+//   2. Admin JWT fallback (manual operator trigger).
+//
+// Endpoint list is curated in `server/workers/cache-warmup-worker.ts`.
+// Sequential 200 ms-spaced fetches — internal hop bypasses anonymous rate
+// budget via `x-cache-warmup` header marker.
+router.post(
+  '/cache/warmup',
+  async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const expectedToken = process.env.CACHE_WARMUP_TOKEN?.trim();
+      const auth = req.headers.authorization ?? '';
+      const presented = auth.startsWith('Bearer ') ? auth.slice(7).trim() : '';
+      const tokenMatch =
+        expectedToken && presented && expectedToken.length >= 16 && presented === expectedToken;
+
+      if (!tokenMatch) {
+        // Fall back to admin JWT path.
+        // Re-run authenticate+requireRole manually so token failure surfaces
+        // as 401 token error before role check.
+        await new Promise<void>((resolve, reject) => {
+          authenticate(req, res, (err?: unknown) => (err ? reject(err) : resolve()));
+        });
+        await new Promise<void>((resolve, reject) => {
+          requireRole('ADMIN')(req, res, (err?: unknown) => (err ? reject(err) : resolve()));
+        });
+      }
+
+      const { warmupCache } = await import('../workers/cache-warmup-worker');
+      const baseUrl =
+        process.env.CACHE_WARMUP_BASE_URL?.trim() ||
+        `${req.protocol}://${req.get('host') ?? 'localhost'}`;
+      const summary = await warmupCache({ baseUrl });
+      res.json({ status: 'success', data: summary });
+    } catch (err) {
+      logger.error('[Admin] cache warmup failed', { message: (err as Error).message });
+      next(err);
+    }
+  },
+);
+
 // ─── P17 BE Track 2 / Aşama 4 — API key admin CRUD ─────────────────────────
 //
 // POST   /api/admin/api-keys           create  → returns raw key ONCE
