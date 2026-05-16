@@ -31,7 +31,7 @@ export const SmartCTA = () => {
       }`}
     >
       <div className="relative group">
-        <button 
+        <button type="button" 
           onClick={() => setIsDismissed(true)}
           className="absolute -top-2 -left-2 bg-gray-200 hover:bg-gray-300 text-gray-600 rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
           aria-label="Dismiss CTA"

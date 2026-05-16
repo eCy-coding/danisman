@@ -27,7 +27,7 @@ const ShortcutsHelpModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
       }}
       tabIndex={-1}
     >
-      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" aria-hidden="true" />
+      <div className="absolute inset-0 bg-black/60" aria-hidden="true" />
       {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions */}
       <div
         role="document"

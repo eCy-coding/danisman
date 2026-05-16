@@ -173,11 +173,11 @@ export const BusinessHealthQuiz: React.FC = () => {
                         </div>
 
                         <div className="flex flex-col sm:flex-row gap-4">
-                            <button className="flex-1 px-6 py-4 bg-primary text-white font-medium rounded-xl hover:bg-primary-dark transition-colors shadow-lg shadow-primary/20 flex items-center justify-center gap-2">
+                            <button type="button" className="flex-1 px-6 py-4 bg-primary text-white font-medium rounded-xl hover:bg-primary-dark transition-colors shadow-lg shadow-primary/20 flex items-center justify-center gap-2">
                                 <FileText className="w-5 h-5" />
                                 Generate Full PDF
                             </button>
-                            <button onClick={() => window.location.reload()} className="px-6 py-4 text-slate-400 font-medium hover:bg-white/5 border border-white/10 rounded-xl transition-colors">
+                            <button type="button" onClick={() => window.location.reload()} className="px-6 py-4 text-slate-400 font-medium hover:bg-white/5 border border-white/10 rounded-xl transition-colors">
                                 Retake
                             </button>
                         </div>
@@ -254,7 +254,7 @@ export const BusinessHealthQuiz: React.FC = () => {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -20 }}
                     transition={{ duration: 0.3 }}
-                    className="glass-card rounded-3xl p-8 md:p-12 border border-white/10 bg-white/5 backdrop-blur-xl"
+                    className="glass-card rounded-3xl p-8 md:p-12 border border-white/10 bg-white/5"
                 >
                     <h2 className="text-2xl md:text-3xl font-serif font-medium text-white mb-10 leading-tight">
                         {currentQuestion.question}
@@ -262,7 +262,7 @@ export const BusinessHealthQuiz: React.FC = () => {
 
                     <div className="grid sm:grid-cols-2 gap-4">
                         {currentQuestion.options.map((option, idx) => (
-                            <button
+                            <button type="button"
                                 key={idx}
                                 onClick={() => setSelectedOption(idx)}
                                 className={`
@@ -291,7 +291,7 @@ export const BusinessHealthQuiz: React.FC = () => {
                     </div>
 
                     <div className="mt-12 flex justify-between items-center border-t border-white/5 pt-8">
-                        <button 
+                        <button type="button" 
                             onClick={() => {
                                 if (currentQuestionIdx > 0) {
                                     setCurrentQuestionIdx(prev => prev - 1);
@@ -303,7 +303,7 @@ export const BusinessHealthQuiz: React.FC = () => {
                             Back
                         </button>
                         
-                        <button
+                        <button type="button"
                             onClick={handleNext}
                             disabled={selectedOption === null}
                             className={`

@@ -61,6 +61,10 @@ export function loadGA4(measurementId: string): void {
 
   const script = document.createElement('script');
   script.async = true;
+  // P16 — `crossOrigin="anonymous"` so unhandled errors thrown inside GA4 are
+  // surfaced with full stack traces to window.onerror / Sentry (browsers
+  // otherwise collapse cross-origin errors to "Script error.").
+  script.crossOrigin = 'anonymous';
   script.src = `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(measurementId)}`;
   script.setAttribute(SCRIPT_DATA_ATTR, '');
   script.dataset.measurementId = measurementId;

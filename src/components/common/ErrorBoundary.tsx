@@ -12,7 +12,7 @@ interface State {
 }
 
 export class ErrorBoundary extends Component<Props, State> {
-  public state: State = {
+  public override state: State = {
     hasError: false,
     error: null,
   };
@@ -21,7 +21,7 @@ export class ErrorBoundary extends Component<Props, State> {
     return { hasError: true, error };
   }
 
-  public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+  public override componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     Logger.error('Critical Application Error', error, { componentStack: errorInfo.componentStack });
   }
 
@@ -34,14 +34,14 @@ export class ErrorBoundary extends Component<Props, State> {
     window.location.reload();
   };
 
-  public render() {
+  public override render() {
     if (this.state.hasError) {
       return (
         <main className="min-h-screen bg-[#050810] flex items-center justify-center p-6 font-sans relative overflow-hidden">
           {/* Background Ambient Glow */}
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-primary/20 blur-[120px] rounded-full pointer-events-none opacity-40"></div>
 
-          <div className="max-w-xl w-full bg-white/5 backdrop-blur-2xl border border-white/10 rounded-3xl p-12 text-center shadow-2xl relative z-10 animate-in fade-in zoom-in duration-500">
+          <div className="max-w-xl w-full bg-white/5 border border-white/10 rounded-3xl p-12 text-center shadow-2xl relative z-10 animate-in fade-in zoom-in duration-500">
             <div className="w-20 h-20 bg-linear-to-br from-red-500/20 to-orange-500/20 rounded-full flex items-center justify-center mx-auto mb-8 ring-1 ring-white/10 shadow-glow">
               <AlertCircle className="text-red-400 w-10 h-10" />
             </div>
@@ -60,7 +60,7 @@ export class ErrorBoundary extends Component<Props, State> {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button
+              <button type="button"
                 onClick={this.handleReload}
                 className="px-8 py-4 bg-linear-to-r from-primary to-primary-dark text-white font-bold rounded-xl hover:shadow-lg hover:shadow-primary/25 transition-all flex items-center justify-center gap-3 active:scale-95 group"
               >
@@ -71,7 +71,7 @@ export class ErrorBoundary extends Component<Props, State> {
                 Sistemi Yenile
               </button>
 
-              <button
+              <button type="button"
                 onClick={this.handleReset}
                 className="px-8 py-4 bg-white/5 text-gray-300 font-bold rounded-xl border border-white/10 hover:bg-white/10 transition-all flex items-center justify-center gap-3 active:scale-95 hover:text-white"
               >

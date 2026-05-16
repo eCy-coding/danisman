@@ -123,7 +123,8 @@ export const StatusPage: React.FC = () => {
               : 'EcyPro platform health dashboard — live status of API, database, and cache services.'
           }
         />
-        <meta name="robots" content="index,follow" />
+        {/* P15 — Status sayfası operational; SERP'te değer üretmez, noindex. */}
+        <meta name="robots" content="noindex,follow" />
       </Helmet>
 
       <div className="min-h-screen pt-12 pb-24 px-4 sm:px-6">
@@ -148,7 +149,7 @@ export const StatusPage: React.FC = () => {
             role="status"
             aria-live="polite"
             data-testid="status-overall"
-            className={`mb-10 rounded-2xl border ${overallMeta.border} ${overallMeta.bg} p-6 backdrop-blur-md`}
+            className={`mb-10 rounded-2xl border ${overallMeta.border} ${overallMeta.bg} p-6`}
           >
             <div className="flex items-center justify-between flex-wrap gap-4">
               <div className="flex items-center gap-4">

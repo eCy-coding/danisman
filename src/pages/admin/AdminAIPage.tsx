@@ -90,7 +90,7 @@ const ContentGenerator: React.FC = () => {
   return (
     <div
       data-testid="content-generator"
-      className="bg-[#0A101F]/80 border border-white/5 rounded-2xl p-6 backdrop-blur-sm space-y-5"
+      className="bg-[#0A101F]/80 border border-white/5 rounded-2xl p-6 space-y-5"
     >
       <div className="flex items-center gap-3">
         <div className="p-2.5 rounded-xl bg-secondary/10 border border-secondary/20">
@@ -107,7 +107,7 @@ const ContentGenerator: React.FC = () => {
         {CONTENT_TEMPLATES.map(t => {
           const Icon = t.icon;
           return (
-            <button
+            <button type="button"
               key={t.id}
               onClick={() => setSelected(t.id)}
               className={`flex flex-col items-center gap-2 p-3 rounded-xl border text-xs font-medium transition-all ${
@@ -137,7 +137,7 @@ const ContentGenerator: React.FC = () => {
           disabled={isStreaming}
         />
         {isStreaming ? (
-          <button
+          <button type="button"
             onClick={abort}
             className="px-5 py-3 bg-red-900/30 border border-red-900/30 text-red-400 rounded-xl text-sm font-medium hover:bg-red-900/50 transition-colors"
             data-testid="generator-stop"
@@ -145,7 +145,7 @@ const ContentGenerator: React.FC = () => {
             Stop
           </button>
         ) : (
-          <button
+          <button type="button"
             onClick={() => void handleGenerate()}
             disabled={!topic.trim()}
             className="px-5 py-3 bg-secondary text-black rounded-xl text-sm font-semibold hover:bg-secondary/80 disabled:opacity-40 disabled:cursor-not-allowed transition-all flex items-center gap-2"
@@ -177,14 +177,14 @@ const ContentGenerator: React.FC = () => {
 
           {!isStreaming && output && (
             <div className="absolute top-3 right-3 flex gap-2">
-              <button
+              <button type="button"
                 onClick={copyOutput}
                 className="p-1.5 bg-black/50 border border-white/10 rounded-lg text-slate-400 hover:text-white hover:border-white/20 transition-all"
                 aria-label="Copy output"
               >
                 {copied ? <Check size={13} className="text-green-400" /> : <Copy size={13} />}
               </button>
-              <button
+              <button type="button"
                 onClick={() => void handleGenerate()}
                 className="p-1.5 bg-black/50 border border-white/10 rounded-lg text-slate-400 hover:text-white hover:border-white/20 transition-all"
                 aria-label="Regenerate"
@@ -240,7 +240,7 @@ export const AdminAIPage: React.FC = () => (
           key={s.label}
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-[#0A101F]/80 border border-white/5 rounded-2xl p-5 backdrop-blur-sm"
+          className="bg-[#0A101F]/80 border border-white/5 rounded-2xl p-5"
           data-testid={`ai-stat-${s.label.toLowerCase()}`}
         >
           <p className="text-2xl font-serif text-secondary">{s.value}</p>

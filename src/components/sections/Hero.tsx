@@ -265,14 +265,14 @@ export const Hero: React.FC = () => {
         </div>
 
         {/* Persona Switcher */}
-        <div className="absolute top-28 left-1/2 -translate-x-1/2 z-30 flex items-center bg-white/5 border border-white/10 rounded-full p-1 backdrop-blur-xl shadow-2xl">
-          <button
+        <div className="absolute top-28 left-1/2 -translate-x-1/2 z-30 flex items-center bg-white/5 border border-white/10 rounded-full p-1 shadow-2xl">
+          <button type="button"
             onClick={() => setPersona('executive')}
             className={`px-6 py-2 rounded-full text-sm font-bold transition-all duration-300 ${persona === 'executive' ? 'bg-primary text-white shadow-[0_0_20px_rgba(37,99,235,0.4)]' : 'text-slate-400 hover:text-white'}`}
           >
             Executive
           </button>
-          <button
+          <button type="button"
             onClick={() => setPersona('developer')}
             className={`px-6 py-2 rounded-full text-sm font-bold transition-all duration-300 ${persona === 'developer' ? 'bg-secondary text-neutral shadow-[0_0_20px_rgba(56,189,248,0.4)]' : 'text-slate-400 hover:text-white'}`}
           >
@@ -291,7 +291,7 @@ export const Hero: React.FC = () => {
           >
             <motion.div
               variants={itemVariants}
-              className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full border border-primary/30 bg-primary/5 backdrop-blur-md mb-8 w-fit"
+              className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full border border-primary/30 bg-primary/5 mb-8 w-fit"
             >
               <span className="flex h-2.5 w-2.5 relative">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-80" />
@@ -318,7 +318,7 @@ export const Hero: React.FC = () => {
 
             <motion.p
               variants={itemVariants}
-              className="text-lg md:text-xl text-slate-300/90 leading-relaxed max-w-2xl mb-12 font-light border-l-4 border-secondary/50 pl-6 backdrop-blur-sm bg-white/2 py-2 rounded-r-lg min-h-20"
+              className="text-lg md:text-xl text-slate-300/90 leading-relaxed max-w-2xl mb-12 font-light border-l-4 border-secondary/50 pl-6 bg-white/2 py-2 rounded-r-lg min-h-20"
             >
               {currentContent.description[lang]}
             </motion.p>
@@ -351,7 +351,7 @@ export const Hero: React.FC = () => {
                     setVideoOpen(true);
                     trackEvent('Hero', 'Click', 'Hero Video Open');
                   }}
-                  className="group px-8 py-4 bg-white/5 hover:bg-white/10 border border-white/10 text-slate-200 text-sm font-bold uppercase tracking-widest rounded-xl backdrop-blur-md transition-all duration-300 flex items-center justify-center gap-3 min-w-50 w-full sm:w-auto"
+                  className="group px-8 py-4 bg-white/5 hover:bg-white/10 border border-white/10 text-slate-200 text-sm font-bold uppercase tracking-widest rounded-xl transition-all duration-300 flex items-center justify-center gap-3 min-w-50 w-full sm:w-auto"
                 >
                   <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center group-hover:scale-110 transition-transform">
                     <Play
@@ -441,7 +441,7 @@ export const Hero: React.FC = () => {
         ].map((feature, i) => (
           <div
             key={i}
-            className="bg-[#0A0F1C]/80 border border-white/5 p-8 rounded-2xl backdrop-blur-xl shadow-2xl hover:border-primary/30 transition-colors duration-500 group"
+            className="bg-[#0A0F1C]/80 border border-white/5 p-8 rounded-2xl shadow-2xl hover:border-primary/30 transition-colors duration-500 group"
           >
             <div className="w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center text-primary mb-6 group-hover:scale-110 group-hover:bg-primary group-hover:text-white transition-all duration-300">
               {feature.icon}
@@ -485,7 +485,7 @@ const StatCard: React.FC<{
           x.set(0);
           y.set(0);
         }}
-        className="bg-[#0A0F1C]/70 backdrop-blur-2xl border border-white/5 rounded-2xl p-6 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.5)] flex flex-col gap-4 min-w-60 cursor-default hover:border-primary/40 hover:bg-[#0A0F1C]/90 transition-colors duration-500 relative group overflow-hidden"
+        className="bg-[#0A0F1C]/70 border border-white/5 rounded-2xl p-6 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.5)] flex flex-col gap-4 min-w-60 cursor-default hover:border-primary/40 hover:bg-[#0A0F1C]/90 transition-colors duration-500 relative group overflow-hidden"
       >
         <div className="absolute inset-0 bg-linear-to-br from-primary/10 via-transparent to-secondary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
         <div

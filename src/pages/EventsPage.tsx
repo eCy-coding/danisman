@@ -150,11 +150,11 @@ export const EventsPage: React.FC = () => {
       </section>
 
       {/* Filter */}
-      <div className="sticky top-20 z-30 border-b border-white/5 bg-neutral/95 backdrop-blur-md">
+      <div className="sticky top-20 z-30 border-b border-white/5 bg-neutral/95">
         <div className="max-w-7xl mx-auto px-6 md:px-12 py-4">
           <div className="flex gap-2 flex-wrap">
             {(['all', 'webinar', 'workshop', 'conference'] as const).map((f) => (
-              <button
+              <button type="button"
                 key={f}
                 onClick={() => setFilter(f)}
                 data-testid={`event-filter-${f}`}

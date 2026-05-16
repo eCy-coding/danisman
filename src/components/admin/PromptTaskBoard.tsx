@@ -62,7 +62,7 @@ export const PromptTaskBoard: React.FC = () => {
   const isFailed = lastLog?.type === 'FAILED';
 
   return (
-    <div className="bg-[#0A101F]/80 border border-white/5 rounded-2xl p-6 backdrop-blur-sm shadow-xl flex flex-col gap-6">
+    <div className="bg-[#0A101F]/80 border border-white/5 rounded-2xl p-6 shadow-xl flex flex-col gap-6">
       <div className="flex justify-between items-center border-b border-white/10 pb-4">
         <div>
           <h2 className="text-xl font-serif text-white flex items-center gap-2">
@@ -82,7 +82,7 @@ export const PromptTaskBoard: React.FC = () => {
               <option key={id} value={id}>Project {id}</option>
             ))}
           </select>
-          <button
+          <button type="button"
             onClick={handleStartTask}
             disabled={isRunning}
             className={`flex items-center gap-2 px-6 py-2 rounded-lg font-semibold transition-all ${

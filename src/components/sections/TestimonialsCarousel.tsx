@@ -268,7 +268,7 @@ export const TestimonialsCarousel: React.FC = () => {
             aria-label={lang === 'tr' ? 'Slaytlar' : 'Slides'}
           >
             {TESTIMONIALS.map((t, i) => (
-              <button
+              <button type="button"
                 key={t.id}
                 role="tab"
                 aria-selected={i === current}

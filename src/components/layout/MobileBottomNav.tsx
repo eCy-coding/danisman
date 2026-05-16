@@ -91,7 +91,7 @@ export const MobileBottomNav: React.FC = () => {
       style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}
     >
       {/* Blur backdrop */}
-      <div className="bg-[#080d1a]/90 backdrop-blur-xl border-t border-white/10 shadow-2xl">
+      <div className="bg-[#080d1a]/90 border-t border-white/10 shadow-2xl">
         <div className="flex items-stretch h-16">
           {TABS.map((tab) => {
             const active = isActive(tab, location.pathname);

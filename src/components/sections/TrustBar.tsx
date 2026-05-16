@@ -103,7 +103,7 @@ export const TrustBar: React.FC = () => {
 
                   {/* Tooltip for Sector */}
                   <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none whitespace-nowrap z-10">
-                    <span className="badge text-secondary bg-neutral/90 backdrop-blur border border-white/10 shadow-lg text-[10px]">
+                    <span className="badge text-secondary bg-neutral/90 border border-white/10 shadow-lg text-[10px]">
                       {logo.sector[lang]}
                     </span>
                   </div>

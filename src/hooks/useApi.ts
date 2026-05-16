@@ -10,6 +10,7 @@ import {
   type ContactPayload,
 } from '@/lib/api';
 import { useAppStore } from '@/store/useAppStore';
+import { QueryKeys } from '@/lib/query-client';
 
 // ─── Auth Hooks ──────────────────────────────────────────
 
@@ -34,7 +35,7 @@ export function useLogin() {
         refreshToken,
         totpRequired: user.totpEnabled ?? false,
       });
-      queryClient.invalidateQueries({ queryKey: ['auth', 'me'] });
+      queryClient.invalidateQueries({ queryKey: QueryKeys.auth.me });
     },
   });
 }
@@ -65,12 +66,13 @@ export function useRegister() {
 export function useCurrentUser() {
   const isAuthenticated = useAppStore((s) => s.isAuthenticated);
 
+  // P18-FE: query-client.ts merkezi `staleTime: 5 min` + `retry: 3` (4xx
+  // short-circuit) zaten uygular. Lokal override'ları kaldırdık ki
+  // tüm `auth.me` çağrıları tek davranış kuralına uysun.
   return useQuery({
-    queryKey: ['auth', 'me'],
+    queryKey: QueryKeys.auth.me,
     queryFn: () => authApi.getMe(),
     enabled: isAuthenticated,
-    staleTime: 5 * 60 * 1000, // 5 minutes
-    retry: 1,
   });
 }
 
@@ -112,10 +114,12 @@ export function useTotpValidate() {
 // ─── Booking Hooks ───────────────────────────────────────
 
 export function useBookings(page = 1, limit = 10) {
+  // P18-FE: bookings listesi yüksek frekanslı; merkezi 5 dk staleTime
+  // burada agresif olur. Lokal 30 s override'ını koruyoruz.
   return useQuery({
-    queryKey: ['bookings', page, limit],
+    queryKey: QueryKeys.bookings.list(page, limit),
     queryFn: () => bookingsApi.list(page, limit),
-    staleTime: 30_000, // 30 seconds
+    staleTime: 30_000,
   });
 }
 
@@ -125,7 +129,9 @@ export function useCreateBooking() {
   return useMutation({
     mutationFn: (data: BookingPayload) => bookingsApi.create(data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['bookings'] });
+      // Tüm `bookings` root'unu invalide et — sayfa/limit kombosu fark
+      // etmeksizin yeni rezervasyon tüm listeleri etkiler.
+      queryClient.invalidateQueries({ queryKey: QueryKeys.bookings.all });
     },
   });
 }
@@ -137,7 +143,7 @@ export function useUpdateBookingStatus() {
     mutationFn: ({ id, status, reason }: { id: string; status: string; reason?: string }) =>
       bookingsApi.updateStatus(id, status, reason),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['bookings'] });
+      queryClient.invalidateQueries({ queryKey: QueryKeys.bookings.all });
     },
   });
 }
@@ -145,11 +151,13 @@ export function useUpdateBookingStatus() {
 // ─── Analytics Hooks ─────────────────────────────────────
 
 export function useDashboardSummary() {
+  // P18-FE: admin dashboard polling cadence 60 s — global 5 dk default'u
+  // burada baskılıyoruz. `refetchInterval` etkin.
   return useQuery({
-    queryKey: ['analytics', 'dashboard'],
+    queryKey: QueryKeys.analytics.dashboard,
     queryFn: () => analyticsApi.getDashboard(),
-    staleTime: 60_000, // 1 minute
-    refetchInterval: 60_000, // Auto-refresh every minute
+    staleTime: 60_000,
+    refetchInterval: 60_000,
   });
 }
 

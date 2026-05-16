@@ -122,7 +122,7 @@ export const UrgencyBanner: React.FC = () => {
         aria-live="polite"
         aria-label={lang === 'tr' ? 'Aciliyet bildirimi' : 'Urgency notice'}
         data-testid="urgency-banner"
-        className={`relative z-30 border-b ${bgClass} backdrop-blur-md`}
+        className={`relative z-30 border-b ${bgClass}`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-2 flex items-center justify-between gap-3 flex-wrap">
           {/* Left */}

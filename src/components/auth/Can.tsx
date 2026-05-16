@@ -6,7 +6,7 @@
  *
  * Usage:
  *   <Can action="blog:publish">
- *     <button>Publish Post</button>
+ *     <button type="button">Publish Post</button>
  *   </Can>
  *
  *   <Can action="user:role:change" fallback={<span>No access</span>}>

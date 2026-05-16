@@ -9,6 +9,7 @@ import { useQuery } from '@tanstack/react-query';
 import { CheckCircle2, AlertTriangle, XCircle, ExternalLink } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { apiClient } from '../../../lib/api';
+import { QueryKeys } from '../../../lib/query-client';
 
 interface StatusComponent {
   name: string;
@@ -33,8 +34,9 @@ function cfg(status: string) {
 }
 
 export const SystemHealthWidget: React.FC = () => {
+  // P18-FE: 30 s refresh policy korunur; key tek kaynak.
   const { data, isLoading } = useQuery<StatusResponse>({
-    queryKey: ['public-status'],
+    queryKey: QueryKeys.status.public,
     queryFn: () => apiClient.get<StatusResponse>('/status').then((r) => r.data),
     refetchInterval: 30_000,
     staleTime: 30_000,

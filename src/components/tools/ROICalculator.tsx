@@ -166,11 +166,11 @@ export const ROICalculator: React.FC = () => {
 
                 {/* CTAs */}
                 <div className="space-y-4">
-                    <button className="w-full py-4 bg-white/10 text-white rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-white/20 transition-colors shadow-lg group">
+                    <button type="button" className="w-full py-4 bg-white/10 text-white rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-white/20 transition-colors shadow-lg group">
                         {language === 'tr' ? 'Detaylı Raporu İndir' : 'Download Detailed Report'}
                         <Download size={18} className="text-slate-400 group-hover:text-white transition-colors" />
                     </button>
-                    <button onClick={() => window.location.href='/contact'} className="w-full py-4 bg-transparent border border-slate-600 text-white rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-slate-800 transition-colors">
+                    <button type="button" onClick={() => window.location.href='/contact'} className="w-full py-4 bg-transparent border border-slate-600 text-white rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-slate-800 transition-colors">
                         {language === 'tr' ? 'Uzmanımıza Danışın' : 'Consult an Expert'}
                         <ArrowRight size={18} />
                     </button>

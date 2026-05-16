@@ -15,7 +15,9 @@ class RealTimeService {
   private listeners: Map<string, Set<Listener>> = new Map();
   private eventSource: EventSource | null = null;
   private isConnected: boolean = false;
-  private reconnectTimer: NodeJS.Timeout | null = null;
+  // P14 — was typed as NodeJS.Timeout but the value is from setInterval (browser).
+  // Renamed for clarity since startSimulationMode() actually owns a repeating timer.
+  private simulationTimer: ReturnType<typeof setInterval> | null = null;
 
   connect() {
     if (this.isConnected || this.eventSource) return;
@@ -55,7 +57,8 @@ class RealTimeService {
     Logger.info('[RealTime] Simulation Mode Active');
 
     // Simulate events every 2 seconds
-    this.reconnectTimer = setInterval(() => {
+    if (this.simulationTimer) clearInterval(this.simulationTimer);
+    this.simulationTimer = setInterval(() => {
         const services = ['strategic-management', 'digital-transformation', 'corporate-training', 'consulting'];
         const serviceName = services[Math.floor(Math.random() * services.length)];
         const viewerCount = Math.floor(Math.random() * 15) + 3;
@@ -77,8 +80,11 @@ class RealTimeService {
       this.eventSource.close();
       this.eventSource = null;
     }
-    if (this.reconnectTimer) clearTimeout(this.reconnectTimer);
-
+    // Fix: was clearTimeout on a setInterval handle (NO-OP for the wrong timer kind).
+    if (this.simulationTimer) {
+      clearInterval(this.simulationTimer);
+      this.simulationTimer = null;
+    }
   }
 
   subscribe(channel: string, listener: Listener) {

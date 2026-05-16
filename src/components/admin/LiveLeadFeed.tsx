@@ -113,7 +113,10 @@ export const LiveLeadFeed: React.FC = () => {
       });
     } catch {
       setConnected(false);
-      pollRef.current = setInterval(() => void fetchRecent(), POLL_MS);
+      // P14 — guard: error handler above may have already started the poll.
+      if (!pollRef.current) {
+        pollRef.current = setInterval(() => void fetchRecent(), POLL_MS);
+      }
     }
 
     return () => {

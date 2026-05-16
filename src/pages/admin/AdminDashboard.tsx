@@ -55,7 +55,7 @@ const KPICard: React.FC<{ stat: KPIData; index: number }> = ({ stat, index }) =>
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
     transition={{ delay: index * 0.1, duration: 0.5 }}
-    className="bg-[#0A101F]/80 border border-white/5 rounded-2xl p-6 backdrop-blur-sm hover:border-white/10 transition-all group"
+    className="bg-[#0A101F]/80 border border-white/5 rounded-2xl p-6 hover:border-white/10 transition-all group"
   >
     <div className="flex justify-between items-start mb-4">
       <div
@@ -94,7 +94,7 @@ const ConnectionBadge: React.FC<{ isConnected: boolean; onReconnect: () => void 
           <WifiOff size={12} className="mt-0.5" />
           OFFLINE
         </div>
-        <button
+        <button type="button"
           onClick={onReconnect}
           className="p-1 text-slate-400 hover:text-white transition-colors"
           title="Reconnect SSE"
@@ -199,7 +199,7 @@ export const AdminDashboard: React.FC = () => {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="bg-[#0A101F]/80 border border-white/5 rounded-2xl p-6 backdrop-blur-sm"
+          className="bg-[#0A101F]/80 border border-white/5 rounded-2xl p-6"
         >
           <h3 className="text-lg font-serif text-white mb-4">Top Pages (Live)</h3>
           <div className="space-y-3">
@@ -219,7 +219,7 @@ export const AdminDashboard: React.FC = () => {
       {/* Charts Row */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Main Chart */}
-        <div className="lg:col-span-2 bg-[#0A101F]/80 border border-white/5 rounded-2xl p-6 backdrop-blur-sm">
+        <div className="lg:col-span-2 bg-[#0A101F]/80 border border-white/5 rounded-2xl p-6">
           <h3 className="text-lg font-serif text-white mb-6">Traffic Analysis</h3>
           <div className="h-75 w-full">
             <ResponsiveContainer width="100%" height="100%" minWidth={1} minHeight={1}>
@@ -261,7 +261,7 @@ export const AdminDashboard: React.FC = () => {
         </div>
 
         {/* Side Chart */}
-        <div className="bg-[#0A101F]/80 border border-white/5 rounded-2xl p-6 backdrop-blur-sm">
+        <div className="bg-[#0A101F]/80 border border-white/5 rounded-2xl p-6">
           <h3 className="text-lg font-serif text-white mb-6">Service Demand</h3>
           <div className="h-75 w-full">
             <ResponsiveContainer width="100%" height="100%" minWidth={1} minHeight={1}>
@@ -349,7 +349,7 @@ const NPSSummaryWidget: React.FC = () => {
           : '#ef4444';
 
   return (
-    <div className="bg-[#0A101F]/80 border border-white/5 rounded-2xl p-6 backdrop-blur-sm">
+    <div className="bg-[#0A101F]/80 border border-white/5 rounded-2xl p-6">
       <div className="flex items-center gap-2 mb-4">
         <Star size={16} className="text-amber-400 fill-amber-400" />
         <h3 className="text-sm font-semibold text-white">NPS Skoru</h3>
@@ -432,7 +432,7 @@ const LeadTierWidget: React.FC = () => {
   const warmPct = contacts.length > 0 ? Math.round((corporate / contacts.length) * 100) : 0;
 
   return (
-    <div className="bg-[#0A101F]/80 border border-white/5 rounded-2xl p-6 backdrop-blur-sm">
+    <div className="bg-[#0A101F]/80 border border-white/5 rounded-2xl p-6">
       <div className="flex items-center gap-2 mb-4">
         <Users size={16} className="text-secondary" />
         <h3 className="text-sm font-semibold text-white">Lead Kalitesi</h3>

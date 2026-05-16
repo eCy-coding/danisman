@@ -41,7 +41,7 @@ export const ResultsChart: React.FC<ResultsChartProps> = ({
     new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY', maximumFractionDigits: 0 }).format(val);
 
   return (
-    <Card className="p-6 bg-white/5 backdrop-blur-sm border-white/10">
+    <Card className="p-6 bg-white/5 border-white/10">
         <div className="flex flex-col h-full justify-between">
             <div className="mb-6 grid grid-cols-2 gap-4">
                 <div className="p-4 rounded-lg bg-green-500/10 border border-green-500/20">

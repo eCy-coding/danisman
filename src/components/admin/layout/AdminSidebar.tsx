@@ -64,7 +64,7 @@ export const AdminSidebar: React.FC = () => {
   const visibleItems = MENU_ITEMS.filter((item) => !item.permission || can(item.permission));
 
   return (
-    <aside className="w-64 bg-neutral/95 backdrop-blur-xl border-r border-white/5 h-screen fixed left-0 top-0 flex flex-col z-50">
+    <aside className="w-64 bg-neutral/95 border-r border-white/5 h-screen fixed left-0 top-0 flex flex-col z-50">
       <div className="p-8 border-b border-white/5">
         <h2 className="text-xl font-serif text-white tracking-wide">
           EcyPro<span className="text-secondary">.</span>
@@ -99,7 +99,7 @@ export const AdminSidebar: React.FC = () => {
 
       <div className="p-4 border-t border-white/5 space-y-1">
         {/* P36-T09: Keyboard shortcuts hint — opens ? help modal */}
-        <button
+        <button type="button"
           onClick={openAdminHelpModal}
           className="w-full flex items-center gap-3 px-4 py-2 rounded-lg text-slate-500 hover:text-slate-300 hover:bg-white/5 transition-colors"
         >
@@ -109,7 +109,7 @@ export const AdminSidebar: React.FC = () => {
             ?
           </kbd>
         </button>
-        <button
+        <button type="button"
           onClick={logout}
           className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-colors"
         >

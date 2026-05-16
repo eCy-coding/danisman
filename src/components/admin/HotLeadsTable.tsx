@@ -12,6 +12,7 @@ import React, { useMemo, useState } from 'react';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { Mail, Building2, Bell, AlertCircle, ExternalLink, Search } from 'lucide-react';
 import { apiClient } from '../../lib/api';
+import { QueryKeys } from '../../lib/query-client';
 
 interface HotLead {
   id: string;
@@ -42,12 +43,12 @@ export const HotLeadsTable: React.FC = () => {
   const [search, setSearch] = useState('');
   const [notifying, setNotifying] = useState<string | null>(null);
 
+  // P18-FE: HotLeadsWidget ile cache deduplication.
   const { data, isLoading, isError } = useQuery<ApiResponse>({
-    queryKey: ['crm-hot-leads'],
+    queryKey: QueryKeys.analytics.hotLeads,
     queryFn: () => apiClient.get<ApiResponse>('/crm/leads/hot').then((r) => r.data),
     staleTime: 60_000,
     refetchInterval: 60_000,
-    retry: 1,
   });
 
   const notifyMutation = useMutation({

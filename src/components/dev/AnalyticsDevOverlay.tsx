@@ -93,7 +93,7 @@ export const AnalyticsDevOverlay: React.FC = () => {
         <button
           type="button"
           onClick={() => setOpen(true)}
-          className="flex items-center gap-2 px-3 py-2 rounded-xl bg-[#0a0f1e]/95 border border-white/15 text-slate-400 hover:text-white hover:border-white/25 transition-all shadow-xl backdrop-blur-sm"
+          className="flex items-center gap-2 px-3 py-2 rounded-xl bg-[#0a0f1e]/95 border border-white/15 text-slate-400 hover:text-white hover:border-white/25 transition-all shadow-xl"
           title="Analytics Dev Overlay (DEV only)"
         >
           <BarChart3 size={14} className="text-blue-400" aria-hidden="true" />
@@ -125,7 +125,7 @@ export const AnalyticsDevOverlay: React.FC = () => {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95 }}
             transition={{ duration: 0.2 }}
-            className="w-80 rounded-2xl bg-[#080d1a]/98 border border-white/10 shadow-2xl backdrop-blur-xl overflow-hidden"
+            className="w-80 rounded-2xl bg-[#080d1a]/98 border border-white/10 shadow-2xl overflow-hidden"
           >
             {/* Header */}
             <div className="flex items-center justify-between px-4 py-3 border-b border-white/8">

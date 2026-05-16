@@ -31,7 +31,7 @@ export const CaseStudyCard: React.FC<CaseStudyCardProps> = ({ study }) => {
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.9 }}
       transition={{ duration: 0.3 }}
-      className="group bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 overflow-hidden hover:border-white/20 transition-all duration-300 flex flex-col h-full"
+      className="group bg-white/5 rounded-2xl border border-white/10 overflow-hidden hover:border-white/20 transition-all duration-300 flex flex-col h-full"
     >
       {study.image && (
           <div className="h-48 overflow-hidden relative">

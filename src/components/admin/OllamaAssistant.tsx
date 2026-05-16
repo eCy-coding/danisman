@@ -70,7 +70,7 @@ const MessageBubble: React.FC<{ entry: ChatEntry }> = ({ entry }) => {
         </div>
 
         {entry.role === 'assistant' && entry.content && !entry.streaming && (
-          <button
+          <button type="button"
             onClick={copyToClipboard}
             className="absolute -bottom-6 right-0 opacity-0 group-hover:opacity-100 text-slate-500 hover:text-white transition-all flex items-center gap-1 text-xs"
             aria-label="Copy response"
@@ -171,7 +171,7 @@ export const OllamaAssistant: React.FC = () => {
   return (
     <div
       data-testid="ollama-assistant"
-      className="flex flex-col bg-[#0A101F]/80 border border-white/5 rounded-2xl backdrop-blur-sm shadow-xl overflow-hidden"
+      className="flex flex-col bg-[#0A101F]/80 border border-white/5 rounded-2xl shadow-xl overflow-hidden"
       style={{ height: '600px' }}
     >
       {/* Header */}
@@ -206,7 +206,7 @@ export const OllamaAssistant: React.FC = () => {
 
           {/* Model Selector */}
           <div className="relative">
-            <button
+            <button type="button"
               onClick={() => setShowModels(p => !p)}
               className="flex items-center gap-1 text-xs bg-black/30 border border-white/10 rounded-lg px-2 py-1.5 text-slate-300 hover:border-secondary/50 transition-colors"
               aria-label="Select model"
@@ -223,7 +223,7 @@ export const OllamaAssistant: React.FC = () => {
                   className="absolute right-0 top-full mt-1 bg-[#050810] border border-white/10 rounded-xl shadow-2xl z-50 py-1 min-w-48"
                 >
                   {AVAILABLE_MODELS.map(m => (
-                    <button
+                    <button type="button"
                       key={m.id}
                       onClick={() => { setModel(m.id); setShowModels(false); }}
                       className={`w-full text-left px-4 py-2 text-xs transition-colors ${
@@ -238,7 +238,7 @@ export const OllamaAssistant: React.FC = () => {
             </AnimatePresence>
           </div>
 
-          <button
+          <button type="button"
             onClick={clearChat}
             className="p-1.5 text-slate-500 hover:text-red-400 transition-colors rounded-lg hover:bg-red-900/20"
             title="Clear chat"
@@ -266,7 +266,7 @@ export const OllamaAssistant: React.FC = () => {
                 'Explain ROI measurement frameworks',
                 'Create a case study outline for SaaS',
               ].map(s => (
-                <button
+                <button type="button"
                   key={s}
                   onClick={() => setInput(s)}
                   className="text-xs px-3 py-1.5 bg-white/5 border border-white/10 rounded-full text-slate-400 hover:text-white hover:border-white/20 transition-all"
@@ -314,7 +314,7 @@ export const OllamaAssistant: React.FC = () => {
             aria-label="Message input"
           />
           {isStreaming ? (
-            <button
+            <button type="button"
               onClick={abort}
               className="shrink-0 p-2 text-red-400 hover:text-red-300 transition-colors"
               aria-label="Stop generation"
@@ -323,7 +323,7 @@ export const OllamaAssistant: React.FC = () => {
               <StopCircle size={18} />
             </button>
           ) : (
-            <button
+            <button type="button"
               onClick={() => void handleSend()}
               disabled={!input.trim()}
               className="shrink-0 p-2 text-secondary disabled:text-slate-600 hover:text-secondary/80 transition-colors"

@@ -1,44 +1,52 @@
-import React, { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
+import React from 'react';
 import { contactSchema, ContactFormData } from '../../schemas/contact';
 import { Send, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
 import { useTranslation } from '@/lib/i18n';
 import { Logger } from '../../lib/logger';
 import { trackForm } from '../../lib/analytics';
+import { createForm } from '../../lib/forms/createForm';
+
+// P15 — Tek otorite: createForm factory.
+//   • zod resolver + submit-lock + AbortController + mountedRef
+//   • idempotency-key, analytics start/success/error
+//   • honeypot (hp_field) — bot trap (schema'da `optional`)
+//
+// onSubmit eski 1500ms simülasyonu korur (E2E + offline UX). Endpoint wire-up
+// backend hazır olduğunda `endpoint: '/api/contact'` yapılır.
+const contactForm = createForm({
+  name: 'contact',
+  schema: contactSchema,
+  onSubmit: async (data) => {
+    await new Promise((resolve) => setTimeout(resolve, 1500));
+    Logger.info('Form submitted:', data);
+  },
+});
 
 export const ContactForm: React.FC = () => {
   const { t } = useTranslation();
-
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
-
+  const { rhf, status, submit, reset } = contactForm.useTypedForm();
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors },
-  } = useForm<ContactFormData>({
-    resolver: zodResolver(contactSchema),
-  });
+  } = rhf;
 
-  const onSubmit = async (data: ContactFormData) => {
-    setIsSubmitting(true);
-    setSubmitStatus('idle');
+  const isSubmitting = status === 'submitting';
+  const submitStatus: 'idle' | 'success' | 'error' =
+    status === 'success' ? 'success' : status === 'error' || status === 'rate_limited' ? 'error' : 'idle';
 
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-      Logger.info('Form submitted:', data);
-      setSubmitStatus('success');
-      trackForm('contact', 'submit_success');
-      reset();
-    } catch (error) {
-      Logger.error('Submission error:', error);
-      setSubmitStatus('error');
-      trackForm('contact', 'submit_error');
-    } finally {
-      setIsSubmitting(false);
+  // Reset form on success so the next submission starts clean.
+  React.useEffect(() => {
+    if (status === 'success') {
+      // Slight delay so the success message stays visible.
+      const t = setTimeout(() => reset(), 3000);
+      return () => clearTimeout(t);
     }
+    return undefined;
+  }, [status, reset]);
+
+  const onSubmit = (data: ContactFormData) => {
+    void submit(data);
   };
 
   const handleFirstFocus = (): void => {
@@ -51,7 +59,16 @@ export const ContactForm: React.FC = () => {
       className="space-y-6"
       data-testid="contact-form"
       aria-label="Contact form"
+      noValidate
     >
+      {/* P15 — Honeypot field, off-screen + tabIndex=-1 — bot trap. */}
+      <div
+        aria-hidden="true"
+        style={{ position: 'absolute', left: '-10000px', top: 'auto', width: '1px', height: '1px', overflow: 'hidden' }}
+      >
+        <label htmlFor="hp_field">Leave this empty</label>
+        <input id="hp_field" type="text" tabIndex={-1} autoComplete="off" {...register('hp_field')} />
+      </div>
       {/* Name Field */}
       <div className="space-y-2">
         <label htmlFor="name" className="text-sm font-medium text-slate-400">

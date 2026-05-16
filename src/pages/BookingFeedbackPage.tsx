@@ -189,7 +189,7 @@ export const BookingFeedbackPage: React.FC = () => {
             {Array.from({ length: 11 }, (_, i) => {
               const isSelected = score === i;
               return (
-                <button
+                <button type="button"
                   key={i}
                   role="radio"
                   aria-checked={isSelected}
@@ -263,7 +263,7 @@ export const BookingFeedbackPage: React.FC = () => {
         )}
 
         {/* Submit button */}
-        <button
+        <button type="button"
           onClick={() => submitMutation.mutate()}
           disabled={!canSubmit}
           className="w-full py-3.5 bg-secondary text-white font-semibold rounded-xl hover:bg-secondary/90 transition-all active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2"

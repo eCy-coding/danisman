@@ -1,13 +1,12 @@
 @import 'tailwindcss';
 @plugin "@tailwindcss/typography";
 
-/* CMDK Overlay Background */
+/* CMDK Overlay Background — P12 doctrine sweep: solid scrim, no backdrop-filter */
 [cmdk-overlay] {
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: rgba(0, 0, 0, 0.7);
   position: fixed;
   inset: 0;
   z-index: 9998;
-  backdrop-filter: blur(2px);
   animation: fade 0.2s ease;
 }
 
@@ -123,12 +122,16 @@
 }
 
 @layer utilities {
+  /* P12 doctrine sweep — solid M3 surfaces, no glassmorphism / blur.
+     Utility names `.glass` and `.glass-card` retained for call-site
+     backwards-compat across ~12 components; visual identity now via
+     opaque neutral surface + subtle border. */
   .glass {
-    @apply bg-neutral/80 backdrop-blur-2xl border-b border-white/[0.04];
+    @apply bg-neutral/95 border-b border-white/[0.04];
   }
 
   .glass-card {
-    @apply bg-white/[0.02] backdrop-blur-3xl border border-white/[0.08];
+    @apply bg-[#0A101F] border border-white/[0.08];
     box-shadow: var(--shadow-tactile);
   }
 

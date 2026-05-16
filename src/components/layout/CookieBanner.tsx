@@ -78,13 +78,13 @@ export const CookieBanner: React.FC = () => {
               </Link>
             </p>
             <div className="flex space-x-4 whitespace-nowrap">
-              <button
+              <button type="button"
                 onClick={() => setShowSettings(true)}
                 className="text-sm font-bold text-slate-400 hover:text-secondary transition-colors px-4 py-2"
               >
                 {COOKIE_BANNER_COPY.settings[lang]}
               </button>
-              <button
+              <button type="button"
                 onClick={handleAcceptAll}
                 className="btn-premium-gold text-sm font-bold px-8 py-3 rounded-lg transition-colors shadow-md outline-none focus:ring-2 focus:ring-offset-2 focus:ring-secondary"
               >
@@ -108,7 +108,7 @@ export const CookieBanner: React.FC = () => {
               <h3 id={modalTitleId} className="text-xl font-sans font-medium text-[#E3E3E3]">
                 {COOKIE_BANNER_COPY.modalTitle[lang]}
               </h3>
-              <button
+              <button type="button"
                 onClick={() => setShowSettings(false)}
                 aria-label="Kapat"
                 className="text-slate-400 hover:text-primary"
@@ -182,13 +182,13 @@ export const CookieBanner: React.FC = () => {
             </div>
 
             <div className="flex justify-end gap-3">
-              <button
+              <button type="button"
                 onClick={handleAcceptAll}
                 className="text-sm font-bold text-slate-400 hover:text-white px-4 py-2"
               >
                 {COOKIE_BANNER_COPY.acceptAll[lang]}
               </button>
-              <button
+              <button type="button"
                 onClick={handleSavePreferences}
                 className="btn-premium-gold text-sm font-bold px-6 py-3 rounded-lg transition-colors"
               >

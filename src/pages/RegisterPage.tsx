@@ -19,6 +19,8 @@ export const RegisterPage: React.FC = () => {
     <>
       <Helmet>
         <title>{t('auth.register') || 'Register'} | EcyPro</title>
+        {/* P15 — auth pages, SERP indeks dışı. */}
+        <meta name="robots" content="noindex,nofollow" />
       </Helmet>
 
       <div className="min-h-screen grid lg:grid-cols-2">

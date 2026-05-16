@@ -97,7 +97,7 @@ export const GeoBanner: React.FC = () => {
         aria-label="Konum önerisi"
         aria-live="polite"
         data-testid="geo-banner"
-        className="relative z-40 bg-linear-to-r from-secondary/15 via-secondary/10 to-transparent border-b border-secondary/20 backdrop-blur-md"
+        className="relative z-40 bg-linear-to-r from-secondary/15 via-secondary/10 to-transparent border-b border-secondary/20"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-2.5 flex items-center justify-between gap-3">
           <div className="flex items-center gap-2.5 min-w-0">

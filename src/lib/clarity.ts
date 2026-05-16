@@ -54,6 +54,8 @@ export function loadClarity(projectId: string): void {
 
   const script = document.createElement('script');
   script.async = true;
+  // P16 — `crossOrigin="anonymous"` opens window.onerror visibility cross-origin.
+  script.crossOrigin = 'anonymous';
   script.src = `https://www.clarity.ms/tag/${encodeURIComponent(projectId)}`;
   script.setAttribute(SCRIPT_DATA_ATTR, '');
   script.dataset.projectId = projectId;

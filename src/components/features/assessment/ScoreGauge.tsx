@@ -16,7 +16,7 @@ export const ScoreGauge: React.FC<ScoreGaugeProps> = ({ score }) => {
   const level = getLevel(score);
 
   return (
-    <Card className="p-8 max-w-2xl mx-auto bg-white/5 backdrop-blur-sm border-white/10 text-center">
+    <Card className="p-8 max-w-2xl mx-auto bg-white/5 border-white/10 text-center">
       <motion.div
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
@@ -62,7 +62,7 @@ export const ScoreGauge: React.FC<ScoreGaugeProps> = ({ score }) => {
         <h4 className={`text-2xl font-bold mb-2 ${level.color}`}>{level.label}</h4>
         <p className="text-gray-300 mb-8">{level.desc}</p>
 
-        <button 
+        <button type="button" 
             onClick={() => window.location.reload()}
             className="px-6 py-3 bg-white/10 text-white font-bold rounded-lg hover:bg-white/20 transition-colors"
         >

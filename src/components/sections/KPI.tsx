@@ -55,7 +55,7 @@ const KPIItem: React.FC<{
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-50px' }}
       transition={{ duration: 0.7, delay: delay / 1000, ease: [0.21, 0.47, 0.32, 0.98] }}
-      className={`relative ${span} h-full min-h-62.5 overflow-hidden rounded-3xl border border-white/5 bg-white/2 p-8 lg:p-10 backdrop-blur-md group transition-colors duration-500 ${getBorderColor(item.category)}`}
+      className={`relative ${span} h-full min-h-62.5 overflow-hidden rounded-3xl border border-white/5 bg-white/2 p-8 lg:p-10 group transition-colors duration-500 ${getBorderColor(item.category)}`}
     >
       <MouseGlow />
       <div

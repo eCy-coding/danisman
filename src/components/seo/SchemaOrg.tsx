@@ -134,11 +134,38 @@ export const SchemaOrg: React.FC = () => {
     ],
   };
 
+  // P12/4 — Person schema for founder / about page (Knowledge Graph signal)
+  const personSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    name: 'Emre Can Yalçın',
+    jobTitle: language === 'tr' ? 'Kurucu & Baş Danışman' : 'Founder & Principal Consultant',
+    url: `${baseUrl}/about`,
+    image: `${baseUrl}/founder.jpg`,
+    worksFor: {
+      '@type': 'Organization',
+      name: 'EcyPro Premium Consulting',
+      url: baseUrl,
+    },
+    sameAs: [
+      'https://www.linkedin.com/in/emre-can-yalcin',
+      'https://twitter.com/ecypro',
+      'https://github.com/emrecnyn',
+    ],
+    knowsAbout: [
+      'Management Consulting',
+      'Digital Transformation',
+      'Enterprise Strategy',
+      'Operational Excellence',
+    ],
+  };
+
   return (
     <Helmet>
       <script type="application/ld+json">{JSON.stringify(professionalServiceSchema)}</script>
       <script type="application/ld+json">{JSON.stringify(serviceSchema)}</script>
       <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
+      <script type="application/ld+json">{JSON.stringify(personSchema)}</script>
     </Helmet>
   );
 };

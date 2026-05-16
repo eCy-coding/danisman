@@ -146,7 +146,7 @@ export const Contact: React.FC = () => {
             {/* Soft backdrop glow behind the form */}
             <div className="absolute -inset-10 bg-linear-to-br from-primary/20 to-secondary/20 rounded-full blur-3xl opacity-20 pointer-events-none" />
             
-            <div className="relative bg-surface/80 border border-white/10 rounded-3xl p-8 md:p-12 backdrop-blur-xl overflow-hidden">
+            <div className="relative bg-surface/80 border border-white/10 rounded-3xl p-8 md:p-12 overflow-hidden">
               <MouseGlow />
               
               <AnimatePresence mode="wait">
@@ -165,7 +165,7 @@ export const Contact: React.FC = () => {
                     </div>
                     <h3 className="text-3xl font-sans font-medium text-white mb-4">Mesajınız Alındı</h3>
                     <p className="text-slate-400 font-light text-lg mb-12">En kısa sürede profesyonel ekibimiz size dönüş yapacaktır.</p>
-                    <button 
+                    <button type="button" 
                       onClick={() => setStatus('idle')} 
                       className="px-8 py-3 rounded-full border border-white/10 text-white font-medium hover:bg-white/5 transition-colors"
                     >

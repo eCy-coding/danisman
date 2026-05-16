@@ -145,7 +145,7 @@ export const VerifyEmailPage: React.FC = () => {
         </div>
 
         {/* ── Card ──────────────────────────────────────── */}
-        <div className="bg-white/3 border border-white/8 rounded-2xl p-8 text-center space-y-5 backdrop-blur-sm">
+        <div className="bg-white/3 border border-white/8 rounded-2xl p-8 text-center space-y-5">
           {/* Loading */}
           {state.status === 'loading' && (
             <>
@@ -172,7 +172,7 @@ export const VerifyEmailPage: React.FC = () => {
                   {countdown} saniye içinde giriş sayfasına yönlendiriliyorsunuz…
                 </p>
               </div>
-              <button
+              <button type="button"
                 onClick={() => navigate('/admin/login')}
                 className="w-full flex items-center justify-center gap-2 py-3 bg-secondary text-white font-semibold rounded-xl hover:bg-secondary/90 transition-all"
               >
@@ -194,7 +194,7 @@ export const VerifyEmailPage: React.FC = () => {
                   </div>
                   <div className="space-y-3">
                     {cfg.canResend && (
-                      <button
+                      <button type="button"
                         onClick={handleResend}
                         disabled={resenLoading}
                         className="w-full flex items-center justify-center gap-2 py-3 bg-white/5 border border-white/10 text-slate-300 font-medium rounded-xl hover:bg-white/10 transition-all disabled:opacity-50"
@@ -210,7 +210,7 @@ export const VerifyEmailPage: React.FC = () => {
                         )}
                       </button>
                     )}
-                    <button
+                    <button type="button"
                       onClick={() => navigate('/admin/login')}
                       className="w-full py-2.5 text-sm text-slate-500 hover:text-slate-300 transition-colors"
                     >
@@ -231,7 +231,7 @@ export const VerifyEmailPage: React.FC = () => {
                   E-posta kutunuzu kontrol edin. Spam klasörünü de kontrol etmeyi unutmayın.
                 </p>
               </div>
-              <button
+              <button type="button"
                 onClick={() => navigate('/admin/login')}
                 className="w-full py-2.5 text-sm text-slate-500 hover:text-slate-300 transition-colors"
               >

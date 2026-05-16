@@ -11,7 +11,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({ categories, activeCategory
   return (
     <div className="flex flex-wrap justify-center gap-4 mb-12">
       {categories.map((category) => (
-        <button
+        <button type="button"
           key={category}
           onClick={() => onSelect(category)}
           className={`relative px-6 py-2 rounded-full text-sm font-semibold transition-colors ${

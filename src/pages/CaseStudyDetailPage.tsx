@@ -9,6 +9,7 @@ import { PageWrapper } from '../components/layout/PageWrapper';
 import { JsonLd } from '../components/seo/JsonLd';
 import { buildCaseStudySchema, buildBreadcrumbSchema } from '../lib/structured-data';
 import { NotFoundPage } from './NotFoundPage';
+import { ResponsiveImage } from '../components/ui/ResponsiveImage';
 
 export const CaseStudyDetailPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -96,7 +97,17 @@ export const CaseStudyDetailPage: React.FC = () => {
               transition={{ duration: 0.5 }}
               className="rounded-2xl overflow-hidden border border-white/10 mb-12 aspect-video"
             >
-              <img src={study.image} alt={study.title} className="w-full h-full object-cover" loading="lazy" />
+              {/* P15 — width/height attr CLS=0 ve fetchPriority=high above-fold hero için. */}
+              <ResponsiveImage
+                src={study.image}
+                alt={study.title}
+                width={1280}
+                height={720}
+                fetchPriority="high"
+                loading="eager"
+                sizes="(min-width: 1024px) 1024px, 100vw"
+                className="w-full h-full object-cover"
+              />
             </motion.div>
           )}
 

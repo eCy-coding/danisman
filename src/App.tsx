@@ -5,6 +5,7 @@ import { AppProviders } from './components/providers/AppProviders';
 import { NotFoundPage } from './pages/NotFoundPage';
 import { director } from '@/lib/director';
 import { SovereignBoundary } from './components/ui/SovereignBoundary';
+import { RouteContainer } from './components/error/RouteContainer';
 import { Logger } from './lib/logger';
 
 // Lazy load ALL pages including LandingPage for maximum code splitting
@@ -14,7 +15,8 @@ const LandingPage = React.lazy(() =>
 
 // Lazy load pages for code splitting (Dashboard & Inner pages only)
 import { SchemaOrg } from './components/seo/SchemaOrg';
-import { Hreflang } from './components/seo/Hreflang';
+// P15 — Hreflang component'i kaldırıldı. SeoManager artık tek otorite
+// (RFC 5646 path-based hreflang). Çift mount Google'da konfüze etmesin.
 const DashboardPage = React.lazy(() =>
   import('./pages/DashboardPage').then((module) => ({ default: module.DashboardPage })),
 );
@@ -70,6 +72,9 @@ const LocationsPage = React.lazy(() =>
 );
 const PrivacyPage = React.lazy(() =>
   import('./pages/PrivacyPage').then((module) => ({ default: module.PrivacyPage })),
+);
+const DataRightsPage = React.lazy(() =>
+  import('./pages/DataRightsPage').then((module) => ({ default: module.DataRightsPage })),
 );
 const TermsPage = React.lazy(() =>
   import('./pages/TermsPage').then((module) => ({ default: module.TermsPage })),
@@ -263,9 +268,9 @@ const AnimatedRoutes = () => {
           <Route
             path="/contact"
             element={
-              <Suspense fallback={<LoadingFallback />}>
+              <RouteContainer name="ContactPage" fallback={<LoadingFallback />}>
                 <ContactPage />
-              </Suspense>
+              </RouteContainer>
             }
           />
           <Route
@@ -327,9 +332,9 @@ const AnimatedRoutes = () => {
           <Route
             path="/pricing"
             element={
-              <Suspense fallback={<LoadingFallback />}>
+              <RouteContainer name="PricingPage" fallback={<LoadingFallback />}>
                 <PricingPage />
-              </Suspense>
+              </RouteContainer>
             }
           />
           <Route
@@ -354,6 +359,14 @@ const AnimatedRoutes = () => {
               <Suspense fallback={<LoadingFallback />}>
                 <PrivacyPage />
               </Suspense>
+            }
+          />
+          <Route
+            path="/privacy/data-rights"
+            element={
+              <RouteContainer name="DataRightsPage" fallback={<LoadingFallback />}>
+                <DataRightsPage />
+              </RouteContainer>
             }
           />
           <Route
@@ -544,6 +557,14 @@ const AnimatedRoutes = () => {
               element={
                 <Suspense fallback={<LoadingFallback />}>
                   <PrivacyPage />
+                </Suspense>
+              }
+            />
+            <Route
+              path="privacy/data-rights"
+              element={
+                <Suspense fallback={<LoadingFallback />}>
+                  <DataRightsPage />
                 </Suspense>
               }
             />
@@ -785,6 +806,7 @@ const AnimatedRoutes = () => {
 };
 
 import { initMonitoring } from './lib/monitor';
+import { initRUM } from './lib/rum';
 import { PrivacyAnalytics } from './components/analytics/PrivacyAnalytics';
 
 import '@/lib/i18n'; // Initialize i18n
@@ -798,11 +820,13 @@ import { useScrollDepth } from '@/hooks/useScrollDepth';
 import { SeoManager } from './components/seo/SeoManager';
 
 import { MissionControl } from './components/debug/MissionControl';
+import { OfflineBanner } from './components/common/OfflineBanner';
 import { analyticsConsumer } from './lib/director/analytics-consumer';
 import { personalization } from './lib/director/personalization';
 import { sentry } from './lib/sentry';
 import { processDirectorActions } from './lib/notifications/toast-manager';
 import { initPerformance } from './lib/performance';
+import { bindAutoFlush as bindRetryQueueFlush } from './lib/network/retry-queue';
 
 const RouterDependentHooks: React.FC = () => {
   useScrollDepth();
@@ -833,6 +857,9 @@ const App: React.FC = () => {
       // Initialize Sentry Error Reporting (deferred)
       sentry.init();
       sentry.addBreadcrumb({ category: 'lifecycle', message: 'App mounted', level: 'info' });
+      // P13/2 — RUM goes online after Sentry so Web Vitals can attach as
+      // measurements to the in-flight pageload transaction.
+      initRUM();
     });
 
     // Initialize The Automatic Director (kept eager — required for ONE_TIME task scheduling)
@@ -863,6 +890,9 @@ const App: React.FC = () => {
     // Initialize Performance Optimizations (resource hints, prefetch, lazy images)
     initPerformance();
 
+    // P15 — Bind auto-flush for offline retry queue.
+    bindRetryQueueFlush();
+
     // Phase 30: Matrix Init
     Logger.info('[App] Matrix Engine Online.');
 
@@ -890,7 +920,8 @@ const App: React.FC = () => {
           <PrivacyAnalytics />
           <SeoManager />
           <SchemaOrg />
-          <Hreflang />
+          {/* P15 — Offline banner: navigator.onLine değiştiğinde görünür. */}
+          <OfflineBanner />
           <CommandMenu />
           <ZenToggle />
           <LanguageToggle />

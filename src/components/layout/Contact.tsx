@@ -168,7 +168,7 @@ export const Contact: React.FC = () => {
                     {CONTACT_FORM_COPY.successTitle[lang]}
                   </h3>
                   <p className="text-green-400">{CONTACT_FORM_COPY.successDesc[lang]}</p>
-                  <button
+                  <button type="button"
                     onClick={() => setStatus('idle')}
                     className="mt-6 text-sm font-bold text-green-400 hover:underline"
                   >

@@ -39,8 +39,13 @@ import { Logger } from './logger';
 export const SUPPORTED_LANGS = ['tr', 'en'] as const;
 export const DEFAULT_LANG = 'tr';
 
+/**
+ * Full namespace registry — kept exported for type safety and tooling
+ * (e.g. content-qa-auditor manifest validation). NOT all namespaces ship
+ * on first paint; see `INITIAL_NAMESPACES` below.
+ */
 export const NAMESPACES = [
-  'translation', // legacy default — already shipping
+  'translation', // legacy default — always loaded
   'blog',
   'contact',
   'services',
@@ -51,7 +56,32 @@ export const NAMESPACES = [
   'liveChat',
   'common',
   'legal',
+  // P16 — Form validation + zod errorMap i18n keys.
+  'forms',
 ] as const;
+
+/**
+ * P17 — Initial namespaces shipped on first paint. Everything else loads
+ * lazily via `useRouteNamespaces` (see `./useRouteNamespaces.ts`) or
+ * automatically by `react-i18next` when `useTranslation('foo')` is called.
+ *
+ * Rationale: previously all 11 namespaces fetched on app boot (~10-20KB
+ * total JSON over the wire even when only `common` was needed for the
+ * header/footer of a static page like /privacy). Now only the universally
+ * shared ns load eagerly; route-specific ns wait until that route mounts.
+ *
+ * SAFETY:
+ *   `forms`  — referenced by `zod-error-map` (validation messages can
+ *              fire from any page that mounts a form). Must be loaded
+ *              eagerly to keep first-validation paint flicker-free.
+ *   `legal`  — referenced by a handful of footer + cookie banner strings
+ *              that render on every route (offline banner, cookie notice).
+ *
+ * Route-specific ns (blog, services, pricing, caseStudies, newsletter,
+ * liveChat, contact) load lazily via `react-i18next`'s `useTranslation(ns)`
+ * binding or via `useRouteNamespaces([ns])` at the page boundary.
+ */
+export const INITIAL_NAMESPACES = ['translation', 'common', 'forms', 'legal'] as const;
 
 i18n
   .use(ICU)
@@ -61,7 +91,14 @@ i18n
   .init({
     fallbackLng: DEFAULT_LANG,
     supportedLngs: SUPPORTED_LANGS as readonly string[] as string[],
-    ns: NAMESPACES as readonly string[] as string[],
+    // P17 — Initial `ns` minimised. The full `NAMESPACES` array is still
+    // valid and react-i18next's `useTranslation('blog')` will trigger
+    // `loadNamespaces` on demand because HTTP backend is wired up.
+    ns: INITIAL_NAMESPACES as readonly string[] as string[],
+    // `partialBundledLanguages: true` — tells i18next that the initial bundle
+    // is intentionally partial; missing namespaces are fetched on demand
+    // rather than triggering a noisy missing-key warning.
+    partialBundledLanguages: true,
     defaultNS: 'translation',
     interpolation: { escapeValue: false }, // React already escapes
     backend: {

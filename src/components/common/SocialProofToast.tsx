@@ -174,7 +174,7 @@ export const SocialProofToast: React.FC = () => {
             exit={prefersReduced ? { opacity: 0 } : { opacity: 0, x: -10, y: -5 }}
             transition={{ duration: 0.35, ease: 'easeOut' }}
             data-testid="social-proof-toast"
-            className="pointer-events-auto max-w-xs bg-[#0f172a]/95 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl p-4 flex items-start gap-3"
+            className="pointer-events-auto max-w-xs bg-[#0f172a]/95 border border-white/10 rounded-2xl shadow-2xl p-4 flex items-start gap-3"
           >
             {/* Icon */}
             <div

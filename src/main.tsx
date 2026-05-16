@@ -1,13 +1,38 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import '@fontsource/inter/300.css';
-import '@fontsource/inter/400.css';
-import '@fontsource/inter/500.css';
-import '@fontsource/inter/600.css';
-import '@fontsource/inter/700.css';
-import '@fontsource/playfair-display/400.css';
-import '@fontsource/playfair-display/600.css';
-import '@fontsource/playfair-display/700.css';
+// P17 — Font subset optimisation. Previously each weight CSS file (e.g.
+// `@fontsource/inter/400.css`) declared 7 `@font-face` blocks: cyrillic,
+// cyrillic-ext, greek, greek-ext, vietnamese, latin, latin-ext. The
+// browser never DOWNLOADED the unused subsets (unicode-range gating),
+// but every @font-face block costs CSS parse + font-matching cycles,
+// and stale subset files still shipped via the asset pipeline (~500KB
+// of dead .woff/.woff2 in `dist/fonts/`).
+//
+// Switching to subset-specific imports (`latin-400.css` +
+// `latin-ext-400.css`) keeps full TR + EN coverage (latin-ext supplies
+// ı, ş, ğ, ç, ö, ü) and drops:
+//   - 5 Inter subsets × 5 weights × (woff2 + woff) = 50 files
+//   - 5 Playfair subsets × 3 weights × (woff2 + woff) = 30 files
+//   - 5–7 @font-face blocks per weight from the rendered CSS.
+//
+// All @fontsource subset stylesheets ship `font-display: swap` by default,
+// so FOIT is avoided on first paint (verified in node_modules).
+import '@fontsource/inter/latin-300.css';
+import '@fontsource/inter/latin-ext-300.css';
+import '@fontsource/inter/latin-400.css';
+import '@fontsource/inter/latin-ext-400.css';
+import '@fontsource/inter/latin-500.css';
+import '@fontsource/inter/latin-ext-500.css';
+import '@fontsource/inter/latin-600.css';
+import '@fontsource/inter/latin-ext-600.css';
+import '@fontsource/inter/latin-700.css';
+import '@fontsource/inter/latin-ext-700.css';
+import '@fontsource/playfair-display/latin-400.css';
+import '@fontsource/playfair-display/latin-ext-400.css';
+import '@fontsource/playfair-display/latin-600.css';
+import '@fontsource/playfair-display/latin-ext-600.css';
+import '@fontsource/playfair-display/latin-700.css';
+import '@fontsource/playfair-display/latin-ext-700.css';
 import '../index.css';
 import './styles/print.css';
 import './lib/i18n-react'; // Phase 20 B2: bootstrap react-i18next once

@@ -18,7 +18,7 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
   totalSteps 
 }) => {
   return (
-    <Card className="p-8 max-w-2xl mx-auto bg-white/5 backdrop-blur-sm border-white/10">
+    <Card className="p-8 max-w-2xl mx-auto bg-white/5 border-white/10">
       <div className="mb-6">
         <div className="flex justify-between text-sm text-gray-400 mb-2">
           <span>Soru {currentStep} / {totalSteps}</span>

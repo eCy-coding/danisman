@@ -58,7 +58,7 @@ export const MegaMenu: React.FC<MegaMenuProps> = ({
         isOpen ? 'opacity-100 scale-100 visible translate-y-0' : 'opacity-0 scale-[0.97] invisible -translate-y-2'
       }`}
     >
-      <div className="bg-[#0a0f1c]/98 backdrop-blur-2xl rounded-2xl shadow-[0_20px_60px_-15px_rgba(0,0,0,0.7)] border border-white/8 overflow-hidden ring-1 ring-white/5">
+      <div className="bg-[#0a0f1c]/98 rounded-2xl shadow-[0_20px_60px_-15px_rgba(0,0,0,0.7)] border border-white/8 overflow-hidden ring-1 ring-white/5">
         <div className="grid grid-cols-4 divide-x divide-white/5">
 
           {/* 3 content columns */}

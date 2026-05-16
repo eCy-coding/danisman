@@ -36,6 +36,11 @@ export function useSSE({
 }: UseSSEOptions = {}) {
   const eventSourceRef = useRef<EventSource | null>(null);
   const retriesRef = useRef(0);
+  // P14 — track reconnect backoff timer so unmount during the delay cancels it.
+  // Previously leaked: setTimeout fired connect() after component unmount,
+  // creating a new EventSource that nothing owned anymore.
+  const reconnectTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const mountedRef = useRef(true);
   const [isConnected, setIsConnected] = useState(false);
   const [lastEvent, setLastEvent] = useState<SSEEvent | null>(null);
 
@@ -87,18 +92,28 @@ export function useSSE({
     });
 
     es.onerror = () => {
+      if (!mountedRef.current) return;
       setIsConnected(false);
       es.close();
 
       if (autoReconnect && retriesRef.current < maxRetries) {
         retriesRef.current += 1;
         const delay = retryDelay * Math.pow(2, retriesRef.current - 1); // Exponential backoff
-        setTimeout(connect, delay);
+        // Track the timer so unmount cancels it.
+        if (reconnectTimerRef.current) clearTimeout(reconnectTimerRef.current);
+        reconnectTimerRef.current = setTimeout(() => {
+          reconnectTimerRef.current = null;
+          if (mountedRef.current) connect();
+        }, delay);
       }
     };
   }, [sseUrl, autoReconnect, maxRetries, retryDelay, onEvent, onMetrics]);
 
   const disconnect = useCallback(() => {
+    if (reconnectTimerRef.current) {
+      clearTimeout(reconnectTimerRef.current);
+      reconnectTimerRef.current = null;
+    }
     if (eventSourceRef.current) {
       eventSourceRef.current.close();
       eventSourceRef.current = null;
@@ -107,8 +122,12 @@ export function useSSE({
   }, []);
 
   useEffect(() => {
+    mountedRef.current = true;
     connect();
-    return disconnect;
+    return () => {
+      mountedRef.current = false;
+      disconnect();
+    };
   }, [connect, disconnect]);
 
   return {

@@ -12,6 +12,7 @@ import { useQuery } from '@tanstack/react-query';
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Tooltip, Cell } from 'recharts';
 import { TrendingDown, AlertCircle, Mail, Users, Calendar } from 'lucide-react';
 import { apiClient } from '../../lib/api';
+import { QueryKeys } from '../../lib/query-client';
 
 interface PipelineStats {
   contacts: { total: number; unread: number; last30: number };
@@ -59,12 +60,13 @@ const FunnelTooltip: React.FC<FunnelTooltipProps> = ({ active, payload }) => {
 };
 
 export const PipelineFunnelChart: React.FC = () => {
+  // P18-FE: aynı QueryKeys root'unu PipelineWidget ile paylaşırız;
+  // admin + dashboard arasında deduplication.
   const { data, isLoading, isError } = useQuery<ApiResponse>({
-    queryKey: ['crm-pipeline-stats'],
+    queryKey: QueryKeys.analytics.pipeline,
     queryFn: () => apiClient.get<ApiResponse>('/crm/pipeline-stats').then((r) => r.data),
     staleTime: 60_000,
     refetchInterval: 60_000,
-    retry: 1,
   });
 
   if (isLoading) {

@@ -315,7 +315,7 @@ export const AboutPage: React.FC = () => {
                 ? 'Organizasyonunuzun potansiyelini açığa çıkarmak için 30 dakikalık ücretsiz keşif görüşmesi planlayın.'
                 : 'Schedule a free 30-minute discovery call to unlock your organization\'s potential.'}
             </p>
-            <button
+            <button type="button"
               onClick={() => window.dispatchEvent(new CustomEvent('open-booking'))}
               className="inline-flex items-center gap-3 px-10 py-4 bg-secondary text-neutral font-bold rounded-full hover:bg-secondary/90 transition-all duration-300 shadow-[0_0_40px_rgba(var(--color-secondary-rgb),0.3)] hover:shadow-[0_0_60px_rgba(var(--color-secondary-rgb),0.5)] text-lg group"
             >

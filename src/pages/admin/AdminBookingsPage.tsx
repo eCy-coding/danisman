@@ -144,20 +144,20 @@ export const AdminBookingsPage: React.FC = () => {
                       <div className="flex items-center justify-end gap-2">
                         {b.status === 'pending' && (
                           <>
-                            <button onClick={() => updateStatus(b.id, 'confirmed')} className="p-1.5 rounded-lg bg-green-500/10 text-green-400 hover:bg-green-500/20 transition-colors" title="Onayla">
+                            <button type="button" onClick={() => updateStatus(b.id, 'confirmed')} className="p-1.5 rounded-lg bg-green-500/10 text-green-400 hover:bg-green-500/20 transition-colors" title="Onayla">
                               <Check size={13} />
                             </button>
-                            <button onClick={() => updateStatus(b.id, 'cancelled')} className="p-1.5 rounded-lg bg-red-500/10 text-red-400 hover:bg-red-500/20 transition-colors" title="İptal">
+                            <button type="button" onClick={() => updateStatus(b.id, 'cancelled')} className="p-1.5 rounded-lg bg-red-500/10 text-red-400 hover:bg-red-500/20 transition-colors" title="İptal">
                               <X size={13} />
                             </button>
                           </>
                         )}
                         {b.status === 'confirmed' && (
-                          <button onClick={() => updateStatus(b.id, 'completed')} className="p-1.5 rounded-lg bg-blue-500/10 text-blue-400 hover:bg-blue-500/20 transition-colors" title="Tamamlandı">
+                          <button type="button" onClick={() => updateStatus(b.id, 'completed')} className="p-1.5 rounded-lg bg-blue-500/10 text-blue-400 hover:bg-blue-500/20 transition-colors" title="Tamamlandı">
                             <Check size={13} />
                           </button>
                         )}
-                        <button onClick={() => setSelected(selected?.id === b.id ? null : b)} className="p-1.5 rounded-lg bg-white/5 text-slate-400 hover:bg-white/10 hover:text-white transition-colors" title="Detay">
+                        <button type="button" onClick={() => setSelected(selected?.id === b.id ? null : b)} className="p-1.5 rounded-lg bg-white/5 text-slate-400 hover:bg-white/10 hover:text-white transition-colors" title="Detay">
                           <Eye size={13} />
                         </button>
                       </div>
@@ -177,7 +177,7 @@ export const AdminBookingsPage: React.FC = () => {
           <div className="bg-white/3 border border-white/8 rounded-2xl p-6 space-y-4 h-fit">
             <div className="flex items-start justify-between">
               <h3 className="font-bold text-white">Detay</h3>
-              <button onClick={() => setSelected(null)} className="p-1.5 rounded-lg hover:bg-white/5 text-slate-500 hover:text-white transition-colors">
+              <button type="button" onClick={() => setSelected(null)} className="p-1.5 rounded-lg hover:bg-white/5 text-slate-500 hover:text-white transition-colors">
                 <X size={16} />
               </button>
             </div>
@@ -207,7 +207,7 @@ export const AdminBookingsPage: React.FC = () => {
                 {(Object.keys(STATUS_CONFIG) as Status[]).map(s => {
                   const st = STATUS_CONFIG[s];
                   return (
-                    <button
+                    <button type="button"
                       key={s}
                       onClick={() => updateStatus(selected.id, s)}
                       disabled={selected.status === s}

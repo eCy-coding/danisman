@@ -61,6 +61,12 @@ export class AnalyticsConsumer {
   private originalPushState: typeof history.pushState | null = null;
   private originalReplaceState: typeof history.replaceState | null = null;
   private popstateHandler: (() => void) | null = null;
+  // P14 — track all window/document handlers so stop() can detach them.
+  // Previously: trackScroll/trackIdle/trackContactForm leaked 6 listeners.
+  private scrollHandler: (() => void) | null = null;
+  private idleResetHandler: (() => void) | null = null;
+  private focusInHandler: ((e: FocusEvent) => void) | null = null;
+  private submitHandler: ((e: SubmitEvent) => void) | null = null;
 
   constructor() {
     incrementVisitCount();
@@ -112,9 +118,18 @@ export class AnalyticsConsumer {
    */
   stop(): void {
     this.isRunning = false;
-    if (this.idleTimer) clearInterval(this.idleTimer);
-    if (this.evaluationTimer) clearInterval(this.evaluationTimer);
-    if (this.pageChangePollTimer) clearInterval(this.pageChangePollTimer);
+    if (this.idleTimer) {
+      clearInterval(this.idleTimer);
+      this.idleTimer = null;
+    }
+    if (this.evaluationTimer) {
+      clearInterval(this.evaluationTimer);
+      this.evaluationTimer = null;
+    }
+    if (this.pageChangePollTimer) {
+      clearInterval(this.pageChangePollTimer);
+      this.pageChangePollTimer = null;
+    }
     // Restore History API
     if (this.originalPushState) {
       history.pushState = this.originalPushState;
@@ -127,6 +142,25 @@ export class AnalyticsConsumer {
     if (this.popstateHandler) {
       window.removeEventListener('popstate', this.popstateHandler);
       this.popstateHandler = null;
+    }
+    // P14 — detach scroll/idle/form listeners so HMR or repeated start() doesn't accumulate.
+    if (this.scrollHandler) {
+      window.removeEventListener('scroll', this.scrollHandler);
+      this.scrollHandler = null;
+    }
+    if (this.idleResetHandler) {
+      window.removeEventListener('mousemove', this.idleResetHandler);
+      window.removeEventListener('keydown', this.idleResetHandler);
+      window.removeEventListener('touchstart', this.idleResetHandler);
+      this.idleResetHandler = null;
+    }
+    if (this.focusInHandler) {
+      document.removeEventListener('focusin', this.focusInHandler);
+      this.focusInHandler = null;
+    }
+    if (this.submitHandler) {
+      document.removeEventListener('submit', this.submitHandler);
+      this.submitHandler = null;
     }
     Logger.debug('[AnalyticsConsumer] Stopped');
   }
@@ -191,6 +225,7 @@ export class AnalyticsConsumer {
       this.context.idleSeconds = 0;
     };
 
+    this.scrollHandler = handler;
     window.addEventListener('scroll', handler, { passive: true });
   }
 
@@ -204,6 +239,7 @@ export class AnalyticsConsumer {
       this.context.lastActivity = Date.now();
     };
 
+    this.idleResetHandler = resetIdle;
     window.addEventListener('mousemove', resetIdle, { passive: true });
     window.addEventListener('keydown', resetIdle, { passive: true });
     window.addEventListener('touchstart', resetIdle, { passive: true });
@@ -219,20 +255,24 @@ export class AnalyticsConsumer {
    */
   private trackContactForm(): void {
     // Watch for focus on contact form fields
-    document.addEventListener('focusin', (e) => {
-      const target = e.target as HTMLElement;
+    this.focusInHandler = (e: FocusEvent) => {
+      const target = e.target as HTMLElement | null;
+      if (!target) return;
       if (target.closest('#contact') || target.closest('[data-contact-form]')) {
         this.context.contactFormStarted = true;
       }
-    });
+    };
+    document.addEventListener('focusin', this.focusInHandler);
 
     // Watch for form submission
-    document.addEventListener('submit', (e) => {
-      const form = e.target as HTMLFormElement;
+    this.submitHandler = (e: SubmitEvent) => {
+      const form = e.target as HTMLFormElement | null;
+      if (!form) return;
       if (form.closest('#contact') || form.hasAttribute('data-contact-form')) {
         this.context.contactFormSubmitted = true;
       }
-    });
+    };
+    document.addEventListener('submit', this.submitHandler);
   }
 
   /**

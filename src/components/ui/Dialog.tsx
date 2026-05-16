@@ -87,7 +87,7 @@ const DialogDescription = React.forwardRef<
 DialogDescription.displayName = 'DialogDescription';
 
 const DialogClose = ({ children }: { children: React.ReactNode }) => <>{children}</>;
-const DialogOverlay = () => <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm" />;
+const DialogOverlay = () => <div className="fixed inset-0 z-50 bg-black/50" />;
 const DialogPortal = ({ children }: { children: React.ReactNode }) => <>{children}</>;
 
 export {

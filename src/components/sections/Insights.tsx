@@ -50,7 +50,7 @@ export const Insights: React.FC = () => {
           <FadeIn delay={200}>
             <Link
               to="/blog"
-              className="hidden md:inline-flex items-center gap-2 px-8 py-4 border border-white/10 text-white text-sm font-medium rounded-full hover:bg-white/5 hover:border-white/20 transition-all backdrop-blur-sm group"
+              className="hidden md:inline-flex items-center gap-2 px-8 py-4 border border-white/10 text-white text-sm font-medium rounded-full hover:bg-white/5 hover:border-white/20 transition-all group"
             >
               {INSIGHTS_COPY.viewAll[lang]}
               <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />

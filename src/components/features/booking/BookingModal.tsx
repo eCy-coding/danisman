@@ -268,7 +268,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose }) =
     >
       {/* Backdrop */}
       <div
-        className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+        className="absolute inset-0 bg-black/80"
         onClick={handleClose}
         aria-hidden="true"
       />
@@ -291,7 +291,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose }) =
               </span>
             </div>
           </div>
-          <button
+          <button type="button"
             onClick={handleClose}
             className="text-slate-500 hover:text-white transition-colors p-1.5 rounded-lg hover:bg-white/5 -mr-1 -mt-1 outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
             aria-label={COPY.close[lang]}
@@ -331,7 +331,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose }) =
             <div>
               {/* Month nav */}
               <div className="flex items-center justify-between mb-5">
-                <button
+                <button type="button"
                   onClick={prevMonth}
                   className="p-2 rounded-lg hover:bg-white/5 text-slate-400 hover:text-white transition-colors outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
                 >
@@ -340,7 +340,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose }) =
                 <span className="text-sm font-bold text-white">
                   {MONTHS[lang][calMonth]} {calYear}
                 </span>
-                <button
+                <button type="button"
                   onClick={nextMonth}
                   className="p-2 rounded-lg hover:bg-white/5 text-slate-400 hover:text-white transition-colors outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
                 >
@@ -367,7 +367,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose }) =
                   const disabled = isPastDay(day) || isWeekend(day);
                   const selected = selectedDate === day;
                   return (
-                    <button
+                    <button type="button"
                       key={day}
                       disabled={disabled}
                       onClick={() => {
@@ -428,7 +428,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose }) =
                   ) : (
                     <div className="grid grid-cols-4 gap-2">
                       {daySlots.map((slot) => (
-                        <button
+                        <button type="button"
                           key={slot.start}
                           onClick={() => setSelectedSlot(slot)}
                           className={`py-2 rounded-lg text-sm font-semibold transition-all outline-none focus-visible:ring-2 focus-visible:ring-primary/50 ${
@@ -568,7 +568,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose }) =
                 {selectedSlot ? formatSlotLabel(selectedSlot) : ''}
               </p>
               <p className="text-slate-500 text-sm">{COPY.confirmedDesc[lang]}</p>
-              <button
+              <button type="button"
                 onClick={handleClose}
                 className="mt-7 btn-premium-gold px-8 py-3 rounded-xl font-bold text-sm uppercase tracking-widest"
               >
@@ -581,7 +581,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose }) =
         {/* Footer nav */}
         {!done && (
           <div className="px-7 pb-7 flex items-center justify-between gap-4">
-            <button
+            <button type="button"
               onClick={() => (step > 0 ? setStep((s) => s - 1) : handleClose())}
               className="flex items-center gap-2 text-sm font-semibold text-slate-400 hover:text-white transition-colors outline-none focus-visible:ring-2 focus-visible:ring-primary/50 rounded-lg px-3 py-2 hover:bg-white/5"
             >
@@ -590,7 +590,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose }) =
             </button>
 
             {step === 0 && (
-              <button
+              <button type="button"
                 disabled={!selectedDate || !selectedSlot}
                 onClick={() => setStep(1)}
                 className="flex items-center gap-2 btn-premium text-sm font-bold uppercase tracking-wider px-6 py-3 rounded-xl disabled:opacity-40 disabled:cursor-not-allowed"
@@ -600,7 +600,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose }) =
             )}
 
             {step === 1 && (
-              <button
+              <button type="button"
                 disabled={!form.name || !form.email}
                 onClick={() => setStep(2)}
                 className="flex items-center gap-2 btn-premium text-sm font-bold uppercase tracking-wider px-6 py-3 rounded-xl disabled:opacity-40 disabled:cursor-not-allowed"
@@ -618,7 +618,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose }) =
                       : 'Error occurred, please retry.'}
                   </span>
                 )}
-                <button
+                <button type="button"
                   onClick={() => submitMutation.mutate()}
                   disabled={submitMutation.isPending}
                   className="flex items-center gap-2 btn-premium-gold text-sm font-bold uppercase tracking-wider px-6 py-3 rounded-xl disabled:opacity-60"

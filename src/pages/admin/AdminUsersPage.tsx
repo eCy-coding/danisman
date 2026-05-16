@@ -134,7 +134,7 @@ export const AdminUsersPage: React.FC = () => {
                     ))}
                   </select>
                 ) : (
-                  <button
+                  <button type="button"
                     onClick={() => setEditingRole(u.id)}
                     className={`flex items-center gap-1 text-xs px-2 py-0.5 rounded-full font-medium cursor-pointer ${ROLE_COLORS[u.role]}`}
                   >
@@ -154,7 +154,7 @@ export const AdminUsersPage: React.FC = () => {
               </div>
 
               <div className="col-span-2 flex justify-end">
-                <button
+                <button type="button"
                   onClick={() => activeMutation.mutate({ id: u.id, isActive: !u.isActive })}
                   disabled={activeMutation.isPending}
                   className={`p-1.5 rounded-lg transition-colors ${

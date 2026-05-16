@@ -9,6 +9,7 @@ import { useQuery } from '@tanstack/react-query';
 import { Flame, Mail, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { apiClient } from '../../../lib/api';
+import { QueryKeys } from '../../../lib/query-client';
 
 interface HotLead {
   id: string;
@@ -31,12 +32,13 @@ const TIER_CLASSES: Record<HotLead['tier'], string> = {
 };
 
 export const HotLeadsWidget: React.FC = () => {
+  // P18-FE: query-key tek kaynaktan; HotLeadsTable admin sayfasıyla
+  // cache deduplication sağlar (aynı root, tek fetch).
   const { data, isLoading } = useQuery<ApiResponse>({
-    queryKey: ['crm-hot-leads'],
+    queryKey: QueryKeys.analytics.hotLeads,
     queryFn: () => apiClient.get<ApiResponse>('/crm/leads/hot').then((r) => r.data),
     staleTime: 60_000,
     refetchInterval: 60_000,
-    retry: 1,
   });
 
   const leads = useMemo<HotLead[]>(() => data?.data?.items?.slice(0, 3) ?? [], [data]);

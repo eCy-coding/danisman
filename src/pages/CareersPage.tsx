@@ -21,7 +21,7 @@ export const CareersPage: React.FC = () => {
                         <div className="glass-card p-8 rounded-xl text-center">
                             <h2 className="text-2xl font-bold text-secondary mb-4">{getLang(CAREERS_COPY.openPositions as MultiLang, lang)}</h2>
                             <p className="text-slate-400 mb-8">Currently no open positions looking for super-humans.</p>
-                            <button className="px-8 py-3 bg-primary text-white rounded-lg font-bold hover:bg-slate-800 transition-colors">
+                            <button type="button" className="px-8 py-3 bg-primary text-white rounded-lg font-bold hover:bg-slate-800 transition-colors">
                                 {getLang(CAREERS_COPY.applyNow as MultiLang, lang)}
                             </button>
                         </div>

@@ -10,6 +10,8 @@ interface SEOProps {
   type?: 'website' | 'article' | 'profile';
   image?: string;
   jsonLd?: Record<string, unknown>;
+  /** P15 — auth/booking/admin/util route'lar için SERP indeksi engelle. */
+  noIndex?: boolean;
 }
 
 export const SEO: React.FC<SEOProps> = ({
@@ -19,6 +21,7 @@ export const SEO: React.FC<SEOProps> = ({
   type = 'website',
   image = 'https://www.ecypro.com/og-image.jpg',
   jsonLd,
+  noIndex = false,
 }) => {
   const { i18n } = useTranslation();
   const language = (i18n.language || 'en') as 'tr' | 'en';
@@ -68,6 +71,7 @@ export const SEO: React.FC<SEOProps> = ({
       <title>{finalTitle}</title>
       <meta name="description" content={finalDescription} />
       <link rel="canonical" href={finalCanonical} />
+      {noIndex && <meta name="robots" content="noindex,nofollow" />}
 
       {/* Open Graph */}
       <meta property="og:site_name" content="EcyPro" />

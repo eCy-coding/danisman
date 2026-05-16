@@ -27,10 +27,10 @@ export const BackToTop: React.FC = () => {
   }, []);
 
   return (
-    <button
+    <button type="button"
       onClick={scrollToTop}
       aria-label="Yukarı Çık"
-      className={`fixed bottom-8 right-8 z-40 p-3 rounded-full bg-white/10 backdrop-blur-md text-white border border-white/10 shadow-lg hover:bg-secondary hover:text-neutral hover:border-transparent transition-all duration-300 transform ${
+      className={`fixed bottom-8 right-8 z-40 p-3 rounded-full bg-white/10 text-white border border-white/10 shadow-lg hover:bg-secondary hover:text-neutral hover:border-transparent transition-all duration-300 transform ${
         isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10 pointer-events-none'
       }`}
     >

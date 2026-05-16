@@ -100,12 +100,34 @@ export class MatrixObserver {
     }, 10000);
   }
 
+  // P14 — store handler so dispose() can detach it (HMR-safe).
+  private visibilityHandler: (() => void) | null = null;
+
   private hookVisibilityChange() {
-    document.addEventListener('visibilitychange', () => {
+    this.visibilityHandler = () => {
       if (document.visibilityState === 'hidden') {
         this.flushData();
       }
-    });
+    };
+    document.addEventListener('visibilitychange', this.visibilityHandler);
+  }
+
+  /**
+   * Release observers, timers, and listeners. Safe in HMR / test teardown.
+   */
+  public dispose() {
+    if (this.observer) {
+      this.observer.disconnect();
+      this.observer = null;
+    }
+    if (this.memoryInterval) {
+      clearInterval(this.memoryInterval);
+      this.memoryInterval = null;
+    }
+    if (this.visibilityHandler) {
+      document.removeEventListener('visibilitychange', this.visibilityHandler);
+      this.visibilityHandler = null;
+    }
   }
 
   private flushData() {

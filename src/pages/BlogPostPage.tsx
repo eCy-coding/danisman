@@ -153,7 +153,7 @@ const BlogPostPage: React.FC = () => {
                       <div className="text-xs text-slate-400">Yazar & Stratejist</div>
                     </div>
                   </div>
-                  <button className="flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 rounded-lg text-slate-300 transition-colors border border-white/10">
+                  <button type="button" className="flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 rounded-lg text-slate-300 transition-colors border border-white/10">
                     <Share2 className="w-4 h-4" />
                     Paylaş
                   </button>

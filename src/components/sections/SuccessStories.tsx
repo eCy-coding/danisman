@@ -5,6 +5,7 @@ import { CASE_STUDIES } from '../../constants';
 import { FadeIn } from '../common/FadeIn';
 import { useTranslation } from 'react-i18next';
 import { MouseGlow } from '../ui/MouseGlow';
+import { ResponsiveImage } from '../ui/ResponsiveImage';
 
 const SUCCESS_STORIES_COPY = {
   badge: { tr: 'Başarı Hikayeleri', en: 'Success Stories' },
@@ -58,7 +59,7 @@ export const SuccessStories: React.FC = () => {
           <motion.div style={{ x }} className="flex gap-10 pl-[35vw] xl:pl-[30vw] pr-24 h-[600px] items-center">
             {CASE_STUDIES.map((study) => (
               <Link to={`/case-studies/${study.slug}`} key={study.id} className="w-[500px] xl:w-[600px] h-[500px] block outline-none group shrink-0">
-                <article className="relative bg-white/5 backdrop-blur-xl rounded-3xl overflow-hidden h-full border border-white/10 shadow-2xl hover:border-secondary/30 transition-all duration-500 flex flex-col group">
+                <article className="relative bg-white/5 rounded-3xl overflow-hidden h-full border border-white/10 shadow-2xl hover:border-secondary/30 transition-all duration-500 flex flex-col group">
                   <MouseGlow />
                   {/* Image */}
                   <div className="relative h-64 overflow-hidden">
@@ -70,7 +71,7 @@ export const SuccessStories: React.FC = () => {
                     />
                     <div className="absolute inset-0 bg-neutral/60 group-hover:bg-neutral/30 transition-colors duration-500"></div>
                     <div className="absolute top-6 left-6">
-                      <span className="bg-white/10 backdrop-blur-md border border-white/20 text-white px-4 py-1.5 rounded-full text-xs font-medium tracking-wide">
+                      <span className="bg-white/10 border border-white/20 text-white px-4 py-1.5 rounded-full text-xs font-medium tracking-wide">
                         {study.sector[lang]}
                       </span>
                     </div>
@@ -128,12 +129,21 @@ export const SuccessStories: React.FC = () => {
             {CASE_STUDIES.map((study, idx) => (
               <FadeIn key={study.id} delay={idx * 150} className="h-full">
                 <Link to={`/case-studies/${study.slug}`} className="block h-full outline-none group">
-                  <article className="relative bg-white/5 backdrop-blur-xl rounded-3xl overflow-hidden h-full border border-white/10 flex flex-col">
+                  <article className="relative bg-white/5 rounded-3xl overflow-hidden h-full border border-white/10 flex flex-col">
                     <div className="relative h-48 overflow-hidden">
-                      <img src={study.image} alt={study.client} loading="lazy" className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" />
+                      {/* P15 — width/height CLS=0; loading=lazy below-fold gallery için. */}
+                      <ResponsiveImage
+                        src={study.image}
+                        alt={study.client}
+                        width={640}
+                        height={384}
+                        loading="lazy"
+                        sizes="(min-width: 768px) 50vw, 100vw"
+                        className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
+                      />
                       <div className="absolute inset-0 bg-neutral/60 group-hover:bg-neutral/30 transition-colors duration-500"></div>
                       <div className="absolute top-4 left-4">
-                        <span className="bg-white/10 backdrop-blur-md border border-white/20 text-white px-3 py-1 rounded-full text-xs font-medium tracking-wide">
+                        <span className="bg-white/10 border border-white/20 text-white px-3 py-1 rounded-full text-xs font-medium tracking-wide">
                           {study.sector[lang]}
                         </span>
                       </div>

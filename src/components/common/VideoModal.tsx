@@ -12,7 +12,7 @@
  *
  * Kullanım:
  *   const { open, setOpen } = useVideoModal();
- *   <button onClick={() => setOpen(true)}>İzle</button>
+ *   <button type="button" onClick={() => setOpen(true)}>İzle</button>
  *   <VideoModal open={open} onClose={() => setOpen(false)} videoId="dQw4w9WgXcQ" />
  */
 
@@ -87,7 +87,7 @@ export const VideoModal: React.FC<VideoModalProps> = ({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.25 }}
-            className="fixed inset-0 bg-black/85 backdrop-blur-md z-60"
+            className="fixed inset-0 bg-black/85 z-60"
             onClick={onClose}
             aria-hidden="true"
           />

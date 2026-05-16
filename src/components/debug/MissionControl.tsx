@@ -63,14 +63,14 @@ export const MissionControl: React.FC = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0 }}
-                className="fixed bottom-4 right-4 z-[9999] w-[400px] bg-slate-900/95 backdrop-blur-md border border-slate-700 rounded-lg shadow-2xl text-slate-200 font-mono text-xs overflow-hidden"
+                className="fixed bottom-4 right-4 z-[9999] w-[400px] bg-slate-900/95 border border-slate-700 rounded-lg shadow-2xl text-slate-200 font-mono text-xs overflow-hidden"
             >
                 <div className="flex items-center justify-between p-3 bg-slate-800 border-b border-slate-700">
                     <div className="flex items-center gap-2">
                         <Terminal className="w-4 h-4 text-green-400" />
                         <span className="font-bold text-green-400">MISSION CONTROL // ORACLE</span>
                     </div>
-                    <button onClick={() => setIsVisible(false)} className="hover:text-white"><X className="w-4 h-4" /></button>
+                    <button type="button" onClick={() => setIsVisible(false)} className="hover:text-white"><X className="w-4 h-4" /></button>
                 </div>
 
                 <div className="p-4 space-y-4 max-h-[60vh] overflow-y-auto custom-scrollbar">

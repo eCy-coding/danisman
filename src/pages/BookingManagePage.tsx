@@ -199,7 +199,7 @@ export const BookingManagePage: React.FC = () => {
                     <p className="text-slate-400 text-xs text-center">
                       Görüşmeyi iptal etmek istiyorsanız aşağıdaki butona tıklayın.
                     </p>
-                    <button
+                    <button type="button"
                       onClick={() => cancelMutation.mutate()}
                       disabled={cancelMutation.isPending}
                       className="w-full flex items-center justify-center gap-2 py-3 rounded-xl border border-red-500/30 text-red-400 hover:bg-red-500/10 transition-colors font-medium text-sm disabled:opacity-50"

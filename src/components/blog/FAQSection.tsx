@@ -97,7 +97,7 @@ export const FAQSection: React.FC<FAQSectionProps> = ({
                     : 'border-white/8 bg-white/2 hover:border-white/15'
                 }`}
               >
-                <button
+                <button type="button"
                   id={headerId}
                   aria-expanded={isOpen}
                   aria-controls={panelId}

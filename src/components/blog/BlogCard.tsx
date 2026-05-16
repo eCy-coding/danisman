@@ -32,7 +32,7 @@ const BlogCard: React.FC<BlogCardProps> = ({ post, index }) => {
       className="group relative flex flex-col h-full"
     >
       <div className="absolute -inset-0.5 bg-linear-to-r from-blue-600 to-yellow-500 rounded-2xl opacity-20 group-hover:opacity-100 blur transition duration-500"></div>
-      <div className="relative flex-1 flex flex-col h-full bg-[#0a0f1c] rounded-xl border border-white/5 overflow-hidden backdrop-blur-sm">
+      <div className="relative flex-1 flex flex-col h-full bg-[#0a0f1c] rounded-xl border border-white/5 overflow-hidden">
         {/* Image Container */}
         <div className="relative h-48 overflow-hidden">
           <img
@@ -46,7 +46,7 @@ const BlogCard: React.FC<BlogCardProps> = ({ post, index }) => {
           <div className="absolute top-4 left-4 flex gap-2 flex-wrap max-w-[75%]">
             {post.category && (
               <span
-                className={`backdrop-blur-md border text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded ${BLOG_CATEGORY_META[post.category as BlogCategory]?.bg ?? 'bg-white/10'} ${BLOG_CATEGORY_META[post.category as BlogCategory]?.border ?? 'border-white/20'} ${BLOG_CATEGORY_META[post.category as BlogCategory]?.color ?? 'text-white/90'}`}
+                className={`border text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded ${BLOG_CATEGORY_META[post.category as BlogCategory]?.bg ?? 'bg-white/10'} ${BLOG_CATEGORY_META[post.category as BlogCategory]?.border ?? 'border-white/20'} ${BLOG_CATEGORY_META[post.category as BlogCategory]?.color ?? 'text-white/90'}`}
               >
                 {post.category}
               </span>

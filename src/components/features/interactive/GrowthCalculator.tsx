@@ -126,7 +126,7 @@ export const GrowthCalculator: React.FC = () => {
             <FormProvider {...methods}>
               <motion.div 
                 initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.1 }}
-                className="p-6 bg-white/5 border border-white/10 rounded-2xl space-y-8 backdrop-blur-sm"
+                className="p-6 bg-white/5 border border-white/10 rounded-2xl space-y-8"
               >
                 <div className="space-y-4">
                   <div className="flex items-center gap-3 mb-2">
@@ -245,7 +245,7 @@ export const GrowthCalculator: React.FC = () => {
               <p className="text-sm text-slate-400 max-w-xs">
                 Numbers are estimates based on average client results in the first 12 months.
               </p>
-              <button className="group relative px-6 py-3 bg-white text-neutral font-medium rounded-xl hover:bg-slate-100 transition-colors overflow-hidden flex items-center gap-2">
+              <button type="button" className="group relative px-6 py-3 bg-white text-neutral font-medium rounded-xl hover:bg-slate-100 transition-colors overflow-hidden flex items-center gap-2">
                 <span className="relative z-10">Get Detailed Blueprint</span>
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform relative z-10" />
               </button>

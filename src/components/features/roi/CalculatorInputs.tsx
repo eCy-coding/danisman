@@ -19,7 +19,7 @@ export const CalculatorInputs: React.FC<CalculatorInputsProps> = ({ register, er
   const costId = React.useId();
 
   return (
-    <Card className="p-6 space-y-4 bg-white/5 backdrop-blur-sm border-white/10">
+    <Card className="p-6 space-y-4 bg-white/5 border-white/10">
       <h3 className="text-xl font-bold text-white mb-4">Proje Verileriniz</h3>
 
       <div className="space-y-2">

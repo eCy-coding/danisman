@@ -96,6 +96,36 @@ class SentryClient {
 
     this.initialized = true;
     Logger.info(`[Sentry] Initialized for ${import.meta.env.MODE || 'development'}`);
+
+    // P12/3 — CSP violation telemetry. Browsers fire securitypolicyviolation
+    // before any report-uri / report-to round-trip; capturing here gives us
+    // per-user visibility even when the network report is blocked (e.g. by
+    // strict adblockers or corporate proxies).
+    if (typeof window !== 'undefined' && typeof document !== 'undefined') {
+      document.addEventListener(
+        'securitypolicyviolation',
+        (e: SecurityPolicyViolationEvent) => {
+          Sentry.captureMessage('CSP violation', {
+            level: 'warning',
+            tags: {
+              csp_directive: e.violatedDirective,
+              csp_disposition: e.disposition,
+            },
+            extra: {
+              blockedURI: e.blockedURI,
+              documentURI: e.documentURI,
+              effectiveDirective: e.effectiveDirective,
+              originalPolicy: e.originalPolicy?.slice(0, 240),
+              sourceFile: e.sourceFile,
+              lineNumber: e.lineNumber,
+              columnNumber: e.columnNumber,
+              sample: e.sample,
+            },
+          });
+        },
+        { passive: true },
+      );
+    }
   }
 
   captureException(error: Error, extra?: Record<string, unknown>): string {

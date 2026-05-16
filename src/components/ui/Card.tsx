@@ -7,7 +7,7 @@ export type CardVariant = 'flat' | 'elevated' | 'overlay';
 export interface CardProps extends HTMLMotionProps<'div'> {
   padding?: 'none' | 'sm' | 'md' | 'lg';
   /**
-   * Phase 102: opaque surface variant (no glassmorphism / backdrop-blur).
+   * Phase 102: opaque surface variant (no glassmorphism /).
    * Defaults to `elevated` to match the previous glass-on visual weight.
    */
   variant?: CardVariant;

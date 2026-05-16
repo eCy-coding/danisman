@@ -24,7 +24,7 @@ export const AIExecutiveSummary: React.FC = () => {
   }, []);
 
   return (
-    <div className="h-full flex flex-col p-6 bg-linear-to-br from-indigo-900/90 to-slate-900 text-white rounded-2xl relative overflow-hidden backdrop-blur-xl border border-white/10 shadow-2xl">
+    <div className="h-full flex flex-col p-6 bg-linear-to-br from-indigo-900/90 to-slate-900 text-white rounded-2xl relative overflow-hidden border border-white/10 shadow-2xl">
       {/* Background Ambience */}
       <div className="absolute -top-20 -right-20 w-64 h-64 bg-indigo-500/20 rounded-full blur-3xl animate-pulse" />
       
@@ -35,7 +35,7 @@ export const AIExecutiveSummary: React.FC = () => {
             </div>
             <h3 className="font-bold text-lg tracking-tight">AI Executive Brief</h3>
         </div>
-        <button 
+        <button type="button" 
             onClick={generateSummary}
             disabled={loading}
             className={`p-2 rounded-full hover:bg-white/10 transition-all ${loading ? 'animate-spin' : ''}`}

@@ -160,7 +160,7 @@ export const AdminAuditLogPage: React.FC = () => {
           <Filter size={14} /> Filtre:
         </div>
         <div className="flex flex-wrap gap-2">
-          <button
+          <button type="button"
             onClick={() => {
               setActionFilter('');
               setPage(1);
@@ -176,7 +176,7 @@ export const AdminAuditLogPage: React.FC = () => {
           {knownActions.map((action) => {
             const cfg = getActionConfig(action);
             return (
-              <button
+              <button type="button"
                 key={action}
                 onClick={() => {
                   setActionFilter(action);
@@ -329,7 +329,7 @@ export const AdminAuditLogPage: React.FC = () => {
             {(page - 1) * PAGE_SIZE + 1}–{Math.min(page * PAGE_SIZE, total)} / {total} kayıt
           </p>
           <div className="flex items-center gap-2">
-            <button
+            <button type="button"
               onClick={() => setPage((p) => Math.max(1, p - 1))}
               disabled={page === 1}
               className="p-1.5 rounded-lg bg-white/5 border border-white/10 text-slate-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed"
@@ -339,7 +339,7 @@ export const AdminAuditLogPage: React.FC = () => {
             <span className="text-xs text-slate-400 px-2">
               {page} / {totalPages}
             </span>
-            <button
+            <button type="button"
               onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
               disabled={page === totalPages}
               className="p-1.5 rounded-lg bg-white/5 border border-white/10 text-slate-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed"

@@ -250,7 +250,7 @@ export const ConsultingModule: React.FC = () => {
 
         {/* Save Dialog */}
         {showSaveDialog && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
                 <div className="glass-card rounded-2xl max-w-md w-full p-6 animate-scale-in">
                     <h3 className="text-xl font-bold mb-4">Complete Session?</h3>
                     <p className="text-slate-400 mb-6">

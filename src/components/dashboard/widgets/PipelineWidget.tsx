@@ -9,6 +9,7 @@ import { useQuery } from '@tanstack/react-query';
 import { TrendingUp, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { apiClient } from '../../../lib/api';
+import { QueryKeys } from '../../../lib/query-client';
 
 interface PipelineStats {
   funnel: {
@@ -33,12 +34,13 @@ interface FunnelStep {
 }
 
 export const PipelineWidget: React.FC = () => {
+  // P18-FE: query-key root'u `QueryKeys.analytics.pipeline` üzerinden tek
+  // kaynağa bağlandı; PipelineFunnelChart admin tarafıyla cache paylaşır.
   const { data, isLoading } = useQuery<ApiResponse>({
-    queryKey: ['crm-pipeline-stats'],
+    queryKey: QueryKeys.analytics.pipeline,
     queryFn: () => apiClient.get<ApiResponse>('/crm/pipeline-stats').then((r) => r.data),
     staleTime: 60_000,
     refetchInterval: 60_000,
-    retry: 1,
   });
 
   const funnel = data?.data.funnel;

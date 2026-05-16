@@ -18,9 +18,18 @@ interface BlogPostMeta {
 async function loadBlogPosts(): Promise<BlogPostMeta[]> {
   try {
     const raw = await import('../../data/blog-posts.json', { assert: { type: 'json' } });
-    // Map blog-posts.json fields to BlogPostMeta (readingTime → readTime)
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const items = (raw.default ?? []) as any[];
+    // Map blog-posts.json fields to BlogPostMeta (readingTime → readTime).
+    // P14 — was `any[]`; tightened to a structural record with safe optional fields.
+    type RawPost = {
+      slug?: string;
+      title?: string;
+      date?: string;
+      category?: string;
+      readTime?: string;
+      readingTime?: string;
+      excerpt?: string;
+    };
+    const items = ((raw.default ?? []) as RawPost[]);
     return items.map((p) => ({
       slug: p.slug ?? '',
       title: p.title ?? '',
@@ -117,7 +126,7 @@ export const AdminBlogPage: React.FC = () => {
             {loaded ? `${posts.length} posts` : 'Loading…'} · MDX-based content management
           </p>
         </div>
-        <button
+        <button type="button"
           onClick={() => setCreating(true)}
           className="flex items-center gap-2 px-4 py-2.5 bg-secondary text-white rounded-xl font-medium text-sm hover:bg-blue-600 transition-colors"
         >
@@ -172,13 +181,13 @@ export const AdminBlogPage: React.FC = () => {
               </div>
             </div>
             <div className="flex gap-3 justify-end">
-              <button
+              <button type="button"
                 onClick={() => setCreating(false)}
                 className="px-4 py-2 text-sm text-slate-400 hover:text-white transition-colors"
               >
                 Cancel
               </button>
-              <button
+              <button type="button"
                 onClick={handleCreate}
                 disabled={!newSlug}
                 className="flex items-center gap-2 px-4 py-2 bg-secondary text-white rounded-lg text-sm font-medium hover:bg-blue-600 transition-colors disabled:opacity-50"

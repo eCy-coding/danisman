@@ -148,7 +148,7 @@ export default function LiveChat() {
           writeConsent(false);
           setConsent(false);
         }}
-        className="fixed bottom-3 left-3 z-50 rounded-full bg-neutral-900/70 px-3 py-1 text-xs text-white/80 backdrop-blur hover:bg-neutral-900"
+        className="fixed bottom-3 left-3 z-50 rounded-full bg-neutral-900/70 px-3 py-1 text-xs text-white/80 hover:bg-neutral-900"
         aria-label={L.revoke}
       >
         {L.revoke}
@@ -165,7 +165,7 @@ export default function LiveChat() {
       role="dialog"
       aria-live="polite"
       aria-label={L.title}
-      className="fixed bottom-4 right-4 z-50 max-w-sm rounded-xl border border-white/10 bg-neutral-900/95 p-4 text-sm text-white shadow-2xl backdrop-blur"
+      className="fixed bottom-4 right-4 z-50 max-w-sm rounded-xl border border-white/10 bg-neutral-900/95 p-4 text-sm text-white shadow-2xl"
     >
       <p className="mb-2 font-semibold">{L.title}</p>
       <p className="mb-3 text-white/75">{L.description}</p>

@@ -14,7 +14,7 @@ interface State {
 }
 
 export class SovereignBoundary extends Component<Props, State> {
-  public state: State = {
+  public override state: State = {
     hasError: false,
     error: null,
   };
@@ -23,7 +23,7 @@ export class SovereignBoundary extends Component<Props, State> {
     return { hasError: true, error };
   }
 
-  public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+  public override componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     Logger.error(`[Healer] Error caught in ${this.props.name || 'unnamed'}:`, error);
     
     // Log to Matrix
@@ -44,10 +44,10 @@ export class SovereignBoundary extends Component<Props, State> {
     // Optional: Could trigger a global cache clear if needed
   };
 
-  public render() {
+  public override render() {
     if (this.state.hasError) {
       return (
-        <div className="flex flex-col items-center justify-center p-8 rounded-2xl bg-red-500/10 border border-red-500/20 backdrop-blur-sm shadow-xl min-h-[300px]">
+        <div className="flex flex-col items-center justify-center p-8 rounded-2xl bg-red-500/10 border border-red-500/20 shadow-xl min-h-[300px]">
            <AlertTriangle className="w-12 h-12 text-red-500 mb-4 opacity-80" />
            <h3 className="text-xl font-serif text-red-300 mb-2 text-center">
              Bileşen Geçici Olarak Erişilemiyor
@@ -56,7 +56,7 @@ export class SovereignBoundary extends Component<Props, State> {
              The Healer protokolü bir anomali tespit etti ve bu bileşeni izole etti. ({this.props.name})
            </p>
            
-           <button 
+           <button type="button" 
              onClick={this.handleReset}
              className="flex items-center gap-2 px-6 py-2.5 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-all shadow-lg hover:shadow-red-600/20 active:scale-95 group"
            >

@@ -21,14 +21,14 @@ export const AdminServicesPage: React.FC = () => {
                    <h1 className="text-3xl font-serif text-white mb-1">Service Protocols</h1>
                    <p className="text-slate-400 font-light">Manage the 21 active service capabilities.</p>
                 </div>
-                <button className="flex items-center gap-2 bg-secondary text-black font-bold px-4 py-2.5 rounded-lg hover:bg-secondary/90 transition-all hover:scale-105 active:scale-95 shadow-[0_0_20px_rgba(204,164,59,0.2)]">
+                <button type="button" className="flex items-center gap-2 bg-secondary text-black font-bold px-4 py-2.5 rounded-lg hover:bg-secondary/90 transition-all hover:scale-105 active:scale-95 shadow-[0_0_20px_rgba(204,164,59,0.2)]">
                     <Plus size={18} />
                     <span className="uppercase tracking-wider text-xs">New Protocol</span>
                 </button>
             </div>
 
             {/* Toolbar */}
-            <div className="bg-[#0A101F]/80 p-4 rounded-xl border border-white/5 flex gap-4 backdrop-blur-sm">
+            <div className="bg-[#0A101F]/80 p-4 rounded-xl border border-white/5 flex gap-4">
                  <div className="relative flex-1">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4" />
                     <input 
@@ -46,7 +46,7 @@ export const AdminServicesPage: React.FC = () => {
             </div>
 
             {/* Table */}
-            <div className="bg-[#0A101F]/80 rounded-xl border border-white/5 overflow-hidden backdrop-blur-sm shadow-xl">
+            <div className="bg-[#0A101F]/80 rounded-xl border border-white/5 overflow-hidden shadow-xl">
                 <div className="overflow-x-auto">
                     <table className="w-full text-left border-collapse">
                         <thead>
@@ -78,10 +78,10 @@ export const AdminServicesPage: React.FC = () => {
                                         </td>
                                         <td className="p-4 text-right">
                                             <div className="flex justify-end gap-2 opacity-60 group-hover:opacity-100 transition-opacity">
-                                                <button className="p-2 hover:text-white hover:bg-white/10 rounded-lg transition-colors text-slate-400">
+                                                <button type="button" className="p-2 hover:text-white hover:bg-white/10 rounded-lg transition-colors text-slate-400">
                                                     <Edit size={16} />
                                                 </button>
-                                                <button className="p-2 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors text-slate-400">
+                                                <button type="button" className="p-2 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors text-slate-400">
                                                     <Trash2 size={16} />
                                                 </button>
                                             </div>

@@ -33,7 +33,7 @@ export const ServiceFilter: React.FC<ServiceFilterProps> = ({ departments, selec
                 {departments.map((dept) => {
                     const isActive = selectedCategory === dept.id;
                     return (
-                        <button
+                        <button type="button"
                             key={dept.id}
                             onClick={() => onSelectCategory(dept.id)}
                             data-testid={`services-filter-${dept.id}`}

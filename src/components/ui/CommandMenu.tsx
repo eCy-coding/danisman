@@ -46,7 +46,7 @@ export const CommandMenu = () => {
       open={open}
       onOpenChange={setOpen}
       label="Global Command Menu"
-      className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-[640px] bg-neutral-900 border border-white/10 rounded-xl shadow-2xl p-0 z-[9999] overflow-hidden backdrop-blur-xl"
+      className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-[640px] bg-neutral-900 border border-white/10 rounded-xl shadow-2xl p-0 z-[9999] overflow-hidden"
     >
       <div className="flex items-center border-b border-white/10 px-4">
         <Search className="w-5 h-5 text-slate-400 mr-2" />

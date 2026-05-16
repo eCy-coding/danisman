@@ -60,7 +60,7 @@ export const Timeline: React.FC<TimelineProps> = ({ steps }) => {
               {/* Card Content */}
               <div className="flex-1 w-full md:w-auto pl-12 md:pl-0">
                 <div
-                  className={`p-8 bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl shadow-xl hover:shadow-2xl hover:border-primary/30 transition-all duration-300 group
+                  className={`p-8 bg-white/5 border border-white/10 rounded-2xl shadow-xl hover:shadow-2xl hover:border-primary/30 transition-all duration-300 group
                                     ${isEven ? 'md:text-left' : 'md:text-right'}
                                 `}
                 >
