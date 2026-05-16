@@ -1,0 +1,99 @@
+# visual-regression.yml — P18 FE Track 1, Aşama 3.
+# Chromium-only screenshot baseline gate for the 6 critical public routes.
+#
+# Çalışma mantığı:
+#   - PR'da: `e2e/snapshots/visual.spec.ts-snapshots/` altındaki baseline PNG'lere
+#     karşı `toHaveScreenshot` ile karşılaştırma (maxDiffPixelRatio 0.05 — config).
+#   - Baseline yok / kasıtlı UI değişikliği: yerel olarak
+#     `npx playwright test e2e/visual.spec.ts --update-snapshots` ile yeniden
+#     üret ve commit'le. Bu workflow `--update-snapshots` ASLA çalıştırmaz;
+#     amaç regresyon yakalamak, snapshot'ı root'lamak değil.
+#   - Diff fail olursa `playwright-report/` ve `test-results/` artifact olarak
+#     yüklenir (14 gün retention) — reviewer önce/sonra görselleri inceleyebilir.
+#
+# Tek font/render stack için chromium-only (font subset farkları diff
+# noise'unu artırıyor). Multi-browser cover'ı manuel review + crawl suite'tan
+# geliyor.
+name: Visual regression (chromium baseline)
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: visual-regression-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  visual:
+    name: Playwright screenshot diff — 6 routes × mobile + desktop
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Install Playwright browsers (chromium only)
+        run: npx playwright install --with-deps chromium
+
+      - name: Provide minimal production env (placeholder values)
+        run: |
+          cp .env.production.example .env.production
+          sed -i 's/__FILL_ME__/ci-stub/g' .env.production
+
+      - name: Build production bundle
+        run: npm run build
+        env:
+          NODE_ENV: production
+
+      - name: Check for visual baseline
+        id: baseline
+        run: |
+          if [ -d "e2e/snapshots/visual.spec.ts-snapshots" ] && \
+             [ "$(ls -A e2e/snapshots/visual.spec.ts-snapshots 2>/dev/null)" ]; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+            echo "::warning::Visual baseline not yet committed. Run \`npx playwright test e2e/visual.spec.ts --update-snapshots\` locally, commit the PNGs, and re-run."
+          fi
+
+      - name: Run visual regression suite
+        if: steps.baseline.outputs.exists == 'true'
+        run: npx playwright test e2e/visual.spec.ts --project=chromium --reporter=list
+        env:
+          NODE_ENV: production
+          CI: 'true'
+
+      - name: Skip note when baseline missing
+        if: steps.baseline.outputs.exists != 'true'
+        run: |
+          echo "Visual baseline missing — this run is a no-op."
+          echo "Generate baselines locally:"
+          echo "  npx playwright test e2e/visual.spec.ts --project=chromium --update-snapshots"
+          echo "Then commit e2e/snapshots/visual.spec.ts-snapshots/*.png"
+
+      - name: Upload diff report on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-regression-${{ github.sha }}
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 14
+          if-no-files-found: ignore
