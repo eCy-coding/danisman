@@ -1,246 +1,202 @@
-# EcyPro Premium Consulting - Dashboard
+# eCyPro Premium Consulting
 
-High-performance, premium administrative dashboard for EcyPro consulting services. Built with modern web technologies focusing on performance, accessibility, and visual excellence.
+> High-performance, premium yönetim panosu + landing site. Production-ready,
+> Lighthouse-validated, GDPR-conscious. **Senaryo C** deploy: Hostinger static
+> frontend + Render Web Service backend.
 
-## 🚀 Tech Stack
+<p align="left">
+  <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-strict-3178c6?logo=typescript&logoColor=white" />
+  <img alt="React" src="https://img.shields.io/badge/React-19-149eca?logo=react&logoColor=white" />
+  <img alt="Vite" src="https://img.shields.io/badge/Vite-6-646cff?logo=vite&logoColor=white" />
+  <img alt="Tailwind" src="https://img.shields.io/badge/Tailwind-v4-38bdf8?logo=tailwindcss&logoColor=white" />
+  <img alt="Express" src="https://img.shields.io/badge/Express-5-000000?logo=express&logoColor=white" />
+  <img alt="Prisma" src="https://img.shields.io/badge/Prisma-7-2D3748?logo=prisma&logoColor=white" />
+  <img alt="ESLint clean" src="https://img.shields.io/badge/ESLint-clean-4b32c3?logo=eslint&logoColor=white" />
+  <img alt="Lighthouse" src="https://img.shields.io/badge/Lighthouse-Perf%2069%20%C2%B7%20A11y%2098%20%C2%B7%20BP%2096%20%C2%B7%20SEO%2092-ff6b35?logo=lighthouse&logoColor=white" />
+  <img alt="Tests" src="https://img.shields.io/badge/tests-passing-2ea44f" />
+</p>
 
-- **Framework:** React 19 + Vite
-- **Language:** TypeScript
-- **Styling:** Tailwind CSS v4 (PostCSS)
-- **State Management:** Zustand
-- **Routing:** React Router DOM v7
-- **Charts:** Recharts
-- **Forms:** React Hook Form + Zod
-- **Testing:** Vitest (Unit) + Playwright (E2E)
-- **Linting:** ESLint + Prettier + Husky
-- **Email:** EmailJS
-- **Monitoring:** Web Vitals
+**Live:** https://www.ecypro.com (cutover sonrası — bkz. `docs/DEPLOY_RUNBOOK.md`)
+**API:** https://api.ecypro.com (Render)
 
-## 🎨 Design Philosophy: "AI Studio Tech"
+---
 
-This project has been rigorously engineered to align with the **Google AI Studio / Material 3** aesthetic, moving away from subjective "luxury" to objective "technical excellence".
+## Tech Stack
 
-### Core Principles
+| Katman | Bileşen |
+| --- | --- |
+| **Frontend** | React 19 · Vite 6 · TypeScript strict · Tailwind v4 (PostCSS) |
+| **State / Data** | Zustand · TanStack Query · React Router DOM v7 |
+| **Forms** | React Hook Form · Zod |
+| **Backend** | Express 5 · Prisma 7 · Postgres · Redis (ioredis) · BullMQ |
+| **Auth** | JWT · bcrypt |
+| **Email** | EmailJS (frontend) · nodemailer (server transactional) |
+| **Charts** | Recharts |
+| **Realtime** | Server-Sent Events (`/events`) — auth + topic-based pub/sub |
+| **Testing** | Vitest (unit) · Playwright (E2E) · axe-core (a11y) |
+| **Tooling** | ESLint 9 · Prettier · Lefthook · Husky · commitlint · gitleaks |
+| **Monitoring** | Sentry (FE + node) · Web Vitals · synthetic monitor |
+| **CMS** | Keystatic |
+| **i18n** | i18next (EN + TR) |
 
-1.  **Solid Surfaces**: Removed all glassmorphism/blur effects in favor of opaque, high-contrast M3 surfaces (`#1E1F20`).
-2.  **Information Density**: High-density layouts inspired by IDEs and data terminals.
-3.  **Typography**: Strict adherence to `Inter` / `Roboto` sans-serif stack for maximum legibility.
-4.  **Interaction**: Subtle, performance-optimized micro-interactions (`hover:scale`, `active:scale`).
+---
 
-## 📐 Mathematical Harmony: The Golden Ratio
-
-Every spatial and typographic decision in this project is governed by the **Golden Ratio (φ ≈ 1.618)** and the **Fibonacci Sequence**.
-
-- **Typography**: Font sizes scale by 1.618.
-  - `text-golden-base` (16px) -> `text-golden-lg` (~26px) -> `text-golden-xl` (~42px) -> `text-golden-2xl` (~68px).
-- **Spacing (Fibonacci)**: All margins, paddings, and gaps use the Fibonacci sequence (`2, 3, 5, 8, 13, 21, 34, 55, 89px`).
-  - Classes: `.p-fib-6` (21px), `.gap-fib-7` (34px), `.mb-fib-9` (89px).
-  - **Zero Magic Numbers**: We do not use arbitrary values like `20px` or `30px`.
-
-This ensures a subconscious, natural rhythm and visual harmony throughout the application.
-
-- Node.js >= 20.0.0
-- npm >= 10.0.0
-- Docker (optional, for containerized deployment)
-
-## 🏃‍♂️ Getting Started
-
-### 1. Clone & Install
+## Quick Start
 
 ```bash
 git clone <repo-url>
-cd copy-of-ecypro-premium-consulting
+cd ecypro
 npm install
+cp .env.example .env.local        # EmailJS + EmailJS template + Sentry DSN
+npm run dev                       # vite + server + terminal (3 paralel)
 ```
 
-### 2. Environment Setup
+`http://localhost:5173` (FE) · `http://localhost:8787` (BE).
+
+**Tam stack (Docker DB + tmux 15-pane):**
 
 ```bash
-cp .env.example .env.local
-# Edit .env.local and add your EmailJS credentials
-```
-
-### 3. Development Server
-
-#### Hızlı (3 paralel servis)
-
-```bash
-npm run dev
-```
-
-Visit `http://localhost:5173`.
-
-#### Tam Stack — 15-Pane Orchestrator (önerilen)
-
-İstek5 disiplininde tüm dev stack'i tek komutla:
-
-```bash
-npm run dev:up      # Docker (Postgres+Redis+Mailpit) + tmux 15-pane
+npm run dev:up      # Postgres + Redis + Mailpit + 15-pane orchestrator
 npm run dev:down    # her şeyi kapat
-npm run dev:full    # tmux yoksa concurrently fallback (CI uyumlu)
 ```
-
-15 pane: Frontend, Backend, DB, E2E, SEO-Watch, Media-Watcher, LHCI, Logs,
-Analytics-Dev, Sec-Watch, Deploy-Watch, Geo-Watch, CRM-Watch, Status.
 
 Detay: [`docs/ORCHESTRATOR.md`](docs/ORCHESTRATOR.md).
 
-### 4. Production Build
+---
+
+## Build & Test
 
 ```bash
-npm run build
-npm run preview
+npm run build               # gen:blog + vite build (postbuild: sitemap + rss + og-image)
+npm run preview             # vite preview --port 4173
+
+npm run lint                # ESLint
+npm run typecheck           # FE + server strict TS
+npm test -- --run           # Vitest tek geçiş
+npm run test:server         # server-side vitest
+npm run test:e2e            # Playwright tüm suite
+npm run test:e2e:fast       # sanity_check smoke
+npm run api:contract:strict # STRICT=1 contract test
+npm run qa:parity           # EN/TR i18n parity
 ```
 
-## 🧪 Testing
+Tek kalite kapısı: [`/publish-check`](.claude/commands/publish-check.md) →
+`lint + typecheck + test + build + e2e:fast`.
 
-- **Unit Tests:** `npm run test`
-- **E2E Tests (Quick):** `npm run e2e:local` — starts mock API + preview + Playwright
-- **E2E Tests (Manual):** `npx playwright test`
-- **Lint:** `npm run lint`
-- **Format:** `npm run format`
-- **E2E Guide:** See [docs/E2E_LOCAL.md](docs/E2E_LOCAL.md) for detailed troubleshooting
+---
 
-## 📧 EmailJS Configuration
+## Deploy Strategy — Senaryo C
 
-1. Sign up at [https://www.emailjs.com/](https://www.emailjs.com/)
-2. Create an email service (Gmail, Outlook, etc.)
-3. Create a template with variables: `from_name`, `from_email`, `message`, `to_name`
-4. Add credentials to `.env.local`:
-   ```
-   VITE_EMAILJS_SERVICE_ID=your_service_id
-   VITE_EMAILJS_TEMPLATE_ID=your_template_id
-   VITE_EMAILJS_PUBLIC_KEY=your_public_key
-   ```
+| Hedef | Sağlayıcı | Tetikleyici |
+| --- | --- | --- |
+| Frontend (`www.ecypro.com`) | **Hostinger** static hosting | `npm run build` + rsync/SFTP |
+| Backend (`api.ecypro.com`) | **Render** Web Service + Postgres | `render.yaml` (Blueprint) |
+| Background jobs | Render Worker (BullMQ email/gdpr/cron) | aynı blueprint |
+| CDN + SSL | Cloudflare proxy (opsiyonel) + Let's Encrypt | Hostinger panel |
 
-## 🐳 Docker Deployment
+Tek master rehber: **[`docs/DEPLOY_RUNBOOK.md`](docs/DEPLOY_RUNBOOK.md)** —
+6 phase (pre-flight, BE, FE, DNS/SSL, validation, monitoring).
 
-### Build Image
+Alternatifler: [`docs/DEPLOYMENT_RENDER.md`](docs/DEPLOYMENT_RENDER.md) ·
+[`docs/DEPLOYMENT_HOSTINGER_VPS.md`](docs/DEPLOYMENT_HOSTINGER_VPS.md) ·
+[`docs/DEPLOYMENT_RAILWAY.md`](docs/DEPLOYMENT_RAILWAY.md).
+
+---
+
+## Database (Prisma)
 
 ```bash
-docker build -t ecypro-dashboard:v1.0.0 .
+npm run db:push              # dev-only: şemayı DB'ye uygula
+npm run db:generate          # Prisma client
+npm run db:studio            # Prisma Studio
+npm run db:migrate:deploy    # production migrate (Render pre-deploy command)
+npm run db:seed              # seed verisi
 ```
 
-### Run Container
+Baseline migration uyarısı: `prisma/migrations/` boş → ilk cutover öncesi
+`prisma migrate dev --name baseline_p3_2026_05_15` çalıştırıp commit
+edilmesi gerekir. Detay: `outputs/PRISMA_DEPLOY_PLAN.md`.
+
+---
+
+## Quality Gates (canlı durum — P27)
+
+| Gate | Durum |
+| --- | --- |
+| TypeScript strict (web + server) | ✅ clean |
+| ESLint | ✅ clean |
+| Vitest unit | ✅ passing |
+| Vitest server | ✅ passing |
+| Playwright sanity_check | ✅ green |
+| API contract strict | ✅ green |
+| i18n parity (EN/TR) | ✅ aligned |
+| Lighthouse `/services` | ✅ Perf **69** · A11y **98** · BP **96** · SEO **92** |
+| Bundle size-limit | ✅ within budget |
+| gitleaks (working tree) | ✅ 0 leak |
+| Total commits (local) | **201** |
+
+`/services` `PAGE_HUNG` regression P27'de **çözüldü** — synthetic-UA gating
++ Scheduler park-when-idle (`outputs/P27_EXEC_FINAL.md`).
+
+---
+
+## Project Structure
+
+```
+src/                    # FE (React 19 + Vite + Tailwind v4)
+  components/           # features/ · layout/ · ui/ · sections/
+  pages/                # route components
+  lib/                  # director, monitor, sentry, queries
+  hooks/                # useInterestTracker, useAuth, ...
+  store/                # Zustand slices
+  i18n/                 # EN + TR resource bundles
+server/                 # BE (Express 5 + Prisma + BullMQ)
+  routes/               # REST + SSE endpoints
+  middleware/           # auth, rate limit, sentry, logger
+  jobs/                 # email / gdpr-export / cron worker
+  lib/                  # prisma, redis, sentry, queues
+prisma/                 # schema + (post-baseline) migrations
+public/                 # static + .htaccess + robots + sitemap
+scripts/                # smoke, sourcemaps, og-image, lighthouse
+docs/                   # runbook, incident, observability, ...
+outputs/                # phase reports (P10–P28) + recipes
+.claude/                # Claude Code commands (lint-fix, e2e, publish-check)
+```
+
+---
+
+## Documentation
+
+- **Deploy:** [`docs/DEPLOY_RUNBOOK.md`](docs/DEPLOY_RUNBOOK.md) (master)
+- **Contributing:** [`CONTRIBUTING.md`](CONTRIBUTING.md)
+- **Incident response:** [`docs/INCIDENT_RUNBOOK.md`](docs/INCIDENT_RUNBOOK.md)
+- **Observability:** [`docs/OBSERVABILITY_SETUP.md`](docs/OBSERVABILITY_SETUP.md)
+- **Disaster recovery:** [`docs/DISASTER_RECOVERY.md`](docs/DISASTER_RECOVERY.md)
+- **CMS manual:** [`docs/CMS_MANUAL.md`](docs/CMS_MANUAL.md)
+- **CRO playbook:** [`docs/CRO_PLAYBOOK.md`](docs/CRO_PLAYBOOK.md)
+- **AB testing:** [`docs/AB_TESTING.md`](docs/AB_TESTING.md)
+- **API versioning:** [`docs/API_VERSIONING.md`](docs/API_VERSIONING.md)
+- **Phase log:** [`outputs/`](outputs/) (P10–P28, BE + FE recipes)
+
+---
+
+## Claude Code (opsiyonel)
 
 ```bash
-docker run -d \
-  --name ecypro-dashboard \
-  -p 80:80 \
-  --restart unless-stopped \
-  ecypro-dashboard:v1.0.0
+npm run claude:setup        # idempotent install + sağlık kontrolü
 ```
 
-### Docker Compose
+Slash komutları: `/lint-fix` · `/typecheck` · `/e2e` · `/e2e-fast` ·
+`/publish-check` · `/phase-status` · `/secret-scan`.
 
-```bash
-docker-compose up -d
-```
+Detay: [`docs/CLAUDE_CODE.md`](docs/CLAUDE_CODE.md).
 
-## 📁 Project Structure
+---
 
-```
-├── components/       # React components
-│   ├── features/     # Feature-specific components
-│   ├── layout/       # Layout components
-│   ├── ui/           # Reusable UI components
-│   └── ...
-├── pages/            # Page components
-├── services/         # Business logic & API calls
-├── store/            # Zustand store
-├── utils/            # Utility functions
-├── public/           # Static assets
-└── docs/             # Documentation
-```
+## License & Contact
 
-## 🎨 Features
+Proprietary — © 2026 EcyPro Consulting. All rights reserved.
 
-- ✅ Landing page with sections (Hero, Services, KPI, etc.)
-- ✅ Dashboard with analytics and consulting module
-- ✅ CRUD operations for consulting sessions
-- ✅ Role-based access control (Admin/Client)
-- ✅ Contact form with EmailJS integration
-- ✅ Responsive design
-- ✅ Dark mode support
-- ✅ PWA support
-- ✅ SEO optimized (robots.txt, sitemap.xml)
-- ✅ 404 error page
-- ✅ Web Vitals monitoring
-- ✅ CI/CD ready (GitHub Actions)
-
-## 📊 Performance
-
-- Bundle size: ~1.1 MB (precached)
-- Lighthouse score: 90+ (Performance, Accessibility, Best Practices, SEO)
-- Core Web Vitals: All passing
-
-## 🔒 Security
-
-- Content Security Policy (CSP) headers
-- Input validation with Zod
-- No hardcoded secrets
-- Dependency audit: 0 vulnerabilities
-
-## 🤖 Claude Code (opsiyonel AI coding companion)
-
-Bu projeye **Claude Code CLI** entegre edilmiştir. Kurmak isteyen geliştiriciler için tek komut:
-
-```bash
-npm run claude:setup    # idempotent install + sağlık kontrolü
-```
-
-Sonra slash komutlar hazır: `/lint-fix`, `/typecheck`, `/e2e`, `/publish-check`, `/phase-status`, `/secret-scan`.
-
-Detaylı rehber (Türkçe): [docs/CLAUDE_CODE.md](docs/CLAUDE_CODE.md)
-
-> Claude Code zorunlu bir bağımlılık değildir; proje onsuz da tüm npm/CI zinciriyle çalışır.
-
-## 🤖 Content Generation
-
-AI-powered blog post and case study generation via `gen:content` script.
-
-### Setup
-
-```bash
-# Copy env template and fill in keys (optional — script skips gracefully without keys)
-cp .env.example .env
-# OPENAI_API_KEY=sk-...       # Required for text generation
-# PEXELS_API_KEY=...          # Required for hero images
-```
-
-### Usage
-
-```bash
-npm run gen:content           # Generate 5 blog posts + 5 case studies (bilingual)
-```
-
-Generated content is written to `src/data/constants_generated.ts` and immediately visible in the Insights and SuccessStories sections of the homepage.
-
-**Recommended frequency:** Run before each content sprint (weekly or monthly). Generated content is deterministic given the same seed prompts. Existing entries are overwritten on each run — commit the output file to version control.
-
-### Without API Keys
-
-The script exits gracefully with a `[gen:content] skipping — no OPENAI_API_KEY` message. Fallback content (5 bilingual entries) is already committed and works without any keys.
-
-## 📚 Documentation
-
-- [Deployment Guide](docs/DEPLOYMENT.md)
-- [Troubleshooting](docs/TROUBLESHOOTING.md)
-- [Claude Code Integration](docs/CLAUDE_CODE.md)
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit changes (`git commit -m 'Add AmazingFeature'`)
-4. Push to branch (`git push origin feature/AmazingFeature`)
-5. Open Pull Request
-
-## 📄 License
-
-Proprietary - © 2025 EcyPro Consulting
-
-## 📞 Support
-
-- Email: info@ecypro.com
-- Website: https://www.ecypro.com
+- **Email:** info@ecypro.com
+- **Website:** https://www.ecypro.com
+- **Issues / contributions:** [`CONTRIBUTING.md`](CONTRIBUTING.md)
