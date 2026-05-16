@@ -11,8 +11,11 @@ import crypto from 'crypto';
 // ─── Security Headers ────────────────────────────────────
 
 export function securityHeaders(req: Request, res: Response, next: NextFunction): void {
-  // Generate unique request ID
-  const requestId = crypto.randomUUID();
+  // P14-BE: defer to the dedicated request-id middleware when it ran first.
+  // Re-generating here would discard an inbound trace and break correlation
+  // for distributed-tracing consumers.
+  const existing = (req.headers['x-request-id'] as string) || undefined;
+  const requestId = existing && existing.length > 0 ? existing : crypto.randomUUID();
   req.headers['x-request-id'] = requestId;
   res.setHeader('X-Request-ID', requestId);
 

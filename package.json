@@ -38,6 +38,8 @@
     "gen:og-image": "node scripts/generate-og-image.mjs",
     "release:sentry": "node scripts/upload-sourcemaps.mjs",
     "smoke": "node scripts/smoke-test.mjs",
+    "api:contract": "node scripts/api-contract-test.mjs",
+    "api:contract:strict": "STRICT=1 node scripts/api-contract-test.mjs",
     "qa:content": "node scripts/content-qa.mjs --check all",
     "qa:parity": "node scripts/content-qa.mjs --check parity",
     "size": "size-limit",
