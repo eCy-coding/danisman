@@ -58,6 +58,10 @@ model User {
   totpEnabled   Boolean   @default(false)
   backupCodes   String?   // JSON array of hashed backup codes
 
+  // P14-BE: GDPR-aware soft-delete marker (hard-delete still available for
+  // explicit Right-to-Erasure flow; default queries should filter this out).
+  deletedAt     DateTime?
+
   // Relations
   bookings           Booking[]
   interactions       Interaction[]
@@ -66,8 +70,12 @@ model User {
   emailVerifications EmailVerification[]
   sessions           Session[]           // P35-T09
 
-  @@index([email])
+  // NOTE: explicit @@index([email]) removed — `email` is already @unique
+  // and Postgres auto-creates a btree index on UNIQUE columns. Keeping both
+  // wastes write throughput and disk for zero read benefit.
   @@index([role])
+  @@index([lastLoginAt])
+  @@index([deletedAt])
   @@map("users")
 }
 
@@ -86,10 +94,26 @@ model Service {
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 
+  // P17 BE Track 2 / Aşama 3 — Postgres FTS support fields.
+  //
+  // Two `tsvector` columns are maintained by trigger (see migration
+  // 20260516200000_p17_be_fts/migration.sql): one indexed with the
+  // 'simple' dictionary so Turkish content is searchable without stemming
+  // losses, the other with 'english' for the EN copy. Both are wrapped in
+  // a GIN index for sub-ms `@@` lookups.
+  //
+  // The fields are declared `Unsupported` so the Prisma client still
+  // produces typed accessors for the rest of Service, but doesn't try to
+  // SELECT/INSERT the tsvector blob (Postgres generates it from the
+  // trigger anyway).
+  searchVectorTr Unsupported("tsvector")?
+  searchVectorEn Unsupported("tsvector")?
+
   // Relations
   bookings    Booking[]
 
-  @@index([slug])
+  // NOTE: explicit @@index([slug]) removed — `slug` is already @unique.
+  @@index([isActive, sortOrder])
   @@map("services")
 }
 
@@ -122,6 +146,14 @@ model Booking {
   @@index([userId])
   @@index([status])
   @@index([scheduledAt])
+  // P14-BE: hot composite indexes for the reminder + NPS cron queries
+  // (server/jobs/booking-reminders.ts). Without these, each scan is a
+  // table-full filter on status + scheduledAt window + idempotency flag.
+  @@index([status, scheduledAt, reminder24hSent])
+  @@index([status, scheduledAt, reminder1hSent])
+  @@index([status, scheduledAt, feedbackEmailSent])
+  // Owner-scoped lookups ("my upcoming bookings")
+  @@index([userId, status, scheduledAt])
   @@map("bookings")
 }
 
@@ -146,6 +178,8 @@ model Analytics {
   @@index([sessionId])
   @@index([page])
   @@index([createdAt])
+  // P14-BE: dashboard "user activity over time" + date-range scans
+  @@index([userId, createdAt])
   @@map("analytics")
 }
 
@@ -164,6 +198,8 @@ model Interaction {
   @@index([sessionId])
   @@index([type])
   @@index([createdAt])
+  // P14-BE: dashboard "user funnel by type" + per-user behavioral cohort
+  @@index([userId, type, createdAt])
   @@map("interactions")
 }
 
@@ -182,8 +218,17 @@ model ContactSubmission {
   isRead      Boolean  @default(false)
   createdAt   DateTime @default(now())
 
+  // P14-BE: GDPR soft-delete. Right-to-Erasure can either hard-delete the
+  // row (legal default) or set deletedAt so an audit trail of "deletion"
+  // remains for compliance proof. CRM list views filter on deletedAt IS NULL.
+  deletedAt   DateTime?
+
   @@index([email])
   @@index([isRead])
+  // Hot path: CRM inbox ordered "newest unread first"
+  @@index([isRead, createdAt])
+  @@index([createdAt])
+  @@index([deletedAt])
   @@map("contact_submissions")
 }
 
@@ -258,6 +303,13 @@ model AuditLog {
   @@index([adminId])
   @@index([action])
   @@index([createdAt])
+  // P14-BE Track 2: "all audit events for resource X" — dashboard drill-down
+  // (e.g. open a booking, see every admin action that touched it).
+  @@index([targetType, targetId])
+  // P14-BE Track 2: "what did admin Y do in the last N days" — required for
+  // the admin-activity report; without this we degrade to a full scan over
+  // audit_logs filtered in app code.
+  @@index([adminId, createdAt])
   @@map("audit_logs")
 }
 
@@ -296,6 +348,128 @@ model BookingFeedback {
 
 // ─── NEWSLETTER ──────────────────────────────────────────
 // Phase 20 (Phase 17 G2 closure): persist subscribers; in-memory Map removed.
+// ─── P17 BE Track 2 / Aşama 5: WEBHOOK IDEMPOTENCY ───────
+// External webhook receivers must be idempotent — a duplicate delivery
+// (network retry, vendor replay) must NOT trigger the side-effect twice.
+// We persist every inbound webhook by its `(source, externalId)` pair so
+// the handler can upsert and skip cleanly on re-delivery.
+//
+// Storage strategy:
+//   - One row per delivery. `processedAt` marks success.
+//   - `payload` JSON keeps a forensic copy for ~30 days (cleaned by
+//     cron `audit-log-cleanup` analogue once a retention sweep is added).
+//   - `error` captures the last failure reason so the admin DLQ pane can
+//     surface "things that arrived but never completed".
+//
+// Schema notes:
+//   - `source` is a short string discriminator: "calcom", "stripe",
+//     "telegram", etc. Don't index alone — composite with externalId.
+//   - `(source, externalId)` is UNIQUE — that's the whole point of the
+//     table. Anything that retries with the same pair upserts to the same row.
+model WebhookEvent {
+  id          String    @id @default(uuid())
+  source      String
+  externalId  String
+  signature   String?
+  payload     Json
+  processedAt DateTime?
+  error       String?
+  receivedAt  DateTime  @default(now())
+
+  @@unique([source, externalId], name: "WebhookEvent_source_externalId_unique")
+  @@index([source, receivedAt])
+  @@index([processedAt])
+  @@map("webhook_events")
+}
+
+// ─── P17 BE Track 2 / Aşama 4: API KEYS ──────────────────
+// Programmatic clients (3rd-party integrations, partner CRMs) authenticate
+// via `Authorization: Bearer <key>`. We never store the raw key — only a
+// SHA-256 hash so an exfil of the DB doesn't grant API access. The
+// plaintext is only ever returned once at creation time.
+//
+// Scopes are simple string tags ("read:bookings", "write:contacts", …).
+// The auth middleware reads them off the row and gates per-route.
+model ApiKey {
+  id          String    @id @default(uuid())
+  // SHA-256 of the raw key. UNIQUE so a lookup is O(1) on the index.
+  hashedKey   String    @unique
+  // Operator-friendly label ("Cal.com integration", "Partner X import").
+  name        String
+  // Free-form scope tags. Convention: "<verb>:<resource>".
+  scopes      String[]
+  // Optional owner — admins create keys; some flows let a user create
+  // their own. NULL when the key belongs to "the platform".
+  userId      String?
+  lastUsedAt  DateTime?
+  expiresAt   DateTime?
+  createdAt   DateTime  @default(now())
+  revokedAt   DateTime?
+
+  @@index([userId])
+  @@index([revokedAt])
+  @@index([expiresAt])
+  @@map("api_keys")
+}
+
+// ─── P18 BE Track 2 / Aşama 1: UPLOADED IMAGE METADATA ────
+// One row per uploaded artifact. Storage-backend agnostic: `storageKey`
+// is the opaque key the adapter understands ("<owner>/2026/05/<uuid>.webp")
+// while `variants` records the AVIF/WebP/thumbnail derivatives created
+// by the BullMQ image-resize worker.
+//
+// Why a dedicated table (not blob columns on User/BlogPost)?
+//   - The same image can be referenced from many places (hero, OG image,
+//     blog cover). Normalising avoids duplicate uploads.
+//   - GDPR delete is simpler: cascade `images.ownerId = userId` → soft
+//     archive job → object-storage purge.
+//   - The hash column gives us cheap content-addressed dedupe.
+model Image {
+  id           String   @id @default(uuid())
+  ownerId      String?
+  storageKey   String   @unique
+  contentType  String
+  sizeBytes    Int
+  width        Int?
+  height       Int?
+  // SHA-256 hex of the original bytes. UNIQUE because reuploading the
+  // same file should return the existing row.
+  hash         String   @unique
+  // JSON map of variant-name → derivative metadata, e.g.
+  //   { "webp": { "key": "...", "size": 1234 }, "thumb": {...} }
+  variants     Json?
+  status       String   @default("ready") // "ready" | "processing" | "failed"
+  errorMessage String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([ownerId])
+  @@index([status])
+  @@index([createdAt])
+  @@map("images")
+}
+
+// ─── P18 BE Track 2 / Aşama 4: ARCHIVED AUDIT LOG METADATA ─
+// Pointer table: when the weekly archival cron exports a window of
+// `audit_logs` to cold storage as JSON.gz, this row keeps the bookkeeping
+// (storage key, row range, byte count) so an operator can grep + restore.
+// The hot `audit_logs` table is then DELETEd to keep its working set small.
+model ArchivedAuditLog {
+  id             String   @id @default(uuid())
+  // Opaque storage adapter key, e.g. "audit-archive/2026/05/2026-05-01.json.gz".
+  coldKey        String   @unique
+  windowStart    DateTime
+  windowEnd      DateTime
+  rowsArchived   Int
+  bytesCompressed Int
+  archivedAt     DateTime @default(now())
+
+  @@index([windowStart])
+  @@index([windowEnd])
+  @@index([archivedAt])
+  @@map("archived_audit_logs")
+}
+
 model NewsletterSubscriber {
   id              String    @id @default(uuid())
   email           String    @unique
@@ -306,7 +480,9 @@ model NewsletterSubscriber {
   subscribedAt    DateTime  @default(now())
   unsubscribedAt  DateTime?
 
-  @@index([email])
+  // NOTE: explicit @@index([email]) removed — `email` is already @unique.
   @@index([subscribedAt])
+  // P14-BE: "active subscribers only" exports filter on this constantly
+  @@index([unsubscribedAt])
   @@map("newsletter_subscribers")
 }
