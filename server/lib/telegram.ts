@@ -21,10 +21,21 @@
  */
 
 import { logger } from '../config/logger';
+import { CircuitBreaker, CircuitOpenError } from './circuit-breaker';
+import { withRetry } from './retry';
 
 const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 const CHAT_ID = process.env.TELEGRAM_CHAT_ID;
 const API_BASE = `https://api.telegram.org/bot${BOT_TOKEN}`;
+
+// P14-BE: a tripped circuit prevents a Telegram outage from blocking
+// the rest of the request pipeline. 5 fails → 30s OPEN → 1 probe → recover.
+const telegramBreaker = new CircuitBreaker({
+  name: 'telegram.sendMessage',
+  failureThreshold: 5,
+  openMs: 30_000,
+  callTimeoutMs: 6_000, // tiny safety cap above the per-call AbortSignal.timeout
+});
 
 export type TelegramLevel = 'info' | 'warn' | 'error' | 'success';
 
@@ -42,25 +53,43 @@ function isConfigured(): boolean {
 async function sendRaw(text: string): Promise<void> {
   if (!isConfigured()) return;
 
+  // sendMessage is idempotent at our usage layer (we never rely on its
+  // server-side ID), so wrapping it in retry is safe. We also gate it
+  // behind a circuit breaker — if Telegram is fully down, fail-fast.
   try {
-    const res = await fetch(`${API_BASE}/sendMessage`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        chat_id: CHAT_ID,
-        text,
-        parse_mode: 'HTML',
-        disable_web_page_preview: true,
+    await telegramBreaker.run(() =>
+      withRetry({ name: 'telegram.sendMessage', maxAttempts: 3 }, async () => {
+        const res = await fetch(`${API_BASE}/sendMessage`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            chat_id: CHAT_ID,
+            text,
+            parse_mode: 'HTML',
+            disable_web_page_preview: true,
+          }),
+          signal: AbortSignal.timeout(5_000),
+        });
+        if (!res.ok) {
+          // 4xx → don't retry (caller error); 5xx → retry path via throw
+          const body = await res.text();
+          if (res.status >= 400 && res.status < 500) {
+            logger.warn('[Telegram] Send rejected (4xx, no retry)', {
+              status: res.status,
+              body: body.slice(0, 120),
+            });
+            return;
+          }
+          throw new Error(`Telegram ${res.status}: ${body.slice(0, 120)}`);
+        }
       }),
-      signal: AbortSignal.timeout(5_000),
-    });
-
-    if (!res.ok) {
-      const body = await res.text();
-      logger.warn('[Telegram] Send failed', { status: res.status, body: body.slice(0, 120) });
-    }
+    );
   } catch (err) {
-    logger.warn('[Telegram] Network error', { message: (err as Error).message });
+    if (err instanceof CircuitOpenError) {
+      // Suppress — operator already knows Telegram is down from the trip log.
+      return;
+    }
+    logger.warn('[Telegram] Network error after retries', { message: (err as Error).message });
   }
 }
 
