@@ -90,13 +90,18 @@ const containerVariants: Variants = {
   visible: { transition: { staggerChildren: 0.1, delayChildren: 0.1 } },
 };
 
+// P28-T01: LCP optimization — removed `filter: blur(8px)` from initial state.
+// Lighthouse's LCP detector excludes elements with active CSS filters from
+// "largest paint" candidacy until the filter clears. With blur on hidden
+// state, LCP fired ~800ms late on mobile (after Framer Motion JS loaded,
+// hydrated, and ran the animation). Plain opacity + y-translate preserves
+// the reveal aesthetic while letting LCP register at first paint of the <p>.
 const itemVariants: Variants = {
-  hidden: { y: 20, filter: 'blur(8px)' },
+  hidden: { opacity: 0, y: 20 },
   visible: {
     opacity: 1,
     y: 0,
-    filter: 'blur(0px)',
-    transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] },
+    transition: { duration: 0.55, ease: [0.16, 1, 0.3, 1] },
   },
 };
 
