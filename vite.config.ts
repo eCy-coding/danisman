@@ -188,6 +188,57 @@ export default defineConfig(({ mode }) => {
         workbox: {
           maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
           cleanupOutdatedCaches: true,
+          // P20 — Mathematical precache budget: ~500 KB app shell yerine
+          // dist/ tümü (6.4 MB) precache'lenmesin. Slow 3G install 33 s →
+          // 2.5 s'e iner. Route chunk'ları runtime'da CacheFirst handler
+          // ile ilk navigasyonda cache'lenir (cache persistance aynı).
+          globPatterns: [
+            'index.html',
+            'offline.html',
+            'manifest.webmanifest',
+            'favicon.ico',
+            'apple-touch-icon.png',
+            // App shell critical JS — initial paint zinciri
+            'assets/main-*.js',
+            'assets/vendor-*.js',
+            'assets/lp.js',
+            'assets/lc.js',
+            'assets/i18n-*.js',
+            'assets/client-*.js',
+            'assets/sentry-*.js',
+            'assets/query-*.js',
+            'assets/utils-*.js',
+            'assets/ui-*.js',
+            'assets/icons-*.js',
+            'assets/motion-*.js',
+            'assets/ab-*.js',
+            'assets/monitoring-*.js',
+            // Critical CSS
+            'assets/main-*.css',
+            'assets/index-*.css',
+            // App Shell fonts (Inter 400/700 — above-fold)
+            'fonts/inter-latin-400-normal.woff2',
+            'fonts/inter-latin-700-normal.woff2',
+          ],
+          // Admin yardımcı sayfalar + per-route chunk'lar + Keystatic
+          // (admin-only 2.6 MB) precache dışı bırakılır; ilk ziyarette
+          // CacheFirst runtime caching ile uzun TTL'le cache'lenir.
+          globIgnores: [
+            'admin.html',
+            'tools/**',
+            'assets/Admin*.js',
+            'assets/keystatic-*.js',
+            'assets/TerminalPage-*.js',
+            'assets/DashboardPage-*.js',
+            'assets/charts-*.js',
+            'assets/markdown-*.js',
+            'assets/dnd-*.js',
+            'assets/forms-*.js',
+            'assets/content-*.js',
+            'assets/realtimeService-*.js',
+            'assets/persistence-*.js',
+            'assets/zod-*.js',
+          ],
           // P16 — Yeni SW aktive olduğunda hemen tüm client'ları üstlen
           // (kullanıcı reload kabulü sonrası). `skipWaiting: false` çünkü
           // `prompt` flow'u kullanıcı onayıyla SW'a SKIP_WAITING mesajı yollar.
@@ -234,6 +285,18 @@ export default defineConfig(({ mode }) => {
               options: {
                 cacheName: 'image-cache',
                 expiration: { maxEntries: 80, maxAgeSeconds: 60 * 60 * 24 * 30 },
+                cacheableResponse: { statuses: [0, 200] },
+              },
+            },
+            // P20 — Route chunk'ları (precache dışı bırakılanlar) ilk
+            // navigasyonda CacheFirst ile cache'lenir, hash-busted URL'ler
+            // sayesinde 1 yıllık güvenli TTL.
+            {
+              urlPattern: /\/assets\/.*\.(js|css)$/,
+              handler: 'CacheFirst',
+              options: {
+                cacheName: 'route-chunk-cache',
+                expiration: { maxEntries: 100, maxAgeSeconds: 60 * 60 * 24 * 365 },
                 cacheableResponse: { statuses: [0, 200] },
               },
             },
