@@ -24,5 +24,14 @@
   },
   "submit": "Mesaj Gönder",
   "disclaimer": "Bu formu göndererek, şunları kabul etmiş olursunuz:",
-  "privacyPolicy": "Gizlilik Politikası"
+  "privacyPolicy": "Gizlilik Politikası",
+  "notifications": {
+    "requiredFields": "Lütfen tüm zorunlu alanları doldurun.",
+    "demoMode": "Demo Modu: Mesaj simüle edildi (Telegram anahtarlarını .env dosyasına ekleyin).",
+    "success": "Mesajınız başarıyla iletildi. En kısa sürede size dönüş yapacağız.",
+    "genericError": "Bir hata oluştu. Lütfen daha sonra tekrar deneyin.",
+    "bookingReceived": "Rezervasyon talebiniz alındı.",
+    "bookingDemoMode": "Demo Modu — rezervasyon simüle edildi.",
+    "bookingError": "Rezervasyon gönderilirken bir hata oluştu."
+  }
 }

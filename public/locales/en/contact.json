@@ -24,5 +24,14 @@
   },
   "submit": "Send Message",
   "disclaimer": "By submitting this form, you agree to our",
-  "privacyPolicy": "Privacy Policy"
+  "privacyPolicy": "Privacy Policy",
+  "notifications": {
+    "requiredFields": "Please fill in all required fields.",
+    "demoMode": "Demo Mode: Message simulated (add Telegram keys to the .env file).",
+    "success": "Your message was delivered. We'll get back to you shortly.",
+    "genericError": "Something went wrong. Please try again later.",
+    "bookingReceived": "Your booking request has been received.",
+    "bookingDemoMode": "Demo Mode — booking simulated.",
+    "bookingError": "An error occurred while submitting the booking."
+  }
 }
