@@ -179,11 +179,26 @@ export default defineConfig(({ mode }) => {
         svg: { multipass: true },
       }),
       VitePWA({
-        registerType: 'autoUpdate',
-        includeAssets: ['favicon.ico', 'apple-touch-icon.png'],
+        // P16 — `prompt` mode: yeni SW yüklendiğinde otomatik takas olmaz;
+        // `UpdatePrompt` toast'u kullanıcıdan onay alır → `updateServiceWorker(true)`
+        // çağrısı sırasında `skipWaiting()` mesajı gelir → activate → reload.
+        // Bu, kullanıcının form/işlem ortasında veri kaybetmesini engeller.
+        registerType: 'prompt',
+        includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'offline.html'],
         workbox: {
           maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
           cleanupOutdatedCaches: true,
+          // P16 — Yeni SW aktive olduğunda hemen tüm client'ları üstlen
+          // (kullanıcı reload kabulü sonrası). `skipWaiting: false` çünkü
+          // `prompt` flow'u kullanıcı onayıyla SW'a SKIP_WAITING mesajı yollar.
+          skipWaiting: false,
+          clientsClaim: true,
+          // P13/4 — Offline navigation fallback. When a route navigation
+          // fetch fails (e.g. user offline + route not in precache), serve
+          // /offline.html so the user gets brand + retry button instead of
+          // browser default error page.
+          navigateFallback: '/offline.html',
+          navigateFallbackDenylist: [/^\/api\//, /^\/admin/],
           runtimeCaching: [
             {
               urlPattern: /\/api\//,
@@ -225,23 +240,48 @@ export default defineConfig(({ mode }) => {
           ],
         },
         manifest: {
+          // P13/4 — Final manifest. Adds id, scope, lang, dir, categories,
+          // start_url with utm tagging, orientation, prefer_related_applications,
+          // and a separate maskable icon (Chromium-recommended split from any).
+          id: '/',
           name: 'EcyPro Premium Consulting',
           short_name: 'EcyPro',
-          description: 'Elite Consulting Dashboard',
+          description:
+            'Yüksek performanslı yönetim danışmanlığı — KPI dashboard, oturum planlama ve uzman içerik tek panoda.',
+          lang: 'tr',
+          dir: 'ltr',
+          scope: '/',
+          start_url: '/?source=pwa',
+          display: 'standalone',
+          display_override: ['window-controls-overlay', 'standalone', 'browser'],
+          orientation: 'portrait',
           theme_color: '#050810',
           background_color: '#050810',
+          categories: ['business', 'productivity', 'finance'],
+          prefer_related_applications: false,
           icons: [
+            { src: 'pwa-192x192.png', sizes: '192x192', type: 'image/png', purpose: 'any' },
+            { src: 'pwa-512x512.png', sizes: '512x512', type: 'image/png', purpose: 'any' },
+            // Maskable variants — Chromium requires `purpose: maskable` to be
+            // its own entry (mixing 'any maskable' on a single icon causes
+            // incorrect safe-zone cropping on Android adaptive icons).
+            { src: 'pwa-192x192.png', sizes: '192x192', type: 'image/png', purpose: 'maskable' },
+            { src: 'pwa-512x512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
+          ],
+          shortcuts: [
             {
-              src: 'pwa-192x192.png',
-              sizes: '192x192',
-              type: 'image/png',
-              purpose: 'any maskable',
+              name: 'Hizmetler',
+              short_name: 'Hizmetler',
+              description: 'Danışmanlık hizmet kataloğu',
+              url: '/services?source=pwa-shortcut',
+              icons: [{ src: 'pwa-192x192.png', sizes: '192x192' }],
             },
             {
-              src: 'pwa-512x512.png',
-              sizes: '512x512',
-              type: 'image/png',
-              purpose: 'any maskable',
+              name: 'Rezervasyon',
+              short_name: 'Booking',
+              description: 'Hızlı görüşme planla',
+              url: '/contact?intent=booking&source=pwa-shortcut',
+              icons: [{ src: 'pwa-192x192.png', sizes: '192x192' }],
             },
           ],
         },
@@ -325,10 +365,24 @@ export default defineConfig(({ mode }) => {
             // Reverted to let rollup auto-name the tslib chunk as in P4.
             // Motion (large ~80KB brotli) — separated for route-level lazy benefit
             motion: ['motion'],
-            // UI primitives (sans motion)
-            ui: ['lucide-react', 'clsx', 'tailwind-merge', '@radix-ui/react-slider', 'sonner'],
-            // i18n — locale-specific, SWR cached
-            i18n: ['i18next', 'react-i18next'],
+            // P17 — Lucide icons isolated from `ui` chunk. lucide-react is
+            // ~80KB raw of the previous 129KB `ui` chunk and rarely changes,
+            // so its own chunk gives much better long-term cache hit rates.
+            // Tree-shake is preserved via Vite's named-import optimisation —
+            // no per-icon path imports needed.
+            icons: ['lucide-react'],
+            // UI primitives (sans icons, sans motion)
+            ui: ['clsx', 'tailwind-merge', '@radix-ui/react-slider', 'sonner'],
+            // i18n — locale-specific, SWR cached. P17 — bundle the full
+            // plugin stack (http-backend, language-detector, icu) so route
+            // lazy-load only fetches translation JSON, not plugin code.
+            i18n: [
+              'i18next',
+              'react-i18next',
+              'i18next-icu',
+              'i18next-http-backend',
+              'i18next-browser-languagedetector',
+            ],
             // Data + validation utilities
             utils: ['dayjs', 'axios', 'zod', 'zustand'],
             // Markdown rendering (blog/MDX)
@@ -341,8 +395,10 @@ export default defineConfig(({ mode }) => {
             query: ['@tanstack/react-query'],
             // Error monitoring — large SDK, rarely changes
             sentry: ['@sentry/react'],
-            // Form handling
-            forms: ['react-hook-form'],
+            // P17 — Form handling: bundle hookform-resolvers with rhf so the
+            // resolver code ships in the same async boundary as the form
+            // runtime (otherwise resolver pulls in a separate ~3-5KB chunk).
+            forms: ['react-hook-form', '@hookform/resolvers'],
             // Drag & drop (admin UI only)
             dnd: ['@dnd-kit/core', '@dnd-kit/sortable', '@dnd-kit/utilities'],
             // A/B testing & feature flags
