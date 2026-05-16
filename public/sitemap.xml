@@ -2,677 +2,686 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://www.ecypro.com/</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/" />
-    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/?lang=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/" />
-    <lastmod>2026-05-15</lastmod>
+    <loc>https://www.ecypro.com</loc>
+    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com" />
+    <lastmod>2026-05-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://www.ecypro.com/about</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/about" />
-    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/about?lang=tr" />
+    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/about" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/about" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/about" />
-    <lastmod>2026-05-15</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.ecypro.com/services</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/services" />
-    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/services?lang=tr" />
+    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/services" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/services" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/services" />
-    <lastmod>2026-05-15</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.ecypro.com/pricing</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/pricing" />
-    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/pricing?lang=tr" />
+    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/pricing" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/pricing" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/pricing" />
-    <lastmod>2026-05-15</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.ecypro.com/blog</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/blog" />
-    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/blog?lang=tr" />
+    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/blog" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/blog" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/blog" />
-    <lastmod>2026-05-15</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.ecypro.com/contact</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/contact" />
-    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/contact?lang=tr" />
+    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/contact" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/contact" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/contact" />
-    <lastmod>2026-05-15</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.ecypro.com/careers</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/careers" />
-    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/careers?lang=tr" />
+    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/careers" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/careers" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/careers" />
-    <lastmod>2026-05-15</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.ecypro.com/team</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/team" />
-    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/team?lang=tr" />
+    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/team" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/team" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/team" />
-    <lastmod>2026-05-15</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.ecypro.com/partners</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/partners" />
-    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/partners?lang=tr" />
+    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/partners" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/partners" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/partners" />
-    <lastmod>2026-05-15</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.ecypro.com/industries</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/industries" />
-    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/industries?lang=tr" />
+    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/industries" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/industries" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/industries" />
-    <lastmod>2026-05-15</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.ecypro.com/methodology</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/methodology" />
-    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/methodology?lang=tr" />
+    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/methodology" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/methodology" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/methodology" />
-    <lastmod>2026-05-15</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.ecypro.com/case-studies</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/case-studies" />
-    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/case-studies?lang=tr" />
+    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/case-studies" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/case-studies" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/case-studies" />
-    <lastmod>2026-05-15</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.ecypro.com/events</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/events" />
-    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/events?lang=tr" />
+    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/events" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/events" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/events" />
-    <lastmod>2026-05-15</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.ecypro.com/locations</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/locations" />
-    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/locations?lang=tr" />
+    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/locations" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/locations" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/locations" />
-    <lastmod>2026-05-15</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.ecypro.com/privacy</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/privacy" />
-    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/privacy?lang=tr" />
+    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/privacy" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/privacy" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/privacy" />
-    <lastmod>2026-05-15</lastmod>
+    <lastmod>2026-05-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.ecypro.com/privacy/data-rights</loc>
+    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/privacy/data-rights" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/privacy/data-rights" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/privacy/data-rights" />
+    <lastmod>2026-05-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.ecypro.com/terms</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/terms" />
-    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/terms?lang=tr" />
+    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/terms" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/terms" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/terms" />
-    <lastmod>2026-05-15</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.ecypro.com/cookies</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/cookies" />
-    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/cookies?lang=tr" />
+    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/cookies" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/cookies" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/cookies" />
-    <lastmod>2026-05-15</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.ecypro.com/faq</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/faq" />
-    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/faq?lang=tr" />
+    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/faq" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/faq" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/faq" />
-    <lastmod>2026-05-15</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.ecypro.com/maturity-assessment</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/maturity-assessment" />
-    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/maturity-assessment?lang=tr" />
+    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/maturity-assessment" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/maturity-assessment" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/maturity-assessment" />
-    <lastmod>2026-05-15</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.ecypro.com/blog/aile-sirketleri-kurumsallasma-yonetisim</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/blog/aile-sirketleri-kurumsallasma-yonetisim" />
-    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/blog/aile-sirketleri-kurumsallasma-yonetisim?lang=tr" />
+    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/blog/aile-sirketleri-kurumsallasma-yonetisim" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/blog/aile-sirketleri-kurumsallasma-yonetisim" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/blog/aile-sirketleri-kurumsallasma-yonetisim" />
-    <lastmod>2026-05-15</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.ecypro.com/blog/akilli-sehirler-kamu-politikasi-dijital-yonetim</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/blog/akilli-sehirler-kamu-politikasi-dijital-yonetim" />
-    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/blog/akilli-sehirler-kamu-politikasi-dijital-yonetim?lang=tr" />
+    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/blog/akilli-sehirler-kamu-politikasi-dijital-yonetim" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/blog/akilli-sehirler-kamu-politikasi-dijital-yonetim" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/blog/akilli-sehirler-kamu-politikasi-dijital-yonetim" />
-    <lastmod>2026-05-15</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.ecypro.com/blog/boardroom-agility-uncertainty</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/blog/boardroom-agility-uncertainty" />
-    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/blog/boardroom-agility-uncertainty?lang=tr" />
+    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/blog/boardroom-agility-uncertainty" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/blog/boardroom-agility-uncertainty" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/blog/boardroom-agility-uncertainty" />
-    <lastmod>2026-05-15</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.ecypro.com/blog/endustriyel-iliskiler-toplu-sozlesme-stratejisi</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/blog/endustriyel-iliskiler-toplu-sozlesme-stratejisi" />
-    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/blog/endustriyel-iliskiler-toplu-sozlesme-stratejisi?lang=tr" />
+    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/blog/endustriyel-iliskiler-toplu-sozlesme-stratejisi" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/blog/endustriyel-iliskiler-toplu-sozlesme-stratejisi" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/blog/endustriyel-iliskiler-toplu-sozlesme-stratejisi" />
-    <lastmod>2026-05-15</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.ecypro.com/blog/esg-strateji-kurumsal-surdurulebilirlik</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/blog/esg-strateji-kurumsal-surdurulebilirlik" />
-    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/blog/esg-strateji-kurumsal-surdurulebilirlik?lang=tr" />
+    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/blog/esg-strateji-kurumsal-surdurulebilirlik" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/blog/esg-strateji-kurumsal-surdurulebilirlik" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/blog/esg-strateji-kurumsal-surdurulebilirlik" />
-    <lastmod>2026-05-15</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.ecypro.com/blog/lean-ai-operational-excellence</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/blog/lean-ai-operational-excellence" />
-    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/blog/lean-ai-operational-excellence?lang=tr" />
+    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/blog/lean-ai-operational-excellence" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/blog/lean-ai-operational-excellence" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/blog/lean-ai-operational-excellence" />
-    <lastmod>2026-05-15</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.ecypro.com/blog/ma-degerleme-due-diligence-rehberi</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/blog/ma-degerleme-due-diligence-rehberi" />
-    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/blog/ma-degerleme-due-diligence-rehberi?lang=tr" />
+    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/blog/ma-degerleme-due-diligence-rehberi" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/blog/ma-degerleme-due-diligence-rehberi" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/blog/ma-degerleme-due-diligence-rehberi" />
-    <lastmod>2026-05-15</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.ecypro.com/blog/makroekonomik-risk-yonetimi-2026</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/blog/makroekonomik-risk-yonetimi-2026" />
-    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/blog/makroekonomik-risk-yonetimi-2026?lang=tr" />
+    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/blog/makroekonomik-risk-yonetimi-2026" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/blog/makroekonomik-risk-yonetimi-2026" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/blog/makroekonomik-risk-yonetimi-2026" />
-    <lastmod>2026-05-15</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.ecypro.com/blog/net-zero-eylem-plani</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/blog/net-zero-eylem-plani" />
-    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/blog/net-zero-eylem-plani?lang=tr" />
+    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/blog/net-zero-eylem-plani" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/blog/net-zero-eylem-plani" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/blog/net-zero-eylem-plani" />
-    <lastmod>2026-05-15</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.ecypro.com/blog/noropazarlama-tuketici-davranisi-stratejisi</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/blog/noropazarlama-tuketici-davranisi-stratejisi" />
-    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/blog/noropazarlama-tuketici-davranisi-stratejisi?lang=tr" />
+    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/blog/noropazarlama-tuketici-davranisi-stratejisi" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/blog/noropazarlama-tuketici-davranisi-stratejisi" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/blog/noropazarlama-tuketici-davranisi-stratejisi" />
-    <lastmod>2026-05-15</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.ecypro.com/blog/tedarik-zinciri-optimizasyonu-lean-six-sigma</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/blog/tedarik-zinciri-optimizasyonu-lean-six-sigma" />
-    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/blog/tedarik-zinciri-optimizasyonu-lean-six-sigma?lang=tr" />
+    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/blog/tedarik-zinciri-optimizasyonu-lean-six-sigma" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/blog/tedarik-zinciri-optimizasyonu-lean-six-sigma" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/blog/tedarik-zinciri-optimizasyonu-lean-six-sigma" />
-    <lastmod>2026-05-15</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.ecypro.com/blog/uluslararasi-pazar-giris-stratejisi-turquality</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/blog/uluslararasi-pazar-giris-stratejisi-turquality" />
-    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/blog/uluslararasi-pazar-giris-stratejisi-turquality?lang=tr" />
+    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/blog/uluslararasi-pazar-giris-stratejisi-turquality" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/blog/uluslararasi-pazar-giris-stratejisi-turquality" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/blog/uluslararasi-pazar-giris-stratejisi-turquality" />
-    <lastmod>2026-05-15</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.ecypro.com/blog/veri-yonetisimi-kvkk-gdpr-uyum</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/blog/veri-yonetisimi-kvkk-gdpr-uyum" />
-    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/blog/veri-yonetisimi-kvkk-gdpr-uyum?lang=tr" />
+    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/blog/veri-yonetisimi-kvkk-gdpr-uyum" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/blog/veri-yonetisimi-kvkk-gdpr-uyum" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/blog/veri-yonetisimi-kvkk-gdpr-uyum" />
-    <lastmod>2026-05-15</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.ecypro.com/blog/stratejik-planlama-rehberi</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/blog/stratejik-planlama-rehberi" />
-    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/blog/stratejik-planlama-rehberi?lang=tr" />
+    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/blog/stratejik-planlama-rehberi" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/blog/stratejik-planlama-rehberi" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/blog/stratejik-planlama-rehberi" />
-    <lastmod>2026-05-15</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.ecypro.com/blog/surecler-nasil-standardize-edilir</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/blog/surecler-nasil-standardize-edilir" />
-    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/blog/surecler-nasil-standardize-edilir?lang=tr" />
+    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/blog/surecler-nasil-standardize-edilir" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/blog/surecler-nasil-standardize-edilir" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/blog/surecler-nasil-standardize-edilir" />
-    <lastmod>2026-05-15</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.ecypro.com/blog/kurumsal-kultur-donusumu</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/blog/kurumsal-kultur-donusumu" />
-    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/blog/kurumsal-kultur-donusumu?lang=tr" />
+    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/blog/kurumsal-kultur-donusumu" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/blog/kurumsal-kultur-donusumu" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/blog/kurumsal-kultur-donusumu" />
-    <lastmod>2026-05-15</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.ecypro.com/blog/veri-odakli-karar-verme</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/blog/veri-odakli-karar-verme" />
-    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/blog/veri-odakli-karar-verme?lang=tr" />
+    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/blog/veri-odakli-karar-verme" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/blog/veri-odakli-karar-verme" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/blog/veri-odakli-karar-verme" />
-    <lastmod>2026-05-15</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.ecypro.com/blog/dijital-donusum-stratejisi-nasil-olusturulur</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/blog/dijital-donusum-stratejisi-nasil-olusturulur" />
-    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/blog/dijital-donusum-stratejisi-nasil-olusturulur?lang=tr" />
+    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/blog/dijital-donusum-stratejisi-nasil-olusturulur" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/blog/dijital-donusum-stratejisi-nasil-olusturulur" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/blog/dijital-donusum-stratejisi-nasil-olusturulur" />
-    <lastmod>2026-05-15</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.ecypro.com/blog/kpi-belirleme-ve-olcme-yontemleri</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/blog/kpi-belirleme-ve-olcme-yontemleri" />
-    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/blog/kpi-belirleme-ve-olcme-yontemleri?lang=tr" />
+    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/blog/kpi-belirleme-ve-olcme-yontemleri" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/blog/kpi-belirleme-ve-olcme-yontemleri" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/blog/kpi-belirleme-ve-olcme-yontemleri" />
-    <lastmod>2026-05-15</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.ecypro.com/blog/stratejik-danismanlik-hizmetleri-secim-kilavuzu</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/blog/stratejik-danismanlik-hizmetleri-secim-kilavuzu" />
-    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/blog/stratejik-danismanlik-hizmetleri-secim-kilavuzu?lang=tr" />
+    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/blog/stratejik-danismanlik-hizmetleri-secim-kilavuzu" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/blog/stratejik-danismanlik-hizmetleri-secim-kilavuzu" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/blog/stratejik-danismanlik-hizmetleri-secim-kilavuzu" />
-    <lastmod>2026-05-15</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.ecypro.com/blog/operasyonel-verimlilik-nasil-arttirilir</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/blog/operasyonel-verimlilik-nasil-arttirilir" />
-    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/blog/operasyonel-verimlilik-nasil-arttirilir?lang=tr" />
+    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/blog/operasyonel-verimlilik-nasil-arttirilir" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/blog/operasyonel-verimlilik-nasil-arttirilir" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/blog/operasyonel-verimlilik-nasil-arttirilir" />
-    <lastmod>2026-05-15</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.ecypro.com/blog/insan-kaynaklari-stratejisi-talent-management</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/blog/insan-kaynaklari-stratejisi-talent-management" />
-    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/blog/insan-kaynaklari-stratejisi-talent-management?lang=tr" />
+    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/blog/insan-kaynaklari-stratejisi-talent-management" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/blog/insan-kaynaklari-stratejisi-talent-management" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/blog/insan-kaynaklari-stratejisi-talent-management" />
-    <lastmod>2026-05-15</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.ecypro.com/blog/yapay-zeka-ile-is-sureclerini-optimize-etme</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/blog/yapay-zeka-ile-is-sureclerini-optimize-etme" />
-    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/blog/yapay-zeka-ile-is-sureclerini-optimize-etme?lang=tr" />
+    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/blog/yapay-zeka-ile-is-sureclerini-optimize-etme" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/blog/yapay-zeka-ile-is-sureclerini-optimize-etme" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/blog/yapay-zeka-ile-is-sureclerini-optimize-etme" />
-    <lastmod>2026-05-15</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.ecypro.com/blog/organizasyonel-degisim-yonetimi</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/blog/organizasyonel-degisim-yonetimi" />
-    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/blog/organizasyonel-degisim-yonetimi?lang=tr" />
+    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/blog/organizasyonel-degisim-yonetimi" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/blog/organizasyonel-degisim-yonetimi" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/blog/organizasyonel-degisim-yonetimi" />
-    <lastmod>2026-05-15</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.ecypro.com/blog/ai-yatirim-roi-hesaplama</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/blog/ai-yatirim-roi-hesaplama" />
-    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/blog/ai-yatirim-roi-hesaplama?lang=tr" />
+    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/blog/ai-yatirim-roi-hesaplama" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/blog/ai-yatirim-roi-hesaplama" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/blog/ai-yatirim-roi-hesaplama" />
-    <lastmod>2026-05-15</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.ecypro.com/blog/measuring-ai-investment-roi</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/blog/measuring-ai-investment-roi" />
-    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/blog/measuring-ai-investment-roi?lang=tr" />
+    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/blog/measuring-ai-investment-roi" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/blog/measuring-ai-investment-roi" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/blog/measuring-ai-investment-roi" />
-    <lastmod>2026-05-15</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.ecypro.com/blog/stratejik-dijital-donusum-2026</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/blog/stratejik-dijital-donusum-2026" />
-    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/blog/stratejik-dijital-donusum-2026?lang=tr" />
+    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/blog/stratejik-dijital-donusum-2026" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/blog/stratejik-dijital-donusum-2026" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/blog/stratejik-dijital-donusum-2026" />
-    <lastmod>2026-05-15</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.ecypro.com/blog/yapay-zeka-yonetim-devrimi</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/blog/yapay-zeka-yonetim-devrimi" />
-    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/blog/yapay-zeka-yonetim-devrimi?lang=tr" />
+    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/blog/yapay-zeka-yonetim-devrimi" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/blog/yapay-zeka-yonetim-devrimi" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/blog/yapay-zeka-yonetim-devrimi" />
-    <lastmod>2026-05-15</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.ecypro.com/blog/global-pazarlara-acilma</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/blog/global-pazarlara-acilma" />
-    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/blog/global-pazarlara-acilma?lang=tr" />
+    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/blog/global-pazarlara-acilma" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/blog/global-pazarlara-acilma" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/blog/global-pazarlara-acilma" />
-    <lastmod>2026-05-15</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.ecypro.com/case-studies/global-retail-transformation</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/case-studies/global-retail-transformation" />
-    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/case-studies/global-retail-transformation?lang=tr" />
+    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/case-studies/global-retail-transformation" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/case-studies/global-retail-transformation" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/case-studies/global-retail-transformation" />
-    <lastmod>2026-05-15</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.ecypro.com/case-studies/fintech-market-entry</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/case-studies/fintech-market-entry" />
-    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/case-studies/fintech-market-entry?lang=tr" />
+    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/case-studies/fintech-market-entry" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/case-studies/fintech-market-entry" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/case-studies/fintech-market-entry" />
-    <lastmod>2026-05-15</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.ecypro.com/case-studies/manufacturing-optimization</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/case-studies/manufacturing-optimization" />
-    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/case-studies/manufacturing-optimization?lang=tr" />
+    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/case-studies/manufacturing-optimization" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/case-studies/manufacturing-optimization" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/case-studies/manufacturing-optimization" />
-    <lastmod>2026-05-15</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.ecypro.com/case-studies/healthcare-ai-platform</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/case-studies/healthcare-ai-platform" />
-    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/case-studies/healthcare-ai-platform?lang=tr" />
+    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/case-studies/healthcare-ai-platform" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/case-studies/healthcare-ai-platform" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/case-studies/healthcare-ai-platform" />
-    <lastmod>2026-05-15</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.ecypro.com/case-studies/energy-transition-strategy</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/case-studies/energy-transition-strategy" />
-    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/case-studies/energy-transition-strategy?lang=tr" />
+    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/case-studies/energy-transition-strategy" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/case-studies/energy-transition-strategy" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/case-studies/energy-transition-strategy" />
-    <lastmod>2026-05-15</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.ecypro.com/case-studies/saas-product-led-growth</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/case-studies/saas-product-led-growth" />
-    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/case-studies/saas-product-led-growth?lang=tr" />
+    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/case-studies/saas-product-led-growth" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/case-studies/saas-product-led-growth" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/case-studies/saas-product-led-growth" />
-    <lastmod>2026-05-15</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.ecypro.com/services/strategic-transformation</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/services/strategic-transformation" />
-    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/services/strategic-transformation?lang=tr" />
+    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/services/strategic-transformation" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/services/strategic-transformation" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/services/strategic-transformation" />
-    <lastmod>2026-05-15</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.ecypro.com/services/mergers-acquisitions</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/services/mergers-acquisitions" />
-    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/services/mergers-acquisitions?lang=tr" />
+    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/services/mergers-acquisitions" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/services/mergers-acquisitions" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/services/mergers-acquisitions" />
-    <lastmod>2026-05-15</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.ecypro.com/services/family-business</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/services/family-business" />
-    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/services/family-business?lang=tr" />
+    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/services/family-business" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/services/family-business" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/services/family-business" />
-    <lastmod>2026-05-15</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.ecypro.com/services/operational-excellence</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/services/operational-excellence" />
-    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/services/operational-excellence?lang=tr" />
+    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/services/operational-excellence" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/services/operational-excellence" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/services/operational-excellence" />
-    <lastmod>2026-05-15</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.ecypro.com/services/neuromarketing</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/services/neuromarketing" />
-    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/services/neuromarketing?lang=tr" />
+    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/services/neuromarketing" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/services/neuromarketing" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/services/neuromarketing" />
-    <lastmod>2026-05-15</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.ecypro.com/services/hr-transformation</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/services/hr-transformation" />
-    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/services/hr-transformation?lang=tr" />
+    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/services/hr-transformation" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/services/hr-transformation" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/services/hr-transformation" />
-    <lastmod>2026-05-15</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.ecypro.com/services/crisis-management</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/services/crisis-management" />
-    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/services/crisis-management?lang=tr" />
+    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/services/crisis-management" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/services/crisis-management" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/services/crisis-management" />
-    <lastmod>2026-05-15</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.ecypro.com/services/ai-analytics</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/services/ai-analytics" />
-    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/services/ai-analytics?lang=tr" />
+    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/services/ai-analytics" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/services/ai-analytics" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/services/ai-analytics" />
-    <lastmod>2026-05-15</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.ecypro.com/services/digital-strategy</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/services/digital-strategy" />
-    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/services/digital-strategy?lang=tr" />
+    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/services/digital-strategy" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/services/digital-strategy" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/services/digital-strategy" />
-    <lastmod>2026-05-15</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.ecypro.com/services/data-governance</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/services/data-governance" />
-    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/services/data-governance?lang=tr" />
+    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/services/data-governance" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/services/data-governance" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/services/data-governance" />
-    <lastmod>2026-05-15</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.ecypro.com/services/esg-strategy</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/services/esg-strategy" />
-    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/services/esg-strategy?lang=tr" />
+    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/services/esg-strategy" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/services/esg-strategy" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/services/esg-strategy" />
-    <lastmod>2026-05-15</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.ecypro.com/services/investment-incentives</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/services/investment-incentives" />
-    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/services/investment-incentives?lang=tr" />
+    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/services/investment-incentives" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/services/investment-incentives" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/services/investment-incentives" />
-    <lastmod>2026-05-15</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.ecypro.com/services/macro-risk</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/services/macro-risk" />
-    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/services/macro-risk?lang=tr" />
+    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/services/macro-risk" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/services/macro-risk" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/services/macro-risk" />
-    <lastmod>2026-05-15</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.ecypro.com/services/competition-economics</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/services/competition-economics" />
-    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/services/competition-economics?lang=tr" />
+    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/services/competition-economics" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/services/competition-economics" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/services/competition-economics" />
-    <lastmod>2026-05-15</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.ecypro.com/services/industrial-relations</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/services/industrial-relations" />
-    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/services/industrial-relations?lang=tr" />
+    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/services/industrial-relations" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/services/industrial-relations" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/services/industrial-relations" />
-    <lastmod>2026-05-15</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.ecypro.com/services/payroll-audit</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/services/payroll-audit" />
-    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/services/payroll-audit?lang=tr" />
+    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/services/payroll-audit" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/services/payroll-audit" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/services/payroll-audit" />
-    <lastmod>2026-05-15</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.ecypro.com/services/employer-branding</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/services/employer-branding" />
-    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/services/employer-branding?lang=tr" />
+    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/services/employer-branding" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/services/employer-branding" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/services/employer-branding" />
-    <lastmod>2026-05-15</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.ecypro.com/services/market-entry</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/services/market-entry" />
-    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/services/market-entry?lang=tr" />
+    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/services/market-entry" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/services/market-entry" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/services/market-entry" />
-    <lastmod>2026-05-15</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.ecypro.com/services/global-intelligence</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/services/global-intelligence" />
-    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/services/global-intelligence?lang=tr" />
+    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/services/global-intelligence" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/services/global-intelligence" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/services/global-intelligence" />
-    <lastmod>2026-05-15</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.ecypro.com/services/smart-cities</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/services/smart-cities" />
-    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/services/smart-cities?lang=tr" />
+    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/services/smart-cities" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/services/smart-cities" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/services/smart-cities" />
-    <lastmod>2026-05-15</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.ecypro.com/services/government-relations</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/services/government-relations" />
-    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/services/government-relations?lang=tr" />
+    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/services/government-relations" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/services/government-relations" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/services/government-relations" />
-    <lastmod>2026-05-15</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>

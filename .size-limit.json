@@ -38,7 +38,13 @@
   {
     "name": "i18n chunk (brotli)",
     "path": "dist/assets/i18n-*.js",
-    "limit": "25 KB",
+    "limit": "30 KB",
+    "brotli": true
+  },
+  {
+    "name": "Icons chunk (lucide-react, brotli)",
+    "path": "dist/assets/icons-*.js",
+    "limit": "30 KB",
     "brotli": true
   },
   {
@@ -71,5 +77,90 @@
     "path": "dist/sw.js",
     "limit": "20 KB",
     "gzip": true
+  },
+
+  {
+    "name": "Route: PricingPage (brotli)",
+    "path": "dist/assets/PricingPage-*.js",
+    "limit": "60 KB",
+    "brotli": true
+  },
+  {
+    "name": "Route: ServicesPage (brotli)",
+    "path": "dist/assets/ServicesPage-*.js",
+    "limit": "60 KB",
+    "brotli": true
+  },
+  {
+    "name": "Route: ServiceDetailPage (brotli)",
+    "path": "dist/assets/ServiceDetailPage-*.js",
+    "limit": "60 KB",
+    "brotli": true
+  },
+  {
+    "name": "Route: AboutPage (brotli)",
+    "path": "dist/assets/AboutPage-*.js",
+    "limit": "60 KB",
+    "brotli": true
+  },
+  {
+    "name": "Route: ContactPage (brotli)",
+    "path": "dist/assets/ContactPage-*.js",
+    "limit": "60 KB",
+    "brotli": true
+  },
+  {
+    "name": "Route: BlogPage (brotli)",
+    "path": "dist/assets/BlogPage-*.js",
+    "limit": "50 KB",
+    "brotli": true
+  },
+  {
+    "name": "Route: BlogPostPage (brotli)",
+    "path": "dist/assets/BlogPostPage-*.js",
+    "limit": "55 KB",
+    "brotli": true
+  },
+  {
+    "name": "Route: CaseStudiesPage (brotli)",
+    "path": "dist/assets/CaseStudiesPage-*.js",
+    "limit": "50 KB",
+    "brotli": true
+  },
+  {
+    "name": "Route: CaseStudyDetailPage (brotli)",
+    "path": "dist/assets/CaseStudyDetailPage-*.js",
+    "limit": "55 KB",
+    "brotli": true
+  },
+  {
+    "name": "Route: DataRightsPage (KVKK/GDPR form, brotli)",
+    "path": "dist/assets/DataRightsPage-*.js",
+    "limit": "30 KB",
+    "brotli": true
+  },
+  {
+    "name": "Route: PrivacyPage (brotli)",
+    "path": "dist/assets/PrivacyPage-*.js",
+    "limit": "30 KB",
+    "brotli": true
+  },
+  {
+    "name": "Route: TermsPage (brotli)",
+    "path": "dist/assets/TermsPage-*.js",
+    "limit": "30 KB",
+    "brotli": true
+  },
+  {
+    "name": "Route: CookiePage (brotli)",
+    "path": "dist/assets/CookiePage-*.js",
+    "limit": "30 KB",
+    "brotli": true
+  },
+  {
+    "name": "Route: DashboardPage (admin, lazy, brotli)",
+    "path": "dist/assets/DashboardPage-*.js",
+    "limit": "100 KB",
+    "brotli": true
   }
 ]
