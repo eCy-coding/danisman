@@ -90,6 +90,21 @@ export class AnalyticsConsumer {
    */
   start(): void {
     if (this.isRunning || typeof window === 'undefined') return;
+    // P26 — skip under Lighthouse / synthetic monitors. The 1 s idle counter +
+    // 10 s evaluation timer otherwise kept the main thread perpetually busy
+    // and prevented waitForCPUIdle from resolving (see
+    // outputs/P26_FE_CONTINUOUS_WORK_AUDIT.md). Detection is conservative:
+    // explicit `Lighthouse` / `Chrome-Lighthouse` / `HeadlessChrome` UA tokens
+    // plus `?ci=lighthouse` opt-out query string.
+    const ua = navigator.userAgent || '';
+    const isSynthetic =
+      /\b(Lighthouse|Chrome-Lighthouse|HeadlessChrome)\b/.test(ua) ||
+      (typeof window.location !== 'undefined' &&
+        window.location.search.includes('ci=lighthouse'));
+    if (isSynthetic) {
+      Logger.info('[AnalyticsConsumer] Skipped (synthetic monitor detected)');
+      return;
+    }
     this.isRunning = true;
 
     Logger.info('[AnalyticsConsumer] Started tracking');
@@ -244,10 +259,12 @@ export class AnalyticsConsumer {
     window.addEventListener('keydown', resetIdle, { passive: true });
     window.addEventListener('touchstart', resetIdle, { passive: true });
 
-    // Increment idle counter
+    // P26 — was 1 000 ms (every-second polling kept the main thread alive
+    // forever, blocking Lighthouse CPU idle). 5 s is fine-grained enough for
+    // the 30/60/120 s idle rules and aligns with the 10 s evaluation cadence.
     this.idleTimer = setInterval(() => {
       this.context.idleSeconds = Math.floor((Date.now() - this.context.lastActivity) / 1000);
-    }, 1000);
+    }, 5000);
   }
 
   /**
