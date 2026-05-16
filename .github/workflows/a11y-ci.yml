@@ -1,0 +1,75 @@
+# a11y-ci.yml — P18 FE Track 1, Aşama 2.
+# Critical-route WCAG 2.1 AA gate via @axe-core/playwright.
+#
+# Mevcut `quality-gate.yml` lint + content-QA + smoke + bundle-size kapsar;
+# E2E suite ise `ci.yml` üzerinden tetiklenir (uzun süreli). Bu workflow:
+#   - Sadece `e2e/a11y-ci.spec.ts` (6 critical public rota) çalıştırır,
+#   - PR'da hızlı (~3-5 dk) bir deterministic gate sağlar,
+#   - Critical violation tek başına fail eder; serious/moderate informational
+#     (spec dosyasında policy var).
+#
+# Daha derin denetim (`a11y.spec.ts` AAA + `crawl_a11y_wcag.spec.ts`) ana
+# E2E suite içinde nightly olarak koşar; bu hızlı PR gate'idir.
+name: A11y CI (critical routes)
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: a11y-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  a11y:
+    name: Axe-core WCAG 2.1 AA — critical-route gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Install Playwright browsers (chromium only)
+        run: npx playwright install --with-deps chromium
+
+      - name: Provide minimal production env (placeholder values)
+        run: |
+          cp .env.production.example .env.production
+          sed -i 's/__FILL_ME__/ci-stub/g' .env.production
+
+      - name: Build production bundle
+        run: npm run build
+        env:
+          NODE_ENV: production
+
+      - name: Run a11y CI spec (critical routes only)
+        run: npx playwright test e2e/a11y-ci.spec.ts --project=chromium --reporter=list
+        env:
+          NODE_ENV: production
+          CI: 'true'
+
+      - name: Upload Playwright HTML report on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: a11y-ci-report-${{ github.sha }}
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 14
+          if-no-files-found: ignore
