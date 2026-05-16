@@ -1147,6 +1147,21 @@ export const openApiSpec = {
         responses: { '200': { description: 'Cache cleared, size before clear returned' } },
       },
     },
+    '/admin/cache/warmup': {
+      post: {
+        tags: ['Admin'],
+        summary: 'Trigger post-deploy cache warm-up (admin or CACHE_WARMUP_TOKEN bearer)',
+        description:
+          'Sequentially fetches the curated top-N read endpoints to fill LRU + Redis caches. Auth: either a valid ADMIN JWT, or `Authorization: Bearer <CACHE_WARMUP_TOKEN>` (minimum 16 chars).',
+        operationId: 'adminCacheWarmup',
+        security: [{ BearerAuth: [] }],
+        responses: {
+          '200': { description: 'Warm-up summary (attempted/succeeded/failed/timings)' },
+          '401': { description: 'Missing or invalid auth (token + JWT both rejected)' },
+          '403': { description: 'JWT presented but role !== ADMIN' },
+        },
+      },
+    },
     // P17 BE Track 2 / Aşama 4 — API key CRUD
     '/admin/api-keys': {
       get: {
