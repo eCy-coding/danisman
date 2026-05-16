@@ -1,0 +1,34 @@
+{
+  "errors": {
+    "required": "Bu alan zorunludur.",
+    "invalid_type": "Geçersiz değer.",
+    "invalid_email": "Geçerli bir e-posta adresi girin.",
+    "invalid_url": "Geçerli bir URL girin.",
+    "invalid_uuid": "Geçerli bir kimlik (UUID) girin.",
+    "invalid_string": "Geçerli bir değer girin.",
+    "too_small_string": "En az {{minimum}} karakter girin.",
+    "too_small_string_one": "En az 1 karakter girin.",
+    "too_big_string": "En fazla {{maximum}} karakter girin.",
+    "too_small_number": "En az {{minimum}} olmalıdır.",
+    "too_big_number": "En fazla {{maximum}} olmalıdır.",
+    "too_small_array": "En az {{minimum}} öğe gerekli.",
+    "too_big_array": "En fazla {{maximum}} öğe seçilebilir.",
+    "too_small_date": "Tarih en az {{minimum}} olmalıdır.",
+    "too_big_date": "Tarih en fazla {{maximum}} olmalıdır.",
+    "invalid_enum": "Geçersiz seçim.",
+    "invalid_literal": "Beklenen değer: {{expected}}.",
+    "not_finite": "Geçerli bir sayı girin.",
+    "custom": "Geçersiz değer.",
+    "network": "Bağlantı hatası — internet bağlantınızı kontrol edin.",
+    "rate_limited": "Çok fazla istek. Lütfen birkaç dakika sonra tekrar deneyin.",
+    "server_unavailable": "Sunucu şu anda yanıt vermiyor. Daha sonra tekrar deneyin.",
+    "validation_failed": "Lütfen formdaki uyarıları kontrol edin.",
+    "submit_failed": "Form gönderilemedi. Lütfen tekrar deneyin."
+  },
+  "actions": {
+    "submitting": "Gönderiliyor…",
+    "submit": "Gönder",
+    "retry": "Tekrar dene",
+    "cancel": "Vazgeç"
+  }
+}
