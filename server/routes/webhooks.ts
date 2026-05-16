@@ -18,12 +18,11 @@
 
 import { Router, Request, Response } from 'express';
 import { prisma } from '../config/db';
-import { verifyCalWebhook } from '../lib/hmac';
 import { logger } from '../config/logger';
+import { verifyWebhook } from '../middleware/verify-webhook';
+import { recordAndCheck, markProcessed, markFailed } from '../lib/webhook-idempotency';
 
 const router = Router();
-
-const CAL_WEBHOOK_SECRET = process.env.CAL_COM_WEBHOOK_SECRET ?? '';
 
 interface CalWebhookPayload {
   triggerEvent: 'BOOKING_CREATED' | 'BOOKING_RESCHEDULED' | 'BOOKING_CANCELLED';
@@ -39,20 +38,45 @@ interface CalWebhookPayload {
   };
 }
 
-router.post('/cal', async (req: Request, res: Response): Promise<void> => {
-  const signature = req.headers['x-cal-signature-256'] as string;
-  const rawBody = JSON.stringify(req.body);
+// P15-BE Aşama 6: HMAC verification now runs as middleware against the
+// RAW request bytes (captured in server/index.ts via express.json({ verify })),
+// not a re-serialised req.body — which previously corrupted key order
+// and silently broke verification for valid Cal.com payloads.
+router.post('/cal', verifyWebhook('calcom'), async (req: Request, res: Response): Promise<void> => {
+  const { triggerEvent, payload } = req.body as CalWebhookPayload;
 
-  // Verify HMAC if secret is configured
-  if (CAL_WEBHOOK_SECRET) {
-    if (!signature || !verifyCalWebhook(rawBody, signature, CAL_WEBHOOK_SECRET)) {
-      logger.warn('[CalWebhook] Invalid signature');
-      res.status(401).json({ error: 'Invalid signature' });
+  // P17 BE Track 2 / Aşama 5 — persisted idempotency. Cal.com delivers
+  // each event with `payload.uid` as the deterministic external ID. If
+  // the upstream queue replays after a successful handler run, we short-
+  // circuit with 200 OK and zero DB mutation so the booking row isn't
+  // mutated twice. Missing uid degrades to "best effort" (treat as new
+  // event); shouldn't happen in production.
+  const externalId = payload.uid ?? `${triggerEvent}:${payload.startTime ?? Date.now()}`;
+  const signature =
+    typeof req.headers['x-cal-signature-256'] === 'string'
+      ? (req.headers['x-cal-signature-256'] as string)
+      : undefined;
+
+  let eventId: string;
+  try {
+    const check = await recordAndCheck({
+      source: 'calcom',
+      externalId,
+      signature,
+      payload: req.body,
+    });
+    if (check.alreadyProcessed) {
+      logger.info('[CalWebhook] duplicate delivery — skip', { externalId, eventId: check.eventId });
+      res.json({ ok: true, replay: true });
       return;
     }
+    eventId = check.eventId;
+  } catch (err) {
+    logger.warn('[CalWebhook] idempotency record failed — proceeding best-effort', {
+      message: (err as Error).message,
+    });
+    eventId = '';
   }
-
-  const { triggerEvent, payload } = req.body as CalWebhookPayload;
 
   try {
     const ecyproId = payload.metadata?.ecyproBookingId;
@@ -99,9 +123,11 @@ router.post('/cal', async (req: Request, res: Response): Promise<void> => {
         logger.info('[CalWebhook] Unhandled event', { triggerEvent });
     }
 
+    if (eventId) await markProcessed(eventId);
     res.json({ ok: true });
   } catch (err) {
     logger.error('[CalWebhook] DB error', { message: (err as Error).message });
+    if (eventId) await markFailed(eventId, err as Error);
     res.status(500).json({ error: 'Internal error' });
   }
 });

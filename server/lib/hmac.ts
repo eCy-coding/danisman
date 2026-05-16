@@ -91,6 +91,12 @@ export function bookingManageUrl(bookingId: string, baseUrl?: string): string {
 /**
  * Verify a Cal.com webhook HMAC-SHA256 signature.
  * Cal.com signs with HMAC-SHA256(raw body, webhook secret).
+ *
+ * @deprecated P15-BE Aşama 6: prefer `verifyWebhook('calcom')` from
+ * server/middleware/verify-webhook.ts — that path uses the captured
+ * raw request bytes instead of `JSON.stringify(req.body)`, which is
+ * lossy. Kept here only for tests that compare against historical
+ * signature output.
  */
 export function verifyCalWebhook(
   rawBody: string,
