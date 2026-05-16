@@ -32,7 +32,10 @@
   RewriteCond %{REQUEST_URI} !^/assets/
   RewriteCond %{REQUEST_URI} !^/fonts/
   RewriteCond %{REQUEST_URI} !^/locales/
-  RewriteCond %{REQUEST_URI} !\.(js|css|map|json|xml|txt|ico|png|jpe?g|gif|webp|avif|svg|woff2?|ttf|otf|eot|mp4|webm|mp3|pdf|webmanifest|br|gz)$ [NC]
+  # P16 — `.map` deliberately removed from skip-list; map files are denied
+  # explicitly by FilesMatch below (defense-in-depth; build pipeline already
+  # deletes maps after Sentry upload via `npm run release:sentry`).
+  RewriteCond %{REQUEST_URI} !\.(js|css|json|xml|txt|ico|png|jpe?g|gif|webp|avif|svg|woff2?|ttf|otf|eot|mp4|webm|mp3|pdf|webmanifest|br|gz)$ [NC]
 
   RewriteRule . /index.html [L]
 </IfModule>
@@ -54,6 +57,13 @@
 
   # COOP — relaxed to keep 3rd-party scripts (EmailJS, Sentry, GA4) working.
   Header always set Cross-Origin-Opener-Policy "same-origin-allow-popups"
+
+  # P12/3 — CSP violation reporting endpoint (modern Reporting API).
+  # The meta http-equiv CSP in index.html references `csp-endpoint`; this
+  # header registers it with the browser. Replace __SENTRY_PROJECT_ID__ +
+  # __SENTRY_CSP_KEY__ when wiring the Sentry CSP project.
+  Header always set Report-To '{"group":"csp-endpoint","max_age":10886400,"endpoints":[{"url":"https://o4508000000000000.ingest.sentry.io/api/__SENTRY_PROJECT_ID__/security/?sentry_key=__SENTRY_CSP_KEY__"}],"include_subdomains":true}'
+  Header always set NEL '{"report_to":"csp-endpoint","max_age":10886400,"include_subdomains":true,"success_fraction":0,"failure_fraction":0.05}'
 
   # Hide server signature / version (defense-in-depth; Hostinger may already mask).
   Header always unset X-Powered-By
@@ -233,6 +243,15 @@ FileETag None
 
 # Block backup/source files if accidentally uploaded
 <FilesMatch "\.(bak|swp|orig|tmp|log|sql)$">
+  Require all denied
+</FilesMatch>
+
+# P16 — Source map exposure guard. Vite emits `sourcemap: 'hidden'` so JS
+# bundles don't carry a `//# sourceMappingURL=` line, but maps are still
+# written to disk during build. CI uploads them to Sentry then deletes them
+# (scripts/upload-sourcemaps.mjs); this rule is the defense-in-depth net for
+# any deploy that bypasses the upload step.
+<FilesMatch "\.map$">
   Require all denied
 </FilesMatch>
 
