@@ -14,6 +14,13 @@ import feedbackRoutes from './feedback';
 import geoRoutes from './geo';
 import crmRoutes from './crm';
 import devAnalyticsRoutes from './dev-analytics';
+import contactRoutes from './contact';
+import gdprRoutes from './gdpr';
+import searchRoutes from './search';
+import uploadRoutes from './upload';
+import uploadsGetRoutes from './uploads-get';
+import metricsRoutes from './metrics';
+import adminQueuesRoutes from './admin-queues';
 import { openApiSpec } from '../config/openapi';
 import { redis } from '../config/redis';
 import { prisma } from '../config/db';
@@ -40,40 +47,111 @@ router.get('/health', (_req, res) => {
 });
 
 // ─── Deep readiness probe ────────────────────────────────
-// Verifies DB + Redis actually respond. Suitable for k8s readinessProbe / Render.
+// P16 BE Track 2 / Aşama 4 — verifies DB + Redis + Sentry + Telegram and
+// returns per-check latency. Suitable for k8s readinessProbe / Render.
+//
+// Status semantics:
+//   - "ready"     all critical deps OK         → 200
+//   - "degraded"  optional deps down, DB OK    → 200 (still take traffic)
+//   - "not_ready" DB down                      → 503 (rotate out)
+//
+// Critical = DB. Redis, Sentry, Telegram are optional and only flip the
+// envelope to "degraded" (still 200) so the load balancer keeps the pod.
 router.get('/ready', async (_req, res) => {
-  const checks: Record<string, 'ok' | 'degraded' | 'down'> = {
-    db: 'down',
-    redis: 'down',
-    sentry: process.env.SENTRY_DSN ? 'ok' : 'degraded',
+  type CheckResult = {
+    status: 'ok' | 'degraded' | 'down' | 'unconfigured';
+    latencyMs?: number;
+    detail?: string;
   };
 
-  // DB ping — 1.5s timeout
-  try {
-    const dbProbe = Promise.race([
-      prisma.$queryRaw`SELECT 1`.then(() => 'ok' as const),
-      new Promise<'down'>((resolve) => setTimeout(() => resolve('down'), 1500)),
+  async function measureWithTimeout<T>(
+    label: string,
+    fn: () => Promise<T>,
+    timeoutMs: number,
+    timeoutValue: T,
+  ): Promise<{ value: T; latencyMs: number }> {
+    const start = Date.now();
+    const value = await Promise.race([
+      fn().catch((err) => {
+        logger.warn(`[ready] ${label} probe error`, { message: (err as Error).message });
+        return timeoutValue;
+      }),
+      new Promise<T>((resolve) => setTimeout(() => resolve(timeoutValue), timeoutMs)),
     ]);
-    checks.db = await dbProbe;
-  } catch (err) {
-    logger.warn('[ready] db probe failed', { message: (err as Error).message });
-    checks.db = 'down';
+    return { value, latencyMs: Date.now() - start };
   }
 
-  // Redis ping — 500ms timeout; redis is optional → degraded if down
-  try {
-    const redisProbe = Promise.race([
-      redis.ping().then(() => 'ok' as const),
-      new Promise<'degraded'>((resolve) => setTimeout(() => resolve('degraded'), 500)),
-    ]);
-    checks.redis = await redisProbe;
-  } catch {
-    checks.redis = 'degraded';
+  // DB — 1.5s timeout, hard requirement.
+  const dbProbe = await measureWithTimeout(
+    'db',
+    () => prisma.$queryRaw`SELECT 1`.then(() => 'ok' as const),
+    1500,
+    'down' as const,
+  );
+  const dbCheck: CheckResult = { status: dbProbe.value, latencyMs: dbProbe.latencyMs };
+
+  // Redis — 500ms timeout, optional. "down" maps to "degraded" so it doesn't
+  // 503 the pod (sessions degrade gracefully to in-memory fallback).
+  const redisProbe = await measureWithTimeout(
+    'redis',
+    () => redis.ping().then(() => 'ok' as const),
+    500,
+    'degraded' as const,
+  );
+  const redisCheck: CheckResult = { status: redisProbe.value, latencyMs: redisProbe.latencyMs };
+
+  // Sentry — presence-only (DSN configured). No network probe; Sentry itself
+  // wouldn't be the bottleneck and we don't want /ready to spend a TCP roundtrip.
+  const sentryCheck: CheckResult = process.env.SENTRY_DSN
+    ? { status: 'ok' }
+    : { status: 'unconfigured', detail: 'SENTRY_DSN not set' };
+
+  // Telegram — 1.5s timeout, optional dep (booking alerts). Token absent →
+  // unconfigured (no health impact). Token present → ping getMe; failure
+  // degrades but doesn't 503.
+  let telegramCheck: CheckResult;
+  if (!process.env.TELEGRAM_BOT_TOKEN) {
+    telegramCheck = { status: 'unconfigured', detail: 'TELEGRAM_BOT_TOKEN not set' };
+  } else {
+    const probe = await measureWithTimeout(
+      'telegram',
+      async () => {
+        const r = await fetch(
+          `https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}/getMe`,
+          { signal: AbortSignal.timeout(1200) },
+        );
+        return (r.ok ? 'ok' : 'degraded') as 'ok' | 'degraded';
+      },
+      1500,
+      'degraded' as const,
+    );
+    telegramCheck = { status: probe.value, latencyMs: probe.latencyMs };
   }
 
-  const isReady = checks.db === 'ok';
-  res.status(isReady ? 200 : 503).json({
-    status: isReady ? 'ok' : 'not_ready',
+  const checks = {
+    db: dbCheck,
+    redis: redisCheck,
+    sentry: sentryCheck,
+    telegram: telegramCheck,
+  } as const;
+
+  const dbOk = dbCheck.status === 'ok';
+  const anyOptionalDown =
+    redisCheck.status === 'down' ||
+    redisCheck.status === 'degraded' ||
+    telegramCheck.status === 'down' ||
+    telegramCheck.status === 'degraded';
+
+  const overall: 'ready' | 'degraded' | 'not_ready' = !dbOk
+    ? 'not_ready'
+    : anyOptionalDown
+      ? 'degraded'
+      : 'ready';
+
+  const httpStatus = overall === 'not_ready' ? 503 : 200;
+  res.status(httpStatus).json({
+    status: overall === 'not_ready' ? 'not_ready' : 'ok',
+    overall,
     service: 'ecypro-api',
     version: SERVICE_VERSION,
     uptime: process.uptime(),
@@ -82,29 +160,12 @@ router.get('/ready', async (_req, res) => {
   });
 });
 
-// ─── Prometheus-style metrics ────────────────────────────
-// Intentionally minimal: no external `prom-client` dependency; plain text format.
-const startTime = Date.now();
-router.get('/metrics', (_req, res) => {
-  const mem = process.memoryUsage();
-  const uptimeSec = Math.round((Date.now() - startTime) / 1000);
-  const lines = [
-    '# HELP process_uptime_seconds Seconds since process start',
-    '# TYPE process_uptime_seconds counter',
-    `process_uptime_seconds ${uptimeSec}`,
-    '# HELP process_resident_memory_bytes Resident memory in bytes',
-    '# TYPE process_resident_memory_bytes gauge',
-    `process_resident_memory_bytes ${mem.rss}`,
-    '# HELP nodejs_heap_used_bytes V8 heap in use',
-    '# TYPE nodejs_heap_used_bytes gauge',
-    `nodejs_heap_used_bytes ${mem.heapUsed}`,
-    '# HELP nodejs_heap_total_bytes V8 heap allocated',
-    '# TYPE nodejs_heap_total_bytes gauge',
-    `nodejs_heap_total_bytes ${mem.heapTotal}`,
-  ].join('\n');
-  res.setHeader('Content-Type', 'text/plain; version=0.0.4');
-  res.send(lines + '\n');
-});
+// ─── Prometheus /metrics ─────────────────────────────────
+// P18 BE Track 2 / Aşama 2 — `prom-client` text format with custom
+// counters/histograms (HTTP, cache, BullMQ, db pool). The router is
+// defined in `./metrics.ts` so authentication + sampled gauges live in
+// one place.
+router.use('/metrics', metricsRoutes);
 
 // ─── Deep service health (all external integrations) ────────────────────────
 // Async-checks DB, Redis, Cal.com, Telegram, Resend, Logtail, Gemini, Docker
@@ -312,6 +373,10 @@ router.use('/analytics', analyticsRoutes);
 router.use('/newsletter', newsletterRoutes);
 router.use('/ai', aiRoutes);
 router.use('/admin', adminRoutes);
+// P18 BE Track 2 / Aşama 3 — Bull-Board queue dashboard. Mounted at
+// `/admin/queues` so the public path is `/api/admin/queues/*`. Auth +
+// IP allowlist enforced inside the subrouter.
+router.use('/admin/queues', adminQueuesRoutes);
 router.use('/webhooks', webhookRoutes);
 router.use('/manage', manageRoutes);
 router.use('/auth/2fa', totpRoutes);
@@ -321,5 +386,13 @@ router.use('/feedback', feedbackRoutes);
 router.use('/geo', geoRoutes);
 router.use('/crm', crmRoutes);
 router.use('/dev/analytics', devAnalyticsRoutes);
+router.use('/contact', contactRoutes);
+router.use('/gdpr', gdprRoutes);
+router.use('/search', searchRoutes);
+// P18 BE Track 2 / Aşama 1 — upload pipeline.
+//   POST /api/upload          → multipart accept + storage put + variant enqueue
+//   GET  /api/uploads/get?... → HMAC-signed read (local adapter only)
+router.use('/upload', uploadRoutes);
+router.use('/uploads', uploadsGetRoutes);
 
 export default router;
