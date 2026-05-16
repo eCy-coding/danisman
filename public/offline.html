@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#050810" />
+  <meta name="robots" content="noindex" />
+  <title>Bağlantı Yok · EcyPro</title>
+  <link rel="icon" href="/favicon.ico" />
+  <style>
+    :root {
+      --bg: #050810;
+      --surface-1: #0E1116;
+      --surface-2: #1E1F20;
+      --fg: #E3E3E3;
+      --muted: #9AA0A6;
+      --accent: #D4AF37;
+      --border: rgba(255, 255, 255, 0.08);
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; margin: 0; }
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      display: flex; align-items: center; justify-content: center; padding: 24px;
+      -webkit-font-smoothing: antialiased;
+    }
+    .card {
+      max-width: 520px; width: 100%;
+      background: var(--surface-1);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 34px 28px;
+      text-align: left;
+    }
+    .accent-bar {
+      height: 4px; width: 56px; background: var(--accent); border-radius: 2px; margin-bottom: 21px;
+    }
+    h1 { font-size: 26px; font-weight: 700; margin: 0 0 8px; }
+    h2 { font-size: 15px; font-weight: 600; margin: 21px 0 8px; color: var(--accent); letter-spacing: 0.04em; text-transform: uppercase; }
+    p { color: var(--muted); line-height: 1.6; margin: 0 0 13px; font-size: 15px; }
+    ul { margin: 0; padding-left: 21px; color: var(--muted); }
+    li { margin-bottom: 8px; }
+    .actions { display: flex; gap: 13px; margin-top: 21px; flex-wrap: wrap; }
+    button, a.btn {
+      appearance: none; border: 1px solid var(--border); background: var(--surface-2); color: var(--fg);
+      padding: 10px 18px; border-radius: 8px; font-size: 14px; font-weight: 600;
+      cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 8px;
+      transition: transform 0.12s ease, background 0.12s ease;
+    }
+    button:hover, a.btn:hover { background: #2A2B2D; }
+    button:active, a.btn:active { transform: scale(0.98); }
+    .primary { background: var(--accent); color: #050810; border-color: var(--accent); }
+    .primary:hover { background: #C39A2E; }
+    .status { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); margin-top: 13px; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; background: #ef4444; }
+    .dot.online { background: #10b981; }
+    .lang-switch { position: absolute; top: 13px; right: 21px; }
+    .lang-switch button { padding: 6px 10px; font-size: 12px; }
+    [data-lang="en"] { display: none; }
+    html[lang="en"] [data-lang="tr"] { display: none; }
+    html[lang="en"] [data-lang="en"] { display: block; }
+    html[lang="en"] [data-lang="en"].inline { display: inline; }
+  </style>
+</head>
+<body>
+  <div class="lang-switch">
+    <button type="button" onclick="setLang('tr')" aria-label="Türkçe">TR</button>
+    <button type="button" onclick="setLang('en')" aria-label="English">EN</button>
+  </div>
+
+  <main class="card" role="main">
+    <div class="accent-bar"></div>
+
+    <!-- Turkish -->
+    <div data-lang="tr">
+      <h1>Bağlantınız Yok</h1>
+      <p>EcyPro şu anda çevrimdışı. Sayfayı görüntülemek için internet bağlantınızı kontrol edip tekrar deneyin.</p>
+
+      <h2>Hızlı kontroller</h2>
+      <ul>
+        <li>Wi-Fi veya hücresel verinin açık olduğundan emin olun.</li>
+        <li>VPN veya proxy bağlantınız varsa devre dışı bırakıp deneyin.</li>
+        <li>Cihazınızı uçak modundan çıkarın.</li>
+      </ul>
+
+      <div class="actions">
+        <button type="button" class="primary" onclick="retry()">Tekrar Dene</button>
+        <a class="btn" href="/" data-link>Anasayfa</a>
+      </div>
+
+      <div class="status">
+        <span class="dot" id="netDot" aria-hidden="true"></span>
+        <span id="netLabel">Çevrimdışı</span>
+      </div>
+    </div>
+
+    <!-- English -->
+    <div data-lang="en">
+      <h1>You are offline</h1>
+      <p>EcyPro is currently unavailable. Please check your internet connection and try again.</p>
+
+      <h2>Quick checks</h2>
+      <ul>
+        <li>Make sure Wi-Fi or cellular data is enabled.</li>
+        <li>If you are using a VPN or proxy, try disabling it.</li>
+        <li>Turn off airplane mode if it is on.</li>
+      </ul>
+
+      <div class="actions">
+        <button type="button" class="primary" onclick="retry()">Retry</button>
+        <a class="btn" href="/" data-link>Home</a>
+      </div>
+
+      <div class="status">
+        <span class="dot" id="netDot2" aria-hidden="true"></span>
+        <span id="netLabel2">Offline</span>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    function setLang(lang) {
+      document.documentElement.lang = lang;
+      try { localStorage.setItem('ecypro_offline_lang', lang); } catch (e) {}
+    }
+    try {
+      var saved = localStorage.getItem('ecypro_offline_lang');
+      if (saved === 'en' || (!saved && navigator.language && navigator.language.startsWith('en'))) {
+        setLang('en');
+      }
+    } catch (e) {}
+
+    function retry() {
+      if (navigator.onLine) {
+        location.reload();
+      } else {
+        // Optimistic — try anyway; SW may have new cache
+        location.reload();
+      }
+    }
+
+    function updateNet() {
+      var online = navigator.onLine;
+      ['netDot', 'netDot2'].forEach(function (id) {
+        var el = document.getElementById(id);
+        if (el) el.classList.toggle('online', online);
+      });
+      ['netLabel', 'netLabel2'].forEach(function (id, i) {
+        var el = document.getElementById(id);
+        if (!el) return;
+        if (id === 'netLabel') el.textContent = online ? 'Çevrimiçi · Yenileyin' : 'Çevrimdışı';
+        if (id === 'netLabel2') el.textContent = online ? 'Online · Refresh' : 'Offline';
+      });
+      if (online) setTimeout(retry, 800);
+    }
+    window.addEventListener('online', updateNet);
+    window.addEventListener('offline', updateNet);
+    updateNet();
+  </script>
+</body>
+</html>
