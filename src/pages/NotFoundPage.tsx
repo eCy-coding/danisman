@@ -1,11 +1,17 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import { Home, Search, ArrowLeft } from 'lucide-react';
 import { Button } from '../components/ui/Button';
 
 export const NotFoundPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-neutral flex items-center justify-center px-4">
+      {/* P15 — 404, SERP indeks dışı + arama motorlarına link takip et. */}
+      <Helmet>
+        <title>404 — Sayfa Bulunamadı | EcyPro</title>
+        <meta name="robots" content="noindex,follow" />
+      </Helmet>
       <div className="max-w-2xl w-full text-center">
         {/* Error Code */}
         <div className="mb-8">
