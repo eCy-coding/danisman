@@ -208,3 +208,4 @@ public/_test
 # Apply recipe scripts (host-side commit chain runners)
 APPLY_P*.command
 _smoke.ts
+dist-old-*/
