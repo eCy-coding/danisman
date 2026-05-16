@@ -19,12 +19,20 @@ export const openApiSpec = {
   },
   servers: [
     {
+      url: 'http://localhost:3001/api/v1',
+      description: 'Development (v1 canonical)',
+    },
+    {
+      url: 'https://api.ecypro.com/api/v1',
+      description: 'Production (v1 canonical)',
+    },
+    {
       url: 'http://localhost:3001/api',
-      description: 'Development',
+      description: 'Development (legacy alias, sunsets 2026-12-01)',
     },
     {
       url: 'https://api.ecypro.com/api',
-      description: 'Production',
+      description: 'Production (legacy alias, sunsets 2026-12-01)',
     },
   ],
   tags: [
@@ -35,6 +43,7 @@ export const openApiSpec = {
     { name: 'SSE', description: 'Real-time Server-Sent Events' },
     { name: 'Newsletter', description: 'Newsletter subscription management' },
     { name: 'Observability', description: 'Readiness + metrics probes' },
+    { name: 'Search', description: 'Full-text search (Postgres tsvector + GIN)' },
   ],
   paths: {
     '/health': {
@@ -258,12 +267,15 @@ export const openApiSpec = {
       get: {
         tags: ['Observability'],
         summary: 'Prometheus-compatible metrics (text/plain)',
+        description:
+          'prom-client exposition. Custom metrics: http_requests_total, http_request_duration_seconds, cache_hits_total, cache_misses_total, bullmq_jobs_total, bullmq_jobs_pending, db_pool_active, db_pool_idle. Optional Bearer/Basic auth via METRICS_BEARER or METRICS_BASIC_USER/PASS env.',
         operationId: 'getMetrics',
         responses: {
           '200': {
             description: 'Metrics in exposition format',
             content: { 'text/plain': { schema: { type: 'string' } } },
           },
+          '401': { description: 'Auth required (when METRICS_BEARER/BASIC is set)' },
         },
       },
     },
@@ -663,6 +675,1116 @@ export const openApiSpec = {
           { in: 'query', name: 'action', schema: { type: 'string', example: 'USER_ROLE_CHANGE' } },
         ],
         responses: { '200': { description: 'Audit log entries with pagination' } },
+      },
+    },
+
+    // ─── P15-BE Aşama 2: Documentation backfill (formerly 58 undocumented) ──────
+    // Each entry below carries: tag, summary, security (when auth required),
+    // request/response shapes at the level needed for SDK gen + Swagger UI.
+    // Internal admin/AI endpoints are documented at "minimal" level (path +
+    // verb + responses + security) per the BE contract policy in
+    // outputs/P15_BE_OPENAPI.md.
+
+    // === Health / Docs / Status ===
+    '/docs': {
+      get: {
+        tags: ['Health'],
+        summary: 'Swagger UI for /docs.json (admin-gated in production)',
+        operationId: 'getDocsUi',
+        responses: {
+          '200': { description: 'HTML page rendering Swagger UI' },
+          '401': { description: 'Unauthenticated (production + DOCS_PUBLIC unset)' },
+          '403': { description: 'Non-admin requesting docs in production' },
+        },
+      },
+    },
+    '/docs.json': {
+      get: {
+        tags: ['Health'],
+        summary: 'Raw OpenAPI specification as JSON',
+        operationId: 'getDocsJson',
+        responses: {
+          '200': {
+            description: 'OpenAPI 3.0 spec',
+            content: { 'application/json': { schema: { type: 'object' } } },
+          },
+        },
+      },
+    },
+    '/health/services': {
+      get: {
+        tags: ['Health'],
+        summary: 'Deep external integration health check',
+        description:
+          'Pings DB, Redis, Cal.com, Telegram, Resend, Logtail, Gemini, Docker. Returns overall: ok | degraded | critical.',
+        operationId: 'getHealthServices',
+        responses: {
+          '200': { description: 'All checks within tolerance' },
+          '503': { description: 'One or more checks critical' },
+        },
+      },
+    },
+    '/status': {
+      get: {
+        tags: ['Health'],
+        summary: 'Public status page payload (operational | degraded | critical)',
+        operationId: 'getStatus',
+        responses: {
+          '200': { description: 'Status snapshot' },
+          '503': { description: 'Major outage' },
+        },
+      },
+    },
+
+    // === Auth — logout / refresh / password change / 2FA management ===
+    '/auth/logout': {
+      post: {
+        tags: ['Auth'],
+        summary: 'Sign out current session (revoke + blacklist jti)',
+        operationId: 'logout',
+        security: [{ BearerAuth: [] }],
+        responses: { '200': { description: 'Signed out' } },
+      },
+    },
+    '/auth/refresh': {
+      post: {
+        tags: ['Auth'],
+        summary: 'Rotate refresh token → issue new access + refresh pair',
+        operationId: 'refreshToken',
+        requestBody: {
+          required: true,
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                required: ['refreshToken'],
+                properties: { refreshToken: { type: 'string' } },
+              },
+            },
+          },
+        },
+        responses: {
+          '200': { description: 'New token pair' },
+          '401': { description: 'NOT_FOUND | REVOKED | EXPIRED | FAMILY_REVOKED' },
+        },
+      },
+    },
+    '/auth/password/change': {
+      post: {
+        tags: ['Auth'],
+        summary: 'Change password (revokes all sessions on success)',
+        description:
+          'Verifies currentPassword, gates newPassword via HIBP, then signs out every device including this one.',
+        operationId: 'changePassword',
+        security: [{ BearerAuth: [] }],
+        requestBody: {
+          required: true,
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                required: ['currentPassword', 'newPassword'],
+                properties: {
+                  currentPassword: { type: 'string', minLength: 8 },
+                  newPassword: { type: 'string', minLength: 12 },
+                },
+              },
+            },
+          },
+        },
+        responses: {
+          '200': { description: 'Password changed — all sessions revoked' },
+          '400': { description: 'NO_PASSWORD_SET (OAuth-only account)' },
+          '401': { description: 'INVALID_CREDENTIALS' },
+          '422': { description: 'PASSWORD_UNCHANGED | PASSWORD_BREACHED' },
+          '429': { description: 'Rate limit exceeded' },
+        },
+      },
+    },
+    '/auth/2fa/disable': {
+      post: {
+        tags: ['Auth'],
+        summary: 'Disable 2FA after verifying a valid TOTP code',
+        operationId: 'disable2fa',
+        security: [{ BearerAuth: [] }],
+        requestBody: {
+          required: true,
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                required: ['code'],
+                properties: { code: { type: 'string', pattern: '^[0-9]{6}$' } },
+              },
+            },
+          },
+        },
+        responses: {
+          '200': { description: '2FA disabled' },
+          '401': { description: 'Invalid TOTP code' },
+        },
+      },
+    },
+    '/auth/2fa/validate': {
+      post: {
+        tags: ['Auth'],
+        summary: 'Verify a TOTP code for a partially-authenticated session',
+        operationId: 'validate2fa',
+        requestBody: {
+          required: true,
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                required: ['userId', 'code'],
+                properties: {
+                  userId: { type: 'string', format: 'uuid' },
+                  code: { type: 'string', pattern: '^[0-9]{6}$' },
+                },
+              },
+            },
+          },
+        },
+        responses: {
+          '200': { description: '2FA validated — full session granted' },
+          '401': { description: 'Invalid code or session' },
+        },
+      },
+    },
+    '/auth/2fa/backup-codes': {
+      post: {
+        tags: ['Auth'],
+        summary: 'Regenerate backup codes (invalidates previous set)',
+        operationId: 'regen2faBackupCodes',
+        security: [{ BearerAuth: [] }],
+        responses: {
+          '200': { description: 'New backup codes (display once)' },
+        },
+      },
+    },
+
+    // === Bookings — owned-resource CRUD ===
+    '/bookings/{id}': {
+      get: {
+        tags: ['Bookings'],
+        summary: 'Fetch a single booking (must be owner or admin)',
+        security: [{ BearerAuth: [] }],
+        parameters: [
+          { in: 'path', name: 'id', required: true, schema: { type: 'string', format: 'uuid' } },
+        ],
+        responses: {
+          '200': { description: 'Booking detail' },
+          '403': { description: 'Forbidden — not owner' },
+          '404': { description: 'Not found' },
+        },
+      },
+      delete: {
+        tags: ['Bookings'],
+        summary: 'Cancel a booking (owner) — soft delete',
+        security: [{ BearerAuth: [] }],
+        parameters: [
+          { in: 'path', name: 'id', required: true, schema: { type: 'string', format: 'uuid' } },
+        ],
+        responses: {
+          '200': { description: 'Booking cancelled' },
+          '403': { description: 'Forbidden' },
+        },
+      },
+    },
+    '/bookings/{id}/status': {
+      patch: {
+        tags: ['Bookings'],
+        summary: 'Update booking status (admin or consultant)',
+        security: [{ BearerAuth: [] }],
+        parameters: [
+          { in: 'path', name: 'id', required: true, schema: { type: 'string', format: 'uuid' } },
+        ],
+        requestBody: {
+          required: true,
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                required: ['status'],
+                properties: {
+                  status: {
+                    type: 'string',
+                    enum: ['PENDING', 'CONFIRMED', 'COMPLETED', 'CANCELLED', 'NO_SHOW'],
+                  },
+                },
+              },
+            },
+          },
+        },
+        responses: {
+          '200': { description: 'Status updated' },
+          '403': { description: 'Forbidden' },
+        },
+      },
+    },
+
+    // === Webhooks ===
+    '/webhooks/cal': {
+      post: {
+        tags: ['Webhooks'],
+        summary: 'Cal.com booking lifecycle webhook receiver',
+        description:
+          'Verifies X-Cal-Signature (HMAC-SHA256 over raw body, shared secret CAL_WEBHOOK_SECRET). Rejects requests with missing or invalid signature.',
+        operationId: 'webhookCal',
+        requestBody: {
+          required: true,
+          content: { 'application/json': { schema: { type: 'object' } } },
+        },
+        responses: {
+          '200': { description: 'Webhook accepted + processed' },
+          '401': { description: 'INVALID_SIGNATURE' },
+          '400': { description: 'MALFORMED_PAYLOAD' },
+        },
+      },
+    },
+
+    // === Analytics ===
+    '/analytics/interaction': {
+      post: {
+        tags: ['Analytics'],
+        summary: 'Track user interaction (click, scroll, conversion)',
+        operationId: 'trackInteraction',
+        requestBody: {
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                properties: {
+                  sessionId: { type: 'string' },
+                  type: { type: 'string', example: 'click' },
+                  target: { type: 'string' },
+                  metadata: { type: 'object', additionalProperties: true },
+                },
+              },
+            },
+          },
+        },
+        responses: { '200': { description: 'Recorded' } },
+      },
+    },
+    '/analytics/error': {
+      post: {
+        tags: ['Analytics'],
+        summary: 'Report a frontend error (forwarded to Sentry)',
+        operationId: 'reportError',
+        requestBody: {
+          required: true,
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                required: ['message'],
+                properties: {
+                  message: { type: 'string' },
+                  stack: { type: 'string' },
+                  url: { type: 'string' },
+                  userAgent: { type: 'string' },
+                },
+              },
+            },
+          },
+        },
+        responses: { '200': { description: 'Logged' } },
+      },
+    },
+    '/analytics/dashboard': {
+      get: {
+        tags: ['Analytics'],
+        summary: 'Aggregate analytics dashboard data (admin)',
+        security: [{ BearerAuth: [] }],
+        responses: { '200': { description: 'Dashboard payload' } },
+      },
+    },
+    '/analytics/errors': {
+      get: {
+        tags: ['Analytics'],
+        summary: 'Recent error log entries (admin)',
+        security: [{ BearerAuth: [] }],
+        parameters: [
+          { in: 'query', name: 'page', schema: { type: 'integer', default: 1 } },
+          { in: 'query', name: 'limit', schema: { type: 'integer', default: 20 } },
+        ],
+        responses: { '200': { description: 'Paginated error list' } },
+      },
+    },
+    '/analytics/errors/stats': {
+      get: {
+        tags: ['Analytics'],
+        summary: 'Error frequency rollups (admin)',
+        security: [{ BearerAuth: [] }],
+        responses: { '200': { description: 'Error stats (24h, 7d, 30d)' } },
+      },
+    },
+
+    // === Newsletter ===
+    '/newsletter/stats': {
+      get: {
+        tags: ['Newsletter'],
+        summary: 'Subscriber count + growth (admin)',
+        security: [{ BearerAuth: [] }],
+        responses: { '200': { description: 'Newsletter analytics' } },
+      },
+    },
+
+    // === Admin ===
+    '/admin/stats': {
+      get: {
+        tags: ['Admin'],
+        summary: 'Top-line platform KPI snapshot (admin)',
+        security: [{ BearerAuth: [] }],
+        responses: { '200': { description: 'KPI bundle' } },
+      },
+    },
+    '/admin/users': {
+      get: {
+        tags: ['Admin'],
+        summary: 'List users with role + verification + activity (admin)',
+        security: [{ BearerAuth: [] }],
+        parameters: [
+          { in: 'query', name: 'page', schema: { type: 'integer', default: 1 } },
+          { in: 'query', name: 'limit', schema: { type: 'integer', default: 20 } },
+          { in: 'query', name: 'search', schema: { type: 'string' } },
+          { in: 'query', name: 'role', schema: { type: 'string', enum: ['USER', 'ADMIN', 'CONSULTANT'] } },
+        ],
+        responses: { '200': { description: 'Paginated user list' } },
+      },
+    },
+    '/admin/users/{id}/role': {
+      patch: {
+        tags: ['Admin'],
+        summary: 'Update user role (admin)',
+        security: [{ BearerAuth: [] }],
+        parameters: [
+          { in: 'path', name: 'id', required: true, schema: { type: 'string', format: 'uuid' } },
+        ],
+        requestBody: {
+          required: true,
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                required: ['role'],
+                properties: {
+                  role: { type: 'string', enum: ['USER', 'ADMIN', 'CONSULTANT'] },
+                },
+              },
+            },
+          },
+        },
+        responses: { '200': { description: 'Role updated' } },
+      },
+    },
+    '/admin/users/{id}/active': {
+      patch: {
+        tags: ['Admin'],
+        summary: 'Activate or deactivate a user account (admin)',
+        security: [{ BearerAuth: [] }],
+        parameters: [
+          { in: 'path', name: 'id', required: true, schema: { type: 'string', format: 'uuid' } },
+        ],
+        requestBody: {
+          required: true,
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                required: ['isActive'],
+                properties: { isActive: { type: 'boolean' } },
+              },
+            },
+          },
+        },
+        responses: { '200': { description: 'Active flag updated' } },
+      },
+    },
+    // P16 BE Track 2 / Aşama 1 — Cache observability
+    '/admin/cache/stats': {
+      get: {
+        tags: ['Admin'],
+        summary: 'Read in-process response cache stats (admin)',
+        operationId: 'adminCacheStats',
+        security: [{ BearerAuth: [] }],
+        responses: { '200': { description: 'Cache hit/miss/eviction counters' } },
+      },
+    },
+    '/admin/cache/invalidate': {
+      post: {
+        tags: ['Admin'],
+        summary: 'Purge cached responses by path prefix (admin)',
+        operationId: 'adminCacheInvalidate',
+        security: [{ BearerAuth: [] }],
+        requestBody: {
+          required: true,
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                required: ['prefix'],
+                properties: {
+                  prefix: { type: 'string', minLength: 2, example: '/api/geo/' },
+                },
+              },
+            },
+          },
+        },
+        responses: {
+          '200': { description: 'Purge count returned' },
+          '400': { description: 'Missing or invalid prefix' },
+        },
+      },
+    },
+    '/admin/cache': {
+      delete: {
+        tags: ['Admin'],
+        summary: 'Clear the entire response cache (admin)',
+        operationId: 'adminCacheClear',
+        security: [{ BearerAuth: [] }],
+        responses: { '200': { description: 'Cache cleared, size before clear returned' } },
+      },
+    },
+    // P17 BE Track 2 / Aşama 4 — API key CRUD
+    '/admin/api-keys': {
+      get: {
+        tags: ['Admin'],
+        summary: 'List API keys (admin)',
+        operationId: 'adminApiKeyList',
+        security: [{ BearerAuth: [] }],
+        parameters: [
+          {
+            in: 'query',
+            name: 'includeRevoked',
+            schema: { type: 'boolean', default: false },
+          },
+        ],
+        responses: { '200': { description: 'API key list (raw key never returned)' } },
+      },
+      post: {
+        tags: ['Admin'],
+        summary: 'Mint a new API key (admin)',
+        description:
+          'Returns the raw key exactly once. The server only persists a SHA-256 hash.',
+        operationId: 'adminApiKeyCreate',
+        security: [{ BearerAuth: [] }],
+        requestBody: {
+          required: true,
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                required: ['name', 'scopes'],
+                properties: {
+                  name: { type: 'string', minLength: 1, maxLength: 120 },
+                  scopes: {
+                    type: 'array',
+                    items: { type: 'string' },
+                    minItems: 1,
+                    example: ['read:bookings', 'write:contacts'],
+                  },
+                  userId: { type: 'string', nullable: true },
+                  expiresAt: { type: 'string', format: 'date-time', nullable: true },
+                },
+              },
+            },
+          },
+        },
+        responses: {
+          '201': { description: 'API key minted; rawKey present in response (one-time)' },
+          '400': { description: 'Validation error' },
+        },
+      },
+    },
+    // P18 BE Track 2 / Aşama 3 — Bull-Board dashboard.
+    // Mount serves an interactive HTML UI; we expose it in the spec
+    // so the OpenAPI contract test recognises the route surface.
+    '/admin/queues': {
+      get: {
+        tags: ['Admin'],
+        summary: 'BullMQ admin dashboard (Bull-Board, HTML)',
+        description:
+          'HTML UI for queue inspection (waiting/active/delayed/failed counts + retry). ADMIN-only. Additional IP allowlist via ADMIN_QUEUES_IP_ALLOWLIST.',
+        operationId: 'adminQueuesDashboard',
+        security: [{ BearerAuth: [] }],
+        responses: {
+          '200': { description: 'Dashboard HTML', content: { 'text/html': {} } },
+          '401': { description: 'Authentication required' },
+          '403': { description: 'IP not allowlisted or not an admin' },
+          '503': { description: 'Bull-Board dependency not installed' },
+        },
+      },
+    },
+    '/admin/api-keys/{id}': {
+      delete: {
+        tags: ['Admin'],
+        summary: 'Revoke an API key (admin)',
+        operationId: 'adminApiKeyRevoke',
+        security: [{ BearerAuth: [] }],
+        parameters: [
+          { in: 'path', name: 'id', required: true, schema: { type: 'string', format: 'uuid' } },
+        ],
+        responses: {
+          '200': { description: 'Revoked (or already revoked)' },
+          '404': { description: 'API key not found' },
+        },
+      },
+    },
+    // P18 BE Track 2 / Aşama 1 — File upload pipeline.
+    '/upload': {
+      post: {
+        tags: ['Admin'],
+        summary: 'Upload an image (multipart/form-data, field name "file")',
+        description:
+          'Authenticated multipart upload. MIME whitelist: image/jpeg, image/png, image/webp, image/avif. Max 5 MB (UPLOAD_MAX_BYTES override). Returns the canonical URL + hash; deduplicated against existing rows via SHA-256.',
+        operationId: 'uploadImage',
+        security: [{ BearerAuth: [] }],
+        requestBody: {
+          required: true,
+          content: {
+            'multipart/form-data': {
+              schema: {
+                type: 'object',
+                properties: { file: { type: 'string', format: 'binary' } },
+                required: ['file'],
+              },
+            },
+          },
+        },
+        responses: {
+          '201': { description: 'Image accepted; variant fan-out enqueued' },
+          '200': { description: 'Existing image returned (hash dedupe)' },
+          '400': { description: 'No file field, parse error, etc.' },
+          '401': { description: 'Authentication required' },
+          '413': { description: 'File exceeds max size' },
+          '415': { description: 'MIME not allowed' },
+        },
+      },
+    },
+    '/uploads/get': {
+      get: {
+        tags: ['Admin'],
+        summary: 'HMAC-signed object read (local storage adapter only)',
+        operationId: 'uploadsGet',
+        parameters: [
+          { in: 'query', name: 'key', required: true, schema: { type: 'string' } },
+          { in: 'query', name: 'exp', required: true, schema: { type: 'integer' } },
+          { in: 'query', name: 'sig', required: true, schema: { type: 'string' } },
+        ],
+        responses: {
+          '200': { description: 'Object bytes', content: { 'application/octet-stream': {} } },
+          '400': { description: 'Missing query params' },
+          '403': { description: 'Signature invalid or expired' },
+          '404': { description: 'Object not found or S3 adapter active' },
+        },
+      },
+    },
+    // P17 BE Track 2 / Aşama 3 — Full-text search
+    '/search': {
+      get: {
+        tags: ['Search'],
+        summary: 'Full-text search across services (Postgres tsvector + GIN)',
+        operationId: 'searchQuery',
+        parameters: [
+          { in: 'query', name: 'q', required: true, schema: { type: 'string', minLength: 1, maxLength: 256 } },
+          { in: 'query', name: 'lang', schema: { type: 'string', enum: ['tr', 'en'], default: 'tr' } },
+          { in: 'query', name: 'limit', schema: { type: 'integer', minimum: 1, maximum: 50, default: 20 } },
+          { in: 'query', name: 'cursor', schema: { type: 'string' } },
+        ],
+        responses: {
+          '200': { description: 'Search results with rank + nextCursor for pagination' },
+          '400': { description: 'Missing or oversized q parameter' },
+          '500': { description: 'Search backend error' },
+        },
+      },
+    },
+    '/admin/contacts': {
+      get: {
+        tags: ['Admin'],
+        summary: 'List inbound contact submissions (admin)',
+        security: [{ BearerAuth: [] }],
+        parameters: [
+          { in: 'query', name: 'isRead', schema: { type: 'boolean' } },
+          { in: 'query', name: 'page', schema: { type: 'integer', default: 1 } },
+          { in: 'query', name: 'limit', schema: { type: 'integer', default: 20 } },
+        ],
+        responses: { '200': { description: 'Paginated contact submissions' } },
+      },
+    },
+    '/admin/contacts/{id}/read': {
+      patch: {
+        tags: ['Admin'],
+        summary: 'Mark a contact submission as read (admin)',
+        security: [{ BearerAuth: [] }],
+        parameters: [
+          { in: 'path', name: 'id', required: true, schema: { type: 'string', format: 'uuid' } },
+        ],
+        responses: { '200': { description: 'Marked read' } },
+      },
+    },
+    '/admin/newsletter': {
+      get: {
+        tags: ['Admin'],
+        summary: 'List newsletter subscribers (admin)',
+        security: [{ BearerAuth: [] }],
+        parameters: [
+          { in: 'query', name: 'page', schema: { type: 'integer', default: 1 } },
+          { in: 'query', name: 'limit', schema: { type: 'integer', default: 20 } },
+        ],
+        responses: { '200': { description: 'Paginated subscriber list' } },
+      },
+    },
+    '/admin/newsletter/{id}': {
+      delete: {
+        tags: ['Admin'],
+        summary: 'Hard-unsubscribe a newsletter subscriber (admin)',
+        security: [{ BearerAuth: [] }],
+        parameters: [
+          { in: 'path', name: 'id', required: true, schema: { type: 'string', format: 'uuid' } },
+        ],
+        responses: { '200': { description: 'Unsubscribed' } },
+      },
+    },
+    '/admin/blog': {
+      get: {
+        tags: ['Admin'],
+        summary: 'List blog posts including drafts (admin)',
+        security: [{ BearerAuth: [] }],
+        responses: { '200': { description: 'All posts' } },
+      },
+      post: {
+        tags: ['Admin'],
+        summary: 'Create a blog post (admin)',
+        security: [{ BearerAuth: [] }],
+        requestBody: {
+          required: true,
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                required: ['slug', 'title', 'content'],
+                properties: {
+                  slug: { type: 'string' },
+                  title: { type: 'string' },
+                  content: { type: 'string' },
+                  status: { type: 'string', enum: ['DRAFT', 'PUBLISHED'] },
+                },
+              },
+            },
+          },
+        },
+        responses: { '201': { description: 'Post created' } },
+      },
+    },
+    '/admin/blog/{slug}': {
+      get: {
+        tags: ['Admin'],
+        summary: 'Fetch a blog post by slug including draft (admin)',
+        security: [{ BearerAuth: [] }],
+        parameters: [
+          { in: 'path', name: 'slug', required: true, schema: { type: 'string' } },
+        ],
+        responses: {
+          '200': { description: 'Post detail' },
+          '404': { description: 'Not found' },
+        },
+      },
+      patch: {
+        tags: ['Admin'],
+        summary: 'Update a blog post (admin)',
+        security: [{ BearerAuth: [] }],
+        parameters: [
+          { in: 'path', name: 'slug', required: true, schema: { type: 'string' } },
+        ],
+        requestBody: {
+          required: true,
+          content: { 'application/json': { schema: { type: 'object' } } },
+        },
+        responses: { '200': { description: 'Post updated' } },
+      },
+      delete: {
+        tags: ['Admin'],
+        summary: 'Delete a blog post (admin)',
+        security: [{ BearerAuth: [] }],
+        parameters: [
+          { in: 'path', name: 'slug', required: true, schema: { type: 'string' } },
+        ],
+        responses: { '200': { description: 'Post deleted' } },
+      },
+    },
+    '/admin/settings': {
+      get: {
+        tags: ['Admin'],
+        summary: 'Read platform settings (admin)',
+        security: [{ BearerAuth: [] }],
+        responses: { '200': { description: 'Settings bundle' } },
+      },
+      patch: {
+        tags: ['Admin'],
+        summary: 'Update platform settings (admin)',
+        security: [{ BearerAuth: [] }],
+        requestBody: {
+          required: true,
+          content: { 'application/json': { schema: { type: 'object' } } },
+        },
+        responses: { '200': { description: 'Settings updated' } },
+      },
+    },
+
+    // === AI ===
+    '/ai/health': {
+      get: {
+        tags: ['Health'],
+        summary: 'AI provider health check (Gemini)',
+        operationId: 'aiHealth',
+        responses: {
+          '200': { description: 'AI provider reachable' },
+          '503': { description: 'AI provider unavailable' },
+        },
+      },
+    },
+    '/ai/models': {
+      get: {
+        tags: ['Health'],
+        summary: 'List available AI models',
+        operationId: 'aiModels',
+        responses: { '200': { description: 'Model list' } },
+      },
+    },
+    '/ai/complete': {
+      post: {
+        tags: ['Health'],
+        summary: 'Single-turn completion (non-streaming)',
+        operationId: 'aiComplete',
+        security: [{ BearerAuth: [] }],
+        requestBody: {
+          required: true,
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                required: ['prompt'],
+                properties: {
+                  prompt: { type: 'string' },
+                  model: { type: 'string' },
+                  temperature: { type: 'number', minimum: 0, maximum: 2 },
+                },
+              },
+            },
+          },
+        },
+        responses: { '200': { description: 'Completion text' } },
+      },
+    },
+    '/ai/chat': {
+      post: {
+        tags: ['Health'],
+        summary: 'Multi-turn chat (non-streaming)',
+        operationId: 'aiChat',
+        security: [{ BearerAuth: [] }],
+        requestBody: {
+          required: true,
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                required: ['messages'],
+                properties: {
+                  messages: { type: 'array', items: { type: 'object' } },
+                  model: { type: 'string' },
+                },
+              },
+            },
+          },
+        },
+        responses: { '200': { description: 'Assistant reply' } },
+      },
+    },
+    '/ai/stream': {
+      post: {
+        tags: ['Health'],
+        summary: 'Streaming completion (SSE)',
+        operationId: 'aiStream',
+        security: [{ BearerAuth: [] }],
+        responses: {
+          '200': {
+            description: 'SSE event stream',
+            content: { 'text/event-stream': { schema: { type: 'string' } } },
+          },
+        },
+      },
+    },
+    '/ai/stream/chat': {
+      post: {
+        tags: ['Health'],
+        summary: 'Streaming chat (SSE)',
+        operationId: 'aiStreamChat',
+        security: [{ BearerAuth: [] }],
+        responses: {
+          '200': {
+            description: 'SSE event stream',
+            content: { 'text/event-stream': { schema: { type: 'string' } } },
+          },
+        },
+      },
+    },
+
+    // === CRM ===
+    '/crm/leads/hot': {
+      get: {
+        tags: ['Admin'],
+        summary: 'Top scoring leads (admin)',
+        security: [{ BearerAuth: [] }],
+        parameters: [
+          { in: 'query', name: 'limit', schema: { type: 'integer', default: 10 } },
+        ],
+        responses: { '200': { description: 'Ordered list of leads' } },
+      },
+    },
+    '/crm/pipeline-stats': {
+      get: {
+        tags: ['Admin'],
+        summary: 'CRM pipeline stage counts (admin)',
+        security: [{ BearerAuth: [] }],
+        responses: { '200': { description: 'Stage roll-ups' } },
+      },
+    },
+    '/crm/notify': {
+      post: {
+        tags: ['Admin'],
+        summary: 'Push a Telegram CRM notification (admin)',
+        security: [{ BearerAuth: [] }],
+        requestBody: {
+          required: true,
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                required: ['message'],
+                properties: { message: { type: 'string' }, severity: { type: 'string' } },
+              },
+            },
+          },
+        },
+        responses: { '200': { description: 'Notification queued' } },
+      },
+    },
+    '/crm/sync-contact': {
+      post: {
+        tags: ['Admin'],
+        summary: 'Sync a contact into the CRM pipeline (admin)',
+        security: [{ BearerAuth: [] }],
+        requestBody: {
+          required: true,
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                required: ['contactId'],
+                properties: { contactId: { type: 'string', format: 'uuid' } },
+              },
+            },
+          },
+        },
+        responses: { '200': { description: 'Sync queued' } },
+      },
+    },
+
+    // === Leads ===
+    '/leads/score': {
+      post: {
+        tags: ['Admin'],
+        summary: 'Compute lead score for an ad-hoc contact payload',
+        security: [{ BearerAuth: [] }],
+        requestBody: {
+          required: true,
+          content: { 'application/json': { schema: { type: 'object' } } },
+        },
+        responses: { '200': { description: 'Computed score + breakdown' } },
+      },
+    },
+    '/leads/weights': {
+      get: {
+        tags: ['Admin'],
+        summary: 'Active lead scoring weights (admin)',
+        security: [{ BearerAuth: [] }],
+        responses: { '200': { description: 'Weight table' } },
+      },
+    },
+    '/leads/{contactId}/score': {
+      get: {
+        tags: ['Admin'],
+        summary: 'Stored lead score for a contact (admin)',
+        security: [{ BearerAuth: [] }],
+        parameters: [
+          { in: 'path', name: 'contactId', required: true, schema: { type: 'string', format: 'uuid' } },
+        ],
+        responses: { '200': { description: 'Score + tier' } },
+      },
+    },
+
+    // === Geo ===
+    '/geo/banner': {
+      get: {
+        tags: ['Health'],
+        summary: 'Localized banner content for the visitor country',
+        operationId: 'geoBanner',
+        responses: { '200': { description: 'Banner payload' } },
+      },
+    },
+    '/geo/lookup': {
+      get: {
+        tags: ['Health'],
+        summary: 'IP → country lookup (server-side proxy)',
+        operationId: 'geoLookup',
+        parameters: [
+          { in: 'query', name: 'ip', schema: { type: 'string', format: 'ipv4' } },
+        ],
+        responses: { '200': { description: 'Country + region' } },
+      },
+    },
+    '/geo/countries': {
+      get: {
+        tags: ['Health'],
+        summary: 'Supported countries directory',
+        operationId: 'geoCountries',
+        responses: { '200': { description: 'Country list' } },
+      },
+    },
+    '/geo/cache/stats': {
+      get: {
+        tags: ['Health'],
+        summary: 'Geo cache hit-rate diagnostics (admin)',
+        security: [{ BearerAuth: [] }],
+        responses: { '200': { description: 'Cache stats' } },
+      },
+    },
+
+    // === Contact ===
+    '/contact': {
+      post: {
+        tags: ['Analytics'],
+        summary: 'Public contact form submission',
+        operationId: 'submitContactForm',
+        requestBody: {
+          required: true,
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                required: ['name', 'email', 'message'],
+                properties: {
+                  name: { type: 'string' },
+                  email: { type: 'string', format: 'email' },
+                  message: { type: 'string' },
+                  company: { type: 'string' },
+                  honeypot: { type: 'string', description: 'Anti-bot — must be empty' },
+                },
+              },
+            },
+          },
+        },
+        responses: {
+          '201': { description: 'Submission recorded' },
+          '400': { description: 'Validation error' },
+          '429': { description: 'Rate limit exceeded' },
+        },
+      },
+    },
+
+    // === Feedback (list-own) ===
+    '/feedback': {
+      get: {
+        tags: ['Bookings'],
+        summary: 'List feedback submitted by the calling user',
+        security: [{ BearerAuth: [] }],
+        responses: { '200': { description: 'Feedback list' } },
+      },
+    },
+
+    // === GDPR / KVKK ===
+    '/gdpr/status': {
+      get: {
+        tags: ['Auth'],
+        summary: 'Outstanding GDPR export / delete request state for the caller',
+        security: [{ BearerAuth: [] }],
+        responses: { '200': { description: 'Status payload' } },
+      },
+    },
+    '/gdpr/export': {
+      post: {
+        tags: ['Auth'],
+        summary: 'Trigger a GDPR data export (Article 15)',
+        security: [{ BearerAuth: [] }],
+        responses: {
+          '202': { description: 'Export queued; download link delivered by email' },
+          '429': { description: 'Already in flight' },
+        },
+      },
+    },
+    '/gdpr/delete': {
+      post: {
+        tags: ['Auth'],
+        summary: 'Request GDPR account deletion (Article 17)',
+        security: [{ BearerAuth: [] }],
+        requestBody: {
+          required: true,
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                required: ['confirm'],
+                properties: {
+                  confirm: { type: 'string', enum: ['DELETE'], description: 'Type "DELETE" to confirm' },
+                },
+              },
+            },
+          },
+        },
+        responses: {
+          '202': { description: 'Deletion scheduled (30-day grace)' },
+          '400': { description: 'Confirmation missing' },
+        },
+      },
+    },
+
+    // === Manage (token-bound public flows) ===
+    '/manage/booking': {
+      get: {
+        tags: ['Bookings'],
+        summary: 'Public booking lookup via HMAC-signed manage token',
+        parameters: [
+          { in: 'query', name: 'token', required: true, schema: { type: 'string' } },
+        ],
+        responses: {
+          '200': { description: 'Booking summary' },
+          '400': { description: 'Invalid token' },
+        },
+      },
+    },
+    '/manage/booking/cancel': {
+      post: {
+        tags: ['Bookings'],
+        summary: 'Cancel a booking via manage-token (no login)',
+        requestBody: {
+          required: true,
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                required: ['token'],
+                properties: { token: { type: 'string' } },
+              },
+            },
+          },
+        },
+        responses: {
+          '200': { description: 'Cancelled' },
+          '400': { description: 'Invalid token' },
+          '409': { description: 'Already cancelled or in the past' },
+        },
       },
     },
   },
