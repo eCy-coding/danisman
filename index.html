@@ -18,17 +18,15 @@
     <link rel="canonical" href="https://www.ecypro.com/" />
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://www.googletagmanager.com https://www.google-analytics.com https://browser.sentry-cdn.com https://*.sentry.io https://api.emailjs.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https: blob:; font-src 'self' data:; connect-src 'self' https://huggingface.co https://cdn-lfs.huggingface.co https://www.googletagmanager.com https://www.google-analytics.com https://*.google-analytics.com https://browser.sentry-cdn.com https://*.sentry.io https://*.ingest.sentry.io https://api.emailjs.com https://api.ecypro.com https://*.ecypro.com wss://* http://localhost:* ws://localhost:* ws://127.0.0.1:*; worker-src 'self' blob:; frame-src 'self'; object-src 'none'; base-uri 'self';"
+      content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://www.googletagmanager.com https://www.google-analytics.com https://browser.sentry-cdn.com https://*.sentry.io https://cdn.growthbook.io; style-src 'self' 'unsafe-inline'; img-src 'self' data: https: blob:; font-src 'self' data:; connect-src 'self' https://huggingface.co https://cdn-lfs.huggingface.co https://www.googletagmanager.com https://www.google-analytics.com https://*.google-analytics.com https://browser.sentry-cdn.com https://*.sentry.io https://*.ingest.sentry.io https://cdn.growthbook.io https://api.ecypro.com https://*.ecypro.com wss://* http://localhost:* ws://localhost:* ws://127.0.0.1:*; worker-src 'self' blob:; frame-src 'self'; object-src 'none'; base-uri 'self'; report-uri https://o4508000000000000.ingest.sentry.io/api/0/security/?sentry_key=__SENTRY_CSP_KEY__; report-to csp-endpoint;"
     />
     <meta http-equiv="X-Content-Type-Options" content="nosniff" />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
 
-    <!-- i18n hreflang alternate links — bcp47 codes, both bare and region-tagged
-         variants improve discoverability for regional Googlebots. -->
-    <link rel="alternate" hreflang="tr" href="https://www.ecypro.com/tr/" />
-    <link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/" />
-    <link rel="alternate" hreflang="en" href="https://www.ecypro.com/en/" />
-    <link rel="alternate" hreflang="en-US" href="https://www.ecypro.com/en/" />
+    <!-- P15 — Statik hreflang tag'leri kaldırıldı. SeoManager (react-helmet-async)
+         route-aware tek otorite olarak yönetir. Çift emit Google'da konfüzyon
+         yaratıyordu (statik 5 + SeoManager 3 = 8 tag aynı route'ta).
+         x-default ilk paint için korunur (Helmet hidrasyon öncesi). -->
     <link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/" />
 
     <!-- P33-T25: Critical font preload — fetchpriority=high blocks FOIT for above-fold h1 -->
@@ -60,6 +58,11 @@
     <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin />
     <link rel="preconnect" href="https://www.google-analytics.com" crossorigin />
     <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+    <!-- P16 — 3rd-party preconnect tamamlama: Clarity tag + GrowthBook features
+         CDN'i. dns-prefetch hafif fallback (preconnect kararı tarayıcıya bırakılır
+         ki connection pool zorlanmasın). -->
+    <link rel="dns-prefetch" href="https://www.clarity.ms" />
+    <link rel="dns-prefetch" href="https://cdn.growthbook.io" />
 
     <!-- P33-T22: Modulepreload critical chunks — browser parses in parallel with render -->
     <link rel="modulepreload" href="/assets/lp.js" />

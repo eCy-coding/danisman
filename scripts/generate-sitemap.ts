@@ -3,6 +3,8 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 // Define static routes
+// NOTE: P15 — privacy/data-rights ve status sitemap'in tek noktasında declare edilir.
+//       /antigravity-terminal — eggegg, noindex (sitemap dışı).
 const STATIC_ROUTES = [
   '',
   'about',
@@ -19,6 +21,7 @@ const STATIC_ROUTES = [
   'events',
   'locations',
   'privacy',
+  'privacy/data-rights',
   'terms',
   'cookies',
   'faq',
@@ -97,15 +100,20 @@ async function generateSitemap() {
   // Single timestamp per build keeps the file deterministic + diffable.
   const buildDate = new Date().toISOString().split('T')[0];
 
-  // Helper: build a single <url> entry with bilingual hreflang
+  // Helper: build a single <url> entry with bilingual hreflang.
+  // P15 fix — hreflang URLs MUST match path-based routing (`/tr/<path>`, `/en/<path>`).
+  // Legacy `?lang=tr` query-string format conflicts with SeoManager + LocaleRoute,
+  // causing Google to crawl URLs that the SPA does not recognize (soft-404 risk).
   const buildUrl = (path: string, changefreq: string, priority: string): string => {
-    const canonicalUrl = `${BASE_URL}/${path}`;
-    const trUrl = `${BASE_URL}/${path}${path.includes('?') ? '&' : '?'}lang=tr`;
+    const cleanPath = path.replace(/^\/+/, '');
+    const canonicalUrl = cleanPath ? `${BASE_URL}/${cleanPath}` : BASE_URL;
+    const trUrl = cleanPath ? `${BASE_URL}/tr/${cleanPath}` : `${BASE_URL}/tr`;
+    const enUrl = cleanPath ? `${BASE_URL}/en/${cleanPath}` : `${BASE_URL}/en`;
     return `
   <url>
     <loc>${canonicalUrl}</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="${canonicalUrl}" />
     <xhtml:link rel="alternate" hreflang="tr-TR" href="${trUrl}" />
+    <xhtml:link rel="alternate" hreflang="en" href="${enUrl}" />
     <xhtml:link rel="alternate" hreflang="x-default" href="${canonicalUrl}" />
     <lastmod>${buildDate}</lastmod>
     <changefreq>${changefreq}</changefreq>
