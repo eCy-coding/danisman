@@ -19,6 +19,7 @@
 import * as Sentry from '@sentry/react';
 import { onCLS, onFCP, onINP, onLCP, onTTFB, type Metric } from 'web-vitals';
 import { Logger } from './logger';
+import { initRumStats, recordVitalSample, setRumRoute } from './rum-stats';
 
 // ── Sample rate ───────────────────────────────────────────────────────────────
 
@@ -45,6 +46,10 @@ const VITAL_UNIT: Record<string, string> = {
 
 function reportToSentry(metric: Metric): void {
   if (!sampled) return;
+
+  // P21/T1 — Statistical aggregation. Tek tek captureMessage'lar yerine
+  // 1dk pencerede P-Squared percentile, sonra TEK transaction olarak dök.
+  recordVitalSample(metric);
 
   // 1) Send as measurement on the current transaction so the Sentry
   //    Performance tab tags route loads with vital numbers.
@@ -102,11 +107,22 @@ export function initRUM(): void {
 
   Logger.debug(`[RUM] init — sampled=${sampled} mode=${import.meta.env.MODE}`);
 
+  // P21/T1 — Aggregator opt-in. Yalnız sampled clientlarda kurulur, böylece
+  // unsampled trafik için sıfır overhead. Sentry'ye 60s pencerelerle dökecek.
+  if (sampled) {
+    initRumStats();
+  }
+
   onCLS(reportToSentry);
   onFCP(reportToSentry);
   onINP(reportToSentry);
   onLCP(reportToSentry);
   onTTFB(reportToSentry);
+}
+
+/** Router route-change hook — pathname'i template'e çevirip aggregator'a iletir. */
+export function notifyRouteChange(pathname: string): void {
+  setRumRoute(pathname);
 }
 
 // ── Critical-path custom transactions ─────────────────────────────────────────

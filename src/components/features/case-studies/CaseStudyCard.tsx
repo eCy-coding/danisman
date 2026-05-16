@@ -38,6 +38,8 @@ export const CaseStudyCard: React.FC<CaseStudyCardProps> = ({ study }) => {
               <img
                   src={study.image}
                   alt={study.title}
+                  width={800}
+                  height={600}
                   loading="lazy"
                   decoding="async"
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"

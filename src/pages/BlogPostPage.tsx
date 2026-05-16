@@ -128,6 +128,8 @@ const BlogPostPage: React.FC = () => {
                     <img
                       src={post.coverImage}
                       alt={post.title}
+                      width={1600}
+                      height={900}
                       loading="eager"
                       fetchPriority="high"
                       decoding="async"

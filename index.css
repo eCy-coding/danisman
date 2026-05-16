@@ -416,6 +416,48 @@
   }
 }
 
+/* P23/T2 — GPU-cheap skeleton shimmer (transform-based, not background-size animation).
+   `translateX` keyframe paint cost ≈ 0; compositor-only animation.            */
+@keyframes ecySkeletonShimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.ecy-skeleton {
+  position: relative;
+  overflow: hidden;
+}
+
+.ecy-skeleton-shimmer::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.06) 50%,
+    transparent 100%
+  );
+  animation: ecySkeletonShimmer 1.6s ease-in-out infinite;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ecy-skeleton-shimmer::after {
+    animation: none;
+    background: none;
+  }
+}
+
+.ecy-skeleton-no-shimmer::after {
+  animation: none;
+  background: none;
+}
+
 /* Performance: Skip rendering of below-fold sections until they enter viewport */
 .below-fold {
   content-visibility: auto;

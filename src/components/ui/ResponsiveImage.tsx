@@ -41,6 +41,7 @@
  */
 
 import React from 'react';
+import { useSaveData } from '../../hooks/useSaveData';
 
 export interface ResponsiveImageProps
   extends Omit<React.ImgHTMLAttributes<HTMLImageElement>, 'srcSet'> {
@@ -82,6 +83,21 @@ export interface ResponsiveImageProps
   mobileSrcSetWidths?: readonly number[];
   /** Optional `sizes` override applied only to the mobile `<source>` blocks. */
   mobileSizes?: string;
+  /**
+   * P21 — Save-Data düşük-bant variant. Eğer sağlanırsa ve kullanıcı
+   * `navigator.connection.saveData === true` ise standart `src` yerine bu
+   * kullanılır (örn. q60 JPEG).
+   */
+  lowBandwidthSrc?: string;
+  /** Save-Data variantı için WebP. */
+  lowBandwidthWebp?: string;
+  /** Save-Data variantı için AVIF. */
+  lowBandwidthAvif?: string;
+  /**
+   * Save-Data aktifken bu komponenti **tamamen** atla — başka bir öğeyle
+   * ikame edilebilir. `null` döner.
+   */
+  skipOnSaveData?: boolean;
 }
 
 /**
@@ -117,11 +133,29 @@ export const ResponsiveImage: React.FC<ResponsiveImageProps> = ({
   mobileMedia = '(max-width: 768px)',
   mobileSrcSetWidths,
   mobileSizes,
+  lowBandwidthSrc,
+  lowBandwidthWebp,
+  lowBandwidthAvif,
+  skipOnSaveData,
   ...rest
 }) => {
-  const fallbackSrcSet = srcSetWidths && src ? buildSrcSet(src, srcSetWidths) : undefined;
-  const webpSrcSet = srcSetWidths && webp ? buildSrcSet(webp, srcSetWidths) : undefined;
-  const avifSrcSet = srcSetWidths && avif ? buildSrcSet(avif, srcSetWidths) : undefined;
+  const saveData = useSaveData();
+
+  // P21 — Save-Data short-circuit: kullanıcı tamamen atlamak istiyorsa null
+  // döner ve render'dan tasarruf eder. CLS riski: width/height bilinen tek
+  // bir placeholder div ile dengelenmeli; bu davranış call-site sorumluluğu.
+  if (saveData && skipOnSaveData) {
+    return null;
+  }
+
+  // Save-Data aktifse düşük-bant variant'a swap; yoksa orijinali kullan.
+  const effSrc = saveData && lowBandwidthSrc ? lowBandwidthSrc : src;
+  const effWebp = saveData && lowBandwidthWebp ? lowBandwidthWebp : webp;
+  const effAvif = saveData && lowBandwidthAvif ? lowBandwidthAvif : avif;
+
+  const fallbackSrcSet = srcSetWidths && effSrc ? buildSrcSet(effSrc, srcSetWidths) : undefined;
+  const webpSrcSet = srcSetWidths && effWebp ? buildSrcSet(effWebp, srcSetWidths) : undefined;
+  const avifSrcSet = srcSetWidths && effAvif ? buildSrcSet(effAvif, srcSetWidths) : undefined;
 
   // P17 — Mobile srcset (only computed when caller provides widths).
   const mobileFallbackSrcSet =
@@ -172,10 +206,10 @@ export const ResponsiveImage: React.FC<ResponsiveImageProps> = ({
           sizes={effectiveMobileSizes}
         />
       )}
-      {avif && <source srcSet={avifSrcSet ?? avif} type="image/avif" sizes={sizes} />}
-      {webp && <source srcSet={webpSrcSet ?? webp} type="image/webp" sizes={sizes} />}
+      {effAvif && <source srcSet={avifSrcSet ?? effAvif} type="image/avif" sizes={sizes} />}
+      {effWebp && <source srcSet={webpSrcSet ?? effWebp} type="image/webp" sizes={sizes} />}
       <img
-        src={src}
+        src={effSrc}
         srcSet={fallbackSrcSet}
         alt={alt}
         width={width}

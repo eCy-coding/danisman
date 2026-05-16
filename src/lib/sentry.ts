@@ -45,8 +45,14 @@ class SentryClient {
           blockAllMedia: true,
         }),
       ],
-      tracesSampleRate: import.meta.env.MODE === 'production' ? 0.1 : 1.0,
-      replaysSessionSampleRate: 0.1,
+      // P21-BE: Sentry billing optimization. Team plan ≈ $26/100K events/mo.
+      //   1M page-views/mo × tracesSampleRate 0.10 = 100K txn events = $26
+      //   1M page-views/mo × tracesSampleRate 0.05 = 50K  txn events = $13
+      // RUM coverage for p95/p99 latency stays statistically sufficient at 5%
+      // (Sentry recommends ≥ 1% for hot paths). Errors are NEVER sampled —
+      // every captured exception is forwarded. See outputs/P21_BE_CACHE_SENTRY.md.
+      tracesSampleRate: import.meta.env.MODE === 'production' ? 0.05 : 1.0,
+      replaysSessionSampleRate: 0.01,
       replaysOnErrorSampleRate: 1.0,
       // P8 — restrict trace propagation to first-party origins so cross-origin
       // 3rd-parties (EmailJS, GA, Sentry CDN) don't receive sentry-trace headers.

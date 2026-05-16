@@ -38,6 +38,8 @@ const BlogCard: React.FC<BlogCardProps> = ({ post, index }) => {
           <img
             src={post.coverImage}
             alt={post.title}
+            width={800}
+            height={600}
             className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
             loading="lazy"
           />

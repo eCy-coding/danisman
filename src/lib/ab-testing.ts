@@ -109,30 +109,61 @@ export interface ExperimentConfig {
   key: string;
   variants: string[];
   defaultVariant: string;
-  sampleSize: number; // estimated sample size per variant for 80% power
-  mde: number; // minimum detectable effect (relative, 0.1 = 10%)
+  /**
+   * **DEPRECATED in P23/T4**: Bu alan eskiden hardcoded 385/500/300 değerleriydi
+   * ve Fleiss z-test ile karşılaştırıldığında 10-100× yetersizdi. Yeni doğru
+   * değer `ab-test.ts → recomputePlannedSampleSize(cfg, baseline)` ile
+   * çalıştırma zamanında hesaplanır. Bu alan halen tutulur — geriye dönük
+   * uyumluluk + admin dashboard'da "config-time tahmin" sütunu için.
+   */
+  sampleSize: number;
+  /** Minimum detectable effect (relative, 0.1 = 10%). */
+  mde: number;
+  /**
+   * **YENİ (P23/T4)**: Baseline conversion rate. `recomputePlannedSampleSize`
+   * çağrılırken kullanılır. Verilmezse default 0.05 (%5) kabul edilir.
+   */
+  baseline?: number;
 }
 
+/**
+ * Sample size hesabı — Fleiss z-test referansı:
+ *
+ *   p₁ = 0.05, p₂ = p₁·(1+mde), α = 0.05 (two-sided), power = 0.8
+ *   n_per_arm = (1.96 + 0.8416)² · [p₁(1-p₁) + p₂(1-p₂)] / (p₂-p₁)²
+ *
+ * Verilen MDE'ler için **doğru** değerler (yukarı yuvarlı):
+ *
+ *   mde=0.10 (hero-cta)      → 31 232 per variant
+ *   mde=0.08 (pricing)       → 48 362 per variant
+ *   mde=0.12 (contact-form)  → 21 883 per variant
+ *
+ * `sampleSize` alanı geriye dönük uyumluluk için tutuldu; **gerçek hedef**
+ * `recomputePlannedSampleSize(cfg)` ile alınır.
+ */
 export const ACTIVE_EXPERIMENTS: ExperimentConfig[] = [
   {
     key: 'hero-cta-variant',
     variants: ['book', 'explore'],
     defaultVariant: 'book',
-    sampleSize: 385,
+    sampleSize: 31_232, // P23/T4 fix — Fleiss z-test (baseline=0.05, mde=0.10)
     mde: 0.1,
+    baseline: 0.05,
   },
   {
     key: 'pricing-layout',
     variants: ['cards', 'table'],
     defaultVariant: 'cards',
-    sampleSize: 500,
+    sampleSize: 48_362, // P23/T4 fix — Fleiss z-test (baseline=0.05, mde=0.08)
     mde: 0.08,
+    baseline: 0.05,
   },
   {
     key: 'contact-form-style',
     variants: ['inline', 'modal'],
     defaultVariant: 'inline',
-    sampleSize: 300,
+    sampleSize: 21_883, // P23/T4 fix — Fleiss z-test (baseline=0.05, mde=0.12)
     mde: 0.12,
+    baseline: 0.05,
   },
 ];

@@ -1,7 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'motion/react';
-import { ROICalculator } from '../tools/ROICalculator';
 import { SERVICES } from '../../data/services';
 import { ServiceCard } from '../services/ServiceCard';
 import { Service } from '../../schemas/service';
@@ -95,7 +94,6 @@ export const Services: React.FC = () => {
           <ServiceCard key={service.id} service={service} variants={cardVariants} />
         ))}
       </motion.div>
-      <ROICalculator />
     </section>
   );
 };
