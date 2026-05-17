@@ -21,7 +21,7 @@ services:
     # BE-9: prisma migrate deploy is now part of the build step so each
     # deploy applies pending migrations before the new server starts.
     buildCommand: |
-      npm ci && \
+      npm ci --include=dev && \
       npx prisma generate && \
       npx prisma migrate deploy && \
       npx tsc -p tsconfig.server.json
