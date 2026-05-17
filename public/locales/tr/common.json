@@ -6,7 +6,10 @@
     "close": "Kapat",
     "back": "Geri",
     "next": "İleri",
-    "viewAll": "Tümünü Gör"
+    "viewAll": "Tümünü Gör",
+    "retry": "Tekrar Dene",
+    "clearFilters": "Filtreleri Temizle",
+    "goHome": "Anasayfaya Dön"
   },
   "form": {
     "required": "zorunlu alan",
@@ -15,10 +18,22 @@
   "errors": {
     "generic": "Bir şeyler yanlış gitti. Lütfen tekrar deneyin.",
     "network": "Ağ bağlantısı yok. Bağlantınızı kontrol edin.",
-    "unauthorized": "Bu işlem için yetkiniz yok."
+    "unauthorized": "Bu işlem için yetkiniz yok.",
+    "title": "Bir şeyler ters gitti",
+    "loadFailed": "İçerik yüklenemedi.",
+    "tryAgainHint": "Birkaç saniye bekleyip tekrar deneyin."
   },
   "loading": "Yükleniyor...",
   "noResults": "Sonuç bulunamadı.",
+  "empty": {
+    "blogTitle": "Henüz blog yazısı yok",
+    "blogDescription": "İlk yazıyı oluşturmak için aşağıdaki butonu kullan.",
+    "searchTitle": "Aradığınız kriterlere uygun sonuç bulunamadı",
+    "searchDescription": "Filtreleri değiştirerek tekrar dene.",
+    "commentsTitle": "Henüz yorum yok",
+    "commentsDescription": "İlk yorumu sen bırak.",
+    "tableTitle": "Listelenecek kayıt yok"
+  },
   "plurals": {
     "bookingDuration": "{count, plural, one {# saat} other {# saat}}",
     "meetingCount": "{count, plural, one {# görüşme} other {# görüşme}}",

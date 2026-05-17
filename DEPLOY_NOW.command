@@ -1,160 +1,150 @@
 #!/usr/bin/env bash
-# eCyPro — DEPLOY_NOW.command  (P10 — master deploy orchestrator)
+# eCyPro — DEPLOY_NOW.command  (P30 Track 2 — Master Deploy Orchestrator)
 #
-# Tek-tık: Finder Cmd+O ile çalıştır. Eğer credentials hazırsa zinciri
-# yürütür; yoksa hangi env var / CLI eksik diye açık liste basar ve durur.
+# Tek dosyadan tüm canlıya çıkış yolculuğu:
+#   0) Push readiness gate (READY_TO_PUSH.command)
+#   1) [user] git push origin main
+#   2) Backend deploy (outputs/DEPLOY_BACKEND_RENDER.command)
+#   3) Frontend deploy (outputs/DEPLOY_FRONTEND_HOSTINGER.command)
+#   4) DNS + SSL setup (outputs/DEPLOY_DNS_SSL.command)
+#   5) Live verification (outputs/DEPLOY_POST_LIVE.command)
 #
-# Çalıştırma sırası:
-#   0) Pre-checks: typecheck + lint + test + build + integration-health
-#   1) git status temizliği
-#   2) Backend deploy (Render CLI veya API)
-#   3) Frontend deploy (Hostinger — rsync veya curl)
-#   4) DNS check (dig)
-#   5) SSL check (openssl s_client)
-#   6) Live smoke (DEPLOY_LIVE_SMOKE.command)
-#   7) SEO submit (IndexNow + Indexing API)
+# Çalıştırma:
+#   Finder'da çift-tık (Terminal ile aç)  veya  bash DEPLOY_NOW.command
+#
+# Geçmek istediğin aşamayı SKIP_<N>=1 ile atla:
+#   SKIP_0=1 bash DEPLOY_NOW.command     # push readiness'i atla
+#   SKIP_2=1 bash DEPLOY_NOW.command     # backend deploy'u atla
+#
+# Her alt-script kendi log dosyasını outputs/ altında üretir.
 
-set -euo pipefail
+set -uo pipefail
 cd "$(dirname "$0")"
 
 TS=$(date +%Y%m%d-%H%M%S)
-LOG="outputs/deploy-now-${TS}.log"
+MASTER_LOG="outputs/deploy-now-${TS}.log"
 mkdir -p outputs
+exec > >(tee -a "$MASTER_LOG") 2>&1
 
-say()  { printf "\n\033[1;36m▸ %s\033[0m\n" "$*" | tee -a "$LOG"; }
-ok()   { printf "  \033[32m✅ %s\033[0m\n" "$*" | tee -a "$LOG"; }
-warn() { printf "  \033[33m⚠  %s\033[0m\n" "$*" | tee -a "$LOG"; }
-fail() { printf "  \033[31m❌ %s\033[0m\n" "$*" | tee -a "$LOG"; }
-hr()   { printf "%s\n" "────────────────────────────────────────────────────────────────────" | tee -a "$LOG"; }
+# ─── colors / helpers ────────────────────────────────────────
+say()  { printf "\n\033[1;36m▸ %s\033[0m\n" "$*"; }
+ok()   { printf "  \033[32m✅ %s\033[0m\n" "$*"; }
+warn() { printf "  \033[33m⚠  %s\033[0m\n" "$*"; }
+fail() { printf "  \033[31m❌ %s\033[0m\n" "$*"; }
+hr()   { printf "%s\n" "════════════════════════════════════════════════════════════════════"; }
 
-say "eCyPro DEPLOY_NOW — ${TS}"
-hr
-
-# ──────────────────────────────────────────────────────────
-# 0) Pre-checks
-# ──────────────────────────────────────────────────────────
-say "0) Pre-checks (typecheck / lint / test / build / integration)"
-
-if ! command -v node >/dev/null 2>&1; then fail "node yok — Homebrew + nvm yükle"; exit 1; fi
-if ! command -v npm  >/dev/null 2>&1; then fail "npm yok"; exit 1; fi
-
-npm run typecheck            2>&1 | tee -a "$LOG" && ok "typecheck"        || { fail "typecheck FAILED"; exit 1; }
-npm run lint                 2>&1 | tee -a "$LOG" && ok "lint"             || { fail "lint FAILED"; exit 1; }
-npm test -- --run --silent   2>&1 | tee -a "$LOG" && ok "vitest"           || { fail "vitest FAILED"; exit 1; }
-
-if [ -f .env.production ]; then
-  node scripts/integration-health.mjs --env=.env.production 2>&1 | tee -a "$LOG"
-  if [ $? -ne 0 ]; then
-    fail "integration-health REQUIRED entegrasyonlardan en az biri eksik veya hatalı."
-    fail "Önce .env.production'ı tamamla. Çıkıyorum."
-    exit 1
+run_stage() {
+  local n="$1" name="$2" script="$3"
+  local skip_var="SKIP_${n}"
+  if [[ "${!skip_var:-0}" == "1" ]]; then
+    warn "Aşama $n ($name) — ATLANDI (${skip_var}=1)"
+    return 0
   fi
-  ok "integration-health PASS"
-else
-  fail ".env.production yok — .env.production.example'dan kopyala + gerçek değerlerle doldur"
-  fail "  cp .env.production.example .env.production && open .env.production"
-  exit 1
-fi
-
-npm run build 2>&1 | tee -a "$LOG" && ok "build" || { fail "build FAILED"; exit 1; }
-
-hr
-
-# ──────────────────────────────────────────────────────────
-# 1) Git status
-# ──────────────────────────────────────────────────────────
-say "1) Git status"
-DIRTY=$(git status --porcelain | wc -l | tr -d ' ')
-if [ "$DIRTY" -ne 0 ]; then
-  warn "Working tree temiz değil ($DIRTY dosya). Önce commit veya stash et."
-  git status --short | tee -a "$LOG"
-else
-  ok "Working tree temiz"
-fi
-
-AHEAD=$(git rev-list --count origin/main..HEAD 2>/dev/null || echo "?")
-say "  Origin'in $AHEAD commit önünde."
-hr
-
-# ──────────────────────────────────────────────────────────
-# 2) Backend deploy (Render)
-# ──────────────────────────────────────────────────────────
-say "2) Backend deploy — Render"
-if [ -n "${RENDER_API_KEY:-}" ] && [ -n "${RENDER_SERVICE_ID:-}" ]; then
-  curl -fsS -X POST \
-    -H "Authorization: Bearer ${RENDER_API_KEY}" \
-    -H "Content-Type: application/json" \
-    "https://api.render.com/v1/services/${RENDER_SERVICE_ID}/deploys" \
-    -d '{"clearCache":"do_not_clear"}' 2>&1 | tee -a "$LOG"
-  ok "Render deploy tetiklendi (asenkron — Dashboard'dan progress)"
-else
-  warn "RENDER_API_KEY veya RENDER_SERVICE_ID env yok — manual yol:"
-  warn "  Render Dashboard → Manual Deploy → Deploy latest commit"
-  warn "  veya: export RENDER_API_KEY=... RENDER_SERVICE_ID=srv-..."
-fi
-hr
-
-# ──────────────────────────────────────────────────────────
-# 3) Frontend deploy (Hostinger)
-# ──────────────────────────────────────────────────────────
-say "3) Frontend deploy — Hostinger"
-if [ -n "${HOSTINGER_FTP_HOST:-}" ] && [ -n "${HOSTINGER_FTP_USER:-}" ] && [ -n "${HOSTINGER_FTP_PASS:-}" ]; then
-  if command -v lftp >/dev/null 2>&1; then
-    lftp -e "set ftp:ssl-allow yes; set ssl:verify-certificate no; mirror -R --delete --parallel=4 dist/ public_html/; bye" \
-      -u "${HOSTINGER_FTP_USER},${HOSTINGER_FTP_PASS}" "${HOSTINGER_FTP_HOST}" 2>&1 | tee -a "$LOG"
-    ok "Hostinger upload tamam (lftp mirror)"
+  hr
+  say "AŞAMA $n: $name"
+  hr
+  if [[ ! -f "$script" ]]; then
+    fail "$script bulunamadı"; return 1
+  fi
+  if bash "$script"; then
+    ok "Aşama $n tamam"
+    return 0
   else
-    warn "lftp yok — Homebrew: brew install lftp; veya File Manager üzerinden manual"
+    fail "Aşama $n BAŞARISIZ"
+    return 1
   fi
-else
-  warn "HOSTINGER_FTP_* env yok — manual yol:"
-  warn "  hPanel → File Manager → public_html/ → dist/ içeriğini sürükle"
-fi
-hr
+}
 
-# ──────────────────────────────────────────────────────────
-# 4) DNS check
-# ──────────────────────────────────────────────────────────
-say "4) DNS check"
-for host in www.ecypro.com ecypro.com api.ecypro.com; do
-  ip=$(dig +short "$host" | head -1)
-  if [ -n "$ip" ]; then ok "$host → $ip"; else warn "$host → DNS resolve yok"; fi
-done
-hr
+# ─── banner ──────────────────────────────────────────────────
+clear || true
+cat <<'BANNER'
+  ╔═══════════════════════════════════════════════════════════╗
+  ║          eCyPro — MASTER DEPLOY ORCHESTRATOR              ║
+  ║                  P30 Track 2 — go live                    ║
+  ╚═══════════════════════════════════════════════════════════╝
+BANNER
+echo ""
+echo "  Timestamp : $TS"
+echo "  Log       : $MASTER_LOG"
+echo ""
+echo "  Aşamalar:"
+echo "    0) Push readiness gate"
+echo "    1) git push origin main  (manuel — sen yapacaksın)"
+echo "    2) Backend deploy (Render)"
+echo "    3) Frontend deploy (Hostinger)"
+echo "    4) DNS + SSL"
+echo "    5) Live verification + Sentry + SEO + Lighthouse"
+echo ""
 
-# ──────────────────────────────────────────────────────────
-# 5) SSL check
-# ──────────────────────────────────────────────────────────
-say "5) SSL check"
-for host in www.ecypro.com api.ecypro.com; do
-  if echo | openssl s_client -servername "$host" -connect "${host}:443" -brief 2>/dev/null | grep -q "Verification: OK"; then
-    ok "$host SSL OK"
+read -r -p "Tüm zinciri çalıştır mı? (y/n) " ans
+[[ "$ans" != "y" ]] && { warn "Kullanıcı iptal etti"; exit 0; }
+
+# ─── Aşama 0: Push readiness ─────────────────────────────────
+if [[ "${SKIP_0:-0}" != "1" ]]; then
+  hr
+  say "AŞAMA 0: Push readiness gate"
+  hr
+  if [[ -x ./READY_TO_PUSH.command ]]; then
+    if bash ./READY_TO_PUSH.command; then
+      ok "Push readiness GREEN"
+    else
+      fail "Push readiness FAIL — düzelt, sonra tekrar dene"
+      exit 1
+    fi
   else
-    warn "$host SSL doğrulama başarısız (DNS daha propagate olmamış olabilir)"
+    warn "READY_TO_PUSH.command yok veya executable değil — atlanıyor"
   fi
-done
-hr
-
-# ──────────────────────────────────────────────────────────
-# 6) Live smoke
-# ──────────────────────────────────────────────────────────
-say "6) Live smoke"
-if [ -x ./DEPLOY_LIVE_SMOKE.command ]; then
-  bash ./DEPLOY_LIVE_SMOKE.command 2>&1 | tee -a "$LOG"
 else
-  warn "DEPLOY_LIVE_SMOKE.command yok veya executable değil"
+  warn "Aşama 0 SKIP_0=1"
 fi
-hr
 
-# ──────────────────────────────────────────────────────────
-# 7) SEO submit
-# ──────────────────────────────────────────────────────────
-say "7) SEO submit (IndexNow + Indexing API)"
-if grep -q "^INDEXNOW_KEY=" .env.production 2>/dev/null; then
-  npm run seo:push 2>&1 | tee -a "$LOG" && ok "seo:push tamam"
+# ─── Aşama 1: git push (manuel) ──────────────────────────────
+if [[ "${SKIP_1:-0}" != "1" ]]; then
+  hr
+  say "AŞAMA 1: git push origin main (manuel)"
+  hr
+  cat <<'PUSHHELP'
+
+  Bu aşamayı sen yapacaksın. Yeni terminalde:
+
+      cd ~/Desktop/ecypro
+      git push origin main
+
+  (Veya iki-faktörlü ise gh CLI kullan: gh auth status && git push)
+
+PUSHHELP
+  read -r -p "Push tamamlandı mı? (y/skip) " ans
+  case "$ans" in
+    y) ok "Push beyan edildi" ;;
+    skip) warn "Push atlandı — backend deploy eski commit'i build edebilir" ;;
+    *) fail "İptal"; exit 1 ;;
+  esac
 else
-  warn "INDEXNOW_KEY env'de yok — sonra: npm run seo:push"
+  warn "Aşama 1 SKIP_1=1"
 fi
-hr
 
-say "DEPLOY_NOW bitti. Log: $LOG"
+# ─── Aşama 2-5: Otomatik alt-scriptler ───────────────────────
+run_stage 2 "Backend deploy (Render)"          "outputs/DEPLOY_BACKEND_RENDER.command"     || exit 1
+run_stage 3 "Frontend deploy (Hostinger)"      "outputs/DEPLOY_FRONTEND_HOSTINGER.command" || exit 1
+run_stage 4 "DNS + SSL"                        "outputs/DEPLOY_DNS_SSL.command"            || exit 1
+run_stage 5 "Live verification"                "outputs/DEPLOY_POST_LIVE.command"          || exit 1
+
+# ─── Final ───────────────────────────────────────────────────
+hr
+say "🚀 DEPLOY_NOW tamam — eCyPro canlıda"
+hr
+cat <<DONE
+
+  Sonraki adımlar:
+   • https://www.ecypro.com   → manuel sanity (homepage render, contact form)
+   • Sentry → Issues          → ilk 30 dk hata akışı izle
+   • Render Dashboard         → CPU/RAM/error rate
+   • Google Search Console    → sitemap durum
+   • PageSpeed Insights       → real-world LCP
+
+  Rollback gerekirse:
+   • Frontend: public_html_backup_${TS}/ klasörünü public_html/ yap
+   • Backend : Render Dashboard → Deploys → önceki LIVE → "Rollback"
+
+  Master log: $MASTER_LOG
+DONE

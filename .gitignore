@@ -209,3 +209,14 @@ public/_test
 APPLY_P*.command
 _smoke.ts
 dist-old-*/
+package-lock.json.bak*
+
+# === P37 — broader env coverage (backup + tmp + variants) ===
+.env.*
+!.env.example
+!.env.production.example
+!.env.development.example
+
+# P39 — local snapshot builds
+dist.p*
+PUSH_TO_REMOTE.command

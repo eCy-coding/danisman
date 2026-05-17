@@ -7,10 +7,34 @@
  * common issue codes.
  */
 
-import { describe, it, expect, beforeAll } from 'vitest';
+import { describe, it, expect, beforeAll, vi } from 'vitest';
 import { z } from 'zod';
-import i18n from '../lib/i18n-react';
-import { installZodI18n } from '../lib/forms/zod-error-map';
+import i18next from 'i18next';
+
+// P26 — Swap the production i18n singleton for an isolated jsdom-friendly one
+// before the error map is loaded. The production module wires `i18next-icu`,
+// which replaces the default `{{var}}` interpolator (ICU expects `{var}`),
+// AND `i18next-http-backend`, which never resolves under jsdom and leaves
+// the singleton's `init()` Promise pending forever. Both effects make
+// `i18n.t(key, vars)` short-circuit to the raw key without interpolation,
+// which is what made `returns Turkish/English messages` fail before P26.
+const isolatedI18n = i18next.createInstance();
+vi.mock('../lib/i18n-react', async () => {
+  await isolatedI18n.init({
+    lng: 'en',
+    fallbackLng: 'en',
+    supportedLngs: ['tr', 'en'],
+    ns: ['forms'],
+    defaultNS: 'forms',
+    interpolation: { escapeValue: false },
+    initImmediate: false,
+    resources: { tr: { forms: {} }, en: { forms: {} } },
+  });
+  return { default: isolatedI18n, SUPPORTED_LANGS: ['tr', 'en'], DEFAULT_LANG: 'tr' };
+});
+
+const i18n = isolatedI18n;
+const { installZodI18n } = await import('../lib/forms/zod-error-map');
 
 // Inject the namespace synchronously so tests don't depend on the HTTP backend.
 function preload() {
@@ -47,14 +71,19 @@ const schema = z.object({
   count: z.number().min(1),
 });
 
+function setLangNoBackend(lng: 'tr' | 'en'): void {
+  // Isolated instance — sync, no backend, no ICU plugin to swallow `{{var}}`.
+  void i18n.changeLanguage(lng);
+}
+
 describe('zod-error-map (P16)', () => {
-  beforeAll(async () => {
+  beforeAll(() => {
     preload();
     installZodI18n();
   });
 
   it('returns Turkish messages when language is tr', async () => {
-    await i18n.changeLanguage('tr');
+    setLangNoBackend('tr');
     const res = schema.safeParse({ name: 'a', email: 'oops', message: 'hi', count: 0 });
     expect(res.success).toBe(false);
     if (res.success) return;
@@ -70,7 +99,7 @@ describe('zod-error-map (P16)', () => {
   });
 
   it('returns English messages when language is en', async () => {
-    await i18n.changeLanguage('en');
+    setLangNoBackend('en');
     const res = schema.safeParse({ name: 'a', email: 'oops', message: 'hi', count: 0 });
     expect(res.success).toBe(false);
     if (res.success) return;
@@ -86,7 +115,7 @@ describe('zod-error-map (P16)', () => {
   });
 
   it('honors schema-level overrides (key path passthrough)', async () => {
-    await i18n.changeLanguage('en');
+    setLangNoBackend('en');
     const custom = z.string().min(3, { message: 'contact.form.name_min' });
     const res = custom.safeParse('a');
     expect(res.success).toBe(false);

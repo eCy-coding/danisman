@@ -26,6 +26,49 @@ Object.defineProperty(window, 'matchMedia', {
   })),
 });
 
+// P26 — jsdom doesn't ship IntersectionObserver, but framer-motion's
+// `useInView` (used inside LegalLayout / FadeIn / many marketing sections)
+// touches it during the first commit and throws ReferenceError. A no-op
+// stub keeps the render path quiet without changing observed behavior.
+class IntersectionObserverStub {
+  readonly root: Element | null = null;
+  readonly rootMargin: string = '';
+  readonly thresholds: ReadonlyArray<number> = [];
+  observe(): void {}
+  unobserve(): void {}
+  disconnect(): void {}
+  takeRecords(): IntersectionObserverEntry[] {
+    return [];
+  }
+}
+Object.defineProperty(window, 'IntersectionObserver', {
+  writable: true,
+  configurable: true,
+  value: IntersectionObserverStub,
+});
+Object.defineProperty(globalThis, 'IntersectionObserver', {
+  writable: true,
+  configurable: true,
+  value: IntersectionObserverStub,
+});
+
+// ResizeObserver also missing in jsdom and used by recharts / radix.
+class ResizeObserverStub {
+  observe(): void {}
+  unobserve(): void {}
+  disconnect(): void {}
+}
+Object.defineProperty(window, 'ResizeObserver', {
+  writable: true,
+  configurable: true,
+  value: ResizeObserverStub,
+});
+Object.defineProperty(globalThis, 'ResizeObserver', {
+  writable: true,
+  configurable: true,
+  value: ResizeObserverStub,
+});
+
 // Mock LocalStorage (if not provided by environment)
 const localStorageMock = (function () {
   let store: Record<string, string> = {};

@@ -3,10 +3,30 @@
  *
  * Verifies the production health surface contracts that Render/Railway
  * platforms rely on for liveness and readiness probes.
+ *
+ * P29 — Vitest's 5s default test timeout is tight for the first dynamic
+ * import of ./index (full router barrel: Prisma + Sentry + Redis init).
+ * On cold sandboxes this exceeded 5s. We do two things to harden:
+ *   1. Bump per-file testTimeout to 10s (covers cold-start module init).
+ *   2. Defensively stub fetch so a leaking TELEGRAM_BOT_TOKEN can never
+ *      cause a real network probe inside this test file.
  */
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, beforeAll } from 'vitest';
 import request from 'supertest';
 import express from 'express';
+
+// P29 — give the first cold module import enough headroom; all other tests
+// are fast since the import is cached.
+vi.setConfig({ testTimeout: 10_000 });
+
+// P29 — defensive: prevent any accidental real network probe (Telegram getMe)
+// if TELEGRAM_BOT_TOKEN ever leaks into the test environment.
+beforeAll(() => {
+  vi.stubGlobal(
+    'fetch',
+    vi.fn(async () => new Response(JSON.stringify({ ok: true }), { status: 200 })),
+  );
+});
 
 // ── Mocks before importing the router ────────────────────────────────────────
 vi.mock('../config/redis', () => ({

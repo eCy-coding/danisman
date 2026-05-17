@@ -49,9 +49,15 @@ const MAX_TOKENS = 6;
 const MAX_TOKEN_LENGTH = 32;
 
 /** Returns a Postgres tsquery string built from a user query. Returns
- *  null when the query collapses to nothing usable (all stop chars). */
+ *  null when the query collapses to nothing usable (all stop chars).
+ *
+ *  Note: we explicitly reset `lastIndex` before each call. The module-level
+ *  regex is `g`-flagged for `exec()`-loop semantics, but if a previous
+ *  call broke out early (MAX_TOKENS cap) the stateful index would leak
+ *  into the next invocation and skip valid leading tokens. */
 export function buildTsQuery(q: string): string | null {
   const tokens: string[] = [];
+  TOKEN_PATTERN.lastIndex = 0;
   let m: RegExpExecArray | null;
   while ((m = TOKEN_PATTERN.exec(q)) !== null) {
     const tok = m[0].toLowerCase().slice(0, MAX_TOKEN_LENGTH);
@@ -59,6 +65,7 @@ export function buildTsQuery(q: string): string | null {
     tokens.push(tok);
     if (tokens.length >= MAX_TOKENS) break;
   }
+  TOKEN_PATTERN.lastIndex = 0;
   if (tokens.length === 0) return null;
   // `prefix:*` lets the search match incomplete words ("consul" → "consulting").
   return tokens.map((t) => `${t}:*`).join(' & ');

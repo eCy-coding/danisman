@@ -12,6 +12,12 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent, cleanup, waitFor } from '@testing-library/react';
 import React from 'react';
+// P26 — DataRightsPage renders via LegalLayout which uses both
+// `react-helmet-async` (needs `HelmetProvider`) and `react-router-dom`'s
+// `<Link>` (needs a `Router` context). Without either, the dispatcher's
+// `init()` or `useContext` throws before the form ever mounts.
+import { HelmetProvider } from 'react-helmet-async';
+import { MemoryRouter } from 'react-router-dom';
 
 // Minimal fetch mock that resolves slowly so we can interrupt it.
 const realFetch = globalThis.fetch;
@@ -91,9 +97,13 @@ describe('Race condition guard — DataRightsPage AbortController', () => {
     const { DataRightsPage } = await import('@/pages/DataRightsPage');
 
     const { unmount } = render(
-      <React.Suspense fallback={null}>
-        <DataRightsPage />
-      </React.Suspense>,
+      <HelmetProvider>
+        <MemoryRouter initialEntries={['/privacy/data-rights']}>
+          <React.Suspense fallback={null}>
+            <DataRightsPage />
+          </React.Suspense>
+        </MemoryRouter>
+      </HelmetProvider>,
     );
 
     const emailInput = await screen.findByPlaceholderText(/ornek@example\.com/i);

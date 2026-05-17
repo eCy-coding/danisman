@@ -14,8 +14,13 @@ vi.mock('../config/redis', () => ({
   },
 }));
 
-vi.mock('../config/db', () => ({
-  prisma: {
+// P27 BE Track 2: register() now wraps user + refreshToken + session
+// writes in `prisma.$transaction(async (tx) => …)`. Without a
+// $transaction mock the controller throws "prisma.$transaction is not
+// a function" → 500. Wire it as a pass-through that re-uses the same
+// mock as `tx` so `tx.user.create` etc. resolve to our fakes.
+vi.mock('../config/db', () => {
+  const prismaMock: Record<string, unknown> = {
     user: {
       findUnique: vi.fn(),
       create: vi.fn(),
@@ -31,8 +36,12 @@ vi.mock('../config/db', () => ({
     refreshToken: {
       create: vi.fn().mockResolvedValue({}),
     },
-  },
-}));
+  };
+  prismaMock.$transaction = vi.fn(async (cb: (tx: typeof prismaMock) => unknown) =>
+    cb(prismaMock),
+  );
+  return { prisma: prismaMock };
+});
 
 vi.mock('../lib/hibp', () => ({
   checkPasswordBreached: vi.fn().mockResolvedValue({ breached: false, count: 0 }),
@@ -44,11 +53,16 @@ vi.mock('../lib/email', () => ({
 
 vi.mock('../lib/refresh-token', () => ({
   ACCESS_TOKEN_EXPIRES_IN: '15m',
+  // P27 BE Track 2: register() now reads this constant to compute the
+  // refresh-token expiry inside the $transaction. Omitting it surfaces
+  // a vitest "no export defined" error from the mocked module → 500.
+  REFRESH_TOKEN_EXPIRES_DAYS: 7,
   generateRefreshToken: vi.fn(() => ({ raw: 'test-refresh-raw-token', hash: 'test-refresh-hash' })),
   newFamily: vi.fn(() => 'test-family-uuid'),
   storeRefreshToken: vi.fn().mockResolvedValue(undefined),
   rotateRefreshToken: vi.fn(),
   revokeAllUserTokens: vi.fn().mockResolvedValue(undefined),
+  revokeAllUserSessions: vi.fn().mockResolvedValue(undefined),
 }));
 
 vi.mock('../lib/jwt-blacklist', () => ({

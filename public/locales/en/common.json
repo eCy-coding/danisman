@@ -6,7 +6,10 @@
     "close": "Close",
     "back": "Back",
     "next": "Next",
-    "viewAll": "View all"
+    "viewAll": "View all",
+    "retry": "Try Again",
+    "clearFilters": "Clear Filters",
+    "goHome": "Back to Home"
   },
   "form": {
     "required": "required",
@@ -15,10 +18,22 @@
   "errors": {
     "generic": "Something went wrong. Please try again.",
     "network": "No network connection. Check your connection.",
-    "unauthorized": "You're not authorized to do that."
+    "unauthorized": "You're not authorized to do that.",
+    "title": "Something went wrong",
+    "loadFailed": "Could not load content.",
+    "tryAgainHint": "Wait a few seconds and try again."
   },
   "loading": "Loading...",
   "noResults": "No results found.",
+  "empty": {
+    "blogTitle": "No blog posts yet",
+    "blogDescription": "Use the button below to create the first one.",
+    "searchTitle": "No results match your filters",
+    "searchDescription": "Try adjusting your filters.",
+    "commentsTitle": "No comments yet",
+    "commentsDescription": "Be the first to leave a comment.",
+    "tableTitle": "Nothing to list yet"
+  },
   "plurals": {
     "bookingDuration": "{count, plural, one {# hour} other {# hours}}",
     "meetingCount": "{count, plural, one {# meeting} other {# meetings}}",

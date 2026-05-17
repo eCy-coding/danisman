@@ -8,7 +8,26 @@
  */
 
 import { describe, expect, it, beforeEach, vi } from 'vitest';
-import { enqueue, registerInlineHandler, _testing, type EmailJobPayload } from './index';
+
+// Force the inline-fallback branch even when bullmq + ioredis happen to
+// be installed in the dev environment. Without this the
+// `getAllQueueStats` test would instantiate a real Queue, fire a real
+// ioredis connect, and hang on ECONNREFUSED until the 5 s test timeout.
+// Mocking the loaders pins us to the "no Redis, no BullMQ" path these
+// tests explicitly target (see file header).
+vi.mock('./bullmq-types', () => ({
+  loadBullMQ: () => null,
+  loadIORedis: () => null,
+  _resetBullMQLoaderCache: () => {},
+}));
+
+import {
+  enqueue,
+  registerInlineHandler,
+  _testing,
+  ALL_QUEUE_NAMES,
+  type EmailJobPayload,
+} from './index';
 
 beforeEach(() => {
   _testing.reset();
@@ -69,7 +88,10 @@ describe('getQueueStats / closeQueues — non-Redis path', () => {
   it('reports available=false for every queue when BullMQ not installed', async () => {
     const { getAllQueueStats } = await import('./index');
     const stats = await getAllQueueStats();
-    expect(stats).toHaveLength(3);
+    // ALL_QUEUE_NAMES is the source of truth — assert against it rather
+    // than a baked-in number so adding a new queue doesn't quietly
+    // bypass this contract.
+    expect(stats).toHaveLength(ALL_QUEUE_NAMES.length);
     for (const s of stats) {
       expect(s.available).toBe(false);
     }

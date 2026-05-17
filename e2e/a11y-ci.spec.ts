@@ -64,7 +64,7 @@ for (const route of ROUTES) {
     if (serious.length > 0) {
       // Surface serious findings in the CI log without failing the build.
       // Promote to `expect(...)` when the team is ready to flip the gate.
-      // eslint-disable-next-line no-console
+       
       console.warn(
         `[a11y-ci] ${route.label}: ${serious.length} serious violation(s) (informational)`,
         serious.map((v) => `${v.id} — ${v.help}`),
@@ -72,7 +72,7 @@ for (const route of ROUTES) {
     }
 
     if (critical.length > 0) {
-      // eslint-disable-next-line no-console
+       
       console.error(
         `[a11y-ci] ${route.label}: critical violation(s)`,
         JSON.stringify(critical, null, 2),

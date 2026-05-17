@@ -440,6 +440,137 @@ export const openApiSpec = {
           qrCodeDataUrl: { type: 'string', description: 'data:image/png;base64,... QR code image' },
         },
       },
+      // ─── P23 BE Track 2 — Outbound Webhook subscriptions ─────────────
+      // Yönetim arayüzünden oluşturulan, partner sistemlere event push
+      // eden abonelikleri tanımlar. `secret` yalnızca create cevabında
+      // döner — list / detail çağrılarında elide edilir.
+      WebhookSubscriptionCreate: {
+        type: 'object',
+        required: ['url', 'events'],
+        properties: {
+          url: {
+            type: 'string',
+            format: 'uri',
+            description: 'HTTPS callback URL (http allowed only in dev)',
+            example: 'https://partner.example.com/hooks/ecypro',
+          },
+          events: {
+            type: 'array',
+            description: 'Event type filter (whitelist). Empty array = none.',
+            items: { type: 'string' },
+            example: ['booking.created', 'booking.cancelled'],
+          },
+          userId: {
+            type: 'string',
+            format: 'uuid',
+            description:
+              'Owner override — only honoured for ADMIN callers. Regular users always create under their own id.',
+          },
+        },
+      },
+      WebhookSubscriptionPatch: {
+        type: 'object',
+        description: 'En az bir alan zorunlu. Hepsi opsiyonel; verilen alanlar güncellenir.',
+        properties: {
+          url: { type: 'string', format: 'uri' },
+          events: { type: 'array', items: { type: 'string' } },
+          active: {
+            type: 'boolean',
+            description:
+              'Re-enabling (false→true) failureCount sayacını sıfırlar; auto-deactivation breaker resetlenir.',
+          },
+        },
+      },
+      WebhookSubscription: {
+        type: 'object',
+        properties: {
+          id: { type: 'string', format: 'uuid' },
+          userId: { type: 'string', format: 'uuid' },
+          url: { type: 'string', format: 'uri' },
+          events: { type: 'array', items: { type: 'string' } },
+          active: { type: 'boolean' },
+          failureCount: { type: 'integer', minimum: 0 },
+          lastSuccess: { type: 'string', format: 'date-time', nullable: true },
+          lastFailure: { type: 'string', format: 'date-time', nullable: true },
+          createdAt: { type: 'string', format: 'date-time' },
+          updatedAt: { type: 'string', format: 'date-time' },
+        },
+      },
+      WebhookSubscriptionCreateResponse: {
+        type: 'object',
+        properties: {
+          status: { type: 'string', example: 'ok' },
+          subscription: { $ref: '#/components/schemas/WebhookSubscription' },
+          secret: {
+            type: 'string',
+            description:
+              'HMAC-SHA256 imzalama için 64-hex (256-bit) secret. **Bu değer yalnızca create cevabında döner**; istemci güvenli şekilde saklamalıdır.',
+          },
+        },
+      },
+      WebhookDeliveryItem: {
+        type: 'object',
+        properties: {
+          id: { type: 'string', format: 'uuid' },
+          eventType: { type: 'string' },
+          status: {
+            type: 'string',
+            enum: ['pending', 'success', 'failed', 'retrying'],
+          },
+          attemptCount: { type: 'integer', minimum: 0 },
+          lastAttemptAt: { type: 'string', format: 'date-time', nullable: true },
+          responseStatus: { type: 'integer', nullable: true },
+          errorMessage: { type: 'string', nullable: true },
+          createdAt: { type: 'string', format: 'date-time' },
+        },
+      },
+      // ─── P23 BE Track 2 — SSE stream ─────────────────────────────────
+      StreamPublishInput: {
+        type: 'object',
+        required: ['topic'],
+        properties: {
+          topic: {
+            type: 'string',
+            pattern: '^[a-z0-9:_-]{1,64}$',
+            description: 'Topic identifier (1-64 chars, [a-z0-9:_-]).',
+            example: 'system:notice',
+          },
+          type: {
+            type: 'string',
+            description: 'SSE event type name (becomes `event:` line). Optional.',
+            example: 'banner.update',
+          },
+          data: {
+            description: 'Arbitrary JSON-serialisable payload (`data:` line).',
+          },
+        },
+      },
+      StreamPublishResponse: {
+        type: 'object',
+        properties: {
+          status: { type: 'string', example: 'ok' },
+          topic: { type: 'string' },
+          fanout: {
+            type: 'integer',
+            minimum: 0,
+            description: 'Anlık olarak event ulaştırılan abone sayısı.',
+          },
+        },
+      },
+      StreamStats: {
+        type: 'object',
+        description: 'In-process SSE manager telemetrisi (admin only).',
+        properties: {
+          status: { type: 'string', example: 'ok' },
+          connections: { type: 'integer', minimum: 0 },
+          topics: { type: 'integer', minimum: 0 },
+          perTopic: {
+            type: 'object',
+            additionalProperties: { type: 'integer' },
+            description: 'topic → connection count map.',
+          },
+        },
+      },
     },
   },
   // ─── Phase 35-37 New Endpoints ────────────────────────────────────
@@ -1799,6 +1930,284 @@ export const openApiSpec = {
           '200': { description: 'Cancelled' },
           '400': { description: 'Invalid token' },
           '409': { description: 'Already cancelled or in the past' },
+        },
+      },
+    },
+    // ─── P23 BE Track 2 / Aşama 2 — Admin Webhook CRUD ────────────────
+    // POST   /api/admin/webhooks                — create subscription
+    // GET    /api/admin/webhooks                — list (own; admin sees all)
+    // PATCH  /api/admin/webhooks/{id}           — update url/events/active
+    // DELETE /api/admin/webhooks/{id}           — remove subscription
+    '/admin/webhooks': {
+      post: {
+        tags: ['admin-webhooks'],
+        summary: 'P23: Webhook subscription oluştur',
+        description:
+          'Yeni bir outbound webhook aboneliği yaratır. Yanıtta `secret` döner — bu değer **yalnızca bir kez** verilir ve istemci kalıcı olarak saklamalıdır. ADMIN istemciler `userId` parametresi ile başka bir kullanıcı adına abonelik açabilir; normal kullanıcılar daima kendi adlarına yaratır.',
+        security: [{ BearerAuth: [] }],
+        requestBody: {
+          required: true,
+          content: {
+            'application/json': {
+              schema: { $ref: '#/components/schemas/WebhookSubscriptionCreate' },
+            },
+          },
+        },
+        responses: {
+          '201': {
+            description: 'Created',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/WebhookSubscriptionCreateResponse' },
+              },
+            },
+          },
+          '400': { description: 'Invalid url or events array' },
+          '401': { description: 'Auth required' },
+        },
+      },
+      get: {
+        tags: ['admin-webhooks'],
+        summary: 'P23: Webhook subscription listesi',
+        description:
+          'Çağıran kullanıcı ADMIN ise tüm abonelikleri, değilse yalnızca kendi `userId`\'ına bağlı abonelikleri döndürür. Sıralama: createdAt DESC, max 100 kayıt. `secret` alanı bu yanıtta yer almaz.',
+        security: [{ BearerAuth: [] }],
+        responses: {
+          '200': {
+            description: 'OK',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    status: { type: 'string', example: 'ok' },
+                    subscriptions: {
+                      type: 'array',
+                      items: { $ref: '#/components/schemas/WebhookSubscription' },
+                    },
+                  },
+                },
+              },
+            },
+          },
+          '401': { description: 'Auth required' },
+        },
+      },
+    },
+    '/admin/webhooks/{id}': {
+      patch: {
+        tags: ['admin-webhooks'],
+        summary: 'P23: Webhook subscription güncelle',
+        description:
+          '`url`, `events` ve `active` alanlarından en az biri verilmelidir. `active=true` set edildiğinde `failureCount` sıfırlanır (auto-deactivation breaker resetlenir).',
+        security: [{ BearerAuth: [] }],
+        parameters: [
+          { in: 'path', name: 'id', required: true, schema: { type: 'string', format: 'uuid' } },
+        ],
+        requestBody: {
+          required: true,
+          content: {
+            'application/json': {
+              schema: { $ref: '#/components/schemas/WebhookSubscriptionPatch' },
+            },
+          },
+        },
+        responses: {
+          '200': {
+            description: 'Updated',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    status: { type: 'string', example: 'ok' },
+                    subscription: { $ref: '#/components/schemas/WebhookSubscription' },
+                  },
+                },
+              },
+            },
+          },
+          '400': { description: 'no_fields — request body did not contain any updatable field' },
+          '401': { description: 'Auth required' },
+          '403': { description: 'forbidden — non-admin caller is not the owner' },
+          '404': { description: 'not_found' },
+        },
+      },
+      delete: {
+        tags: ['admin-webhooks'],
+        summary: 'P23: Webhook subscription sil',
+        description:
+          'Aboneliği veritabanından kalıcı olarak siler. Geçmiş `WebhookDelivery` kayıtları (audit trail) cascade ile kaldırılır.',
+        security: [{ BearerAuth: [] }],
+        parameters: [
+          { in: 'path', name: 'id', required: true, schema: { type: 'string', format: 'uuid' } },
+        ],
+        responses: {
+          '200': { description: 'Deleted' },
+          '401': { description: 'Auth required' },
+          '403': { description: 'forbidden — non-admin caller is not the owner' },
+          '404': { description: 'not_found' },
+        },
+      },
+    },
+    '/admin/webhooks/{id}/deliveries': {
+      get: {
+        tags: ['admin-webhooks'],
+        summary: 'P23: Webhook delivery history',
+        description:
+          'Belirtilen abonelik için son 100 delivery girdisini (createdAt DESC) döndürür. Audit / debug için kullanılır. `payload` body alanı yanıttan elide edilmiştir.',
+        security: [{ BearerAuth: [] }],
+        parameters: [
+          { in: 'path', name: 'id', required: true, schema: { type: 'string', format: 'uuid' } },
+        ],
+        responses: {
+          '200': {
+            description: 'OK',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    status: { type: 'string', example: 'ok' },
+                    deliveries: {
+                      type: 'array',
+                      items: { $ref: '#/components/schemas/WebhookDeliveryItem' },
+                    },
+                  },
+                },
+              },
+            },
+          },
+          '401': { description: 'Auth required' },
+          '403': { description: 'forbidden — non-admin caller is not the owner' },
+          '404': { description: 'not_found' },
+        },
+      },
+    },
+    '/admin/webhooks/{id}/retry/{deliveryId}': {
+      post: {
+        tags: ['admin-webhooks'],
+        summary: 'P23: Manual retry of a single delivery',
+        description:
+          'Tek bir delivery kaydını `pending` statüsüne çekip `webhook-out` queue\'suna yeniden ekler. `attemptCount` değeri korunur — audit trail toplam (otomatik + operator) deneme sayısını yansıtır. Yanıtın `mode` alanı queue\'nun gerçekten enqueue edildiğini (`bullmq`) veya in-process fallback ile çalıştığını (`memory`) belirtir.',
+        security: [{ BearerAuth: [] }],
+        parameters: [
+          { in: 'path', name: 'id', required: true, schema: { type: 'string', format: 'uuid' } },
+          {
+            in: 'path',
+            name: 'deliveryId',
+            required: true,
+            schema: { type: 'string', format: 'uuid' },
+          },
+        ],
+        responses: {
+          '200': {
+            description: 'Re-enqueued',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    status: { type: 'string', example: 'ok' },
+                    delivery: { type: 'string', format: 'uuid' },
+                    mode: { type: 'string', enum: ['bullmq', 'memory'] },
+                  },
+                },
+              },
+            },
+          },
+          '401': { description: 'Auth required' },
+          '403': { description: 'forbidden — non-admin caller is not the owner' },
+          '404': {
+            description: 'not_found — subscription/delivery missing or delivery does not belong to subscription',
+          },
+        },
+      },
+    },
+    // ─── P23 BE Track 2 / Aşama 1 — Topic-based SSE stream ───────────
+    // GET  /api/stream?topic=a,b           — subscribe (text/event-stream)
+    // POST /api/stream/publish             — admin fan-out
+    // GET  /api/stream/_stats              — manager telemetry (admin)
+    '/stream': {
+      get: {
+        tags: ['stream'],
+        summary: 'P23: SSE subscription',
+        description:
+          'Virgülle ayrılmış `topic` query parametresi ile bir veya daha çok kanala abone olur. Yalnızca `PUBLIC_TOPICS` (`status:tick`) için anonim erişim açıktır; diğer topic\'ler `BearerAuth` zorunludur. Tek connection üzerinde en fazla 8 topic. SSE çıktısı `text/event-stream`; ilk frame `event: subscribed` ile gelir.',
+        security: [{ BearerAuth: [] }, {}],
+        parameters: [
+          {
+            in: 'query',
+            name: 'topic',
+            required: true,
+            schema: { type: 'string', example: 'job:done,status:tick' },
+            description: 'Comma-separated topic ids ([a-z0-9:_-]{1,64}), max 8.',
+          },
+        ],
+        responses: {
+          '200': {
+            description: 'SSE stream — `text/event-stream`',
+            content: {
+              'text/event-stream': {
+                schema: { type: 'string', description: 'newline-framed SSE events' },
+              },
+            },
+          },
+          '400': { description: 'topic query param required' },
+          '401': { description: 'Auth required for non-public topic' },
+          '429': { description: 'per-user / per-ip connection limit exceeded' },
+          '503': { description: 'process_total_limit — node is at max SSE capacity' },
+        },
+      },
+    },
+    '/stream/publish': {
+      post: {
+        tags: ['stream'],
+        summary: 'P23: Admin fan-out to a stream topic',
+        description:
+          'Bir worker yazmadan tüm aktif aboneye event göndermek için HTTP fan-out. ADMIN-only. Yanıttaki `fanout` alanı event\'in anlık ulaştığı abone sayısını verir.',
+        security: [{ BearerAuth: [] }],
+        requestBody: {
+          required: true,
+          content: {
+            'application/json': {
+              schema: { $ref: '#/components/schemas/StreamPublishInput' },
+            },
+          },
+        },
+        responses: {
+          '200': {
+            description: 'Published',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/StreamPublishResponse' },
+              },
+            },
+          },
+          '400': { description: 'invalid topic' },
+          '401': { description: 'Auth required' },
+          '403': { description: 'admin only' },
+        },
+      },
+    },
+    '/stream/_stats': {
+      get: {
+        tags: ['stream'],
+        summary: 'P23: SSE manager telemetry',
+        description:
+          'In-process SSE yöneticisinin canlı istatistikleri: aktif connection sayısı, topic dağılımı. ADMIN-only — uçtaki worker / Render dashboard\'una alternatif tanı yüzeyi.',
+        security: [{ BearerAuth: [] }],
+        responses: {
+          '200': {
+            description: 'OK',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/StreamStats' },
+              },
+            },
+          },
+          '401': { description: 'Auth required' },
+          '403': { description: 'admin only' },
         },
       },
     },

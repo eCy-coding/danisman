@@ -8,9 +8,20 @@ import { prisma } from '../config/db';
 
 // ── Module mocks ──────────────────────────────────────────────────────────────
 
+// P17 BE Track 2 / Aşama 5 added `webhook-idempotency` which calls
+// `prisma.webhookEvent.upsert` before any handler logic runs. Without
+// the mock the upsert throws "Cannot read properties of undefined" → 500.
+// Re-stabilised in P25 BE Track 2 / Aşama 3.
 vi.mock('../config/db', () => ({
   prisma: {
     booking: {
+      update: vi.fn().mockResolvedValue({}),
+    },
+    webhookEvent: {
+      upsert: vi.fn().mockResolvedValue({
+        id: 'mock-event-id',
+        processedAt: null,
+      }),
       update: vi.fn().mockResolvedValue({}),
     },
   },
@@ -30,7 +41,19 @@ function sign(body: string, secret = TEST_SECRET): string {
 
 function makeApp() {
   const app = express();
-  app.use(express.json());
+  // P27 BE Track 2: the production index.ts captures the raw request
+  // bytes via `express.json({ verify })` so the HMAC middleware can
+  // verify against the byte-for-byte payload. The previous test fixture
+  // omitted this, so every request fell into the middleware's
+  // RAW_BODY_UNAVAILABLE → 500 branch and only the "missing header"
+  // case (which short-circuits earlier) survived.
+  app.use(
+    express.json({
+      verify: (req, _res, buf) => {
+        (req as express.Request & { rawBody?: Buffer }).rawBody = Buffer.from(buf);
+      },
+    }),
+  );
   app.use('/webhooks', webhookRoutes);
   app.use(errorHandler);
   return app;
@@ -81,7 +104,11 @@ describe('POST /webhooks/cal — HMAC verification', () => {
     const res = await request(app).post('/webhooks/cal').send(BOOKING_CREATED_PAYLOAD);
 
     expect(res.status).toBe(401);
-    expect(res.body.error).toContain('signature');
+    // The middleware emits `{ code: 'INVALID_SIGNATURE', message: '…' }`
+    // — assert against the actual envelope rather than a legacy `error`
+    // field that never existed in this code path.
+    expect(res.body.code).toBe('INVALID_SIGNATURE');
+    expect(res.body.message.toLowerCase()).toContain('signature');
   });
 
   it('returns 401 for a wrong signature', async () => {
