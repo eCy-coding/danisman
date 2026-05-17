@@ -138,7 +138,6 @@ pnpm-lock.yaml
 pnpm-workspace.yaml
 
 # Generated content (regenerate with: npx tsx scripts/generate-content.ts)
-constants_generated.ts
 
 # Claude Code (Phase 21 entegrasyon)
 .claude/cache/
