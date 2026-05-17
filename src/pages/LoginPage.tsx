@@ -10,7 +10,8 @@ export const LoginPage: React.FC = () => {
   const passwordId = React.useId();
   return (
     <AuthLayout seoTitle={getLang(AUTH_COPY.loginTitle as MultiLang, lang)}>
-      <h1 className="text-2xl font-bold text-primary mb-6 text-center">
+      {/* P45 D4: text-primary (mavi #2563EB) dark bg üzerinde AA contrast düşüktü; text-white'a alındı. */}
+      <h1 className="text-2xl font-serif font-bold text-white mb-6 text-center">
         {getLang(AUTH_COPY.loginTitle as MultiLang, lang)}
       </h1>
       <form data-testid="login-form" className="space-y-4">
@@ -49,7 +50,7 @@ export const LoginPage: React.FC = () => {
         <button
           type="submit"
           data-testid="login-submit"
-          className="w-full bg-primary text-white py-3 rounded-lg font-bold hover:bg-slate-800 transition-colors uppercase tracking-wider text-sm shadow-md hover:shadow-lg transform active:scale-95"
+          className="w-full bg-secondary text-neutral py-3 rounded-lg font-bold hover:bg-secondary/90 transition-colors uppercase tracking-wider text-sm shadow-md hover:shadow-lg transform active:scale-95"
         >
           {getLang(AUTH_COPY.signInBtn as MultiLang, lang)}
         </button>
@@ -61,7 +62,7 @@ export const LoginPage: React.FC = () => {
         </Link>
       </div>
       <div className="mt-2 text-center text-xs">
-        <Link to="/forgot-password" className="text-slate-400 hover:text-primary">
+        <Link to="/forgot-password" className="text-slate-400 hover:text-secondary transition-colors">
           {getLang(AUTH_COPY.forgotPwTitle as MultiLang, lang)}
         </Link>
       </div>

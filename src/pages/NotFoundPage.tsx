@@ -1,19 +1,17 @@
+/**
+ * NotFoundPage — 404 fallback rendered by the React Router catch-all.
+ *
+ * P45 D5: Önceki sürüm `<motion.h1 initial={{ opacity: 0 }} animate={{ opacity: 1 }}>`
+ * kullanıyordu. Motion animation prod ortamda bazı yollarda mount-once trigger'ı kaçırıp
+ * elementleri opacity 0'da bırakıyordu — sonuç tamamen siyah ekran. Bu sürüm motion'a
+ * bağımlılığı kaldırır, sadece static CSS + standart Tailwind sınıfları kullanır.
+ */
+
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { useTranslation } from 'react-i18next';
-import { motion, useReducedMotion } from 'motion/react';
-import {
-  Home,
-  Briefcase,
-  Mail,
-  ArrowRight,
-  BookOpen,
-  Building2,
-  BadgeDollarSign,
-} from 'lucide-react';
-import { Button } from '../components/ui/Button';
-import { EcyLogo } from '@/components/ui/EcyLogo';
+import { Home, Briefcase, Mail, ArrowRight, BookOpen, Building2, BadgeDollarSign } from 'lucide-react';
 
 interface Suggestion {
   icon: React.ComponentType<{ size?: number; className?: string }>;
@@ -71,120 +69,97 @@ const SUGGESTIONS: Suggestion[] = [
 export const NotFoundPage: React.FC = () => {
   const { i18n } = useTranslation();
   const lang = (i18n.language || 'en').startsWith('tr') ? 'tr' : 'en';
-  const prefersReducedMotion = useReducedMotion();
 
   return (
-    <div className="min-h-screen bg-[#080808] flex flex-col">
+    <div className="min-h-screen bg-neutral text-white flex flex-col">
       <Helmet>
         <title>{COPY.metaTitle[lang]}</title>
         <meta name="robots" content="noindex,follow" />
       </Helmet>
 
       {/* Header */}
-      <header className="px-fib-6 md:px-fib-7 py-fib-5">
-        <Link to="/" aria-label="EcyPro Home" className="inline-block">
-          <EcyLogo size="md" variant="full" />
+      <header className="px-6 md:px-12 py-6">
+        <Link to="/" aria-label="EcyPro Home" className="inline-flex items-center gap-2">
+          <span className="text-xl font-serif font-bold text-white">eCy</span>
+          <span className="text-xs uppercase tracking-widest text-slate-400">Pro</span>
         </Link>
       </header>
 
       {/* Main content */}
-      <main className="flex-1 flex flex-col items-center justify-center px-fib-6 md:px-fib-7 py-fib-8 relative overflow-hidden">
-        {/* Ambient glow */}
-        <motion.div
+      <main className="flex-1 flex flex-col items-center justify-center px-6 md:px-12 py-12 relative overflow-hidden">
+        {/* Ambient glow — static (no animation) */}
+        <div
           aria-hidden="true"
           className="absolute inset-0 pointer-events-none flex items-center justify-center"
-          animate={prefersReducedMotion ? undefined : { opacity: [0.3, 0.6, 0.3] }}
-          transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
         >
           <div
-            className="w-[700px] h-[700px] rounded-full"
+            className="w-[700px] h-[700px] rounded-full opacity-40"
             style={{
               background:
                 'radial-gradient(circle, rgba(217,119,6,0.18) 0%, rgba(217,119,6,0.04) 40%, transparent 70%)',
             }}
           />
-        </motion.div>
+        </div>
 
         <div className="relative z-10 max-w-4xl w-full text-center">
-          {/* 404 Gradient Title */}
-          <motion.h1
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, ease: [0.21, 0.47, 0.32, 0.98] }}
-            className="font-serif-display text-[7rem] md:text-[10rem] lg:text-[12rem] font-bold leading-none tracking-tight bg-gradient-to-br from-amber-300 via-amber-500 to-orange-600 bg-clip-text text-transparent"
+          <h1
+            className="text-[7rem] md:text-[10rem] lg:text-[12rem] font-bold leading-none tracking-tight text-amber-400"
             aria-label="404"
           >
             404
-          </motion.h1>
+          </h1>
 
-          <div className="h-px w-24 mx-auto bg-gradient-to-r from-transparent via-amber-500 to-transparent mt-fib-5 mb-fib-7" />
+          <div className="h-px w-24 mx-auto bg-gradient-to-r from-transparent via-amber-500 to-transparent mt-5 mb-8" />
 
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.15 }}
-            className="font-serif-display text-golden-xl md:text-golden-2xl font-bold text-white mb-fib-4 leading-tight"
-          >
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif font-bold text-white mb-4 leading-tight">
             {COPY.title[lang]}
-          </motion.h2>
+          </h2>
 
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.25 }}
-            className="text-lg text-slate-400 max-w-2xl mx-auto leading-relaxed mb-fib-8 font-light"
-          >
+          <p className="text-lg text-slate-400 max-w-2xl mx-auto leading-relaxed mb-10 font-light">
             {COPY.description[lang]}
-          </motion.p>
+          </p>
 
           {/* Action buttons */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.35 }}
-            className="flex flex-col sm:flex-row gap-fib-4 justify-center items-center mb-fib-9"
-          >
-            <Link to="/">
-              <Button size="lg" className="w-full sm:w-auto">
-                <Home className="mr-2 h-5 w-5" />
-                {COPY.homeBtn[lang]}
-              </Button>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16">
+            <Link
+              to="/"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-secondary text-neutral font-semibold hover:bg-secondary/90 transition-colors w-full sm:w-auto"
+            >
+              <Home className="h-5 w-5" />
+              {COPY.homeBtn[lang]}
             </Link>
-            <Link to="/services">
-              <Button variant="outline" size="lg" className="w-full sm:w-auto">
-                <Briefcase className="mr-2 h-5 w-5" />
-                {COPY.servicesBtn[lang]}
-              </Button>
+            <Link
+              to="/services"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl border border-white/15 text-white font-semibold hover:bg-white/5 transition-colors w-full sm:w-auto"
+            >
+              <Briefcase className="h-5 w-5" />
+              {COPY.servicesBtn[lang]}
             </Link>
-            <Link to="/contact">
-              <Button variant="outline" size="lg" className="w-full sm:w-auto">
-                <Mail className="mr-2 h-5 w-5" />
-                {COPY.contactBtn[lang]}
-              </Button>
+            <Link
+              to="/contact"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl border border-white/15 text-white font-semibold hover:bg-white/5 transition-colors w-full sm:w-auto"
+            >
+              <Mail className="h-5 w-5" />
+              {COPY.contactBtn[lang]}
             </Link>
-          </motion.div>
+          </div>
 
-          {/* Suggestions bento */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.5 }}
-            className="pt-fib-7 border-t border-white/[0.06]"
-          >
-            <p className="text-xs font-bold tracking-[0.2em] uppercase text-slate-400 mb-fib-6">
+          {/* Suggestions */}
+          <div className="pt-10 border-t border-white/10">
+            <p className="text-xs font-bold tracking-[0.2em] uppercase text-slate-400 mb-8">
               {COPY.suggestionsTitle[lang]}
             </p>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-fib-5">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
               {SUGGESTIONS.map((s) => {
                 const Icon = s.icon;
                 return (
                   <Link
                     key={s.to}
                     to={s.to}
-                    className="group p-fib-6 rounded-fib-6 bg-[#111111] border border-white/[0.06] hover:border-secondary/30 transition-all duration-500 text-left flex flex-col"
+                    className="group p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-secondary/30 hover:bg-white/8 transition-all duration-300 text-left flex flex-col"
                   >
-                    <div className="flex items-center justify-between mb-fib-4">
-                      <div className="w-11 h-11 rounded-fib-5 bg-amber-500/8 border border-amber-500/20 flex items-center justify-center text-amber-400 group-hover:scale-110 group-hover:bg-amber-500 group-hover:text-[#080808] transition-all duration-300">
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="w-11 h-11 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 group-hover:scale-110 transition-transform duration-300">
                         <Icon size={20} />
                       </div>
                       <ArrowRight
@@ -192,7 +167,7 @@ export const NotFoundPage: React.FC = () => {
                         className="text-slate-400 group-hover:text-secondary group-hover:translate-x-1 transition-all"
                       />
                     </div>
-                    <h3 className="text-golden-base font-bold text-white mb-fib-2 tracking-tight">
+                    <h3 className="text-base font-bold text-white mb-2 tracking-tight">
                       {s.title[lang]}
                     </h3>
                     <p className="text-sm text-slate-400 leading-relaxed font-light">
@@ -202,7 +177,7 @@ export const NotFoundPage: React.FC = () => {
                 );
               })}
             </div>
-          </motion.div>
+          </div>
         </div>
       </main>
     </div>

@@ -163,8 +163,8 @@ const FAQS = [
   {
     q: { tr: 'Sözleşme süresi nedir?', en: 'What is the contract length?' },
     a: {
-      tr: 'Aylık veya yıllık olarak seçilebilir. Yıllıkta %17 indirim uygulanır.',
-      en: 'Monthly or annual billing. Annual plans get 17% discount.',
+      tr: 'Aylık veya yıllık fatura döngüsü seçebilirsiniz; toplam ücret aynı kalır, sadece fatura periyodu farklıdır. Engagement süresi (Strateji Oturumu, Çeyreklik, Yıllık) paket tipiyle belirlenir.',
+      en: 'You can choose monthly or annual billing cycles; the total fee stays the same, only the invoice period differs. Engagement length (Strategy Session, Quarterly, Annual) is set by the tier you pick.',
     },
   },
   {
@@ -212,7 +212,9 @@ export const PricingPage: React.FC = () => {
     },
     monthly: { tr: 'Aylık', en: 'Monthly' },
     annual: { tr: 'Yıllık', en: 'Annual' },
-    save: { tr: '2 ay ücretsiz', en: '2 months free' },
+    // P45 D1: "2 ay ücretsiz" iddiası kaldırıldı — priceAnnual === priceMonthly
+    // olduğu için gerçek bir indirim yok. Toggle sadece fatura periyodu seçimi.
+    save: { tr: '', en: '' },
     perMonth: { tr: '/ay', en: '/mo' },
     custom: { tr: 'Özel Teklif', en: 'Custom Quote' },
     compare: { tr: 'Detaylı Karşılaştırma', en: 'Detailed Comparison' },
@@ -230,7 +232,10 @@ export const PricingPage: React.FC = () => {
 
   const getPrice = (tier: Tier) => {
     if (tier.priceMonthly === 0) return t.custom[lang];
-    const baseTRY = billing === 'annual' ? Math.round(tier.priceAnnual / 12) : tier.priceMonthly;
+    // P45 D1: Toggle artık fatura periyodu (aylık vs yıllık) seçimini gösteriyor;
+    // fiyat aynı kalır. Eski "annual = priceAnnual / 12" 12x'lik sahte indirim
+    // yaratıyordu. priceAnnual ve priceMonthly aynı engagement birim fiyatıdır.
+    const baseTRY = tier.priceMonthly;
     return formatPrice(baseTRY);
   };
 

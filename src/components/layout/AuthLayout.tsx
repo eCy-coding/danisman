@@ -13,7 +13,8 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({ children, seoTitle }) =>
       {/* P15 — auth route'ları SERP'te değer üretmez, noindex. */}
       <SEO title={seoTitle} noIndex />
       <FadeIn>
-        <div className="glass-card p-8 rounded-xl w-full max-w-md">
+        {/* P45 D4: glass-card → solid surface (CLAUDE.md doktrini: glassmorphism YOK). */}
+        <div className="bg-white/5 border border-white/10 p-8 rounded-2xl w-full max-w-md shadow-2xl">
            {children}
         </div>
       </FadeIn>
