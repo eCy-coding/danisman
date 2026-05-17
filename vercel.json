@@ -20,49 +20,84 @@
     {
       "source": "/assets/lp.js",
       "headers": [
-        {"key": "Cache-Control", "value": "public, max-age=300, must-revalidate"}
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=300, must-revalidate"
+        }
       ]
     },
     {
       "source": "/assets/lc.js",
       "headers": [
-        {"key": "Cache-Control", "value": "public, max-age=300, must-revalidate"}
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=300, must-revalidate"
+        }
       ]
     },
     {
       "source": "/assets/(.*)",
       "headers": [
-        {"key": "Cache-Control", "value": "public, max-age=31536000, immutable"}
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
       ]
     },
     {
       "source": "/fonts/(.*)",
       "headers": [
-        {"key": "Cache-Control", "value": "public, max-age=31536000, immutable"},
-        {"key": "Access-Control-Allow-Origin", "value": "*"}
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        },
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        }
       ]
     },
     {
       "source": "/",
       "headers": [
-        {"key": "Link", "value": "</fonts/inter-latin-400-normal.woff2>; rel=preload; as=font; type=font/woff2; crossorigin, </fonts/inter-latin-700-normal.woff2>; rel=preload; as=font; type=font/woff2; crossorigin, </assets/lp.js>; rel=modulepreload, </assets/lc.js>; rel=modulepreload"}
+        {
+          "key": "Link",
+          "value": "</fonts/inter-latin-400-normal.woff2>; rel=preload; as=font; type=font/woff2; crossorigin, </fonts/inter-latin-700-normal.woff2>; rel=preload; as=font; type=font/woff2; crossorigin, </assets/lp.js>; rel=modulepreload, </assets/lc.js>; rel=modulepreload"
+        }
       ]
     },
     {
       "source": "/(.*).(png|jpg|jpeg|gif|webp|avif|svg|ico)",
       "headers": [
-        {"key": "Cache-Control", "value": "public, max-age=31536000, stale-while-revalidate=604800, immutable"}
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, stale-while-revalidate=604800, immutable"
+        }
       ]
     },
     {
-      "source": "/((?!assets/|fonts/|favicon|apple-touch-icon|pwa-|founder\.svg|og-image|twitter-card|case-studies/|clients/|robots\.txt|sitemap|rss\.xml|sw\.js|manifest|health\.json|tools/).*)",
+      "source": "/(.*)",
       "headers": [
-        {"key": "X-Frame-Options", "value": "DENY"},
-        {"key": "X-Content-Type-Options", "value": "nosniff"},
-        {"key": "Referrer-Policy", "value": "strict-origin-when-cross-origin"},
-        {"key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=(), interest-cohort=(), payment=(), usb=(), magnetometer=(), accelerometer=()"},
-        {"key": "Content-Security-Policy", "value": "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://vercel.live https://cdn.growthbook.io; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' https://ecypro-api.onrender.com https://www.google-analytics.com https://*.google-analytics.com https://api.github.com https://vitals.vercel-insights.com https://cdn.growthbook.io https://api.cal.com https://api.resend.com https://*.ingest.sentry.io https://api.ecypro.com https://*.ecypro.com; img-src 'self' data: blob: https: https://www.googletagmanager.com https://raw.githubusercontent.com; frame-src 'self' https://vercel.live; worker-src 'self' blob:; manifest-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests;"},
-        {"key": "Strict-Transport-Security", "value": "max-age=63072000; includeSubDomains; preload"}
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "camera=(), microphone=(), geolocation=(), interest-cohort=(), payment=(), usb=(), magnetometer=(), accelerometer=()"
+        },
+        {
+          "key": "Strict-Transport-Security",
+          "value": "max-age=63072000; includeSubDomains; preload"
+        }
       ]
     }
   ]
