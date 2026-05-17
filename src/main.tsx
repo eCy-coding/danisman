@@ -35,18 +35,10 @@ if (!rootElement) {
 
 const root = ReactDOM.createRoot(rootElement);
 
-<<<<<<< Updated upstream
-// P44: SW registration disabled. Older deployments cached stale lp.js with
-// wrong MIME (text/plain), causing dynamic import to fail and ErrorBoundary
-// to render the Hizmet Kesintisi screen. Unregister any existing SW on load.
-=======
-// P44: Service Worker registration disabled.
-// Older deployments cached stale lp.js with wrong MIME (text/plain), causing
-// React's dynamic import('/assets/lp.js') to fail and the ErrorBoundary to
-// render the "Hizmet Kesintisi" screen. Until we ship a self-destroying SW
-// strategy via vite-plugin-pwa `selfDestroying:true`, we unregister any
-// existing SW on load and skip registration so the app loads from the CDN.
->>>>>>> Stashed changes
+// P44: Service Worker registration disabled. Older deployments cached stale
+// lp.js with wrong MIME (text/plain), causing dynamic import to fail and the
+// ErrorBoundary to render the Hizmet Kesintisi screen. Unregister any existing
+// SW on load and skip registration so the app loads from the CDN.
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker
