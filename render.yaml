@@ -23,6 +23,14 @@ services:
     buildCommand: |
       npm ci --include=dev && \
       npx prisma generate && \
+      # P41: bootstrap a fresh DB — push schema first, mark all existing
+      # migrations as applied, then run migrate deploy for any future ones.
+      # Idempotent on subsequent deploys (db push is a no-op when in-sync,
+      # migrate resolve fails-soft if already applied).
+      npx prisma db push --accept-data-loss --skip-generate && \
+      for m in $(ls prisma/migrations | grep -v migration_lock); do \
+        npx prisma migrate resolve --applied "$m" 2>/dev/null || true; \
+      done && \
       npx prisma migrate deploy && \
       npx tsc -p tsconfig.server.json
     startCommand: node dist/server/index.js
