@@ -422,6 +422,10 @@ export default defineConfig(({ mode }) => {
     resolve: {
       alias: {
         '@': path.resolve(__dirname, './src'),
+        // P46 C2: react-helmet-async@2.0.5 is incompatible with React 19
+        // (Helmet writes zero DOM tags). Alias to our useEffect-based shim
+        // that exposes the same Helmet + HelmetProvider API.
+        'react-helmet-async': path.resolve(__dirname, './src/lib/seo-helmet.tsx'),
       },
     },
     // P7 Round C — strip console.* and debugger statements from production
