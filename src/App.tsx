@@ -8,10 +8,12 @@ import { SovereignBoundary } from './components/ui/SovereignBoundary';
 import { RouteContainer } from './components/error/RouteContainer';
 import { Logger } from './lib/logger';
 
-// Lazy load ALL pages including LandingPage for maximum code splitting
-const LandingPage = React.lazy(() =>
-  import('./pages/LandingPage').then((module) => ({ default: module.LandingPage })),
-);
+// P44: LandingPage is statically imported now. The previous lazy split
+// produced /assets/lp.js which Vercel's edge cache pinned with the wrong
+// MIME type (text/plain) from an earlier build, breaking every visitor's
+// initial dynamic import (Failed to fetch dynamically imported module).
+// Bundling it into main resolves the cache poison once and for all.
+import { LandingPage } from './pages/LandingPage';
 
 // Lazy load pages for code splitting (Dashboard & Inner pages only)
 import { SchemaOrg } from './components/seo/SchemaOrg';

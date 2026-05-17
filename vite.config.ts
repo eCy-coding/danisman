@@ -464,8 +464,10 @@ export default defineConfig(({ mode }) => {
             return 'assets/[name]-[hash][extname]';
           },
           chunkFileNames: (chunkInfo: { name?: string }) => {
-            if (chunkInfo.name === 'LandingPage') return 'assets/lp.js';
-            if (chunkInfo.name === 'LandingContent') return 'assets/lc.js';
+            // P44: lp.js + lc.js had stable non-hashed names which let Vercel's
+            // edge cache pin a stale response (wrong MIME type) and break
+            // dynamic import('/assets/lp.js') for every visitor. Hash both so
+            // each new build emits fresh URLs that bypass the poisoned cache.
             return 'assets/[name]-[hash].js';
           },
           manualChunks: {
