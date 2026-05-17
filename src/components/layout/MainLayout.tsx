@@ -7,7 +7,10 @@ import { SeoHead } from '../seo/SeoHead';
 import { BackToTop } from '../common/BackToTop';
 import { SmartCTA } from '../common/SmartCTA';
 import { GeoBanner } from '../common/GeoBanner';
-import { UrgencyBanner } from '../common/UrgencyBanner';
+// P45: UrgencyBanner disabled — "Bu ay yalnızca 3 danışmanlık slotu kaldı +
+// haftalık geri sayım" sahte kıtlık göstergesiydi. Premium consulting brand
+// pozisyonuna uygun değil.
+// import { UrgencyBanner } from '../common/UrgencyBanner';
 import { SocialProofToast } from '../common/SocialProofToast';
 import { ExitIntentModal } from '../common/ExitIntentModal';
 import { MobileBottomNav } from './MobileBottomNav';
@@ -26,7 +29,7 @@ export const MainLayout: React.FC = () => {
         title="EcyPro | Stratejik Yönetim Danışmanlığı"
         description="EcyPro, kurumsal yönetim danışmanlığı, etkinlik yönetimi ve dijital marka çözümleriyle işinizi büyütür. Global standartlarda stratejik iş ortağınız."
       />
-      <UrgencyBanner />
+      {/* P45: <UrgencyBanner /> kaldırıldı — sahte kıtlık göstergesi. */}
       <GeoBanner />
       <Navbar />
       <main className="grow pt-24" role="main" id="main-content">
