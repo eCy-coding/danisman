@@ -18,10 +18,14 @@
     <link rel="canonical" href="https://www.ecypro.com/" />
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://www.googletagmanager.com https://www.google-analytics.com https://browser.sentry-cdn.com https://*.sentry.io https://cdn.growthbook.io; style-src 'self' 'unsafe-inline'; img-src 'self' data: https: blob:; font-src 'self' data:; connect-src 'self' https://huggingface.co https://cdn-lfs.huggingface.co https://www.googletagmanager.com https://www.google-analytics.com https://*.google-analytics.com https://browser.sentry-cdn.com https://*.sentry.io https://*.ingest.sentry.io https://cdn.growthbook.io https://api.ecypro.com https://*.ecypro.com wss://* http://localhost:* ws://localhost:* ws://127.0.0.1:*; worker-src 'self' blob:; frame-src 'self'; object-src 'none'; base-uri 'self'; report-uri https://o4508000000000000.ingest.sentry.io/api/0/security/?sentry_key=__SENTRY_CSP_KEY__; report-to csp-endpoint;"
+      content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://www.googletagmanager.com https://www.google-analytics.com https://browser.sentry-cdn.com https://*.sentry.io https://cdn.growthbook.io; style-src 'self' 'unsafe-inline'; img-src 'self' data: https: blob:; font-src 'self' data:; connect-src 'self' https://huggingface.co https://cdn-lfs.huggingface.co https://www.googletagmanager.com https://www.google-analytics.com https://*.google-analytics.com https://browser.sentry-cdn.com https://*.sentry.io https://*.ingest.sentry.io https://cdn.growthbook.io https://api.ecypro.com https://*.ecypro.com https://ecypro-api.onrender.com wss://* http://localhost:* ws://localhost:* ws://127.0.0.1:*; worker-src 'self' blob:; frame-src 'self'; object-src 'none'; base-uri 'self'; report-uri https://o4508000000000000.ingest.sentry.io/api/0/security/?sentry_key=__SENTRY_CSP_KEY__; report-to csp-endpoint;"
     />
     <meta http-equiv="X-Content-Type-Options" content="nosniff" />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
+
+    <!-- P43: Google Search Console verification placeholder.
+         Action item: Search Console → Property → "HTML tag" yöntemi → verification token kopyala → content="…" değerini override et. -->
+    <meta name="google-site-verification" content="REPLACE_WITH_GSC_TOKEN" />
 
     <!-- P15 — Statik hreflang tag'leri kaldırıldı. SeoManager (react-helmet-async)
          route-aware tek otorite olarak yönetir. Çift emit Google'da konfüzyon

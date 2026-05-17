@@ -8,62 +8,8 @@ const TRUSTBAR_COPY = {
   sectionTitle: { tr: 'Güvenenler', en: 'Trusted By' },
 };
 
-// Simulating distinct SVG logos for different industries
-const renderLogo = (id: string, className: string) => {
-  switch (id) {
-    case 'l1': // Holding (Geometric/Solid)
-      return (
-        <svg width="120" height="40" viewBox="0 0 120 40" className={`fill-current ${className}`} xmlns="http://www.w3.org/2000/svg">
-          <path d="M10 10 L30 10 L30 30 L10 30 Z" />
-          <path d="M35 10 L55 10 L55 30 L35 30 Z" />
-          <rect x="65" y="16" width="50" height="8" rx="1" />
-        </svg>
-      );
-    case 'l2': // Finance (Stability/Pillars)
-      return (
-        <svg width="120" height="40" viewBox="0 0 120 40" className={`fill-current ${className}`} xmlns="http://www.w3.org/2000/svg">
-          <rect x="5" y="28" width="40" height="4" />
-          <rect x="10" y="12" width="6" height="16" />
-          <rect x="22" y="12" width="6" height="16" />
-          <rect x="34" y="12" width="6" height="16" />
-          <path d="M25 4 L48 12 L2 12 Z" />
-          <rect x="55" y="14" width="60" height="10" rx="2" />
-        </svg>
-      );
-    case 'l3': // Construction (Structure)
-      return (
-        <svg width="120" height="40" viewBox="0 0 120 40" className={`fill-current ${className}`} xmlns="http://www.w3.org/2000/svg">
-          <path d="M10 30 L10 10 L30 30 Z" />
-          <rect x="35" y="14" width="70" height="12" rx="0" />
-        </svg>
-      );
-    case 'l4': // Tech (Nodes/Connections)
-      return (
-        <svg width="120" height="40" viewBox="0 0 120 40" className={`fill-current ${className}`} xmlns="http://www.w3.org/2000/svg">
-          <circle cx="10" cy="20" r="6" />
-          <circle cx="35" cy="10" r="4" />
-          <circle cx="35" cy="30" r="4" />
-          <line x1="16" y1="20" x2="31" y2="10" stroke="currentColor" strokeWidth="2" />
-          <line x1="16" y1="20" x2="31" y2="30" stroke="currentColor" strokeWidth="2" />
-          <rect x="50" y="16" width="60" height="8" rx="4" />
-        </svg>
-      );
-    case 'l5': // Retail (Cart/Bag/Simple)
-      return (
-        <svg width="120" height="40" viewBox="0 0 120 40" className={`fill-current ${className}`} xmlns="http://www.w3.org/2000/svg">
-          <path d="M10 10 C10 10, 15 30, 25 30 C35 30, 40 10, 40 10" fill="none" stroke="currentColor" strokeWidth="3" />
-          <rect x="50" y="14" width="60" height="10" rx="2" />
-        </svg>
-      );
-    default:
-      return (
-        <svg width="120" height="40" viewBox="0 0 120 40" className={`fill-current ${className}`} xmlns="http://www.w3.org/2000/svg">
-          <rect x="0" y="8" width="24" height="24" rx="4" />
-          <rect x="32" y="14" width="80" height="12" rx="2" />
-        </svg>
-      );
-  }
-};
+// Anonymized sector badges live under /public/clients/*.svg
+// (200×80, mono navy/gold, no glass surface — AI Studio Tech doktrini).
 
 export const TrustBar: React.FC = () => {
   const { i18n } = useTranslation();
@@ -84,7 +30,7 @@ export const TrustBar: React.FC = () => {
             <p className="text-xs font-bold text-slate-400 uppercase tracking-[0.2em] whitespace-nowrap pt-2">
               {TRUSTBAR_COPY.sectionTitle[lang]}
             </p>
-            <div className="w-full grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-12 items-center justify-items-center">
+            <div className="w-full grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-12 items-center justify-items-center">
               {TRUST_LOGOS.map((logo, idx) => (
                 <motion.div
                   key={logo.id}
@@ -96,10 +42,17 @@ export const TrustBar: React.FC = () => {
                   className="group relative flex justify-center w-full cursor-default grayscale hover:grayscale-0 transition-all duration-500"
                   title={logo.alt[lang]}
                 >
-                  {renderLogo(
-                    logo.id,
-                    'text-slate-400 group-hover:text-white transition-colors duration-500 h-8 w-auto',
-                  )}
+                  {logo.src ? (
+                    <img
+                      src={logo.src}
+                      alt={logo.alt[lang]}
+                      width={120}
+                      height={48}
+                      loading="lazy"
+                      decoding="async"
+                      className="h-10 w-auto opacity-80 group-hover:opacity-100 transition-opacity duration-500"
+                    />
+                  ) : null}
 
                   {/* Tooltip for Sector */}
                   <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none whitespace-nowrap z-10">

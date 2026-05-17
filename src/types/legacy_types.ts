@@ -91,6 +91,7 @@ export interface TrustLogo {
   name: string;
   sector: I18nString;
   alt: I18nString;
+  src?: string;
 }
 
 export interface HeroPillar {

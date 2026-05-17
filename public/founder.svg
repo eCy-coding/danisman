@@ -1,24 +1,54 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" width="800" height="800" role="img">
-    <defs>
-      <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-        <stop offset="0%" stop-color="#0B1220"/>
-        <stop offset="100%" stop-color="#1A2238"/>
-      </linearGradient>
-      <linearGradient id="ring" x1="0" y1="0" x2="1" y2="1">
-        <stop offset="0%" stop-color="#D4AF37"/>
-        <stop offset="100%" stop-color="#B8941F"/>
-      </linearGradient>
-    </defs>
-    <rect width="800" height="800" fill="url(#bg)"/>
-    <circle cx="400" cy="400" r="280" fill="none" stroke="url(#ring)" stroke-width="6" opacity="0.85"/>
-    <circle cx="400" cy="400" r="220" fill="#0E1626"/>
-    <text x="400" y="430" text-anchor="middle"
-          font-family="Inter, system-ui, sans-serif" font-size="120" font-weight="600"
-          fill="#D4AF37" letter-spacing="6">ECY</text>
-    <text x="400" y="510" text-anchor="middle"
-          font-family="Inter, system-ui, sans-serif" font-size="20" font-weight="400"
-          fill="#9CA3AF" letter-spacing="4">EMRE CAN YALÇIN</text>
-    <text x="400" y="540" text-anchor="middle"
-          font-family="Inter, system-ui, sans-serif" font-size="14" font-weight="400"
-          fill="#6B7280" letter-spacing="2">eCyverse · Premium Consulting</text>
-  </svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024" role="img" aria-label="Emre Can Yalcin — eCyverse Premium Consulting Strategist">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0B1220"/>
+      <stop offset="55%" stop-color="#4F46E5"/>
+      <stop offset="100%" stop-color="#7C3AED"/>
+    </linearGradient>
+    <linearGradient id="silhouette" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0B1220"/>
+      <stop offset="100%" stop-color="#1E1B4B"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#D4AF37"/>
+      <stop offset="100%" stop-color="#B8941F"/>
+    </linearGradient>
+    <radialGradient id="halo" cx="0.5" cy="0.42" r="0.45">
+      <stop offset="0%" stop-color="#7C3AED" stop-opacity="0.55"/>
+      <stop offset="100%" stop-color="#0B1220" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1024" height="1024" fill="url(#bg)"/>
+  <rect width="1024" height="1024" fill="url(#halo)"/>
+
+  <g opacity="0.08" stroke="#D4AF37" stroke-width="1" fill="none">
+    <line x1="0" y1="256" x2="1024" y2="256"/>
+    <line x1="0" y1="512" x2="1024" y2="512"/>
+    <line x1="0" y1="768" x2="1024" y2="768"/>
+    <line x1="256" y1="0" x2="256" y2="1024"/>
+    <line x1="512" y1="0" x2="512" y2="1024"/>
+    <line x1="768" y1="0" x2="768" y2="1024"/>
+  </g>
+
+  <circle cx="512" cy="430" r="320" fill="none" stroke="url(#gold)" stroke-width="2" opacity="0.45"/>
+  <circle cx="512" cy="430" r="260" fill="none" stroke="url(#gold)" stroke-width="1" opacity="0.25"/>
+
+  <g fill="url(#silhouette)">
+    <path d="M512 220 C 452 220 408 268 408 328 C 408 372 428 408 458 428 C 420 442 388 466 364 500 C 332 544 316 600 312 660 L 712 660 C 708 600 692 544 660 500 C 636 466 604 442 566 428 C 596 408 616 372 616 328 C 616 268 572 220 512 220 Z"/>
+  </g>
+
+  <path d="M512 220 C 452 220 408 268 408 328 C 408 372 428 408 458 428" fill="none" stroke="url(#gold)" stroke-width="1.5" opacity="0.85"/>
+  <path d="M566 428 C 596 408 616 372 616 328 C 616 268 572 220 512 220" fill="none" stroke="url(#gold)" stroke-width="1.5" opacity="0.85"/>
+  <path d="M364 500 C 332 544 316 600 312 660" fill="none" stroke="url(#gold)" stroke-width="1.5" opacity="0.6"/>
+  <path d="M660 500 C 692 544 708 600 712 660" fill="none" stroke="url(#gold)" stroke-width="1.5" opacity="0.6"/>
+
+  <circle cx="512" cy="328" r="6" fill="url(#gold)"/>
+  <circle cx="408" cy="428" r="4" fill="url(#gold)" opacity="0.8"/>
+  <circle cx="616" cy="428" r="4" fill="url(#gold)" opacity="0.8"/>
+
+  <line x1="280" y1="780" x2="744" y2="780" stroke="url(#gold)" stroke-width="1" opacity="0.55"/>
+
+  <text x="512" y="848" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="44" font-weight="600" fill="#F3F4F6" letter-spacing="8">EMRE CAN YALÇIN</text>
+  <text x="512" y="900" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="22" font-weight="400" fill="url(#gold)" letter-spacing="4">eCyverse · Premium Consulting Strategist</text>
+</svg>
