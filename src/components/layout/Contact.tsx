@@ -126,17 +126,20 @@ export const Contact: React.FC = () => {
                       {CONTACT_CONFIG.email}
                     </a>
                   </div>
-                  <div>
-                    <h4 className="text-sm font-bold text-slate-600 uppercase tracking-widest mb-2">
-                      {CONTACT_FORM_COPY.phoneLabel[lang]}
-                    </h4>
-                    <a
-                      href={`tel:${CONTACT_CONFIG.phone}`}
-                      className="text-primary text-lg hover:text-secondary transition-colors"
-                    >
-                      {CONTACT_CONFIG.phoneDisplay}
-                    </a>
-                  </div>
+                  {/* P46 C4: Telefon CONTACT_CONFIG.phone boş ise gizle (kırık tel: link). */}
+                  {CONTACT_CONFIG.phone && CONTACT_CONFIG.phone.length > 0 && (
+                    <div>
+                      <h4 className="text-sm font-bold text-slate-600 uppercase tracking-widest mb-2">
+                        {CONTACT_FORM_COPY.phoneLabel[lang]}
+                      </h4>
+                      <a
+                        href={`tel:${CONTACT_CONFIG.phone}`}
+                        className="text-primary text-lg hover:text-secondary transition-colors"
+                      >
+                        {CONTACT_CONFIG.phoneDisplay}
+                      </a>
+                    </div>
+                  )}
                 </div>
 
                 <div className="pt-6">

@@ -40,28 +40,26 @@ export const SeoManager: React.FC<SeoManagerProps> = ({
   const canonicalPath = location.pathname;
   const canonicalUrl = `${SITE_URL}${canonicalPath}`;
 
-  const defaultTitle =
-    currentLang === 'tr'
-      ? 'EcyPro | Stratejik Yönetim Danışmanlığı'
-      : 'EcyPro | Premium Management Consulting';
-  const defaultDescription =
-    currentLang === 'tr'
-      ? 'Global ölçekte stratejik büyüme ve dijital dönüşüm ortağınız.'
-      : 'Elite management consulting: strategy, operations, and technology transformation.';
-
-  const finalTitle = title ? `${title} | EcyPro` : defaultTitle;
-  const finalDescription = description ?? defaultDescription;
+  // P46 C2: Default title/description ARTıK BURADA SET EDİLMEZ. SeoManager
+  // global olarak App.tsx'te prop'suz mount oluyordu; her route'ta default
+  // title'ı flush ediyor, per-page <SEO /> başlığını eziyordu. Şimdi prop
+  // gelmezse sadece hreflang + locale meta'yı yönetir, title/desc/canonical
+  // tag'lerini per-page SEO'ya bırakır.
+  const finalTitle = title ? `${title} | EcyPro` : undefined;
+  const finalDescription = description ?? undefined;
   const ogLocale = currentLang === 'tr' ? 'tr_TR' : 'en_US';
   const ogLocaleAlt = currentLang === 'tr' ? 'en_US' : 'tr_TR';
 
   return (
     <Helmet>
       <html lang={currentLang} />
-      <title>{finalTitle}</title>
-      <meta name="description" content={finalDescription} />
+      {finalTitle && <title>{finalTitle}</title>}
+      {finalDescription && <meta name="description" content={finalDescription} />}
       {noIndex && <meta name="robots" content="noindex,nofollow" />}
 
-      {/* Canonical */}
+      {/* P46 C1: Canonical — SeoManager hala fallback olarak set ediyor ama
+          per-page <SEO canonical="..." /> override ediyor (react-helmet-async
+          son tag'i tutar). */}
       <link rel="canonical" href={canonicalUrl} />
 
       {/* P39-T01: Path-based hreflang (RFC 5646) */}
@@ -83,21 +81,25 @@ export const SeoManager: React.FC<SeoManagerProps> = ({
         );
       })()}
 
-      {/* Open Graph */}
+      {/* Open Graph — only when title/desc passed (per-page sets own OG via <SEO />) */}
       <meta property="og:site_name" content="EcyPro Consulting" />
-      <meta property="og:title" content={finalTitle} />
-      <meta property="og:description" content={finalDescription} />
+      {finalTitle && <meta property="og:title" content={finalTitle} />}
+      {finalDescription && <meta property="og:description" content={finalDescription} />}
       <meta property="og:url" content={canonicalUrl} />
       <meta property="og:type" content={type} />
-      <meta property="og:image" content={`${SITE_URL}${image}`} />
       <meta property="og:locale" content={ogLocale} />
       <meta property="og:locale:alternate" content={ogLocaleAlt} />
+      {(finalTitle || finalDescription) && (
+        <meta property="og:image" content={`${SITE_URL}${image}`} />
+      )}
 
       {/* Twitter */}
       <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:title" content={finalTitle} />
-      <meta name="twitter:description" content={finalDescription} />
-      <meta name="twitter:image" content={`${SITE_URL}${image}`} />
+      {finalTitle && <meta name="twitter:title" content={finalTitle} />}
+      {finalDescription && <meta name="twitter:description" content={finalDescription} />}
+      {(finalTitle || finalDescription) && (
+        <meta name="twitter:image" content={`${SITE_URL}${image}`} />
+      )}
     </Helmet>
   );
 };

@@ -15,7 +15,12 @@
     <meta name="author" content="EcyPro Danışmanlık A.Ş." />
     <meta name="robots" content="index, follow" />
     <meta name="format-detection" content="telephone=no" />
-    <link rel="canonical" href="https://www.ecypro.com/" />
+    <!-- P46 C1: Statik canonical kaldırıldı — index.html'deki hardcoded
+         canonical "/" tüm 80 URL'de ilk DOM tag olarak kalıyor ve
+         querySelector + Google crawler bunu önce okuyor. Sonuç: site
+         genelinde canonical homepage'i gösteriyor, alt sayfalar duplicate
+         sayılıyor. SeoManager + per-page SEO component canonical'ı
+         react-helmet-async ile route-aware yönetir. -->
     <meta
       http-equiv="Content-Security-Policy"
       content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://www.googletagmanager.com https://www.google-analytics.com https://browser.sentry-cdn.com https://*.sentry.io https://cdn.growthbook.io; style-src 'self' 'unsafe-inline'; img-src 'self' data: https: blob:; font-src 'self' data:; connect-src 'self' https://huggingface.co https://cdn-lfs.huggingface.co https://www.googletagmanager.com https://www.google-analytics.com https://*.google-analytics.com https://browser.sentry-cdn.com https://*.sentry.io https://*.ingest.sentry.io https://cdn.growthbook.io https://api.ecypro.com https://*.ecypro.com https://ecypro-api.onrender.com wss://* http://localhost:* ws://localhost:* ws://127.0.0.1:*; worker-src 'self' blob:; frame-src 'self'; object-src 'none'; base-uri 'self'; report-uri https://o4508000000000000.ingest.sentry.io/api/0/security/?sentry_key=__SENTRY_CSP_KEY__; report-to csp-endpoint;"
@@ -316,7 +321,7 @@
                 font-size: 0.9375rem;
                 font-family: system-ui, sans-serif;
               "
-              >Book Discovery Call &#8594;</a
+              >&Uuml;cretsiz Strateji G&ouml;r&uuml;&#x15F;mesi Al &#8594;</a
             >
             <a
               href="/services"
@@ -331,7 +336,7 @@
                 font-size: 0.9375rem;
                 font-family: system-ui, sans-serif;
               "
-              >Explore Services</a
+              >Hizmetleri Ke&#x15F;fedin</a
             >
           </div>
         </div>
@@ -392,6 +397,30 @@
           { "@type": "ListItem", "position": 1, "name": "Anasayfa", "item": "https://www.ecypro.com/" },
           { "@type": "ListItem", "position": 2, "name": "Hizmetler", "item": "https://www.ecypro.com/services" },
           { "@type": "ListItem", "position": 3, "name": "Blog", "item": "https://www.ecypro.com/blog" }
+        ]
+      }
+    </script>
+    <!-- P46 M4: Person schema (founder) — Knowledge Graph'a Emre Can Yalçın
+         girişi sağlar, Organization → founder bağlantısını güçlendirir. -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "@id": "https://www.ecypro.com/#founder",
+        "name": "Emre Can Yalçın",
+        "givenName": "Emre Can",
+        "familyName": "Yalçın",
+        "jobTitle": "Founder & Chief Strategist",
+        "description": "Founder of EcyPro Premium Consulting and the eCyverse ecosystem. Strategic management advisory, organizational transformation, and culture engineering practitioner.",
+        "worksFor": { "@id": "https://www.ecypro.com/#organization" },
+        "url": "https://www.ecypro.com/about",
+        "knowsAbout": [
+          "Strategic Management",
+          "Organizational Transformation",
+          "Culture Engineering",
+          "M&A Advisory",
+          "Operational Excellence",
+          "Family Business Governance"
         ]
       }
     </script>

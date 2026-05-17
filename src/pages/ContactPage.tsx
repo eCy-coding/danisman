@@ -80,21 +80,26 @@ export const ContactPage: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="flex items-start gap-4 p-6 glass-card rounded-xl transition-all hover:border-white/20">
-                  <div className="p-3 bg-green-500/10 text-green-400 rounded-lg border border-green-500/20">
-                    <Phone size={24} />
+                {/* P46 C4: Telefon kartı CONTACT_CONFIG.phone boş olduğunda
+                    kırık `tel:` linki render etmesin. Phone aktive edilince bu
+                    kart yeniden görünür hale gelir. */}
+                {CONTACT_CONFIG.phone && CONTACT_CONFIG.phone.length > 0 && (
+                  <div className="flex items-start gap-4 p-6 bg-white/5 border border-white/10 rounded-xl transition-all hover:border-white/20">
+                    <div className="p-3 bg-green-500/10 text-green-400 rounded-lg border border-green-500/20">
+                      <Phone size={24} />
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-white mb-1">Telefon</h3>
+                      <a
+                        href={`tel:${CONTACT_CONFIG.phone}`}
+                        className="text-lg text-slate-300 hover:text-secondary transition-colors"
+                      >
+                        {CONTACT_CONFIG.phoneDisplay || CONTACT_CONFIG.phone}
+                      </a>
+                      <p className="text-xs text-slate-400 mt-2">Pazartesi - Cuma, 09:00 - 18:00</p>
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="font-bold text-white mb-1">Telefon</h3>
-                    <a
-                      href={`tel:${CONTACT_CONFIG.phone}`}
-                      className="text-lg text-slate-300 hover:text-secondary transition-colors"
-                    >
-                      {CONTACT_CONFIG.phone}
-                    </a>
-                    <p className="text-xs text-slate-400 mt-2">Pazartesi - Cuma, 09:00 - 18:00</p>
-                  </div>
-                </div>
+                )}
 
                 <div className="flex items-start gap-4 p-6 glass-card rounded-xl transition-all hover:border-white/20">
                   <div className="p-3 bg-purple-500/10 text-purple-400 rounded-lg border border-purple-500/20">

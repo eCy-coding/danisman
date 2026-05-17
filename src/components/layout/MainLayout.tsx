@@ -3,7 +3,8 @@ import { Outlet } from 'react-router-dom';
 import { Navbar } from './Navbar';
 import { Footer } from './Footer';
 import { CookieBanner } from './CookieBanner';
-import { SeoHead } from '../seo/SeoHead';
+// P46 C2: SeoHead layout seviyesinden kaldırıldı — generic title flush per-page'i eziyordu.
+// import { SeoHead } from '../seo/SeoHead';
 import { BackToTop } from '../common/BackToTop';
 import { SmartCTA } from '../common/SmartCTA';
 import { GeoBanner } from '../common/GeoBanner';
@@ -25,10 +26,9 @@ export const MainLayout: React.FC = () => {
     <div className="flex flex-col min-h-screen bg-neutral text-slate-300 selection:bg-secondary selection:text-white">
       {/* P15 — i18n skip link (TR + EN, single source via SkipLinks). */}
       <SkipLinks />
-      <SeoHead
-        title="EcyPro | Stratejik Yönetim Danışmanlığı"
-        description="EcyPro, kurumsal yönetim danışmanlığı, etkinlik yönetimi ve dijital marka çözümleriyle işinizi büyütür. Global standartlarda stratejik iş ortağınız."
-      />
+      {/* P46 C2: Layout seviyesinde <SeoHead /> kaldırıldı — her route'ta aynı
+          default başlığı flush ediyor, per-page <SEO /> başlığını eziyordu.
+          Title/desc/canonical artık her sayfanın kendi <SEO />'su ile yönetiliyor. */}
       {/* P45: <UrgencyBanner /> kaldırıldı — sahte kıtlık göstergesi. */}
       <GeoBanner />
       <Navbar />
