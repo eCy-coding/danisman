@@ -321,12 +321,22 @@ export const Hero: React.FC = () => {
               </span>
             </h1>
 
-            <motion.p
-              variants={itemVariants}
+            {/*
+              P31-T01: LCP optimization — this <p> is the LCP element on /
+              (Lighthouse mobile run). Previously wrapped in motion.p with
+              variants={itemVariants} which starts at `opacity: 0`. Per LCP
+              spec, opacity:0 elements are NOT paint candidates, so LCP
+              fires only after Framer Motion runs the "visible" transition
+              (~1100ms element render delay on mobile, simulated ~5250ms).
+              Rendering as a plain <p> with opacity:1 lets LCP register at
+              first paint of the hydrated React tree (~300-400ms).
+              Badge/h1/buttons still animate; only the LCP <p> is plain.
+            */}
+            <p
               className="text-lg md:text-xl text-slate-300/90 leading-relaxed max-w-2xl mb-12 font-light border-l-4 border-secondary/50 pl-6 bg-white/2 py-2 rounded-r-lg min-h-20"
             >
               {currentContent.description[lang]}
-            </motion.p>
+            </p>
 
             <motion.div
               variants={itemVariants}
