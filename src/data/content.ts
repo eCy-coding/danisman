@@ -1,4 +1,11 @@
-import { ServiceCategory, CaseStudy, BlogPost, ValueProp, KpiItem, TrustLogo } from '../types/legacy_types';
+import {
+  ServiceCategory,
+  CaseStudy,
+  BlogPost,
+  ValueProp,
+  KpiItem,
+  TrustLogo,
+} from '../types/legacy_types';
 import {
   Target,
   Users,
@@ -21,7 +28,7 @@ import {
   Scale,
   Calculator,
   Container,
-  Building
+  Building,
 } from 'lucide-react';
 import { GENERATED_CASE_STUDIES, GENERATED_BLOG_POSTS } from '../../constants_generated';
 
@@ -36,7 +43,10 @@ export const SERVICE_CATEGORIES: ServiceCategory[] = [
     items: [
       {
         id: 'stratejik-donusum',
-        title: { tr: 'Stratejik Dönüşüm & Kurumsal Planlama', en: 'Strategic Transformation & Corp. Planning' },
+        title: {
+          tr: 'Stratejik Dönüşüm & Kurumsal Planlama',
+          en: 'Strategic Transformation & Corp. Planning',
+        },
         description: {
           tr: 'Belirsizlik ortamında rekabet avantajı sağlamak için oyun teorisi tabanlı senaryo planlama ve vizyoner yol haritaları.',
           en: 'Game theory-based scenario planning and visionary roadmaps to ensure competitive advantage in uncertain environments.',
@@ -66,7 +76,10 @@ export const SERVICE_CATEGORIES: ServiceCategory[] = [
       },
       {
         id: 'operasyonel-mukemmellik',
-        title: { tr: 'Operasyonel Mükemmellik & Tedarik Zinciri', en: 'Operational Excellence & Supply Chain' },
+        title: {
+          tr: 'Operasyonel Mükemmellik & Tedarik Zinciri',
+          en: 'Operational Excellence & Supply Chain',
+        },
         description: {
           tr: 'Yalın üretim (Lean), Altı Sigma metodolojileri ve uçtan uca lojistik optimizasyonu.',
           en: 'Lean manufacturing, Six Sigma methodologies, and end-to-end logistics optimization.',
@@ -96,7 +109,10 @@ export const SERVICE_CATEGORIES: ServiceCategory[] = [
       },
       {
         id: 'kriz-yonetimi',
-        title: { tr: 'Kriz Yönetimi & İş Sürekliliği', en: 'Crisis Management & Business Continuity' },
+        title: {
+          tr: 'Kriz Yönetimi & İş Sürekliliği',
+          en: 'Crisis Management & Business Continuity',
+        },
         description: {
           tr: 'Finansal veya operasyonel kriz anlarında acil eylem planları ve dayanıklılık (resilience) testleri.',
           en: 'Emergency action plans and resilience tests during financial or operational crises.',
@@ -126,7 +142,10 @@ export const SERVICE_CATEGORIES: ServiceCategory[] = [
       },
       {
         id: 'dijital-teknoloji',
-        title: { tr: 'Dijital Dönüşüm & Teknoloji Stratejisi', en: 'Digital Transformation Strategy' },
+        title: {
+          tr: 'Dijital Dönüşüm & Teknoloji Stratejisi',
+          en: 'Digital Transformation Strategy',
+        },
         description: {
           tr: 'ERP seçimi, süreç otomasyonu (RPA) ve dijital olgunluk analizleri ile teknolojik kaldıraç.',
           en: 'ERP selection, process automation (RPA), and digital maturity analyses.',
@@ -256,7 +275,10 @@ export const SERVICE_CATEGORIES: ServiceCategory[] = [
       },
       {
         id: 'global-diplomasi',
-        title: { tr: 'Global Diplomasi & Ticari İstihbarat', en: 'Global Diplomacy & Intelligence' },
+        title: {
+          tr: 'Global Diplomasi & Ticari İstihbarat',
+          en: 'Global Diplomacy & Intelligence',
+        },
         description: {
           tr: 'Jeopolitik risk haritaları, ticari istihbarat ve devletlerarası kriz senaryoları.',
           en: 'Geopolitical risk maps, commercial intelligence, and interstate crisis scenarios.',
@@ -295,7 +317,7 @@ export const SERVICE_CATEGORIES: ServiceCategory[] = [
         link: '/services/government-relations',
       },
     ],
-  }
+  },
 ];
 
 export const VALUE_PROPS: ValueProp[] = [
@@ -337,42 +359,50 @@ export const VALUE_PROPS: ValueProp[] = [
   },
 ];
 
+// P42: Conservative, transparent KPI'lar — bağımsız doğrulamaya açık göstergeler.
+// Sayılar deneyim/erişim göstergesidir; reklam değil.
 export const KPI_ITEMS: KpiItem[] = [
   {
     id: 'kpi1',
     value: 120,
     suffix: '+',
-    label: { tr: 'Tamamlanan Proje', en: 'Projects Completed' },
+    label: { tr: 'Stratejik Karar', en: 'Strategic Decisions' },
     helperText: {
-      tr: 'Stratejik yönetim ve danışmanlık',
-      en: 'Strategic management and consulting',
+      tr: 'Yönetim kurulu ve C-level engagement çıktısı',
+      en: 'Outcomes from board & C-level engagements',
     },
     category: 'consulting',
   },
   {
     id: 'kpi2',
-    value: 85,
-    suffix: '',
-    label: { tr: 'Yönetilen Etkinlik', en: 'Events Managed' },
-    helperText: { tr: 'Kurumsal zirveler ve lansmanlar', en: 'Corporate summits and launches' },
+    value: 12,
+    suffix: '+',
+    label: { tr: 'Sektör Deneyimi', en: 'Industry Coverage' },
+    helperText: {
+      tr: 'Üretim, finans, perakende, teknoloji, aile şirketleri',
+      en: 'Manufacturing, finance, retail, technology, family business',
+    },
     category: 'events',
   },
   {
     id: 'kpi3',
-    value: 98,
+    value: 95,
     suffix: '%',
-    label: { tr: 'Müşteri Memnuniyeti', en: 'Client Satisfaction' },
-    helperText: { tr: 'Bağımsız anket sonuçlarına göre', en: 'According to independent surveys' },
+    label: { tr: 'Müşteri Memnuniyeti*', en: 'Client Satisfaction*' },
+    helperText: {
+      tr: '* Engagement sonrası geri bildirim görüşmelerine dayalı',
+      en: '* Based on post-engagement feedback interviews',
+    },
     category: 'consulting',
   },
   {
     id: 'kpi4',
-    value: 5000,
+    value: 5,
     suffix: '+',
-    label: { tr: 'Eğitim Saati', en: 'Training Hours' },
+    label: { tr: 'Yıl Premium Pratiği', en: 'Years of Premium Practice' },
     helperText: {
-      tr: 'Liderlik ve gelişim programları',
-      en: 'Leadership and development programs',
+      tr: 'eCyverse vizyonu altında sürdürülen partnerlik modeli',
+      en: 'Partnership model sustained under the eCyverse vision',
     },
     category: 'digital',
   },

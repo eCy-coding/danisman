@@ -32,9 +32,11 @@ type CalculatorData = {
   cost: string;
 };
 
+// P42: Conservative default'lar — kullanıcı kendi sayılarını girene kadar
+// gösterge muhafazakar bir başlangıç noktası sunar.
 const ROI_DEFAULTS: CalculatorData = {
   revenue: '1000000',
-  efficiencyGain: '20',
+  efficiencyGain: '15',
   cost: '50000',
 };
 
@@ -191,7 +193,8 @@ export const ROICalculator: React.FC = () => {
                 </span>
               </p>
             )}
-            <button type="button"
+            <button
+              type="button"
               onClick={handleCTAClick}
               className="inline-flex items-center gap-2 px-8 py-3.5 bg-secondary text-neutral font-semibold rounded-xl hover:bg-secondary/90 transition-all active:scale-95 shadow-lg shadow-secondary/25"
             >

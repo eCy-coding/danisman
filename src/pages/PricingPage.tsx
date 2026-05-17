@@ -27,66 +27,86 @@ interface Tier {
   features: { tr: string; en: string }[];
 }
 
+// P42: Türk consulting piyasası için kalibre edilmiş 3-tier paket.
+// Fiyatlar başlangıç noktasıdır; kapsama göre özelleştirilir.
 const TIERS: Tier[] = [
   {
     id: 'starter',
-    name: { tr: 'Başlangıç', en: 'Starter' },
+    name: { tr: 'Strateji Oturumu', en: 'Strategy Session' },
     tagline: {
-      tr: 'Hızlı bir değerlendirme ile başlayın',
-      en: 'Kickstart with a rapid assessment',
+      tr: 'İki saatlik premium audit & yol haritası',
+      en: 'Two-hour premium audit & roadmap',
     },
-    priceMonthly: 1490,
-    priceAnnual: 14900,
-    currency: '€',
+    priceMonthly: 12000,
+    priceAnnual: 12000,
+    currency: '₺',
     icon: <Sparkles className="w-5 h-5" />,
-    cta: { tr: 'Başlayın', en: 'Start Now' },
+    cta: { tr: 'Oturum Planla', en: 'Book Session' },
     features: [
-      { tr: 'Olgunluk Değerlendirmesi (2 sa.)', en: 'Maturity Assessment (2 hr)' },
-      { tr: 'Yönetici Özeti raporu', en: 'Executive Summary report' },
-      { tr: 'Aylık 1 strateji görüşmesi', en: '1 strategy call / month' },
-      { tr: 'Slack / E-posta desteği', en: 'Slack / Email support' },
+      { tr: 'Kurum bağlamı keşif çağrısı (30 dk)', en: 'Discovery call (30 min)' },
+      { tr: '2 saatlik yönetici atölyesi', en: '2-hour executive workshop' },
+      { tr: 'Stratejik yol haritası (özet rapor)', en: 'Strategic roadmap (summary report)' },
+      { tr: '30 gün boyunca asenkron e-posta desteği', en: '30-day async email support' },
     ],
   },
   {
     id: 'growth',
-    name: { tr: 'Büyüme', en: 'Growth' },
+    name: { tr: 'Çeyreklik Engagement', en: 'Quarterly Engagement' },
     tagline: {
-      tr: 'Dijital dönüşümünüzü hızlandırın',
-      en: 'Accelerate your digital transformation',
+      tr: '3 ay aktif danışmanlık partnerliği',
+      en: '3 months of active advisory partnership',
     },
-    priceMonthly: 4990,
-    priceAnnual: 49900,
-    currency: '€',
+    priceMonthly: 75000,
+    priceAnnual: 75000,
+    currency: '₺',
     icon: <Zap className="w-5 h-5" />,
     highlight: true,
-    cta: { tr: 'En Popüler', en: 'Most Popular' },
+    cta: { tr: 'Görüşme Planla', en: 'Schedule a Call' },
     features: [
-      { tr: 'Tüm Başlangıç özellikleri', en: 'Everything in Starter' },
-      { tr: 'Haftalık 2 uzman danışmanlığı', en: '2 weekly expert sessions' },
-      { tr: 'Özel yol haritası + OKR kurulumu', en: 'Custom roadmap + OKR setup' },
-      { tr: 'Performans panosu (SSE real-time)', en: 'Live performance dashboard (SSE)' },
-      { tr: '4 saat yanıt SLA', en: '4-hour response SLA' },
+      { tr: 'Tüm Strateji Oturumu özellikleri', en: 'Everything in Strategy Session' },
+      {
+        tr: 'Haftalık çalışma oturumu (yönetim ekibiyle)',
+        en: 'Weekly working session (with leadership)',
+      },
+      { tr: 'Aylık karar raporu + OKR ritmi', en: 'Monthly decision review + OKR cadence' },
+      {
+        tr: 'Özel danışman erişimi (Slack / e-posta)',
+        en: 'Dedicated advisor access (Slack / email)',
+      },
+      { tr: 'Engagement-sonu retrospektif', en: 'End-of-engagement retrospective' },
     ],
   },
   {
     id: 'enterprise',
-    name: { tr: 'Kurumsal', en: 'Enterprise' },
-    tagline: { tr: 'Tam dönüşüm ortaklığı', en: 'Full transformation partnership' },
-    priceMonthly: 0,
-    priceAnnual: 0,
-    currency: '€',
+    name: { tr: 'Yıllık Partnerlik', en: 'Annual Partnership' },
+    tagline: {
+      tr: 'Sürdürülebilir transformasyon ortaklığı',
+      en: 'Sustainable transformation partnership',
+    },
+    priceMonthly: 350000,
+    priceAnnual: 350000,
+    currency: '₺',
     icon: <Crown className="w-5 h-5" />,
-    cta: { tr: 'İletişime Geçin', en: 'Contact Sales' },
+    cta: { tr: 'Bize Ulaşın', en: 'Contact Us' },
     features: [
-      { tr: 'Tüm Büyüme özellikleri', en: 'Everything in Growth' },
-      { tr: 'Özel ekip (Managing Partner + 3 uzman)', en: 'Dedicated team (MP + 3 experts)' },
-      { tr: 'İş günü 24/7 destek', en: '24/7 business-day support' },
-      { tr: 'SOC 2 / ISO 27001 uyum danışmanlığı', en: 'SOC 2 / ISO 27001 compliance advisory' },
-      { tr: 'Özel sözleşme + KVKK/DPA', en: 'Custom MSA + GDPR DPA' },
-      { tr: 'Yerinde çalıştaylar (quarterly)', en: 'On-site workshops (quarterly)' },
+      { tr: 'Tüm Çeyreklik Engagement özellikleri', en: 'Everything in Quarterly Engagement' },
+      {
+        tr: 'Yönetim kurulu / icra düzeyinde sürekli partnerlik',
+        en: 'Ongoing board / exec-level partnership',
+      },
+      { tr: 'Çeyreklik yerinde çalıştay', en: 'Quarterly on-site workshop' },
+      {
+        tr: 'Kültür mühendisliği programı (opsiyonel modül)',
+        en: 'Culture engineering program (optional module)',
+      },
+      { tr: 'M&A advisory desteği (kapsamlı)', en: 'M&A advisory support (scope-based)' },
+      { tr: 'Özel sözleşme + KVKK/DPA çerçevesi', en: 'Custom MSA + GDPR/KVKK framework' },
     ],
   },
 ];
+
+// Şeffaflık: Listelenen fiyatlar başlangıç noktasıdır.
+// Kapsam, süre ve özel modüllere göre teklif özelleştirilir.
 
 const COMPARISON_ROWS = [
   {

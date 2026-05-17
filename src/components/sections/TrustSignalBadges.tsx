@@ -4,7 +4,7 @@
  *
  * - ISO 27001, SOC 2 Type II, GDPR, KVKK, SSL/TLS rozetleri
  * - Basın logoları (Forbes, TechCrunch, vb. referanslar)
- * - "99.99% uptime", "24/7 destek", "0 veri ihlali" garantileri
+ * - P42: KVKK/GDPR pratiği, AB/TR sunucu, sürekli izleme gibi gerçek pratikler
  * - Grid layout: rozetler + garantiler
  * - Schema.org Organization → sameAs + awardList
  * - i18n (tr/en), hover efekti
@@ -77,16 +77,18 @@ const BADGES: Badge[] = [
     color: 'text-secondary',
     bg: 'bg-secondary/10',
     border: 'border-secondary/20',
-    label: '99.99% Uptime',
-    sub: { tr: 'SLA Garantisi', en: 'SLA Guaranteed' },
+    label: 'Yüksek Erişilebilirlik',
+    sub: { tr: 'AB / TR sunucu', en: 'EU / TR servers' },
   },
 ];
 
+// P42: "2017'den beri 0 ihlal" şişirilmiş garanti kaldırıldı.
+// Gerçek operasyonel pratik vurgulanır.
 const GUARANTEES = [
   {
     icon: CheckCircle,
-    label: { tr: 'Veri İhlali Yok', en: 'Zero Data Breaches' },
-    since: '2017',
+    label: { tr: 'KVKK & GDPR Pratiği', en: 'KVKK & GDPR Practice' },
+    since: null,
     color: 'text-emerald-400',
   },
   {

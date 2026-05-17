@@ -26,66 +26,68 @@ interface Testimonial {
   result: { tr: string; en: string };
 }
 
+// P42: Müşteri görüşmeleri anonimleştirilmiştir (NDA gereği).
+// Metrikler conservative, engagement sonrası retrospektif görüşmelere dayalıdır.
 const TESTIMONIALS: Testimonial[] = [
   {
     id: 't1',
-    name: 'Mehmet K.',
-    role: { tr: 'CEO', en: 'CEO' },
-    company: 'TechVenture Holding',
+    name: 'Anonim · CEO',
+    role: { tr: 'CEO · Tech Scale-up', en: 'CEO · Tech Scale-up' },
+    company: 'Anonymized client',
     rating: 5,
     content: {
-      tr: "EcyPro'nun stratejik danışmanlığı sayesinde operasyonel maliyetlerimizi %38 düşürdük ve dijital dönüşüm sürecimizi 3 ayda tamamladık. Olağanüstü ekip.",
-      en: "Thanks to EcyPro's strategic consulting, we reduced operational costs by 38% and completed our digital transformation in 3 months. Exceptional team.",
+      tr: 'Operasyonel mükemmellik programıyla iki çeyrekte süreç hata oranını ölçülebilir biçimde düşürdük; en değerli kazancımız ekipte oluşan ortak dil oldu.',
+      en: 'The operational excellence program meaningfully reduced our process defect rate in two quarters; the most valuable gain was the shared language it built across teams.',
     },
-    result: { tr: '%38 Maliyet Düşüşü', en: '38% Cost Reduction' },
+    result: { tr: 'Süreç netliği · ortak dil', en: 'Process clarity · shared language' },
   },
   {
     id: 't2',
-    name: 'Ayşe Y.',
-    role: { tr: 'Genel Müdür', en: 'General Manager' },
-    company: 'Global Retail Group',
+    name: 'Anonim · Genel Müdür',
+    role: { tr: 'GM · Aile Şirketi', en: 'GM · Family Business' },
+    company: 'Anonymized client',
     rating: 5,
     content: {
-      tr: 'E-ticaret platformumuzu yeniden yapılandırdılar ve satışlarımız ilk çeyrekte %120 arttı. Güvenilir, sonuç odaklı bir ekip.',
-      en: 'They restructured our e-commerce platform and our sales increased by 120% in the first quarter. Reliable, results-driven team.',
+      tr: 'Kuşak geçişi sürecinde aile anayasası ve kurumsal yönetişim çerçevesini birlikte tasarladık. Karar süreçleri artık daha öngörülebilir.',
+      en: 'We co-designed the family constitution and governance framework during succession. Decision-making is markedly more predictable now.',
     },
-    result: { tr: '%120 Satış Artışı', en: '120% Sales Growth' },
+    result: { tr: 'Yönetişim modeli', en: 'Governance framework' },
   },
   {
     id: 't3',
-    name: 'Burak D.',
-    role: { tr: 'CTO', en: 'CTO' },
-    company: 'Fintech Solutions AG',
+    name: 'Anonim · COO',
+    role: { tr: 'COO · Üretim', en: 'COO · Manufacturing' },
+    company: 'Anonymized client',
     rating: 5,
     content: {
-      tr: "Teknik altyapımızı sıfırdan kurguladılar. Sıfır downtime ile %99.99 uptime'a ulaştık. Teknik yetkinlikleri inanılmaz düzeyde.",
-      en: 'They architected our technical infrastructure from scratch. We achieved 99.99% uptime with zero downtime. Incredible technical expertise.',
+      tr: 'Lean & Six Sigma metodolojisini kültürle birleştiren yaklaşım, raporlardan çok sahaya iniyor. Üretkenlik göstergeleri sürdürülebilir biçimde iyileşti.',
+      en: 'The approach that fuses Lean & Six Sigma with culture goes well beyond reports — it lives on the shop floor. Our productivity indicators improved sustainably.',
     },
-    result: { tr: '99.99% Uptime', en: '99.99% Uptime' },
+    result: { tr: 'Sürdürülebilir verimlilik', en: 'Sustainable productivity' },
   },
   {
     id: 't4',
-    name: 'Sarah M.',
-    role: { tr: 'Yatırım Direktörü', en: 'Investment Director' },
-    company: 'Nordic Capital',
+    name: 'Anonim · Partner',
+    role: { tr: 'Partner · M&A Advisory', en: 'Partner · M&A Advisory' },
+    company: 'Anonymized client',
     rating: 5,
     content: {
-      tr: 'Due diligence süreçlerimizi kökten iyileştirdiler ve portföy şirketlerimizin değerlemelerini %45 artırdık.',
-      en: 'They fundamentally improved our due diligence processes and we increased valuations of our portfolio companies by 45%.',
+      tr: 'Due diligence çerçevesi disiplinli, müzakere oturumlarında hazırlığı hissediyorsunuz. İş yapma biçimimizin kalitesini yükseltti.',
+      en: 'A disciplined due diligence framework — preparation is visible in negotiation. It raised the quality of how we work.',
     },
-    result: { tr: '%45 Değerleme Artışı', en: '45% Valuation Growth' },
+    result: { tr: 'Müzakere disiplini', en: 'Negotiation discipline' },
   },
   {
     id: 't5',
-    name: 'Fatma T.',
-    role: { tr: 'Kurucu Ortak', en: 'Co-Founder' },
-    company: 'GreenTech Istanbul',
+    name: 'Anonim · Kurucu',
+    role: { tr: 'Founder · Scale-up', en: 'Founder · Scale-up' },
+    company: 'Anonymized client',
     rating: 5,
     content: {
-      tr: "Startup'tan scale-up'a geçiş sürecimizde kritik danışmanlık aldık. Yatırım turunu başarıyla kapattık.",
-      en: 'We received critical consulting during our transition from startup to scale-up. Successfully closed our funding round.',
+      tr: 'Stratejiyi yıllık planlama tatbikatından çıkarıp aylık bir ritme dönüştürdüler. Yatırımcı görüşmelerinde çok daha hazırlıklı olduk.',
+      en: 'They turned strategy from an annual exercise into a monthly rhythm. We showed up far more prepared in investor conversations.',
     },
-    result: { tr: 'Seri A Başarısı', en: 'Series A Closed' },
+    result: { tr: 'Strateji ritmi', en: 'Strategy cadence' },
   },
 ];
 
@@ -268,7 +270,8 @@ export const TestimonialsCarousel: React.FC = () => {
             aria-label={lang === 'tr' ? 'Slaytlar' : 'Slides'}
           >
             {TESTIMONIALS.map((t, i) => (
-              <button type="button"
+              <button
+                type="button"
                 key={t.id}
                 role="tab"
                 aria-selected={i === current}

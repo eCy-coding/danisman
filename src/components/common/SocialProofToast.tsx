@@ -26,60 +26,57 @@ interface ProofItem {
   color: string;
 }
 
+// P42: Sahte "X kişi şunu yaptı" toast'ları kaldırıldı.
+// Yerine: gerçek içerik feed'i — son blog yazıları / engagement temaları.
+// Hiçbir öğe "anlık bir kişi" iddiası taşımaz; tema-bazlı, dürüst.
 const SEED_DATA: ProofItem[] = [
   {
-    id: 'a1',
-    nameInitial: 'M.K.',
-    city: 'İstanbul',
-    action: { tr: 'strateji görüşmesi rezervasyonu yaptı', en: 'booked a strategy call' },
-    time: { tr: '2 dakika önce', en: '2 minutes ago' },
-    icon: Calendar,
+    id: 's1',
+    nameInitial: '·',
+    city: 'EcyPro',
+    action: {
+      tr: 'Stratejik dijital dönüşüm rehberi yayında',
+      en: 'Strategic digital transformation playbook is live',
+    },
+    time: { tr: 'Yeni içerik', en: 'New insight' },
+    icon: TrendingUp,
     color: 'text-secondary',
   },
   {
-    id: 'a2',
-    nameInitial: 'A.Y.',
-    city: 'Ankara',
-    action: { tr: 'büyüme planı aldı', en: 'started the Growth plan' },
-    time: { tr: '7 dakika önce', en: '7 minutes ago' },
-    icon: TrendingUp,
+    id: 's2',
+    nameInitial: '·',
+    city: 'EcyPro',
+    action: {
+      tr: 'Aile şirketlerinde kuşak geçişi — pratik notlar',
+      en: 'Generational transition in family firms — practical notes',
+    },
+    time: { tr: 'Yeni içerik', en: 'New insight' },
+    icon: Users,
     color: 'text-emerald-400',
   },
   {
-    id: 'a3',
-    nameInitial: 'B.D.',
-    city: 'Berlin',
-    action: { tr: 'enterprise pakete geçti', en: 'upgraded to Enterprise' },
-    time: { tr: '12 dakika önce', en: '12 minutes ago' },
+    id: 's3',
+    nameInitial: '·',
+    city: 'EcyPro',
+    action: {
+      tr: 'Lean & AI birleşimi: operasyonel mükemmellik',
+      en: 'Lean & AI convergence: operational excellence',
+    },
+    time: { tr: 'Yeni içerik', en: 'New insight' },
     icon: Star,
     color: 'text-amber-400',
   },
   {
-    id: 'a4',
-    nameInitial: 'S.Ö.',
-    city: 'İzmir',
-    action: { tr: 'olgunluk değerlendirmesi tamamladı', en: 'completed maturity assessment' },
-    time: { tr: '18 dakika önce', en: '18 minutes ago' },
-    icon: Users,
-    color: 'text-violet-400',
-  },
-  {
-    id: 'a5',
-    nameInitial: 'C.A.',
-    city: 'Dubai',
-    action: { tr: 'danışmanlık başlattı', en: 'started consulting' },
-    time: { tr: '25 dakika önce', en: '25 minutes ago' },
+    id: 's4',
+    nameInitial: '·',
+    city: 'EcyPro',
+    action: {
+      tr: 'Yönetim kurulu çevikliği — belirsizlik çağı',
+      en: 'Boardroom agility — in the age of uncertainty',
+    },
+    time: { tr: 'Yeni içerik', en: 'New insight' },
     icon: Calendar,
-    color: 'text-secondary',
-  },
-  {
-    id: 'a6',
-    nameInitial: 'F.T.',
-    city: 'London',
-    action: { tr: 'haftalık çağrı rezervasyonu yaptı', en: 'booked weekly call' },
-    time: { tr: '31 dakika önce', en: '31 minutes ago' },
-    icon: TrendingUp,
-    color: 'text-emerald-400',
+    color: 'text-violet-400',
   },
 ];
 

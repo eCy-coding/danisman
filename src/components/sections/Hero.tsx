@@ -34,56 +34,57 @@ import { useFeatureValue } from '@growthbook/growthbook-react';
 // Persona content
 const PERSONA_CONTENT = {
   executive: {
-    badge: { tr: 'Stratejik Liderlik', en: 'Strategic Leadership' },
+    badge: { tr: 'Premium Consulting · eCyverse', en: 'Premium Consulting · eCyverse' },
     title: {
-      line1: { tr: 'Geleceğin', en: 'Scale Your' },
-      highlight: { tr: 'Vizyonunu', en: 'Enterprise' },
-      line2: { tr: 'Yönetin', en: 'Vision' },
+      line1: { tr: 'Vizyon. Strateji.', en: 'Vision. Strategy.' },
+      highlight: { tr: 'Sürdürülebilir', en: 'Sustainable' },
+      line2: { tr: 'Sonuç.', en: 'Outcomes.' },
     },
     description: {
-      tr: 'Veriye dayalı içgörüler ve stratejik danışmanlık ile operasyonel maliyetleri %40 düşürün ve büyümeyi hızlandırın.',
-      en: 'Accelerate growth and reduce operational costs by 40% with data-driven insights and strategic consulting.',
+      tr: 'eCyverse ekosisteminin premium danışmanlık kolu. Organizasyonel dönüşüm, stratejik danışmanlık ve kültür mühendisliği ile lider organizasyonların yanındayız.',
+      en: 'The premium consulting arm of the eCyverse ecosystem. We partner with leading organizations on organizational transformation, strategic advisory, and culture engineering.',
     },
     stats: [
       {
         icon: <TrendingUp size={20} />,
-        value: '+340%',
-        label: { tr: 'Büyüme Hızı', en: 'Growth Velocity' },
+        value: '5+',
+        label: { tr: 'Yıl Deneyim', en: 'Years of Practice' },
       },
       {
         icon: <Users size={20} />,
-        value: '50M+',
-        label: { tr: 'Aktif Kullanıcı', en: 'Active Users' },
+        value: '120+',
+        label: { tr: 'Stratejik Karar', en: 'Strategic Decisions' },
       },
       {
         icon: <BarChart3 size={20} />,
-        value: '99.99%',
-        label: { tr: 'Sistem Uptime', en: 'System Uptime' },
+        value: 'TR · AB',
+        label: { tr: 'Pazar Erişimi', en: 'Market Reach' },
       },
     ],
   },
   developer: {
-    badge: { tr: 'Sıfır Hata Altyapı', en: 'Zero-Defect Infra' },
+    badge: { tr: 'Operasyonel Mükemmellik', en: 'Operational Excellence' },
     title: {
-      line1: { tr: 'Daha Hızlı,', en: 'Ship Faster,' },
-      highlight: { tr: 'Daha Güvenli', en: 'Safer Code' },
-      line2: { tr: 'Kodlayın', en: 'Every Day' },
+      line1: { tr: 'Daha Net Süreç,', en: 'Cleaner Process,' },
+      highlight: { tr: 'Daha Güçlü', en: 'Stronger' },
+      line2: { tr: 'Operasyon.', en: 'Operations.' },
     },
     description: {
-      tr: "Modern E2E test altyapısı, CI/CD pipeline optimizasyonu ve 'Tactile Brutalism' standartlarında yüksek performans.",
-      en: "High performance with modern E2E test infrastructure, CI/CD pipeline optimization, and 'Tactile Brutalism' standards.",
+      tr: 'Lean & Six Sigma metodolojisi, veri odaklı süreç mühendisliği ve kültürel disiplin ile sürdürülebilir operasyonel iyileşme.',
+      en: 'Lean & Six Sigma methodology, data-driven process engineering, and cultural discipline for sustainable operational improvement.',
     },
     stats: [
-      { icon: <Code2 size={20} />, value: '0', label: { tr: 'Hata Payı', en: 'Defect Rate' } },
-      { icon: <Zap size={20} />, value: '12ms', label: { tr: 'API Yanıt', en: 'API Latency' } },
+      { icon: <Code2 size={20} />, value: '12+', label: { tr: 'Sektör', en: 'Sectors' } },
+      { icon: <Zap size={20} />, value: '95%', label: { tr: 'Memnuniyet*', en: 'Satisfaction*' } },
       {
         icon: <Cpu size={20} />,
-        value: '100%',
-        label: { tr: 'Test Kapsamı', en: 'Test Coverage' },
+        value: '6 ay',
+        label: { tr: 'Ort. Engagement', en: 'Avg. Engagement' },
       },
     ],
   },
 };
+// * Müşteri görüşmelerine dayalı, bağımsız doğrulamaya açık gösterge.
 
 const containerVariants: Variants = {
   hidden: {},
@@ -271,13 +272,15 @@ export const Hero: React.FC = () => {
 
         {/* Persona Switcher */}
         <div className="absolute top-28 left-1/2 -translate-x-1/2 z-30 flex items-center bg-white/5 border border-white/10 rounded-full p-1 shadow-2xl">
-          <button type="button"
+          <button
+            type="button"
             onClick={() => setPersona('executive')}
             className={`px-6 py-2 rounded-full text-sm font-bold transition-all duration-300 ${persona === 'executive' ? 'bg-primary text-white shadow-[0_0_20px_rgba(37,99,235,0.4)]' : 'text-slate-400 hover:text-white'}`}
           >
             Executive
           </button>
-          <button type="button"
+          <button
+            type="button"
             onClick={() => setPersona('developer')}
             className={`px-6 py-2 rounded-full text-sm font-bold transition-all duration-300 ${persona === 'developer' ? 'bg-secondary text-neutral shadow-[0_0_20px_rgba(56,189,248,0.4)]' : 'text-slate-400 hover:text-white'}`}
           >
@@ -332,9 +335,7 @@ export const Hero: React.FC = () => {
               first paint of the hydrated React tree (~300-400ms).
               Badge/h1/buttons still animate; only the LCP <p> is plain.
             */}
-            <p
-              className="text-lg md:text-xl text-slate-300/90 leading-relaxed max-w-2xl mb-12 font-light border-l-4 border-secondary/50 pl-6 bg-white/2 py-2 rounded-r-lg min-h-20"
-            >
+            <p className="text-lg md:text-xl text-slate-300/90 leading-relaxed max-w-2xl mb-12 font-light border-l-4 border-secondary/50 pl-6 bg-white/2 py-2 rounded-r-lg min-h-20">
               {currentContent.description[lang]}
             </p>
 

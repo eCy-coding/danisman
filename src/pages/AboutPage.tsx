@@ -5,53 +5,115 @@ import { ABOUT_COPY, TEAM_COPY, LOCATIONS_COPY } from '@/data/copy/pages';
 import { SEO } from '../components/common/SEO';
 import { JsonLd } from '../components/seo/JsonLd';
 import { buildBreadcrumbSchema } from '../lib/structured-data';
-import { Target, Eye, Award, Globe, Users, TrendingUp, Shield, Zap, MapPin, Phone, ArrowRight, CheckCircle2 } from 'lucide-react';
+import {
+  Target,
+  Eye,
+  Award,
+  Globe,
+  Users,
+  TrendingUp,
+  Shield,
+  Zap,
+  MapPin,
+  Phone,
+  ArrowRight,
+  CheckCircle2,
+} from 'lucide-react';
 import { FadeIn } from '../components/common/FadeIn';
 
 const VALUES = [
   {
     icon: Target,
     title: { tr: 'Sonuç Odaklılık', en: 'Result-Driven' },
-    desc: { tr: 'Her projeyi ölçülebilir KPI\'lar ve net çıktılarla yönetir, vaat ettiğimizi teslim ederiz.', en: 'We manage every project with measurable KPIs and clear outputs, delivering on every promise.' },
+    desc: {
+      tr: "Her projeyi ölçülebilir KPI'lar ve net çıktılarla yönetir, vaat ettiğimizi teslim ederiz.",
+      en: 'We manage every project with measurable KPIs and clear outputs, delivering on every promise.',
+    },
     color: 'from-secondary/20 to-secondary/5',
     border: 'border-secondary/20',
   },
   {
     icon: Shield,
     title: { tr: 'Güvenilirlik', en: 'Reliability' },
-    desc: { tr: 'İstanbul\'dan Londra\'ya, müşterilerimizin güvendiği partner olarak her zaman yanlarındayız.', en: 'From Istanbul to London, we are always the trusted partner our clients rely on.' },
+    desc: {
+      tr: "İstanbul'dan Londra'ya, müşterilerimizin güvendiği partner olarak her zaman yanlarındayız.",
+      en: 'From Istanbul to London, we are always the trusted partner our clients rely on.',
+    },
     color: 'from-blue-500/20 to-blue-500/5',
     border: 'border-blue-500/20',
   },
   {
     icon: Zap,
     title: { tr: 'İnovasyon', en: 'Innovation' },
-    desc: { tr: 'Yapay zeka ve veri analitiğini geleneksel danışmanlık deneyimiyle birleştirerek benzersiz çözümler üretiriz.', en: 'We combine AI and data analytics with traditional consulting experience to deliver unique solutions.' },
+    desc: {
+      tr: 'Yapay zeka ve veri analitiğini geleneksel danışmanlık deneyimiyle birleştirerek benzersiz çözümler üretiriz.',
+      en: 'We combine AI and data analytics with traditional consulting experience to deliver unique solutions.',
+    },
     color: 'from-purple-500/20 to-purple-500/5',
     border: 'border-purple-500/20',
   },
   {
     icon: Users,
     title: { tr: 'Ortaklık', en: 'Partnership' },
-    desc: { tr: 'Danışman değil, ortak olarak çalışırız. Başarınız bizim başarımızdır.', en: 'We work as partners, not consultants. Your success is our success.' },
+    desc: {
+      tr: 'Danışman değil, ortak olarak çalışırız. Başarınız bizim başarımızdır.',
+      en: 'We work as partners, not consultants. Your success is our success.',
+    },
     color: 'from-emerald-500/20 to-emerald-500/5',
     border: 'border-emerald-500/20',
   },
 ];
 
 const MILESTONES = [
-  { year: '2017', title: { tr: 'Kuruluş', en: 'Founded' }, desc: { tr: 'İstanbul\'da stratejik danışmanlık vizyonuyla kurulduk.', en: 'Founded in Istanbul with a strategic consulting vision.' } },
-  { year: '2019', title: { tr: 'Global Genişleme', en: 'Global Expansion' }, desc: { tr: 'Londra ofisimizi açtık ve AB pazarlarına giriş yaptık.', en: "Opened our London office and entered EU markets." } },
-  { year: '2021', title: { tr: 'AI Entegrasyonu', en: 'AI Integration' }, desc: { tr: 'Yapay zeka destekli analitik platformumuzu devreye aldık.', en: 'Launched our AI-powered analytics platform.' } },
-  { year: '2023', title: { tr: '50+ Proje', en: '50+ Projects' }, desc: { tr: '12 ülkede 50\'den fazla dönüşüm projesini başarıyla tamamladık.', en: 'Successfully completed 50+ transformation projects across 12 countries.' } },
-  { year: '2026', title: { tr: 'Yeni Nesil', en: 'Next Generation' }, desc: { tr: 'EcyPro Premium platformuyla kurumsal danışmanlığı yeniden tanımlıyoruz.', en: 'Redefining enterprise consulting with the EcyPro Premium platform.' } },
+  {
+    year: '2020',
+    title: { tr: 'eCyverse Vizyonu', en: 'eCyverse Vision' },
+    desc: {
+      tr: 'Emre Can Yalçın tarafından premium danışmanlık ve stratejik dönüşüm vizyonu şekillendirildi.',
+      en: 'Premium consulting and strategic transformation vision shaped by Emre Can Yalçın.',
+    },
+  },
+  {
+    year: '2022',
+    title: { tr: 'Premium Pratik', en: 'Premium Practice' },
+    desc: {
+      tr: 'Organizasyonel dönüşüm, kültür mühendisliği ve operasyonel mükemmellik temalı engagement modeline geçildi.',
+      en: 'Transition to an engagement model centered on organizational transformation, culture engineering, and operational excellence.',
+    },
+  },
+  {
+    year: '2024',
+    title: { tr: 'Sektörlerarası Pratik', en: 'Cross-Sector Practice' },
+    desc: {
+      tr: 'Üretim, finans, perakende, teknoloji ve aile şirketlerinde çoklu sektör deneyimi.',
+      en: 'Multi-sector experience across manufacturing, finance, retail, technology, and family business.',
+    },
+  },
+  {
+    year: '2025',
+    title: { tr: 'EcyPro Premium Platformu', en: 'EcyPro Premium Platform' },
+    desc: {
+      tr: 'Danışmanlık pratiğini destekleyen veri odaklı premium platform devreye girdi.',
+      en: 'Data-driven premium platform supporting the consulting practice went live.',
+    },
+  },
+  {
+    year: '2026',
+    title: { tr: 'TR + AB Erişimi', en: 'TR + EU Reach' },
+    desc: {
+      tr: "Türkiye merkezli pratik, Avrupa Birliği pazarlarında çapraz engagement'lar.",
+      en: 'Türkiye-based practice with cross-engagements across EU markets.',
+    },
+  },
 ];
 
+// P42: Transparent, conservative göstergeler.
+// "*" işareti müşteri görüşmelerine / engagement-sonrası retrospektife dayalı.
 const STATS = [
-  { value: '150+', label: { tr: 'Müşteri', en: 'Clients' }, icon: Users },
-  { value: '12', label: { tr: 'Ülke', en: 'Countries' }, icon: Globe },
-  { value: '€2.8B', label: { tr: 'Yaratılan Değer', en: 'Value Created' }, icon: TrendingUp },
-  { value: '97%', label: { tr: 'Müşteri Memnuniyeti', en: 'Client Satisfaction' }, icon: Award },
+  { value: '120+', label: { tr: 'Stratejik Karar', en: 'Strategic Decisions' }, icon: Users },
+  { value: '12+', label: { tr: 'Sektör', en: 'Sectors' }, icon: Globe },
+  { value: '5+', label: { tr: 'Yıl Pratik', en: 'Years of Practice' }, icon: TrendingUp },
+  { value: '95%*', label: { tr: 'Müşteri Memnuniyeti', en: 'Client Satisfaction' }, icon: Award },
 ];
 
 export const AboutPage: React.FC = () => {
@@ -84,9 +146,21 @@ export const AboutPage: React.FC = () => {
               </span>
               <h1 className="text-5xl md:text-7xl font-serif font-bold text-white leading-[1.05] mb-8">
                 {lang === 'tr' ? (
-                  <><span className="text-slate-300">Dünyanın En İyi </span><br /><span className="text-secondary">Danışmanlık</span><br />Firmalarından Biri</>
+                  <>
+                    <span className="text-slate-300">Dünyanın En İyi </span>
+                    <br />
+                    <span className="text-secondary">Danışmanlık</span>
+                    <br />
+                    Firmalarından Biri
+                  </>
                 ) : (
-                  <><span className="text-slate-300">One of the World's </span><br /><span className="text-secondary">Leading</span><br />Consulting Firms</>
+                  <>
+                    <span className="text-slate-300">One of the World's </span>
+                    <br />
+                    <span className="text-secondary">Leading</span>
+                    <br />
+                    Consulting Firms
+                  </>
                 )}
               </h1>
               <p className="text-xl text-slate-400 leading-relaxed max-w-2xl">
@@ -113,7 +187,9 @@ export const AboutPage: React.FC = () => {
                 className="text-center"
               >
                 <stat.icon size={20} className="text-secondary mx-auto mb-3 opacity-70" />
-                <p className="text-4xl md:text-5xl font-serif font-bold text-white mb-2">{stat.value}</p>
+                <p className="text-4xl md:text-5xl font-serif font-bold text-white mb-2">
+                  {stat.value}
+                </p>
                 <p className="text-sm text-slate-500 uppercase tracking-widest">{l(stat.label)}</p>
               </motion.div>
             ))}
@@ -126,8 +202,30 @@ export const AboutPage: React.FC = () => {
         <div className="max-w-7xl mx-auto px-6 md:px-12">
           <div className="grid md:grid-cols-2 gap-8">
             {[
-              { icon: Target, color: 'text-secondary', bg: 'bg-secondary/10', border: 'border-secondary/20', title: l(ABOUT_COPY.missionTitle as { tr: string; en: string }), body: l(ABOUT_COPY.missionDesc as { tr: string; en: string }), items: lang === 'tr' ? ['Veri odaklı kararlar', 'Ölçülebilir sonuçlar', 'Uzun vadeli değer'] : ['Data-driven decisions', 'Measurable outcomes', 'Long-term value'] },
-              { icon: Eye, color: 'text-blue-400', bg: 'bg-blue-500/10', border: 'border-blue-500/20', title: l(ABOUT_COPY.visionTitle as { tr: string; en: string }), body: l(ABOUT_COPY.visionDesc as { tr: string; en: string }), items: lang === 'tr' ? ['Global erişim', 'Yerel uzmanlık', 'Sürdürülebilir etki'] : ['Global reach', 'Local expertise', 'Sustainable impact'] },
+              {
+                icon: Target,
+                color: 'text-secondary',
+                bg: 'bg-secondary/10',
+                border: 'border-secondary/20',
+                title: l(ABOUT_COPY.missionTitle as { tr: string; en: string }),
+                body: l(ABOUT_COPY.missionDesc as { tr: string; en: string }),
+                items:
+                  lang === 'tr'
+                    ? ['Veri odaklı kararlar', 'Ölçülebilir sonuçlar', 'Uzun vadeli değer']
+                    : ['Data-driven decisions', 'Measurable outcomes', 'Long-term value'],
+              },
+              {
+                icon: Eye,
+                color: 'text-blue-400',
+                bg: 'bg-blue-500/10',
+                border: 'border-blue-500/20',
+                title: l(ABOUT_COPY.visionTitle as { tr: string; en: string }),
+                body: l(ABOUT_COPY.visionDesc as { tr: string; en: string }),
+                items:
+                  lang === 'tr'
+                    ? ['Global erişim', 'Yerel uzmanlık', 'Sürdürülebilir etki']
+                    : ['Global reach', 'Local expertise', 'Sustainable impact'],
+              },
             ].map((card, i) => (
               <motion.div
                 key={i}
@@ -137,7 +235,9 @@ export const AboutPage: React.FC = () => {
                 transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
                 className={`bg-white/3 border ${card.border} rounded-3xl p-10 hover:bg-white/5 transition-colors duration-300`}
               >
-                <div className={`w-14 h-14 ${card.bg} rounded-2xl flex items-center justify-center mb-8 border ${card.border}`}>
+                <div
+                  className={`w-14 h-14 ${card.bg} rounded-2xl flex items-center justify-center mb-8 border ${card.border}`}
+                >
                   <card.icon size={24} className={card.color} />
                 </div>
                 <h2 className="text-2xl font-serif font-bold text-white mb-4">{card.title}</h2>
@@ -183,7 +283,10 @@ export const AboutPage: React.FC = () => {
               >
                 <div className={`absolute inset-0 bg-linear-to-br ${v.color} opacity-50`} />
                 <div className="relative z-10">
-                  <v.icon size={28} className="text-white/60 mb-6 group-hover:text-white transition-colors" />
+                  <v.icon
+                    size={28}
+                    className="text-white/60 mb-6 group-hover:text-white transition-colors"
+                  />
                   <h3 className="text-lg font-bold text-white mb-3">{l(v.title)}</h3>
                   <p className="text-sm text-slate-400 leading-relaxed">{l(v.desc)}</p>
                 </div>
@@ -214,8 +317,12 @@ export const AboutPage: React.FC = () => {
                   className={`md:flex items-center gap-8 ${i % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'}`}
                 >
                   <div className={`md:w-1/2 ${i % 2 === 0 ? 'md:text-right' : 'md:text-left'}`}>
-                    <div className={`bg-white/3 border border-white/8 rounded-2xl p-8 hover:bg-white/5 transition-colors`}>
-                      <span className="text-xs font-bold text-secondary tracking-[0.2em] uppercase mb-3 block">{m.year}</span>
+                    <div
+                      className={`bg-white/3 border border-white/8 rounded-2xl p-8 hover:bg-white/5 transition-colors`}
+                    >
+                      <span className="text-xs font-bold text-secondary tracking-[0.2em] uppercase mb-3 block">
+                        {m.year}
+                      </span>
                       <h3 className="text-xl font-bold text-white mb-2">{l(m.title)}</h3>
                       <p className="text-slate-400 text-sm leading-relaxed">{l(m.desc)}</p>
                     </div>
@@ -236,7 +343,9 @@ export const AboutPage: React.FC = () => {
         <div className="max-w-7xl mx-auto px-6 md:px-12">
           <FadeIn>
             <div className="text-center mb-16">
-              <h2 className="text-4xl font-serif font-bold text-white mb-4">{l(TEAM_COPY.title)}</h2>
+              <h2 className="text-4xl font-serif font-bold text-white mb-4">
+                {l(TEAM_COPY.title)}
+              </h2>
               <p className="text-slate-400 max-w-2xl mx-auto">{l(TEAM_COPY.subtitle)}</p>
             </div>
           </FadeIn>
@@ -254,7 +363,9 @@ export const AboutPage: React.FC = () => {
                   {member.name.charAt(0)}
                 </div>
                 <h3 className="text-xl font-bold text-white mb-2">{member.name}</h3>
-                <p className="text-secondary text-sm font-semibold mb-4 uppercase tracking-wide">{l(member.role)}</p>
+                <p className="text-secondary text-sm font-semibold mb-4 uppercase tracking-wide">
+                  {l(member.role)}
+                </p>
                 <p className="text-slate-400 text-sm leading-relaxed">{l(member.bio)}</p>
               </motion.div>
             ))}
@@ -267,7 +378,9 @@ export const AboutPage: React.FC = () => {
         <div className="max-w-7xl mx-auto px-6 md:px-12">
           <FadeIn>
             <div className="text-center mb-16">
-              <h2 className="text-4xl font-serif font-bold text-white mb-4">{l(LOCATIONS_COPY.title)}</h2>
+              <h2 className="text-4xl font-serif font-bold text-white mb-4">
+                {l(LOCATIONS_COPY.title)}
+              </h2>
               <p className="text-slate-400 max-w-xl mx-auto">{l(LOCATIONS_COPY.subtitle)}</p>
             </div>
           </FadeIn>
@@ -313,9 +426,10 @@ export const AboutPage: React.FC = () => {
             <p className="text-xl text-slate-400 mb-10 max-w-2xl mx-auto">
               {lang === 'tr'
                 ? 'Organizasyonunuzun potansiyelini açığa çıkarmak için 30 dakikalık ücretsiz keşif görüşmesi planlayın.'
-                : 'Schedule a free 30-minute discovery call to unlock your organization\'s potential.'}
+                : "Schedule a free 30-minute discovery call to unlock your organization's potential."}
             </p>
-            <button type="button"
+            <button
+              type="button"
               onClick={() => window.dispatchEvent(new CustomEvent('open-booking'))}
               className="inline-flex items-center gap-3 px-10 py-4 bg-secondary text-neutral font-bold rounded-full hover:bg-secondary/90 transition-all duration-300 shadow-[0_0_40px_rgba(var(--color-secondary-rgb),0.3)] hover:shadow-[0_0_60px_rgba(var(--color-secondary-rgb),0.5)] text-lg group"
             >

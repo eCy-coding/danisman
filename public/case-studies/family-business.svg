@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" width="1200" height="675" role="img">
+    <defs>
+      <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="#0B1220"/>
+        <stop offset="100%" stop-color="#1A2238"/>
+      </linearGradient>
+    </defs>
+    <rect width="1200" height="675" fill="url(#bg)"/>
+    <g opacity="0.5">
+      <circle cx="200" cy="540" r="320" fill="#A78BFA" opacity="0.18"/>
+      <circle cx="1000" cy="180" r="240" fill="#D4AF37" opacity="0.12"/>
+    </g>
+    <g stroke="#A78BFA" stroke-width="2" opacity="0.55" fill="none">
+      <path d="M 60 580 L 360 480 L 660 520 L 980 360 L 1140 420"/>
+    </g>
+    <g stroke="#1F2A44" stroke-width="1" opacity="0.6" fill="none">
+      <line x1="60"  y1="610" x2="1140" y2="610"/>
+      <line x1="60"  y1="550" x2="1140" y2="550"/>
+      <line x1="60"  y1="490" x2="1140" y2="490"/>
+    </g>
+    <text x="60" y="110" font-family="Inter, system-ui, sans-serif"
+          font-size="20" font-weight="500" fill="#D4AF37" letter-spacing="6">ECYPRO · CASE STUDY</text>
+    <text x="60" y="200" font-family="Inter, system-ui, sans-serif"
+          font-size="56" font-weight="600" fill="#F8FAFC">Aile Şirketi · Kuşak Geçişi</text>
+    <text x="60" y="240" font-family="Inter, system-ui, sans-serif"
+          font-size="16" font-weight="400" fill="#9CA3AF" letter-spacing="2">ANONYMIZED CLIENT · NDA</text>
+  </svg>

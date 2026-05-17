@@ -19,131 +19,128 @@
  */
 import type { CaseStudy, BlogPost } from './src/types/legacy_types';
 
+// P42: Anonimleştirilmiş case study'ler, conservative metrik / disclaimer.
+// Görseller branded SVG (yerel), unsplash bağımlılığı kaldırıldı.
 export const GENERATED_CASE_STUDIES: CaseStudy[] = [
   {
-    id: 'cs-retail-2026',
-    client: 'Fortune 500 Retailer',
-    sector: { tr: 'Perakende', en: 'Retail' },
-    challenge: {
-      tr: '38 ülkede dağınık tedarik zinciri, birleşik talep sinyali olmadan operasyon.',
-      en: 'Fragmented supply chain across 38 countries with no unified demand signal.',
-    },
-    solution: {
-      tr: 'Snowflake + dbt üzerinde birleşik talep-sinyali lakehouse, 42 tahmin modeli (LightGBM + Prophet topluluğu).',
-      en: 'Unified demand-signal lakehouse on Snowflake + dbt with 42 forecasting models (LightGBM + Prophet ensemble).',
-    },
-    result: {
-      tr: '%240 ROI, stoksuzluk %61 azaldı, envanter devir hızı +%46.',
-      en: '240% ROI, stockouts down 61%, inventory turnover +46%.',
-    },
-    description: {
-      tr: '14 ay içinde 1.200+ mağazada birleşik veri platformu; 8.400 kategori yöneticisi için değişim yönetimi playbook.',
-      en: '14-month rollout to 1,200+ stores; change-management playbook for 8,400 category managers.',
-    },
-    image:
-      'https://images.unsplash.com/photo-1556740758-90de374c12ad?auto=format&fit=crop&q=80&w=1200',
-    category: { tr: 'Dijital Dönüşüm', en: 'Digital Transformation' },
-    slug: 'global-retail-transformation',
-  },
-  {
-    id: 'cs-fintech-2025',
-    client: 'NeoBank Corp',
-    sector: { tr: 'Finans', en: 'Finance' },
-    challenge: {
-      tr: '3 AB pazarında PSD2 + MiCA uyumlu neobank lansmanı, 9 aylık sermaye penceresi.',
-      en: 'Launch a regulated neobank in 3 EU markets under PSD2 + MiCA with a 9-month runway.',
-    },
-    solution: {
-      tr: 'Düzenleyici Program Ofisi (BaFin, ACPR, DNB) + 3 segment için onboarding funnels + viral katsayısı K = 1.42 büyüme motoru.',
-      en: 'Regulatory Program Office (BaFin, ACPR, DNB) + 3-segment onboarding funnels + viral coefficient K = 1.42 growth engine.',
-    },
-    result: {
-      tr: '6 ayda 1M kullanıcı, 0 düzenleyici yeniden başvuru, K = 1.42 viral katsayı.',
-      en: '1M users in 6 months, zero regulatory re-submissions, viral coefficient K = 1.42.',
-    },
-    description: {
-      tr: '12 kişilik uyum ekibi, 340 düzenleyici teslim, üç eşzamanlı pazara açılış.',
-      en: '12-person compliance team, 340 regulatory artefacts, three simultaneous market launches.',
-    },
-    image:
-      'https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&q=80&w=1200',
-    category: { tr: 'Pazara Giriş', en: 'Market Entry' },
-    slug: 'fintech-market-entry',
-  },
-  {
-    id: 'cs-saas-2025',
-    client: 'Vertical SaaS Platform',
+    id: 'cs-tech-scaleup',
+    client: 'Anonymized client · Tech Scale-up',
     sector: { tr: 'Teknoloji', en: 'Technology' },
     challenge: {
-      tr: 'Yıllık $40M ARR\'da CAC payback 22 aya çıktı, churn %14\'e tırmandı.',
-      en: 'CAC payback ballooned to 22 months at $40M ARR; churn climbed to 14%.',
+      tr: "Hızla büyüyen scale-up'ta rol netliği, karar hakları ve süreç sahipliği gri kalmıştı.",
+      en: 'Role clarity, decision rights, and process ownership were blurred in a fast-growing scale-up.',
     },
     solution: {
-      tr: 'Müşteri segmentasyonu yeniden tasarımı, ürün-led growth motoru, customer success rota haritası.',
-      en: 'Customer segmentation redesign, product-led growth engine, customer success route map.',
+      tr: 'Operating model: RACI yeniden tanımı, karar hakları matrisi, haftalık operasyon ritmi, lider koçluğu.',
+      en: 'Operating model: RACI redesign, decision-rights matrix, weekly operating cadence, leadership coaching.',
     },
     result: {
-      tr: 'CAC payback 22 → 9 ay, net revenue retention 92% → 124%, ARR 18 ayda 2.4×.',
-      en: 'CAC payback 22 → 9 months, NRR 92% → 124%, ARR 2.4× in 18 months.',
+      tr: 'Karar yürütme döngüsü sürdürülebilir biçimde kısaldı; yönetim ekibi ortak bir dile kavuştu.',
+      en: 'Decision execution loop sustainably shortened; the leadership team converged on a shared language.',
     },
     description: {
-      tr: '8 ay süren program; ürün, satış ve CS ekipleri tek bir CSAT-bağlı OKR çatısı altında.',
-      en: '8-month program; product, sales, and CS teams unified under a single CSAT-bound OKR umbrella.',
+      tr: '6 aylık engagement; tüm sayısal göstergeler retrospektif görüşmeye dayalı (NDA).',
+      en: '6-month engagement; all numeric indicators based on post-engagement retrospective (NDA).',
     },
-    image:
-      'https://images.unsplash.com/photo-1551434678-e076c223a692?auto=format&fit=crop&q=80&w=1200',
-    category: { tr: 'Büyüme Stratejisi', en: 'Growth Strategy' },
-    slug: 'vertical-saas-growth-engine',
+    image: '/case-studies/tech-scaleup.svg',
+    category: { tr: 'Operasyonel Mükemmellik', en: 'Operational Excellence' },
+    slug: 'tech-scaleup-operational-excellence',
   },
   {
-    id: 'cs-manufacturing-2024',
-    client: 'Industrial Manufacturer',
+    id: 'cs-family-business',
+    client: 'Anonymized client · Family Business',
+    sector: { tr: 'Aile Şirketi', en: 'Family Business' },
+    challenge: {
+      tr: 'İkinci kuşağa geçiş hazırlığı; aile-şirket sınırları, karar mekanizmaları, hissedar hakları.',
+      en: 'Preparation for second-generation transition; family-business boundaries, decision mechanisms, shareholder rights.',
+    },
+    solution: {
+      tr: 'Aile anayasası, yönetişim çerçevesi (aile konseyi · yönetim kurulu · icra) ve kuşak geçişi yol haritası.',
+      en: 'Family constitution, governance framework (family council · board · executive) and succession roadmap.',
+    },
+    result: {
+      tr: 'Yönetişim yazılı dokümana ve toplantı ritmine bağlandı; ikinci kuşak liderler tanımlı bir yetkinlik haritasıyla yönlendirildi.',
+      en: 'Governance anchored in written documents and meeting cadence; next-gen leaders guided by a defined competency map.',
+    },
+    description: {
+      tr: '9 aylık engagement; veriler NDA gereği anonimleştirilmiştir.',
+      en: '9-month engagement; data anonymized per NDA.',
+    },
+    image: '/case-studies/family-business.svg',
+    category: { tr: 'Aile Şirketleri', en: 'Family Business' },
+    slug: 'family-business-governance',
+  },
+  {
+    id: 'cs-manufacturing',
+    client: 'Anonymized client · Manufacturing',
     sector: { tr: 'Üretim', en: 'Manufacturing' },
     challenge: {
-      tr: '11 fabrikada OEE %58, kalitesizlik maliyeti yıllık $24M, kestirimci bakım yok.',
-      en: 'OEE at 58% across 11 plants, $24M annual cost of poor quality, no predictive maintenance.',
+      tr: 'Çok tesisli üretim grubunda plansız duruşlar ve yüksek hata oranı; mevcut raporlama sahaya inmiyordu.',
+      en: 'Unplanned downtime and elevated defect rate in a multi-site manufacturer; reporting failed to reach the shop floor.',
     },
     solution: {
-      tr: 'IIoT sensör fabrikası + edge ML kestirimci bakım + dijital ikiz simülasyon platformu.',
-      en: 'IIoT sensor factory + edge ML predictive maintenance + digital-twin simulation platform.',
+      tr: 'Gemba bazlı kayıp ağacı, hat sahibi koçluğu, görsel yönetim, Six Sigma DMAIC ile kritik hata modlarına odak.',
+      en: 'Gemba-driven loss-tree mapping, line-owner coaching, visual management, Six Sigma DMAIC on critical defect modes.',
     },
     result: {
-      tr: 'OEE 58% → 81%, COPQ -$18M, plansız duruş -%72.',
-      en: 'OEE 58% → 81%, COPQ down $18M, unplanned downtime -72%.',
+      tr: 'Öncelikli hata modlarında ölçülebilir azalma; iyileştirme metodolojisi kuruma kalıcı bir yetenek olarak transfer edildi.',
+      en: 'Measurable reduction on priority defect modes; the improvement methodology was transferred to the client as a durable capability.',
     },
     description: {
-      tr: '18 ay içinde 11 fabrikanın tamamı entegre; 1.200 sensör, 47 ML modeli üretimde.',
-      en: 'All 11 plants integrated in 18 months; 1,200 sensors, 47 ML models in production.',
+      tr: '8 aylık engagement; sayısal göstergeler iç ölçüm, NDA gereği paylaşılmaz.',
+      en: '8-month engagement; numeric indicators are internal measurements, not shared per NDA.',
     },
-    image:
-      'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=1200',
-    category: { tr: 'Endüstri 4.0', en: 'Industry 4.0' },
-    slug: 'industrial-iot-transformation',
+    image: '/case-studies/manufacturing.svg',
+    category: { tr: 'Lean & Six Sigma', en: 'Lean & Six Sigma' },
+    slug: 'manufacturing-lean-six-sigma',
   },
   {
-    id: 'cs-healthcare-2024',
-    client: 'Regional Hospital Network',
-    sector: { tr: 'Sağlık', en: 'Healthcare' },
+    id: 'cs-ma-advisory',
+    client: 'Anonymized client · M&A Advisory',
+    sector: { tr: 'M&A', en: 'M&A' },
     challenge: {
-      tr: '8 hastane, 14 farklı EHR, hasta kayıt süresi ortalama 23 dakika, klinisyen tükenmişlik %71.',
-      en: '8 hospitals, 14 disparate EHRs, 23-minute average intake, 71% clinician burnout score.',
+      tr: 'Stratejik satın alma fırsatında geniş kapsamlı due diligence, müzakere disiplini ve PMI planı.',
+      en: 'Wide-scope due diligence, negotiation discipline, and PMI plan for a strategic acquisition opportunity.',
     },
     solution: {
-      tr: 'EHR konsolidasyon (FHIR), klinik iş akışı yeniden tasarımı, klinisyen co-design programı.',
-      en: 'EHR consolidation (FHIR), clinical workflow redesign, clinician co-design program.',
+      tr: 'Çoklu metodoloji değerleme, müzakere oyun planı, 100-gün PMI çerçevesi ve sinerji takip mekanizması.',
+      en: 'Multi-method valuation, negotiation playbook, 100-day PMI framework and synergy-tracking mechanism.',
     },
     result: {
-      tr: 'Hasta kayıt süresi 23 → 6 dakika, tükenmişlik %71 → %38, hasta memnuniyeti +%34 (HCAHPS).',
-      en: 'Intake 23 → 6 min, burnout 71% → 38%, HCAHPS satisfaction +34%.',
+      tr: 'İşlem öngörülen takvimde kapatıldı; kritik risklerin önemli bölümü müzakere aşamasında temizlendi.',
+      en: 'Deal closed on schedule; a meaningful share of critical risks resolved at the negotiation stage.',
     },
     description: {
-      tr: '24 ay süren program; 4.200 klinisyen yeniden eğitildi, 8 hastane tek FHIR ağında.',
-      en: '24-month program; 4,200 clinicians retrained, 8 hospitals on a unified FHIR fabric.',
+      tr: '5 aylık engagement; işlem detayları NDA gereği paylaşılmaz.',
+      en: '5-month engagement; deal details not shared per NDA.',
     },
-    image:
-      'https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&q=80&w=1200',
-    category: { tr: 'Sağlık Dönüşümü', en: 'Healthcare Transformation' },
-    slug: 'hospital-network-fhir-consolidation',
+    image: '/case-studies/ma-advisory.svg',
+    category: { tr: 'M&A Advisory', en: 'M&A Advisory' },
+    slug: 'ma-advisory-engagement',
+  },
+  {
+    id: 'cs-org-transformation',
+    client: 'Anonymized client · Mid-cap',
+    sector: { tr: 'Organizasyonel', en: 'Organizational' },
+    challenge: {
+      tr: 'Fonksiyonel siloların yavaşlattığı karar süreçleri; yatay işbirliğinde sürtünme.',
+      en: 'Decision-making slowed by functional silos; friction in horizontal collaboration.',
+    },
+    solution: {
+      tr: 'Müşteri yolculukları etrafında ürün odaklı squad tasarımı, yönetim ritmi yeniden kurulumu, lider koçluğu.',
+      en: 'Product-oriented squads designed around customer journeys, redesigned management cadence, leadership coaching.',
+    },
+    result: {
+      tr: 'Yeni işletim modeli yönetim kurulu tarafından onaylandı ve sahada uygulamaya başlandı.',
+      en: 'New operating model approved by the board and rolled into the field.',
+    },
+    description: {
+      tr: '7 aylık engagement; detaylar NDA gereği anonimleştirilmiştir.',
+      en: '7-month engagement; details anonymized per NDA.',
+    },
+    image: '/case-studies/org-transformation.svg',
+    category: { tr: 'Organizasyonel Dönüşüm', en: 'Organizational Transformation' },
+    slug: 'organizational-transformation',
   },
 ];
 
@@ -175,7 +172,7 @@ export const GENERATED_BLOG_POSTS: BlogPost[] = [
       en: 'The AI Revolution in Corporate Governance',
     },
     excerpt: {
-      tr: 'Yönetim kurullarından operasyonel süreçlere kadar AI\'nın kurumsal yapı üzerindeki dönüştürücü etkisi.',
+      tr: "Yönetim kurullarından operasyonel süreçlere kadar AI'nın kurumsal yapı üzerindeki dönüştürücü etkisi.",
       en: 'How AI is transforming everything from boardrooms to operational processes.',
     },
     image:
@@ -239,7 +236,7 @@ export const GENERATED_BLOG_POSTS: BlogPost[] = [
     date: { tr: '10 Şubat 2026', en: 'February 10, 2026' },
     readTime: { tr: '8 dk okuma', en: '8 min read' },
     title: {
-      tr: 'Yapay Zeka Yatırımının ROI\'sini Hesaplamak: CFO Rehberi',
+      tr: "Yapay Zeka Yatırımının ROI'sini Hesaplamak: CFO Rehberi",
       en: 'Measuring AI Investment ROI: The CFO Framework',
     },
     excerpt: {
@@ -260,8 +257,8 @@ export const GENERATED_BLOG_POSTS: BlogPost[] = [
       en: 'Change Management in Digital Transformation: The Human Factor',
     },
     excerpt: {
-      tr: 'Teknoloji projelerinin %70\'i insani direnç nedeniyle başarısız olur. EcyPro\'nun ADAPT çerçevesiyle değişimi yönetin.',
-      en: '70% of technology projects fail due to human resistance. Manage change with EcyPro\'s ADAPT framework.',
+      tr: "Teknoloji projelerinin %70'i insani direnç nedeniyle başarısız olur. EcyPro'nun ADAPT çerçevesiyle değişimi yönetin.",
+      en: "70% of technology projects fail due to human resistance. Manage change with EcyPro's ADAPT framework.",
     },
     image:
       'https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',

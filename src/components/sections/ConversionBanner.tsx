@@ -35,9 +35,9 @@ interface ConversionBannerProps {
 }
 
 const STATS = [
-  { icon: Users, value: '120+', label: { tr: 'Mutlu Müşteri', en: 'Happy Clients' } },
-  { icon: TrendingUp, value: '340%', label: { tr: 'Ortalama Büyüme', en: 'Avg. Growth' } },
-  { icon: Star, value: '4.9/5', label: { tr: 'Müşteri Puanı', en: 'Client Rating' } },
+  { icon: Users, value: '5+', label: { tr: 'Yıl Deneyim', en: 'Years of Practice' } },
+  { icon: TrendingUp, value: '120+', label: { tr: 'Stratejik Karar', en: 'Strategic Decisions' } },
+  { icon: Star, value: '12+', label: { tr: 'Sektör', en: 'Sectors Served' } },
 ];
 
 const VARIANT_STYLES: Record<BannerVariant, string> = {
@@ -52,12 +52,12 @@ export const ConversionBanner: React.FC<ConversionBannerProps> = ({
   primaryCta = { tr: 'Ücretsiz Görüşme Ayarla', en: 'Book a Free Call', href: '/contact' },
   secondaryCta = { tr: 'Fiyatlandırmayı Gör', en: 'View Pricing', href: '/pricing' },
   headline = {
-    tr: 'Büyümenizi Hızlandırmaya Hazır mısınız?',
-    en: 'Ready to Accelerate Your Growth?',
+    tr: 'Stratejik dönüşüme bir oturum uzaktasınız.',
+    en: "You're one session away from strategic clarity.",
   },
   subline = {
-    tr: '120+ şirket zaten dönüşüm yolculuğuna başladı. Siz de katılın.',
-    en: '120+ companies already started their transformation journey. Join them.',
+    tr: 'Ücretsiz keşif görüşmesinde organizasyonunuza özel yol haritasını birlikte konuşalım.',
+    en: "In a free discovery call we'll map out a roadmap tailored to your organization.",
   },
 }) => {
   const { i18n } = useTranslation();

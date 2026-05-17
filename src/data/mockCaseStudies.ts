@@ -1,197 +1,209 @@
 import { CaseStudy } from '../components/features/case-studies/CaseStudyCard';
 
+/**
+ * P42: Anonimleştirilmiş case study'ler. Sayılar conservative,
+ * tüm metinler "Anonymized client" disclaimer'ı taşır.
+ * Görseller branded SVG (yerel asset) — unsplash bağımlılığı kaldırıldı.
+ */
 export const CASE_STUDIES: CaseStudy[] = [
   {
-    slug: 'global-retail-transformation',
-    title: 'Global Retail Digital Transformation',
-    client: 'Fortune 500 Retailer',
-    industry: 'Retail',
-    result: '240% ROI',
-    duration: '14 months',
-    goLive: 'Q2 2025',
-    challenge: 'Fragmented supply chain across 38 countries with no unified demand signal.',
-    image: 'https://images.unsplash.com/photo-1556740758-90de374c12ad?auto=format&fit=crop&q=80',
-    content: `
-      <h2>The Challenge</h2>
-      <p>A Fortune 500 retailer operated 1,200+ stores across 38 countries with siloed regional ERPs.
-      Inventory turnover was 23% below industry median; stockouts during promotional windows eroded
-      <strong>$180M annually</strong>. Leadership needed a single demand-signal platform without rip-and-replace.</p>
-
-      <h2>Our Approach</h2>
-      <ul>
-        <li><strong>Phase 1 — Diagnostic (6 weeks):</strong> Shadowed 14 distribution centers, mapped 92 data integrations, benchmarked vs. McKinsey Retail Operations Index.</li>
-        <li><strong>Phase 2 — Platform (5 months):</strong> Delivered a unified demand-signal lakehouse on Snowflake + dbt with 42 forecasting models (LightGBM + Prophet ensemble).</li>
-        <li><strong>Phase 3 — Rollout (7 months):</strong> Wave-based deployment across 4 regions; change-management playbook for 8,400 category managers.</li>
-      </ul>
-
-      <h2>Results</h2>
-      <ul>
-        <li>Stockouts reduced by <strong>61%</strong> in the first 9 months post go-live.</li>
-        <li>Inventory turnover improved from 6.1 → 8.9 (+46%).</li>
-        <li>Forecast accuracy (SKU-store-week) rose from 58% → 84% MAPE-weighted.</li>
-        <li>Net ROI of <strong>240%</strong> within 18 months, validated by internal audit.</li>
-      </ul>
-
-      <p>The platform now processes 2.3B rows/day and is the single source of truth for merchandising, finance, and operations.</p>
-    `,
-  },
-  {
-    slug: 'fintech-market-entry',
-    title: 'Fintech Market Entry Strategy',
-    client: 'NeoBank Corp',
-    industry: 'Finance',
-    result: '1M Users in 6 Months',
-    duration: '9 months',
-    goLive: 'Q4 2024',
-    challenge: 'Launch a regulated neobank in 3 EU markets under PSD2 + MiCA with a lean team.',
-    image: 'https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&q=80',
-    content: `
-      <h2>The Challenge</h2>
-      <p>A Series B neobank needed simultaneous launch in Germany, France, and the Netherlands with
-      regulatory clearance under PSD2 and forthcoming MiCA, a 12-person compliance team, and a 9-month window
-      before capital runway pressure.</p>
-
-      <h2>Our Approach</h2>
-      <ul>
-        <li><strong>Regulatory Program Office:</strong> End-to-end orchestration across BaFin, ACPR, and DNB. 340 artefacts delivered, zero re-submissions.</li>
-        <li><strong>Product-Market Fit Squad:</strong> 14 qualitative interview cohorts → 3 segment-specific onboarding funnels with A/B-validated copy.</li>
-        <li><strong>Growth Engine:</strong> Referral mechanic with embedded virality coefficient K = 1.42, supported by a programmatic creative factory (MMM-steered budget).</li>
-      </ul>
-
-      <h2>Results</h2>
-      <ul>
-        <li><strong>1,000,000 verified users</strong> in the first 6 months (vs. plan of 400k).</li>
-        <li>CAC €14.80 vs. segment benchmark €38.20 (-61%).</li>
-        <li>Regulatory pass rate 100% across 3 jurisdictions.</li>
-        <li>Series C closed at 3.2× valuation uplift driven by traction.</li>
-      </ul>
-    `,
-  },
-  {
-    slug: 'manufacturing-optimization',
-    title: 'Industry 4.0 Optimization',
-    client: 'AutoParts Ltd',
-    industry: 'Manufacturing',
-    result: '30% Cost Reduction',
-    duration: '11 months',
-    goLive: 'Q1 2025',
-    challenge: 'Unplanned downtime costing €42M/yr across 4 precision-machining plants.',
-    image: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80',
-    content: `
-      <h2>The Challenge</h2>
-      <p>A Tier-1 automotive supplier faced €42M annual unplanned-downtime losses across 4 plants.
-      OEE averaged 58% vs. world-class 85%; existing SCADA stack lacked cross-plant observability.</p>
-
-      <h2>Our Approach</h2>
-      <ul>
-        <li><strong>Edge Instrumentation:</strong> 1,840 IO-Link sensors deployed across 212 machines; OPC-UA unified namespace.</li>
-        <li><strong>Predictive Maintenance Models:</strong> Vibration + thermal + acoustic features → XGBoost classifier (AUROC 0.94) for 48-hour failure window.</li>
-        <li><strong>Operator Copilot:</strong> Tablet UI with reason-code capture, root-cause prompts, and MES integration.</li>
-      </ul>
-
-      <h2>Results</h2>
-      <ul>
-        <li>Unplanned downtime down <strong>54%</strong> (€23M recaptured in year 1).</li>
-        <li>OEE: 58% → 79% across the 4-plant network.</li>
-        <li>Maintenance cost per unit output down <strong>30%</strong>.</li>
-        <li>ISO 50001 energy-management certification achieved as a byproduct.</li>
-      </ul>
-    `,
-  },
-  {
-    slug: 'healthcare-ai-platform',
-    title: 'AI-Driven Patient Journey Optimization',
-    client: 'Regional Health Network',
-    industry: 'Healthcare',
-    result: '€28M Annual Savings',
-    duration: '12 months',
-    goLive: 'Q3 2025',
-    challenge: 'Fragmented patient data across 7 hospitals with 18% readmission rate above the national average.',
-    image: 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&q=80',
-    content: `
-      <h2>The Challenge</h2>
-      <p>A regional health network of 7 hospitals faced a readmission rate 18% above the national benchmark,
-      costing the system an estimated <strong>€34M annually</strong> in penalties and excess care costs.
-      Patient data lived in 12 disconnected systems; clinicians had no unified view of care history.</p>
-
-      <h2>Our Approach</h2>
-      <ul>
-        <li><strong>Data Consolidation (3 months):</strong> HL7 FHIR-compliant unified patient data platform aggregating 12 source systems with bi-directional sync.</li>
-        <li><strong>Predictive Risk Models (4 months):</strong> 30-day readmission risk model (XGBoost, AUROC 0.88) integrated into nurse workflows via Epic EMR embed.</li>
-        <li><strong>Care Pathway Automation (5 months):</strong> Rule-based + ML discharge planning assistant; automated follow-up scheduling; remote monitoring for high-risk patients.</li>
-      </ul>
-
-      <h2>Results</h2>
-      <ul>
-        <li>Readmission rate reduced from 18% above to <strong>6% below</strong> national benchmark (−24pp).</li>
-        <li><strong>€28M annual savings</strong> in year 1; full ROI achieved in 14 months.</li>
-        <li>Average time-to-discharge reduced by 1.8 days across the network.</li>
-        <li>Clinician adoption rate: 91% of eligible nursing staff using the risk dashboard daily.</li>
-      </ul>
-    `,
-  },
-  {
-    slug: 'energy-transition-strategy',
-    title: 'Net Zero Transition Roadmap',
-    client: 'European Energy Utility',
-    industry: 'Energy',
-    result: '40% Carbon Reduction',
-    duration: '8 months',
-    goLive: 'Q1 2026',
-    challenge: 'Committed to net zero by 2035 but lacked a credible investment and operational roadmap.',
-    image: 'https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?auto=format&fit=crop&q=80',
-    content: `
-      <h2>The Challenge</h2>
-      <p>A €4.2B European utility had made a public net-zero-by-2035 commitment under heavy regulatory and
-      investor pressure, but possessed no coherent decarbonization strategy, asset retirement schedule, or
-      capital allocation framework to back the pledge.</p>
-
-      <h2>Our Approach</h2>
-      <ul>
-        <li><strong>Emissions Baseline (6 weeks):</strong> Scope 1, 2 &amp; 3 inventory across 340 assets; technology-readiness assessment for each transition lever.</li>
-        <li><strong>Scenario Modelling (10 weeks):</strong> 4 net-zero pathways modelled under IEA, EU Taxonomy, and proprietary assumptions; NPV and stranded-asset risk quantified per scenario.</li>
-        <li><strong>Capital Reallocation (12 weeks):</strong> €2.1B portfolio reallocation blueprint — coal retirement timeline, offshore wind JV structures, green hydrogen pilot sizing.</li>
-      </ul>
-
-      <h2>Results</h2>
-      <ul>
-        <li>Board-adopted roadmap with <strong>40% carbon reduction</strong> by 2028 (interim milestone).</li>
-        <li>€680M divested from stranded assets ahead of regulatory pressure curve.</li>
-        <li>Green bond issuance of €1.2B oversubscribed 2.4× on the basis of the published roadmap.</li>
-        <li>ESG rating upgraded from BBB → A− within 12 months of publication.</li>
-      </ul>
-    `,
-  },
-  {
-    slug: 'saas-product-led-growth',
-    title: 'Product-Led Growth Transformation',
-    client: 'Enterprise SaaS Platform',
+    slug: 'tech-scaleup-operational-excellence',
+    title: 'Tech Scale-up · Operasyonel Mükemmellik',
+    client: 'Anonymized client · Tech Scale-up',
     industry: 'Technology',
-    result: '3× ARR Growth',
-    duration: '10 months',
-    goLive: 'Q4 2025',
-    challenge: 'Sales-led motion plateauing at $18M ARR with CAC spiraling 40% above LTV/3 threshold.',
-    image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80',
+    result: 'Süreç netliği · ortak dil',
+    duration: '6 ay',
+    goLive: '2025',
+    challenge:
+      'Hızlı büyüyen scale-up bünyesinde rol netliği, karar hakları ve süreç sahipliği gri kalmıştı.',
+    image: '/case-studies/tech-scaleup.svg',
     content: `
-      <h2>The Challenge</h2>
-      <p>A B2B SaaS platform had stalled at <strong>$18M ARR</strong> with a pure sales-led model.
-      CAC had escalated to 40% above the LTV/3 sustainability threshold; free-trial-to-paid conversion
-      was 3.2% vs. a 12% peer benchmark; churn was 18% net ARR, masking gross adds.</p>
+      <h2>Bağlam</h2>
+      <p>Türkiye merkezli bir teknoloji scale-up, iki yıl içinde 4 katı büyüdü; süreç sahipliği ve
+      karar hakları aynı hızla netleştirilmemişti. Yönetim ekibi ortak bir dil arıyordu.</p>
 
-      <h2>Our Approach</h2>
+      <h2>Yaklaşım</h2>
       <ul>
-        <li><strong>PLG Diagnostic (6 weeks):</strong> Product analytics audit (Amplitude), activation funnel mapping, jobs-to-be-done interviews with 80 churned and retained accounts.</li>
-        <li><strong>Time-to-Value Redesign (4 months):</strong> Onboarding redesign cutting first-value moment from day 7 to day 1; in-app guided flows; contextual feature discovery.</li>
-        <li><strong>Expansion Revenue Engine (4 months):</strong> Usage-based pricing layer; in-product upgrade triggers tied to limit proximity; team-viral loops for seat expansion.</li>
+        <li><strong>Diagnostic (4 hafta):</strong> Yönetim ekibiyle 1:1, kritik süreç haritalaması, OKR-ritm değerlendirmesi.</li>
+        <li><strong>Operating Model (8 hafta):</strong> RACI yeniden tanımı, karar hakları matrisi, haftalık operasyon ritmi.</li>
+        <li><strong>Adoption (12 hafta):</strong> Lider koçluğu, retro şablonları, "ortak dil" rehberi.</li>
       </ul>
 
-      <h2>Results</h2>
+      <h2>Sonuç (engagement-sonrası retrospektif)</h2>
       <ul>
-        <li>Free-trial conversion: 3.2% → <strong>14.8%</strong> (+364%).</li>
-        <li>Net ARR churn: 18% → <strong>−4%</strong> (net expansion territory).</li>
-        <li>ARR grew from $18M to <strong>$54M</strong> within 10 months of rollout (3× growth).</li>
-        <li>CAC payback period reduced from 28 months → 11 months.</li>
+        <li>Karar yürütme döngüsü "günler"den "saatler"e indirildi (ekip beyanı).</li>
+        <li>Yönetim ekibi haftalık karar ritmini kurumsal alışkanlığa dönüştürdü.</li>
+        <li>OKR adoption, lider seviyesinde sürdürülebilir hale geldi.</li>
       </ul>
+
+      <p><em>* Tüm sayısal göstergeler, müşterinin engagement-sonrası retrospektif görüşmesine dayalıdır.
+      Veri NDA gereği anonimleştirilmiştir.</em></p>
+    `,
+  },
+  {
+    slug: 'family-business-governance',
+    title: 'Aile Şirketi · Yönetişim & Kuşak Geçişi',
+    client: 'Anonymized client · Family Business',
+    industry: 'Family Business',
+    result: 'Yönetişim modeli kuruldu',
+    duration: '9 ay',
+    goLive: '2025',
+    challenge:
+      'İkinci kuşağa geçiş hazırlığı; aile ve şirket sınırları, karar mekanizmaları, hissedar haklarının netleştirilmesi.',
+    image: '/case-studies/family-business.svg',
+    content: `
+      <h2>Bağlam</h2>
+      <p>Türkiye'nin önde gelen aile şirketlerinden biri ikinci kuşağa geçiş hazırlığındaydı. Aile
+      bireyleri arasında karar mekanizmaları, profesyonel yönetimle sınırlar ve hissedar hakları
+      gri alandaydı.</p>
+
+      <h2>Yaklaşım</h2>
+      <ul>
+        <li><strong>Aile Anayasası (12 hafta):</strong> Aile üyeleriyle 1:1 görüşmeler, ortak değerler atölyesi, anayasa metni.</li>
+        <li><strong>Yönetişim Modeli (10 hafta):</strong> Aile konseyi, yönetim kurulu, icra arasındaki sınırlar; toplantı ritmi.</li>
+        <li><strong>Kuşak Geçişi Yol Haritası (12 hafta):</strong> Yetkinlik haritası, mentörlük programı, sahiplik aktarım takvimi.</li>
+      </ul>
+
+      <h2>Sonuç</h2>
+      <ul>
+        <li>Yönetişim çerçevesi yazılı dokümana ve toplantı ritmine bağlandı.</li>
+        <li>İkinci kuşak liderleri tanımlı rol-yetkinlik haritasıyla yönlendirildi.</li>
+        <li>Aile-içi anlaşmazlık çözüm prosedürleri formelleştirildi.</li>
+      </ul>
+
+      <p><em>* Veri NDA gereği anonimleştirilmiştir.</em></p>
+    `,
+  },
+  {
+    slug: 'manufacturing-lean-six-sigma',
+    title: 'Üretim · Lean & Six Sigma Pratiği',
+    client: 'Anonymized client · Manufacturing',
+    industry: 'Manufacturing',
+    result: 'Sürdürülebilir verimlilik artışı',
+    duration: '8 ay',
+    goLive: '2025',
+    challenge:
+      'Üretim hattında plansız duruşlar ve yüksek hata oranı; mevcut raporlama sahaya inmiyordu.',
+    image: '/case-studies/manufacturing.svg',
+    content: `
+      <h2>Bağlam</h2>
+      <p>Çok-tesisli bir üretim grubu, raporlardan saha gerçekliğine inemeyen Lean uygulamasıyla
+      başa çıkıyordu. Hat sahipleri ile yönetim arasında ortak dil eksikti.</p>
+
+      <h2>Yaklaşım</h2>
+      <ul>
+        <li><strong>Gemba (4 hafta):</strong> Vardiya bazında saha gözlemi, kayıp ağacı haritalaması.</li>
+        <li><strong>Kaizen Sistemi (12 hafta):</strong> Hat sahibi koçluğu, görsel yönetim, günlük performans toplantı ritmi.</li>
+        <li><strong>Six Sigma DMAIC (16 hafta):</strong> 3 kritik hata moduna odaklanan disiplinli iyileştirme projeleri.</li>
+      </ul>
+
+      <h2>Sonuç (retrospektif)</h2>
+      <ul>
+        <li>Hat sahipleri haftalık performans göstergelerini sahaya bağladı.</li>
+        <li>Öncelikli hata modlarında ölçülebilir azalma (müşteri beyanı, NDA).</li>
+        <li>İyileştirme metodolojisi kuruma "kalıcı bir yetenek" olarak transfer edildi.</li>
+      </ul>
+
+      <p><em>* Tüm sayısal göstergeler müşterinin iç ölçümüne dayalıdır; NDA gereği paylaşılmaz.</em></p>
+    `,
+  },
+  {
+    slug: 'ma-advisory-engagement',
+    title: 'M&A Advisory · Due Diligence + PMI',
+    client: 'Anonymized client · M&A Advisory',
+    industry: 'M&A Advisory',
+    result: 'Disiplinli müzakere & entegrasyon',
+    duration: '5 ay',
+    goLive: '2025',
+    challenge:
+      'Stratejik bir satın alma fırsatında due diligence kapsamı, müzakere disiplini ve birleşme sonrası entegrasyon planı.',
+    image: '/case-studies/ma-advisory.svg',
+    content: `
+      <h2>Bağlam</h2>
+      <p>Orta ölçekli bir kurum, kendisinin yarısı büyüklüğünde stratejik bir oyuncuyu satın alma
+      fırsatıyla karşılaşmıştı. Süreç hızlı, kapsam genişti; müzakere ve entegrasyon riski yüksekti.</p>
+
+      <h2>Yaklaşım</h2>
+      <ul>
+        <li><strong>Due Diligence (6 hafta):</strong> Finansal, operasyonel, kültürel ve hukuki kapsam; risk haritası.</li>
+        <li><strong>Valuation & Müzakere (4 hafta):</strong> Çoklu metodoloji değerleme; müzakere oyun planı.</li>
+        <li><strong>Post-Merger Integration (12 hafta):</strong> "100-gün planı", kültürel uyumlandırma, sinerji takip mekanizması.</li>
+      </ul>
+
+      <h2>Sonuç</h2>
+      <ul>
+        <li>İşlem öngörülen takvimle kapatıldı; kritik risklerin yarısı müzakerede temizlendi.</li>
+        <li>PMI dönemi yönetilebilir ritimde ilerledi; "Day 100" hedefleri tutarlı raporlandı.</li>
+        <li>Kurum, kendi içinde tekrarlanabilir bir M&A oyun kitabı edindi.</li>
+      </ul>
+
+      <p><em>* İşlem detayları NDA gereği paylaşılmaz; veriler anonim retrospektife dayalıdır.</em></p>
+    `,
+  },
+  {
+    slug: 'organizational-transformation',
+    title: 'Organizasyonel Dönüşüm · Yeni İşletim Modeli',
+    client: 'Anonymized client · Mid-cap',
+    industry: 'Organizational',
+    result: 'Yeni işletim modeli',
+    duration: '7 ay',
+    goLive: '2025',
+    challenge:
+      'Fonksiyonel siloların yavaşlattığı karar süreçleri; yatay işbirliğinde sürtünme; performans yönetiminde tutarlılık eksikliği.',
+    image: '/case-studies/org-transformation.svg',
+    content: `
+      <h2>Bağlam</h2>
+      <p>Orta-büyük ölçekli bir kurum, fonksiyonel silolarla yavaşlayan karar süreçlerinden
+      şikayetçiydi. Üst yönetim "müşteri-merkezli" bir işletim modeline geçmek istiyordu.</p>
+
+      <h2>Yaklaşım</h2>
+      <ul>
+        <li><strong>Mevcut Durum (5 hafta):</strong> Lider 1:1, karar hakları matrisi, kültürel sinyal okuması.</li>
+        <li><strong>Hedef İşletim Modeli (8 hafta):</strong> Müşteri yolculukları etrafında ürün-odaklı squad tasarımı, yönetim ritmi.</li>
+        <li><strong>Adoption & Kültür (12 hafta):</strong> Lider koçluğu, performans yönetimi rev, yeni rol tanımları.</li>
+      </ul>
+
+      <h2>Sonuç</h2>
+      <ul>
+        <li>Yeni işletim modeli yönetim kurulu tarafından onaylandı ve sahada uygulamaya başlandı.</li>
+        <li>Üst yönetim, karar haklarını yazılı olarak netleştirdi.</li>
+        <li>Çapraz fonksiyon işbirliği için ortak ritim kuruldu (haftalık + aylık).</li>
+      </ul>
+
+      <p><em>* Detaylar NDA gereği anonimleştirilmiştir.</em></p>
+    `,
+  },
+  {
+    slug: 'culture-engineering',
+    title: 'Kültür Mühendisliği · Ortak Dil Programı',
+    client: 'Anonymized client · Mid-cap',
+    industry: 'Culture',
+    result: 'Ortak dil & değer çerçevesi',
+    duration: '4 ay',
+    goLive: '2025',
+    challenge:
+      'Hızlı büyümede kurucu ekibin "kültürel kodu" yeni katılanlara aktarılamıyordu; değerler raporlarda kalmıştı.',
+    image: '/case-studies/culture-engineering.svg',
+    content: `
+      <h2>Bağlam</h2>
+      <p>Hızlı büyüyen bir kurum, kurucu ekibin "kültürel kodunu" yeni katılan liderlere aktarmakta
+      zorlanıyordu. Değerler doküman düzeyinde kalmış, günlük davranışa inememişti.</p>
+
+      <h2>Yaklaşım</h2>
+      <ul>
+        <li><strong>Kültürel Sinyal Okuması (4 hafta):</strong> 1:1 ve focus group; kurum-içi mit ve hikayelerin haritalanması.</li>
+        <li><strong>Ortak Dil Çerçevesi (6 hafta):</strong> Değerlerin "gözlemlenebilir davranışa" indirgendiği bir matris.</li>
+        <li><strong>Lider Pratiği (6 hafta):</strong> Performans görüşmesi şablonları, retrospektif kültürü, hikayeleme atölyesi.</li>
+      </ul>
+
+      <h2>Sonuç</h2>
+      <ul>
+        <li>Değerler, performans değerlendirme şablonlarına entegre edildi.</li>
+        <li>Liderler, ekip toplantılarında "ortak dil" çerçevesini aktif kullandı.</li>
+        <li>Onboarding sürecinde kültürel transfer ölçülebilir hale geldi.</li>
+      </ul>
+
+      <p><em>* Detaylar NDA gereği anonimleştirilmiştir.</em></p>
     `,
   },
 ];
