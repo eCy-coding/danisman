@@ -801,6 +801,10 @@ const AnimatedRoutes = () => {
         </Route>
         {/* P39-T02: /locale-detect → redirects root domain to /tr or /en */}
         <Route path="/locale-detect" element={<LocaleRedirect />} />
+        {/* P45 C1: Bare /founder ve /data-rights URL'leri NotFoundPage'e değil
+            kanonik konumlarına yönlensin. Eski linkler ve harici referanslar için. */}
+        <Route path="/founder" element={<Navigate to="/about" replace />} />
+        <Route path="/data-rights" element={<Navigate to="/privacy/data-rights" replace />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </AnimatePresence>

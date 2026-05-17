@@ -150,11 +150,12 @@ export const TeamPage: React.FC = () => {
       <section className="border-y border-white/5 bg-white/2">
         <div className="max-w-7xl mx-auto px-6 md:px-12 py-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+            {/* P45: Stats P42 about + KPI section ile sync — conservative + transparent. */}
             {[
-              { value: '6+', label: { tr: 'Uzman Partner', en: 'Expert Partners' } },
-              { value: '12', label: { tr: 'Ülke', en: 'Countries' } },
-              { value: '65+', label: { tr: 'Yıl Toplam Deneyim', en: 'Combined Exp.' } },
-              { value: '150+', label: { tr: 'Tamamlanan Proje', en: 'Projects' } },
+              { value: '120+', label: { tr: 'Stratejik Karar', en: 'Strategic Decisions' } },
+              { value: '12+', label: { tr: 'Sektör', en: 'Sectors' } },
+              { value: '5+', label: { tr: 'Yıl Pratik', en: 'Years of Practice' } },
+              { value: '95%*', label: { tr: 'Müşteri Memnuniyeti', en: 'Client Satisfaction' } },
             ].map((stat) => (
               <div key={stat.value}>
                 <div className="text-3xl md:text-4xl font-bold text-white mb-1">{stat.value}</div>
