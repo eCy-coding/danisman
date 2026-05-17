@@ -65,15 +65,20 @@ function parseTag(el: React.ReactElement): ParsedTag | null {
 }
 
 function selectorFor(parsed: ParsedTag): string {
+  // P46 C2-fix: önce data-seo-helmet ATTRIBUTE'suz olarak match dene — statik
+  // index.html tag'lerini ÜZERİNE YAZ ki querySelector ilk tag'i değiştirilmiş
+  // olarak görsün. Eskiden [data-seo-helmet] required'dı; shim yeni tag yaratıp
+  // statik tag DOM'da kalıyordu, querySelector statik'i alıyordu.
   const { tag, attrs } = parsed;
   if (tag === 'meta') {
-    if (attrs.name) return `meta[name="${attrs.name}"][data-seo-helmet]`;
-    if (attrs.property) return `meta[property="${attrs.property}"][data-seo-helmet]`;
-    if (attrs['http-equiv']) return `meta[http-equiv="${attrs['http-equiv']}"][data-seo-helmet]`;
+    if (attrs.name) return `meta[name="${attrs.name}"]`;
+    if (attrs.property) return `meta[property="${attrs.property}"]`;
+    if (attrs['http-equiv']) return `meta[http-equiv="${attrs['http-equiv']}"]`;
     return '';
   }
   if (tag === 'link') {
-    if (attrs.rel) return `link[rel="${attrs.rel}"][data-seo-helmet]`;
+    // Canonical en kritik tag; rel="canonical" unique, yine de ilk match güvenli.
+    if (attrs.rel) return `link[rel="${attrs.rel}"]`;
     return '';
   }
   if (tag === 'script') {

@@ -196,7 +196,9 @@ export default defineConfig(({ mode }) => {
       compressionServePlugin,
       htmlCharsetPlugin,
       nonBlockingCssPlugin,
-      mdx(),
+      // P46 C5: providerImportSource ile MDXProvider'dan components map'i alır.
+      // Olmadan MDX h1 → h2 demote çalışmıyordu (BlogPostPage'de 2 H1 vardı).
+      mdx({ providerImportSource: '@mdx-js/react' }),
       react(),
       viteCompression({
         algorithm: 'brotliCompress',

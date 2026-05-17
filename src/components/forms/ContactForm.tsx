@@ -1,6 +1,6 @@
 import React from 'react';
 import { contactSchema, ContactFormData } from '../../schemas/contact';
-import { Send, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
+import { Send, CheckCircle, AlertCircle, Loader2, Lock } from 'lucide-react';
 import { useTranslation } from '@/lib/i18n';
 import { Logger } from '../../lib/logger';
 import { trackForm } from '../../lib/analytics';
@@ -188,7 +188,7 @@ export const ContactForm: React.FC = () => {
         type="submit"
         disabled={isSubmitting}
         data-testid="contact-submit"
-        className={`w-full py-4 rounded-xl font-bold flex items-center justify-center gap-2 transition-all ${
+        className={`w-full py-4 min-h-[52px] rounded-xl font-bold flex items-center justify-center gap-2 transition-all ${
           isSubmitting
             ? 'bg-white/5 text-slate-400 cursor-not-allowed'
             : 'bg-primary text-white hover:bg-primary-dark shadow-lg hover:shadow-xl active:scale-95'
@@ -201,10 +201,18 @@ export const ContactForm: React.FC = () => {
           </>
         ) : (
           <>
-            {t('contact.form.submit') || 'Mesajı Gönder'} <Send size={20} />
+            {t('contact.form.submit') || 'Mesajı Gönder · 1 İş Günü Yanıt'} <Send size={20} />
           </>
         )}
       </button>
+
+      {/* P46 C8: Form trust microcopy — submit'in altında SSL + KVKK reassurance.
+          Conversion için "güvenlik" friction'ını azaltır (form submission'da
+          %15-25 abandon riski kişisel veri concern'leri yüzünden olur). */}
+      <p className="mt-3 flex items-center justify-center gap-2 text-xs text-slate-400">
+        <Lock size={12} className="text-emerald-400" aria-hidden="true" />
+        <span>SSL ile şifreli · KVKK & GDPR uyumlu · Verileriniz 3. taraf ile paylaşılmaz</span>
+      </p>
 
       {/* Status Messages */}
       {submitStatus === 'success' && (

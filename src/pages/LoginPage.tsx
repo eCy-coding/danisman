@@ -3,6 +3,7 @@ import { AuthLayout } from '../components/layout/AuthLayout';
 import { useTranslation, getLang, MultiLang } from '../lib/i18n';
 import { AUTH_COPY } from '../constants';
 import { Link } from 'react-router-dom';
+import { Lock } from 'lucide-react';
 
 export const LoginPage: React.FC = () => {
   const { language: lang } = useTranslation();
@@ -50,10 +51,19 @@ export const LoginPage: React.FC = () => {
         <button
           type="submit"
           data-testid="login-submit"
-          className="w-full bg-secondary text-neutral py-3 rounded-lg font-bold hover:bg-secondary/90 transition-colors uppercase tracking-wider text-sm shadow-md hover:shadow-lg transform active:scale-95"
+          className="w-full bg-secondary text-neutral py-3 min-h-[44px] rounded-lg font-bold hover:bg-secondary/90 transition-colors uppercase tracking-wider text-sm shadow-md hover:shadow-lg transform active:scale-95"
         >
           {getLang(AUTH_COPY.signInBtn as MultiLang, lang)}
         </button>
+        {/* P46 C8: Form trust microcopy — submit altı SSL/KVKK reassurance. */}
+        <p className="mt-3 flex items-center justify-center gap-2 text-xs text-slate-400">
+          <Lock size={11} className="text-emerald-400" aria-hidden="true" />
+          <span>
+            {lang === 'tr'
+              ? 'SSL şifreli · KVKK uyumlu kimlik doğrulama'
+              : 'SSL encrypted · KVKK-compliant authentication'}
+          </span>
+        </p>
       </form>
       <div className="mt-6 text-center text-sm text-slate-400">
         {getLang(AUTH_COPY.noAccount as MultiLang, lang)}{' '}

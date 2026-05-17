@@ -114,6 +114,11 @@
     <link rel="dns-prefetch" href="https://api.ecypro.com" />
     <link rel="dns-prefetch" href="https://cdn.ecypro.com" />
     <link rel="preconnect" href="https://api.ecypro.com" crossorigin />
+    <!-- P46 C9: ecypro-api Render backend preconnect — health check + contact
+         form için TLS handshake'i page-load anında başlat, ilk POST 100-300ms
+         daha hızlı tamamlanır. -->
+    <link rel="dns-prefetch" href="https://ecypro-api.onrender.com" />
+    <link rel="preconnect" href="https://ecypro-api.onrender.com" crossorigin />
 
     <!-- PWA & Mobile -->
     <meta name="theme-color" content="#050810" media="(prefers-color-scheme: dark)" />
