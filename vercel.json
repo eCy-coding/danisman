@@ -62,7 +62,7 @@
       "headers": [
         {
           "key": "Link",
-          "value": "</fonts/inter-latin-400-normal.woff2>; rel=preload; as=font; type=font/woff2; crossorigin, </fonts/inter-latin-700-normal.woff2>; rel=preload; as=font; type=font/woff2; crossorigin, </assets/lp.js>; rel=modulepreload, </assets/lc.js>; rel=modulepreload"
+          "value": "</fonts/inter-latin-400-normal.woff2>; rel=preload; as=font; type=font/woff2; crossorigin, </fonts/inter-latin-700-normal.woff2>; rel=preload; as=font; type=font/woff2; crossorigin"
         }
       ]
     },
