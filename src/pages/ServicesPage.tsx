@@ -143,7 +143,8 @@ export const ServicesPage: React.FC = () => {
                 <div className="relative z-10 max-w-7xl mx-auto px-6">
                     {/* Header Section */}
                     <div className="text-center mb-16">
-                        <FadeIn>
+                        {/* P31-T02: immediate — LCP element <p> below; skip opacity:0 */}
+                        <FadeIn immediate>
                             <span className="inline-block py-1 px-3 rounded-full bg-white/5 border border-white/10 text-[10px] font-bold tracking-[0.2em] text-slate-400 uppercase mb-6">
                                 Akademik Derinlik, Profesyonel Çözüm
                             </span>

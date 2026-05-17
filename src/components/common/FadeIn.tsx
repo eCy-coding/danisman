@@ -10,6 +10,13 @@ interface FadeInProps {
   className?: string;
   once?: boolean;
   scale?: boolean;
+  /**
+   * P31-T02: LCP optimization — skip opacity:0 → 1 animation for above-fold
+   * LCP candidates. Renders children inside a plain <div> with no motion,
+   * letting Lighthouse register LCP at initial paint instead of after the
+   * variant transition completes. Use on hero <p>/<h1> blocks above the fold.
+   */
+  immediate?: boolean;
 }
 
 const directionOffsets = {
@@ -28,12 +35,16 @@ export const FadeIn: React.FC<FadeInProps> = ({
   className = '',
   once = true,
   scale = false,
+  immediate = false,
 }) => {
   const prefersReducedMotion = useReducedMotion();
   const ref = React.useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once, margin: '-10% 0px -10% 0px' });
 
-  if (prefersReducedMotion) {
+  // P31-T02: above-fold LCP candidates render plain (no opacity:0 initial state).
+  // Framer Motion's variant scheduling otherwise defers LCP until the
+  // "visible" state lands, costing ~1100ms element render delay on mobile.
+  if (prefersReducedMotion || immediate) {
     return <div className={className}>{children}</div>;
   }
 

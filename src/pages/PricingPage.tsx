@@ -238,7 +238,8 @@ export const PricingPage: React.FC = () => {
         <div className="max-w-7xl mx-auto px-6">
           {/* Header */}
           <div className="text-center mb-16">
-            <FadeIn>
+            {/* P31-T02: immediate — LCP element <p.text-xl> below */}
+            <FadeIn immediate>
               <h1 className="text-4xl md:text-6xl font-serif font-bold text-white mb-6 tracking-tight">
                 {t.title[lang]}
               </h1>
