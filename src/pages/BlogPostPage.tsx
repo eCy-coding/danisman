@@ -1,8 +1,16 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
+import { MDXProvider } from '@mdx-js/react';
 import { Calendar, Clock, ArrowLeft, Share2 } from 'lucide-react';
 import { motion } from 'motion/react';
+
+// P46 C5: MDX content'in ilk satırı `# Başlık` formatında olduğu için her blog
+// post sayfasında 2 H1 vardı (BlogPostPage + MDX). SEO best practice 1 H1/page.
+// Bu mapping MDX h1 → h2 demote eder; semantic h1 sayısı 1'e iner.
+const MDX_COMPONENTS = {
+  h1: (props: React.ComponentPropsWithoutRef<'h2'>) => <h2 {...props} />,
+};
 
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
@@ -56,6 +64,16 @@ const BlogPostPage: React.FC = () => {
       <Helmet>
         <title>{post.title} | EcyPro Blog</title>
         <meta name="description" content={post.excerpt} />
+        <link rel="canonical" href={`https://www.ecypro.com/blog/${post.slug}`} />
+        <meta property="og:title" content={`${post.title} | EcyPro Blog`} />
+        <meta property="og:description" content={post.excerpt} />
+        <meta property="og:type" content="article" />
+        <meta property="og:url" content={`https://www.ecypro.com/blog/${post.slug}`} />
+        <meta property="og:image" content={post.coverImage} />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={`${post.title} | EcyPro Blog`} />
+        <meta name="twitter:description" content={post.excerpt} />
+        <meta name="twitter:image" content={post.coverImage} />
         <meta property="article:published_time" content={post.date} />
         <meta property="article:author" content={post.author} />
       </Helmet>
@@ -139,9 +157,17 @@ const BlogPostPage: React.FC = () => {
                   </div>
                 </header>
 
-                {/* MDX Content */}
+                {/* MDX Content — P46 C5: MDXProvider components mapping ile MDX'in
+                    ilk H1'i (markdown # Title) H2'ye demote ediliyor. Önce 2 H1
+                    vardı (BlogPostPage h1 + MDX h1 = SEO ihlali); şimdi 1 H1. */}
                 <div className="prose prose-lg prose-invert mx-auto prose-headings:font-serif prose-headings:text-white prose-a:text-blue-400 prose-img:rounded-xl prose-img:border prose-img:border-white/10 prose-blockquote:border-l-blue-500 prose-blockquote:bg-white/5 prose-blockquote:p-4 prose-blockquote:rounded-r-lg">
-                  {Content ? <Content /> : <div className="text-center py-20">Yükleniyor...</div>}
+                  {Content ? (
+                    <MDXProvider components={MDX_COMPONENTS}>
+                      <Content />
+                    </MDXProvider>
+                  ) : (
+                    <div className="text-center py-20">Yükleniyor...</div>
+                  )}
                 </div>
 
                 {/* Author & Share */}
