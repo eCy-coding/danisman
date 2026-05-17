@@ -406,6 +406,11 @@ const AnimatedRoutes = () => {
           />
         </Route>
 
+        {/* P45 D5: /404 explicit route. Without this, /:locale wildcard catches
+            "404" as a locale → LocaleRoute redirects to /404 → infinite loop →
+            blank screen. Specific path matches before wildcard, breaking the loop. */}
+        <Route path="/404" element={<NotFoundPage />} />
+
         {/* P39-T02: Locale-prefixed routes — /tr/* and /en/* */}
         {/* These parallel the existing routes and set i18next language from URL */}
         <Route path="/:locale" element={<LocaleRoute />}>
