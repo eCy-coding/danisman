@@ -126,16 +126,14 @@ export const LOCATIONS_COPY = {
     tr: 'Global varlığımızla yanınızdayız.',
     en: 'We are with you with our global presence.',
   },
+  // P45: Sahte adres + telefon kartları kaldırıldı. Tek ofis kartı, sadece
+  // şehir + ülke bilgisi + iletişim formuna yönlendirme. Gerçek ofis adresi
+  // eklenince burada güncellenecek.
   offices: [
     {
       city: { tr: 'İstanbul', en: 'Istanbul' },
-      address: { tr: 'Levent, Büyükdere Cd.', en: 'Levent, Buyukdere Ave.' },
-      phone: '+90 212 555 0000',
-    },
-    {
-      city: { tr: 'Londra', en: 'London' },
-      address: { tr: 'Canary Wharf', en: 'Canary Wharf' },
-      phone: '+44 20 7000 0000',
+      address: { tr: 'Türkiye merkezli pratik', en: 'Türkiye-based practice' },
+      phone: '',
     },
   ],
 };

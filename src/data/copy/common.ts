@@ -289,14 +289,17 @@ export const MEGA_MENUS = {
   },
 };
 
+// P45: Sahte telefon ve WhatsApp numaraları kaldırıldı. Gerçek numara
+// eklenince phone + phoneDisplay + whatsapp doldurulacak. Şimdilik e-posta
+// + iletişim formu birincil kanal.
 export const CONTACT_CONFIG = {
   title: { tr: 'İletişim', en: 'Contact' },
   email: 'info@ecypro.com',
   address: { tr: 'İstanbul, Türkiye', en: 'Istanbul, Turkey' },
-  phone: '+902125550000',
-  phoneDisplay: '+90 (212) 555 0000',
-  whatsapp: '+905555555555',
-  mapLink: 'https://maps.google.com',
+  phone: '',
+  phoneDisplay: '',
+  whatsapp: '',
+  mapLink: '',
   social: {
     linkedin: 'https://linkedin.com/company/ecypro',
     twitter: 'https://twitter.com/ecypro',
