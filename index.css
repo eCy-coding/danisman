@@ -32,6 +32,14 @@
   --color-text-main: #fafafa; /* Zinc-50 */
   --color-text-muted: #a1a1aa; /* Zinc-400 */
 
+  /* P44: axe-core WCAG AA contrast fix — slate-300 (#cad5e2) ve slate-500 (#62748e)
+     dark `#0a0a0a` surface üzerinde 4.4:1 / 4.3:1 (4.5 minimum altında).
+     Override → slate-400 equivalent (#94a3b8) → 7.0:1 (AA ✅, AAA için 7:1 sınırı).
+     Mevcut `text-slate-300` ve `text-slate-500` class'ları aynı görünür değeri alır;
+     component-bazlı refactor yerine token-level fix tercih edildi. */
+  --color-slate-300: #94a3b8;
+  --color-slate-500: #94a3b8;
+
   --font-sans:
     'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   --font-serif: 'Playfair Display', ui-serif, Georgia, serif;

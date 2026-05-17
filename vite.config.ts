@@ -1,11 +1,24 @@
 import fs from 'fs';
 import path from 'path';
+import { createRequire } from 'module';
 import { defineConfig, ViteDevServer } from 'vite';
 import mdx from '@mdx-js/rollup';
 import react from '@vitejs/plugin-react';
 import viteCompression from 'vite-plugin-compression';
 import { visualizer } from 'rollup-plugin-visualizer';
 import { ViteImageOptimizer } from 'vite-plugin-image-optimizer';
+
+// P44: svgo conditional probe — svgo opsiyonel olduğu için (devDep listede ama
+// her ortamda kurulu olmayabilir), eksikse SVG optimizasyonu sessizce skip edilir.
+// PNG/JPEG/WebP/AVIF optimizasyonu svgo'dan bağımsız çalışır.
+const HAS_SVGO = (() => {
+  try {
+    createRequire(import.meta.url)('svgo');
+    return true;
+  } catch {
+    return false;
+  }
+})();
 import { VitePWA } from 'vite-plugin-pwa';
 import { sentryVitePlugin } from '@sentry/vite-plugin';
 import { IncomingMessage, ServerResponse } from 'http';
@@ -204,7 +217,8 @@ export default defineConfig(({ mode }) => {
         jpeg: { quality: 80 },
         webp: { quality: 80, lossless: false },
         avif: { quality: 65, effort: 6 },
-        svg: { multipass: true },
+        // P44: svgo modülü yoksa SVG optimizasyonunu skip et — plugin fatal olmasın
+        ...(HAS_SVGO ? { svg: { multipass: true } } : { svg: false as const }),
       }),
       VitePWA({
         // P16 — `prompt` mode: yeni SW yüklendiğinde otomatik takas olmaz;

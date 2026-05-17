@@ -94,8 +94,10 @@ const TESTIMONIALS: Testimonial[] = [
 const AUTO_INTERVAL = 5000;
 
 function StarRow({ count }: { count: number }) {
+  // P44: axe-core fix — div'e aria-label varken role yoktu (WCAG violation).
+  // role="img" eklendi; ekran okuyucu "5 yıldız" tek değer olarak okur.
   return (
-    <div className="flex gap-0.5" aria-label={`${count} yıldız`}>
+    <div className="flex gap-0.5" role="img" aria-label={`${count} yıldız`}>
       {Array.from({ length: 5 }).map((_, i) => (
         <Star
           key={i}

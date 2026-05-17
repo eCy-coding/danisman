@@ -48,14 +48,15 @@ const KPIItem: React.FC<{
     }
   };
 
+  // P44: axe-core fix — parent <li> zaten listitem semantiği veriyor; bu motion.div'de
+  // role="listitem" duplikasyon yaratıyordu. Kaldırıldı.
   return (
     <motion.div
-      role="listitem"
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-50px' }}
       transition={{ duration: 0.7, delay: delay / 1000, ease: [0.21, 0.47, 0.32, 0.98] }}
-      className={`relative ${span} h-full min-h-62.5 overflow-hidden rounded-3xl border border-white/5 bg-white/2 p-8 lg:p-10 group transition-colors duration-500 ${getBorderColor(item.category)}`}
+      className={`relative h-full min-h-62.5 overflow-hidden rounded-3xl border border-white/5 bg-white/2 p-8 lg:p-10 group transition-colors duration-500 ${getBorderColor(item.category)}`}
     >
       <MouseGlow />
       <div
@@ -141,9 +142,12 @@ export const KPI: React.FC = () => {
           </FadeIn>
         </div>
 
+        {/* P44: axe-core fix — <li className="contents"> li'yi DOM render'dan
+            kaldırarak ul/li parent-child role mismatch yaratıyordu. Span artık
+            doğrudan <li>'de; KPIItem h-full ile dolduruyor. */}
         <ul className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-6 lg:gap-8 list-none p-0 m-0">
           {KPI_ITEMS.map((item, idx) => (
-            <li key={item.id} className="contents">
+            <li key={item.id} className={`${getSpanForItem(idx)} list-none h-full`}>
               <KPIItem
                 item={item}
                 delay={idx * 150}
