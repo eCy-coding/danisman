@@ -2,23 +2,19 @@
 # Deploy: render blueprint apply
 # Docs:   https://docs.render.com/infrastructure-as-code
 #
-# BE-10 — Hybrid hosting: this manifest provisions the API service.
-# Frontend is on Hostinger (static, www.ecypro.com).
-# This service answers api.ecypro.com (CNAME → Render external URL).
+# P40 — ZERO-COST DEPLOY (Free tier):
+#   * Frontend: Vercel (free) — www.ecypro.com
+#   * Backend:  Render Free   — api.ecypro.com (this manifest)
+#   * Database: Neon Postgres (free 0.5 GB, external) — DATABASE_URL set in dashboard
+#   * DNS:      Hostinger (existing) — A/CNAME records
 
-databases:
-  - name: ecypro-db
-    plan: starter
-    databaseName: ecypro
-    user: ecypro_user
-    region: frankfurt
-    postgresMajorVersion: "17"
-    ipAllowList: [] # Empty = Render internal network only
+# NOTE (P40): databases: section removed — Neon provides Postgres externally.
+# Set DATABASE_URL in Render dashboard from Neon connection string.
 
 services:
   - type: web
     name: ecypro-api
-    plan: starter
+    plan: free
     runtime: node
     region: frankfurt
     rootDir: .
@@ -56,15 +52,14 @@ services:
       - key: PORT
         value: "3001"
       - key: DATABASE_URL
-        fromDatabase:
-          name: ecypro-db
-          property: connectionString
+        sync: false # P40: Neon connection string — set in Render dashboard
       - key: JWT_SECRET
         generateValue: true
       - key: JWT_EXPIRES_IN
         value: 7d
       - key: CORS_ORIGIN
-        value: https://www.ecypro.com,https://ecypro.com
+        # P40: include Vercel preview URL for staging deploys
+        value: https://www.ecypro.com,https://ecypro.com,https://danisman.vercel.app
       - key: TRUST_PROXY
         value: "1"
 
