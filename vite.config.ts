@@ -121,6 +121,33 @@ const wasmContentTypePlugin = {
   },
 };
 
+// P32 — Vite auto-injects entry CSS as <link rel="stylesheet"> which is
+// render-blocking. The App Shell in index.html is fully inline-styled, so
+// CSS is only required for React hydration (which is async anyway). This
+// plugin rewrites the auto-injected blocking links to the print-onload
+// pattern so Lantern's "wait for stylesheets" gate is removed from the
+// FCP critical path. Hand-authored print-onload links in index.html are
+// left untouched.
+const nonBlockingCssPlugin = {
+  name: 'p32-non-blocking-css',
+  enforce: 'post' as const,
+  transformIndexHtml(html: string) {
+    return html.replace(
+      /<link rel="stylesheet"((?:(?! media=)[^>])*?)\shref="([^"]+)"([^>]*)>/g,
+      (match, before, href, after) => {
+        // Skip links that already carry an explicit media attribute
+        // (these are intentional, e.g. our index.css print-onload trick).
+        if (/\smedia=/.test(match)) return match;
+        const attrs = `${before}${after}`.trim();
+        return (
+          `<link rel="preload" as="style" href="${href}" ${attrs} onload="this.onload=null;this.rel='stylesheet'">` +
+          `<noscript><link rel="stylesheet" href="${href}" ${attrs}></noscript>`
+        );
+      }
+    );
+  },
+};
+
 export default defineConfig(({ mode }) => {
   // NOTE: We deliberately do NOT forward server-side secrets (GEMINI_API_KEY, JWT_SECRET,
   // DATABASE_URL, SENTRY_DSN server-only) to the frontend bundle. Vite already exposes
@@ -155,6 +182,7 @@ export default defineConfig(({ mode }) => {
       staticOverridePlugin,
       compressionServePlugin,
       htmlCharsetPlugin,
+      nonBlockingCssPlugin,
       mdx(),
       react(),
       viteCompression({
@@ -393,6 +421,13 @@ export default defineConfig(({ mode }) => {
       target: 'esnext', // Modern browsers for smaller bundle
       sourcemap: 'hidden' as const, // Hidden sourcemaps: Sentry/debuggers can use them, not served publicly
       minify: 'esbuild' as const,
+      // P31-T03: lightningcss CSS minifier — ~3× faster than esbuild on the
+      // built CSS and emits ~5-8% smaller output (tighter shorthand, dedupe).
+      // Transformer is kept as the default (postcss-driven by tailwind v4)
+      // so we don't touch the Tailwind pipeline; only the final minify step
+      // is swapped. lightningcss is already in node_modules as a tailwind v4
+      // transitive dep, no new install needed.
+      cssMinify: 'lightningcss' as const,
 
       // P5-4 NOTE — an earlier attempt trimmed the modulepreload graph to
       // an allow-list (vendor/tslib/utils/ui/i18n) hoping to free LCP. In
