@@ -13,7 +13,7 @@ export const BlogPostSchema = z.object({
   // P45: was z.enum(BLOG_CATEGORIES). 21/34 posts had categories outside the
   // enum (Analitik, Pazarlama, Finans, Yapay Zeka, Dijital Dönüşüm...) so Zod
   // rejected the whole list, getBlogPosts() returned [], and /blog rendered
-  // 'Bu filtreyle eşleşen yazı bulunamadı'. Switched to free-form string —
+  // "Bu filtreyle eşleşen yazı bulunamadı". Switched to free-form string —
   // BlogList filter chips still draw from BLOG_CATEGORIES so the curated
   // taxonomy is preserved.
   category: z.string().optional(),

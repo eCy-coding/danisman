@@ -16,13 +16,14 @@ interface BlogPostMetadata {
   date: string;
   author: string;
   coverImage?: string;
+  /** Phase 20 B3: single primary category. */
   category?: string;
   tags: string[];
   readingTime: string;
 }
 
 if (!fs.existsSync(CONTENT_DIR)) {
-  console.log('Creating content directory: ' + CONTENT_DIR);
+  console.log(`Creating content directory: ${CONTENT_DIR}`);
   fs.mkdirSync(CONTENT_DIR, { recursive: true });
 }
 
@@ -32,35 +33,54 @@ const parseFrontmatter = (content: string): { data: any, content: string } => {
   if (!match) {
     return { data: {}, content };
   }
+  
   const frontmatterRaw = match[1];
   const body = match[2];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const data: any = {};
+  
   (frontmatterRaw || '').split('\n').forEach(line => {
     const [key, ...valueParts] = line.split(':');
     if (key && valueParts.length > 0) {
       let value = valueParts.join(':').trim();
-      if ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'"))) {
+      // Remove wrapping quotes if present (supports '...' and "...")
+      if (
+        (value.startsWith('"') && value.endsWith('"')) ||
+        (value.startsWith("'") && value.endsWith("'"))
+      ) {
         value = value.slice(1, -1);
       }
+      // Handle array syntax [a, b] fairly simply
       if (value.startsWith('[') && value.endsWith(']')) {
-        data[key.trim()] = value.slice(1, -1).split(',').map(s => s.trim().replace(/^['"]|['"]$/g, ''));
+         data[key.trim()] = value
+          .slice(1, -1)
+          .split(',')
+          .map(s => s.trim().replace(/^['"]|['"]$/g, ''));
       } else {
-        data[key.trim()] = value.replace(/^['"]|['"]$/g, '');
+         data[key.trim()] = value.replace(/^['"]|['"]$/g, '');
       }
     }
   });
+  
   return { data, content: body || '' };
 };
 
 // P45: Title / excerpt fallbacks parsed directly from the MDX body when the
-// YAML frontmatter is absent. Most posts use a # H1 opening line and a
-// **Kategori:** ... | **Okuma Suresi:** N dk | **Yazar:** ... metadata strip.
+// YAML frontmatter is absent. Most posts use a `# H1` opening line and a
+// `**Kategori:** ... | **Okuma Süresi:** N dk | **Yazar:** ...` metadata
+// strip — that previously produced "Untitled" cards on /blog because the
+// frontmatter regex never matched. Now we extract the first heading and the
+// first non-meta paragraph as a graceful fallback.
 const extractFromBody = (body: string) => {
+  // First H1 (`# ...`) becomes the title.
   const titleMatch = body.match(/^\s*#\s+(.+?)\s*$/m);
   const title = titleMatch?.[1]?.replace(/\*\*/g, '').trim();
+
+  // Strip the meta-line ("Kategori | Okuma Süresi | Yazar") and yaml-like
+  // horizontal rules, then find the first prose paragraph.
   const lines = body.split('\n');
   let i = 0;
+  // skip until we pass the H1
   while (i < lines.length && !/^\s*#\s/.test(lines[i] ?? '')) i++;
   i++;
   let excerpt = '';
@@ -74,21 +94,26 @@ const extractFromBody = (body: string) => {
     excerpt = line.replace(/[*_`]/g, '').slice(0, 220);
     break;
   }
+
+  // Meta line parsing (Kategori / Okuma Süresi / Yazar / Tags)
   const metaLine = lines.find((l) => /\*\*Kategori:/.test(l)) ?? '';
   const category = metaLine.match(/\*\*Kategori:\*\*\s*([^|]+)/)?.[1]?.trim();
   const readingTime = metaLine.match(/\*\*Okuma S[uü]resi:\*\*\s*([^|]+)/)?.[1]?.trim();
   const author = metaLine.match(/\*\*Yazar:\*\*\s*([^|]+)/)?.[1]?.trim();
+
   return { title, excerpt, category, readingTime, author };
 };
 
 const generateBlogIndex = () => {
   const files = fs.readdirSync(CONTENT_DIR).filter(file => file.endsWith('.mdx'));
+
   const posts: BlogPostMetadata[] = files.map(filename => {
     const filePath = path.join(CONTENT_DIR, filename);
     const fileContent = fs.readFileSync(filePath, 'utf-8');
     const { data, content: body } = parseFrontmatter(fileContent);
     const slug = filename.replace('.mdx', '');
     const fallback = extractFromBody(body || fileContent);
+
     return {
       slug,
       title: data.title || fallback.title || 'Untitled',
@@ -101,17 +126,22 @@ const generateBlogIndex = () => {
       readingTime: data.readingTime || fallback.readingTime || '5 dk okuma',
     };
   });
+
+  // Sort by date descending
   posts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
   if (!fs.existsSync(path.dirname(OUTPUT_FILE))) {
     fs.mkdirSync(path.dirname(OUTPUT_FILE), { recursive: true });
   }
+
   fs.writeFileSync(OUTPUT_FILE, JSON.stringify(posts, null, 2));
-  console.log('Generated blog index with ' + posts.length + ' posts at ' + OUTPUT_FILE);
+  console.log(`✅ Generated blog index with ${posts.length} posts at ${OUTPUT_FILE}`);
 };
 
 try {
   generateBlogIndex();
 } catch (error) {
-  console.error('Error generating blog index:', error);
+  console.error('❌ Error generating blog index:', error);
   process.exit(1);
 }
+

@@ -1,7 +1,17 @@
 import React, { useRef } from 'react';
 import { motion, useScroll } from 'motion/react';
 import { useTranslation, getLang, MultiLang, Language } from '@/lib/i18n';
-import { Microscope, Compass, Zap, TrendingUp, LucideIcon } from 'lucide-react';
+import {
+  Microscope,
+  Compass,
+  Zap,
+  TrendingUp,
+  Eye,
+  Wrench,
+  Sprout,
+  Recycle,
+  LucideIcon,
+} from 'lucide-react';
 
 interface Step {
   title: MultiLang;
@@ -18,6 +28,11 @@ const icons: Record<string, LucideIcon> = {
   Compass,
   Zap,
   TrendingUp,
+  // P45 C4: methodology icon palette
+  Eye,
+  Wrench,
+  Sprout,
+  Recycle,
 };
 
 export const Timeline: React.FC<TimelineProps> = ({ steps }) => {

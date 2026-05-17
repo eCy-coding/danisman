@@ -187,6 +187,129 @@ export const DataRightsPage: React.FC = () => {
     >
       <p className="text-slate-300">{labels.subtitle}</p>
 
+      {/* P45 C2: KVKK haklarının açıklaması + sürecin şeffaf gösterimi. */}
+      <section className="mt-fib-7 space-y-fib-5 text-slate-300">
+        <h2 className="text-2xl font-semibold text-white">
+          {lang === 'tr' ? 'Veri Sahibi Olarak Haklarınız' : 'Your Rights as a Data Subject'}
+        </h2>
+        <p className="leading-relaxed">
+          {lang === 'tr'
+            ? 'KVKK Madde 11 kapsamında EcyPro Premium Consulting nezdindeki kişisel verilerinize ilişkin aşağıdaki haklara sahipsiniz. Talebinizi bu sayfadaki form üzerinden veya kvkk@ecypro.com adresine e-posta ile iletebilirsiniz.'
+            : 'Under KVKK Article 11, you have the following rights regarding personal data held by EcyPro Premium Consulting. You may submit your request via the form on this page or by email to kvkk@ecypro.com.'}
+        </p>
+        <ul className="list-disc list-inside space-y-fib-3 marker:text-secondary">
+          <li>
+            {lang === 'tr'
+              ? 'Kişisel verilerinizin işlenip işlenmediğini öğrenme.'
+              : 'Learn whether your personal data is being processed.'}
+          </li>
+          <li>
+            {lang === 'tr'
+              ? 'İşlenmişse buna ilişkin bilgi talep etme — hangi veriler, hangi amaçla.'
+              : 'Request information about what data is processed and for what purposes.'}
+          </li>
+          <li>
+            {lang === 'tr'
+              ? 'Eksik veya yanlış işlenmiş verilerin düzeltilmesini isteme.'
+              : 'Request correction of incomplete or inaccurate data.'}
+          </li>
+          <li>
+            {lang === 'tr'
+              ? 'KVKK Madde 7 koşulları sağlandığında verilerin silinmesini veya yok edilmesini isteme.'
+              : 'Request erasure or destruction of data when KVKK Article 7 conditions are met.'}
+          </li>
+          <li>
+            {lang === 'tr'
+              ? 'Düzeltme, silme veya yok etme işlemlerinin verinin aktarıldığı üçüncü taraflara bildirilmesini isteme.'
+              : 'Request that correction, erasure, or destruction be notified to third parties to whom the data was transferred.'}
+          </li>
+          <li>
+            {lang === 'tr'
+              ? 'Otomatik sistemler aracılığıyla analiz edilmesi sonucu aleyhinize çıkan bir sonuca itiraz etme.'
+              : 'Object to outcomes derived from automated processing that disadvantage you.'}
+          </li>
+          <li>
+            {lang === 'tr'
+              ? 'Kanuna aykırı işleme nedeniyle zarara uğramanız durumunda zararın giderilmesini talep etme.'
+              : 'Claim compensation for damages caused by unlawful processing.'}
+          </li>
+        </ul>
+
+        <h2 className="text-2xl font-semibold text-white pt-fib-5">
+          {lang === 'tr' ? 'Veriyi Hangi Amaçla Topluyoruz' : 'Why We Collect Data'}
+        </h2>
+        <p className="leading-relaxed">
+          {lang === 'tr'
+            ? 'EcyPro Premium Consulting; iletişim formları, danışmanlık engagement süreçleri, randevu yönetimi ve opt-in pazarlama iletişimi için sınırlı kişisel veri toplar. Açık rızanız olmadan üçüncü taraflara satılmaz veya pazarlama amacıyla paylaşılmaz.'
+            : 'EcyPro Premium Consulting collects limited personal data for contact forms, consulting engagement workflows, appointment management, and opt-in marketing communications. Your data is never sold to or shared with third parties for marketing without your explicit consent.'}
+        </p>
+
+        <h2 className="text-2xl font-semibold text-white pt-fib-5">
+          {lang === 'tr' ? 'Saklama Süresi' : 'Retention Period'}
+        </h2>
+        <p className="leading-relaxed">
+          {lang === 'tr'
+            ? 'İletişim ve engagement verileri yasal asgari saklama süresi olan 5 yıl boyunca tutulur. Bu sürenin sonunda otomatik olarak silinir veya anonimleştirilir. Silme talebiniz onaylandıktan sonra verileriniz 30 gün içinde sistemlerimizden kaldırılır.'
+            : 'Contact and engagement data are retained for 5 years (the statutory minimum). After this period, data are automatically deleted or anonymized. Once an erasure request is verified, data are removed from our systems within 30 days.'}
+        </p>
+
+        <h2 className="text-2xl font-semibold text-white pt-fib-5">
+          {lang === 'tr' ? 'Veri İşleyiciler' : 'Data Processors'}
+        </h2>
+        <p className="leading-relaxed">
+          {lang === 'tr'
+            ? 'Aşağıdaki üçüncü taraf sağlayıcılar, sözleşmesel KVKK/GDPR garantileri altında verilerinizi işleyebilir:'
+            : 'The following third-party processors may handle your data under contractual KVKK/GDPR safeguards:'}
+        </p>
+        <ul className="list-disc list-inside space-y-fib-3 marker:text-secondary">
+          <li>
+            <strong className="text-slate-100">Vercel</strong>
+            {lang === 'tr'
+              ? ' — site hosting ve edge CDN (AB sunucuları).'
+              : ' — site hosting and edge CDN (EU regions).'}
+          </li>
+          <li>
+            <strong className="text-slate-100">Render</strong>
+            {lang === 'tr'
+              ? ' — backend API barındırma.'
+              : ' — backend API hosting.'}
+          </li>
+          <li>
+            <strong className="text-slate-100">Neon</strong>
+            {lang === 'tr'
+              ? ' — yönetilen Postgres veritabanı.'
+              : ' — managed Postgres database.'}
+          </li>
+          <li>
+            <strong className="text-slate-100">EmailJS</strong>
+            {lang === 'tr'
+              ? ' — iletişim formu mesaj iletimi.'
+              : ' — contact form message relay.'}
+          </li>
+          <li>
+            <strong className="text-slate-100">Sentry</strong>
+            {lang === 'tr'
+              ? ' — hata izleme (kişisel veri scrub edilir).'
+              : ' — error monitoring (PII scrubbing enabled).'}
+          </li>
+        </ul>
+
+        <h2 className="text-2xl font-semibold text-white pt-fib-5">
+          {lang === 'tr' ? 'Başvuru Yanıt Süresi' : 'Response SLA'}
+        </h2>
+        <p className="leading-relaxed">
+          {lang === 'tr'
+            ? 'Talebinizi aldıktan sonra 24 saat içinde e-posta ile dönüş yaparız. Talep doğrulamasından sonra KVKK\'nın öngördüğü en geç 30 gün içinde işlem tamamlanır. Karmaşık talepler için ek süre gerekirse e-posta ile bilgilendirilirsiniz.'
+            : 'We acknowledge your request by email within 24 hours. After identity verification, the request is completed within the KVKK-mandated maximum of 30 days. If additional time is needed for complex requests, you will be notified by email.'}
+        </p>
+
+        <p className="text-xs text-slate-500 italic pt-fib-5 border-t border-white/5">
+          {lang === 'tr'
+            ? 'Bu sayfa bilgilendirme amaçlıdır ve hukuki tavsiye niteliği taşımaz. Sayfadaki bilgiler EcyPro Premium Consulting tarafından özenle hazırlanmış olsa da bağımsız bir avukat onayından geçmemiştir. Hukuki yorum gerektiren konularda lütfen bir avukata danışın.'
+            : 'This page is informational and does not constitute legal advice. While prepared with care, the content has not been independently reviewed by counsel. Consult an attorney for matters requiring legal interpretation.'}
+        </p>
+      </section>
+
       <form
         onSubmit={onSubmit}
         className="mt-fib-7 p-fib-6 bg-surface-2 border border-white/10 rounded-lg max-w-2xl"
