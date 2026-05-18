@@ -11,5 +11,38 @@
   "booking": {
     "title": "Start Your Project",
     "desc": "Define your needs and contact our experts."
+  },
+  "common_ui": {
+    "discoveryCta": "Book a Free Discovery Call",
+    "exploreMethodology": "Explore Methodology",
+    "trustBadges": {
+      "years": "5+ years of practice",
+      "decisions": "120+ strategic decisions",
+      "compliance": "KVKK & GDPR compliant",
+      "sla": "24h response SLA"
+    }
+  },
+  "list": {
+    "strategic-transformation": { "title": "Strategic Transformation & Corporate Planning", "subtitle": "3-5 year north star + 90-day implementation bridge in uncertainty.", "valueProp": "Closes the gap between vision and daily operations — board decisions actually land in the field." },
+    "mergers-acquisitions": { "title": "Mergers, Acquisitions (M&A) & Valuation", "subtitle": "Valuation, due diligence, post-merger integration (PMI), exit strategy.", "valueProp": "Objective advisory from strategic fit to PMI; valuation anchored on sectoral comparables." },
+    "family-business": { "title": "Family Business Governance & Constitution", "subtitle": "Generational transition, institutionalization, sustainable family constitution.", "valueProp": "We co-design governance that preserves family value while scaling the company." },
+    "operational-excellence": { "title": "Operational Excellence & Supply Chain", "subtitle": "Lean manufacturing, Six Sigma, end-to-end logistics optimization.", "valueProp": "OEE/cycle time/lead time improvements typically 15-40% in 12 months." },
+    "neuromarketing": { "title": "Neuromarketing & Customer Experience (CX)", "subtitle": "Behavioral consumer analysis with data-driven brand strategy.", "valueProp": "Goes beyond 'what consumers say' to 'what they do and feel' — measurable conversion uplift." },
+    "hr-transformation": { "title": "Human Resources & Organization Design", "subtitle": "Talent matrices, performance management, agile organizational structures.", "valueProp": "Transforms HR from payroll+leave into a strategic partner with measurable talent metrics." },
+    "crisis-management": { "title": "Crisis Management & Business Continuity", "subtitle": "Emergency action plans, resilience testing for financial or operational crises.", "valueProp": "72-hour strategic triage + stakeholder communication + financial maneuvers." },
+    "ai-analytics": { "title": "AI & Business Analytics", "subtitle": "ML models for predictive analysis and AI integration strategy.", "valueProp": "ROI-focused use-case selection beyond AI hype; pilot to scale roadmap." },
+    "digital-strategy": { "title": "Digital Transformation & Technology Strategy", "subtitle": "ERP selection, process automation (RPA), digital maturity analysis.", "valueProp": "Not tool selection — alignment of strategy-process-technology-culture tetragram. Measurable ROI." },
+    "data-governance": { "title": "Data Governance & KVKK/GDPR Compliance", "subtitle": "Data privacy, cyber governance, regulatory compliance (ISO 27001).", "valueProp": "Moves KVKK/GDPR beyond compliance-checklist into strategic data governance." },
+    "esg-strategy": { "title": "ESG Strategy & Green Deal", "subtitle": "Carbon footprint reporting, sustainability strategy, green finance access.", "valueProp": "EU Green Deal + CBAM-ready strategic roadmap — competitive advantage, not just cost." },
+    "investment-incentives": { "title": "Investment Incentives & Grant Management", "subtitle": "Government support, R&D grants, project-based investment incentive certificates.", "valueProp": "Maps your company to 200+ Turkish incentive programs; manages application + reporting." },
+    "macro-risk": { "title": "Macroeconomic Risk & Market Analysis", "subtitle": "FX, rate, inflation projections; C-Level decision support reports.", "valueProp": "Structured answer to CFO/CEO what-if — scenario planning + hedge strategy." },
+    "competition-economics": { "title": "Competition Economics & Regulation", "subtitle": "Antitrust review, market dominance analysis, regulatory compliance.", "valueProp": "Economic analysis for Competition Authority / EU Commission investigations + M&A filing risk." },
+    "industrial-relations": { "title": "Industrial Relations & Unions", "subtitle": "Collective bargaining, union relations, workplace harmony.", "valueProp": "Structured CBA negotiation; protects employer cost envelope + workplace peace." },
+    "payroll-audit": { "title": "Payroll Audit & Employment Incentives", "subtitle": "Maximize SGK premium incentives, cost optimization, payroll risk audit.", "valueProp": "Reclaims 5-15% of payroll cost via systematic incentive optimization." },
+    "employer-branding": { "title": "Talent Management & Employer Branding", "subtitle": "Strategic Employer Branding to attract and retain qualified workforce.", "valueProp": "Reduces recruitment cost + turnover, increases employee engagement via data-driven EVP." },
+    "market-entry": { "title": "International Market Entry & Export", "subtitle": "Target market research, distributor identification, Turquality preparation.", "valueProp": "Go-to-market strategy in 2-3 target markets: distributor pool + Turquality + export finance." },
+    "global-intelligence": { "title": "Global Diplomacy & Commercial Intelligence", "subtitle": "Geopolitical risk maps, commercial intelligence, inter-state crisis scenarios.", "valueProp": "Monthly geopolitical briefing + risk-event simulation for cross-border companies." },
+    "smart-cities": { "title": "Smart Cities & Public Policy", "subtitle": "Digital urbanism strategy and impact analysis for local governments.", "valueProp": "3-5 year smart city roadmap: citizen services, mobility, energy, waste, safety architecture." },
+    "government-relations": { "title": "Corporate Relations & Lobbying (GR)", "subtitle": "Stakeholder mapping, regulatory tracking, strategic representation in Ankara and Brussels.", "valueProp": "Early signals on regulation changes affecting your sector + ethical lobbying support." }
   }
 }

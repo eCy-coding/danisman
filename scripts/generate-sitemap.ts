@@ -26,6 +26,17 @@ const STATIC_ROUTES = [
   'cookies',
   'faq',
   'maturity-assessment',
+  // P52: P51 Phase 4 content pages
+  'press',
+  'speaking',
+  'pillar/strategy',
+  'pillar/family-business',
+  'pillar/operations',
+  'pillar/digital-ai',
+  'pillar/sustainability-esg',
+  'webinars/esg-cbam-2026-readiness',
+  'webinars/family-business-transition-2026',
+  'industry-reports/turkey-premium-consulting-2026',
 ];
 
 const BASE_URL = 'https://www.ecypro.com';

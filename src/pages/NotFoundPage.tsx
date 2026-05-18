@@ -12,6 +12,7 @@ import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { useTranslation } from 'react-i18next';
 import { Home, Briefcase, Mail, ArrowRight, BookOpen, Building2, BadgeDollarSign } from 'lucide-react';
+import { NotFoundSearch } from '../components/common/NotFoundSearch';
 
 interface Suggestion {
   icon: React.ComponentType<{ size?: number; className?: string }>;
@@ -118,6 +119,9 @@ export const NotFoundPage: React.FC = () => {
           <p className="text-lg text-slate-400 max-w-2xl mx-auto leading-relaxed mb-10 font-light">
             {COPY.description[lang]}
           </p>
+
+          {/* P56.G8 — client-side route search */}
+          <NotFoundSearch lang={lang === 'en' ? 'en' : 'tr'} />
 
           {/* Action buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16">

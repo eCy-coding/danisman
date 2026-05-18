@@ -1,0 +1,30 @@
+<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Emre Can Yalçın — Founder & Chief Strategist (placeholder portrait)">
+  <title>Emre Can Yalçın</title>
+  <defs>
+    <linearGradient id="founderBg" x1="0" y1="0" x2="400" y2="400" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0F172A" />
+      <stop offset="50%" stop-color="#1E1B3A" />
+      <stop offset="100%" stop-color="#2D1B5E" />
+    </linearGradient>
+    <linearGradient id="founderAccent" x1="0" y1="0" x2="200" y2="200" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#2563EB" />
+      <stop offset="100%" stop-color="#7C3AED" />
+    </linearGradient>
+    <linearGradient id="founderGold" x1="0" y1="0" x2="60" y2="60" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#F59E0B" />
+      <stop offset="100%" stop-color="#D97706" />
+    </linearGradient>
+  </defs>
+  <rect width="400" height="400" rx="32" fill="url(#founderBg)" />
+  <g transform="translate(200,200)">
+    <circle r="160" fill="none" stroke="url(#founderAccent)" stroke-width="1.5" opacity="0.4" />
+    <circle r="120" fill="none" stroke="url(#founderAccent)" stroke-width="1" opacity="0.3" />
+    <text y="-15" text-anchor="middle" font-family="Georgia, serif" font-size="72" font-weight="700" fill="url(#founderAccent)">EC</text>
+    <text y="35" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="13" font-weight="600" letter-spacing="0.3em" fill="#94A3B8">EMRE CAN</text>
+    <text y="55" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="13" font-weight="600" letter-spacing="0.3em" fill="#94A3B8">YALÇIN</text>
+    <text y="90" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="9" font-weight="500" letter-spacing="0.25em" fill="#64748B">FOUNDER · CHIEF STRATEGIST</text>
+  </g>
+  <g transform="translate(335,65)" opacity="0.9">
+    <path d="M 0 -10 L 2 -2 L 10 0 L 2 2 L 0 10 L -2 2 L -10 0 L -2 -2 Z" fill="url(#founderGold)" />
+  </g>
+</svg>

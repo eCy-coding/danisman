@@ -1,0 +1,87 @@
+<mjml>
+  <mj-head>
+    <mj-title>Discovery Call Onayı — EcyPro Premium Consulting</mj-title>
+    <mj-preview>Discovery Call randevunuz onaylandı; takvim daveti aşağıda.</mj-preview>
+    <mj-attributes>
+      <mj-all font-family="Inter, Roboto, Helvetica, Arial, sans-serif" />
+      <mj-text color="#1f2937" font-size="15px" line-height="1.6" />
+      <mj-button background-color="#2563EB" color="#ffffff" font-weight="600" border-radius="10px" />
+    </mj-attributes>
+    <mj-style inline="inline">
+      .ecy-muted { color: #6B7280; font-size: 13px; }
+      .ecy-badge { background-color: #EFF6FF; color: #2563EB; border-radius: 999px; padding: 4px 12px; font-size: 12px; font-weight: 700; letter-spacing: 1px; }
+    </mj-style>
+  </mj-head>
+  <mj-body background-color="#F8FAFC">
+    <mj-section padding="24px 0 8px 0">
+      <mj-column>
+        <mj-text align="left" font-size="14px" color="#2563EB" font-weight="700" letter-spacing="2px">
+          ECYPRO PREMIUM CONSULTING
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+    <mj-section background-color="#ffffff" border-radius="14px" padding="32px 32px 24px 32px">
+      <mj-column>
+        <mj-text>
+          <span class="ecy-badge">DISCOVERY CALL ONAYI</span>
+        </mj-text>
+        <mj-text font-size="22px" font-weight="700" color="#0F172A" padding-top="12px" padding-bottom="12px">
+          {{firstName}}, randevunuz onaylandı.
+        </mj-text>
+        <mj-text>
+          <strong>Tarih:</strong> {{meetingDate}}<br />
+          <strong>Saat:</strong> {{meetingTime}} (Europe/Istanbul)<br />
+          <strong>Süre:</strong> 45 dakika<br />
+          <strong>Format:</strong> {{meetingFormat}}<br />
+          <strong>Bağlantı:</strong> <a href="{{meetingLink}}" style="color:#2563EB;">{{meetingLink}}</a>
+        </mj-text>
+        <mj-button href="{{calendarLink}}" padding-top="20px">
+          Takvime Ekle (.ics)
+        </mj-button>
+      </mj-column>
+    </mj-section>
+
+    <mj-section background-color="#ffffff" border-radius="14px" padding="24px 32px">
+      <mj-column>
+        <mj-text font-size="16px" font-weight="700" color="#0F172A" padding-bottom="10px">
+          Discovery Call’a hazırlık
+        </mj-text>
+        <mj-text>
+          Görüşme öncesi paylaşmanız faydalı olur (zorunlu değil):<br />
+          • Şirket / engagement’ın ölçeği<br />
+          • Karar veren paydaşlar (CEO, CFO, COO, Yön. Kurulu)<br />
+          • Sıkıştığınız hipotez veya öncelik<br />
+          • Önceden danışmanlık deneyimi ve oradaki ders kartları
+        </mj-text>
+        <mj-text padding-top="12px">
+          Bu bilgiyi info@ecypro.com adresine iletirseniz görüşmeyi daha derinleştirebiliriz.
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+    <mj-section background-color="#ffffff" border-radius="14px" padding="24px 32px">
+      <mj-column>
+        <mj-text font-size="16px" font-weight="700" color="#0F172A" padding-bottom="10px">
+          Sonraki adımlar
+        </mj-text>
+        <mj-text>
+          Discovery Call sonrasında 5-7 iş günü içinde yazılı önerge ileteceğiz. Önergede engagement
+          kapsamı, süresi, fiyat çerçevesi, ekip kompozisyonu yer alacak. Bağlayıcı değil; iki
+          taraflı uyum onayı bekleyen bir taslak.
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+    <mj-section padding="16px 16px 8px 16px">
+      <mj-column>
+        <mj-text css-class="ecy-muted">
+          Randevuyu değiştirmek veya iptal etmek için:
+          <a href="{{rescheduleLink}}" style="color:#2563EB;">randevuyu yönet</a> ·
+          <a href="mailto:info@ecypro.com" style="color:#2563EB;">info@ecypro.com</a> ·
+          <a href="tel:+905417143000" style="color:#2563EB;text-decoration:none;">+90 541 714 30 00</a>
+        </mj-text>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>

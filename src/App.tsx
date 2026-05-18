@@ -99,6 +99,15 @@ const AssessmentPage = React.lazy(() =>
   import('./pages/AssessmentPage').then((module) => ({ default: module.AssessmentPage })),
 );
 
+// P52: P51 Phase 4 content pages — lazy import for code split.
+const PillarPage = React.lazy(() => import('./pages/PillarPage'));
+const PressKitPage = React.lazy(() => import('./pages/PressKitPage'));
+const SpeakingPage = React.lazy(() => import('./pages/SpeakingPage'));
+const IndustryReportPage = React.lazy(() => import('./pages/IndustryReportPage'));
+const WebinarLandingPage = React.lazy(() => import('./pages/WebinarLandingPage'));
+const AnnualReportPage = React.lazy(() => import('./pages/AnnualReportPage'));
+const NewsletterStatusPage = React.lazy(() => import('./pages/NewsletterStatusPage'));
+
 const TerminalPage = React.lazy(() =>
   import('./pages/TerminalPage').then((module) => ({ default: module.TerminalPage })),
 );
@@ -139,6 +148,20 @@ const AdminNewsletterPage = React.lazy(() =>
     default: module.AdminNewsletterPage,
   })),
 );
+const AdminCampaignsPage = React.lazy(() => import('./pages/admin/AdminCampaignsPage'));
+const AdminOverviewPage = React.lazy(() => import('./pages/admin/AdminOverviewPage'));
+const AdminBlogEditPage = React.lazy(() => import('./pages/admin/AdminBlogEditPage'));
+const AdminServiceEditPage = React.lazy(() => import('./pages/admin/AdminServiceEditPage'));
+const AdminPagesListPage = React.lazy(() => import('./pages/admin/AdminPagesListPage'));
+const AdminCollectionPage = React.lazy(() => import('./pages/admin/AdminCollectionPage'));
+const AdminLeadDetailPage = React.lazy(() => import('./pages/admin/AdminLeadDetailPage'));
+const AdminCampaignWizardPage = React.lazy(() => import('./pages/admin/AdminCampaignWizardPage'));
+const AdminMediaLibraryPage = React.lazy(() => import('./pages/admin/AdminMediaLibraryPage'));
+const AdminSettingsTabsPage = React.lazy(() => import('./pages/admin/AdminSettingsTabsPage'));
+const AdminSecurityPage = React.lazy(() => import('./pages/admin/AdminSecurityPage'));
+const AdminProfilePage = React.lazy(() => import('./pages/admin/AdminProfilePage'));
+const AdminHelpPage = React.lazy(() => import('./pages/admin/AdminHelpPage'));
+const AdminPageEditPage = React.lazy(() => import('./pages/admin/AdminPageEditPage'));
 const AdminBlogPage = React.lazy(() =>
   import('./pages/admin/AdminBlogPage').then((module) => ({ default: module.AdminBlogPage })),
 );
@@ -396,6 +419,79 @@ const AnimatedRoutes = () => {
             }
           />
           <Route path="/antigravity-terminal" element={<TerminalPage />} />
+          {/* P52: P51 Phase 4 content pages inside MainLayout */}
+          <Route
+            path="/pillar/:slug"
+            element={
+              <Suspense fallback={<LoadingFallback />}>
+                <PillarPage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/press"
+            element={
+              <Suspense fallback={<LoadingFallback />}>
+                <PressKitPage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/speaking"
+            element={
+              <Suspense fallback={<LoadingFallback />}>
+                <SpeakingPage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/industry-reports/:slug"
+            element={
+              <Suspense fallback={<LoadingFallback />}>
+                <IndustryReportPage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/webinars/:slug"
+            element={
+              <Suspense fallback={<LoadingFallback />}>
+                <WebinarLandingPage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/annual-report/2025"
+            element={
+              <Suspense fallback={<LoadingFallback />}>
+                <AnnualReportPage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/newsletter/confirmed"
+            element={
+              <Suspense fallback={<LoadingFallback />}>
+                <NewsletterStatusPage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/newsletter/unsubscribed"
+            element={
+              <Suspense fallback={<LoadingFallback />}>
+                <NewsletterStatusPage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/newsletter/invalid-token"
+            element={
+              <Suspense fallback={<LoadingFallback />}>
+                <NewsletterStatusPage />
+              </Suspense>
+            }
+          />
           <Route
             path="/status"
             element={
@@ -687,7 +783,15 @@ const AnimatedRoutes = () => {
               </Suspense>
             }
           >
-            <Route index element={<Navigate to="/admin/dashboard" replace />} />
+            <Route index element={<Navigate to="/admin/overview" replace />} />
+            <Route
+              path="overview"
+              element={
+                <Suspense fallback={<LoadingFallback />}>
+                  <AdminOverviewPage />
+                </Suspense>
+              }
+            />
             <Route
               path="dashboard"
               element={
@@ -737,10 +841,114 @@ const AnimatedRoutes = () => {
               }
             />
             <Route
+              path="newsletter/campaigns"
+              element={
+                <Suspense fallback={<LoadingFallback />}>
+                  <AdminCampaignsPage />
+                </Suspense>
+              }
+            />
+            <Route
+              path="newsletter/campaigns/new"
+              element={
+                <Suspense fallback={<LoadingFallback />}>
+                  <AdminCampaignWizardPage />
+                </Suspense>
+              }
+            />
+            <Route
+              path="media"
+              element={
+                <Suspense fallback={<LoadingFallback />}>
+                  <AdminMediaLibraryPage />
+                </Suspense>
+              }
+            />
+            <Route
+              path="settings/tabs"
+              element={
+                <Suspense fallback={<LoadingFallback />}>
+                  <AdminSettingsTabsPage />
+                </Suspense>
+              }
+            />
+            <Route
+              path="security"
+              element={
+                <Suspense fallback={<LoadingFallback />}>
+                  <AdminSecurityPage />
+                </Suspense>
+              }
+            />
+            <Route
+              path="profile"
+              element={
+                <Suspense fallback={<LoadingFallback />}>
+                  <AdminProfilePage />
+                </Suspense>
+              }
+            />
+            <Route
+              path="help"
+              element={
+                <Suspense fallback={<LoadingFallback />}>
+                  <AdminHelpPage />
+                </Suspense>
+              }
+            />
+            <Route
               path="blog"
               element={
                 <Suspense fallback={<LoadingFallback />}>
                   <AdminBlogPage />
+                </Suspense>
+              }
+            />
+            <Route
+              path="blog/:slug/edit"
+              element={
+                <Suspense fallback={<LoadingFallback />}>
+                  <AdminBlogEditPage />
+                </Suspense>
+              }
+            />
+            <Route
+              path="services/:slug/edit"
+              element={
+                <Suspense fallback={<LoadingFallback />}>
+                  <AdminServiceEditPage />
+                </Suspense>
+              }
+            />
+            <Route
+              path="pages"
+              element={
+                <Suspense fallback={<LoadingFallback />}>
+                  <AdminPagesListPage />
+                </Suspense>
+              }
+            />
+            <Route
+              path="pages/:id/edit"
+              element={
+                <Suspense fallback={<LoadingFallback />}>
+                  <AdminPageEditPage />
+                </Suspense>
+              }
+            />
+            <Route
+              path="collections/:type"
+              element={
+                <Suspense fallback={<LoadingFallback />}>
+                  <AdminCollectionPage />
+                </Suspense>
+              }
+            />
+            <Route
+              path="leads/:id"
+              element={
+                <Suspense fallback={<LoadingFallback />}>
+                  <AdminLeadDetailPage />
                 </Suspense>
               }
             />
@@ -832,6 +1040,10 @@ import { SeoManager } from './components/seo/SeoManager';
 
 import { MissionControl } from './components/debug/MissionControl';
 import { OfflineBanner } from './components/common/OfflineBanner';
+import { WhatsAppButton } from './components/contact/WhatsAppButton';
+import { SimpleChatWidget } from './components/chat/SimpleChatWidget';
+import { ExitIntentModalP53 } from './components/marketing/ExitIntentModal';
+import { MobileCtaBar } from './components/marketing/MobileCtaBar';
 import { analyticsConsumer } from './lib/director/analytics-consumer';
 import { personalization } from './lib/director/personalization';
 import { sentry } from './lib/sentry';
@@ -940,6 +1152,12 @@ const App: React.FC = () => {
             <AnimatedRoutes />
           </Suspense>
           <LiveChat />
+          {/* P52: WhatsApp + simple chat — admin/auth route'larında gizli */}
+          <WhatsAppButton />
+          <SimpleChatWidget />
+          {/* P53: exit-intent + mobile sticky CTA */}
+          <ExitIntentModalP53 />
+          <MobileCtaBar />
           <BookingModal isOpen={bookingOpen} onClose={() => setBookingOpen(false)} />
         </BrowserRouter>
       </AppProviders>

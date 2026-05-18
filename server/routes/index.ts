@@ -3,6 +3,7 @@ import authRoutes from './auth';
 import bookingRoutes from './bookings';
 import analyticsRoutes from './analytics';
 import newsletterRoutes from './newsletter';
+import newsletterLifecycleRoutes from './newsletter-lifecycle';
 import aiRoutes from './ai';
 import adminRoutes from './admin';
 import webhookRoutes from './webhooks';
@@ -21,6 +22,13 @@ import uploadRoutes from './upload';
 import uploadsGetRoutes from './uploads-get';
 import metricsRoutes from './metrics';
 import adminQueuesRoutes from './admin-queues';
+import adminCampaignsRoutes from './admin-campaigns';
+import adminDashboardRoutes from './admin-dashboard';
+import adminContentRoutes from './admin-content';
+import adminCollectionsRoutes from './admin-collections';
+import adminLeadsNotesRoutes from './admin-leads-notes';
+import adminMediaRoutes from './admin-media';
+import adminSecurityRoutes from './admin-security';
 // P23 BE Track 2 / Aşama 1 — topic-based SSE pub/sub
 import streamRoutes from './stream';
 // P23 BE Track 2 / Aşama 2 — outbound webhook admin CRUD
@@ -375,12 +383,20 @@ router.use('/auth', authRoutes);
 router.use('/bookings', bookingRoutes);
 router.use('/analytics', analyticsRoutes);
 router.use('/newsletter', newsletterRoutes);
+router.use('/newsletter', newsletterLifecycleRoutes);
 router.use('/ai', aiRoutes);
 router.use('/admin', adminRoutes);
 // P18 BE Track 2 / Aşama 3 — Bull-Board queue dashboard. Mounted at
 // `/admin/queues` so the public path is `/api/admin/queues/*`. Auth +
 // IP allowlist enforced inside the subrouter.
 router.use('/admin/queues', adminQueuesRoutes);
+router.use('/admin/newsletter/campaigns', adminCampaignsRoutes);
+router.use('/admin/dashboard', adminDashboardRoutes);
+router.use('/admin/content', adminContentRoutes);
+router.use('/admin/collections', adminCollectionsRoutes);
+router.use('/admin/leads', adminLeadsNotesRoutes);
+router.use('/admin/media', adminMediaRoutes);
+router.use('/admin/security', adminSecurityRoutes);
 // P23 BE Track 2 / Aşama 2 — partner-facing event push subscriptions.
 router.use('/admin/webhooks', adminWebhookRoutes);
 router.use('/webhooks', webhookRoutes);

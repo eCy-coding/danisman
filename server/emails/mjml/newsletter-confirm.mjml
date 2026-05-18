@@ -1,0 +1,71 @@
+<mjml>
+  <mj-head>
+    <mj-title>EcyPro Premium Consulting — Bülten kaydınızı onaylayın</mj-title>
+    <mj-preview>Aşağıdaki düğmeye tıklayarak bülten kaydınızı tamamlayın (double opt-in).</mj-preview>
+    <mj-attributes>
+      <mj-all font-family="Inter, Roboto, Helvetica, Arial, sans-serif" />
+      <mj-text color="#1f2937" font-size="15px" line-height="1.6" />
+      <mj-button background-color="#2563EB" color="#ffffff" font-weight="600" border-radius="10px" />
+    </mj-attributes>
+    <mj-style inline="inline">
+      .ecy-muted { color: #6B7280; font-size: 13px; }
+    </mj-style>
+  </mj-head>
+  <mj-body background-color="#F8FAFC">
+    <mj-section padding="24px 0 8px 0">
+      <mj-column>
+        <mj-text align="left" font-size="14px" color="#2563EB" font-weight="700" letter-spacing="2px">
+          ECYPRO PREMIUM CONSULTING
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+    <mj-section background-color="#ffffff" border-radius="14px" padding="32px 32px 24px 32px">
+      <mj-column>
+        <mj-text font-size="22px" font-weight="700" color="#0F172A" padding-bottom="12px">
+          Bülten kaydınızı onaylayın
+        </mj-text>
+        <mj-text>
+          Bu e-postayı, eCyPro Premium Consulting bültenine kayıt isteğinde bulunduğunuz için
+          alıyorsunuz. KVKK ve GDPR uyumu için <strong>çift-onay (double opt-in)</strong> uyguluyoruz —
+          aşağıdaki düğmeye tıklayarak kaydınızı tamamlayabilirsiniz.
+        </mj-text>
+        <mj-button href="https://www.ecypro.com/newsletter/confirm?token={{confirmToken}}" padding-top="20px">
+          Bülten Kaydımı Onayla
+        </mj-button>
+        <mj-text padding-top="16px">
+          Düğme çalışmazsa, aşağıdaki bağlantıyı tarayıcıya yapıştırabilirsiniz:<br />
+          <span style="word-break:break-all;color:#2563EB;">https://www.ecypro.com/newsletter/confirm?token={{confirmToken}}</span>
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+    <mj-section background-color="#ffffff" border-radius="14px" padding="24px 32px">
+      <mj-column>
+        <mj-text font-size="16px" font-weight="700" color="#0F172A" padding-bottom="10px">
+          Ne bekleyebilirsiniz?
+        </mj-text>
+        <mj-text>
+          • Ayda 1 mektup — 5-katmanlı metodoloji notu, anonim engagement öğrenimi, sektör trend okuması.<br />
+          • Spam yok, satış zorlaması yok.<br />
+          • Her zaman tek tıkla aboneliği iptal edebilirsiniz.<br />
+          • Tercihlerinizi yönetebilir, konu bazlı abonelik seçebilirsiniz.
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+    <mj-section padding="16px 16px 8px 16px">
+      <mj-column>
+        <mj-text css-class="ecy-muted">
+          Eğer bu kaydı siz başlatmadıysanız, bu e-postayı yok sayabilirsiniz —
+          onay olmadan e-posta listemize eklenmezsiniz.
+        </mj-text>
+        <mj-text css-class="ecy-muted" padding-top="8px">
+          eCyPro Premium Consulting — Türkiye / Avrupa hattı.<br />
+          <a href="https://www.ecypro.com/privacy" style="color:#2563EB;text-decoration:none;">Gizlilik politikası</a> ·
+          <a href="https://www.ecypro.com/data-rights" style="color:#2563EB;text-decoration:none;">KVKK hakları</a>
+        </mj-text>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>

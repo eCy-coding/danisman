@@ -1,0 +1,53 @@
+name: Lighthouse CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  lighthouse:
+    name: Lighthouse (desktop + mobile)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    strategy:
+      fail-fast: false
+      matrix:
+        preset: [desktop, mobile]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install LHCI
+        run: npm install -g @lhci/cli@0.13.x
+
+      - name: Run Lighthouse — ${{ matrix.preset }}
+        run: |
+          if [ "${{ matrix.preset }}" = "mobile" ]; then
+            lhci collect --config=./.lighthouserc.cjs \
+              --collect.settings.preset=mobile \
+              --collect.settings.formFactor=mobile \
+              --collect.settings.screenEmulation.mobile=true
+          else
+            lhci collect --config=./.lighthouserc.cjs
+          fi
+          lhci assert --config=./.lighthouserc.cjs
+        continue-on-error: false
+
+      - name: Upload report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-${{ matrix.preset }}
+          path: .lighthouseci/
+          retention-days: 7

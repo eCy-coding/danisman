@@ -1,0 +1,85 @@
+<mjml>
+  <mj-head>
+    <mj-title>EcyPro Premium Consulting — Hoş Geldiniz</mj-title>
+    <mj-preview>Discovery Call onayınız, sonraki adımlar ve hızlı kaynaklar.</mj-preview>
+    <mj-attributes>
+      <mj-all font-family="Inter, Roboto, Helvetica, Arial, sans-serif" />
+      <mj-text color="#1f2937" font-size="15px" line-height="1.6" />
+      <mj-button background-color="#2563EB" color="#ffffff" font-weight="600" border-radius="10px" />
+    </mj-attributes>
+    <mj-style inline="inline">
+      .ecy-divider { border-bottom: 1px solid #E5E7EB; }
+      .ecy-muted { color: #6B7280; font-size: 13px; }
+    </mj-style>
+  </mj-head>
+  <mj-body background-color="#F8FAFC">
+    <mj-section padding="24px 0 8px 0">
+      <mj-column>
+        <mj-text align="left" font-size="14px" color="#2563EB" font-weight="700" letter-spacing="2px">
+          ECYPRO PREMIUM CONSULTING
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+    <mj-section background-color="#ffffff" border-radius="14px" padding="32px 32px 24px 32px">
+      <mj-column>
+        <mj-text font-size="22px" font-weight="700" color="#0F172A" padding-bottom="12px">
+          Hoş geldiniz, {{firstName}}.
+        </mj-text>
+        <mj-text>
+          Discovery Call talebiniz alındı. 5-7 iş günü içinde size yazılı önerge ileteceğiz.
+          Bu süreçte engagement uyumunu birlikte değerlendireceğiz; bağlayıcı bir adım değil,
+          ortak bir tanışma.
+        </mj-text>
+        <mj-text padding-top="12px">
+          Aşağıda sonraki adımlar ve sık başvurulan kaynaklar yer alıyor.
+        </mj-text>
+        <mj-button href="https://www.ecypro.com/methodology" padding-top="20px">
+          5-Katmanlı Metodolojiyi İnceleyin
+        </mj-button>
+      </mj-column>
+    </mj-section>
+
+    <mj-section background-color="#ffffff" border-radius="14px" padding="24px 32px">
+      <mj-column>
+        <mj-text font-size="16px" font-weight="700" color="#0F172A" padding-bottom="10px">
+          Sonraki adımlar
+        </mj-text>
+        <mj-text>
+          1. Önerge taslağı (5-7 iş günü) — engagement kapsamı, süresi, fiyat çerçevesi.<br />
+          2. Eşleştirme görüşmesi — danışman + müşteri ekibi uyum görüşmesi.<br />
+          3. Kontrat ve kickoff — NDA + engagement sözleşmesi + Vision Architecture™ başlangıcı.
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+    <mj-section background-color="#ffffff" border-radius="14px" padding="24px 32px">
+      <mj-column>
+        <mj-text font-size="16px" font-weight="700" color="#0F172A" padding-bottom="10px">
+          Hızlı kaynaklar
+        </mj-text>
+        <mj-text>
+          • <a href="https://www.ecypro.com/services" style="color:#2563EB;text-decoration:none;font-weight:600;">21 Hizmet</a> — premium boutique kapsamı<br />
+          • <a href="https://www.ecypro.com/case-studies" style="color:#2563EB;text-decoration:none;font-weight:600;">Case Studies</a> — anonimleştirilmiş engagement özetleri<br />
+          • <a href="https://www.ecypro.com/annual-report/2025" style="color:#2563EB;text-decoration:none;font-weight:600;">2025 Yıllık Rapor</a> — agrege metrikler ve sektör dağılımı<br />
+          • <a href="https://www.ecypro.com/faq" style="color:#2563EB;text-decoration:none;font-weight:600;">SSS</a> — engagement süreci hakkında
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+    <mj-section padding="16px 16px 8px 16px">
+      <mj-column>
+        <mj-text css-class="ecy-muted">
+          Bu e-postayı, eCyPro Premium Consulting üzerinden iletişim formu aracılığıyla
+          başvurduğunuz için aldınız. Çift-onay (double opt-in) tamamlanana kadar pazarlama
+          listemize eklenmezsiniz. Tercih yönetimi:
+          <a href="https://www.ecypro.com/preferences?token={{prefToken}}" style="color:#2563EB;">tercihlerimi yönet</a>.
+        </mj-text>
+        <mj-text css-class="ecy-muted" padding-top="8px">
+          eCyPro Premium Consulting — Türkiye / Avrupa hattı.<br />
+          info@ecypro.com · <a href="tel:+905417143000" style="color:#2563EB;text-decoration:none;">+90 541 714 30 00</a>
+        </mj-text>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>

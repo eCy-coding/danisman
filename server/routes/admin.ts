@@ -68,6 +68,50 @@ router.patch(
   },
 );
 
+// P58 — Single contact detail (used by AdminLeadDetailPage)
+router.get(
+  '/contacts/:id',
+  ...adminOnly,
+  async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const item = await prisma.contactSubmission.findUnique({
+        where: { id: req.params.id },
+      });
+      if (!item) {
+        res.status(404).json({ status: 'error', message: 'Not found' });
+        return;
+      }
+      res.json({ status: 'success', data: item });
+    } catch (err) {
+      next(err);
+    }
+  },
+);
+
+// P58 — Generic contact PATCH (isRead toggle + future field updates)
+router.patch(
+  '/contacts/:id',
+  ...adminOnly,
+  async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const body = req.body as { isRead?: boolean };
+      const data: { isRead?: boolean } = {};
+      if (typeof body.isRead === 'boolean') data.isRead = body.isRead;
+      if (Object.keys(data).length === 0) {
+        res.status(400).json({ status: 'error', message: 'No updatable fields' });
+        return;
+      }
+      const item = await prisma.contactSubmission.update({
+        where: { id: req.params.id },
+        data,
+      });
+      res.json({ status: 'success', data: item });
+    } catch (err) {
+      next(err);
+    }
+  },
+);
+
 // ─── Newsletter Subscribers ───────────────────────────────────────────────────
 
 router.get(

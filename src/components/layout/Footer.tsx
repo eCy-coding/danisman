@@ -197,6 +197,39 @@ export const Footer: React.FC = () => {
                   {FOOTER_COPY.locations[lang]}
                 </Link>
               </li>
+              {/* P52: P51 Phase 4 content sayfaları */}
+              <li>
+                <Link
+                  to="/press"
+                  className="hover:text-secondary transition-colors block min-h-11 py-2 outline-none focus-visible:text-secondary"
+                >
+                  {lang === 'tr' ? 'Basın · Press Kit' : 'Press Kit'}
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/speaking"
+                  className="hover:text-secondary transition-colors block min-h-11 py-2 outline-none focus-visible:text-secondary"
+                >
+                  {lang === 'tr' ? 'Konuşma Talepleri' : 'Speaking'}
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/pillar/strategy"
+                  className="hover:text-secondary transition-colors block min-h-11 py-2 outline-none focus-visible:text-secondary"
+                >
+                  {lang === 'tr' ? 'Pillar · Strateji' : 'Pillar · Strategy'}
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/industry-reports/turkey-premium-consulting-2026"
+                  className="hover:text-secondary transition-colors block min-h-11 py-2 outline-none focus-visible:text-secondary"
+                >
+                  {lang === 'tr' ? 'Industry Report 2026' : 'Industry Report 2026'}
+                </Link>
+              </li>
             </ul>
           </div>
 

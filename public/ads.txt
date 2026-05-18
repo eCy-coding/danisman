@@ -1,0 +1,10 @@
+# EcyPro Premium Consulting — ads.txt
+#
+# This site does not currently participate in any programmatic advertising
+# program. The file exists to comply with the IAB Tech Lab spec
+# (https://iabtechlab.com/ads-txt/) and to make the absence of advertising
+# explicit to crawlers and partners.
+#
+# Contact: legal@ecypro.com
+#
+# (no authorized sellers)

@@ -1,0 +1,152 @@
+// P51.4 — CRM Lead model expansion (Prisma schema additions).
+//
+// NOT: Bu dosya schema.prisma'ya MERGE edilecek, sandbox'ta `prisma migrate dev`
+// çalıştırılmaz (Render üzerinden user manual run). Tüm fields backward-compatible.
+//
+// Migration komutu (kullanıcı çalıştıracak):
+//   npx prisma db push
+// veya
+//   npx prisma migrate dev --name expand_lead_model
+//
+// Mevcut Lead model varsa: aşağıdaki alanları ekle.
+// Yoksa: aşağıdaki Lead modelini doğrudan ekle.
+
+model Lead {
+  id              String      @id @default(cuid())
+  // Kim
+  name            String?
+  email           String      @db.VarChar(255)
+  phone           String?     @db.VarChar(50)
+  organization    String?     @db.VarChar(255)
+  jobTitle        String?     @db.VarChar(150)
+  // Source attribution
+  source          LeadSource  @default(WEBSITE_FORM)
+  campaign        String?     @db.VarChar(100)
+  utmMedium       String?     @db.VarChar(100)
+  utmCampaign     String?     @db.VarChar(100)
+  // Pipeline state
+  status          LeadStatus  @default(NEW)
+  stage           LeadStage   @default(LEAD)
+  score           Int         @default(0) @db.SmallInt // 0-100
+  qualifiedAt     DateTime?
+  closedAt        DateTime?
+  closeReason     String?     @db.VarChar(255)
+  // Owner
+  ownerEmail      String?     @db.VarChar(255) // Hangi takım üyesi takipte
+  // Engagement data
+  serviceInterest String[]    // ['strategic-transformation', 'ai-analytics', ...]
+  engagementValue Decimal?    @db.Decimal(12, 2) // tahmini engagement değeri TRY
+  notes           String?     @db.Text
+  // Communication
+  lastContactedAt DateTime?
+  nextFollowUpAt  DateTime?
+  emailSequences  EmailSequence[]
+  // Metadata
+  metadata        Json?
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  @@index([email])
+  @@index([status])
+  @@index([stage])
+  @@index([nextFollowUpAt])
+  @@index([source])
+}
+
+enum LeadSource {
+  WEBSITE_FORM
+  NEWSLETTER
+  WEBINAR
+  INDUSTRY_REPORT
+  CHAT_WIDGET
+  CALENDLY
+  REFERRAL
+  PRESS
+  LINKEDIN
+  SPEAKING
+  OTHER
+}
+
+enum LeadStatus {
+  NEW
+  CONTACTED
+  QUALIFIED          // MQL (Marketing Qualified Lead)
+  SQL                // Sales Qualified Lead
+  DISCOVERY_BOOKED
+  PROPOSAL_SENT
+  NEGOTIATING
+  WON
+  LOST
+  ON_HOLD
+  UNSUBSCRIBED
+}
+
+enum LeadStage {
+  LEAD               // İlk temas
+  MQL                // Marketing qualified
+  SQL                // Sales qualified
+  OPPORTUNITY        // Active opportunity
+  CUSTOMER           // Engagement won, paying
+  CHURNED            // Lost paying customer
+}
+
+// Email sequences (P51.3 drip campaign integration)
+model EmailSequence {
+  id              String   @id @default(cuid())
+  leadId          String
+  lead            Lead     @relation(fields: [leadId], references: [id])
+  templateKey     String   // örn 'tr-welcome-day-0'
+  sequenceKey     String   // örn 'newsletter-welcome-tr'
+  scheduledAt     DateTime
+  sentAt          DateTime?
+  status          SequenceStatus @default(PENDING)
+  metadata        Json?
+  createdAt       DateTime @default(now())
+
+  @@index([scheduledAt])
+  @@index([status])
+}
+
+enum SequenceStatus {
+  PENDING
+  SENT
+  FAILED
+  CANCELLED
+}
+
+model EmailTemplate {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  locale    String   // 'tr' | 'en'
+  subject   String
+  bodyMjml  String   @db.Text
+  bodyText  String   @db.Text
+  updatedAt DateTime @updatedAt
+}
+
+model EmailDeliveryLog {
+  id                 String   @id @default(cuid())
+  sequenceId         String
+  emailProvider      String   // 'mailgun' | 'sendgrid' | 'ses'
+  providerMessageId  String?
+  event              String   // 'delivered' | 'bounced' | 'opened' | 'clicked' | 'spam'
+  metadata           Json?
+  timestamp          DateTime @default(now())
+
+  @@index([sequenceId])
+  @@index([timestamp])
+}
+
+// Newsletter subscriber (P51.1)
+model NewsletterSubscriber {
+  id               String   @id @default(cuid())
+  email            String   @unique @db.VarChar(255)
+  source           String?  @db.VarChar(100)
+  confirmedAt      DateTime?
+  unsubscribedAt   DateTime?
+  metadata         Json?
+  createdAt        DateTime @default(now())
+
+  @@index([email])
+  @@index([confirmedAt])
+}

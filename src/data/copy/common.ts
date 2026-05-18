@@ -289,17 +289,25 @@ export const MEGA_MENUS = {
   },
 };
 
-// P45: Sahte telefon ve WhatsApp numaraları kaldırıldı. Gerçek numara
-// eklenince phone + phoneDisplay + whatsapp doldurulacak. Şimdilik e-posta
-// + iletişim formu birincil kanal.
+// P52: Gerçek telefon numarası entegrasyonu. ENV `VITE_CONTACT_PHONE` override edebilir.
+// E.164 format: +905417143000 (Türkiye mobil) — tel: link compatible.
+// Display format: +90 541 714 30 00 (insanlar için okunabilir).
+// WhatsApp deep link: wa.me/<digits-only> + URL-encoded greeting.
+const ENV_PHONE = (typeof import.meta !== 'undefined' && import.meta.env?.VITE_CONTACT_PHONE)
+  ? String(import.meta.env.VITE_CONTACT_PHONE).trim()
+  : '';
+const PHONE_E164 = ENV_PHONE || '+905417143000';
+const PHONE_DISPLAY = '+90 541 714 30 00';
+const WHATSAPP_DEEP_LINK = `https://wa.me/${PHONE_E164.replace(/[^0-9]/g, '')}?text=${encodeURIComponent('Merhaba eCyPro, web siteniz üzerinden ulaşıyorum.')}`;
+
 export const CONTACT_CONFIG = {
   title: { tr: 'İletişim', en: 'Contact' },
   email: 'info@ecypro.com',
   address: { tr: 'İstanbul, Türkiye', en: 'Istanbul, Turkey' },
-  phone: '',
-  phoneDisplay: '',
-  whatsapp: '',
-  mapLink: '',
+  phone: PHONE_E164,
+  phoneDisplay: PHONE_DISPLAY,
+  whatsapp: WHATSAPP_DEEP_LINK,
+  mapLink: 'https://maps.app.goo.gl/?q=Istanbul,Turkey',
   social: {
     linkedin: 'https://linkedin.com/company/ecypro',
     twitter: 'https://twitter.com/ecypro',
