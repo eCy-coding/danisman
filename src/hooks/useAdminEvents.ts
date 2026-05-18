@@ -1,11 +1,14 @@
 /**
- * P61.B4 — Admin SSE EventSource hook.
+ * P65 — Admin SSE EventSource hook (polyfill ile Authorization header).
  *
- * Subscribes to `/api/admin/events` Server-Sent Events; dispatches typed events
- * to optional callback. Reconnects with exponential backoff.
+ * Native EventSource Authorization header set edemiyordu → 401. Polyfill
+ * (event-source-polyfill) Bearer header desteği sağlar. Token JWT cookie'den
+ * okunur veya useAppStore.token'dan alınır.
  */
 
 import { useEffect, useRef } from 'react';
+import { EventSourcePolyfill } from 'event-source-polyfill';
+import { useAppStore } from '../store/useAppStore';
 
 export type AdminEventType =
   | 'lead.created'
@@ -28,11 +31,12 @@ interface Options {
 }
 
 export function useAdminEvents({ enabled = true, onEvent }: Options = {}): void {
-  const sourceRef = useRef<EventSource | null>(null);
+  const sourceRef = useRef<EventSourcePolyfill | null>(null);
   const attemptsRef = useRef(0);
+  const token = useAppStore((s) => s.token);
 
   useEffect(() => {
-    if (!enabled) return;
+    if (!enabled || !token) return;
     let cancelled = false;
 
     const baseURL = (import.meta.env.VITE_API_URL as string | undefined) ?? '';
@@ -40,17 +44,15 @@ export function useAdminEvents({ enabled = true, onEvent }: Options = {}): void 
 
     const connect = () => {
       if (cancelled) return;
-      const es = new EventSource(url, { withCredentials: true });
+      const es = new EventSourcePolyfill(url, {
+        headers: { Authorization: `Bearer ${token}` },
+        heartbeatTimeout: 60_000,
+      });
       sourceRef.current = es;
 
       const types: AdminEventType[] = [
-        'lead.created',
-        'lead.updated',
-        'contact.submitted',
-        'newsletter.subscribed',
-        'campaign.sent',
-        'audit.action',
-        'ready',
+        'lead.created', 'lead.updated', 'contact.submitted',
+        'newsletter.subscribed', 'campaign.sent', 'audit.action', 'ready',
       ];
       for (const t of types) {
         es.addEventListener(t, (ev: MessageEvent) => {
@@ -63,9 +65,7 @@ export function useAdminEvents({ enabled = true, onEvent }: Options = {}): void 
         });
       }
 
-      es.onopen = () => {
-        attemptsRef.current = 0;
-      };
+      es.onopen = () => { attemptsRef.current = 0; };
       es.onerror = () => {
         es.close();
         if (cancelled) return;
@@ -76,13 +76,12 @@ export function useAdminEvents({ enabled = true, onEvent }: Options = {}): void 
     };
 
     connect();
-
     return () => {
       cancelled = true;
       sourceRef.current?.close();
       sourceRef.current = null;
     };
-  }, [enabled, onEvent]);
+  }, [enabled, onEvent, token]);
 }
 
 export default useAdminEvents;
