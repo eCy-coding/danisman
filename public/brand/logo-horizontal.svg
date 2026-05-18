@@ -1,0 +1,66 @@
+<svg viewBox="0 0 360 80" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="eCy Pro — Premium Consulting">
+  <title>eCy Pro</title>
+  <defs>
+    <linearGradient id="ecyHorizGrad" x1="0" y1="0" x2="80" y2="80" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#2563EB" />
+      <stop offset="100%" stop-color="#7C3AED" />
+    </linearGradient>
+    <linearGradient id="ecyHorizBg" x1="0" y1="0" x2="80" y2="80" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0F172A" />
+      <stop offset="100%" stop-color="#1E1B3A" />
+    </linearGradient>
+    <linearGradient id="ecyHorizProGrad" x1="200" y1="40" x2="340" y2="40" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#F59E0B" />
+      <stop offset="100%" stop-color="#D97706" />
+    </linearGradient>
+  </defs>
+
+  <!-- Icon mark (square) -->
+  <rect x="4" y="8" width="64" height="64" rx="14" fill="url(#ecyHorizBg)" />
+  <rect x="4" y="8" width="64" height="64" rx="14" fill="none" stroke="url(#ecyHorizGrad)" stroke-width="1.2" opacity="0.7" />
+  <path
+    d="M 21 42 A 14 14 0 1 1 42 29"
+    stroke="url(#ecyHorizGrad)"
+    stroke-width="4"
+    stroke-linecap="round"
+    fill="none"
+  />
+  <path d="M 21 42 L 49 42" stroke="url(#ecyHorizGrad)" stroke-width="4" stroke-linecap="round" />
+  <circle cx="21" cy="42" r="2.4" fill="#7C3AED" />
+  <circle cx="49" cy="42" r="2" fill="#2563EB" />
+  <circle cx="42" cy="29" r="2" fill="#F59E0B" />
+
+  <!-- Wordmark: "eCy" regular + "Pro" bold/gold emphasis -->
+  <!-- "eCy" — Inter 500, slate/white -->
+  <text
+    x="88"
+    y="52"
+    font-family="Inter, system-ui, sans-serif"
+    font-size="38"
+    font-weight="500"
+    letter-spacing="-0.025em"
+    fill="#F8FAFC"
+  >eCy</text>
+
+  <!-- "Pro" — Inter 700, gold gradient, premium emphasis -->
+  <text
+    x="183"
+    y="52"
+    font-family="Inter, system-ui, sans-serif"
+    font-size="38"
+    font-weight="700"
+    letter-spacing="-0.015em"
+    fill="url(#ecyHorizProGrad)"
+  >Pro</text>
+
+  <!-- Subtle tagline strip -->
+  <text
+    x="88"
+    y="68"
+    font-family="Inter, system-ui, sans-serif"
+    font-size="9"
+    font-weight="600"
+    letter-spacing="0.32em"
+    fill="#94A3B8"
+  >PREMIUM CONSULTING</text>
+</svg>

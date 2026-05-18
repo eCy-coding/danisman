@@ -1,0 +1,57 @@
+<svg viewBox="0 0 200 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="eCy Pro — Premium Consulting">
+  <title>eCy Pro</title>
+  <defs>
+    <linearGradient id="ecyStkGrad" x1="0" y1="0" x2="100" y2="100" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#2563EB" />
+      <stop offset="100%" stop-color="#7C3AED" />
+    </linearGradient>
+    <linearGradient id="ecyStkBg" x1="0" y1="0" x2="100" y2="100" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0F172A" />
+      <stop offset="100%" stop-color="#1E1B3A" />
+    </linearGradient>
+    <linearGradient id="ecyStkPro" x1="0" y1="0" x2="200" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#F59E0B" />
+      <stop offset="100%" stop-color="#D97706" />
+    </linearGradient>
+  </defs>
+
+  <!-- Icon centered top -->
+  <g transform="translate(60,0)">
+    <rect x="0" y="0" width="80" height="80" rx="18" fill="url(#ecyStkBg)" />
+    <rect x="0" y="0" width="80" height="80" rx="18" fill="none" stroke="url(#ecyStkGrad)" stroke-width="1.2" opacity="0.7" />
+    <path
+      d="M 22 44 A 18 18 0 1 1 49 27"
+      stroke="url(#ecyStkGrad)"
+      stroke-width="5"
+      stroke-linecap="round"
+      fill="none"
+    />
+    <path d="M 22 44 L 58 44" stroke="url(#ecyStkGrad)" stroke-width="5" stroke-linecap="round" />
+    <circle cx="22" cy="44" r="3" fill="#7C3AED" />
+    <circle cx="58" cy="44" r="2.5" fill="#2563EB" />
+    <circle cx="49" cy="27" r="2.5" fill="#F59E0B" />
+  </g>
+
+  <!-- Wordmark below -->
+  <text
+    x="100"
+    y="135"
+    text-anchor="middle"
+    font-family="Inter, system-ui, sans-serif"
+    font-size="40"
+    font-weight="500"
+    letter-spacing="-0.025em"
+    fill="#F8FAFC"
+  >eCy<tspan font-weight="700" fill="url(#ecyStkPro)" dx="6">Pro</tspan></text>
+
+  <text
+    x="100"
+    y="170"
+    text-anchor="middle"
+    font-family="Inter, system-ui, sans-serif"
+    font-size="10"
+    font-weight="600"
+    letter-spacing="0.32em"
+    fill="#94A3B8"
+  >PREMIUM CONSULTING</text>
+</svg>

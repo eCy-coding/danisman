@@ -1,0 +1,51 @@
+<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="eCyPro icon mark">
+  <title>eCyPro</title>
+  <defs>
+    <linearGradient id="ecyIconGrad" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#2563EB" />
+      <stop offset="100%" stop-color="#7C3AED" />
+    </linearGradient>
+    <linearGradient id="ecyIconBg" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0F172A" />
+      <stop offset="100%" stop-color="#1E1B3A" />
+    </linearGradient>
+    <linearGradient id="ecyAccent" x1="0" y1="0" x2="20" y2="20" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#F59E0B" />
+      <stop offset="100%" stop-color="#D97706" />
+    </linearGradient>
+  </defs>
+
+  <!-- Rounded square base (solid surface, no glassmorphism per CLAUDE.md doctrine) -->
+  <rect x="1" y="1" width="62" height="62" rx="15" fill="url(#ecyIconBg)" />
+  <rect x="1" y="1" width="62" height="62" rx="15" fill="none" stroke="url(#ecyIconGrad)" stroke-width="1.2" opacity="0.7" />
+
+  <!-- Geometric "e" letterform: 300° arc + horizontal crossbar -->
+  <!-- Center (32, 35), radius 14, arc starts at (18,35) sweeps clockwise -->
+  <path
+    d="M 18 35 A 14 14 0 1 1 39 22"
+    stroke="url(#ecyIconGrad)"
+    stroke-width="4"
+    stroke-linecap="round"
+    fill="none"
+  />
+  <!-- Crossbar (horizontal arm) -->
+  <path
+    d="M 18 35 L 46 35"
+    stroke="url(#ecyIconGrad)"
+    stroke-width="4"
+    stroke-linecap="round"
+  />
+
+  <!-- 3 endpoint nodes — ecosystem/network signal -->
+  <circle cx="18" cy="35" r="2.5" fill="#7C3AED" />
+  <circle cx="46" cy="35" r="2" fill="#2563EB" />
+  <circle cx="39" cy="22" r="2" fill="url(#ecyAccent)" />
+
+  <!-- Premium gold spark — small accent in upper right corner (eCyverse signal) -->
+  <g transform="translate(50,12)" opacity="0.85">
+    <path
+      d="M 0 -4 L 1 -1 L 4 0 L 1 1 L 0 4 L -1 1 L -4 0 L -1 -1 Z"
+      fill="url(#ecyAccent)"
+    />
+  </g>
+</svg>

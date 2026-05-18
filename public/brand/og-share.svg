@@ -1,0 +1,56 @@
+<svg viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="EcyPro Premium Consulting — Open Graph share image">
+  <title>EcyPro Premium Consulting</title>
+  <defs>
+    <linearGradient id="ogBg" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0F172A" />
+      <stop offset="50%" stop-color="#1E1B3A" />
+      <stop offset="100%" stop-color="#2D1B5E" />
+    </linearGradient>
+    <linearGradient id="ogIcon" x1="0" y1="0" x2="200" y2="200" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#2563EB" />
+      <stop offset="100%" stop-color="#7C3AED" />
+    </linearGradient>
+    <linearGradient id="ogPro" x1="0" y1="0" x2="600" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#F59E0B" />
+      <stop offset="100%" stop-color="#D97706" />
+    </linearGradient>
+    <radialGradient id="ogGlow" cx="50%" cy="40%" r="50%">
+      <stop offset="0%" stop-color="#7C3AED" stop-opacity="0.15" />
+      <stop offset="100%" stop-color="#0F172A" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#ogBg)" />
+  <rect width="1200" height="630" fill="url(#ogGlow)" />
+
+  <!-- Subtle grid pattern (mathematical/strategic feel) -->
+  <g opacity="0.05">
+    <path d="M 0 100 L 1200 100 M 0 200 L 1200 200 M 0 300 L 1200 300 M 0 400 L 1200 400 M 0 500 L 1200 500" stroke="#FFFFFF" stroke-width="0.5" />
+    <path d="M 100 0 L 100 630 M 200 0 L 200 630 M 300 0 L 300 630 M 400 0 L 400 630 M 500 0 L 500 630 M 600 0 L 600 630 M 700 0 L 700 630 M 800 0 L 800 630 M 900 0 L 900 630 M 1000 0 L 1000 630 M 1100 0 L 1100 630" stroke="#FFFFFF" stroke-width="0.5" />
+  </g>
+
+  <!-- Icon mark (large, top-left) -->
+  <g transform="translate(100,150)">
+    <rect x="0" y="0" width="140" height="140" rx="30" fill="#0F172A" />
+    <rect x="0" y="0" width="140" height="140" rx="30" fill="none" stroke="url(#ogIcon)" stroke-width="2" opacity="0.7" />
+    <path d="M 38 78 A 32 32 0 1 1 86 48" stroke="url(#ogIcon)" stroke-width="9" stroke-linecap="round" fill="none" />
+    <path d="M 38 78 L 102 78" stroke="url(#ogIcon)" stroke-width="9" stroke-linecap="round" />
+    <circle cx="38" cy="78" r="5.5" fill="#7C3AED" />
+    <circle cx="102" cy="78" r="4.5" fill="#2563EB" />
+    <circle cx="86" cy="48" r="4.5" fill="#F59E0B" />
+  </g>
+
+  <!-- Wordmark, large -->
+  <text x="280" y="245" font-family="Inter, system-ui, sans-serif" font-size="92" font-weight="500" letter-spacing="-0.025em" fill="#F8FAFC">eCy<tspan font-weight="700" fill="url(#ogPro)" dx="12">Pro</tspan></text>
+
+  <!-- Tagline -->
+  <text x="280" y="295" font-family="Inter, system-ui, sans-serif" font-size="22" font-weight="600" letter-spacing="0.3em" fill="#94A3B8">PREMIUM CONSULTING</text>
+
+  <!-- Hero copy -->
+  <text x="100" y="400" font-family="Georgia, serif" font-size="56" font-weight="500" fill="#FFFFFF">Vizyon. Strateji.</text>
+  <text x="100" y="465" font-family="Georgia, serif" font-size="56" font-weight="500" fill="url(#ogIcon)">Sürdürülebilir Sonuç.</text>
+
+  <!-- Footer band -->
+  <text x="100" y="565" font-family="Inter, system-ui, sans-serif" font-size="20" font-weight="500" fill="#94A3B8">eCyverse · Organizasyonel Dönüşüm · Stratejik Danışmanlık</text>
+  <text x="100" y="595" font-family="Inter, system-ui, sans-serif" font-size="16" font-weight="400" fill="#64748B">www.ecypro.com</text>
+</svg>
