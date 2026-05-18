@@ -1,0 +1,50 @@
+---
+title: 'Üretim Hattında MLOps: İlk 90 Gün'
+excerpt: 'Bir AI/ML modelini araştırma defterinden gerçek üretim hattına taşımanın ilk üç ayında karşılaşılan organizasyonel ve teknik soruları derinlemesine ele alan rehber.'
+date: '2026-05-22'
+author: 'Ali Demir'
+coverImage: '/brand/blog-covers/mlops-90-gun.svg'
+category: 'AI & Analitik'
+tags: ['MLOps', 'AI', 'Production', 'DevOps']
+readingTime: '6 dk'
+lang: 'tr'
+status: 'draft'
+---
+
+# Üretim Hattında MLOps: İlk 90 Gün
+
+Veri bilimi ekibinin başarılı bir prototip ürettiği gün, organizasyonel olarak en zor dönem yeni başlar. Pek çok şirkette modeller jupyter notebook'larda doğar, prezentasyonlarda kalır ve operasyonel hatta taşınamaz. MLOps, bu boşluğu kapatmak için tasarlanmıştır.
+
+## Hafta 1-2: Kurumsal yetki haritası
+
+Pilot model üretime alınmadan önce dört kritik soruyu yazılı yanıtlamak gerekir. Kim modelden çıkan kararı doğrudan kullanacak? Hangi sistem (CRM, ERP, sahaya entegre dashboard) tüketici olacak? Model yanlış öneri verirse iş etkisi ne? Veri kaynağı sahibi kim ve SLA'i nedir? Bu dört soru cevaplandığında 90 günlük yolun yarısı tamamlanmış olur.
+
+## Hafta 3-4: Repository ve versiyon kontrol
+
+Modeller koda dönüşmedikçe versiyonlanmaz. İlk teknik karar: model artefaktları (eğitilmiş ağırlıklar, feature pipeline'ı, eğitim scripti) için ortak repository. MLflow, DVC veya Weights & Biases gibi araçlar tercih edilir. Notebook çıktısını doğrudan production'a almak en yaygın hatadır; her notebook bir entropic kara kutudur. Production-ready Python modülü ve test suite olmadan ileri adım atılmaz.
+
+## Hafta 5-6: Veri pipeline ve feature store
+
+Modelin gerçek üretim verisiyle aynı kalitede beslenebileceğinden emin olmak için feature store kurmak gerekir. Modelin eğitildiği özellik (örn. müşteri yaş ortalaması son 30 günde) ile inference zamanında hesaplanan özellik aynı tanım üzerinden gelmeli. Bu hizalama olmadığında train-serving skew oluşur — model laboratuvarda mükemmel, gerçek dünyada başarısızdır.
+
+## Hafta 7-8: Containerization ve deployment
+
+Modelin Docker image'a paketlenmesi standart hale gelmiştir. Tipik bir container şu bileşenleri içerir: Python runtime + bağımlılıklar, model artefaktları, FastAPI inference servisi, healthcheck endpoint'i, logger konfigürasyonu. Kubernetes veya Cloud Run gibi orchestrator'lara deploy edilir. Bu noktada DevOps ekibiyle yakın çalışma şart; veri bilimi ekibinin tek başına yapması beklenen bir görev değil.
+
+## Hafta 9-10: Monitoring ve alerting
+
+Üretime alınmış model "set and forget" değildir. İzlenmesi gereken minimum dört metrik: latency (p50, p95, p99), throughput (saniyede inference sayısı), prediction distribution (üretim çıktısının eğitim çıktısına benzerliği), input feature drift (gelen verinin eğitim verisinden uzaklaşması). Drift tespit eden bir uyarı sistemi, modelin sessizce kötüleşmesini engeller.
+
+## Hafta 11-12: Geri besleme döngüsü ve retraining
+
+Modelin uzun vadeli sağlığı, gerçek sonuçları (ground truth) yeniden modele besleyebilme kapasitesine bağlıdır. Müşteri kayıp tahminleme modelinde gerçek kayıp olayı 30-60 gün sonra netleşir; bu veri otomatik olarak feedback table'a yazılmalı ve aylık retraining job'una girdi olmalı. Otomatik retraining pipeline'ı olmadan, model 6-9 ay içinde performans kaybeder.
+
+## Yaygın engeller
+
+Üç engel sıralanır: kurumsal yetki belirsizliği (kim modeli sahipleniyor — IT mi, veri ekibi mi, iş birimi mi?), eski sistemlerle entegrasyon (legacy ERP modern REST API ile konuşamayabilir), kullanıcı güvensizliği (saha ekibi AI önerisini kabul etmeyebilir, modelin neden o öneriyi verdiğine ilişkin açıklayıcı katman gerekir).
+
+## Sonuç
+
+İlk 90 günde teknik kurulumdan çok organizasyonel uyum belirleyicidir. MLOps başlangıç sprintinde başarı kriterleri net olmalı: bir model production'da, izleniyor, retrain'leniyor, son kullanıcı tarafından düzenli kullanılıyor. Bu dört kriter sağlanırsa, kalan modeller için altyapı hazırdır. Aksi takdirde her model yeni baştan inşa edilir.
+
+Bir sonraki yazıda model explainability (SHAP, LIME) ve regulasyonel uyum (AB AI Act, KVKK Madde 9) için yapılması gerekenleri anlatacağım.

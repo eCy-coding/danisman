@@ -1,0 +1,79 @@
+---
+title: 'Karbon Muhasebesi: Scope 1-2-3 İçin İlk Adımlar'
+excerpt: 'Karbon emisyonu hesabını sıfırdan kurmak isteyen bir şirketin Scope 1, 2 ve 3 kategorilerinde atması gereken ilk adımlar. Pratik veri toplama önerileriyle.'
+date: '2026-05-28'
+author: 'Mehmet Çelik'
+coverImage: '/brand/blog-covers/karbon-scope-123.svg'
+category: 'ESG & Sürdürülebilirlik'
+tags: ['Karbon', 'Scope 3', 'CBAM', 'Emisyon Hesabı']
+readingTime: '7 dk'
+lang: 'tr'
+status: 'draft'
+---
+
+# Karbon Muhasebesi: Scope 1-2-3 İçin İlk Adımlar
+
+Türk şirketleri için karbon muhasebesi artık sadece ESG raporu konusu değil — CBAM (Sınırda Karbon Düzenleme Mekanizması) Ocak 2026'dan itibaren bazı sektörler için aktif fatura yaratıyor, AB müşterilerinden tedarik zinciri talepleri yoğunlaşıyor, finans kuruluşları kredilendirme kararlarında dikkate alıyor. Bu yazıda Scope 1, 2 ve 3 kategorilerinde nereden başlanacağını anlatıyorum.
+
+## Scope kavramları kısaca
+
+GHG Protocol standardı emisyonu üçe ayırır. **Scope 1:** Doğrudan emisyon — şirketin sahip olduğu veya kontrol ettiği kaynaklardan (kazan, jeneratör, araç filosu, kaçaklar). **Scope 2:** Dolaylı enerji emisyonu — satın alınan elektrik, ısıtma, soğutma. **Scope 3:** Değer zinciri emisyonu — yukarı (tedarikçiler) ve aşağı (müşteriler, ürün kullanımı, atık) yöndeki tüm dolaylı emisyonlar. 15 alt kategoriye ayrılır.
+
+Pek çok şirkette toplam karbon ayak izinin %70-90'ı Scope 3'tedir. Yine de en zor ölçülen kategoridir.
+
+## Scope 1: Yakıt ve doğrudan emisyon
+
+Veri toplama yapısı görece kolaydır. Şirketin doğrudan tükettiği yakıtların aylık faturalarından başlanır:
+
+- **Doğalgaz:** m³ tüketimi × dönüşüm faktörü (TÇ Kalkınma Bakanlığı'nın yıllık yayınlanan emisyon faktör tablosu).
+- **Motorin/Dizel:** Litre × 2.68 kg CO2e/L (yaklaşık).
+- **Benzin:** Litre × 2.31 kg CO2e/L.
+- **LPG:** kg × 2.99 kg CO2e/kg.
+- **Soğutucu gaz kaçakları:** R-134a, R-410a vs. her gazın GWP (Global Warming Potential) çarpanı farklı; yıllık servis bakım kayıtlarından kaçak miktarı tahmin edilir.
+
+Tipik veri kaynakları: muhasebe (yakıt alış faturaları), filo yönetim sistemi, jeneratör log kayıtları, soğutucu bakım raporları. Excel ile başlanabilir, sonra ERP entegrasyonu yapılır.
+
+## Scope 2: Satın alınan enerji
+
+Türkiye'de Scope 2 hesabı için iki yöntem var:
+
+1. **Location-based:** Tüketilen kWh × Türkiye şebeke ortalama emisyon faktörü (TEDAŞ veya EPDK yıllık tablosu, yaklaşık 0.42 kg CO2e/kWh).
+2. **Market-based:** Sahip olunan yenilenebilir enerji sertifikası (YEK-G, I-REC) kadar kWh için sıfır emisyon, kalan kWh için şebeke faktörü.
+
+CSRD ve diğer raporlarda her iki rakamın da paralel raporlanması beklenir. Yenilenebilir enerji sertifikası satın almak Scope 2'yi sıfıra indirir, ancak Scope 3'e etki etmez — eğer sertifika rakamı abartıldıysa greenwashing iddiası doğar.
+
+Veri kaynakları: aylık elektrik faturaları (kWh hanesi), YEK-G/I-REC alış belgesi.
+
+## Scope 3: 15 kategori, üç pratik yaklaşım
+
+Scope 3 en korkutucu kategoridir çünkü 15 alt kategorinin tamamına veri yaymak için yıllar süren bir altyapı gerekir. Ancak ilk yıl için "tam doğruluk" hedefi gerçekçi değildir. Üç pratik yaklaşım:
+
+**Yaklaşım 1: Spend-based metodoloji.** Tedarikçi harcamalarının (TL veya USD) yıllık toplamı × sektörel emisyon yoğunluğu çarpanı. Örneğin "endüstriyel makine" kategorisinde 1 USD = 0.5 kg CO2e gibi. EEIO (Environmentally Extended Input-Output) tabloları kullanılır. Hızlı ama hatalı.
+
+**Yaklaşım 2: Average-data metodoloji.** Ürün/hizmet birimi başına ortalama emisyon faktörü. Örneğin 1 ton çelik satın alımı = 1.8 ton CO2e. Daha doğru ama her ürün kategorisine ihtiyaç var.
+
+**Yaklaşım 3: Supplier-specific data.** Tedarikçinin kendi karbon raporundan birim emisyon faktörü. En doğru ama tedarikçi katılımı şart. Türkiye'de büyük tedarikçiler henüz raporlamaz; bu yaklaşım 3-5 yıl içinde olgunlaşır.
+
+Pratikte ilk yıl Yaklaşım 1, ikinci yıl ilk 20 tedarikçi için Yaklaşım 2, üçüncü yıl Yaklaşım 3'e doğru kademeli geçiş önerilir.
+
+## Veri toplama altyapısı
+
+Üç tip altyapı seçeneği:
+
+- **Excel + manuel:** En küçük şirketler için yıllık tek seferlik hesap. 1-2 günlük çalışma.
+- **ESG software:** Workiva, Sphera, Watershed, IBM Envizi. Yıllık 30K-150K USD lisans. Orta-büyük şirketler için pratik.
+- **ERP entegrasyonu:** SAP Sustainability Control Tower, Oracle ESG modülü. En büyük şirketler için. Yıllık 100K+ USD.
+
+Çoğu Türk KOBİ için yıl 1 = Excel, yıl 2-3 = ESG software, yıl 4+ = ERP entegrasyonu doğal evrim çizgisidir.
+
+## Doğrulama ve hata yönetimi
+
+Karbon hesabı subjektif değil — ISO 14064-3 veya GHG Protocol'a göre üçüncü taraf doğrulaması ile güvence sağlanır. İlk yıl "limited assurance", ileri yıllarda "reasonable assurance". Doğrulama ücreti yıllık 15K-50K USD bandında, şirket ölçeğine göre. Bağımsız denetim firmaları (TÜV, Bureau Veritas, SGS, KPMG, EY, Deloitte) bu hizmeti veriyor.
+
+İlk yıl hataları normaldir. Tipik hatalar: yenilenebilir enerji sertifikası iki kez sayma, soğutucu kaçağı atlama, Scope 3 spend-based hesabında ikili sayma. Doğrulama firması bu hataları işaretler.
+
+## Sonuç
+
+Karbon muhasebesi karmaşık görünür ama disiplinle adım adım kurulduğunda 6-12 ay içinde fonksiyonel bir altyapı yaratır. CBAM süreciyle uğraşan üreticiler için bu adımlar zaten zorunlu; AB'li müşterileri olan herkese ise yakın gelecekte talep gelecek.
+
+İlerleyen yazılarda CBAM ile karbon hesabının nasıl entegre edileceğini, ETS (Emissions Trading System) takip ve yenilenebilir enerji portföy stratejisini ele alacağım.

@@ -1,0 +1,50 @@
+---
+title: 'AI Tabanlı KPI Tahminlemesi: 6 Adımda Hayata Geçirme'
+excerpt: 'Veri yoğun KPI panolarını ileriye dönük tahminlemeyle güçlendirmek için pratik bir 6 adım rehberi. Veri hazırlığı, model seçimi ve operasyonel entegrasyon dahil.'
+date: '2026-05-15'
+author: 'Ali Demir'
+coverImage: '/brand/blog-covers/ai-kpi-tahminleme.svg'
+category: 'AI & Analitik'
+tags: ['Yapay Zeka', 'KPI', 'Predictive Analytics', 'Forecasting']
+readingTime: '7 dk'
+lang: 'tr'
+status: 'published'
+---
+
+# AI Tabanlı KPI Tahminlemesi: 6 Adımda Hayata Geçirme
+
+Modern yönetim panoları geriye bakan göstergelerle dolu — geçen ay satış, geçen çeyrek müşteri kazanımı, bir önceki yıl gelir büyümesi. Yöneticilerin gerçekten ihtiyacı olan şey ise farklı: gelecek üç ayda hangi göstergelerin nereye yöneleceğine ilişkin güvenilir bir kestirim. AI tabanlı tahminleme tam burada devreye giriyor.
+
+## 1. Doğru KPI seçimi
+
+Tüm KPI'lar tahminleme için uygun değildir. Aday metrikleri üç filtreden geçirin: en az 24 aylık geriye dönük veri, mevsimsel veya trend bileşeni içerme, yönetim kararını doğrudan etkileme. Müşteri kayıp oranı, sipariş hacmi, stok dönüş hızı, abone kazanımı gibi metrikler ideal başlangıç noktalarıdır. Tek seferlik kampanya ölçütlerinden veya çok değişkenli muhasebe kalemlerinden kaçının; sinyal/gürültü oranı düşüktür.
+
+## 2. Veri olgunluğu denetimi
+
+Tahminleme kalitesi büyük ölçüde geçmiş verinin temizliğine bağlıdır. Beş ana kontrol noktası: tamamlık (eksik gün/ay var mı), tutarlılık (tanımlar zaman içinde değişti mi), bütünlük (sistem değişiklikleri kırılma yarattı mı), normalizasyon (birim ve para birimi tutarlı mı), erişilebilirlik (model katmanı veriye otomatik ulaşabilecek mi). Bu denetimi atlayan ekipler genellikle model kurulumundan sonra fark eder ve baştan başlarlar.
+
+## 3. Doğru model seçimi
+
+Karmaşık modeller her zaman daha iyi sonuç vermez. Yeni başlayanlar için üç katmanlı bir yaklaşım önerilir: temel olarak Holt-Winters veya SARIMA (mevsimsellik için), orta katmanda Prophet (Facebook'un açık kaynak aracı, çoğu KPI için yeterli), gelişmiş katmanda XGBoost veya LightGBM ile makine öğrenmesi. Model seçimini iş hedefine göre yapın: yorumlanabilirlik mi yoksa doğruluk mu öne çıkıyor?
+
+## 4. Eğitim, test, doğrulama bölünmesi
+
+Tahminleme modellerinde yaygın bir hata: tüm veriyle eğitim, sonuçtan memnun kalma, prodüksiyona alma. Doğru yaklaşım, time-series cross validation ile çoklu pencereler kullanmaktır. Son 6 ay'ı test seti olarak ayırın, modeli eski veriyle eğitin, ileri doğru tahminlemenin gerçek ile uyumunu MAPE ve RMSE ile ölçün. %15'in altında MAPE çoğu iş senaryosunda kabul edilebilir; %5'in altında mükemmel.
+
+## 5. Operasyonel entegrasyon
+
+Tahminleme sonuçları Excel dosyasında kalırsa değer üretmez. Üç tipik entegrasyon noktası: yönetim panosu (Power BI / Tableau widget'ı olarak tahmin + güven aralığı), planlama döngüsü (aylık S&OP toplantısında AI tahmini referans nokta olarak masada), uyarı sistemi (gerçek vs. tahmin sapması %20'yi geçince Slack/e-posta tetiği). Yöneticilerin "rakamlar nereden geliyor?" sorusunu cevaplayabilmesi için methodology one-pager hazırlayın.
+
+## 6. Sürekli iyileştirme döngüsü
+
+Modeller zaman içinde aşınır — pazar koşulları, ürün karması, kanal yapısı değişir. Üç ayda bir model performansını yeniden değerlendirin: MAPE eğilimi nasıl, hangi tahminlemeler sistematik olarak sapıyor, yeni veri kaynakları (örn. dış makro verisi, hava durumu) eklenebilir mi. İyileştirme döngüsünü ekibin OKR'ına bağlayın; aksi takdirde model bir kez kurulup unutulur.
+
+## Yaygın tuzaklar
+
+Üç noktayı baştan netleştirin: tek model çoklu metrik için çalışmaz (her KPI'nın kendi karakteristiği vardır), AI tahminleme sezgi yerine geçmez (yönetici bağlamı veya stratejik bilgisi modelde yoktur), proaktif aksiyona dönüşmeyen tahminleme zaman ve para israfıdır.
+
+## Sonuç
+
+AI tabanlı KPI tahminlemesi, doğru kurulduğunda yönetim toplantılarını dönüştürür: tartışma "ne oldu?" yerine "ne yapmalıyız?" eksenine kayar. 6 adımlık disiplinli yaklaşım bu dönüşümün başlangıç noktası. Pilot proje için ideal seçenek: yüksek hacimli, mevsimsel, üst yönetim kararlarına doğrudan etkili tek bir KPI ile başlayın. İlk başarı ekibin geri kalan KPI'ları talep etmesine yol açacaktır.
+
+İlerleyen yazılarda model karşılaştırma matrislerini, vendor değerlendirme kriterlerini ve operasyonel risk paneli kurulum şablonlarını paylaşacağım.
