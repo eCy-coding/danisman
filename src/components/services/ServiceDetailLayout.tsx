@@ -37,6 +37,7 @@ import { SERVICES } from '../../data/services';
 import { JsonLd } from '../seo/JsonLd';
 import { ServiceIllustration } from './ServiceIllustration';
 import { useInView, useCountUp } from '../../lib/animations';
+import { useServiceOverride } from '../../hooks/useServiceOverride';
 import { StrategicMaturityLadder } from './widgets/StrategicMaturityLadder';
 import { DealPipelineVisualizer } from './widgets/DealPipelineVisualizer';
 import { GenerationalTransitionTimeline } from './widgets/GenerationalTransitionTimeline';
@@ -183,9 +184,12 @@ export const ServiceDetailLayout: React.FC<ServiceDetailLayoutProps> = ({
   fallbackTitle,
   fallbackDescription,
 }) => {
-  const title = content?.hero?.title || fallbackTitle;
-  const subtitle = content?.hero?.subtitle || fallbackDescription;
-  const valueProp = content?.hero?.valueProp;
+  // P63.B — Admin canlı override fetcher (Redis-backed, public endpoint)
+  const override = useServiceOverride(content?.slug ?? '').data;
+
+  const title = override?.heroTitle || content?.hero?.title || fallbackTitle;
+  const subtitle = override?.heroSubtitle || content?.hero?.subtitle || fallbackDescription;
+  const valueProp = override?.valueProp || content?.hero?.valueProp;
   const primaryCta = content?.hero?.primaryCtaText || 'Ücretsiz Strateji Görüşmesi Al';
 
   const relatedServices = (content?.related || [])

@@ -31,6 +31,7 @@ import adminMediaRoutes from './admin-media';
 import adminSecurityRoutes from './admin-security';
 import adminEventsRoutes from './admin-events';
 import adminRevalidateRoutes from './admin-revalidate';
+import publicServicesRoutes from './public-services';
 // P23 BE Track 2 / Aşama 1 — topic-based SSE pub/sub
 import streamRoutes from './stream';
 // P23 BE Track 2 / Aşama 2 — outbound webhook admin CRUD
@@ -401,6 +402,7 @@ router.use('/admin/media', adminMediaRoutes);
 router.use('/admin/security', adminSecurityRoutes);
 router.use('/admin/events', adminEventsRoutes);
 router.use('/admin/revalidate', adminRevalidateRoutes);
+router.use('/public/services', publicServicesRoutes);
 // P23 BE Track 2 / Aşama 2 — partner-facing event push subscriptions.
 router.use('/admin/webhooks', adminWebhookRoutes);
 router.use('/webhooks', webhookRoutes);
