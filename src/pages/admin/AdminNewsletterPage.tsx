@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
 import { Mail, Download, Trash2, Search, Users } from 'lucide-react';
 import { apiClient } from '../../lib/api';
+import { useAdminEvents, type AdminEvent } from '../../hooks/useAdminEvents';
 
 interface Subscriber {
   id: string;
@@ -35,6 +37,19 @@ export const AdminNewsletterPage: React.FC = () => {
     mutationFn: (id: string) => apiClient.delete(`/admin/newsletter/${id}`),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['admin-newsletter'] }),
   });
+
+  // P62.B — real-time SSE subscription
+  const onAdminEvent = useCallback(
+    (evt: AdminEvent) => {
+      if (evt.type === 'newsletter.subscribed') {
+        const email = (evt.payload['email'] as string | undefined) ?? '';
+        toast.success(`Yeni abone: ${email}`);
+        queryClient.invalidateQueries({ queryKey: ['admin-newsletter'] });
+      }
+    },
+    [queryClient],
+  );
+  useAdminEvents({ onEvent: onAdminEvent });
 
   const filtered = (data?.data.items ?? []).filter(
     (s) => search === '' || s.email.toLowerCase().includes(search.toLowerCase()),

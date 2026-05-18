@@ -59,6 +59,17 @@ router.post('/subscribe', contactLimiter, async (req: Request, res: Response, ne
     });
     logger.info('[newsletter] new subscriber', { email: key, source });
 
+    // P62.C — admin SSE channel
+    try {
+      const { adminEventBus } = await import('../lib/event-bus');
+      adminEventBus.publish('newsletter.subscribed', {
+        email: key,
+        source: source ?? null,
+      });
+    } catch {
+      /* never block subscribe */
+    }
+
     return res.status(201).json({
       status: 'ok',
       code: 'SUBSCRIBED',

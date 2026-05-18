@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
 import {
   Mail,
   MailOpen,
@@ -11,6 +12,7 @@ import {
   ChevronRight,
 } from 'lucide-react';
 import { apiClient } from '../../lib/api';
+import { useAdminEvents, type AdminEvent } from '../../hooks/useAdminEvents';
 
 interface ContactSubmission {
   id: string;
@@ -49,6 +51,19 @@ export const AdminContactsPage: React.FC = () => {
     mutationFn: (id: string) => apiClient.patch(`/admin/contacts/${id}/read`, {}),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['admin-contacts'] }),
   });
+
+  // P62.B — real-time SSE subscription
+  const onAdminEvent = useCallback(
+    (evt: AdminEvent) => {
+      if (evt.type === 'contact.submitted') {
+        const name = (evt.payload['fullName'] as string | undefined) ?? 'Yeni lead';
+        toast.success(`Yeni iletişim: ${name}`);
+        queryClient.invalidateQueries({ queryKey: ['admin-contacts'] });
+      }
+    },
+    [queryClient],
+  );
+  useAdminEvents({ onEvent: onAdminEvent });
 
   const filtered = (data?.data.items ?? []).filter(
     (c) =>

@@ -100,6 +100,20 @@ export const submitContact = async (req: Request, res: Response, next: NextFunct
       },
     });
 
+    // P62.C — admin SSE channel real-time event
+    try {
+      const { adminEventBus } = await import('../lib/event-bus');
+      adminEventBus.publish('contact.submitted', {
+        id: submission.id,
+        fullName: submission.fullName,
+        email: submission.email,
+        service: submission.service ?? null,
+        source: submission.source ?? null,
+      });
+    } catch {
+      /* event bus optional — never block contact submit */
+    }
+
     res.status(201).json({ status: 'success', data: { id: submission.id } });
   } catch (error) {
     next(error);

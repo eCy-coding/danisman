@@ -17,6 +17,9 @@ enum UserRole {
   CONSULTANT
   ADMIN
   PREMIUM
+  // P62.B — Blog yazarı + içerik editörü rolleri (DB enum Neon production'a apply edildi 2026-05-18)
+  BLOG_AUTHOR
+  EDITOR
 }
 
 enum BookingStatus {
