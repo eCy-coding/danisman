@@ -11,6 +11,7 @@ import { JsonLd } from '../components/seo/JsonLd';
 import { useCurrencyStore } from '../stores/currencyStore';
 import { CurrencySwitcher } from '../components/ui/CurrencySwitcher';
 import { buildFaqSchema, buildBreadcrumbSchema } from '../lib/structured-data';
+import { CalendlyEmbed } from '../components/booking/CalendlyEmbed';
 
 type Billing = 'monthly' | 'annual';
 
@@ -479,6 +480,21 @@ export const PricingPage: React.FC = () => {
               <span>{t.bookCall[lang]}</span>
               <ArrowRight className="w-4 h-4" />
             </Link>
+          </section>
+
+          {/* P77.B — Calendly inline embed: high-intent users at end of pricing review */}
+          <section className="mt-12 rounded-3xl p-6 md:p-8 bg-white/5 border border-white/10">
+            <header className="text-center mb-6">
+              <h2 className="text-2xl md:text-3xl font-serif font-bold text-white mb-2">
+                {lang === 'tr' ? 'Hemen Görüşme Planlayın' : 'Book a Call Now'}
+              </h2>
+              <p className="text-slate-300">
+                {lang === 'tr'
+                  ? '30 dakika ücretsiz keşif görüşmesi — uygun zamanı siz seçin.'
+                  : '30-minute free discovery call — pick the time that suits you.'}
+              </p>
+            </header>
+            <CalendlyEmbed source="pricing-page-bottom" heightPx={680} />
           </section>
         </div>
       </PageWrapper>

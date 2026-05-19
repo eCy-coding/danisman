@@ -7,6 +7,7 @@ import { CONTACT_CONFIG } from '@/data/copy/common';
 import { Helmet } from 'react-helmet-async';
 import { JsonLd } from '../components/seo/JsonLd';
 import { buildBreadcrumbSchema } from '../lib/structured-data';
+import { CalendlyEmbed } from '../components/booking/CalendlyEmbed';
 
 const PLAN_LABELS: Record<string, { tr: string; en: string }> = {
   starter: { tr: 'Başlangıç', en: 'Starter' },
@@ -142,6 +143,23 @@ export const ContactPage: React.FC = () => {
               <ContactForm />
             </div>
           </div>
+        </div>
+
+        {/* P77.B — Calendly alternative booking path */}
+        <div className="container mx-auto px-4 pb-20 max-w-5xl">
+          <div className="text-center mb-8">
+            <h2 className="text-2xl md:text-3xl font-serif font-bold text-white mb-3">
+              {lang.startsWith('tr')
+                ? 'Veya doğrudan takvimden randevu alın'
+                : 'Or book directly from the calendar'}
+            </h2>
+            <p className="text-slate-300">
+              {lang.startsWith('tr')
+                ? '30 dakika ücretsiz Discovery Call — müsait zaman dilimini siz seçin.'
+                : '30-minute free Discovery Call — pick the time slot that works for you.'}
+            </p>
+          </div>
+          <CalendlyEmbed source="contact-page-form-alt" heightPx={720} />
         </div>
       </div>
     </React.Fragment>

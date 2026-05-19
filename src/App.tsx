@@ -107,6 +107,8 @@ const IndustryReportPage = React.lazy(() => import('./pages/IndustryReportPage')
 const WebinarLandingPage = React.lazy(() => import('./pages/WebinarLandingPage'));
 const AnnualReportPage = React.lazy(() => import('./pages/AnnualReportPage'));
 const NewsletterStatusPage = React.lazy(() => import('./pages/NewsletterStatusPage'));
+// P77.B: Dedicated Discovery Call landing page (Calendly embed)
+const DiscoveryCallPage = React.lazy(() => import('./pages/DiscoveryCallPage'));
 
 const TerminalPage = React.lazy(() =>
   import('./pages/TerminalPage').then((module) => ({ default: module.TerminalPage })),
@@ -295,6 +297,14 @@ const AnimatedRoutes = () => {
             element={
               <RouteContainer name="ContactPage" fallback={<LoadingFallback />}>
                 <ContactPage />
+              </RouteContainer>
+            }
+          />
+          <Route
+            path="/discovery-call"
+            element={
+              <RouteContainer name="DiscoveryCallPage" fallback={<LoadingFallback />}>
+                <DiscoveryCallPage />
               </RouteContainer>
             }
           />
