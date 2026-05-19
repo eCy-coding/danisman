@@ -55,14 +55,16 @@ export function useAdminEvents({ enabled = true, onEvent }: Options = {}): void 
         'newsletter.subscribed', 'campaign.sent', 'audit.action', 'ready',
       ];
       for (const t of types) {
-        es.addEventListener(t, (ev: MessageEvent) => {
+        // P76: event-source-polyfill types conflict with DOM EventListener;
+        // cast via unknown to satisfy both type systems.
+        (es as unknown as EventSource).addEventListener(t, ((ev: Event) => {
           try {
-            const parsed = JSON.parse(ev.data) as AdminEvent;
+            const parsed = JSON.parse((ev as MessageEvent).data) as AdminEvent;
             onEvent?.(parsed);
           } catch {
             /* ignore malformed */
           }
-        });
+        }));
       }
 
       es.onopen = () => { attemptsRef.current = 0; };

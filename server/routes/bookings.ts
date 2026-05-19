@@ -129,7 +129,7 @@ router.get(
         return acc;
       }, {});
 
-      const totalAll = Object.values(statusDist).reduce((a, b) => a + b, 0);
+      const totalAll = Object.values(statusDist).reduce((a: number, b: number) => a + b, 0);
       const cancelledAll = statusDist.CANCELLED ?? 0;
       const noShowAll = statusDist.NO_SHOW ?? 0;
       const cancelRate = totalAll > 0 ? Math.round((cancelledAll / totalAll) * 100) : 0;
@@ -148,11 +148,11 @@ router.get(
             noShowRate,
           },
           last30: {
-            total: Object.values(statusDistL30).reduce((a, b) => a + b, 0),
+            total: Object.values(statusDistL30).reduce((a: number, b: number) => a + b, 0),
             byStatus: statusDistL30,
           },
           trend: trendData,
-          byService: byService.map((s) => ({ serviceId: s.serviceId, count: s._count.id })),
+          byService: byService.map((s: any) => ({ serviceId: s.serviceId, count: s._count.id })),
         },
       });
     } catch (err) {

@@ -194,7 +194,7 @@ router.get(
       const hasMore = rows.length > limit;
       const page = rows.slice(0, limit);
 
-      const results: SearchResult[] = page.map((r) => ({
+      const results: SearchResult[] = page.map((r: any) => ({
         type: 'service',
         id: r.id,
         slug: r.slug,
