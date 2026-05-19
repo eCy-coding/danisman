@@ -19,7 +19,8 @@
     "useUnknownInCatchVariables": true,
     "jsx": "react-jsx",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "react-helmet-async": ["./src/lib/seo-helmet.tsx"]
     },
     "allowImportingTsExtensions": true,
     "noEmit": true

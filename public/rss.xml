@@ -5,112 +5,208 @@
     <link>https://www.ecypro.com</link>
     <description>Insights on Strategic Management, Digital Transformation, and Corporate Leadership.</description>
     <language>tr</language>
-    <lastBuildDate>Sun, 17 May 2026 09:43:31 GMT</lastBuildDate>
+    <lastBuildDate>Tue, 19 May 2026 20:47:28 GMT</lastBuildDate>
     <atom:link href="https://www.ecypro.com/rss.xml" rel="self" type="application/rss+xml" />
 
     <item>
-        <title>Untitled</title>
-        <link>https://www.ecypro.com/blog/net-zero-eylem-plani</link>
-        <guid>https://www.ecypro.com/blog/net-zero-eylem-plani</guid>
-        <pubDate>Sun, 17 May 2026 09:43:12 GMT</pubDate>
-        <description></description>
-        <author>info@ecypro.com (EcyPro Team)</author>
+        <title>Karbon Muhasebesi: Scope 1-2-3 İçin İlk Adımlar</title>
+        <link>https://www.ecypro.com/blog/karbon-muhasebesi-scope-1-2-3-ilk-adimlar</link>
+        <guid>https://www.ecypro.com/blog/karbon-muhasebesi-scope-1-2-3-ilk-adimlar</guid>
+        <pubDate>Thu, 28 May 2026 00:00:00 GMT</pubDate>
+        <description>Karbon emisyonu hesabını sıfırdan kurmak isteyen bir şirketin Scope 1, 2 ve 3 kategorilerinde atması gereken ilk adımlar. Pratik veri toplama önerileriyle.</description>
+        <author>info@ecypro.com (Mehmet Çelik)</author>
     </item>
     <item>
-        <title>Untitled</title>
-        <link>https://www.ecypro.com/blog/noropazarlama-tuketici-davranisi-stratejisi</link>
-        <guid>https://www.ecypro.com/blog/noropazarlama-tuketici-davranisi-stratejisi</guid>
-        <pubDate>Sun, 17 May 2026 09:43:12 GMT</pubDate>
-        <description></description>
-        <author>info@ecypro.com (EcyPro Team)</author>
+        <title>GPT-Tabanlı Müşteri Hizmetleri Otomasyonunun ROI Modeli</title>
+        <link>https://www.ecypro.com/blog/gpt-tabanli-musteri-hizmetleri-roi</link>
+        <guid>https://www.ecypro.com/blog/gpt-tabanli-musteri-hizmetleri-roi</guid>
+        <pubDate>Mon, 25 May 2026 00:00:00 GMT</pubDate>
+        <description>Büyük dil modeli destekli müşteri hizmetleri çözümlerinin maliyet, fayda ve risk bileşenlerini kapsayan kapsamlı ROI modeli. Gerçek pazar verisiyle.</description>
+        <author>info@ecypro.com (Ali Demir)</author>
     </item>
     <item>
-        <title>Untitled</title>
+        <title>Üretim Hattında MLOps: İlk 90 Gün</title>
+        <link>https://www.ecypro.com/blog/uretim-hattinda-mlops-ilk-90-gun</link>
+        <guid>https://www.ecypro.com/blog/uretim-hattinda-mlops-ilk-90-gun</guid>
+        <pubDate>Fri, 22 May 2026 00:00:00 GMT</pubDate>
+        <description>Bir AI/ML modelini araştırma defterinden gerçek üretim hattına taşımanın ilk üç ayında karşılaşılan organizasyonel ve teknik soruları derinlemesine ele alan rehber.</description>
+        <author>info@ecypro.com (Ali Demir)</author>
+    </item>
+    <item>
+        <title>Tedarik Zinciri Optimizasyonu: Lean ve Six Sigma ile Operasyonel Mükemmellik</title>
         <link>https://www.ecypro.com/blog/tedarik-zinciri-optimizasyonu-lean-six-sigma</link>
         <guid>https://www.ecypro.com/blog/tedarik-zinciri-optimizasyonu-lean-six-sigma</guid>
-        <pubDate>Sun, 17 May 2026 09:43:12 GMT</pubDate>
-        <description></description>
-        <author>info@ecypro.com (EcyPro Team)</author>
+        <pubDate>Tue, 19 May 2026 20:47:05 GMT</pubDate>
+        <description>COVID-19 pandemisi, küresel tedarik zincirlerinin yapısal kırılganlıklarını açığa çıkarmıştır. Japon otomotiv sanayii, ABD elektronik sektörü ve Avrupa imalat endüstrisinin eş zamanlı tedarik şoklarıyla karşılaşması; sad</description>
+        <author>info@ecypro.com (EcyPro Consulting)</author>
     </item>
     <item>
-        <title>Untitled</title>
+        <title>Uluslararası Pazar Girişi: Turquality&apos;den Küresel Markaya Stratejik Yol Haritası</title>
         <link>https://www.ecypro.com/blog/uluslararasi-pazar-giris-stratejisi-turquality</link>
         <guid>https://www.ecypro.com/blog/uluslararasi-pazar-giris-stratejisi-turquality</guid>
-        <pubDate>Sun, 17 May 2026 09:43:12 GMT</pubDate>
-        <description></description>
-        <author>info@ecypro.com (EcyPro Team)</author>
+        <pubDate>Tue, 19 May 2026 20:47:05 GMT</pubDate>
+        <description>Türkiye&apos;nin ihracat hacmi 2023 yılında 255 milyar dolara ulaşmıştır. Ancak Türk markalarının küresel marka değeri sıralamasındaki görece düşük konumu, ihracat başarısının marka değerine henüz tam olarak dönüşemediğini or</description>
+        <author>info@ecypro.com (EcyPro Consulting)</author>
     </item>
     <item>
-        <title>Untitled</title>
+        <title>Veri Yönetişimi ve KVKK/GDPR Uyumu: Kurumsal Veri Stratejisi Çerçevesi</title>
         <link>https://www.ecypro.com/blog/veri-yonetisimi-kvkk-gdpr-uyum</link>
         <guid>https://www.ecypro.com/blog/veri-yonetisimi-kvkk-gdpr-uyum</guid>
-        <pubDate>Sun, 17 May 2026 09:43:12 GMT</pubDate>
-        <description></description>
-        <author>info@ecypro.com (EcyPro Team)</author>
+        <pubDate>Tue, 19 May 2026 20:47:05 GMT</pubDate>
+        <description>Kişisel Verilerin Korunması Kurumu (KVKK), 2025 yılında kurumsal veri ihlalleri nedeniyle 180 milyon TL&apos;yi aşan idari para cezası uygulamıştır. Avrupa&apos;da ise GDPR kapsamında 2024 yılında uygulanan cezaların toplamı 2,5 m</description>
+        <author>info@ecypro.com (EcyPro Analiz Ekibi)</author>
     </item>
     <item>
-        <title>Untitled</title>
-        <link>https://www.ecypro.com/blog/aile-sirketleri-kurumsallasma-yonetisim</link>
-        <guid>https://www.ecypro.com/blog/aile-sirketleri-kurumsallasma-yonetisim</guid>
-        <pubDate>Sun, 17 May 2026 09:43:12 GMT</pubDate>
-        <description></description>
-        <author>info@ecypro.com (EcyPro Team)</author>
-    </item>
-    <item>
-        <title>Untitled</title>
-        <link>https://www.ecypro.com/blog/akilli-sehirler-kamu-politikasi-dijital-yonetim</link>
-        <guid>https://www.ecypro.com/blog/akilli-sehirler-kamu-politikasi-dijital-yonetim</guid>
-        <pubDate>Sun, 17 May 2026 09:43:12 GMT</pubDate>
-        <description></description>
-        <author>info@ecypro.com (EcyPro Team)</author>
-    </item>
-    <item>
-        <title>Untitled</title>
-        <link>https://www.ecypro.com/blog/boardroom-agility-uncertainty</link>
-        <guid>https://www.ecypro.com/blog/boardroom-agility-uncertainty</guid>
-        <pubDate>Sun, 17 May 2026 09:43:12 GMT</pubDate>
-        <description></description>
-        <author>info@ecypro.com (EcyPro Team)</author>
-    </item>
-    <item>
-        <title>Untitled</title>
-        <link>https://www.ecypro.com/blog/endustriyel-iliskiler-toplu-sozlesme-stratejisi</link>
-        <guid>https://www.ecypro.com/blog/endustriyel-iliskiler-toplu-sozlesme-stratejisi</guid>
-        <pubDate>Sun, 17 May 2026 09:43:12 GMT</pubDate>
-        <description></description>
-        <author>info@ecypro.com (EcyPro Team)</author>
-    </item>
-    <item>
-        <title>Untitled</title>
-        <link>https://www.ecypro.com/blog/esg-strateji-kurumsal-surdurulebilirlik</link>
-        <guid>https://www.ecypro.com/blog/esg-strateji-kurumsal-surdurulebilirlik</guid>
-        <pubDate>Sun, 17 May 2026 09:43:12 GMT</pubDate>
-        <description></description>
-        <author>info@ecypro.com (EcyPro Team)</author>
-    </item>
-    <item>
-        <title>Untitled</title>
+        <title>Lean AI &amp; Operasyonel Mükemmellik: Klasik Yalın Üretim ile Yapay Zekanın Sinerjisi</title>
         <link>https://www.ecypro.com/blog/lean-ai-operational-excellence</link>
         <guid>https://www.ecypro.com/blog/lean-ai-operational-excellence</guid>
-        <pubDate>Sun, 17 May 2026 09:43:12 GMT</pubDate>
-        <description></description>
-        <author>info@ecypro.com (EcyPro Team)</author>
+        <pubDate>Tue, 19 May 2026 20:47:05 GMT</pubDate>
+        <description>Endüstri 4.0 dönüşümünün en güçlü paradoksu, en modern teknolojilerin en köklü metodoloji ile birleştiğinde maksimum değer üretmesidir. Toyota Üretim Sistemi&apos;nden (TPS) türeyen Lean felsefesi, Yapay Zeka ve Endüstriyel N</description>
+        <author>info@ecypro.com (EcyPro Analiz Ekibi)</author>
     </item>
     <item>
-        <title>Untitled</title>
+        <title>M&amp;A Due Diligence: Şirket Birleşme ve Satın Almalarında Değerleme Metodolojisi</title>
         <link>https://www.ecypro.com/blog/ma-degerleme-due-diligence-rehberi</link>
         <guid>https://www.ecypro.com/blog/ma-degerleme-due-diligence-rehberi</guid>
-        <pubDate>Sun, 17 May 2026 09:43:12 GMT</pubDate>
-        <description></description>
-        <author>info@ecypro.com (EcyPro Team)</author>
+        <pubDate>Tue, 19 May 2026 20:47:05 GMT</pubDate>
+        <description>McKinsey &amp; Company&apos;nin kapsamlı araştırması, M&amp;A işlemlerinin %70&apos;inin hedeflenen sinerji değerlerini yakalayamadığını ortaya koymaktadır (Christofferson et al., 2004). Bu çarpıcı istatistiğin ardında yatan temel nedenle</description>
+        <author>info@ecypro.com (EcyPro Consulting)</author>
     </item>
     <item>
-        <title>Untitled</title>
+        <title>Makroekonomik Risk Yönetimi: Kur, Enflasyon ve Faiz Baskısında Kurumsal Strateji</title>
         <link>https://www.ecypro.com/blog/makroekonomik-risk-yonetimi-2026</link>
         <guid>https://www.ecypro.com/blog/makroekonomik-risk-yonetimi-2026</guid>
-        <pubDate>Sun, 17 May 2026 09:43:12 GMT</pubDate>
-        <description></description>
-        <author>info@ecypro.com (EcyPro Team)</author>
+        <pubDate>Tue, 19 May 2026 20:47:05 GMT</pubDate>
+        <description>2024–2026 döneminde küresel ekonomik ortam, kurumsal yöneticiler için olağandışı bir belirsizlik tablosu sergilemektedir: ABD&apos;de enflasyonun yapısal direnci, Avrupa&apos;da büyüme yavaşlaması, Orta Doğu ve Ukrayna&apos;da süregele</description>
+        <author>info@ecypro.com (EcyPro Analiz Ekibi)</author>
+    </item>
+    <item>
+        <title>Net Sıfır Taahhüdünden Eylem Planına: 5 Kritik Adım</title>
+        <link>https://www.ecypro.com/blog/net-zero-eylem-plani</link>
+        <guid>https://www.ecypro.com/blog/net-zero-eylem-plani</guid>
+        <pubDate>Tue, 19 May 2026 20:47:05 GMT</pubDate>
+        <description>2015 Paris Anlaşması&apos;ndan bu yana 140&apos;ı aşkın ülke ve binlerce kurum &quot;net sıfır&quot; karbon emisyon taahhüdü vermiştir. Ancak araştırmalar, bu taahhütlerin önemli bir bölümünün ölçülebilir eylem planına dönüşmediğini ortaya </description>
+        <author>info@ecypro.com (EcyPro Analiz Ekibi)</author>
+    </item>
+    <item>
+        <title>Nöropazarlama: Bilinçdışı Tüketici Davranışlarını Anlamak ve Strateji Üretmek</title>
+        <link>https://www.ecypro.com/blog/noropazarlama-tuketici-davranisi-stratejisi</link>
+        <guid>https://www.ecypro.com/blog/noropazarlama-tuketici-davranisi-stratejisi</guid>
+        <pubDate>Tue, 19 May 2026 20:47:05 GMT</pubDate>
+        <description>Harvard Business School profesörü Gerald Zaltman&apos;ın araştırmaları, satın alma kararlarının %95&apos;inin bilinçdışı süreçlerle şekillendiğini ortaya koymaktadır (Zaltman, 2003). Bu bulgu, geleneksel pazar araştırması yöntemle</description>
+        <author>info@ecypro.com (EcyPro Analiz Ekibi)</author>
+    </item>
+    <item>
+        <title>Akıllı Şehirler ve Dijital Kamu Yönetimi: Yerel Yönetimler için Dönüşüm Rehberi</title>
+        <link>https://www.ecypro.com/blog/akilli-sehirler-kamu-politikasi-dijital-yonetim</link>
+        <guid>https://www.ecypro.com/blog/akilli-sehirler-kamu-politikasi-dijital-yonetim</guid>
+        <pubDate>Tue, 19 May 2026 20:47:05 GMT</pubDate>
+        <description>Birleşmiş Milletler tahminlerine göre, 2030 yılına kadar dünya nüfusunun %60&apos;ı kentlerde yaşayacaktır. Bu demografik gerçeklik, şehirleri iklim değişikliği, altyapı baskısı ve hizmet kalitesi talepleriyle aynı anda yüzle</description>
+        <author>info@ecypro.com (EcyPro Consulting)</author>
+    </item>
+    <item>
+        <title>Belirsizlik Çağında Yönetim Kurulu Çevikliği: Senaryo Planlama ve Karar Hızını Yeniden Tasarlamak</title>
+        <link>https://www.ecypro.com/blog/boardroom-agility-uncertainty</link>
+        <guid>https://www.ecypro.com/blog/boardroom-agility-uncertainty</guid>
+        <pubDate>Tue, 19 May 2026 20:47:05 GMT</pubDate>
+        <description>2020-2026 döneminin kurumsal yönetim tarihine bakıldığında, yönetim kurullarının hiçbir zaman bu denli karmaşık, hızlı değişen ve belirsiz bir ortamda karar almak zorunda kalmadığı görülmektedir. Pandemi, jeopolitik kriz</description>
+        <author>info@ecypro.com (EcyPro Consulting)</author>
+    </item>
+    <item>
+        <title>Endüstriyel İlişkiler ve Toplu Sözleşme: Çalışma Barışının Stratejik Yönetimi</title>
+        <link>https://www.ecypro.com/blog/endustriyel-iliskiler-toplu-sozlesme-stratejisi</link>
+        <guid>https://www.ecypro.com/blog/endustriyel-iliskiler-toplu-sozlesme-stratejisi</guid>
+        <pubDate>Tue, 19 May 2026 20:47:05 GMT</pubDate>
+        <description>Küresel işgücü piyasasında köklü dönüşümlerin yaşandığı günümüzde —Büyük İstifa dalgası, ücret enflasyonu, çalışan güçlenmesi ve sendikacılığın yeniden yükselişi— endüstriyel ilişkiler yönetimi hiçbir dönemde bu denli st</description>
+        <author>info@ecypro.com (EcyPro Consulting)</author>
+    </item>
+    <item>
+        <title>ESG Stratejisi ve Kurumsal Sürdürülebilirlik: C-Suite Rehberi 2026</title>
+        <link>https://www.ecypro.com/blog/esg-strateji-kurumsal-surdurulebilirlik</link>
+        <guid>https://www.ecypro.com/blog/esg-strateji-kurumsal-surdurulebilirlik</guid>
+        <pubDate>Tue, 19 May 2026 20:47:05 GMT</pubDate>
+        <description>ESG (Environmental, Social, Governance — Çevresel, Sosyal, Yönetişim) kriterleri, son on yılda kurumsal yönetim gündeminin en üst sıralarına yerleşmiştir. Ancak pek çok yönetici ESG&apos;yi hâlâ bir uyum yükümlülüğü ya da iti</description>
+        <author>info@ecypro.com (EcyPro Analiz Ekibi)</author>
+    </item>
+    <item>
+        <title>Aile Şirketlerinde Kurumsallaşma ve Yönetişim: Anayasa Modeli</title>
+        <link>https://www.ecypro.com/blog/aile-sirketleri-kurumsallasma-yonetisim</link>
+        <guid>https://www.ecypro.com/blog/aile-sirketleri-kurumsallasma-yonetisim</guid>
+        <pubDate>Tue, 19 May 2026 20:47:05 GMT</pubDate>
+        <description>Dünya ekonomilerinin omurgasını oluşturan aile şirketleri, küresel GSYH&apos;nin %70&apos;ini ve istihdamın %60&apos;ından fazlasını temsil etmektedir (Family Business Network International, 2022). Türkiye&apos;de ise büyük ölçekli şirketle</description>
+        <author>info@ecypro.com (EcyPro Consulting)</author>
+    </item>
+    <item>
+        <title>İş Uyuşmazlıklarında Arabuluculuk: Stratejik Yaklaşım ve Uygulama Rehberi</title>
+        <link>https://www.ecypro.com/blog/is-uyusmazliklari-arabuluculuk-stratejisi</link>
+        <guid>https://www.ecypro.com/blog/is-uyusmazliklari-arabuluculuk-stratejisi</guid>
+        <pubDate>Tue, 19 May 2026 00:00:00 GMT</pubDate>
+        <description>İş hukukunda zorunlu arabuluculuk, şirketler için yalnızca yasal bir gereklilik değil, stratejik bir fırsattır. Bu yazı, arabuluculuk sürecini kurumsal avantaja dönüştüren çerçeveyi sunuyor.</description>
+        <author>info@ecypro.com (Emre Can Yalçın)</author>
+    </item>
+    <item>
+        <title>Kurumsal Kriz Yönetimi: İletişim Çerçevesi ve İlk 72 Saat Protokolü</title>
+        <link>https://www.ecypro.com/blog/kriz-yonetimi-iletisim-cercevesi</link>
+        <guid>https://www.ecypro.com/blog/kriz-yonetimi-iletisim-cercevesi</guid>
+        <pubDate>Tue, 19 May 2026 00:00:00 GMT</pubDate>
+        <description>Kriz anında itibar kaybının büyük bölümü ilk 72 saatte şekillenir. Bu yazı, kurumsal kriz iletişiminin stratejik çerçevesini ve uygulanabilir bir protokolü sunuyor.</description>
+        <author>info@ecypro.com (Emre Can Yalçın)</author>
+    </item>
+    <item>
+        <title>Sınır Ötesi M&amp;A&apos;da Değerleme Tuzakları: Kültürel ve Finansal Kör Noktalar</title>
+        <link>https://www.ecypro.com/blog/sinir-otesi-ma-degerleme-tuzaklari</link>
+        <guid>https://www.ecypro.com/blog/sinir-otesi-ma-degerleme-tuzaklari</guid>
+        <pubDate>Tue, 19 May 2026 00:00:00 GMT</pubDate>
+        <description>Cross-border M&amp;A işlemlerinde değerleme hataları, finansal modellerin ötesinde kültürel ve operasyonel kör noktalardan kaynaklanır. Bu yazı, Türk şirketlerinin uluslararası satın almalarda karşılaştığı beş kritik tuzağı inceliyor.</description>
+        <author>info@ecypro.com (Emre Can Yalçın)</author>
+    </item>
+    <item>
+        <title>Vizyon-Strateji-Sonuç Trinity Modeli</title>
+        <link>https://www.ecypro.com/blog/vizyon-strateji-sonuc-trinity</link>
+        <guid>https://www.ecypro.com/blog/vizyon-strateji-sonuc-trinity</guid>
+        <pubDate>Sat, 16 May 2026 00:00:00 GMT</pubDate>
+        <description>Vizyon olmadan strateji boşlukta yüzer; strateji olmadan vizyon süslü bir poster olur; sonuç olmadan ikisi de teorik kalır. Trinity modeli, bu üç katmanı birbirine bağlayan operasyonel disiplini tanımlar.</description>
+        <author>info@ecypro.com (Emre Can Yalçın)</author>
+    </item>
+    <item>
+        <title>AI Tabanlı KPI Tahminlemesi: 6 Adımda Hayata Geçirme</title>
+        <link>https://www.ecypro.com/blog/ai-tabanli-kpi-tahminlemesi-6-adim</link>
+        <guid>https://www.ecypro.com/blog/ai-tabanli-kpi-tahminlemesi-6-adim</guid>
+        <pubDate>Fri, 15 May 2026 00:00:00 GMT</pubDate>
+        <description>Veri yoğun KPI panolarını ileriye dönük tahminlemeyle güçlendirmek için pratik bir 6 adım rehberi. Veri hazırlığı, model seçimi ve operasyonel entegrasyon dahil.</description>
+        <author>info@ecypro.com (Ali Demir)</author>
+    </item>
+    <item>
+        <title>M&amp;A Sonrası Entegrasyonun 90 Günlük Kuralı</title>
+        <link>https://www.ecypro.com/blog/ma-90-gunluk-kural</link>
+        <guid>https://www.ecypro.com/blog/ma-90-gunluk-kural</guid>
+        <pubDate>Thu, 14 May 2026 00:00:00 GMT</pubDate>
+        <description>M&amp;A işlemlerinin değer kaybının büyük çoğunluğu kapanışın ilk 90 gününde yaşanır. Bu yazı, post-merger entegrasyonun ilk üç ayını mimari bir disipline çeviren beş prensibi paylaşıyor.</description>
+        <author>info@ecypro.com (Emre Can Yalçın)</author>
+    </item>
+    <item>
+        <title>Aile Anayasası: 5 Maddelik Çekirdek Şablon</title>
+        <link>https://www.ecypro.com/blog/aile-anayasasi-5-maddelik-cekirdek</link>
+        <guid>https://www.ecypro.com/blog/aile-anayasasi-5-maddelik-cekirdek</guid>
+        <pubDate>Tue, 12 May 2026 00:00:00 GMT</pubDate>
+        <description>Türkiye&apos;deki aile şirketlerinin ilk aile anayasasını hazırlarken üzerinde mutlaka çalışması gereken beş çekirdek madde. Pratik örnekler ve mahremiyet sınırları dahil.</description>
+        <author>info@ecypro.com (Ayşe Kaya)</author>
+    </item>
+    <item>
+        <title>Türk KOBİ&apos;lerinde Lean &amp; Six Sigma Pratiği: Şablon Değil, Tercüme Meselesi</title>
+        <link>https://www.ecypro.com/blog/turk-kobi-lean-six-sigma</link>
+        <guid>https://www.ecypro.com/blog/turk-kobi-lean-six-sigma</guid>
+        <pubDate>Mon, 11 May 2026 00:00:00 GMT</pubDate>
+        <description>Lean ve Six Sigma metodolojileri Toyota ve Motorola için kuruldu. Türk KOBİ&apos;sinde aynen uygulamaya çalışmak başarısızlıkla biter. Asıl mesele şablonu değil, yerel iş kültürüne tercümeyi doğru yapmaktır.</description>
+        <author>info@ecypro.com (Emre Can Yalçın)</author>
+    </item>
+    <item>
+        <title>CSRD Uyumunda 2026 Hareket Planı</title>
+        <link>https://www.ecypro.com/blog/csrd-uyumunda-2026-hareket-plani</link>
+        <guid>https://www.ecypro.com/blog/csrd-uyumunda-2026-hareket-plani</guid>
+        <pubDate>Sun, 10 May 2026 00:00:00 GMT</pubDate>
+        <description>Avrupa CSRD (Corporate Sustainability Reporting Directive) regülasyonuna 2026&apos;da uyum sağlaması beklenen Türk şirketleri için adım adım hareket planı.</description>
+        <author>info@ecypro.com (Mehmet Çelik)</author>
     </item>
     <item>
         <title>Stratejik Planlama Nasıl Yapılır? Kurumsal Liderler için Kapsamlı Rehber</title>
@@ -119,6 +215,22 @@
         <pubDate>Sat, 09 May 2026 00:00:00 GMT</pubDate>
         <description>Yıllık stratejik planlama sürecinin adım adım metodolojisi: hedef belirleme, kaynak tahsisi, uygulama ve ölçüm.</description>
         <author>info@ecypro.com (EcyPro Consulting)</author>
+    </item>
+    <item>
+        <title>Aile Şirketlerinde Stratejik Geçiş: Kuşak Devri Bir Olay Değil, Bir Mimaridir</title>
+        <link>https://www.ecypro.com/blog/aile-sirketleri-stratejik-gecis</link>
+        <guid>https://www.ecypro.com/blog/aile-sirketleri-stratejik-gecis</guid>
+        <pubDate>Fri, 08 May 2026 00:00:00 GMT</pubDate>
+        <description>Kuşak geçişini bir &apos;CEO atama günü&apos; olarak kuran aile şirketleri kaybediyor. Geçişi mimariye dönüştürenler ise sadece şirketi değil, ailenin bağını da koruyor. Bu yazı saha notlarından bir çerçeve sunuyor.</description>
+        <author>info@ecypro.com (Emre Can Yalçın)</author>
+    </item>
+    <item>
+        <title>Nesil Geçişinde 3 Yıllık Sermaye Devir Stratejisi</title>
+        <link>https://www.ecypro.com/blog/nesil-gecisinde-3-yillik-sermaye-devir-stratejisi</link>
+        <guid>https://www.ecypro.com/blog/nesil-gecisinde-3-yillik-sermaye-devir-stratejisi</guid>
+        <pubDate>Fri, 08 May 2026 00:00:00 GMT</pubDate>
+        <description>Aile şirketinde 1. kuşaktan 2. kuşağa veya 2.&apos;den 3.&apos;ye geçişte sermaye yapısını üç yıla yayarak nasıl yapacağınızın pratik adımları. Vergi, kontrol ve duygusal denge dahil.</description>
+        <author>info@ecypro.com (Ayşe Kaya)</author>
     </item>
     <item>
         <title>İş Süreçleri Nasıl Standardize Edilir? Adım Adım Metodoloji</title>
@@ -159,6 +271,14 @@
         <pubDate>Tue, 05 May 2026 00:00:00 GMT</pubDate>
         <description>KPI belirleme sürecinde sık yapılan hatalar ve veri odaklı performans göstergelerini doğru seçmek için adım adım metodoloji.</description>
         <author>info@ecypro.com (EcyPro Consulting)</author>
+    </item>
+    <item>
+        <title>Premium Consulting Neden Komoditeleşemez</title>
+        <link>https://www.ecypro.com/blog/premium-consulting-komoditelesemez</link>
+        <guid>https://www.ecypro.com/blog/premium-consulting-komoditelesemez</guid>
+        <pubDate>Mon, 04 May 2026 00:00:00 GMT</pubDate>
+        <description>Danışmanlık pazarı yıllardır &apos;demokratikleşiyor&apos;, &apos;self-service&apos;leşiyor, &apos;AI ile düzleşiyor&apos;. Yine de premium consulting komoditeleşmez. Sebebi metodoloji değil; karşı tarafın kararına ortaklık etme cesaretidir.</description>
+        <author>info@ecypro.com (Emre Can Yalçın)</author>
     </item>
     <item>
         <title>Stratejik Danışmanlık Firması Nasıl Seçilir? Kurumsal Alıcı Rehberi 2026</title>

@@ -273,7 +273,7 @@
     "supertest": "^7.2.2",
     "svgo": "^3.3.2",
     "tailwindcss": "^4.1.18",
-    "tsx": "^4.21.0",
+    "tsx": "^4.22.3",
     "typedoc": "^0.28.19",
     "typescript": "~5.8.2",
     "typescript-eslint": "^8.24.1",

@@ -1,133 +1,245 @@
 [
   {
-    "slug": "lean-ai-operational-excellence",
-    "title": "Untitled",
-    "excerpt": "",
-    "date": "2026-05-17T10:46:22.876Z",
-    "author": "EcyPro Team",
-    "coverImage": "/images/blog-default.jpg",
-    "tags": [],
-    "readingTime": "5 min read"
+    "slug": "karbon-muhasebesi-scope-1-2-3-ilk-adimlar",
+    "title": "Karbon Muhasebesi: Scope 1-2-3 İçin İlk Adımlar",
+    "excerpt": "Karbon emisyonu hesabını sıfırdan kurmak isteyen bir şirketin Scope 1, 2 ve 3 kategorilerinde atması gereken ilk adımlar. Pratik veri toplama önerileriyle.",
+    "date": "2026-05-28T00:00:00.000Z",
+    "author": "Mehmet Çelik",
+    "coverImage": "/brand/blog-covers/karbon-scope-123.svg",
+    "category": "ESG & Sürdürülebilirlik",
+    "tags": [
+      "Karbon",
+      "Scope 3",
+      "CBAM",
+      "Emisyon Hesabı"
+    ],
+    "readingTime": "7 dk"
   },
   {
-    "slug": "ma-degerleme-due-diligence-rehberi",
-    "title": "Untitled",
-    "excerpt": "",
-    "date": "2026-05-17T10:46:22.876Z",
-    "author": "EcyPro Team",
-    "coverImage": "/images/blog-default.jpg",
-    "tags": [],
-    "readingTime": "5 min read"
+    "slug": "gpt-tabanli-musteri-hizmetleri-roi",
+    "title": "GPT-Tabanlı Müşteri Hizmetleri Otomasyonunun ROI Modeli",
+    "excerpt": "Büyük dil modeli destekli müşteri hizmetleri çözümlerinin maliyet, fayda ve risk bileşenlerini kapsayan kapsamlı ROI modeli. Gerçek pazar verisiyle.",
+    "date": "2026-05-25T00:00:00.000Z",
+    "author": "Ali Demir",
+    "coverImage": "/brand/blog-covers/gpt-musteri-hizmetleri-roi.svg",
+    "category": "AI & Analitik",
+    "tags": [
+      "GPT",
+      "Müşteri Hizmetleri",
+      "ROI",
+      "LLM"
+    ],
+    "readingTime": "8 dk"
   },
   {
-    "slug": "makroekonomik-risk-yonetimi-2026",
-    "title": "Untitled",
-    "excerpt": "",
-    "date": "2026-05-17T10:46:22.876Z",
-    "author": "EcyPro Team",
-    "coverImage": "/images/blog-default.jpg",
-    "tags": [],
-    "readingTime": "5 min read"
-  },
-  {
-    "slug": "net-zero-eylem-plani",
-    "title": "Untitled",
-    "excerpt": "",
-    "date": "2026-05-17T10:46:22.876Z",
-    "author": "EcyPro Team",
-    "coverImage": "/images/blog-default.jpg",
-    "tags": [],
-    "readingTime": "5 min read"
-  },
-  {
-    "slug": "noropazarlama-tuketici-davranisi-stratejisi",
-    "title": "Untitled",
-    "excerpt": "",
-    "date": "2026-05-17T10:46:22.876Z",
-    "author": "EcyPro Team",
-    "coverImage": "/images/blog-default.jpg",
-    "tags": [],
-    "readingTime": "5 min read"
+    "slug": "uretim-hattinda-mlops-ilk-90-gun",
+    "title": "Üretim Hattında MLOps: İlk 90 Gün",
+    "excerpt": "Bir AI/ML modelini araştırma defterinden gerçek üretim hattına taşımanın ilk üç ayında karşılaşılan organizasyonel ve teknik soruları derinlemesine ele alan rehber.",
+    "date": "2026-05-22T00:00:00.000Z",
+    "author": "Ali Demir",
+    "coverImage": "/brand/blog-covers/mlops-90-gun.svg",
+    "category": "AI & Analitik",
+    "tags": [
+      "MLOps",
+      "AI",
+      "Production",
+      "DevOps"
+    ],
+    "readingTime": "6 dk"
   },
   {
     "slug": "tedarik-zinciri-optimizasyonu-lean-six-sigma",
-    "title": "Untitled",
-    "excerpt": "",
-    "date": "2026-05-17T10:46:22.876Z",
-    "author": "EcyPro Team",
+    "title": "Tedarik Zinciri Optimizasyonu: Lean ve Six Sigma ile Operasyonel Mükemmellik",
+    "excerpt": "COVID-19 pandemisi, küresel tedarik zincirlerinin yapısal kırılganlıklarını açığa çıkarmıştır. Japon otomotiv sanayii, ABD elektronik sektörü ve Avrupa imalat endüstrisinin eş zamanlı tedarik şoklarıyla karşılaşması; sad",
+    "date": "2026-05-19T20:47:05.437Z",
+    "author": "EcyPro Consulting",
     "coverImage": "/images/blog-default.jpg",
+    "category": "Operasyon",
     "tags": [],
-    "readingTime": "5 min read"
+    "readingTime": "9 dk"
   },
   {
     "slug": "uluslararasi-pazar-giris-stratejisi-turquality",
-    "title": "Untitled",
-    "excerpt": "",
-    "date": "2026-05-17T10:46:22.876Z",
-    "author": "EcyPro Team",
+    "title": "Uluslararası Pazar Girişi: Turquality'den Küresel Markaya Stratejik Yol Haritası",
+    "excerpt": "Türkiye'nin ihracat hacmi 2023 yılında 255 milyar dolara ulaşmıştır. Ancak Türk markalarının küresel marka değeri sıralamasındaki görece düşük konumu, ihracat başarısının marka değerine henüz tam olarak dönüşemediğini or",
+    "date": "2026-05-19T20:47:05.437Z",
+    "author": "EcyPro Consulting",
     "coverImage": "/images/blog-default.jpg",
+    "category": "Global Vizyon",
     "tags": [],
-    "readingTime": "5 min read"
+    "readingTime": "9 dk"
   },
   {
     "slug": "veri-yonetisimi-kvkk-gdpr-uyum",
-    "title": "Untitled",
-    "excerpt": "",
-    "date": "2026-05-17T10:46:22.876Z",
-    "author": "EcyPro Team",
+    "title": "Veri Yönetişimi ve KVKK/GDPR Uyumu: Kurumsal Veri Stratejisi Çerçevesi",
+    "excerpt": "Kişisel Verilerin Korunması Kurumu (KVKK), 2025 yılında kurumsal veri ihlalleri nedeniyle 180 milyon TL'yi aşan idari para cezası uygulamıştır. Avrupa'da ise GDPR kapsamında 2024 yılında uygulanan cezaların toplamı 2,5 m",
+    "date": "2026-05-19T20:47:05.437Z",
+    "author": "EcyPro Analiz Ekibi",
     "coverImage": "/images/blog-default.jpg",
+    "category": "Yapay Zeka & Teknoloji",
     "tags": [],
-    "readingTime": "5 min read"
+    "readingTime": "10 dk"
   },
   {
-    "slug": "aile-sirketleri-kurumsallasma-yonetisim",
-    "title": "Untitled",
-    "excerpt": "",
-    "date": "2026-05-17T10:46:22.875Z",
-    "author": "EcyPro Team",
+    "slug": "lean-ai-operational-excellence",
+    "title": "Lean AI & Operasyonel Mükemmellik: Klasik Yalın Üretim ile Yapay Zekanın Sinerjisi",
+    "excerpt": "Endüstri 4.0 dönüşümünün en güçlü paradoksu, en modern teknolojilerin en köklü metodoloji ile birleştiğinde maksimum değer üretmesidir. Toyota Üretim Sistemi'nden (TPS) türeyen Lean felsefesi, Yapay Zeka ve Endüstriyel N",
+    "date": "2026-05-19T20:47:05.435Z",
+    "author": "EcyPro Analiz Ekibi",
     "coverImage": "/images/blog-default.jpg",
+    "category": "Operasyon",
     "tags": [],
-    "readingTime": "5 min read"
+    "readingTime": "7 dk"
+  },
+  {
+    "slug": "ma-degerleme-due-diligence-rehberi",
+    "title": "M&A Due Diligence: Şirket Birleşme ve Satın Almalarında Değerleme Metodolojisi",
+    "excerpt": "McKinsey & Company'nin kapsamlı araştırması, M&A işlemlerinin %70'inin hedeflenen sinerji değerlerini yakalayamadığını ortaya koymaktadır (Christofferson et al., 2004). Bu çarpıcı istatistiğin ardında yatan temel nedenle",
+    "date": "2026-05-19T20:47:05.435Z",
+    "author": "EcyPro Consulting",
+    "coverImage": "/images/blog-default.jpg",
+    "category": "M&A & Değerleme",
+    "tags": [],
+    "readingTime": "11 dk"
+  },
+  {
+    "slug": "makroekonomik-risk-yonetimi-2026",
+    "title": "Makroekonomik Risk Yönetimi: Kur, Enflasyon ve Faiz Baskısında Kurumsal Strateji",
+    "excerpt": "2024–2026 döneminde küresel ekonomik ortam, kurumsal yöneticiler için olağandışı bir belirsizlik tablosu sergilemektedir: ABD'de enflasyonun yapısal direnci, Avrupa'da büyüme yavaşlaması, Orta Doğu ve Ukrayna'da süregele",
+    "date": "2026-05-19T20:47:05.435Z",
+    "author": "EcyPro Analiz Ekibi",
+    "coverImage": "/images/blog-default.jpg",
+    "category": "Finans & Ekonomi",
+    "tags": [],
+    "readingTime": "10 dk"
+  },
+  {
+    "slug": "net-zero-eylem-plani",
+    "title": "Net Sıfır Taahhüdünden Eylem Planına: 5 Kritik Adım",
+    "excerpt": "2015 Paris Anlaşması'ndan bu yana 140'ı aşkın ülke ve binlerce kurum \"net sıfır\" karbon emisyon taahhüdü vermiştir. Ancak araştırmalar, bu taahhütlerin önemli bir bölümünün ölçülebilir eylem planına dönüşmediğini ortaya ",
+    "date": "2026-05-19T20:47:05.435Z",
+    "author": "EcyPro Analiz Ekibi",
+    "coverImage": "/images/blog-default.jpg",
+    "category": "Kamu & ESG",
+    "tags": [],
+    "readingTime": "7 dk"
+  },
+  {
+    "slug": "noropazarlama-tuketici-davranisi-stratejisi",
+    "title": "Nöropazarlama: Bilinçdışı Tüketici Davranışlarını Anlamak ve Strateji Üretmek",
+    "excerpt": "Harvard Business School profesörü Gerald Zaltman'ın araştırmaları, satın alma kararlarının %95'inin bilinçdışı süreçlerle şekillendiğini ortaya koymaktadır (Zaltman, 2003). Bu bulgu, geleneksel pazar araştırması yöntemle",
+    "date": "2026-05-19T20:47:05.435Z",
+    "author": "EcyPro Analiz Ekibi",
+    "coverImage": "/images/blog-default.jpg",
+    "category": "Pazarlama & CX",
+    "tags": [],
+    "readingTime": "8 dk"
   },
   {
     "slug": "akilli-sehirler-kamu-politikasi-dijital-yonetim",
-    "title": "Untitled",
-    "excerpt": "",
-    "date": "2026-05-17T10:46:22.875Z",
-    "author": "EcyPro Team",
+    "title": "Akıllı Şehirler ve Dijital Kamu Yönetimi: Yerel Yönetimler için Dönüşüm Rehberi",
+    "excerpt": "Birleşmiş Milletler tahminlerine göre, 2030 yılına kadar dünya nüfusunun %60'ı kentlerde yaşayacaktır. Bu demografik gerçeklik, şehirleri iklim değişikliği, altyapı baskısı ve hizmet kalitesi talepleriyle aynı anda yüzle",
+    "date": "2026-05-19T20:47:05.433Z",
+    "author": "EcyPro Consulting",
     "coverImage": "/images/blog-default.jpg",
+    "category": "Kamu & ESG",
     "tags": [],
-    "readingTime": "5 min read"
+    "readingTime": "9 dk"
   },
   {
     "slug": "boardroom-agility-uncertainty",
-    "title": "Untitled",
-    "excerpt": "",
-    "date": "2026-05-17T10:46:22.875Z",
-    "author": "EcyPro Team",
+    "title": "Belirsizlik Çağında Yönetim Kurulu Çevikliği: Senaryo Planlama ve Karar Hızını Yeniden Tasarlamak",
+    "excerpt": "2020-2026 döneminin kurumsal yönetim tarihine bakıldığında, yönetim kurullarının hiçbir zaman bu denli karmaşık, hızlı değişen ve belirsiz bir ortamda karar almak zorunda kalmadığı görülmektedir. Pandemi, jeopolitik kriz",
+    "date": "2026-05-19T20:47:05.433Z",
+    "author": "EcyPro Consulting",
     "coverImage": "/images/blog-default.jpg",
+    "category": "Liderlik",
     "tags": [],
-    "readingTime": "5 min read"
+    "readingTime": "6 dk"
   },
   {
     "slug": "endustriyel-iliskiler-toplu-sozlesme-stratejisi",
-    "title": "Untitled",
-    "excerpt": "",
-    "date": "2026-05-17T10:46:22.875Z",
-    "author": "EcyPro Team",
+    "title": "Endüstriyel İlişkiler ve Toplu Sözleşme: Çalışma Barışının Stratejik Yönetimi",
+    "excerpt": "Küresel işgücü piyasasında köklü dönüşümlerin yaşandığı günümüzde —Büyük İstifa dalgası, ücret enflasyonu, çalışan güçlenmesi ve sendikacılığın yeniden yükselişi— endüstriyel ilişkiler yönetimi hiçbir dönemde bu denli st",
+    "date": "2026-05-19T20:47:05.433Z",
+    "author": "EcyPro Consulting",
     "coverImage": "/images/blog-default.jpg",
+    "category": "İnsan & Organizasyon",
     "tags": [],
-    "readingTime": "5 min read"
+    "readingTime": "8 dk"
   },
   {
     "slug": "esg-strateji-kurumsal-surdurulebilirlik",
-    "title": "Untitled",
-    "excerpt": "",
-    "date": "2026-05-17T10:46:22.875Z",
-    "author": "EcyPro Team",
+    "title": "ESG Stratejisi ve Kurumsal Sürdürülebilirlik: C-Suite Rehberi 2026",
+    "excerpt": "ESG (Environmental, Social, Governance — Çevresel, Sosyal, Yönetişim) kriterleri, son on yılda kurumsal yönetim gündeminin en üst sıralarına yerleşmiştir. Ancak pek çok yönetici ESG'yi hâlâ bir uyum yükümlülüğü ya da iti",
+    "date": "2026-05-19T20:47:05.433Z",
+    "author": "EcyPro Analiz Ekibi",
     "coverImage": "/images/blog-default.jpg",
+    "category": "Kamu & ESG",
     "tags": [],
-    "readingTime": "5 min read"
+    "readingTime": "9 dk"
+  },
+  {
+    "slug": "aile-sirketleri-kurumsallasma-yonetisim",
+    "title": "Aile Şirketlerinde Kurumsallaşma ve Yönetişim: Anayasa Modeli",
+    "excerpt": "Dünya ekonomilerinin omurgasını oluşturan aile şirketleri, küresel GSYH'nin %70'ini ve istihdamın %60'ından fazlasını temsil etmektedir (Family Business Network International, 2022). Türkiye'de ise büyük ölçekli şirketle",
+    "date": "2026-05-19T20:47:05.432Z",
+    "author": "EcyPro Consulting",
+    "coverImage": "/images/blog-default.jpg",
+    "category": "Strateji",
+    "tags": [],
+    "readingTime": "10 dk"
+  },
+  {
+    "slug": "is-uyusmazliklari-arabuluculuk-stratejisi",
+    "title": "İş Uyuşmazlıklarında Arabuluculuk: Stratejik Yaklaşım ve Uygulama Rehberi",
+    "excerpt": "İş hukukunda zorunlu arabuluculuk, şirketler için yalnızca yasal bir gereklilik değil, stratejik bir fırsattır. Bu yazı, arabuluculuk sürecini kurumsal avantaja dönüştüren çerçeveyi sunuyor.",
+    "date": "2026-05-19T00:00:00.000Z",
+    "author": "Emre Can Yalçın",
+    "coverImage": "/images/blog-default.jpg",
+    "category": "Endüstriyel İlişkiler",
+    "tags": [
+      "endustriyel-iliskiler",
+      "arabuluculuk",
+      "is-hukuku",
+      "uyusmazlik",
+      "insan-kaynaklari"
+    ],
+    "readingTime": "9 dk"
+  },
+  {
+    "slug": "kriz-yonetimi-iletisim-cercevesi",
+    "title": "Kurumsal Kriz Yönetimi: İletişim Çerçevesi ve İlk 72 Saat Protokolü",
+    "excerpt": "Kriz anında itibar kaybının büyük bölümü ilk 72 saatte şekillenir. Bu yazı, kurumsal kriz iletişiminin stratejik çerçevesini ve uygulanabilir bir protokolü sunuyor.",
+    "date": "2026-05-19T00:00:00.000Z",
+    "author": "Emre Can Yalçın",
+    "coverImage": "/images/blog-default.jpg",
+    "category": "Risk & Kriz Yönetimi",
+    "tags": [
+      "kriz-yonetimi",
+      "iletisim",
+      "itibar",
+      "risk",
+      "kurumsal-strateji"
+    ],
+    "readingTime": "10 dk"
+  },
+  {
+    "slug": "sinir-otesi-ma-degerleme-tuzaklari",
+    "title": "Sınır Ötesi M&A'da Değerleme Tuzakları: Kültürel ve Finansal Kör Noktalar",
+    "excerpt": "Cross-border M&A işlemlerinde değerleme hataları, finansal modellerin ötesinde kültürel ve operasyonel kör noktalardan kaynaklanır. Bu yazı, Türk şirketlerinin uluslararası satın almalarda karşılaştığı beş kritik tuzağı inceliyor.",
+    "date": "2026-05-19T00:00:00.000Z",
+    "author": "Emre Can Yalçın",
+    "coverImage": "/images/blog-default.jpg",
+    "category": "M&A & Strateji",
+    "tags": [
+      "m-and-a",
+      "cross-border",
+      "degerleme",
+      "due-diligence",
+      "uluslararasi"
+    ],
+    "readingTime": "10 dk"
   },
   {
     "slug": "vizyon-strateji-sonuc-trinity",
@@ -148,6 +260,22 @@
     "readingTime": "9 dk"
   },
   {
+    "slug": "ai-tabanli-kpi-tahminlemesi-6-adim",
+    "title": "AI Tabanlı KPI Tahminlemesi: 6 Adımda Hayata Geçirme",
+    "excerpt": "Veri yoğun KPI panolarını ileriye dönük tahminlemeyle güçlendirmek için pratik bir 6 adım rehberi. Veri hazırlığı, model seçimi ve operasyonel entegrasyon dahil.",
+    "date": "2026-05-15T00:00:00.000Z",
+    "author": "Ali Demir",
+    "coverImage": "/brand/blog-covers/ai-kpi-tahminleme.svg",
+    "category": "AI & Analitik",
+    "tags": [
+      "Yapay Zeka",
+      "KPI",
+      "Predictive Analytics",
+      "Forecasting"
+    ],
+    "readingTime": "7 dk"
+  },
+  {
     "slug": "ma-90-gunluk-kural",
     "title": "M&A Sonrası Entegrasyonun 90 Günlük Kuralı",
     "excerpt": "M&A işlemlerinin değer kaybının büyük çoğunluğu kapanışın ilk 90 gününde yaşanır. Bu yazı, post-merger entegrasyonun ilk üç ayını mimari bir disipline çeviren beş prensibi paylaşıyor.",
@@ -163,6 +291,22 @@
       "founder-notes"
     ],
     "readingTime": "9 dk"
+  },
+  {
+    "slug": "aile-anayasasi-5-maddelik-cekirdek",
+    "title": "Aile Anayasası: 5 Maddelik Çekirdek Şablon",
+    "excerpt": "Türkiye'deki aile şirketlerinin ilk aile anayasasını hazırlarken üzerinde mutlaka çalışması gereken beş çekirdek madde. Pratik örnekler ve mahremiyet sınırları dahil.",
+    "date": "2026-05-12T00:00:00.000Z",
+    "author": "Ayşe Kaya",
+    "coverImage": "/brand/blog-covers/aile-anayasasi-5-madde.svg",
+    "category": "Aile Şirketleri",
+    "tags": [
+      "Aile Anayasası",
+      "Yönetişim",
+      "Aile Şirketi",
+      "Devir"
+    ],
+    "readingTime": "6 dk"
   },
   {
     "slug": "turk-kobi-lean-six-sigma",
@@ -183,6 +327,22 @@
     "readingTime": "9 dk"
   },
   {
+    "slug": "csrd-uyumunda-2026-hareket-plani",
+    "title": "CSRD Uyumunda 2026 Hareket Planı",
+    "excerpt": "Avrupa CSRD (Corporate Sustainability Reporting Directive) regülasyonuna 2026'da uyum sağlaması beklenen Türk şirketleri için adım adım hareket planı.",
+    "date": "2026-05-10T00:00:00.000Z",
+    "author": "Mehmet Çelik",
+    "coverImage": "/brand/blog-covers/csrd-2026.svg",
+    "category": "ESG & Sürdürülebilirlik",
+    "tags": [
+      "CSRD",
+      "ESG",
+      "Sürdürülebilirlik",
+      "AB Regulasyon"
+    ],
+    "readingTime": "7 dk"
+  },
+  {
     "slug": "stratejik-planlama-rehberi",
     "title": "Stratejik Planlama Nasıl Yapılır? Kurumsal Liderler için Kapsamlı Rehber",
     "excerpt": "Yıllık stratejik planlama sürecinin adım adım metodolojisi: hedef belirleme, kaynak tahsisi, uygulama ve ölçüm.",
@@ -191,7 +351,7 @@
     "coverImage": "/images/blog-default.jpg",
     "category": "Strateji",
     "tags": [],
-    "readingTime": "5 min read"
+    "readingTime": "5 dk okuma"
   },
   {
     "slug": "aile-sirketleri-stratejik-gecis",
@@ -211,6 +371,22 @@
     "readingTime": "10 dk"
   },
   {
+    "slug": "nesil-gecisinde-3-yillik-sermaye-devir-stratejisi",
+    "title": "Nesil Geçişinde 3 Yıllık Sermaye Devir Stratejisi",
+    "excerpt": "Aile şirketinde 1. kuşaktan 2. kuşağa veya 2.'den 3.'ye geçişte sermaye yapısını üç yıla yayarak nasıl yapacağınızın pratik adımları. Vergi, kontrol ve duygusal denge dahil.",
+    "date": "2026-05-08T00:00:00.000Z",
+    "author": "Ayşe Kaya",
+    "coverImage": "/brand/blog-covers/nesil-gecisi-3-yil.svg",
+    "category": "Aile Şirketleri",
+    "tags": [
+      "Nesil Geçişi",
+      "Sermaye Devri",
+      "Aile Şirketi",
+      "Veraset"
+    ],
+    "readingTime": "7 dk"
+  },
+  {
     "slug": "surecler-nasil-standardize-edilir",
     "title": "İş Süreçleri Nasıl Standardize Edilir? Adım Adım Metodoloji",
     "excerpt": "Süreç standardizasyonu nedir, neden gereklidir ve kurumunuzda nasıl uygulanır? Pratik araçlar ve şablonlarla tam rehber.",
@@ -219,7 +395,7 @@
     "coverImage": "/images/blog-default.jpg",
     "category": "Operasyon",
     "tags": [],
-    "readingTime": "5 min read"
+    "readingTime": "5 dk okuma"
   },
   {
     "slug": "kurumsal-kultur-donusumu",
@@ -230,7 +406,7 @@
     "coverImage": "/images/blog-default.jpg",
     "category": "İnsan Kaynakları",
     "tags": [],
-    "readingTime": "5 min read"
+    "readingTime": "5 dk okuma"
   },
   {
     "slug": "veri-odakli-karar-verme",
@@ -241,7 +417,7 @@
     "coverImage": "/images/blog-default.jpg",
     "category": "Analitik",
     "tags": [],
-    "readingTime": "5 min read"
+    "readingTime": "5 dk okuma"
   },
   {
     "slug": "dijital-donusum-stratejisi-nasil-olusturulur",
@@ -257,7 +433,7 @@
       "kurumsal",
       "operasyonel verimlilik"
     ],
-    "readingTime": "5 min read"
+    "readingTime": "5 dk okuma"
   },
   {
     "slug": "kpi-belirleme-ve-olcme-yontemleri",
@@ -268,7 +444,7 @@
     "coverImage": "/images/blog-default.jpg",
     "category": "Strateji",
     "tags": [],
-    "readingTime": "5 min read"
+    "readingTime": "5 dk okuma"
   },
   {
     "slug": "premium-consulting-komoditelesemez",
@@ -301,7 +477,7 @@
       "kurumsal",
       "seçim kriterleri"
     ],
-    "readingTime": "5 min read"
+    "readingTime": "5 dk okuma"
   },
   {
     "slug": "operasyonel-verimlilik-nasil-arttirilir",
@@ -318,7 +494,7 @@
       "six sigma",
       "kurumsal"
     ],
-    "readingTime": "5 min read"
+    "readingTime": "5 dk okuma"
   },
   {
     "slug": "insan-kaynaklari-stratejisi-talent-management",
@@ -335,7 +511,7 @@
       "hr strateji",
       "çalışan deneyimi"
     ],
-    "readingTime": "5 min read"
+    "readingTime": "5 dk okuma"
   },
   {
     "slug": "yapay-zeka-ile-is-sureclerini-optimize-etme",
@@ -352,7 +528,7 @@
       "generative ai",
       "kurumsal ai"
     ],
-    "readingTime": "5 min read"
+    "readingTime": "5 dk okuma"
   },
   {
     "slug": "organizasyonel-degisim-yonetimi",
