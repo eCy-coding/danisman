@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 
 const VALUE_PROP_COPY = {
   badge: { tr: 'Değer Önerimiz', en: 'Our Value Proposition' },
-  title: { tr: 'Neden Ecypro?', en: 'Why Ecypro?' },
+  title: { tr: 'Neden eCyPro?', en: 'Why eCyPro?' },
   description: {
     tr: 'Geleceği şekillendiren vizyonumuz, sektördeki derin tecrübemiz ve sonuç odaklı yaklaşımımızla işletmenizi bir adım öteye taşıyoruz.',
     en: 'With our future-shaping vision, deep industry experience, and result-oriented approach, we take your business a step further.',

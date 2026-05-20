@@ -114,7 +114,7 @@ export const Navbar: React.FC = () => {
           href="#hero"
           onClick={(e) => handleNavClick(e, '#hero', 'Logo')}
           className="flex items-center h-full group relative z-50 outline-none -ml-2"
-          aria-label="EcyPro Anasayfa"
+          aria-label="eCyPro Anasayfa"
         >
           <EcyLogo size="sm" variant="full" />
         </a>

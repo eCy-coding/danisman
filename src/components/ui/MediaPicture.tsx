@@ -17,7 +17,7 @@
  * Kullanım:
  *   <MediaPicture
  *     src="/images/hero.jpg"
- *     alt="EcyPro Hero"
+ *     alt="eCyPro Hero"
  *     width={1920} height={1080}
  *     priority
  *   />

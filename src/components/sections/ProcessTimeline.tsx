@@ -192,7 +192,7 @@ export const ProcessTimeline: React.FC = () => {
       itemScope
       itemType="https://schema.org/HowTo"
     >
-      <meta itemProp="name" content="EcyPro Consulting Process" />
+      <meta itemProp="name" content="eCyPro Consulting Process" />
 
       <div className="max-w-3xl mx-auto">
         {/* Header */}

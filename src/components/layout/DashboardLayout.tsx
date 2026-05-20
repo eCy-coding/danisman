@@ -30,7 +30,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
                <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-white font-serif font-bold">
                  E
                </div>
-               <span className="font-serif font-bold text-xl text-white">EcyPro</span>
+               <span className="font-serif font-bold text-xl text-white">eCyPro</span>
            </Link>
         </div>
 

@@ -82,7 +82,7 @@ export const SeoManager: React.FC<SeoManagerProps> = ({
       })()}
 
       {/* Open Graph — only when title/desc passed (per-page sets own OG via <SEO />) */}
-      <meta property="og:site_name" content="EcyPro Consulting" />
+      <meta property="og:site_name" content="eCyPro Consulting" />
       {finalTitle && <meta property="og:title" content={finalTitle} />}
       {finalDescription && <meta property="og:description" content={finalDescription} />}
       <meta property="og:url" content={canonicalUrl} />

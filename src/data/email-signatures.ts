@@ -64,7 +64,7 @@ eCyverse · Stratejik Dönüşüm · Kurumsal Yönetişim · KVKK & GDPR Uyumlu
 <table style="font-family: 'Inter', Arial, sans-serif; font-size: 13px; color: #0F172A;" cellspacing="0" cellpadding="0">
   <tr>
     <td style="padding-right: 16px; vertical-align: top;">
-      <img src="${SITE}/brand/icon-mark.svg" alt="EcyPro" width="56" height="56" style="display: block;" />
+      <img src="${SITE}/brand/icon-mark.svg" alt="eCyPro" width="56" height="56" style="display: block;" />
     </td>
     <td style="vertical-align: top;">
       <div style="font-size: 15px; font-weight: 700; color: #0F172A;">Emre Can Yalçın</div>
@@ -117,7 +117,7 @@ eCyverse · Strategic Transformation · Corporate Governance · KVKK & GDPR Comp
       html: `
 <table style="font-family: 'Inter', Arial, sans-serif; font-size: 13px; color: #0F172A;" cellspacing="0" cellpadding="0">
   <tr><td style="padding-right: 16px;">
-    <img src="${SITE}/brand/icon-mark.svg" alt="EcyPro" width="40" height="40" />
+    <img src="${SITE}/brand/icon-mark.svg" alt="eCyPro" width="40" height="40" />
   </td><td>
     <div style="font-weight: 700;">EcyPro · Customer Service</div>
     <div style="font-size: 12px; color: #475569; margin-top: 4px;">

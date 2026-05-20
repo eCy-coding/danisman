@@ -32,7 +32,7 @@ export const ContactPage: React.FC = () => {
         <title>{t('contact.title') || 'İletişim'} | EcyPro Premium Consulting</title>
         <meta
           name="description"
-          content="EcyPro ile hemen iletişime geçin. Stratejik büyüme hedefleriniz için profesyonel destek alın."
+          content="eCyPro ile hemen iletişime geçin. Stratejik büyüme hedefleriniz için profesyonel destek alın."
         />
         <link rel="canonical" href="https://ecypro.com/contact" />
       </Helmet>

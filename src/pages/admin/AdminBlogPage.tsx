@@ -49,7 +49,7 @@ date: "${new Date().toISOString().slice(0, 10)}"
 category: "Strategy"
 readTime: "5 min"
 excerpt: "Bu yazının kısa açıklaması buraya gelecek."
-author: "EcyPro Consulting"
+author: "eCyPro Consulting"
 lang: "tr"
 ---
 

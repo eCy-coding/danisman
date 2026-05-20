@@ -67,7 +67,7 @@ export const AdminSidebar: React.FC = () => {
     <aside className="w-64 bg-neutral/95 border-r border-white/5 h-screen fixed left-0 top-0 flex flex-col z-50">
       <div className="p-8 border-b border-white/5">
         <h2 className="text-xl font-serif text-white tracking-wide">
-          EcyPro<span className="text-secondary">.</span>
+          eCyPro<span className="text-secondary">.</span>
           <span className="block text-xs font-mono text-slate-400 mt-1 uppercase tracking-widest">
             Control Tower
           </span>

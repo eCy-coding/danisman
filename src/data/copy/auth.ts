@@ -25,7 +25,7 @@ export const AUTH_COPY = {
   },
   register: {
     title: { tr: "Partner Başvurusu", en: "Partner Application" },
-    subtitle: { tr: "EcyPro ekosistemine katılmak için ön başvuru formunu doldurun.", en: "Fill out the pre-application form to join the EcyPro ecosystem." },
+    subtitle: { tr: "eCyPro ekosistemine katılmak için ön başvuru formunu doldurun.", en: "Fill out the pre-application form to join the eCyPro ecosystem." },
     submit: { tr: "Başvuruyu Gönder", en: "Submit Application" }
   },
   forgotPassword: {

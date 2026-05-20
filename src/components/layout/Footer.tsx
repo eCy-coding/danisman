@@ -67,7 +67,7 @@ export const Footer: React.FC = () => {
             <Link
               to="/"
               className="inline-block outline-none focus-visible:ring-2 focus-visible:ring-secondary rounded"
-              aria-label="EcyPro Anasayfa"
+              aria-label="eCyPro Anasayfa"
             >
               <EcyLogo size="md" variant="full" />
             </Link>
@@ -319,7 +319,7 @@ export const Footer: React.FC = () => {
 
         <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-slate-300 border-t border-white/5 pt-10">
           <p>
-            &copy; {new Date().getFullYear()} EcyPro. {FOOTER_COPY.rights[lang]}
+            &copy; {new Date().getFullYear()} eCyPro. {FOOTER_COPY.rights[lang]}
           </p>
           <CountrySelector />
           <div className="flex space-x-6 mt-4 md:mt-0">

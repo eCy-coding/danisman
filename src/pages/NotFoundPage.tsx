@@ -80,7 +80,7 @@ export const NotFoundPage: React.FC = () => {
 
       {/* Header */}
       <header className="px-6 md:px-12 py-6">
-        <Link to="/" aria-label="EcyPro Home" className="inline-flex items-center gap-2">
+        <Link to="/" aria-label="eCyPro Home" className="inline-flex items-center gap-2">
           <span className="text-xl font-serif font-bold text-white">eCy</span>
           <span className="text-xs uppercase tracking-widest text-slate-400">Pro</span>
         </Link>

@@ -25,7 +25,7 @@ const AVAILABLE_MODELS = [
 ];
 
 const SYSTEM_PROMPTS: Record<string, string> = {
-  assistant: 'You are EcyPro AI, a premium consulting assistant. Be concise, professional, and data-driven.',
+  assistant: 'You are eCyPro AI, a premium consulting assistant. Be concise, professional, and data-driven.',
   coder:     'You are a senior TypeScript/React expert. Write clean, production-ready code. Prefer named exports, motion/react for animations, Tailwind v4 utilities.',
   analyst:   'You are a McKinsey-level strategy analyst. Provide structured frameworks, quantified insights, and actionable recommendations.',
   writer:    'You are an expert business content writer. Write in a premium, authoritative tone suitable for enterprise consulting.',
@@ -257,7 +257,7 @@ export const OllamaAssistant: React.FC = () => {
               <Bot size={28} className="text-secondary/60" />
             </div>
             <div>
-              <p className="text-slate-400 font-serif text-lg">EcyPro AI Assistant</p>
+              <p className="text-slate-400 font-serif text-lg">eCyPro AI Assistant</p>
               <p className="text-slate-600 text-sm mt-1">Ask anything — strategy, code, content, analysis</p>
             </div>
             <div className="flex flex-wrap justify-center gap-2 mt-2 max-w-sm">

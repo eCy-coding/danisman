@@ -1,5 +1,5 @@
 /**
- * Ecypro Premium Consulting - Design System & Theme Tokens
+ * eCyPro Premium Consulting - Design System & Theme Tokens
  *
  * This file centralizes the design tokens (colors, typography, animations, breakpoints)
  * used across the frontend. These tokens correspond to the Tailwind configuration
