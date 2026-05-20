@@ -109,8 +109,10 @@ async function prerenderRoute(browser, route) {
 }
 
 async function main() {
-  if (process.env.PRERENDER !== '1') {
-    console.log('[prerender] skipped — set PRERENDER=1 to enable');
+  // Opt-out instead of opt-in for production. Skip only when explicitly disabled
+  // (local dev, CI without browser binary, fast iteration).
+  if (process.env.PRERENDER === '0' || process.env.SKIP_PRERENDER === '1') {
+    console.log('[prerender] skipped — PRERENDER=0 or SKIP_PRERENDER=1 set');
     return;
   }
   if (!fs.existsSync(path.join(distDir, 'index.html'))) {
