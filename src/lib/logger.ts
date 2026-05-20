@@ -1,8 +1,9 @@
 /**
  * Centralized DEV-gated logger with optional Sentry capture for errors.
- * P103: replaces direct console.* across src/* (logger is the single sink).
+ * P76: Uses lazy sentry.module instead of eager @sentry/react import
+ * to keep the 259KB Sentry chunk out of the initial bundle.
  */
-import * as Sentry from '@sentry/react';
+import { sentry } from './sentry';
 
 export enum LogLevel {
   DEBUG,
@@ -42,13 +43,18 @@ class LoggerService {
     if (this.level <= LogLevel.ERROR) {
       console.error(`%c[ERROR] ${message}`, 'color: #EF4444', error ?? '', extra ?? '');
     }
-    // No-op when Sentry is not initialized; safe to call always.
-    if (error instanceof Error) {
-      Sentry.captureException(error, { extra: { logMessage: message, ...extra } });
-    } else if (error !== undefined) {
-      Sentry.captureMessage(`${message}: ${String(error)}`, 'error');
-    } else {
-      Sentry.captureMessage(message, 'error');
+    // P76: Access lazy-loaded Sentry module. No-op before sentry.init() completes.
+    // Circular import (sentry→logger→sentry) is safe because .module is only
+    // accessed at call time, not at module evaluation time.
+    const S = sentry.module;
+    if (S) {
+      if (error instanceof Error) {
+        S.captureException(error, { extra: { logMessage: message, ...extra } });
+      } else if (error !== undefined) {
+        S.captureMessage(`${message}: ${String(error)}`, 'error');
+      } else {
+        S.captureMessage(message, 'error');
+      }
     }
   }
 

@@ -1,27 +1,17 @@
 /**
  * P13/2 — Real User Monitoring (RUM).
  *
- * Web Vitals çıktısını TEK boru üzerinden hem (1) Sentry'ye custom
- * measurement olarak hem de (2) backend beacon kanalına (`/api/analytics/interaction`)
- * gönderir. Mevcut `src/lib/monitor.ts` beacon path'ini koruyoruz; bu modül
- * onu Sentry tarafıyla zenginleştiriyor + sample rate kontrolü ekliyor.
- *
- * Tasarım kararları:
- *   - Sample rate prod %10, dev %100 — `VITE_RUM_SAMPLE_RATE` env override.
- *   - Custom transaction'lar: route change, form submit, hero render — Sentry
- *     trace dashboard'unda P75/P95 alarm tetiklemesi için.
- *   - Sentry zaten `browserTracingIntegration()` çalıştırıyor (sentry.ts); biz
- *     ona sadece `setMeasurement` ile Web Vital sayılarını ekliyoruz.
- *   - Consent-aware: AnalyticsProvider'daki cookie consent inactive ise
- *     beacon atılmaz (RUM Sentry ile zaten kullanıcı izinli).
+ * P76: Converted to use lazy Sentry reference from sentry.ts instead of
+ * eagerly importing @sentry/react. This prevents the 259KB Sentry chunk
+ * from being pulled into the initial bundle via rum.ts.
  */
 
-import * as Sentry from '@sentry/react';
 import { onCLS, onFCP, onINP, onLCP, onTTFB, type Metric } from 'web-vitals';
 import { Logger } from './logger';
 import { initRumStats, recordVitalSample, setRumRoute } from './rum-stats';
+import { sentry } from './sentry';
 
-// ── Sample rate ───────────────────────────────────────────────────────────────
+// ── Sample rate ──────────────────────────────────────────────────────────────
 
 function rumSampleRate(): number {
   const raw = import.meta.env.VITE_RUM_SAMPLE_RATE;
@@ -34,10 +24,10 @@ function rumSampleRate(): number {
 
 const sampled = Math.random() < rumSampleRate();
 
-// ── Web Vital → Sentry measurement ────────────────────────────────────────────
+// ── Web Vital → Sentry measurement ──────────────────────────────────────────
 
 const VITAL_UNIT: Record<string, string> = {
-  CLS: '', // unit-less ratio
+  CLS: '',
   FCP: 'millisecond',
   INP: 'millisecond',
   LCP: 'millisecond',
@@ -46,13 +36,11 @@ const VITAL_UNIT: Record<string, string> = {
 
 function reportToSentry(metric: Metric): void {
   if (!sampled) return;
+  const Sentry = sentry.module;
+  if (!Sentry) return; // Sentry not yet loaded — skip silently
 
-  // P21/T1 — Statistical aggregation. Tek tek captureMessage'lar yerine
-  // 1dk pencerede P-Squared percentile, sonra TEK transaction olarak dök.
   recordVitalSample(metric);
 
-  // 1) Send as measurement on the current transaction so the Sentry
-  //    Performance tab tags route loads with vital numbers.
   try {
     Sentry.setMeasurement(
       metric.name.toLowerCase(),
@@ -60,11 +48,9 @@ function reportToSentry(metric: Metric): void {
       VITAL_UNIT[metric.name] ?? 'millisecond',
     );
   } catch {
-    /* setMeasurement throws if no active transaction — safe to ignore */
+    /* setMeasurement throws if no active transaction */
   }
 
-  // 2) Emit a typed event so we can dashboard / alert independent of trace
-  //    sampling (transactions get pruned at high traffic; events don't).
   Sentry.addBreadcrumb({
     category: 'web-vital',
     message: `${metric.name}=${Math.round(metric.value)}`,
@@ -78,8 +64,6 @@ function reportToSentry(metric: Metric): void {
     },
   });
 
-  // 3) Poor-rating spike → captureMessage so on-call sees it without
-  //    drilling into traces.
   if (metric.rating === 'poor') {
     Sentry.captureMessage(`Poor ${metric.name}`, {
       level: 'warning',
@@ -96,7 +80,7 @@ function reportToSentry(metric: Metric): void {
   }
 }
 
-// ── Public init ───────────────────────────────────────────────────────────────
+// ── Public init ──────────────────────────────────────────────────────────────
 
 let initialized = false;
 
@@ -107,8 +91,6 @@ export function initRUM(): void {
 
   Logger.debug(`[RUM] init — sampled=${sampled} mode=${import.meta.env.MODE}`);
 
-  // P21/T1 — Aggregator opt-in. Yalnız sampled clientlarda kurulur, böylece
-  // unsampled trafik için sıfır overhead. Sentry'ye 60s pencerelerle dökecek.
   if (sampled) {
     initRumStats();
   }
@@ -120,27 +102,30 @@ export function initRUM(): void {
   onTTFB(reportToSentry);
 }
 
-/** Router route-change hook — pathname'i template'e çevirip aggregator'a iletir. */
+/** Router route-change hook */
 export function notifyRouteChange(pathname: string): void {
   setRumRoute(pathname);
 }
 
-// ── Critical-path custom transactions ─────────────────────────────────────────
+// ── Critical-path custom transactions ────────────────────────────────────────
 
 /**
- * Wrap a critical async op so it appears as a Sentry transaction with custom
- * `op` for dashboard filtering. Used by Contact form submit, ROI calc, etc.
+ * Wrap a critical async op so it appears as a Sentry transaction.
+ * P76: Uses lazy Sentry ref; falls back to plain execution if not loaded.
  */
 export async function tracedOp<T>(
   name: string,
   op: string,
   fn: () => Promise<T>,
 ): Promise<T> {
-  // Sentry v8 API — startSpan returns the callback's value.
+  const Sentry = sentry.module;
+  if (!Sentry) return fn();
   return Sentry.startSpan({ name, op }, async () => fn());
 }
 
 /** Sync variant. */
 export function tracedSync<T>(name: string, op: string, fn: () => T): T {
+  const Sentry = sentry.module;
+  if (!Sentry) return fn();
   return Sentry.startSpan({ name, op }, () => fn());
 }

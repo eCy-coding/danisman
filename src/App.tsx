@@ -1,5 +1,8 @@
 import React, { Suspense, useState, useEffect } from 'react';
-import { BookingModal } from './components/features/booking/BookingModal';
+// P76: Lazy-load non-critical UI components to reduce main bundle size
+const BookingModal = React.lazy(() =>
+  import('./components/features/booking/BookingModal').then((m) => ({ default: m.BookingModal })),
+);
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { AppProviders } from './components/providers/AppProviders';
 import { NotFoundPage } from './pages/NotFoundPage';
@@ -113,7 +116,7 @@ const DiscoveryCallPage = React.lazy(() => import('./pages/DiscoveryCallPage'));
 const TerminalPage = React.lazy(() =>
   import('./pages/TerminalPage').then((module) => ({ default: module.TerminalPage })),
 );
-import LiveChat from './components/integrations/LiveChat';
+const LiveChat = React.lazy(() => import('./components/integrations/LiveChat'));
 
 // Admin Modules (Lazy)
 const AdminLoginPage = React.lazy(() =>
@@ -1039,8 +1042,13 @@ import { initRUM } from './lib/rum';
 import { PrivacyAnalytics } from './components/analytics/PrivacyAnalytics';
 
 import '@/lib/i18n'; // Initialize i18n
-import { CommandMenu } from './components/ui/CommandMenu';
-import { ZenToggle } from './components/ui/ZenToggle';
+// P76: CommandMenu + ZenToggle lazy — only triggered by keyboard/interaction
+const CommandMenu = React.lazy(() =>
+  import('./components/ui/CommandMenu').then((m) => ({ default: m.CommandMenu })),
+);
+const ZenToggle = React.lazy(() =>
+  import('./components/ui/ZenToggle').then((m) => ({ default: m.ZenToggle })),
+);
 import { LanguageToggle } from './components/ui/LanguageToggle';
 
 import { useWebVitals } from '@/hooks/useWebVitals';
@@ -1048,12 +1056,21 @@ import { useScrollDepth } from '@/hooks/useScrollDepth';
 
 import { SeoManager } from './components/seo/SeoManager';
 
-import { MissionControl } from './components/debug/MissionControl';
+// P76: Lazy-load marketing/debug overlays — none are needed for initial paint
+const MissionControl = React.lazy(() =>
+  import('./components/debug/MissionControl').then((m) => ({ default: m.MissionControl })),
+);
 import { OfflineBanner } from './components/common/OfflineBanner';
 import { WhatsAppButton } from './components/contact/WhatsAppButton';
-import { SimpleChatWidget } from './components/chat/SimpleChatWidget';
-import { ExitIntentModalP53 } from './components/marketing/ExitIntentModal';
-import { MobileCtaBar } from './components/marketing/MobileCtaBar';
+const SimpleChatWidget = React.lazy(() =>
+  import('./components/chat/SimpleChatWidget').then((m) => ({ default: m.SimpleChatWidget })),
+);
+const ExitIntentModalP53 = React.lazy(() =>
+  import('./components/marketing/ExitIntentModal').then((m) => ({ default: m.ExitIntentModalP53 })),
+);
+const MobileCtaBar = React.lazy(() =>
+  import('./components/marketing/MobileCtaBar').then((m) => ({ default: m.MobileCtaBar })),
+);
 import { analyticsConsumer } from './lib/director/analytics-consumer';
 import { personalization } from './lib/director/personalization';
 import { sentry } from './lib/sentry';
@@ -1086,9 +1103,10 @@ const App: React.FC = () => {
             ).requestIdleCallback(cb, { timeout: 2000 })
         : (cb) => setTimeout(cb, 1500);
 
-    idle(() => {
-      // Initialize Sentry Error Reporting (deferred)
-      sentry.init();
+    idle(async () => {
+      // P76: sentry.init() is now async (dynamic import of @sentry/react).
+      // The 259KB Sentry chunk loads here, NOT during initial paint.
+      await sentry.init();
       sentry.addBreadcrumb({ category: 'lifecycle', message: 'App mounted', level: 'info' });
       // P13/2 — RUM goes online after Sentry so Web Vitals can attach as
       // measurements to the in-flight pageload transaction.
@@ -1149,26 +1167,35 @@ const App: React.FC = () => {
       <AppProviders>
         <BrowserRouter>
           <RouterDependentHooks />
-          <MissionControl />
+          {/* P76: Lazy overlays wrapped in Suspense with null fallback (invisible until loaded) */}
+          <Suspense fallback={null}>
+            <MissionControl />
+          </Suspense>
           <PrivacyAnalytics />
           <SeoManager />
           <SchemaOrg />
           {/* P15 — Offline banner: navigator.onLine değiştiğinde görünür. */}
           <OfflineBanner />
-          <CommandMenu />
-          <ZenToggle />
+          <Suspense fallback={null}>
+            <CommandMenu />
+            <ZenToggle />
+          </Suspense>
           <LanguageToggle />
           <Suspense fallback={<LoadingFallback />}>
             <AnimatedRoutes />
           </Suspense>
-          <LiveChat />
+          <Suspense fallback={null}>
+            <LiveChat />
+          </Suspense>
           {/* P52: WhatsApp + simple chat — admin/auth route'larında gizli */}
           <WhatsAppButton />
-          <SimpleChatWidget />
-          {/* P53: exit-intent + mobile sticky CTA */}
-          <ExitIntentModalP53 />
-          <MobileCtaBar />
-          <BookingModal isOpen={bookingOpen} onClose={() => setBookingOpen(false)} />
+          <Suspense fallback={null}>
+            <SimpleChatWidget />
+            {/* P53: exit-intent + mobile sticky CTA */}
+            <ExitIntentModalP53 />
+            <MobileCtaBar />
+            <BookingModal isOpen={bookingOpen} onClose={() => setBookingOpen(false)} />
+          </Suspense>
         </BrowserRouter>
       </AppProviders>
     </SovereignBoundary>

@@ -25,7 +25,7 @@
  * kurulmaz, böylece SSR / test ortamı güvende kalır.
  */
 
-import * as Sentry from '@sentry/react';
+import { sentry } from './sentry';
 import type { Metric } from 'web-vitals';
 
 // ── Public types ──────────────────────────────────────────────────────────────
@@ -521,7 +521,10 @@ function round(x: number, decimals = 2): number {
  * `captureMessage` çağrısının yerine geçer (transaction kotası ~60× azalır).
  */
 export function sentryFlush(snap: RumSnapshot): void {
-  Sentry.startSpan(
+  // P76: Use lazy Sentry reference — no-op if Sentry not yet loaded
+  const S = sentry.module;
+  if (!S) return;
+  S.startSpan(
     {
       name: `rum.window ${snap.route}`,
       op: 'rum.aggregation',
@@ -535,12 +538,12 @@ export function sentryFlush(snap: RumSnapshot): void {
       for (const [name, v] of Object.entries(snap.vitals)) {
         const unit = name === 'CLS' ? '' : 'millisecond';
         const lower = name.toLowerCase();
-        Sentry.setMeasurement(`${lower}_p50`, v.p50, unit);
-        Sentry.setMeasurement(`${lower}_p75`, v.p75, unit);
-        Sentry.setMeasurement(`${lower}_p95`, v.p95, unit);
-        Sentry.setMeasurement(`${lower}_p99`, v.p99, unit);
-        Sentry.setMeasurement(`${lower}_count`, v.count, '');
-        Sentry.setMeasurement(`${lower}_poor`, v.poor, '');
+        S.setMeasurement(`${lower}_p50`, v.p50, unit);
+        S.setMeasurement(`${lower}_p75`, v.p75, unit);
+        S.setMeasurement(`${lower}_p95`, v.p95, unit);
+        S.setMeasurement(`${lower}_p99`, v.p99, unit);
+        S.setMeasurement(`${lower}_count`, v.count, '');
+        S.setMeasurement(`${lower}_poor`, v.poor, '');
       }
     },
   );
