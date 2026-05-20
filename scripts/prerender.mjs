@@ -154,6 +154,23 @@ async function main() {
 }
 
 main().catch((err) => {
+  const msg = err?.message ?? String(err);
+  // Graceful skip on environments without Playwright browser binary
+  // (Vercel, Render, CI without `playwright install chromium`).
+  // Build continues; local dev/CI with chromium still runs full prerender.
+  const transient = [
+    'browserType.launch',
+    'Executable doesn\'t exist',
+    "Cannot find module 'playwright'",
+    'Failed to launch',
+    'spawn ENOENT',
+    'preview server start timeout',
+  ];
+  if (transient.some((sig) => msg.includes(sig))) {
+    console.warn(`[prerender] skipped (no browser binary): ${msg.slice(0, 120)}`);
+    console.warn('[prerender] build continues — set PRERENDER=0 to silence');
+    process.exit(0);
+  }
   console.error('[prerender] fatal:', err);
   process.exit(1);
 });
