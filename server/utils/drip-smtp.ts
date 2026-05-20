@@ -83,7 +83,7 @@ export async function renderTemplate(
   let html = substituted;
   try {
     // Optional: only if installed
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+     
     const mjmlMod = (await (new Function('m', 'return import(m)') as (m: string) => Promise<unknown>)('mjml').catch(() => null)) as unknown;
     if (mjmlMod && typeof mjmlMod === 'object' && 'default' in (mjmlMod as object)) {
       const mjml2html = (mjmlMod as { default: (s: string) => { html: string; errors: unknown[] } })

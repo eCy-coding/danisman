@@ -15,7 +15,7 @@
  * Sandbox build'a etki YOK — sadece manuel run.
  */
 
-/* eslint-disable no-console */
+ 
 
 const SITEMAP_URL = 'https://www.ecypro.com/sitemap.xml';
 const INDEXNOW_API = 'https://api.indexnow.org/indexnow';

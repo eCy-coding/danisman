@@ -128,7 +128,7 @@ export const AdminMediaLibraryPage: React.FC = () => {
           {items.map((m) => (
             <article key={m.id} className="bg-white/[0.02] border border-white/10 rounded-xl overflow-hidden group">
               <div className="aspect-video bg-white/5 overflow-hidden">
-                {/* eslint-disable-next-line jsx-a11y/img-redundant-alt */}
+                { }
                 <img src={m.url} alt={m.alt ?? m.filename} className="w-full h-full object-cover" />
               </div>
               <div className="p-3">
