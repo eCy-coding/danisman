@@ -219,3 +219,6 @@ package-lock.json.bak*
 # P39 — local snapshot builds
 dist.p*
 PUSH_TO_REMOTE.command
+
+# Cron internal state (autonomous-development task)
+.claude/scheduled_tasks.lock
