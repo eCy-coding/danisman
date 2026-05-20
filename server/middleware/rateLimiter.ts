@@ -20,6 +20,7 @@ interface RateLimiterOptions {
   maxRequests: number; // Max requests per window
   message?: string; // Custom error message
   keyGenerator?: (req: Request) => string; // Custom key extractor
+  skip?: (req: Request) => boolean; // P99 — return true to bypass limiter (e.g. health probes)
 }
 
 // ─── In-Memory Store (Fallback) ──────────────────────────
@@ -53,9 +54,15 @@ export function createRateLimiter(options: RateLimiterOptions) {
     maxRequests,
     message = 'Too many requests, please try again later.',
     keyGenerator = defaultKeyGenerator,
+    skip,
   } = options;
 
   return async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    // P99 — health probes / explicit bypass paths must not consume the budget.
+    if (skip && skip(req)) {
+      next();
+      return;
+    }
     const key = `ratelimit:${keyGenerator(req)}:${req.baseUrl || req.path}`;
     const now = Date.now();
     let currentCount = 1;
@@ -157,6 +164,15 @@ export function createRateLimiter(options: RateLimiterOptions) {
 export const generalLimiter = createRateLimiter({
   windowMs: Number.parseInt(process.env.RATE_LIMIT_WINDOW_MS ?? '', 10) || 15 * 60 * 1000,
   maxRequests: Number.parseInt(process.env.RATE_LIMIT_MAX ?? '', 10) || 100,
+  // P99 — health probes are platform-issued and idempotent; counting them
+  // against the per-IP API budget caused self-inflicted 429s on Render +
+  // Better Stack (mis-reported as 502 by the upstream LB).
+  skip: (req) =>
+    req.path === '/health' ||
+    req.path === '/api/health' ||
+    req.path === '/api/v1/health' ||
+    req.originalUrl === '/api/health' ||
+    req.originalUrl === '/api/v1/health',
 });
 
 /**
