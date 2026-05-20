@@ -16,14 +16,14 @@ export const SchemaOrg: React.FC = () => {
     image: logoUrl,
     '@id': baseUrl,
     url: baseUrl,
-    telephone: '+90-555-123-4567',
+    telephone: '+90-541-714-3000',
     priceRange: '$$$',
     address: {
       '@type': 'PostalAddress',
-      streetAddress: 'Maslak Mah. Buyukdere Cad. No:123/A',
+      streetAddress: 'Istanbul, Turkey',
       addressLocality: 'Istanbul',
       addressRegion: 'Sariyer',
-      postalCode: '34398',
+      postalCode: '34000',
       addressCountry: 'TR',
     },
     geo: {
