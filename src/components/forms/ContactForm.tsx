@@ -1,5 +1,6 @@
 import React from 'react';
 import posthog from 'posthog-js';
+import { useNavigate } from 'react-router-dom';
 import { contactSchema, ContactFormData } from '../../schemas/contact';
 import { Send, CheckCircle, AlertCircle, Loader2, Lock } from 'lucide-react';
 import { useTranslation } from '@/lib/i18n';
@@ -35,6 +36,7 @@ const contactForm = createForm({
 
 export const ContactForm: React.FC = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const { rhf, status, submit, reset } = contactForm.useTypedForm();
   const {
     register,
@@ -50,15 +52,20 @@ export const ContactForm: React.FC = () => {
         ? 'error'
         : 'idle';
 
-  // Reset form on success so the next submission starts clean.
+  // On success: brief inline confirmation, then route to /thank-you so the
+  // post-conversion experience (case studies + Calendly direct + newsletter)
+  // takes over instead of the user staring at an empty form.
   React.useEffect(() => {
     if (status === 'success') {
-      // Slight delay so the success message stays visible.
-      const t = setTimeout(() => reset(), 3000);
-      return () => clearTimeout(t);
+      const r = setTimeout(() => reset(), 3000);
+      const n = setTimeout(() => navigate('/thank-you'), 1200);
+      return () => {
+        clearTimeout(r);
+        clearTimeout(n);
+      };
     }
     return undefined;
-  }, [status, reset]);
+  }, [status, reset, navigate]);
 
   const onSubmit = (data: ContactFormData) => {
     // P97 — PostHog capture is a no-op when the user hasn't opted in

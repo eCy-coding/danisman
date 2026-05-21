@@ -20,6 +20,7 @@ import { AnalyticsDevOverlay } from '../dev/AnalyticsDevOverlay';
 import { InstallPrompt } from '../pwa/InstallPrompt';
 import { UpdatePrompt } from '../pwa/UpdatePrompt';
 import { SkipLinks } from '../common/SkipLinks';
+import { MobileStickyCTA } from '../common/MobileStickyCTA';
 
 export const MainLayout: React.FC = () => {
   return (
@@ -43,6 +44,7 @@ export const MainLayout: React.FC = () => {
         <SocialProofToast />
         <ExitIntentModal />
         <MobileBottomNav />
+        <MobileStickyCTA />
         <InstallPrompt />
         <UpdatePrompt />
       </aside>
