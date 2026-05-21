@@ -35,7 +35,7 @@ export const FounderPortrait: React.FC<FounderPortraitProps> = ({
       loading="lazy"
       decoding="async"
       onError={() => setErrored(true)}
-      alt="Emre Can Yalçın — Founder & Chief Strategist, EcyPro Premium Consulting"
+      alt="Emre Can Yalçın — Founder & Chief Strategist, eCyPro Premium Consulting"
       className={`rounded-2xl object-cover ${className}`}
       style={{ width: px, height: px }}
       data-testid="founder-portrait"

@@ -21,26 +21,26 @@ import { apiClient } from '../lib/api';
 
 type Variant = 'confirmed' | 'unsubscribed' | 'invalid-token';
 
-const COPY: Record<Variant, { title: string; heading: string; body: string; icon: 'check' | 'mailx' | 'alert' }> = {
+const COPY: Record<
+  Variant,
+  { title: string; heading: string; body: string; icon: 'check' | 'mailx' | 'alert' }
+> = {
   confirmed: {
-    title: 'Bülten Onaylandı | EcyPro Premium Consulting',
+    title: 'Bülten Onaylandı | eCyPro Premium Consulting',
     heading: 'Bülten kaydınız onaylandı.',
-    body:
-      'KVKK çift-onayını tamamladığınız için teşekkürler. Ayda en fazla 1 mektup; satış baskısı yok, anonim engagement öğrenimi var. İlk içerik 3 gün içinde gelir.',
+    body: 'KVKK çift-onayını tamamladığınız için teşekkürler. Ayda en fazla 1 mektup; satış baskısı yok, anonim engagement öğrenimi var. İlk içerik 3 gün içinde gelir.',
     icon: 'check',
   },
   unsubscribed: {
-    title: 'Bülten Aboneliği İptal Edildi | EcyPro Premium Consulting',
+    title: 'Bülten Aboneliği İptal Edildi | eCyPro Premium Consulting',
     heading: 'Aboneliğiniz başarıyla iptal edildi.',
-    body:
-      'Sizi listeden çıkardık. Bu bir an meselesi olduysa tekrar abone olmak isterseniz ana sayfa altındaki formu kullanabilirsiniz. Nedeninizi öğrenmek isteriz — aşağıdaki anonim formla 30 saniyede paylaşabilirsiniz.',
+    body: 'Sizi listeden çıkardık. Bu bir an meselesi olduysa tekrar abone olmak isterseniz ana sayfa altındaki formu kullanabilirsiniz. Nedeninizi öğrenmek isteriz — aşağıdaki anonim formla 30 saniyede paylaşabilirsiniz.',
     icon: 'mailx',
   },
   'invalid-token': {
-    title: 'Geçersiz Bağlantı | EcyPro Premium Consulting',
+    title: 'Geçersiz Bağlantı | eCyPro Premium Consulting',
     heading: 'Bağlantı geçerli değil veya süresi dolmuş.',
-    body:
-      'Bu bağlantı 30 günü aştığı için veya değiştirilmiş olduğu için doğrulanamadı. Yeni bir bülten aboneliği başlatabilir veya iletişime geçebilirsiniz.',
+    body: 'Bu bağlantı 30 günü aştığı için veya değiştirilmiş olduğu için doğrulanamadı. Yeni bir bülten aboneliği başlatabilir veya iletişime geçebilirsiniz.',
     icon: 'alert',
   },
 };
@@ -56,27 +56,27 @@ export const NewsletterStatusPage: React.FC = () => {
   const variant = detectVariant(pathname);
   const copy = COPY[variant];
 
-  const Icon =
-    copy.icon === 'check' ? CheckCircle2 : copy.icon === 'mailx' ? MailX : AlertTriangle;
+  const Icon = copy.icon === 'check' ? CheckCircle2 : copy.icon === 'mailx' ? MailX : AlertTriangle;
   const iconColor =
-    copy.icon === 'check' ? 'text-secondary' : copy.icon === 'alert' ? 'text-amber-400' : 'text-slate-400';
+    copy.icon === 'check'
+      ? 'text-secondary'
+      : copy.icon === 'alert'
+        ? 'text-amber-400'
+        : 'text-slate-400';
 
   return (
     <div className="min-h-screen bg-neutral flex items-center justify-center px-6 py-24">
-      <SEO
-        title={copy.title}
-        description={copy.body}
-        canonical={pathname}
-        noIndex
-      />
+      <SEO title={copy.title} description={copy.body} canonical={pathname} noIndex />
       <article className="max-w-xl w-full text-center">
-        <div className={`inline-flex items-center justify-center w-16 h-16 rounded-full border ${
-          copy.icon === 'check'
-            ? 'border-secondary/30 bg-secondary/10'
-            : copy.icon === 'alert'
-              ? 'border-amber-400/30 bg-amber-400/10'
-              : 'border-white/15 bg-white/5'
-        } mb-6`}>
+        <div
+          className={`inline-flex items-center justify-center w-16 h-16 rounded-full border ${
+            copy.icon === 'check'
+              ? 'border-secondary/30 bg-secondary/10'
+              : copy.icon === 'alert'
+                ? 'border-amber-400/30 bg-amber-400/10'
+                : 'border-white/15 bg-white/5'
+          } mb-6`}
+        >
           <Icon size={28} className={iconColor} aria-hidden="true" />
         </div>
         <h1 className="text-3xl md:text-4xl font-serif font-bold text-white mb-4 leading-tight">
@@ -120,7 +120,11 @@ const UnsubscribeFeedbackForm: React.FC<{ search: string }> = ({ search }) => {
       // Search query string'inde reason=optional gibi parametre olabilir; göz ardı.
       const params = new URLSearchParams(search);
       const email = params.get('email') ?? 'unknown@example.com';
-      await apiClient.post('/newsletter/feedback', { email, category: category || undefined, reason: reason || undefined });
+      await apiClient.post('/newsletter/feedback', {
+        email,
+        category: category || undefined,
+        reason: reason || undefined,
+      });
       setStatus('sent');
     } catch {
       setStatus('error');
@@ -167,7 +171,9 @@ const UnsubscribeFeedbackForm: React.FC<{ search: string }> = ({ search }) => {
         />
       </label>
       {status === 'error' && (
-        <p className="text-xs text-red-400">Geri bildirim gönderilemedi. Lütfen daha sonra dener veya info@ecypro.com'a yazın.</p>
+        <p className="text-xs text-red-400">
+          Geri bildirim gönderilemedi. Lütfen daha sonra dener veya info@ecypro.com'a yazın.
+        </p>
       )}
       <button
         type="submit"

@@ -110,9 +110,7 @@ const KpiCard: React.FC<{ result: string; index: number }> = ({ result, index })
           <span className="ml-1 text-secondary">↗</span>
         </div>
       )}
-      <p className="text-slate-300 text-sm leading-relaxed flex-1">
-        {display ? rest : result}
-      </p>
+      <p className="text-slate-300 text-sm leading-relaxed flex-1">{display ? rest : result}</p>
       <div className="mt-4 text-[10px] uppercase tracking-widest font-bold text-slate-500">
         Sonuç #{index + 1}
       </div>
@@ -157,10 +155,7 @@ const StickyCta: React.FC<{ primaryText: string }> = ({ primaryText }) => {
     <div className="fixed bottom-6 right-6 left-6 md:left-auto md:right-8 z-40 pointer-events-none">
       <div className="md:max-w-md mx-auto md:ml-auto pointer-events-auto bg-secondary text-neutral rounded-2xl shadow-2xl border border-secondary/30 px-5 py-4 flex items-center gap-4 animate-in slide-in-from-bottom-4 fade-in duration-500">
         <Sparkles size={18} className="text-neutral flex-shrink-0" />
-        <Link
-          to="/contact"
-          className="flex-1 font-semibold text-sm leading-tight hover:underline"
-        >
+        <Link to="/contact" className="flex-1 font-semibold text-sm leading-tight hover:underline">
           {primaryText}
           <span className="block text-xs opacity-75 mt-0.5 font-normal">
             Discovery Call · 45 dk ücretsiz
@@ -202,7 +197,7 @@ export const ServiceDetailLayout: React.FC<ServiceDetailLayoutProps> = ({
     serviceType: title,
     provider: {
       '@type': 'Organization',
-      name: 'EcyPro Premium Consulting',
+      name: 'eCyPro Premium Consulting',
       url: 'https://www.ecypro.com',
     },
     areaServed: { '@type': 'Country', name: 'Turkey' },
@@ -488,7 +483,9 @@ export const ServiceDetailLayout: React.FC<ServiceDetailLayoutProps> = ({
                   </div>
                   <p className="text-sm text-slate-400 mb-6 pb-6 border-b border-white/5">
                     Toplam:{' '}
-                    <strong className="text-white text-base">{content.timeline.totalDuration}</strong>
+                    <strong className="text-white text-base">
+                      {content.timeline.totalDuration}
+                    </strong>
                   </p>
                   <ol className="space-y-4 list-none">
                     {content.timeline.milestones.map((m, i) => (
@@ -702,8 +699,8 @@ export const ServiceDetailLayout: React.FC<ServiceDetailLayoutProps> = ({
             Discovery Call ile başlayalım
           </h2>
           <p className="text-slate-400 mb-10 leading-relaxed text-lg">
-            45 dakikalık ücretsiz keşif görüşmesi. Engagement uyumunu birlikte değerlendirelim,
-            5-7 gün içinde yazılı önerge paylaşılır.
+            45 dakikalık ücretsiz keşif görüşmesi. Engagement uyumunu birlikte değerlendirelim, 5-7
+            gün içinde yazılı önerge paylaşılır.
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
             <Link

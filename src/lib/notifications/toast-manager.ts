@@ -1,5 +1,5 @@
 /**
- * EcyPro — Toast Notification Manager
+ * eCyPro — Toast Notification Manager
  *
  * Bridges the Personalization Engine with Sonner toast notifications.
  * Each personalization variant maps to a specific toast style.
@@ -24,13 +24,14 @@ const VARIANT_ICONS: Record<string, string> = {
   'form-recovery': '📋',
 };
 
-const VARIANT_STYLES: Record<string, { duration: number; position: 'top-right' | 'bottom-right' }> = {
-  'premium-cta': { duration: 8000, position: 'bottom-right' },
-  'welcome-back': { duration: 6000, position: 'top-right' },
-  'discount-popup': { duration: 10000, position: 'bottom-right' },
-  'idle-prompt': { duration: 7000, position: 'bottom-right' },
-  'form-recovery': { duration: 9000, position: 'bottom-right' },
-};
+const VARIANT_STYLES: Record<string, { duration: number; position: 'top-right' | 'bottom-right' }> =
+  {
+    'premium-cta': { duration: 8000, position: 'bottom-right' },
+    'welcome-back': { duration: 6000, position: 'top-right' },
+    'discount-popup': { duration: 10000, position: 'bottom-right' },
+    'idle-prompt': { duration: 7000, position: 'bottom-right' },
+    'form-recovery': { duration: 9000, position: 'bottom-right' },
+  };
 
 /**
  * Show a personalization toast from a Director action
@@ -40,7 +41,10 @@ export function showPersonalizationToast(action: Action): void {
   if (!payload?.message) return;
 
   const icon = VARIANT_ICONS[payload.variant] || '✨';
-  const style = VARIANT_STYLES[payload.variant] || { duration: 6000, position: 'bottom-right' as const };
+  const style = VARIANT_STYLES[payload.variant] || {
+    duration: 6000,
+    position: 'bottom-right' as const,
+  };
 
   const title = getVariantTitle(payload.variant);
   const description = payload.message;
@@ -65,7 +69,7 @@ function getVariantTitle(variant: string): string {
     'idle-prompt': 'Need Assistance?',
     'form-recovery': 'Complete Your Inquiry',
   };
-  return titles[variant] || 'EcyPro Update';
+  return titles[variant] || 'eCyPro Update';
 }
 
 /**

@@ -243,7 +243,7 @@ export const PricingPage: React.FC = () => {
   return (
     <React.Fragment>
       <Helmet>
-        <title>{`${t.title[lang]} | EcyPro`}</title>
+        <title>{`${t.title[lang]} | eCyPro`}</title>
         <meta name="description" content={t.subtitle[lang]} />
         <link rel="canonical" href="https://ecypro.com/pricing" />
       </Helmet>

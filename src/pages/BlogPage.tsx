@@ -8,8 +8,11 @@ const BlogPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-[#050810] text-slate-300 font-sans selection:bg-blue-500/30 selection:text-white">
       <Helmet>
-        <title>Blog & İçgörüler | EcyPro Premium Danışmanlık</title>
-        <meta name="description" content="İş dünyası, dijital dönüşüm ve stratejik yönetim üzerine uzman analizleri ve rehberler." />
+        <title>Blog & İçgörüler | eCyPro Premium Danışmanlık</title>
+        <meta
+          name="description"
+          content="İş dünyası, dijital dönüşüm ve stratejik yönetim üzerine uzman analizleri ve rehberler."
+        />
       </Helmet>
 
       <Navbar />
@@ -26,7 +29,8 @@ const BlogPage: React.FC = () => {
               </span>
             </h1>
             <p className="text-lg text-slate-400 leading-relaxed">
-              Geleceği şekillendiren teknolojiler ve yönetim stratejileri üzerine uzman analizlerimiz.
+              Geleceği şekillendiren teknolojiler ve yönetim stratejileri üzerine uzman
+              analizlerimiz.
             </p>
           </div>
 

@@ -1,5 +1,4 @@
-
-// EcyPro Premium Consulting - Constants Aggregator
+// eCyPro Premium Consulting - Constants Aggregator
 // This file re-exports modularized content from src/data
 // Maintaining backward compatibility for the application.
 

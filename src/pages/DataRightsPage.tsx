@@ -29,8 +29,7 @@ interface SubmissionState {
   message?: string;
 }
 
-const apiBase = (): string =>
-  (import.meta.env.VITE_API_URL || '/api').replace(/\/$/, '');
+const apiBase = (): string => (import.meta.env.VITE_API_URL || '/api').replace(/\/$/, '');
 
 function newIdempotencyKey(): string {
   if (typeof crypto !== 'undefined' && 'randomUUID' in crypto) {
@@ -100,7 +99,8 @@ export const DataRightsPage: React.FC = () => {
         lang === 'tr'
           ? 'Bu e-posta için 24 saat içinde başka bir talep gönderdiniz. Lütfen yarın tekrar deneyin.'
           : 'You have already submitted a request for this email within 24 hours. Please try again tomorrow.',
-      invalidEmail: lang === 'tr' ? 'Geçerli bir e-posta adresi girin.' : 'Please enter a valid email.',
+      invalidEmail:
+        lang === 'tr' ? 'Geçerli bir e-posta adresi girin.' : 'Please enter a valid email.',
     }),
     [lang],
   );
@@ -194,8 +194,8 @@ export const DataRightsPage: React.FC = () => {
         </h2>
         <p className="leading-relaxed">
           {lang === 'tr'
-            ? 'KVKK Madde 11 kapsamında EcyPro Premium Consulting nezdindeki kişisel verilerinize ilişkin aşağıdaki haklara sahipsiniz. Talebinizi bu sayfadaki form üzerinden veya kvkk@ecypro.com adresine e-posta ile iletebilirsiniz.'
-            : 'Under KVKK Article 11, you have the following rights regarding personal data held by EcyPro Premium Consulting. You may submit your request via the form on this page or by email to kvkk@ecypro.com.'}
+            ? 'KVKK Madde 11 kapsamında eCyPro Premium Consulting nezdindeki kişisel verilerinize ilişkin aşağıdaki haklara sahipsiniz. Talebinizi bu sayfadaki form üzerinden veya kvkk@ecypro.com adresine e-posta ile iletebilirsiniz.'
+            : 'Under KVKK Article 11, you have the following rights regarding personal data held by eCyPro Premium Consulting. You may submit your request via the form on this page or by email to kvkk@ecypro.com.'}
         </p>
         <ul className="list-disc list-inside space-y-fib-3 marker:text-secondary">
           <li>
@@ -240,8 +240,8 @@ export const DataRightsPage: React.FC = () => {
         </h2>
         <p className="leading-relaxed">
           {lang === 'tr'
-            ? 'EcyPro Premium Consulting; iletişim formları, danışmanlık engagement süreçleri, randevu yönetimi ve opt-in pazarlama iletişimi için sınırlı kişisel veri toplar. Açık rızanız olmadan üçüncü taraflara satılmaz veya pazarlama amacıyla paylaşılmaz.'
-            : 'EcyPro Premium Consulting collects limited personal data for contact forms, consulting engagement workflows, appointment management, and opt-in marketing communications. Your data is never sold to or shared with third parties for marketing without your explicit consent.'}
+            ? 'eCyPro Premium Consulting; iletişim formları, danışmanlık engagement süreçleri, randevu yönetimi ve opt-in pazarlama iletişimi için sınırlı kişisel veri toplar. Açık rızanız olmadan üçüncü taraflara satılmaz veya pazarlama amacıyla paylaşılmaz.'
+            : 'eCyPro Premium Consulting collects limited personal data for contact forms, consulting engagement workflows, appointment management, and opt-in marketing communications. Your data is never sold to or shared with third parties for marketing without your explicit consent.'}
         </p>
 
         <h2 className="text-2xl font-semibold text-white pt-fib-5">
@@ -270,21 +270,15 @@ export const DataRightsPage: React.FC = () => {
           </li>
           <li>
             <strong className="text-slate-100">Render</strong>
-            {lang === 'tr'
-              ? ' — backend API barındırma.'
-              : ' — backend API hosting.'}
+            {lang === 'tr' ? ' — backend API barındırma.' : ' — backend API hosting.'}
           </li>
           <li>
             <strong className="text-slate-100">Neon</strong>
-            {lang === 'tr'
-              ? ' — yönetilen Postgres veritabanı.'
-              : ' — managed Postgres database.'}
+            {lang === 'tr' ? ' — yönetilen Postgres veritabanı.' : ' — managed Postgres database.'}
           </li>
           <li>
             <strong className="text-slate-100">EmailJS</strong>
-            {lang === 'tr'
-              ? ' — iletişim formu mesaj iletimi.'
-              : ' — contact form message relay.'}
+            {lang === 'tr' ? ' — iletişim formu mesaj iletimi.' : ' — contact form message relay.'}
           </li>
           <li>
             <strong className="text-slate-100">Sentry</strong>
@@ -299,13 +293,13 @@ export const DataRightsPage: React.FC = () => {
         </h2>
         <p className="leading-relaxed">
           {lang === 'tr'
-            ? 'Talebinizi aldıktan sonra 24 saat içinde e-posta ile dönüş yaparız. Talep doğrulamasından sonra KVKK\'nın öngördüğü en geç 30 gün içinde işlem tamamlanır. Karmaşık talepler için ek süre gerekirse e-posta ile bilgilendirilirsiniz.'
+            ? "Talebinizi aldıktan sonra 24 saat içinde e-posta ile dönüş yaparız. Talep doğrulamasından sonra KVKK'nın öngördüğü en geç 30 gün içinde işlem tamamlanır. Karmaşık talepler için ek süre gerekirse e-posta ile bilgilendirilirsiniz."
             : 'We acknowledge your request by email within 24 hours. After identity verification, the request is completed within the KVKK-mandated maximum of 30 days. If additional time is needed for complex requests, you will be notified by email.'}
         </p>
 
         <p className="text-xs text-slate-500 italic pt-fib-5 border-t border-white/5">
           {lang === 'tr'
-            ? 'Bu sayfa bilgilendirme amaçlıdır ve hukuki tavsiye niteliği taşımaz. Sayfadaki bilgiler EcyPro Premium Consulting tarafından özenle hazırlanmış olsa da bağımsız bir avukat onayından geçmemiştir. Hukuki yorum gerektiren konularda lütfen bir avukata danışın.'
+            ? 'Bu sayfa bilgilendirme amaçlıdır ve hukuki tavsiye niteliği taşımaz. Sayfadaki bilgiler eCyPro Premium Consulting tarafından özenle hazırlanmış olsa da bağımsız bir avukat onayından geçmemiştir. Hukuki yorum gerektiren konularda lütfen bir avukata danışın.'
             : 'This page is informational and does not constitute legal advice. While prepared with care, the content has not been independently reviewed by counsel. Consult an attorney for matters requiring legal interpretation.'}
         </p>
       </section>
@@ -389,7 +383,17 @@ export const DataRightsPage: React.FC = () => {
         </div>
 
         {/* Honeypot — visually hidden, off-tab */}
-        <div aria-hidden="true" style={{ position: 'absolute', left: '-10000px', top: 'auto', width: '1px', height: '1px', overflow: 'hidden' }}>
+        <div
+          aria-hidden="true"
+          style={{
+            position: 'absolute',
+            left: '-10000px',
+            top: 'auto',
+            width: '1px',
+            height: '1px',
+            overflow: 'hidden',
+          }}
+        >
           <label htmlFor="hp_field">Leave this empty</label>
           <input
             id="hp_field"
@@ -410,21 +414,13 @@ export const DataRightsPage: React.FC = () => {
         </button>
 
         {state.status === 'error' && state.message && (
-          <p
-            id={errorId}
-            role="alert"
-            className="mt-fib-5 text-sm text-red-400"
-          >
+          <p id={errorId} role="alert" className="mt-fib-5 text-sm text-red-400">
             {state.message}
           </p>
         )}
 
         {state.status === 'success' && state.message && (
-          <p
-            id={successId}
-            role="status"
-            className="mt-fib-5 text-sm text-emerald-400"
-          >
+          <p id={successId} role="status" className="mt-fib-5 text-sm text-emerald-400">
             {state.message}
           </p>
         )}
@@ -436,9 +432,7 @@ export const DataRightsPage: React.FC = () => {
         </p>
       </form>
 
-      <p className="mt-fib-7 text-sm text-slate-400">
-        {t('placeholder')}
-      </p>
+      <p className="mt-fib-7 text-sm text-slate-400">{t('placeholder')}</p>
     </LegalLayout>
   );
 };

@@ -30,41 +30,39 @@ export const ServiceDetailPage: React.FC = () => {
   const detailedContent = getServiceContent(slug);
 
   // ServiceDetailLayout her halükarda render olur; içerik yoksa hero + fallback CTA döner.
-  const content =
-    detailedContent ??
-    {
-      slug,
-      hero: {
-        title: fallbackTitle,
-        subtitle: fallbackDescription,
-        valueProp: '',
-        primaryCtaText: 'Ücretsiz Strateji Görüşmesi Al',
-      },
-      problem: { title: '', painPoints: [] },
-      outcomes: { title: '', results: [] },
-      methodology: { title: '', phases: [] },
-      deliverables: { title: '', artifacts: [] },
-      timeline: { totalDuration: '', milestones: [] },
-      investment: { range: '', model: '', paymentPlan: '' },
-      trust: { anonymizedExample: '' },
-      faq: { items: [] },
-      related: [],
-      assessment: { title: '', questions: [], rubric: '' },
-    };
+  const content = detailedContent ?? {
+    slug,
+    hero: {
+      title: fallbackTitle,
+      subtitle: fallbackDescription,
+      valueProp: '',
+      primaryCtaText: 'Ücretsiz Strateji Görüşmesi Al',
+    },
+    problem: { title: '', painPoints: [] },
+    outcomes: { title: '', results: [] },
+    methodology: { title: '', phases: [] },
+    deliverables: { title: '', artifacts: [] },
+    timeline: { totalDuration: '', milestones: [] },
+    investment: { range: '', model: '', paymentPlan: '' },
+    trust: { anonymizedExample: '' },
+    faq: { items: [] },
+    related: [],
+    assessment: { title: '', questions: [], rubric: '' },
+  };
 
   return (
     <>
       <Helmet>
-        <title>{`${fallbackTitle} | EcyPro Premium Consulting`}</title>
+        <title>{`${fallbackTitle} | eCyPro Premium Consulting`}</title>
         <meta name="description" content={fallbackDescription} />
         <link rel="canonical" href={serviceUrl} />
-        <meta property="og:title" content={`${fallbackTitle} | EcyPro Premium Consulting`} />
+        <meta property="og:title" content={`${fallbackTitle} | eCyPro Premium Consulting`} />
         <meta property="og:description" content={fallbackDescription} />
         <meta property="og:type" content="website" />
         <meta property="og:url" content={serviceUrl} />
         <meta property="og:image" content="https://www.ecypro.com/og-image.svg" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={`${fallbackTitle} | EcyPro Premium Consulting`} />
+        <meta name="twitter:title" content={`${fallbackTitle} | eCyPro Premium Consulting`} />
         <meta name="twitter:description" content={fallbackDescription} />
       </Helmet>
       <JsonLd

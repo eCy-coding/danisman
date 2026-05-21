@@ -8,9 +8,9 @@ import { motion } from 'motion/react';
 // P46 C5: MDX content'in ilk satırı `# Başlık` formatında olduğu için her blog
 // post sayfasında 2 H1 vardı (BlogPostPage + MDX). SEO best practice 1 H1/page.
 // Bu mapping MDX h1 → h2 demote eder; semantic h1 sayısı 1'e iner.
-const MDX_COMPONENTS = {
-  h1: (props: React.ComponentPropsWithoutRef<'h2'>) => <h2 {...props} />,
-};
+// eslint-disable-next-line jsx-a11y/heading-has-content -- MDX runtime supplies children at render time
+const MdxH2 = (props: React.ComponentPropsWithoutRef<'h2'>) => <h2 {...props} />;
+const MDX_COMPONENTS = { h1: MdxH2 };
 
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
@@ -62,16 +62,16 @@ const BlogPostPage: React.FC = () => {
     <div className="min-h-screen bg-neutral text-slate-300 font-sans">
       <ScrollProgressBar />
       <Helmet>
-        <title>{post.title} | EcyPro Blog</title>
+        <title>{post.title} | eCyPro Blog</title>
         <meta name="description" content={post.excerpt} />
         <link rel="canonical" href={`https://www.ecypro.com/blog/${post.slug}`} />
-        <meta property="og:title" content={`${post.title} | EcyPro Blog`} />
+        <meta property="og:title" content={`${post.title} | eCyPro Blog`} />
         <meta property="og:description" content={post.excerpt} />
         <meta property="og:type" content="article" />
         <meta property="og:url" content={`https://www.ecypro.com/blog/${post.slug}`} />
         <meta property="og:image" content={post.coverImage} />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={`${post.title} | EcyPro Blog`} />
+        <meta name="twitter:title" content={`${post.title} | eCyPro Blog`} />
         <meta name="twitter:description" content={post.excerpt} />
         <meta name="twitter:image" content={post.coverImage} />
         <meta property="article:published_time" content={post.date} />
@@ -181,7 +181,10 @@ const BlogPostPage: React.FC = () => {
                       <div className="text-xs text-slate-400">Yazar & Stratejist</div>
                     </div>
                   </div>
-                  <button type="button" className="flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 rounded-lg text-slate-300 transition-colors border border-white/10">
+                  <button
+                    type="button"
+                    className="flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 rounded-lg text-slate-300 transition-colors border border-white/10"
+                  >
                     <Share2 className="w-4 h-4" />
                     Paylaş
                   </button>

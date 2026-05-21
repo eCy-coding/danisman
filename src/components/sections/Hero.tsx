@@ -386,7 +386,7 @@ export const Hero: React.FC = () => {
               onClose={() => setVideoOpen(false)}
               videoId="dQw4w9WgXcQ"
               provider="youtube"
-              title={{ tr: 'EcyPro Platform Demosu', en: 'EcyPro Platform Demo' }}
+              title={{ tr: 'eCyPro Platform Demosu', en: 'eCyPro Platform Demo' }}
             />
           </MotionOrDiv>
 

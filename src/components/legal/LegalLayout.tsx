@@ -29,13 +29,7 @@ interface LegalLayoutProps {
   children: ReactNode;
 }
 
-function LegalDocumentSchema({
-  name,
-  dateModified,
-}: {
-  name: string;
-  dateModified: string;
-}) {
+function LegalDocumentSchema({ name, dateModified }: { name: string; dateModified: string }) {
   const data = {
     '@context': 'https://schema.org',
     '@type': 'WebPage',
@@ -43,7 +37,7 @@ function LegalDocumentSchema({
     dateModified,
     publisher: {
       '@type': 'Organization',
-      name: 'EcyPro Premium Consulting',
+      name: 'eCyPro Premium Consulting',
       url: 'https://www.ecypro.com',
     },
   };
@@ -70,7 +64,7 @@ export const LegalLayout: React.FC<LegalLayoutProps> = ({
   return (
     <FadeIn>
       <Helmet>
-        <title>{title} | EcyPro</title>
+        <title>{title} | eCyPro</title>
         {description && <meta name="description" content={description} />}
       </Helmet>
 
@@ -78,19 +72,13 @@ export const LegalLayout: React.FC<LegalLayoutProps> = ({
 
       <div className="min-h-screen bg-neutral text-slate-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-8 pb-24">
-          <Breadcrumb
-            items={[{ label: { tr: title, en: title } }]}
-            className="mb-6"
-          />
+          <Breadcrumb items={[{ label: { tr: title, en: title } }]} className="mb-6" />
 
           <LegalDisclaimer />
 
           <div className="flex gap-12 items-start">
             {/* Main content column */}
-            <article
-              ref={contentRef}
-              className="flex-1 min-w-0 max-w-4xl"
-            >
+            <article ref={contentRef} className="flex-1 min-w-0 max-w-4xl">
               <header className="mb-8 border-b border-white/10 pb-6">
                 <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">{title}</h1>
                 <p className="text-sm text-slate-400">

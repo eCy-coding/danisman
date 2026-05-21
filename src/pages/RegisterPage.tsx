@@ -18,7 +18,7 @@ export const RegisterPage: React.FC = () => {
   return (
     <>
       <Helmet>
-        <title>{t('auth.register') || 'Register'} | EcyPro</title>
+        <title>{t('auth.register') || 'Register'} | eCyPro</title>
         {/* P15 — auth pages, SERP indeks dışı. */}
         <meta name="robots" content="noindex,nofollow" />
       </Helmet>
@@ -46,7 +46,7 @@ export const RegisterPage: React.FC = () => {
           </div>
 
           <div className="relative z-10 text-sm text-slate-400">
-            &copy; 2024 EcyPro Consulting. Premium Membership.
+            &copy; 2024 eCyPro Consulting. Premium Membership.
           </div>
         </div>
 

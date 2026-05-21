@@ -25,7 +25,7 @@ export function buildFounderSchema() {
     familyName: 'Yalçın',
     jobTitle: 'Founder & Chief Strategist',
     description:
-      'Founder of EcyPro Premium Consulting and the eCyverse ecosystem. Strategic management advisory, organizational transformation, and culture engineering practitioner.',
+      'Founder of eCyPro Premium Consulting and the eCyverse ecosystem. Strategic management advisory, organizational transformation, and culture engineering practitioner.',
     worksFor: { '@id': 'https://www.ecypro.com/#organization' },
     url: 'https://www.ecypro.com/about',
     image: 'https://www.ecypro.com/founder.jpg',

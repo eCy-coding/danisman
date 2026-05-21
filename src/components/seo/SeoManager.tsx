@@ -45,7 +45,7 @@ export const SeoManager: React.FC<SeoManagerProps> = ({
   // title'ı flush ediyor, per-page <SEO /> başlığını eziyordu. Şimdi prop
   // gelmezse sadece hreflang + locale meta'yı yönetir, title/desc/canonical
   // tag'lerini per-page SEO'ya bırakır.
-  const finalTitle = title ? `${title} | EcyPro` : undefined;
+  const finalTitle = title ? `${title} | eCyPro` : undefined;
   const finalDescription = description ?? undefined;
   const ogLocale = currentLang === 'tr' ? 'tr_TR' : 'en_US';
   const ogLocaleAlt = currentLang === 'tr' ? 'en_US' : 'tr_TR';

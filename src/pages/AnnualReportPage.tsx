@@ -19,7 +19,7 @@ import { ANNUAL_REPORT_2025 } from '../data/annual-report-2025';
 
 const REPORT = ANNUAL_REPORT_2025;
 
-const TITLE = `${REPORT.year} Yıllık Raporu | EcyPro Premium Consulting`;
+const TITLE = `${REPORT.year} Yıllık Raporu | eCyPro Premium Consulting`;
 const DESCRIPTION = `${REPORT.headline} — anonimleştirilmiş engagement portföyü, sektör dağılımı, methodoloji metrikleri.`;
 const URL = `https://www.ecypro.com/annual-report/${REPORT.year}`;
 
@@ -35,12 +35,12 @@ export const AnnualReportPage: React.FC = () => {
           datePublished: `${REPORT.year}-12-31`,
           author: {
             '@type': 'Organization',
-            name: 'EcyPro Premium Consulting',
+            name: 'eCyPro Premium Consulting',
             url: 'https://www.ecypro.com',
           },
           publisher: {
             '@type': 'Organization',
-            name: 'EcyPro Premium Consulting',
+            name: 'eCyPro Premium Consulting',
             url: 'https://www.ecypro.com',
           },
           headline: REPORT.headline,
@@ -76,10 +76,7 @@ export const AnnualReportPage: React.FC = () => {
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
             {REPORT.metrics.map((m) => (
-              <div
-                key={m.label}
-                className="bg-white/[0.02] border border-white/8 rounded-xl p-5"
-              >
+              <div key={m.label} className="bg-white/[0.02] border border-white/8 rounded-xl p-5">
                 <div className="text-xs font-bold uppercase tracking-[0.2em] text-secondary mb-1">
                   {m.label}
                 </div>

@@ -1,5 +1,5 @@
 /**
- * EcyPro Director — Personalization Engine
+ * eCyPro Director — Personalization Engine
  *
  * Consumes analytics data from the SSE stream and triggers
  * UI personalization rules based on user behavior heuristics.
@@ -32,7 +32,13 @@ const PERSONALIZATION_RULES: Rule[] = [
       { field: 'hasBooking', operator: 'EQUALS', value: false },
     ],
     actions: [
-      { type: 'NOTIFY', payload: { variant: 'welcome-back', message: 'Welcome back! Schedule a free consultation.' } },
+      {
+        type: 'NOTIFY',
+        payload: {
+          variant: 'welcome-back',
+          message: 'Welcome back! Schedule a free consultation.',
+        },
+      },
     ],
   },
   {
@@ -45,7 +51,14 @@ const PERSONALIZATION_RULES: Rule[] = [
       { field: 'hasBooking', operator: 'EQUALS', value: false },
     ],
     actions: [
-      { type: 'NOTIFY', payload: { variant: 'discount-popup', discount: 15, message: '15% off your first consultation!' } },
+      {
+        type: 'NOTIFY',
+        payload: {
+          variant: 'discount-popup',
+          discount: 15,
+          message: '15% off your first consultation!',
+        },
+      },
     ],
   },
   {
@@ -57,7 +70,10 @@ const PERSONALIZATION_RULES: Rule[] = [
       { field: 'pageViews', operator: 'GREATER_THAN', value: 2 },
     ],
     actions: [
-      { type: 'NOTIFY', payload: { variant: 'idle-prompt', message: 'Need help? Chat with our team.' } },
+      {
+        type: 'NOTIFY',
+        payload: { variant: 'idle-prompt', message: 'Need help? Chat with our team.' },
+      },
     ],
   },
   {
@@ -69,7 +85,13 @@ const PERSONALIZATION_RULES: Rule[] = [
       { field: 'contactFormSubmitted', operator: 'EQUALS', value: false },
     ],
     actions: [
-      { type: 'NOTIFY', payload: { variant: 'form-recovery', message: 'Complete your inquiry to get a free analysis.' } },
+      {
+        type: 'NOTIFY',
+        payload: {
+          variant: 'form-recovery',
+          message: 'Complete your inquiry to get a free analysis.',
+        },
+      },
     ],
   },
 ];

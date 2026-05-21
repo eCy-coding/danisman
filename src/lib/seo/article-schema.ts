@@ -45,7 +45,7 @@ export function buildArticleSchema(input: ArticleInput) {
     publisher: {
       '@type': 'Organization',
       '@id': 'https://www.ecypro.com/#organization',
-      name: 'EcyPro Premium Consulting',
+      name: 'eCyPro Premium Consulting',
       logo: {
         '@type': 'ImageObject',
         url: 'https://www.ecypro.com/pwa-512x512.png',

@@ -19,8 +19,8 @@ const FAQS: FaqItem[] = [
   {
     id: 'who-do-you-work-with',
     question: {
-      tr: 'EcyPro hangi tür şirketlerle çalışıyor?',
-      en: 'What kind of companies does EcyPro work with?',
+      tr: 'eCyPro hangi tür şirketlerle çalışıyor?',
+      en: 'What kind of companies does eCyPro work with?',
     },
     answer: {
       tr: 'Genellikle 50-500 çalışanlı, karar mercii erişilebilir orta ve büyük ölçekli işletmelerle pratik yürütüyoruz. Üretim, finans, perakende, teknoloji ve aile şirketi yapısındaki holdinglerle deneyimli olsak da, metodolojimiz sektörden bağımsız çalıştığı için yeni sektörlere kapalı değiliz. Engagement boyutu kararlıdır: küçük ekip, üst yönetim katılımlı, ölçülebilir hedefli.',
@@ -45,7 +45,7 @@ const FAQS: FaqItem[] = [
       en: 'How does pricing work?',
     },
     answer: {
-      tr: 'Üç tier üzerinden şeffaf bir model kullanıyoruz. Strateji Oturumu ₺12.000\'den başlar, Çeyreklik Engagement ₺75.000\'den başlar, Yıllık Ortaklık ₺350.000\'den başlar (KDV hariç). Engagement kapsamı netleştikten sonra sabit fiyat anlaşması yapıyoruz — saat bazlı faturalama yok. Ödeme planı esnek: aylık taksit, milestone bazlı veya peşin %5 indirimle. Detayları /pricing sayfasında bulabilirsiniz.',
+      tr: "Üç tier üzerinden şeffaf bir model kullanıyoruz. Strateji Oturumu ₺12.000'den başlar, Çeyreklik Engagement ₺75.000'den başlar, Yıllık Ortaklık ₺350.000'den başlar (KDV hariç). Engagement kapsamı netleştikten sonra sabit fiyat anlaşması yapıyoruz — saat bazlı faturalama yok. Ödeme planı esnek: aylık taksit, milestone bazlı veya peşin %5 indirimle. Detayları /pricing sayfasında bulabilirsiniz.",
       en: 'We use a transparent three-tier model. A Strategy Sprint starts at ₺12,000, a Quarterly Engagement at ₺75,000, and an Annual Partnership at ₺350,000 (VAT excluded). Once scope is defined we work on fixed-price agreements — no hourly billing. Payment plans are flexible: monthly installments, milestone-based, or 5% discount on full upfront payment. See /pricing for details.',
     },
   },
@@ -56,8 +56,8 @@ const FAQS: FaqItem[] = [
       en: 'How do you measure results?',
     },
     answer: {
-      tr: "Her engagement KPI baseline ile başlar. İlk haftada mevcut metrikleri (gelir, marj, çevrim süresi, NPS, OEE, vb.) ölçeriz ve bunlardan engagement\'in temel başarı göstergelerini birlikte seçeriz. 90 günlük retrospektif raporlarda bu KPI\'ların gelişimini şeffaf paylaşırız. Engagement\'lar tamamlandıktan 6 ay sonra anonim takip görüşmesi yaparız; bu sonuçlar (yine anonim) gelecekteki müşterilere referans olur.",
-      en: 'Every engagement starts with a KPI baseline. In the first week we measure current metrics (revenue, margin, cycle time, NPS, OEE, etc.) and jointly select the engagement\'s success indicators. We share progress transparently in 90-day retrospective reports. Six months after an engagement closes we run an anonymous follow-up review; those results (still anonymized) inform future client conversations.',
+      tr: "Her engagement KPI baseline ile başlar. İlk haftada mevcut metrikleri (gelir, marj, çevrim süresi, NPS, OEE, vb.) ölçeriz ve bunlardan engagement'in temel başarı göstergelerini birlikte seçeriz. 90 günlük retrospektif raporlarda bu KPI'ların gelişimini şeffaf paylaşırız. Engagement'lar tamamlandıktan 6 ay sonra anonim takip görüşmesi yaparız; bu sonuçlar (yine anonim) gelecekteki müşterilere referans olur.",
+      en: "Every engagement starts with a KPI baseline. In the first week we measure current metrics (revenue, margin, cycle time, NPS, OEE, etc.) and jointly select the engagement's success indicators. We share progress transparently in 90-day retrospective reports. Six months after an engagement closes we run an anonymous follow-up review; those results (still anonymized) inform future client conversations.",
     },
   },
   {
@@ -78,7 +78,7 @@ const FAQS: FaqItem[] = [
       en: 'Do you operate confidentially? Do you share client references?',
     },
     answer: {
-      tr: "Standart engagement\'larda NDA imzalanır ve müşteri kimliği yazılı izin olmadan açıklanmaz. Vaka analizlerimiz anonim — sektör, ölçek, sonuç paylaşılır ama isim paylaşılmaz. Müşteri referansı isteyen potansiyel müşteriler için mevcut müşterilerle bire bir görüşme ayarlayabiliyoruz; bu kararı her zaman müşteri verir, bizim referans listemiz yoktur.",
+      tr: "Standart engagement'larda NDA imzalanır ve müşteri kimliği yazılı izin olmadan açıklanmaz. Vaka analizlerimiz anonim — sektör, ölçek, sonuç paylaşılır ama isim paylaşılmaz. Müşteri referansı isteyen potansiyel müşteriler için mevcut müşterilerle bire bir görüşme ayarlayabiliyoruz; bu kararı her zaman müşteri verir, bizim referans listemiz yoktur.",
       en: 'Standard engagements include an NDA; client identity is never disclosed without written consent. Our case studies are anonymized — we share sector, scale, and outcomes but not names. For prospects who request references, we can arrange one-on-one conversations with existing clients on a case-by-case basis; the decision always rests with the client. We do not maintain a public reference list.',
     },
   },
@@ -89,7 +89,7 @@ const FAQS: FaqItem[] = [
       en: 'What does the onboarding process look like?',
     },
     answer: {
-      tr: 'Üç adım: (1) Discovery Call — 45 dakika ücretsiz keşif görüşmesi, ihtiyacı anlamak ve uyumu doğrulamak için. (2) Önerge — 5-7 gün içinde kapsam, süre, fiyat ve KPI\'ların yazılı önerisi. (3) Engagement — kontrat imzasından sonra kickoff haftası, baseline ölçümü ve haftalık ritmin başlatılması. /contact sayfasından veya hello@ecypro.com adresinden Discovery Call talep edebilirsiniz.',
+      tr: "Üç adım: (1) Discovery Call — 45 dakika ücretsiz keşif görüşmesi, ihtiyacı anlamak ve uyumu doğrulamak için. (2) Önerge — 5-7 gün içinde kapsam, süre, fiyat ve KPI'ların yazılı önerisi. (3) Engagement — kontrat imzasından sonra kickoff haftası, baseline ölçümü ve haftalık ritmin başlatılması. /contact sayfasından veya hello@ecypro.com adresinden Discovery Call talep edebilirsiniz.",
       en: 'Three steps: (1) Discovery Call — a free 45-minute exploratory conversation to understand the need and confirm fit. (2) Proposal — within 5-7 days, a written scope, timeline, price, and KPI proposal. (3) Engagement — after contract signature, the kickoff week starts with baseline measurement and the establishment of weekly cadence. Request a Discovery Call via /contact or hello@ecypro.com.',
     },
   },

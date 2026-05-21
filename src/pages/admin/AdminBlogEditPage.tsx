@@ -62,7 +62,7 @@ function defaultFrontmatter(slug: string): BlogFrontmatter {
     category: 'Strateji',
     readTime: '5 dk',
     excerpt: '',
-    author: 'EcyPro Consulting',
+    author: 'eCyPro Consulting',
     lang: 'tr',
     status: 'draft',
   };
@@ -92,9 +92,9 @@ export const AdminBlogEditPage: React.FC = () => {
       category: meta.category ?? 'Strateji',
       readTime: meta.readTime ?? '5 dk',
       excerpt: meta.excerpt ?? '',
-      author: meta.author ?? 'EcyPro Consulting',
+      author: meta.author ?? 'eCyPro Consulting',
       lang: meta.lang ?? 'tr',
-      status: ((meta.status ?? 'draft') as BlogFrontmatter['status']),
+      status: (meta.status ?? 'draft') as BlogFrontmatter['status'],
       scheduledFor: meta.scheduledFor,
       coverImage: meta.coverImage,
       tags: meta.tags,
@@ -147,7 +147,11 @@ export const AdminBlogEditPage: React.FC = () => {
 
       <header className="flex items-center justify-between gap-4 flex-wrap">
         <div className="flex items-center gap-3">
-          <Link to="/admin/blog" aria-label="Blog listesine geri dön" className="text-slate-400 hover:text-white inline-flex items-center gap-1 text-sm">
+          <Link
+            to="/admin/blog"
+            aria-label="Blog listesine geri dön"
+            className="text-slate-400 hover:text-white inline-flex items-center gap-1 text-sm"
+          >
             <ArrowLeft size={14} /> Geri
           </Link>
           <h1 className="text-2xl font-serif font-bold text-white">Yazı: {fm.title}</h1>
@@ -196,9 +200,17 @@ export const AdminBlogEditPage: React.FC = () => {
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
                 <div className="lg:col-span-2 space-y-4">
                   <FormField label="Başlık" required tooltip="Yazının ana başlığı">
-                    <input type="text" value={fm.title} onChange={(e) => update('title', e.target.value)} className={fieldClassName} />
+                    <input
+                      type="text"
+                      value={fm.title}
+                      onChange={(e) => update('title', e.target.value)}
+                      className={fieldClassName}
+                    />
                   </FormField>
-                  <FormField label="Özet" tooltip="Liste sayfalarında ve SEO'da görünür (max 200 karakter)">
+                  <FormField
+                    label="Özet"
+                    tooltip="Liste sayfalarında ve SEO'da görünür (max 200 karakter)"
+                  >
                     <textarea
                       value={fm.excerpt}
                       onChange={(e) => update('excerpt', e.target.value)}
@@ -206,7 +218,10 @@ export const AdminBlogEditPage: React.FC = () => {
                       maxLength={200}
                     />
                   </FormField>
-                  <FormField label="İçerik (Markdown)" hint="Markdown sözdizimi: # başlık, **kalın**, [link](url), ![görsel](url)">
+                  <FormField
+                    label="İçerik (Markdown)"
+                    hint="Markdown sözdizimi: # başlık, **kalın**, [link](url), ![görsel](url)"
+                  >
                     <textarea
                       value={body}
                       onChange={(e) => {
@@ -218,8 +233,17 @@ export const AdminBlogEditPage: React.FC = () => {
                   </FormField>
                 </div>
                 <aside className="space-y-3">
-                  <FormField label="Durum" tooltip="Taslak = sadece admin görür; Yayında = siteye yansır; Zamanlanmış = ileri tarihte otomatik yayınlanır">
-                    <select value={fm.status} onChange={(e) => update('status', e.target.value as BlogFrontmatter['status'])} className={fieldClassName}>
+                  <FormField
+                    label="Durum"
+                    tooltip="Taslak = sadece admin görür; Yayında = siteye yansır; Zamanlanmış = ileri tarihte otomatik yayınlanır"
+                  >
+                    <select
+                      value={fm.status}
+                      onChange={(e) =>
+                        update('status', e.target.value as BlogFrontmatter['status'])
+                      }
+                      className={fieldClassName}
+                    >
                       <option value="draft">Taslak</option>
                       <option value="scheduled">Zamanlanmış</option>
                       <option value="published">Yayında</option>
@@ -227,26 +251,63 @@ export const AdminBlogEditPage: React.FC = () => {
                   </FormField>
                   {fm.status === 'scheduled' && (
                     <FormField label="Yayın Tarihi">
-                      <input type="datetime-local" value={fm.scheduledFor ?? ''} onChange={(e) => update('scheduledFor', e.target.value)} className={fieldClassName} />
+                      <input
+                        type="datetime-local"
+                        value={fm.scheduledFor ?? ''}
+                        onChange={(e) => update('scheduledFor', e.target.value)}
+                        className={fieldClassName}
+                      />
                     </FormField>
                   )}
                   <FormField label="Kategori">
-                    <input type="text" value={fm.category} onChange={(e) => update('category', e.target.value)} className={fieldClassName} />
+                    <input
+                      type="text"
+                      value={fm.category}
+                      onChange={(e) => update('category', e.target.value)}
+                      className={fieldClassName}
+                    />
                   </FormField>
                   <FormField label="Etiketler" hint="Virgülle ayır">
-                    <input type="text" value={fm.tags ?? ''} onChange={(e) => update('tags', e.target.value)} className={fieldClassName} placeholder="strateji, m-and-a, kvkk" />
+                    <input
+                      type="text"
+                      value={fm.tags ?? ''}
+                      onChange={(e) => update('tags', e.target.value)}
+                      className={fieldClassName}
+                      placeholder="strateji, m-and-a, kvkk"
+                    />
                   </FormField>
                   <FormField label="Kapak Görseli URL" tooltip="Medya kütüphanesinden veya tam URL">
-                    <input type="text" value={fm.coverImage ?? ''} onChange={(e) => update('coverImage', e.target.value)} className={fieldClassName} placeholder="/uploads/cover.jpg" />
+                    <input
+                      type="text"
+                      value={fm.coverImage ?? ''}
+                      onChange={(e) => update('coverImage', e.target.value)}
+                      className={fieldClassName}
+                      placeholder="/uploads/cover.jpg"
+                    />
                   </FormField>
                   <FormField label="Okuma Süresi">
-                    <input type="text" value={fm.readTime} onChange={(e) => update('readTime', e.target.value)} className={fieldClassName} placeholder="5 dk" />
+                    <input
+                      type="text"
+                      value={fm.readTime}
+                      onChange={(e) => update('readTime', e.target.value)}
+                      className={fieldClassName}
+                      placeholder="5 dk"
+                    />
                   </FormField>
                   <FormField label="Yazar">
-                    <input type="text" value={fm.author} onChange={(e) => update('author', e.target.value)} className={fieldClassName} />
+                    <input
+                      type="text"
+                      value={fm.author}
+                      onChange={(e) => update('author', e.target.value)}
+                      className={fieldClassName}
+                    />
                   </FormField>
                   <FormField label="Dil">
-                    <select value={fm.lang} onChange={(e) => update('lang', e.target.value)} className={fieldClassName}>
+                    <select
+                      value={fm.lang}
+                      onChange={(e) => update('lang', e.target.value)}
+                      className={fieldClassName}
+                    >
                       <option value="tr">Türkçe</option>
                       <option value="en">English</option>
                     </select>

@@ -29,7 +29,7 @@ export const ContactPage: React.FC = () => {
   return (
     <React.Fragment>
       <Helmet>
-        <title>{t('contact.title') || 'İletişim'} | EcyPro Premium Consulting</title>
+        <title>{t('contact.title') || 'İletişim'} | eCyPro Premium Consulting</title>
         <meta
           name="description"
           content="eCyPro ile hemen iletişime geçin. Stratejik büyüme hedefleriniz için profesyonel destek alın."

@@ -9,13 +9,13 @@
   "printBtn": "Yazdır",
   "placeholder": "Bu bölümün nihai metni hukuki danışman incelemesi sonrasında eklenecektir. Mevcut taslak KVKK ve GDPR çerçevesinde hazırlanmıştır.",
   "entity": {
-    "name": "EcyPro Premium Consulting",
+    "name": "eCyPro Premium Consulting",
     "email": "info@ecypro.com",
     "website": "https://www.ecypro.com"
   },
   "privacy": {
     "title": "Gizlilik Politikası",
-    "metaDescription": "EcyPro KVKK ve GDPR uyumlu gizlilik politikası — kişisel verilerinizin nasıl toplandığı, işlendiği ve korunduğu hakkında bilgi.",
+    "metaDescription": "eCyPro KVKK ve GDPR uyumlu gizlilik politikası — kişisel verilerinizin nasıl toplandığı, işlendiği ve korunduğu hakkında bilgi.",
     "sections": {
       "controller": "Veri Sorumlusu",
       "data": "Toplanan Veriler",
@@ -26,18 +26,18 @@
       "contact": "İletişim ve Başvuru"
     },
     "content": {
-      "controller": "Veri sorumlusu sıfatıyla EcyPro Premium Consulting, 6698 sayılı Kişisel Verilerin Korunması Kanunu (KVKK) ve Avrupa Birliği Genel Veri Koruma Tüzüğü (GDPR) kapsamında kişisel verilerinizin işlenmesinden sorumludur. Her türlü başvuru, soru veya talebinizi info@ecypro.com adresine iletebilirsiniz.",
+      "controller": "Veri sorumlusu sıfatıyla eCyPro Premium Consulting, 6698 sayılı Kişisel Verilerin Korunması Kanunu (KVKK) ve Avrupa Birliği Genel Veri Koruma Tüzüğü (GDPR) kapsamında kişisel verilerinizin işlenmesinden sorumludur. Her türlü başvuru, soru veya talebinizi info@ecypro.com adresine iletebilirsiniz.",
       "data": "Web sitemizi ziyaret ettiğinizde, hizmetlerimize başvurduğunuzda veya iletişim formlarımızı doldurduğunuzda; ad-soyad, e-posta, telefon, şirket bilgisi, IP adresi, tarayıcı bilgisi, çerez tanımlayıcıları ve gönüllü olarak paylaştığınız diğer iletişim verilerini topluyoruz. Hassas nitelikli kişisel veri (sağlık, biyometrik vb.) talep etmiyor ve toplamıyoruz.",
       "purpose": "Kişisel verileriniz; talep ettiğiniz hizmetlerin sunulması, sözleşmesel yükümlülüklerin yerine getirilmesi, müşteri ilişkilerinin yönetimi, hukuki yükümlülüklerin ifası, web sitesi güvenliği ve meşru menfaat çerçevesinde hizmet iyileştirme amaçlarıyla işlenir. Hukuki sebepler: KVKK md.5/2(a-c-e-f), GDPR md.6(1)(a-b-c-f).",
       "retention": "Kişisel verileriniz, işleme amacının gerektirdiği süre boyunca ve ilgili mevzuatta öngörülen asgari yasal saklama süreleri kadar muhafaza edilir. Bu süreler dolduğunda veriler periyodik olarak imha, anonimleştirme veya silme yöntemleriyle ortadan kaldırılır.",
       "rights": "KVKK md.11 ve GDPR md.15-22 uyarınca; kişisel verilerinizin işlenip işlenmediğini öğrenme, işleme amacını ve kullanım şeklini bilme, eksik/yanlış verilerin düzeltilmesini, silinmesini veya anonimleştirilmesini talep etme, otomatik sistemlerle yapılan değerlendirmelere itiraz etme ve zararın giderilmesini isteme haklarına sahipsiniz. Başvuru: info@ecypro.com.",
       "transfer": "Kişisel verileriniz, hizmet sağlayıcılarımız (barındırma, e-posta, analitik) aracılığıyla yurt içi ve yurt dışına aktarılabilir. Yurt dışı aktarımlar GDPR md.46 standart sözleşme şartları veya KVKK md.9 açık rıza/yeterlilik kararları çerçevesinde gerçekleştirilir.",
-      "contact": "Gizlilik politikası ile ilgili tüm soru, talep ve başvurularınız için: info@ecypro.com — Veri Sorumlusu: EcyPro Premium Consulting."
+      "contact": "Gizlilik politikası ile ilgili tüm soru, talep ve başvurularınız için: info@ecypro.com — Veri Sorumlusu: eCyPro Premium Consulting."
     }
   },
   "terms": {
     "title": "Kullanım Koşulları",
-    "metaDescription": "EcyPro hizmet kullanım koşulları — haklar, yükümlülükler, ödeme ve iade politikası.",
+    "metaDescription": "eCyPro hizmet kullanım koşulları — haklar, yükümlülükler, ödeme ve iade politikası.",
     "sections": {
       "scope": "Hizmetin Kapsamı",
       "obligations": "Kullanıcı Yükümlülükleri",
@@ -48,18 +48,18 @@
       "contact": "İletişim"
     },
     "content": {
-      "scope": "EcyPro Premium Consulting, kurumsal yönetim danışmanlığı, etkinlik yönetimi ve dijital marka çözümleri hizmetlerini www.ecypro.com aracılığıyla sunar. Bu kullanım koşulları, web sitesini ziyaret ettiğiniz veya hizmetlerimize başvurduğunuz andan itibaren bağlayıcıdır. Hizmetlerimizin nihai kapsamı ve teknik şartları her müşteri için ayrı ayrı düzenlenecek hizmet sözleşmesinde tanımlanır.",
+      "scope": "eCyPro Premium Consulting, kurumsal yönetim danışmanlığı, etkinlik yönetimi ve dijital marka çözümleri hizmetlerini www.ecypro.com aracılığıyla sunar. Bu kullanım koşulları, web sitesini ziyaret ettiğiniz veya hizmetlerimize başvurduğunuz andan itibaren bağlayıcıdır. Hizmetlerimizin nihai kapsamı ve teknik şartları her müşteri için ayrı ayrı düzenlenecek hizmet sözleşmesinde tanımlanır.",
       "obligations": "Web sitesini kullanırken; yürürlükteki mevzuata uymakla, doğru ve güncel bilgi sağlamakla, üçüncü kişilerin haklarına saygı göstermekle ve site güvenliğini tehdit edebilecek davranışlardan kaçınmakla yükümlüsünüz. Otomatik araçlarla içerik kazıma, tersine mühendislik veya yetkisiz erişim girişimleri kabul edilemez.",
       "payment": "Ücretli hizmetlere ilişkin ödeme ve iade koşulları her müşteri için imzalanan ayrı hizmet sözleşmesinde tanımlanır. Web sitesi üzerinden doğrudan ödeme alınmamaktadır; tüm ticari işlemler hizmet sözleşmesi ve fatura çerçevesinde yürütülür.",
-      "liability": "EcyPro Premium Consulting, web sitesi içeriğinin doğruluğu için makul özeni gösterir ancak içeriklerin hatasızlığı veya kesintisiz erişilebilirliği konusunda kesin garanti vermez. Web sitesi kullanımından doğan dolaylı, arızi veya beklenmeyen zararlardan, yasal sınırlar dahilinde, sorumluluk kabul edilmez.",
-      "ip": "Web sitesinde yer alan tüm metin, görsel, logo, marka, yazılım ve düzenlemeler EcyPro Premium Consulting veya lisans verenlerinin fikri mülkiyetidir. Yazılı izin olmaksızın çoğaltılamaz, dağıtılamaz veya türev eserlere konu edilemez. Üçüncü taraf marka ve içerikler ilgili sahiplerine aittir.",
+      "liability": "eCyPro Premium Consulting, web sitesi içeriğinin doğruluğu için makul özeni gösterir ancak içeriklerin hatasızlığı veya kesintisiz erişilebilirliği konusunda kesin garanti vermez. Web sitesi kullanımından doğan dolaylı, arızi veya beklenmeyen zararlardan, yasal sınırlar dahilinde, sorumluluk kabul edilmez.",
+      "ip": "Web sitesinde yer alan tüm metin, görsel, logo, marka, yazılım ve düzenlemeler eCyPro Premium Consulting veya lisans verenlerinin fikri mülkiyetidir. Yazılı izin olmaksızın çoğaltılamaz, dağıtılamaz veya türev eserlere konu edilemez. Üçüncü taraf marka ve içerikler ilgili sahiplerine aittir.",
       "dispute": "İşbu koşullardan doğabilecek uyuşmazlıklarda Türkiye Cumhuriyeti hukuku uygulanır. Taraflar öncelikle uyuşmazlığı sulh yoluyla çözmeye gayret eder; çözüme ulaşılamaması halinde İstanbul Mahkemeleri ve İcra Daireleri yetkilidir.",
       "contact": "Kullanım koşulları ile ilgili sorularınız için: info@ecypro.com."
     }
   },
   "cookies": {
     "title": "Çerez Politikası",
-    "metaDescription": "EcyPro çerez politikası — hangi çerezlerin kullanıldığı, amaçları ve nasıl yönetileceği.",
+    "metaDescription": "eCyPro çerez politikası — hangi çerezlerin kullanıldığı, amaçları ve nasıl yönetileceği.",
     "manageBtn": "Çerez Ayarlarını Yönet",
     "bannerLink": "Çerez Politikası",
     "sections": {

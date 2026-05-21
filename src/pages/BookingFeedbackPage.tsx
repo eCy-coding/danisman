@@ -137,7 +137,7 @@ export const BookingFeedbackPage: React.FC = () => {
             bir deneyim sunmak için çalışmaya devam edeceğiz.
           </p>
           <div className="mt-8 pt-6 border-t border-white/10">
-            <p className="text-xs text-slate-600">EcyPro Premium Consulting</p>
+            <p className="text-xs text-slate-600">eCyPro Premium Consulting</p>
           </div>
         </div>
       </div>
@@ -178,7 +178,7 @@ export const BookingFeedbackPage: React.FC = () => {
         {/* NPS Score Card */}
         <div className="bg-white/3 border border-white/8 rounded-2xl p-6 mb-4">
           <p className="text-sm font-medium text-slate-300 mb-1 text-center">
-            EcyPro'yu bir arkadaşınıza veya iş ortağınıza ne kadar önerirsiniz?
+            eCyPro'yu bir arkadaşınıza veya iş ortağınıza ne kadar önerirsiniz?
           </p>
           <p className="text-xs text-slate-500 mb-6 text-center">
             0 = Kesinlikle önermem · 10 = Kesinlikle öneririm
@@ -189,7 +189,8 @@ export const BookingFeedbackPage: React.FC = () => {
             {Array.from({ length: 11 }, (_, i) => {
               const isSelected = score === i;
               return (
-                <button type="button"
+                <button
+                  type="button"
                   key={i}
                   role="radio"
                   aria-checked={isSelected}
@@ -263,7 +264,8 @@ export const BookingFeedbackPage: React.FC = () => {
         )}
 
         {/* Submit button */}
-        <button type="button"
+        <button
+          type="button"
           onClick={() => submitMutation.mutate()}
           disabled={!canSubmit}
           className="w-full py-3.5 bg-secondary text-white font-semibold rounded-xl hover:bg-secondary/90 transition-all active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2"
@@ -278,7 +280,7 @@ export const BookingFeedbackPage: React.FC = () => {
         </button>
 
         <p className="text-xs text-slate-600 text-center mt-4">
-          30 saniye · Yanıtınız gizli tutulur · EcyPro Premium Consulting
+          30 saniye · Yanıtınız gizli tutulur · eCyPro Premium Consulting
         </p>
       </div>
     </div>

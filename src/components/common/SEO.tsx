@@ -80,9 +80,9 @@ export const SEO: React.FC<SEOProps> = ({
 
   const siteTitle =
     language === 'tr'
-      ? 'EcyPro | Premium Kurumsal Danışmanlık'
-      : 'EcyPro | Premium Management Consulting';
-  const finalTitle = title ? `${title} | EcyPro` : siteTitle;
+      ? 'eCyPro | Premium Kurumsal Danışmanlık'
+      : 'eCyPro | Premium Management Consulting';
+  const finalTitle = title ? `${title} | eCyPro` : siteTitle;
 
   const siteDescription =
     language === 'tr'
@@ -97,7 +97,7 @@ export const SEO: React.FC<SEOProps> = ({
     () => ({
       '@context': 'https://schema.org',
       '@type': 'Organization',
-      name: 'EcyPro',
+      name: 'eCyPro',
       url: SITE_URL,
       logo: `${SITE_URL}/logo.png`,
       sameAs: [
@@ -138,7 +138,7 @@ export const SEO: React.FC<SEOProps> = ({
     upsertLink('canonical', finalCanonical);
 
     // Open Graph
-    upsertMeta('meta[property="og:site_name"]', 'property', 'og:site_name', 'EcyPro');
+    upsertMeta('meta[property="og:site_name"]', 'property', 'og:site_name', 'eCyPro');
     upsertMeta('meta[property="og:title"]', 'property', 'og:title', finalTitle);
     upsertMeta('meta[property="og:description"]', 'property', 'og:description', finalDescription);
     upsertMeta('meta[property="og:type"]', 'property', 'og:type', type);

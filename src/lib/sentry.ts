@@ -1,5 +1,5 @@
 /**
- * EcyPro — Sentry Error Reporting (Frontend)
+ * eCyPro — Sentry Error Reporting (Frontend)
  *
  * P76: Converted to dynamic import so the 259KB @sentry/react chunk is NOT
  * loaded until init() is called (via requestIdleCallback in App.tsx).
@@ -58,10 +58,7 @@ class SentryClient {
         tracesSampleRate: import.meta.env.MODE === 'production' ? 0.05 : 1.0,
         replaysSessionSampleRate: 0.01,
         replaysOnErrorSampleRate: 1.0,
-        tracePropagationTargets: [
-          /^\//,
-          /^https:\/\/(www\.|api\.)?ecypro\.com/,
-        ],
+        tracePropagationTargets: [/^\//, /^https:\/\/(www\.|api\.)?ecypro\.com/],
         beforeSend(event) {
           try {
             if (event.user) {

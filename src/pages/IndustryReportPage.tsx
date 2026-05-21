@@ -9,13 +9,14 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { FileText, Download, Loader2, CheckCircle2, ArrowRight } from 'lucide-react';
+import { FileText, Download, Loader2, CheckCircle2 } from 'lucide-react';
 import { trackFormSubmit } from '../lib/integrations/analytics';
 
 const REPORT = {
   slug: 'turkey-premium-consulting-2026',
   title: 'Türkiye Premium Consulting Pazarı · 2026 Görünüm Raporu',
-  subtitle: 'Big4 dampingi sonrası boutique fırsatları, sektörel öncelikler, fiyatlandırma benchmarks.',
+  subtitle:
+    'Big4 dampingi sonrası boutique fırsatları, sektörel öncelikler, fiyatlandırma benchmarks.',
   pageCount: 28,
   sections: [
     'Yönetici Özeti (3 sayfa)',
@@ -48,7 +49,11 @@ export const IndustryReportPage: React.FC = () => {
       const res = await fetch(`${apiBase}/newsletter/subscribe`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: form.email.trim(), source: `industry-report:${REPORT.slug}`, metadata: form }),
+        body: JSON.stringify({
+          email: form.email.trim(),
+          source: `industry-report:${REPORT.slug}`,
+          metadata: form,
+        }),
       });
       if (res.ok || res.status === 409) {
         setStatus('success');
@@ -66,7 +71,7 @@ export const IndustryReportPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-neutral text-slate-300">
       <Helmet>
-        <title>{`${REPORT.title} | EcyPro`}</title>
+        <title>{`${REPORT.title} | eCyPro`}</title>
         <meta name="description" content={REPORT.subtitle} />
         <link rel="canonical" href={`https://www.ecypro.com/industry-reports/${REPORT.slug}`} />
       </Helmet>
@@ -76,28 +81,42 @@ export const IndustryReportPage: React.FC = () => {
             <div className="text-xs font-bold uppercase tracking-[0.25em] text-secondary mb-3 flex items-center gap-2">
               <FileText size={12} /> Industry Report · {REPORT.publishDate}
             </div>
-            <h1 className="text-4xl md:text-5xl font-serif font-bold text-white mb-5 leading-tight">{REPORT.title}</h1>
+            <h1 className="text-4xl md:text-5xl font-serif font-bold text-white mb-5 leading-tight">
+              {REPORT.title}
+            </h1>
             <p className="text-lg text-slate-400 leading-relaxed mb-6">{REPORT.subtitle}</p>
             <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-slate-300 mb-8">
-              <span><strong className="text-white">{REPORT.pageCount}</strong> sayfa</span>
-              <span><strong className="text-white">7 bölüm</strong></span>
+              <span>
+                <strong className="text-white">{REPORT.pageCount}</strong> sayfa
+              </span>
+              <span>
+                <strong className="text-white">7 bölüm</strong>
+              </span>
               <span>Yazar: {REPORT.authors.join(', ')}</span>
             </div>
-            <h2 className="text-xs font-bold uppercase tracking-widest text-secondary mb-3">İçindekiler</h2>
+            <h2 className="text-xs font-bold uppercase tracking-widest text-secondary mb-3">
+              İçindekiler
+            </h2>
             <ul className="space-y-2 mb-6">
               {REPORT.sections.map((s, i) => (
                 <li key={i} className="flex items-start gap-3 text-slate-200">
-                  <span className="w-6 h-6 rounded-md bg-secondary/10 border border-secondary/20 text-xs font-bold text-secondary flex items-center justify-center flex-shrink-0 mt-0.5">{i + 1}</span>
+                  <span className="w-6 h-6 rounded-md bg-secondary/10 border border-secondary/20 text-xs font-bold text-secondary flex items-center justify-center flex-shrink-0 mt-0.5">
+                    {i + 1}
+                  </span>
                   <span>{s}</span>
                 </li>
               ))}
             </ul>
-            <p className="text-xs text-slate-500 italic">Bu rapor anonimized engagement data + sektörel benchmark + yurtdışı kaynak üçlüsünden derlenmiştir.</p>
+            <p className="text-xs text-slate-500 italic">
+              Bu rapor anonimized engagement data + sektörel benchmark + yurtdışı kaynak üçlüsünden
+              derlenmiştir.
+            </p>
           </div>
           <aside className="md:sticky md:top-32 h-fit p-6 bg-gradient-to-br from-secondary/15 to-primary/10 border border-secondary/30 rounded-2xl">
             <h3 className="text-lg font-serif font-bold text-white mb-3">Ücretsiz PDF Erişimi</h3>
             <p className="text-sm text-slate-300 mb-5 leading-relaxed">
-              E-postanıza PDF link gönderilir + bültenimize abone olursunuz (istediğinizde abonelikten çıkabilirsiniz).
+              E-postanıza PDF link gönderilir + bültenimize abone olursunuz (istediğinizde
+              abonelikten çıkabilirsiniz).
             </p>
             {status === 'success' ? (
               <div className="text-center" role="status" aria-live="polite">
@@ -113,24 +132,73 @@ export const IndustryReportPage: React.FC = () => {
               </div>
             ) : (
               <form onSubmit={onSubmit} className="space-y-3" noValidate>
-                <input type="text" required value={form.name} onChange={(e) => setForm({...form, name: e.target.value})} placeholder="Ad Soyad" aria-label="İsim"
-                  className="w-full px-4 py-3 min-h-[44px] rounded-lg bg-white/5 border border-white/10 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-secondary text-sm" />
-                <input type="email" required value={form.email} onChange={(e) => setForm({...form, email: e.target.value})} placeholder="email@kurum.com" aria-label="E-posta"
-                  className="w-full px-4 py-3 min-h-[44px] rounded-lg bg-white/5 border border-white/10 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-secondary text-sm" />
-                <input type="text" value={form.org} onChange={(e) => setForm({...form, org: e.target.value})} placeholder="Kurum" aria-label="Kurum"
-                  className="w-full px-4 py-3 min-h-[44px] rounded-lg bg-white/5 border border-white/10 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-secondary text-sm" />
-                <input type="text" value={form.role} onChange={(e) => setForm({...form, role: e.target.value})} placeholder="Pozisyon (opsiyonel)" aria-label="Pozisyon"
-                  className="w-full px-4 py-3 min-h-[44px] rounded-lg bg-white/5 border border-white/10 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-secondary text-sm" />
+                <input
+                  type="text"
+                  required
+                  value={form.name}
+                  onChange={(e) => setForm({ ...form, name: e.target.value })}
+                  placeholder="Ad Soyad"
+                  aria-label="İsim"
+                  className="w-full px-4 py-3 min-h-[44px] rounded-lg bg-white/5 border border-white/10 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-secondary text-sm"
+                />
+                <input
+                  type="email"
+                  required
+                  value={form.email}
+                  onChange={(e) => setForm({ ...form, email: e.target.value })}
+                  placeholder="email@kurum.com"
+                  aria-label="E-posta"
+                  className="w-full px-4 py-3 min-h-[44px] rounded-lg bg-white/5 border border-white/10 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-secondary text-sm"
+                />
+                <input
+                  type="text"
+                  value={form.org}
+                  onChange={(e) => setForm({ ...form, org: e.target.value })}
+                  placeholder="Kurum"
+                  aria-label="Kurum"
+                  className="w-full px-4 py-3 min-h-[44px] rounded-lg bg-white/5 border border-white/10 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-secondary text-sm"
+                />
+                <input
+                  type="text"
+                  value={form.role}
+                  onChange={(e) => setForm({ ...form, role: e.target.value })}
+                  placeholder="Pozisyon (opsiyonel)"
+                  aria-label="Pozisyon"
+                  className="w-full px-4 py-3 min-h-[44px] rounded-lg bg-white/5 border border-white/10 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-secondary text-sm"
+                />
                 <label className="flex items-start gap-2 text-xs text-slate-400 cursor-pointer">
-                  <input type="checkbox" checked={consent} onChange={(e) => setConsent(e.target.checked)} className="mt-0.5 accent-secondary" />
-                  <span className="leading-relaxed">KVKK kapsamında bülten + rapor erişimi için açık rıza. <Link to="/privacy/data-rights" className="text-secondary underline">Detay</Link></span>
+                  <input
+                    type="checkbox"
+                    checked={consent}
+                    onChange={(e) => setConsent(e.target.checked)}
+                    className="mt-0.5 accent-secondary"
+                  />
+                  <span className="leading-relaxed">
+                    KVKK kapsamında bülten + rapor erişimi için açık rıza.{' '}
+                    <Link to="/privacy/data-rights" className="text-secondary underline">
+                      Detay
+                    </Link>
+                  </span>
                 </label>
-                <button type="submit" disabled={status === 'submitting'}
-                  className="w-full px-4 py-3 min-h-[44px] rounded-lg bg-secondary text-neutral font-semibold hover:bg-secondary/90 transition-colors disabled:opacity-50 inline-flex items-center justify-center gap-2 text-sm">
-                  {status === 'submitting' ? <><Loader2 size={14} className="animate-spin" /> Gönderiliyor</> : <><Download size={14} /> Raporu Al</>}
+                <button
+                  type="submit"
+                  disabled={status === 'submitting'}
+                  className="w-full px-4 py-3 min-h-[44px] rounded-lg bg-secondary text-neutral font-semibold hover:bg-secondary/90 transition-colors disabled:opacity-50 inline-flex items-center justify-center gap-2 text-sm"
+                >
+                  {status === 'submitting' ? (
+                    <>
+                      <Loader2 size={14} className="animate-spin" /> Gönderiliyor
+                    </>
+                  ) : (
+                    <>
+                      <Download size={14} /> Raporu Al
+                    </>
+                  )}
                 </button>
                 {status === 'error' && (
-                  <p className="text-xs text-red-400" role="alert">Bir hata oluştu. Lütfen email + KVKK rızasını kontrol edin.</p>
+                  <p className="text-xs text-red-400" role="alert">
+                    Bir hata oluştu. Lütfen email + KVKK rızasını kontrol edin.
+                  </p>
                 )}
               </form>
             )}

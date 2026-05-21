@@ -144,23 +144,37 @@ export const WebinarLandingPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-neutral text-slate-300">
       <Helmet>
-        <title>{`${webinar.title} | EcyPro Webinar`}</title>
-        <meta name="description" content={`${webinar.title} — ${webinar.speakers.join(', ')} ile ${dateFmt} ${timeFmt}.`} />
+        <title>{`${webinar.title} | eCyPro Webinar`}</title>
+        <meta
+          name="description"
+          content={`${webinar.title} — ${webinar.speakers.join(', ')} ile ${dateFmt} ${timeFmt}.`}
+        />
         <link rel="canonical" href={`https://www.ecypro.com/webinars/${webinar.slug}`} />
       </Helmet>
       <section className="pt-32 pb-12 px-6 md:px-12 border-b border-white/5">
         <div className="max-w-4xl mx-auto">
           <div className="text-xs font-bold uppercase tracking-[0.25em] text-secondary mb-3">
-            EcyPro Webinar
+            eCyPro Webinar
           </div>
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold text-white mb-6 leading-[1.05]">
             {webinar.title}
           </h1>
-          <p className="text-lg text-slate-400 mb-8 max-w-2xl leading-relaxed">{webinar.audience} için 60-75 dk online seans + interaktif Q&A.</p>
+          <p className="text-lg text-slate-400 mb-8 max-w-2xl leading-relaxed">
+            {webinar.audience} için 60-75 dk online seans + interaktif Q&A.
+          </p>
           <div className="flex flex-wrap gap-x-6 gap-y-3 text-sm text-slate-300">
-            <span className="inline-flex items-center gap-2"><Calendar size={16} className="text-secondary" />{dateFmt} · {timeFmt}</span>
-            <span className="inline-flex items-center gap-2"><Clock size={16} className="text-secondary" />{webinar.durationMin} dk</span>
-            <span className="inline-flex items-center gap-2"><Users size={16} className="text-secondary" />Konuşmacı: {webinar.speakers.join(', ')}</span>
+            <span className="inline-flex items-center gap-2">
+              <Calendar size={16} className="text-secondary" />
+              {dateFmt} · {timeFmt}
+            </span>
+            <span className="inline-flex items-center gap-2">
+              <Clock size={16} className="text-secondary" />
+              {webinar.durationMin} dk
+            </span>
+            <span className="inline-flex items-center gap-2">
+              <Users size={16} className="text-secondary" />
+              Konuşmacı: {webinar.speakers.join(', ')}
+            </span>
           </div>
         </div>
       </section>
@@ -171,7 +185,10 @@ export const WebinarLandingPage: React.FC = () => {
             <h2 className="text-2xl font-serif font-bold text-white mb-4">Gündem</h2>
             <ul className="space-y-3">
               {webinar.agenda.map((item, i) => (
-                <li key={i} className="flex items-start gap-3"><CheckCircle2 size={18} className="text-secondary mt-0.5 flex-shrink-0" /><span className="text-slate-200">{item}</span></li>
+                <li key={i} className="flex items-start gap-3">
+                  <CheckCircle2 size={18} className="text-secondary mt-0.5 flex-shrink-0" />
+                  <span className="text-slate-200">{item}</span>
+                </li>
               ))}
             </ul>
           </div>
@@ -179,42 +196,85 @@ export const WebinarLandingPage: React.FC = () => {
             <h2 className="text-2xl font-serif font-bold text-white mb-4">Kimler İçin?</h2>
             <ul className="space-y-2">
               {webinar.whoFor.map((item, i) => (
-                <li key={i} className="text-slate-300 leading-relaxed">• {item}</li>
+                <li key={i} className="text-slate-300 leading-relaxed">
+                  • {item}
+                </li>
               ))}
             </ul>
           </div>
           <div>
-            <h2 className="text-2xl font-serif font-bold text-white mb-4">Webinar Sonrası Alacağınız</h2>
+            <h2 className="text-2xl font-serif font-bold text-white mb-4">
+              Webinar Sonrası Alacağınız
+            </h2>
             <ul className="space-y-2">
               {webinar.takeaways.map((item, i) => (
-                <li key={i} className="text-slate-300 leading-relaxed">📎 {item}</li>
+                <li key={i} className="text-slate-300 leading-relaxed">
+                  📎 {item}
+                </li>
               ))}
             </ul>
           </div>
         </div>
         <aside className="md:sticky md:top-32 h-fit p-6 md:p-8 bg-gradient-to-br from-secondary/15 to-primary/10 border border-secondary/30 rounded-2xl">
           <h3 className="text-lg font-serif font-bold text-white mb-3">Ücretsiz Kayıt</h3>
-          <p className="text-sm text-slate-300 mb-5 leading-relaxed">Kayıt formunu doldurun, webinar bağlantısı + hatırlatma e-postası gönderilir.</p>
+          <p className="text-sm text-slate-300 mb-5 leading-relaxed">
+            Kayıt formunu doldurun, webinar bağlantısı + hatırlatma e-postası gönderilir.
+          </p>
           {status === 'success' ? (
-            <div className="p-4 bg-emerald-500/10 border border-emerald-500/30 rounded-lg" role="status" aria-live="polite">
+            <div
+              className="p-4 bg-emerald-500/10 border border-emerald-500/30 rounded-lg"
+              role="status"
+              aria-live="polite"
+            >
               <CheckCircle2 size={20} className="text-emerald-400 mb-2" />
               <p className="text-emerald-200 text-sm">Kayıt alındı! Bağlantı e-postanıza geldi.</p>
             </div>
           ) : (
             <form onSubmit={onSubmit} className="space-y-3" noValidate>
-              <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="email@sirket.com" required aria-required="true"
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="email@sirket.com"
+                required
+                aria-required="true"
                 disabled={status === 'submitting'}
-                className="w-full px-4 py-3 min-h-[44px] rounded-lg bg-white/5 border border-white/10 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-secondary disabled:opacity-50" />
+                className="w-full px-4 py-3 min-h-[44px] rounded-lg bg-white/5 border border-white/10 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-secondary disabled:opacity-50"
+              />
               <label className="flex items-start gap-2 text-xs text-slate-400 cursor-pointer">
-                <input type="checkbox" checked={consent} onChange={(e) => setConsent(e.target.checked)} className="mt-0.5 accent-secondary" />
-                <span className="leading-relaxed">KVKK kapsamında webinar bilgilendirmesi için e-posta işlenmesine açık rıza veriyorum. <Link to="/privacy/data-rights" className="text-secondary underline">Detay</Link></span>
+                <input
+                  type="checkbox"
+                  checked={consent}
+                  onChange={(e) => setConsent(e.target.checked)}
+                  className="mt-0.5 accent-secondary"
+                />
+                <span className="leading-relaxed">
+                  KVKK kapsamında webinar bilgilendirmesi için e-posta işlenmesine açık rıza
+                  veriyorum.{' '}
+                  <Link to="/privacy/data-rights" className="text-secondary underline">
+                    Detay
+                  </Link>
+                </span>
               </label>
-              <button type="submit" disabled={status === 'submitting'}
-                className="w-full px-4 py-3 min-h-[44px] rounded-lg bg-secondary text-neutral font-semibold hover:bg-secondary/90 transition-colors disabled:opacity-50 inline-flex items-center justify-center gap-2">
-                {status === 'submitting' ? <><Loader2 size={16} className="animate-spin" /> Kaydediliyor</> : <>Kayıt Ol <ArrowRight size={16} /></>}
+              <button
+                type="submit"
+                disabled={status === 'submitting'}
+                className="w-full px-4 py-3 min-h-[44px] rounded-lg bg-secondary text-neutral font-semibold hover:bg-secondary/90 transition-colors disabled:opacity-50 inline-flex items-center justify-center gap-2"
+              >
+                {status === 'submitting' ? (
+                  <>
+                    <Loader2 size={16} className="animate-spin" /> Kaydediliyor
+                  </>
+                ) : (
+                  <>
+                    Kayıt Ol <ArrowRight size={16} />
+                  </>
+                )}
               </button>
               {status === 'error' && errorMsg && (
-                <p className="text-xs text-red-400" role="alert">{errorMsg}</p>
+                <p className="text-xs text-red-400" role="alert">
+                  {errorMsg}
+                </p>
               )}
             </form>
           )}

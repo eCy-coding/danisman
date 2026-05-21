@@ -12,7 +12,7 @@ export const SchemaOrg: React.FC = () => {
   const professionalServiceSchema = {
     '@context': 'https://schema.org',
     '@type': 'ProfessionalService',
-    name: 'EcyPro Premium Consulting',
+    name: 'eCyPro Premium Consulting',
     image: logoUrl,
     '@id': baseUrl,
     url: baseUrl,
@@ -64,7 +64,7 @@ export const SchemaOrg: React.FC = () => {
     serviceType: 'Management Consulting',
     provider: {
       '@type': 'ProfessionalService',
-      name: 'EcyPro Premium Consulting',
+      name: 'eCyPro Premium Consulting',
     },
     areaServed: {
       '@type': 'Country',
@@ -144,7 +144,7 @@ export const SchemaOrg: React.FC = () => {
     image: `${baseUrl}/founder.jpg`,
     worksFor: {
       '@type': 'Organization',
-      name: 'EcyPro Premium Consulting',
+      name: 'eCyPro Premium Consulting',
       url: baseUrl,
     },
     sameAs: [

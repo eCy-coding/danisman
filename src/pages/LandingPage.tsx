@@ -34,9 +34,7 @@ const TrustBar: React.FC = () => {
             return (
               <li key={p.tr} className="inline-flex items-center gap-2 min-h-[44px]">
                 <Icon size={14} className="text-secondary" aria-hidden="true" />
-                <span className="font-medium tracking-wide">
-                  {lang === 'tr' ? p.tr : p.en}
-                </span>
+                <span className="font-medium tracking-wide">{lang === 'tr' ? p.tr : p.en}</span>
               </li>
             );
           })}
@@ -52,8 +50,8 @@ export const LandingPage: React.FC = () => {
   const { language: lang } = useTranslation();
   const title =
     lang === 'tr'
-      ? 'EcyPro Premium Consulting — Stratejik Yönetim & Dijital Dönüşüm'
-      : 'EcyPro Premium Consulting — Strategic Management & Digital Transformation';
+      ? 'eCyPro Premium Consulting — Stratejik Yönetim & Dijital Dönüşüm'
+      : 'eCyPro Premium Consulting — Strategic Management & Digital Transformation';
   const description =
     lang === 'tr'
       ? 'eCyverse ekosisteminin premium danışmanlık kolu. Organizasyonel dönüşüm, stratejik danışmanlık ve kültür mühendisliği ile Türkiye merkezli, AB pazarlarında engagement deneyimi.'

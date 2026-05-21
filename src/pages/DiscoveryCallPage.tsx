@@ -21,8 +21,8 @@ export const DiscoveryCallPage: React.FC = () => {
       <Helmet>
         <title>
           {isTr
-            ? 'Ücretsiz Strateji Görüşmesi — EcyPro Premium Consulting'
-            : 'Free Discovery Call — EcyPro Premium Consulting'}
+            ? 'Ücretsiz Strateji Görüşmesi — eCyPro Premium Consulting'
+            : 'Free Discovery Call — eCyPro Premium Consulting'}
         </title>
         <meta
           name="description"
@@ -35,7 +35,7 @@ export const DiscoveryCallPage: React.FC = () => {
         <link rel="canonical" href="https://www.ecypro.com/discovery-call" />
         <meta
           property="og:title"
-          content="Ücretsiz Strateji Görüşmesi | EcyPro Premium Consulting"
+          content="Ücretsiz Strateji Görüşmesi | eCyPro Premium Consulting"
         />
         <meta property="og:url" content="https://www.ecypro.com/discovery-call" />
         <meta property="og:type" content="website" />
@@ -80,9 +80,7 @@ export const DiscoveryCallPage: React.FC = () => {
 
           <footer className="text-center mt-8">
             <p className="text-slate-400 text-sm">
-              {isTr
-                ? 'Uygun zaman bulamıyorsanız '
-                : 'No suitable time? Email us at '}
+              {isTr ? 'Uygun zaman bulamıyorsanız ' : 'No suitable time? Email us at '}
               <a
                 href="mailto:info@ecypro.com"
                 className="text-secondary hover:text-secondary/80 underline"

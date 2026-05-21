@@ -33,7 +33,7 @@ const SEED_DATA: ProofItem[] = [
   {
     id: 's1',
     nameInitial: '·',
-    city: 'EcyPro',
+    city: 'eCyPro',
     action: {
       tr: 'Stratejik dijital dönüşüm rehberi yayında',
       en: 'Strategic digital transformation playbook is live',
@@ -45,7 +45,7 @@ const SEED_DATA: ProofItem[] = [
   {
     id: 's2',
     nameInitial: '·',
-    city: 'EcyPro',
+    city: 'eCyPro',
     action: {
       tr: 'Aile şirketlerinde kuşak geçişi — pratik notlar',
       en: 'Generational transition in family firms — practical notes',
@@ -57,7 +57,7 @@ const SEED_DATA: ProofItem[] = [
   {
     id: 's3',
     nameInitial: '·',
-    city: 'EcyPro',
+    city: 'eCyPro',
     action: {
       tr: 'Lean & AI birleşimi: operasyonel mükemmellik',
       en: 'Lean & AI convergence: operational excellence',
@@ -69,7 +69,7 @@ const SEED_DATA: ProofItem[] = [
   {
     id: 's4',
     nameInitial: '·',
-    city: 'EcyPro',
+    city: 'eCyPro',
     action: {
       tr: 'Yönetim kurulu çevikliği — belirsizlik çağı',
       en: 'Boardroom agility — in the age of uncertainty',
