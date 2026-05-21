@@ -48,9 +48,10 @@ export const NewsletterSection: React.FC = () => {
     trackEvent('Newsletter', 'Subscribe', 'section');
 
     try {
-      const baseUrl =
-        (import.meta.env.VITE_API_URL as string | undefined) ?? 'http://localhost:3001/api';
-      const res = await fetch(`${baseUrl}/newsletter/subscribe`, {
+      const baseUrl = (
+        (import.meta.env.VITE_API_URL as string | undefined) ?? 'http://localhost:3001/api'
+      ).replace(/\/$/, '');
+      const res = await fetch(`${baseUrl}/v1/newsletter/subscribe`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, consent: true, source: 'newsletter-section' }),
@@ -238,6 +239,9 @@ export const NewsletterSection: React.FC = () => {
                     <button
                       type="submit"
                       data-testid="newsletter-submit"
+                      data-cta="newsletter"
+                      data-track="cta-click"
+                      data-cta-source="newsletter-section"
                       disabled={!email || !consent || status === 'loading'}
                       className="w-full flex items-center justify-center gap-2 bg-secondary hover:bg-secondary/90 disabled:opacity-50 text-neutral font-semibold py-3 rounded-xl transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-secondary"
                     >
