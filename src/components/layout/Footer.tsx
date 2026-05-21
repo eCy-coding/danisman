@@ -201,6 +201,33 @@ export const Footer: React.FC = () => {
                   {FOOTER_COPY.locations[lang]}
                 </Link>
               </li>
+              {/* Track 4: Lead magnet ücretsiz araçlar */}
+              <li>
+                <Link
+                  to="/quick-check"
+                  className="hover:text-secondary transition-colors block min-h-11 py-2 outline-none focus-visible:text-secondary"
+                  data-cta-source="footer"
+                  data-cta="quick-check"
+                  data-track="cta-click"
+                >
+                  {lang === 'tr'
+                    ? 'KVKK Quick-Check (Ücretsiz · 5 dk)'
+                    : 'KVKK Quick-Check (Free · 5 min)'}
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/pricing-calculator"
+                  className="hover:text-secondary transition-colors block min-h-11 py-2 outline-none focus-visible:text-secondary"
+                  data-cta-source="footer"
+                  data-cta="pricing-calc"
+                  data-track="cta-click"
+                >
+                  {lang === 'tr'
+                    ? 'Pricing Calculator (Ücretsiz · 2 dk)'
+                    : 'Pricing Calculator (Free · 2 min)'}
+                </Link>
+              </li>
               {/* P52: P51 Phase 4 content sayfaları */}
               <li>
                 <Link

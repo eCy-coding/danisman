@@ -289,6 +289,21 @@ export const PricingPage: React.FC = () => {
               <p className="text-xl text-slate-400 max-w-2xl mx-auto font-light leading-relaxed">
                 {t.subtitle[lang]}
               </p>
+              <div className="mt-6 flex justify-center">
+                <Link
+                  to="/pricing-calculator"
+                  data-cta="pricing-calc"
+                  data-cta-source="pricing-banner"
+                  data-track="cta-click"
+                  onClick={() => trackEvent('Pricing', 'Click', 'Pricing Banner Calc')}
+                  className="inline-flex items-center gap-2 rounded-full border border-secondary/40 bg-secondary/10 px-5 py-2 text-sm text-secondary hover:bg-secondary hover:text-neutral transition-colors font-semibold"
+                >
+                  {lang === 'tr'
+                    ? 'Hangi paket size uygun? — 4 soruda öğrenin'
+                    : 'Which package fits? — 4-question calculator'}
+                  <ArrowRight size={14} aria-hidden="true" />
+                </Link>
+              </div>
             </FadeIn>
 
             {/* Billing + Currency controls */}
