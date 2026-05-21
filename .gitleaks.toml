@@ -31,3 +31,10 @@ description = "Generated lock files"
 paths = [
   '''package-lock\.json''',
 ]
+
+[[allowlists]]
+description = "Sentry CSP report-uri sentry_key — public by design, lives in client HTML so browsers can POST CSP violation reports to Sentry. Not a credential."
+regexes = ['''sentry_key=[a-f0-9]{32}''']
+paths = [
+  '''^index\.html$''',
+]

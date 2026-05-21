@@ -23,7 +23,7 @@
          react-helmet-async ile route-aware yönetir. -->
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://www.googletagmanager.com https://www.google-analytics.com https://www.clarity.ms https://*.clarity.ms https://browser.sentry-cdn.com https://*.sentry.io https://*.ingest.us.sentry.io https://*.ingest.de.sentry.io https://cdn.growthbook.io; style-src 'self' 'unsafe-inline'; img-src 'self' data: https: blob:; font-src 'self' data:; connect-src 'self' https://huggingface.co https://cdn-lfs.huggingface.co https://www.googletagmanager.com https://www.google-analytics.com https://*.google-analytics.com https://www.clarity.ms https://*.clarity.ms https://browser.sentry-cdn.com https://*.sentry.io https://*.ingest.sentry.io https://*.ingest.us.sentry.io https://*.ingest.de.sentry.io https://cdn.growthbook.io https://api.ecypro.com https://*.ecypro.com https://ecypro-api.onrender.com wss://* http://localhost:* ws://localhost:* ws://127.0.0.1:*; worker-src 'self' blob:; frame-src 'self'; object-src 'none'; base-uri 'self'; report-uri https://o4511338639982592.ingest.us.sentry.io/api/4511403451088896/security/?sentry_key=0e06ef649f82d275d1ab21d4e28e65d1; report-to csp-endpoint;"
+      content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://www.googletagmanager.com https://www.google-analytics.com https://www.clarity.ms https://*.clarity.ms https://browser.sentry-cdn.com https://*.sentry.io https://*.ingest.us.sentry.io https://*.ingest.de.sentry.io https://cdn.growthbook.io; style-src 'self' 'unsafe-inline'; img-src 'self' data: https: blob:; font-src 'self' data:; connect-src 'self' https://huggingface.co https://cdn-lfs.huggingface.co https://www.googletagmanager.com https://www.google-analytics.com https://*.google-analytics.com https://www.clarity.ms https://*.clarity.ms https://browser.sentry-cdn.com https://*.sentry.io https://*.ingest.sentry.io https://*.ingest.us.sentry.io https://*.ingest.de.sentry.io https://cdn.growthbook.io https://api.ecypro.com https://*.ecypro.com wss://* http://localhost:* ws://localhost:* ws://127.0.0.1:*; worker-src 'self' blob:; frame-src 'self'; object-src 'none'; base-uri 'self'; report-uri https://o4511338639982592.ingest.us.sentry.io/api/4511403451088896/security/?sentry_key=0e06ef649f82d275d1ab21d4e28e65d1; report-to csp-endpoint;"
     />
     <meta http-equiv="X-Content-Type-Options" content="nosniff" />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
@@ -89,11 +89,6 @@
     <link rel="dns-prefetch" href="https://api.ecypro.com" />
     <link rel="dns-prefetch" href="https://cdn.ecypro.com" />
     <link rel="preconnect" href="https://api.ecypro.com" crossorigin />
-    <!-- P46 C9: ecypro-api Render backend preconnect — health check + contact
-         form için TLS handshake'i page-load anında başlat, ilk POST 100-300ms
-         daha hızlı tamamlanır. -->
-    <link rel="dns-prefetch" href="https://ecypro-api.onrender.com" />
-    <link rel="preconnect" href="https://ecypro-api.onrender.com" crossorigin />
 
     <!-- PWA & Mobile -->
     <meta name="theme-color" content="#050810" media="(prefers-color-scheme: dark)" />
