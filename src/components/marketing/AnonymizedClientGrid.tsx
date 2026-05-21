@@ -18,7 +18,11 @@ import {
   HeartHandshake,
   type LucideIcon,
 } from 'lucide-react';
-import { ANONYMIZED_CLIENTS, SHOULD_DISPLAY_REAL_LOGOS, type AnonymizedClient } from '../../data/clients';
+import {
+  ANONYMIZED_CLIENTS,
+  SHOULD_DISPLAY_REAL_LOGOS,
+  type AnonymizedClient,
+} from '../../data/clients';
 
 const GLYPH_ICONS: Record<AnonymizedClient['glyph'], LucideIcon> = {
   industry: Factory,
@@ -39,17 +43,19 @@ export const AnonymizedClientGrid: React.FC<{ className?: string }> = ({ classNa
           <div className="text-xs font-bold uppercase tracking-[0.25em] text-secondary mb-3">
             Engagement Portföyü
           </div>
-          <h2 id="anon-clients-heading" className="text-3xl md:text-4xl font-serif font-bold text-white mb-4">
+          <h2
+            id="anon-clients-heading"
+            className="text-3xl md:text-4xl font-serif font-bold text-white mb-4"
+          >
             Çalıştığımız Müşteri Profili
           </h2>
           <p className="text-slate-400 max-w-2xl mx-auto leading-relaxed">
-            NDA gereği gerçek isimler paylaşılmaz; aşağıda engagement yürüttüğümüz kurumların
-            anonim sektör + ölçek profili.
+            NDA gereği gerçek isimler paylaşılmaz; aşağıda engagement yürüttüğümüz kurumların anonim
+            sektör + ölçek profili.
           </p>
         </div>
         <ul
           className="grid grid-cols-2 md:grid-cols-4 gap-4"
-          role="list"
           aria-label="Anonim müşteri sektör + ölçek profili"
         >
           {ANONYMIZED_CLIENTS.map((c) => {
@@ -65,8 +71,11 @@ export const AnonymizedClientGrid: React.FC<{ className?: string }> = ({ classNa
                   <img
                     src={realLogoPath}
                     alt={`${c.sector} müşteri logosu`}
+                    width={160}
+                    height={48}
                     className="w-full h-12 object-contain mb-3"
                     loading="lazy"
+                    decoding="async"
                   />
                 ) : (
                   <div className="w-12 h-12 rounded-xl bg-secondary/10 border border-secondary/20 flex items-center justify-center mb-3 group-hover:scale-105 transition-transform">
