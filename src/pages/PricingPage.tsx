@@ -12,6 +12,7 @@ import { useCurrencyStore } from '../stores/currencyStore';
 import { CurrencySwitcher } from '../components/ui/CurrencySwitcher';
 import { buildFaqSchema, buildBreadcrumbSchema } from '../lib/structured-data';
 import { CalendlyEmbed } from '../components/booking/CalendlyEmbed';
+import { getCalendlyCta, hasExternalCalendly } from '../lib/cta/calendly';
 
 // P95 — ROI calculator: 3-input projection (Engagement Audit vs Quarterly
 // Retainer cost ↔ projected client return). Lazy because Recharts pulls
@@ -51,7 +52,7 @@ const TIERS: Tier[] = [
     priceAnnual: 12000,
     currency: '₺',
     icon: <Sparkles className="w-5 h-5" />,
-    cta: { tr: 'Oturum Planla', en: 'Book Session' },
+    cta: { tr: 'Discovery Call ile başla', en: 'Start with Discovery Call' },
     features: [
       { tr: 'Kurum bağlamı keşif çağrısı (30 dk)', en: 'Discovery call (30 min)' },
       { tr: '2 saatlik yönetici atölyesi', en: '2-hour executive workshop' },
@@ -71,7 +72,7 @@ const TIERS: Tier[] = [
     currency: '₺',
     icon: <Zap className="w-5 h-5" />,
     highlight: true,
-    cta: { tr: 'Görüşme Planla', en: 'Schedule a Call' },
+    cta: { tr: 'Discovery Call ile başla', en: 'Start with Discovery Call' },
     features: [
       { tr: 'Tüm Strateji Oturumu özellikleri', en: 'Everything in Strategy Session' },
       {
@@ -97,7 +98,7 @@ const TIERS: Tier[] = [
     priceAnnual: 350000,
     currency: '₺',
     icon: <Crown className="w-5 h-5" />,
-    cta: { tr: 'Bize Ulaşın', en: 'Contact Us' },
+    cta: { tr: 'Discovery Call ile başla', en: 'Start with Discovery Call' },
     features: [
       { tr: 'Tüm Çeyreklik Engagement özellikleri', en: 'Everything in Quarterly Engagement' },
       {
@@ -374,19 +375,48 @@ export const PricingPage: React.FC = () => {
                     </li>
                   ))}
                 </ul>
-                <Link
-                  to={tier.priceMonthly === 0 ? '/contact' : `/contact?plan=${tier.id}`}
-                  onClick={() => trackEvent('Pricing', 'CtaClick', tier.id)}
-                  data-testid={`pricing-cta-${tier.id}`}
-                  className={`w-full text-center px-6 py-3 rounded-xl font-semibold text-sm transition-all flex items-center justify-center gap-2 ${
+                {(() => {
+                  const tierMap: Record<string, 'audit' | 'retainer' | 'custom'> = {
+                    starter: 'audit',
+                    growth: 'retainer',
+                    enterprise: 'custom',
+                  };
+                  const tierKey = tierMap[tier.id] ?? 'audit';
+                  const cta = getCalendlyCta('pricing-tier', {
+                    'data-tier': tierKey,
+                    'data-plan': tier.id,
+                  });
+                  const sharedClass = `w-full text-center px-6 py-3 rounded-xl font-semibold text-sm transition-all flex items-center justify-center gap-2 ${
                     tier.highlight
                       ? 'bg-white text-neutral hover:bg-slate-100'
                       : 'bg-white/10 text-white hover:bg-white/20 border border-white/10'
-                  }`}
-                >
-                  <span>{tier.cta[lang]}</span>
-                  <ArrowRight className="w-4 h-4" />
-                </Link>
+                  }`;
+                  return hasExternalCalendly() ? (
+                    <a
+                      href={cta.href}
+                      target={cta.target}
+                      rel={cta.rel}
+                      {...cta.dataAttrs}
+                      onClick={() => trackEvent('Pricing', 'CtaClick', tier.id)}
+                      data-testid={`pricing-cta-${tier.id}`}
+                      className={sharedClass}
+                    >
+                      <span>{tier.cta[lang]}</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </a>
+                  ) : (
+                    <Link
+                      to={cta.href}
+                      onClick={() => trackEvent('Pricing', 'CtaClick', tier.id)}
+                      {...cta.dataAttrs}
+                      data-testid={`pricing-cta-${tier.id}`}
+                      className={sharedClass}
+                    >
+                      <span>{tier.cta[lang]}</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </Link>
+                  );
+                })()}
               </motion.div>
             ))}
           </div>
@@ -516,14 +546,34 @@ export const PricingPage: React.FC = () => {
               {t.readyTitle[lang]}
             </h2>
             <p className="text-slate-300 mb-8">{t.readySub[lang]}</p>
-            <Link
-              to="/contact"
-              onClick={() => trackEvent('Pricing', 'FinalCtaClick')}
-              className="inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-white text-neutral font-bold hover:bg-slate-100 transition-all"
-            >
-              <span>{t.bookCall[lang]}</span>
-              <ArrowRight className="w-4 h-4" />
-            </Link>
+            {(() => {
+              const cta = getCalendlyCta('pricing-final');
+              const sharedClass =
+                'inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-white text-neutral font-bold hover:bg-slate-100 transition-all';
+              return hasExternalCalendly() ? (
+                <a
+                  href={cta.href}
+                  target={cta.target}
+                  rel={cta.rel}
+                  {...cta.dataAttrs}
+                  onClick={() => trackEvent('Pricing', 'FinalCtaClick')}
+                  className={sharedClass}
+                >
+                  <span>{t.bookCall[lang]}</span>
+                  <ArrowRight className="w-4 h-4" />
+                </a>
+              ) : (
+                <Link
+                  to={cta.href}
+                  {...cta.dataAttrs}
+                  onClick={() => trackEvent('Pricing', 'FinalCtaClick')}
+                  className={sharedClass}
+                >
+                  <span>{t.bookCall[lang]}</span>
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+              );
+            })()}
           </section>
 
           {/* P77.B — Calendly inline embed: high-intent users at end of pricing review */}
