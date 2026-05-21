@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   motion,
   useReducedMotion,
@@ -218,6 +218,18 @@ export const Hero: React.FC = () => {
   const [persona, setPersona] = useState<'executive' | 'developer'>('executive');
   const [videoOpen, setVideoOpen] = useState(false);
 
+  // Mobile LCP: the decorative background (MouseGlow pointer tracking, Spotlight,
+  // and DataFlowBackground's infinite animated SVG with glow filters) ran at mount
+  // and starved the main thread, delaying the LCP <p> paint. Defer it to idle so
+  // the hero text hydrates first; skip it entirely under reduced-motion.
+  const [bgReady, setBgReady] = useState(false);
+  useEffect(() => {
+    const ric = window.requestIdleCallback ?? ((cb: () => void) => window.setTimeout(cb, 200));
+    const cancel = window.cancelIdleCallback ?? window.clearTimeout;
+    const id = ric(() => setBgReady(true));
+    return () => cancel(id as number);
+  }, []);
+
   // A/B test: hero-cta-variant — 'book' (default) | 'explore'
   const ctaVariant = useFeatureValue<string>('hero-cta-variant', 'book');
   const primaryCtaLabel =
@@ -261,8 +273,12 @@ export const Hero: React.FC = () => {
       <div className="sticky top-0 h-screen flex flex-col justify-center overflow-hidden">
         {/* Background Architecture */}
         <div className="absolute inset-0 z-0">
-          <MouseGlow color="rgba(37, 99, 235, 0.15)" size={1000} />
-          <Spotlight fill="rgba(37, 99, 235, 0.08)" />
+          {bgReady && !prefersReducedMotion && (
+            <>
+              <MouseGlow color="rgba(37, 99, 235, 0.15)" size={1000} />
+              <Spotlight fill="rgba(37, 99, 235, 0.08)" />
+            </>
+          )}
 
           <div
             className="absolute inset-0 opacity-[0.1]"
@@ -273,7 +289,7 @@ export const Hero: React.FC = () => {
             }}
           />
 
-          <DataFlowBackground />
+          {bgReady && !prefersReducedMotion && <DataFlowBackground />}
 
           <div className="absolute inset-0 bg-radial-gradient from-transparent via-[#050810]/60 to-[#050810] pointer-events-none" />
         </div>

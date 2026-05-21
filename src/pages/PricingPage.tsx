@@ -11,8 +11,15 @@ import { JsonLd } from '../components/seo/JsonLd';
 import { useCurrencyStore } from '../stores/currencyStore';
 import { CurrencySwitcher } from '../components/ui/CurrencySwitcher';
 import { buildFaqSchema, buildBreadcrumbSchema } from '../lib/structured-data';
-import { CalendlyEmbed } from '../components/booking/CalendlyEmbed';
 import { getCalendlyCta, hasExternalCalendly } from '../lib/cta/calendly';
+import { LazyMount } from '../components/common/LazyMount';
+
+// Calendly pulls an external widget.js + iframe; intersection-gating it keeps
+// that network + main-thread cost off the critical path until the user scrolls
+// to the bottom embed, freeing CPU for the above-fold LCP <p>.
+const CalendlyEmbed = React.lazy(() =>
+  import('../components/booking/CalendlyEmbed').then((m) => ({ default: m.CalendlyEmbed })),
+);
 
 // P95 — ROI calculator: 3-input projection (Engagement Audit vs Quarterly
 // Retainer cost ↔ projected client return). Lazy because Recharts pulls
@@ -494,16 +501,9 @@ export const PricingPage: React.FC = () => {
             <p className="text-center text-slate-400 mb-8">
               Engagement maliyetinizi 12 aylık beklenen geri dönüşle karşılaştırın.
             </p>
-            <React.Suspense
-              fallback={
-                <div
-                  className="h-48 rounded-2xl border border-white/10 bg-white/5 animate-pulse"
-                  aria-hidden="true"
-                />
-              }
-            >
+            <LazyMount placeholderHeight={192}>
               <ROICalculator />
-            </React.Suspense>
+            </LazyMount>
           </section>
 
           {/* FAQ */}
@@ -603,7 +603,9 @@ export const PricingPage: React.FC = () => {
                   : '30-minute free discovery call — pick the time that suits you.'}
               </p>
             </header>
-            <CalendlyEmbed source="pricing-page-bottom" heightPx={680} />
+            <LazyMount placeholderHeight={680}>
+              <CalendlyEmbed source="pricing-page-bottom" heightPx={680} />
+            </LazyMount>
           </section>
         </div>
       </PageWrapper>

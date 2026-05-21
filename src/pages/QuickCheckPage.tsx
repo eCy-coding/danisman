@@ -1,7 +1,14 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { PageWrapper } from '../components/layout/PageWrapper';
-import { QuickCheckWizard } from '../components/QuickCheckWizard';
+import { LazyMount } from '../components/common/LazyMount';
+
+// Mobile LCP: the 855-line wizard hydrating eagerly kept the main thread busy
+// past the LCP <p> in the header. Lazy + intersection-gated mount frees CPU so
+// the above-fold header paints at first frame (mirrors /services pattern).
+const QuickCheckWizard = React.lazy(() =>
+  import('../components/QuickCheckWizard').then((m) => ({ default: m.QuickCheckWizard })),
+);
 
 export const QuickCheckPage: React.FC = () => {
   return (
@@ -31,7 +38,9 @@ export const QuickCheckPage: React.FC = () => {
             </p>
           </header>
 
-          <QuickCheckWizard />
+          <LazyMount placeholderHeight={560}>
+            <QuickCheckWizard />
+          </LazyMount>
 
           <footer className="mt-10 text-center text-xs text-slate-500">
             Verilerinizi KVKK m.5/2-f çerçevesinde işliyoruz · eCyPro Premium Consulting
