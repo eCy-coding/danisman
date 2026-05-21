@@ -108,7 +108,10 @@
       "success_title": "Mesajınız İletildi!",
       "success_desc": "En kısa sürede size dönüş yapacağız.",
       "error_title": "Bir Hata Oluştu",
-      "error_desc": "Lütfen tekrar deneyiniz veya telefon ile ulaşınız."
+      "error_desc": "Lütfen tekrar deneyiniz veya telefon ile ulaşınız.",
+      "kvkk_label": "Verilerimin EcyPro tarafından bu talebi yanıtlamak amacıyla işlenmesini kabul ediyorum.",
+      "kvkk_link": "Gizlilik Politikası",
+      "kvkk_required": "Devam etmek için KVKK onayı gerekli."
     }
   },
   "cookies": {
