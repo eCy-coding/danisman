@@ -28,7 +28,9 @@ class SentryClient {
       return this._initPromise ?? Promise.resolve();
     }
 
-    const dsn = import.meta.env.VITE_SENTRY_DSN;
+    // VITE_SENTRY_DSN_FRONTEND is the canonical name; VITE_SENTRY_DSN kept
+    // as a legacy alias so prior deploys don't lose error reporting on cut-over.
+    const dsn = import.meta.env.VITE_SENTRY_DSN_FRONTEND || import.meta.env.VITE_SENTRY_DSN;
     if (!dsn || dsn === 'https://mock@o0.ingest.sentry.io/0') {
       Logger.debug('[Sentry] No valid DSN configured — error reporting disabled');
       return;
