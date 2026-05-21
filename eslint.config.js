@@ -75,6 +75,39 @@ export default tseslint.config(
       'jsx-a11y/no-autofocus': 'error',
       'jsx-a11y/no-static-element-interactions': 'error',
       'jsx-a11y/no-redundant-roles': 'error',
+
+      // Track C #1 — Brand casing guardrail. Always import BRAND_NAME from
+      // src/constants/brand.ts. Hardcoded "EcyPro" string literals slip
+      // through copy reviews and ship to dist/. The rule bans the literal
+      // in source strings, template chunks, JSX text, and comments-as-code.
+      'no-restricted-syntax': [
+        'error',
+        {
+          selector: "Literal[value=/EcyPro/]",
+          message:
+            'Use the canonical "eCyPro" form (or import BRAND_NAME from src/constants/brand.ts). Capital-E "EcyPro" is the legacy spelling.',
+        },
+        {
+          selector: "TemplateElement[value.raw=/EcyPro/]",
+          message:
+            'Use the canonical "eCyPro" form (or import BRAND_NAME from src/constants/brand.ts) in template literals.',
+        },
+        {
+          selector: "JSXText[value=/EcyPro/]",
+          message:
+            'Use the canonical "eCyPro" form (or render {BRAND_NAME}) inside JSX text.',
+        },
+      ],
+    },
+  },
+
+  // ── Track C #1 — brand.ts itself is the authority; allow the legacy
+  // literal there only if it ever needs to be referenced (e.g. in a doc
+  // comment). Other files cannot bypass the rule.
+  {
+    files: ['src/constants/brand.ts'],
+    rules: {
+      'no-restricted-syntax': 'off',
     },
   },
 
