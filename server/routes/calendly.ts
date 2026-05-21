@@ -9,8 +9,13 @@
  * `timingSafeEqual` before doing anything with the payload.
  *
  * Behavior:
- *   - `invitee.created`   → PostHog `discovery_booked` + Telegram heads-up.
- *   - `invitee.canceled`  → PostHog `discovery_canceled` + Telegram heads-up.
+ *   - `invitee.created`   → Notion PROSPECT upsert (Stage="Discovery Booked")
+ *                           + Notion INTERACTION (Type="Discovery Call",
+ *                           Outcome="Booked") + PostHog `calendly_booked`
+ *                           + Telegram heads-up.
+ *   - `invitee.canceled`  → Notion stage rollback to "Lead" + INTERACTION
+ *                           (Outcome="Canceled") + PostHog `discovery_canceled`
+ *                           + Telegram heads-up.
  *   - Any other event     → 204 No Content (we accept, but don't act).
  *
  * If CALENDLY_WEBHOOK_SIGNING_KEY is unset, we accept any payload in dev
@@ -23,6 +28,7 @@ import express from 'express';
 import { logger } from '../config/logger';
 import { notify } from '../lib/telegram';
 import { capture as posthogCapture } from '../lib/posthog-server';
+import { upsertProspect, createInteraction } from '../services/notion';
 
 const router = Router();
 const SIGNING_KEY = process.env.CALENDLY_WEBHOOK_SIGNING_KEY ?? '';
@@ -112,7 +118,7 @@ router.post(
 
     if (event === 'invitee.created') {
       void posthogCapture({
-        event: 'discovery_booked',
+        event: 'calendly_booked',
         distinctId,
         properties: {
           name: invitee.name ?? null,
@@ -122,7 +128,43 @@ router.post(
         },
       });
 
+      // KVKK m.5/2-f — the invitee opted into Calendly's consent flow on
+      // schedule, which is treated as the lawful basis timestamp here.
+      // Best-effort: a Notion outage MUST NOT 5xx the webhook (Calendly
+      // would otherwise retry indefinitely).
+      (async () => {
+        try {
+          const prospectId = await upsertProspect({
+            name: invitee.name ?? invitee.email ?? 'Unknown',
+            email: invitee.email ?? '',
+            source: body.payload?.tracking?.utm_source ?? 'Calendly inbound',
+            stage: 'Discovery Booked',
+            priority: 'High',
+            kvkkConsentAt: new Date().toISOString(),
+            notes: [
+              scheduled.start_time && `Scheduled: ${scheduled.start_time}`,
+              invitee.timezone && `Timezone: ${invitee.timezone}`,
+            ]
+              .filter(Boolean)
+              .join('\n'),
+          });
+          if (prospectId) {
+            await createInteraction({
+              prospectId,
+              type: 'Discovery Call',
+              outcome: 'Booked',
+              occurredAt: scheduled.start_time ?? new Date().toISOString(),
+              notes: `Calendly invitee.created — TZ ${invitee.timezone ?? '-'}`,
+            });
+          }
+        } catch (err) {
+          logger.warn('[calendly] notion sync failed', { err: String(err) });
+        }
+      })();
+
       // Best-effort founder ping; never block on Telegram outages.
+      // TELEGRAM_FOUNDER_CHAT_ID overrides the default chat id for
+      // booking alerts (founder may segregate ops vs booking channels).
       notify('info', '📅 Yeni Discovery Call rezervasyonu', {
         İsim: invitee.name ?? '-',
         Email: invitee.email ?? '-',
@@ -135,6 +177,29 @@ router.post(
         distinctId,
         properties: { startTime: scheduled.start_time ?? null },
       });
+      (async () => {
+        try {
+          const prospectId = await upsertProspect({
+            name: invitee.name ?? invitee.email ?? 'Unknown',
+            email: invitee.email ?? '',
+            source: 'Calendly inbound',
+            stage: 'Lead',
+            priority: 'Low',
+            kvkkConsentAt: new Date().toISOString(),
+            notes: 'Discovery call canceled by invitee',
+          });
+          if (prospectId) {
+            await createInteraction({
+              prospectId,
+              type: 'Discovery Call',
+              outcome: 'Canceled',
+              occurredAt: scheduled.start_time ?? new Date().toISOString(),
+            });
+          }
+        } catch (err) {
+          logger.warn('[calendly] notion sync failed', { err: String(err) });
+        }
+      })();
       notify('warn', '⚠️ Discovery Call iptal edildi', {
         İsim: invitee.name ?? '-',
         Email: invitee.email ?? '-',

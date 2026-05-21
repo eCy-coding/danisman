@@ -22,12 +22,13 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import { z } from 'zod';
 import { Resend } from 'resend';
-import { contactLimiter } from '../middleware/rateLimiter';
+import { contactStrictLimiter } from '../middleware/rateLimiter';
 import { idempotency } from '../middleware/idempotency';
 import { HttpError } from '../middleware/error';
 import { notify } from '../lib/telegram';
 import { logger } from '../config/logger';
 import { capture as posthogCapture } from '../lib/posthog-server';
+import { upsertProspect } from '../services/notion';
 
 const router = Router();
 
@@ -37,6 +38,7 @@ const ContactSchema = z.object({
   name: z.string().trim().min(2, 'Name too short').max(120, 'Name too long'),
   email: z.string().trim().email('Invalid email').max(180),
   company: z.string().trim().max(180).optional().default(''),
+  sector: z.string().trim().max(120).optional().default(''),
   phone: z.string().trim().max(60).optional().default(''),
   message: z.string().trim().min(10, 'Message too short').max(4000, 'Message too long'),
   kind: z.enum(['contact', 'booking']).optional().default('contact'),
@@ -51,7 +53,8 @@ const ContactSchema = z.object({
 export type ContactPayload = z.infer<typeof ContactSchema>;
 
 const RESEND_KEY = process.env.RESEND_API_KEY;
-const EMAIL_FROM = process.env.EMAIL_FROM ?? 'EcyPro <noreply@ecypro.com>';
+const EMAIL_FROM = process.env.EMAIL_FROM ?? 'eCyPro <noreply@ecypro.com>';
+const FOUNDER_EMAIL = process.env.FOUNDER_EMAIL ?? 'hello@ecypro.com';
 let resendClient: Resend | null = null;
 function getResend(): Resend | null {
   if (!RESEND_KEY) return null;
@@ -62,11 +65,11 @@ function getResend(): Resend | null {
 function ackEmailHtml(name: string): string {
   return `<!DOCTYPE html><html lang="tr"><body style="font-family:Inter,system-ui,sans-serif;background:#050810;color:#e2e8f0;margin:0;padding:40px 20px">
 <div style="max-width:560px;margin:0 auto;background:#0f172a;border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:32px">
-  <div style="margin-bottom:24px"><strong style="font-size:20px;color:#fff">Ecy<span style="color:#2563eb">Pro</span></strong></div>
+  <div style="margin-bottom:24px"><strong style="font-size:20px;color:#fff">e<span style="color:#2563eb">Cy</span>Pro</strong></div>
   <h1 style="font-size:22px;color:#fff;margin:0 0 12px">Mesajınız bize ulaştı, ${escapeHtml(name)}</h1>
   <p style="line-height:1.6;color:#cbd5e1;margin:0 0 12px">Talebinizi aldık. Bir iş günü içinde sizinle dönüş yaparak Discovery Call için uygun zaman dilimini netleştireceğiz.</p>
   <p style="line-height:1.6;color:#cbd5e1;margin:0 0 24px">Acil bir konu varsa <a href="mailto:hello@ecypro.com" style="color:#38bdf8">hello@ecypro.com</a> adresine yazabilirsiniz.</p>
-  <p style="font-size:12px;color:#64748b;border-top:1px solid rgba(255,255,255,0.08);padding-top:16px;margin:0">EcyPro Premium Consulting · İstanbul, Türkiye</p>
+  <p style="font-size:12px;color:#64748b;border-top:1px solid rgba(255,255,255,0.08);padding-top:16px;margin:0">eCyPro Premium Consulting · İstanbul, Türkiye · KVKK m.5/2-f</p>
 </div></body></html>`;
 }
 
@@ -83,7 +86,7 @@ function escapeHtml(s: string): string {
 
 router.post(
   '/',
-  contactLimiter,
+  contactStrictLimiter,
   // P13/1 — Idempotency-Key honored if client sends one. Optional (no 400 on
   // missing key) so legacy form clients keep working; retried POSTs from
   // network jitter / double-click will dedupe within 24h TTL.
@@ -143,20 +146,45 @@ router.post(
       });
 
       // Best-effort ack to the lead — never block on email delivery.
+      // `reply_to` routes the lead's reply to the founder inbox so the
+      // conversation continues out of the noreply mailbox.
       const resend = getResend();
       if (resend) {
         resend.emails
           .send({
             from: EMAIL_FROM,
             to: data.email,
+            replyTo: FOUNDER_EMAIL,
             subject:
               data.kind === 'booking'
-                ? 'Rezervasyon talebiniz alındı — EcyPro'
-                : 'Mesajınız bize ulaştı — EcyPro',
+                ? 'Rezervasyon talebiniz alındı — eCyPro'
+                : 'Mesajınız bize ulaştı — eCyPro',
             html: ackEmailHtml(data.name),
           })
           .catch((err) => logger.warn('[contact] ack email failed', { err: String(err) }));
       }
+
+      // KVKK m.5/2-f — consent timestamp captured at submission time; Notion
+      // stores the timestamp on the Prospect row for audit provenance.
+      // Best-effort: a Notion outage MUST NOT fail the user submission.
+      void upsertProspect({
+        name: data.name,
+        email: data.email,
+        company: data.company || undefined,
+        sector: data.sector || undefined,
+        source: data.kind === 'booking' ? 'Booking form inbound' : 'Contact form inbound',
+        stage: 'Lead',
+        priority: data.budget ? 'High' : 'Medium',
+        kvkkConsentAt: new Date().toISOString(),
+        notes: [
+          data.serviceInterest && `Service: ${data.serviceInterest}`,
+          data.budget && `Budget: ${data.budget}`,
+          data.phone && `Phone: ${data.phone}`,
+          data.message && `Message: ${data.message.slice(0, 1200)}`,
+        ]
+          .filter(Boolean)
+          .join('\n'),
+      }).catch((err) => logger.warn('[contact] notion upsert failed', { err: String(err) }));
 
       void posthogCapture({
         event: 'contact_submit',
@@ -164,6 +192,7 @@ router.post(
         properties: {
           kind: data.kind,
           company: data.company || null,
+          sector: data.sector || null,
           serviceInterest: data.serviceInterest || null,
           budget: data.budget || null,
         },

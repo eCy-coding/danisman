@@ -62,14 +62,13 @@ describe('POST /api/contact', () => {
     process.env.TELEGRAM_CHAT_ID = '1234';
     process.env.NODE_ENV = 'test';
 
-    const res = await request(makeApp())
-      .post('/api/contact')
-      .send({
-        name: 'Ada Lovelace',
-        email: 'ada@example.com',
-        company: 'Analytical Engines',
-        message: 'I need consulting on the difference engine.',
-      });
+    const res = await request(makeApp()).post('/api/contact').send({
+      name: 'Ada Lovelace',
+      email: 'ada@example.com',
+      company: 'Analytical Engines',
+      message: 'I need consulting on the difference engine.',
+      kvkkConsent: true,
+    });
 
     expect(res.status).toBe(200);
     expect(res.body).toEqual({ ok: true });
@@ -80,13 +79,11 @@ describe('POST /api/contact', () => {
     process.env.TELEGRAM_BOT_TOKEN = 'test-token';
     process.env.TELEGRAM_CHAT_ID = '1234';
 
-    const res = await request(makeApp())
-      .post('/api/contact')
-      .send({
-        name: 'Ada',
-        email: 'not-an-email',
-        message: 'I need consulting on the difference engine.',
-      });
+    const res = await request(makeApp()).post('/api/contact').send({
+      name: 'Ada',
+      email: 'not-an-email',
+      message: 'I need consulting on the difference engine.',
+    });
 
     expect(res.status).toBe(400);
     expect(res.body.code).toBe('INVALID_PAYLOAD');
@@ -97,14 +94,12 @@ describe('POST /api/contact', () => {
     process.env.TELEGRAM_BOT_TOKEN = 'test-token';
     process.env.TELEGRAM_CHAT_ID = '1234';
 
-    const res = await request(makeApp())
-      .post('/api/contact')
-      .send({
-        name: 'Ada Lovelace',
-        email: 'ada@example.com',
-        message: 'I need consulting on the difference engine.',
-        hp_field: 'i-am-a-bot',
-      });
+    const res = await request(makeApp()).post('/api/contact').send({
+      name: 'Ada Lovelace',
+      email: 'ada@example.com',
+      message: 'I need consulting on the difference engine.',
+      hp_field: 'i-am-a-bot',
+    });
 
     // 400 because hp_field length>0 fails the schema (max(0))
     expect([200, 400]).toContain(res.status);
@@ -116,13 +111,12 @@ describe('POST /api/contact', () => {
     delete process.env.TELEGRAM_CHAT_ID;
     process.env.NODE_ENV = 'production';
 
-    const res = await request(makeApp())
-      .post('/api/contact')
-      .send({
-        name: 'Ada Lovelace',
-        email: 'ada@example.com',
-        message: 'I need consulting on the difference engine.',
-      });
+    const res = await request(makeApp()).post('/api/contact').send({
+      name: 'Ada Lovelace',
+      email: 'ada@example.com',
+      message: 'I need consulting on the difference engine.',
+      kvkkConsent: true,
+    });
 
     expect(res.status).toBe(503);
     expect(res.body.code).toBe('NOTIFY_DISABLED');
@@ -134,13 +128,12 @@ describe('POST /api/contact', () => {
     delete process.env.TELEGRAM_CHAT_ID;
     process.env.NODE_ENV = 'test';
 
-    const res = await request(makeApp())
-      .post('/api/contact')
-      .send({
-        name: 'Ada Lovelace',
-        email: 'ada@example.com',
-        message: 'I need consulting on the difference engine.',
-      });
+    const res = await request(makeApp()).post('/api/contact').send({
+      name: 'Ada Lovelace',
+      email: 'ada@example.com',
+      message: 'I need consulting on the difference engine.',
+      kvkkConsent: true,
+    });
 
     expect(res.status).toBe(200);
     expect(res.body).toEqual({ ok: true, demo: true });
