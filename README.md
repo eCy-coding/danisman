@@ -121,6 +121,28 @@ bile eksikse ilgili özellik sessizce devre dışı kalır; bunu önlemek için
 
 Detaylı liste: [`.env.production.example`](.env.production.example).
 
+### Backend ENV Checklist (Track 1 launch)
+
+Bu değişkenler Render / API host'una **deploy öncesi** girilmelidir. Boş kalan
+servisler sessizce no-op'a düşer; KVKK + lead pipeline işlevleri için kritik.
+
+| Anahtar | Servis | Kritiklik | Notlar |
+| --- | --- | --- | --- |
+| `SENTRY_DSN` | Sentry (Node) | **P0** | Boşsa server-side error capture devre dışı |
+| `RESEND_API_KEY` | Resend | **P0** | Eksikse contact/quick-check/pricing-calc ack maili gönderilmez |
+| `FOUNDER_EMAIL` | Reply-to | **P0** | Tüm transactional Resend gönderilerinde `replyTo` olarak kullanılır |
+| `NOTION_API_KEY` | Notion CRM | **P0** | Boşsa Prospect/Interaction yazımları no-op |
+| `NOTION_PROSPECTS_DB_ID` | Notion | **P0** | Prospects veritabanı ID'si (URL slug'ı) |
+| `NOTION_INTERACTIONS_DB_ID` | Notion | **P1** | Interactions DB; boşsa sadece Prospect yazılır |
+| `NOTION_ENGAGEMENTS_DB_ID` | Notion | **P2** | Gelecek rollup'lar için rezerve |
+| `NOTION_DELIVERABLES_DB_ID` | Notion | **P2** | Gelecek rollup'lar için rezerve |
+| `CALENDLY_WEBHOOK_SIGNING_KEY` | Calendly | **P0** | Boşsa prod'da `/api/v1/calendly` 503 döner (HMAC zorunlu) |
+| `POSTHOG_API_KEY` | PostHog (server) | **P1** | Server-side event ingestion; boşsa client-side `VITE_POSTHOG_KEY` üzerinden devam eder |
+| `POSTHOG_HOST` | PostHog | **P1** | Default `https://eu.i.posthog.com` |
+| `TELEGRAM_BOT_TOKEN` | Telegram | **P1** | Booking + lead notifier; eksikse `/api/v1/contact` prod'da 503 |
+| `TELEGRAM_CHAT_ID` | Telegram | **P1** | Default ops channel |
+| `TELEGRAM_FOUNDER_CHAT_ID` | Telegram | **P2** | Opsiyonel founder-only kanal |
+
 ---
 
 ## Database (Prisma)
