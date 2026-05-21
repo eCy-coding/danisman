@@ -23,13 +23,13 @@ export const SeoHead: React.FC<SeoProps> = ({
 }) => {
   const { pathname } = useLocation();
   const canonicalUrl = `https://ecypro.com${pathname}`;
-  const fullTitle = `${title} | ECYPRO Premium Consulting`;
+  const fullTitle = `${title} | eCyPro Premium Consulting`;
 
   // Default Organization Schema
   const defaultSchema = {
     "@context": "https://schema.org",
     "@type": "ConsultingService",
-    "name": "ECYPRO",
+    "name": "eCyPro",
     "url": "https://ecypro.com",
     "logo": "https://ecypro.com/logo.png",
     "description": "Premium Business Consulting for Global Scale.",
@@ -56,7 +56,7 @@ export const SeoHead: React.FC<SeoProps> = ({
       <meta property="og:title" content={fullTitle} />
       <meta property="og:description" content={description} />
       <meta property="og:image" content={imageUrl} />
-      <meta property="og:site_name" content="ECYPRO" />
+      <meta property="og:site_name" content="eCyPro" />
       {publishedTime && <meta property="article:published_time" content={publishedTime} />}
 
       {/* Twitter */}
