@@ -164,6 +164,8 @@ app.get('/__health', (_req, res) => res.json({ ok: true }));
 
 // ─── Health Check Endpoint ───────────────────────────────
 app.get('/api/health', (_req, res) => {
+  // P99 follow-up — no CDN/edge caching of liveness payloads.
+  res.setHeader('Cache-Control', 'no-store');
   if (isShuttingDown) {
     res.setHeader('Retry-After', '15');
     res.status(503).json({
@@ -318,7 +320,8 @@ const server = app.listen(PORT, () => {
 //   t+0    server.close() — finish in-flight HTTP, refuse new sockets
 //   t+30s  hard ceiling — Render aborts container at ~30s on rolling deploys.
 //   between: prisma.$disconnect + pgPool.end + Sentry.flush (in parallel)
-const SHUTDOWN_TIMEOUT_MS = Number.parseInt(process.env.SHUTDOWN_TIMEOUT_MS ?? '30000', 10) || 30_000;
+const SHUTDOWN_TIMEOUT_MS =
+  Number.parseInt(process.env.SHUTDOWN_TIMEOUT_MS ?? '30000', 10) || 30_000;
 
 let shuttingDownPromise: Promise<void> | null = null;
 

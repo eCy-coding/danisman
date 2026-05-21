@@ -7,6 +7,7 @@
 
 import { Request, Response, NextFunction } from 'express';
 import { redis } from '../config/redis';
+import { isHealthProbe } from './health-probe';
 
 // ─── Types ───────────────────────────────────────────────
 
@@ -164,15 +165,16 @@ export function createRateLimiter(options: RateLimiterOptions) {
 export const generalLimiter = createRateLimiter({
   windowMs: Number.parseInt(process.env.RATE_LIMIT_WINDOW_MS ?? '', 10) || 15 * 60 * 1000,
   maxRequests: Number.parseInt(process.env.RATE_LIMIT_MAX ?? '', 10) || 100,
-  // P99 — health probes are platform-issued and idempotent; counting them
-  // against the per-IP API budget caused self-inflicted 429s on Render +
-  // Better Stack (mis-reported as 502 by the upstream LB).
-  skip: (req) =>
-    req.path === '/health' ||
-    req.path === '/api/health' ||
-    req.path === '/api/v1/health' ||
-    req.originalUrl === '/api/health' ||
-    req.originalUrl === '/api/v1/health',
+  // P99 follow-up — health probes are platform-issued and idempotent;
+  // counting them against the per-IP API budget caused self-inflicted 429s
+  // on Render (visible as "Instance failed: HTTP health check failed with
+  // status code 429" in Events, every 6-7min). The previous skip relied on
+  // `req.path` equality, but `app.use('/api', limiter)` strips `/api` from
+  // `req.path` before the middleware sees it — only the originalUrl branch
+  // ever fired, and it broke on any query string. We now delegate to
+  // `isHealthProbe`, which normalizes the path + accepts Render's probe
+  // User-Agent (`Go-http-client/*`).
+  skip: isHealthProbe,
 });
 
 /**

@@ -46,12 +46,16 @@ const router = Router();
 
 // BE-7: SERVICE_VERSION pulled from npm_package_version (set by node when run
 // via `npm`/`pnpm`) → falls back to RELEASE_VERSION env (set by Render) → "1.0.0".
-const SERVICE_VERSION =
-  process.env.npm_package_version || process.env.RELEASE_VERSION || '1.0.0';
+const SERVICE_VERSION = process.env.npm_package_version || process.env.RELEASE_VERSION || '1.0.0';
 
 // ─── Basic health check ──────────────────────────────────
 // Fast path — NO DB/Redis calls. For platform liveness probes.
+// P99 follow-up — `no-store` so no CDN ever serves a stale "ok" past
+// a real outage. Also stops the default `defaultCacheByMethod` policy
+// from tagging anonymous GETs as `public, max-age=60` and confusing
+// platform health checkers that re-validate aggressively.
 router.get('/health', (_req, res) => {
+  res.setHeader('Cache-Control', 'no-store');
   res.json({
     status: 'ok',
     service: 'ecypro-api',
@@ -211,15 +215,15 @@ router.get('/docs', (req, res, next) => {
 
   // Production + private → require Bearer token. Reuse the auth middleware
   // lazily so we don't pull it into the hot path for /health etc.
-  return import('../middleware/auth').then(({ authenticate, requireRole }) => {
-    authenticate(req, res, () => {
-      requireRole('ADMIN')(
-        req as Parameters<ReturnType<typeof requireRole>>[0],
-        res,
-        () => renderSwaggerUI(req, res),
-      );
-    });
-  }).catch(next);
+  return import('../middleware/auth')
+    .then(({ authenticate, requireRole }) => {
+      authenticate(req, res, () => {
+        requireRole('ADMIN')(req as Parameters<ReturnType<typeof requireRole>>[0], res, () =>
+          renderSwaggerUI(req, res),
+        );
+      });
+    })
+    .catch(next);
 });
 
 function renderSwaggerUI(_req: import('express').Request, res: import('express').Response): void {
