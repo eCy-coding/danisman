@@ -16,6 +16,11 @@ export const contactSchema = z.object({
     ])
     .optional(),
   message: z.string().min(10, { message: 'contact.form.message_min' }),
+  // Track B — KVKK explicit opt-in. Refines on `true` so the form blocks
+  // submission until the consent checkbox is ticked.
+  kvkkConsent: z.boolean().refine((v) => v === true, {
+    message: 'contact.form.kvkk_required',
+  }),
   // P15 — Honeypot: bot trap. Kullanıcılar tab'la atlar (off-screen + aria-hidden).
   hp_field: z.string().optional(),
 });
