@@ -34,7 +34,7 @@
 import type { Request, Response, NextFunction } from 'express';
 import { redis } from '../config/redis';
 import { logger } from '../config/logger';
-import { isHealthProbe } from './health-probe';
+import { isRateLimitExempt } from './health-probe';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -229,7 +229,7 @@ export function tierRateLimit(options: TierRateLimitOptions = {}) {
  * otherwise Render's liveness check counts against the anonymous tier
  * (60/15min default) and the LB recovers the instance every ~6min.
  */
-export const tierRateLimiter = tierRateLimit({ skip: isHealthProbe });
+export const tierRateLimiter = tierRateLimit({ skip: isRateLimitExempt });
 
 // ── Testing hooks ─────────────────────────────────────────────────────────────
 

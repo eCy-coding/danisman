@@ -7,7 +7,7 @@
 
 import { Request, Response, NextFunction } from 'express';
 import { redis } from '../config/redis';
-import { isHealthProbe } from './health-probe';
+import { isRateLimitExempt } from './health-probe';
 
 // ─── Types ───────────────────────────────────────────────
 
@@ -174,7 +174,8 @@ export const generalLimiter = createRateLimiter({
   // ever fired, and it broke on any query string. We now delegate to
   // `isHealthProbe`, which normalizes the path + accepts Render's probe
   // User-Agent (`Go-http-client/*`).
-  skip: isHealthProbe,
+  // Track 1 launch — also exempt third-party webhook ingress (Calendly).
+  skip: isRateLimitExempt,
 });
 
 /**
@@ -191,13 +192,41 @@ export const authLimiter = createRateLimiter({
 
 /**
  * BE-5: Contact form — 3 per hour per IP.
- * Contact + newsletter subscribe share this limiter. 3/hour stops bots
- * cold while leaving room for one legitimate submission + two retries.
+ * Legacy newsletter subscribe + NPS feedback + analytics /contact route
+ * still rely on this. The /api/v1/contact route uses the stricter
+ * `contactStrictLimiter` (5 per 10 min) to match the launch KVKK abuse
+ * brief without regressing the older flows.
  */
 export const contactLimiter = createRateLimiter({
   windowMs: 60 * 60 * 1000,
   maxRequests: 3,
   message: 'Too many contact form submissions. Please try again later.',
+});
+
+/**
+ * Track 1 — `/api/v1/contact` launch limiter.
+ *
+ * 5 req / 10 min / IP. Tighter window than `contactLimiter` so a
+ * legitimate user can correct a typo + retry quickly, but a bot loop is
+ * killed within seconds. The KVKK abuse brief calls for sub-quarter-hour
+ * lockouts on identity-bearing endpoints.
+ */
+export const contactStrictLimiter = createRateLimiter({
+  windowMs: 10 * 60 * 1000,
+  maxRequests: 5,
+  message: 'Çok sık deneme. Lütfen birkaç dakika sonra tekrar deneyin.',
+});
+
+/**
+ * Track 1 — `/api/v1/quick-check-submit` limiter.
+ *
+ * 3 req / hour / IP. Quick-Check is a one-time inbound assessment; three
+ * attempts cover form refresh + double-submit while stopping enumeration.
+ */
+export const quickCheckLimiter = createRateLimiter({
+  windowMs: 60 * 60 * 1000,
+  maxRequests: 3,
+  message: 'Quick-Check için saatlik gönderim limitine ulaşıldı.',
 });
 
 /** SSE connections: 3 per minute */

@@ -74,3 +74,19 @@ export function isHealthProbe(req: Request): boolean {
 
   return false;
 }
+
+// Track 1 launch — third-party webhook ingress paths. Calendly fires from
+// its own IP pool and Calendly itself enforces per-customer rate limits;
+// the cheap IP-bucket limiter would shed legitimate `invitee.created`
+// events under burst (multiple bookings in the same second), so we skip
+// the generic limiter on these paths. Auth still lives inside the route
+// via HMAC verify — bypassing rate limit does NOT bypass auth.
+const WEBHOOK_PATHS = new Set<string>(['/api/v1/calendly', '/api/calendly']);
+
+export function isThirdPartyWebhook(req: Request): boolean {
+  return WEBHOOK_PATHS.has(normalizedPath(req));
+}
+
+export function isRateLimitExempt(req: Request): boolean {
+  return isHealthProbe(req) || isThirdPartyWebhook(req);
+}
