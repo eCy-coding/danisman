@@ -9,11 +9,7 @@
 import express, { type Request, type Response, type NextFunction } from 'express';
 import request from 'supertest';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import {
-  classifyTier,
-  tierRateLimit,
-  _tierTesting,
-} from './rate-limit-tier';
+import { classifyTier, tierRateLimit, _tierTesting } from './rate-limit-tier';
 
 interface AuthLikeRequest extends Request {
   user?: { id: string; role: string };
@@ -185,5 +181,25 @@ describe('tierRateLimit middleware', () => {
     await request(app).get('/b');
     const third = await request(app).get('/a');
     expect(third.status).toBe(429);
+  });
+
+  it('skip option bypasses the limiter (P99 — Render health probe)', async () => {
+    // Reproduces the failure mode that caused the 429 → instance recover
+    // loop: 150 successive probes must all flow through untouched.
+    const app = express();
+    app.use(
+      tierRateLimit({
+        budgets: { anonymous: { windowMs: 60_000, maxRequests: 2 } },
+        skip: (req) => req.path === '/health',
+      }),
+    );
+    app.get('/health', (_req, res) => res.json({ ok: true }));
+
+    let lastStatus = 0;
+    for (let i = 0; i < 150; i += 1) {
+      const r = await request(app).get('/health');
+      lastStatus = r.status;
+    }
+    expect(lastStatus).toBe(200);
   });
 });

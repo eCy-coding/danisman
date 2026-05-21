@@ -50,7 +50,12 @@ const SERVICE_VERSION = process.env.npm_package_version || process.env.RELEASE_V
 
 // ─── Basic health check ──────────────────────────────────
 // Fast path — NO DB/Redis calls. For platform liveness probes.
+// P99 follow-up — `no-store` so no CDN ever serves a stale "ok" past
+// a real outage. Also stops the default `defaultCacheByMethod` policy
+// from tagging anonymous GETs as `public, max-age=60` and confusing
+// platform health checkers that re-validate aggressively.
 router.get('/health', (_req, res) => {
+  res.setHeader('Cache-Control', 'no-store');
   res.json({
     status: 'ok',
     service: 'ecypro-api',

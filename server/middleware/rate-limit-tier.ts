@@ -34,6 +34,7 @@
 import type { Request, Response, NextFunction } from 'express';
 import { redis } from '../config/redis';
 import { logger } from '../config/logger';
+import { isHealthProbe } from './health-probe';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -53,6 +54,13 @@ export interface TierRateLimitOptions {
   classify?: (req: Request) => RateLimitTier;
   /** Override the identity extractor. */
   identify?: (req: Request, tier: RateLimitTier) => string;
+  /**
+   * Return true to bypass the limiter for a given request.
+   * P99 follow-up — platform health probes (Render, BetterStack) must NOT
+   * consume the anonymous tier budget; doing so triggered 429 → instance
+   * recover loops visible in Render Events every 6-7 minutes.
+   */
+  skip?: (req: Request) => boolean;
 }
 
 interface AuthLikeRequest extends Request {
@@ -117,9 +125,7 @@ async function incrementAtomic(
 ): Promise<{ count: number; resetSeconds: number }> {
   try {
     const usable =
-      redis.status === 'ready' ||
-      redis.status === 'connecting' ||
-      redis.status === 'reconnecting';
+      redis.status === 'ready' || redis.status === 'connecting' || redis.status === 'reconnecting';
     if (!usable) throw new Error('Redis not ready');
     const result = (await redis.eval(LUA_SCRIPT, 1, key, windowMs)) as [number, number];
     return { count: result[0], resetSeconds: Math.ceil(result[1] / 1000) };
@@ -167,16 +173,24 @@ export function tierRateLimit(options: TierRateLimitOptions = {}) {
     'api-key': { ...DEFAULT_BUDGETS['api-key'], ...options.budgets?.['api-key'] },
   };
 
+  const skip = options.skip;
+
   return async function tierRateLimitMiddleware(
     req: Request,
     res: Response,
     next: NextFunction,
   ): Promise<void> {
+    if (skip && skip(req)) {
+      next();
+      return;
+    }
     const authReq = req as AuthLikeRequest;
     const tier = options.classify ? options.classify(req) : classifyTier(authReq);
     const budget = budgets[tier];
     const bucket = options.bucket ?? req.baseUrl + req.path;
-    const identity = options.identify ? options.identify(req, tier) : defaultIdentify(authReq, tier);
+    const identity = options.identify
+      ? options.identify(req, tier)
+      : defaultIdentify(authReq, tier);
     const key = `ratelimit:tier:${tier}:${bucket}:${identity}`;
 
     const { count, resetSeconds } = await incrementAtomic(key, budget.windowMs);
@@ -210,8 +224,12 @@ export function tierRateLimit(options: TierRateLimitOptions = {}) {
  * Drop-in global limiter — mount AFTER `authenticate` (so `req.user` is set)
  * to get accurate tier classification. Mounting BEFORE auth degrades all
  * requests to the `anonymous` tier (still works, just stricter).
+ *
+ * P99 follow-up — the global instance MUST skip platform health probes;
+ * otherwise Render's liveness check counts against the anonymous tier
+ * (60/15min default) and the LB recovers the instance every ~6min.
  */
-export const tierRateLimiter = tierRateLimit();
+export const tierRateLimiter = tierRateLimit({ skip: isHealthProbe });
 
 // ── Testing hooks ─────────────────────────────────────────────────────────────
 

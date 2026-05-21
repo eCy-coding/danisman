@@ -164,6 +164,8 @@ app.get('/__health', (_req, res) => res.json({ ok: true }));
 
 // ─── Health Check Endpoint ───────────────────────────────
 app.get('/api/health', (_req, res) => {
+  // P99 follow-up — no CDN/edge caching of liveness payloads.
+  res.setHeader('Cache-Control', 'no-store');
   if (isShuttingDown) {
     res.setHeader('Retry-After', '15');
     res.status(503).json({
