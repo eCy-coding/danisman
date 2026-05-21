@@ -248,7 +248,7 @@ export const ContactForm: React.FC = () => {
           />
           <span>
             {t('contact.form.kvkk_label') ||
-              'Verilerimin EcyPro tarafından bu talebi yanıtlamak amacıyla işlenmesini kabul ediyorum.'}{' '}
+              'Verilerimin eCyPro tarafından bu talebi yanıtlamak amacıyla işlenmesini kabul ediyorum.'}{' '}
             <a
               href="/privacy"
               target="_blank"
