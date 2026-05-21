@@ -15,7 +15,16 @@ import { Link, useLocation } from 'react-router-dom';
 import { Sparkles, Briefcase } from 'lucide-react';
 import { trackCtaClick } from '../../lib/integrations/analytics';
 
-const HIDDEN_PATHS = ['/admin', '/login', '/register', '/forgot-password', '/verify-email', '/booking/manage', '/feedback/', '/404'];
+const HIDDEN_PATHS = [
+  '/admin',
+  '/login',
+  '/register',
+  '/forgot-password',
+  '/verify-email',
+  '/booking/manage',
+  '/feedback/',
+  '/404',
+];
 
 export const MobileCtaBar: React.FC = () => {
   const { pathname } = useLocation();
@@ -50,6 +59,7 @@ export const MobileCtaBar: React.FC = () => {
       <div className="flex gap-2 p-2">
         <Link
           to="/contact"
+          data-track="discovery-cta"
           onClick={() => trackCtaClick('mobile-cta-discovery', pathname)}
           className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-3 min-h-[48px] rounded-xl bg-secondary text-neutral font-bold text-sm hover:bg-secondary/90 transition-colors"
         >

@@ -352,6 +352,7 @@ export const Hero: React.FC = () => {
                 <a
                   href="#contact"
                   data-testid="hero-cta-primary"
+                  data-track="discovery-cta"
                   onClick={(e) => handleCtaClick(e, '#contact', 'Hero Primary')}
                   className="group relative px-8 py-4 bg-ecypro-gold hover:bg-ecypro-gold/90 text-ecypro-navy font-bold uppercase tracking-widest rounded-xl shadow-[0_0_40px_rgba(212,163,86,0.35)] hover:shadow-[0_0_60px_rgba(212,163,86,0.55)] transition-all duration-300 flex items-center justify-center gap-3 min-w-50 w-full sm:w-auto overflow-hidden border border-ecypro-gold/40"
                 >
