@@ -37,18 +37,46 @@
          (Account: ecypro, Container: ecypro-web). GA4 measurement ID
          G-3Q4T3KL83V is mapped inside the GTM workspace (Tags → GA4
          Configuration → Measurement ID). KVKK note: GTM only fires
-         marketing tags when the consent banner records 'granted'. -->
+         marketing tags when the consent banner records 'granted'.
+
+         Perf: the 115KB gtm.js download is deferred until the browser is
+         idle (or the first user interaction) so it no longer competes with
+         the app bundle for bandwidth/main-thread during the mobile LCP
+         window. dataLayer is created synchronously and queues all pushes,
+         so consent-mode defaults and route events set before gtm.js loads
+         replay in order once the container boots. -->
     <script>
-      (function (w, d, s, l, i) {
+      (function (w, d, l, i) {
         w[l] = w[l] || [];
         w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
-        var f = d.getElementsByTagName(s)[0],
-          j = d.createElement(s),
-          dl = l != 'dataLayer' ? '&l=' + l : '';
-        j.async = true;
-        j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
-        f.parentNode.insertBefore(j, f);
-      })(window, document, 'script', 'dataLayer', 'GTM-NH7RJ9FB');
+        var loaded = false;
+        function load() {
+          if (loaded) return;
+          loaded = true;
+          var dl = l != 'dataLayer' ? '&l=' + l : '';
+          var j = d.createElement('script');
+          j.async = true;
+          j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+          d.head.appendChild(j);
+        }
+        var idle =
+          w.requestIdleCallback || function (cb) { return w.setTimeout(cb, 1); };
+        var events = ['pointerdown', 'keydown', 'scroll', 'touchstart'];
+        function onInteract() {
+          events.forEach(function (e) {
+            w.removeEventListener(e, onInteract);
+          });
+          load();
+        }
+        events.forEach(function (e) {
+          w.addEventListener(e, onInteract, { once: true, passive: true });
+        });
+        function schedule() {
+          idle(load, { timeout: 4000 });
+        }
+        if (d.readyState === 'complete') schedule();
+        else w.addEventListener('load', schedule);
+      })(window, document, 'dataLayer', 'GTM-NH7RJ9FB');
     </script>
 
     <!-- Microsoft Clarity is now consent-gated via src/lib/clarity.ts + the
@@ -65,13 +93,13 @@
          x-default ilk paint için korunur (Helmet hidrasyon öncesi). -->
     <link rel="alternate" hreflang="x-default" href="https://www.ecypro.com/" />
 
-    <!-- No web-font preload on purpose. The above-fold App Shell h1 (LCP element)
-         renders in Georgia/system-ui, so Inter/Playfair are not needed for first
-         paint — they load post-hydration under font-display:swap. The previous
-         /fonts/*.woff2 preloads were orphaned: @fontsource emits hashed /assets/
-         URLs, so the preloaded files were downloaded but never matched a
-         @font-face (and the playfair file 404'd). Preloading them at high
-         priority stole bandwidth from the real mobile LCP path. -->
+    <!-- No web-font preload on purpose. The above-fold App Shell h1 (the first
+         paint / FCP element) renders in Georgia/system-ui, so Inter/Playfair are
+         not first-paint fonts. The build does emit them at /fonts/*.woff2 (Vite
+         keeps the @fontsource filenames), so the old preloads resolved — but
+         pulling them at fetchpriority=high made them compete with the JS bundle
+         for bandwidth during the mobile LCP window for no first-paint benefit.
+         They now load lazily via the bundled @font-face under font-display:swap. -->
 
     <!-- P33-T06: Preconnect to analytics origins — DNS + TLS resolved before gtag fires -->
     <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin />
