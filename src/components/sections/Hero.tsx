@@ -447,16 +447,16 @@ export const Hero: React.FC = () => {
             icon: <Shield size={24} />,
             title: { tr: 'Kurumsal Güvenlik', en: 'Enterprise Security' },
             desc: {
-              tr: 'Sıfır güvenlik açığı, tam uyumluluk. Verileriniz askeri düzeyde korunur.',
-              en: 'Zero vulnerabilities, full compliance. Your data is protected at military grade.',
+              tr: 'Endüstri standartlarının ötesinde güvenlik denetimi ve kurumsal düzey uyum protokolleri.',
+              en: 'Security audits beyond industry baselines and enterprise-grade compliance protocols.',
             },
           },
           {
             icon: <Zap size={24} />,
             title: { tr: 'Real-time Analitik', en: 'Real-time Analytics' },
             desc: {
-              tr: 'Milisaniyeler içinde kararlar alın. Pazar değişimlerine anında tepki verin.',
-              en: 'Make decisions in milliseconds. React to market changes instantly.',
+              tr: 'Hızlı karar desteği — saniyeler içinde aksiyon alabilir, pazar değişimlerini erken yakalarsınız.',
+              en: 'Fast decision support — act within seconds and surface market shifts early.',
             },
           },
         ].map((feature, i) => (
