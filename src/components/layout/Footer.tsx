@@ -261,6 +261,14 @@ export const Footer: React.FC = () => {
                   {lang === 'tr' ? 'Industry Report 2026' : 'Industry Report 2026'}
                 </Link>
               </li>
+              <li>
+                <Link
+                  to="/quick-check"
+                  className="hover:text-secondary transition-colors block min-h-11 py-2 outline-none focus-visible:text-secondary"
+                >
+                  {lang === 'tr' ? 'Hızlı Değerlendirme' : 'Quick Check'}
+                </Link>
+              </li>
             </ul>
           </div>
 
@@ -359,18 +367,51 @@ export const Footer: React.FC = () => {
             {FOOTER_COPY.rights[lang]}
           </p>
           <CountrySelector />
-          <div className="flex space-x-6 mt-4 md:mt-0">
+          <div className="flex flex-wrap gap-x-6 gap-y-2 mt-4 md:mt-0 justify-center md:justify-end">
             <Link to="/privacy" className="hover:text-white transition-colors">
               {FOOTER_COPY.privacy[lang]}
             </Link>
-            <span className="text-slate-400">|</span>
+            <span className="text-slate-400" aria-hidden="true">
+              |
+            </span>
             <Link to="/terms" className="hover:text-white transition-colors">
-              {/* Note: Added Manual KVKK/Terms link if needed, or map existing KVKK */}
               {lang === 'tr' ? 'Kullanım Koşulları' : 'Terms of Use'}
             </Link>
-            <span className="text-slate-400">|</span>
+            <span className="text-slate-400" aria-hidden="true">
+              |
+            </span>
             <Link to="/cookies" className="hover:text-white transition-colors">
               {FOOTER_COPY.cookies[lang]}
+            </Link>
+            <span className="text-slate-400" aria-hidden="true">
+              |
+            </span>
+            <Link
+              to="/privacy#m10"
+              className="hover:text-white transition-colors"
+              data-testid="kvkk-m10"
+            >
+              {lang === 'tr' ? 'KVKK m.10 Aydınlatma' : 'KVKK Art.10 Disclosure'}
+            </Link>
+            <span className="text-slate-400" aria-hidden="true">
+              |
+            </span>
+            <Link
+              to="/privacy/data-rights"
+              className="hover:text-white transition-colors"
+              data-testid="kvkk-m11"
+            >
+              {lang === 'tr' ? 'KVKK m.11 Haklar' : 'KVKK Art.11 Rights'}
+            </Link>
+            <span className="text-slate-400" aria-hidden="true">
+              |
+            </span>
+            <Link
+              to="/quick-check"
+              className="hover:text-white transition-colors"
+              data-testid="quick-check"
+            >
+              {lang === 'tr' ? 'Quick Check' : 'Quick Check'}
             </Link>
           </div>
         </div>
