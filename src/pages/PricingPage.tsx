@@ -390,9 +390,14 @@ export const PricingPage: React.FC = () => {
             >
               {t.compare[lang]}
             </h2>
+            {/* Track C #7 — Sticky thead so column tiers stay visible as the
+                user scrolls a long comparison matrix. Navbar above is
+                fixed at z-50 (py-3 → ~48px when scrolled, py-6 → ~72px
+                idle); thead sits at top-20 (80px) with z-30 so it is
+                always anchored just under the navbar without overlap. */}
             <div className="overflow-x-auto rounded-2xl border border-white/10 bg-white/5">
-              <table className="w-full text-sm">
-                <thead>
+              <table className="w-full text-sm border-separate border-spacing-0">
+                <thead className="sticky top-20 z-30 bg-neutral shadow-[0_1px_0_0_rgba(255,255,255,0.08)]">
                   <tr className="border-b border-white/10">
                     <th scope="col" className="text-left p-4 text-slate-400 font-semibold">
                       {t.feature[lang]}

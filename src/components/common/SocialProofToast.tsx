@@ -204,9 +204,9 @@ export const SocialProofToast: React.FC = () => {
               type="button"
               onClick={handleDismiss}
               aria-label="Kapat"
-              className="shrink-0 p-1 rounded-md text-slate-600 hover:text-slate-300 transition-colors focus:outline-none focus-visible:ring-1 focus-visible:ring-secondary"
+              className="shrink-0 inline-flex items-center justify-center min-h-[44px] min-w-[44px] rounded-md text-slate-600 hover:text-slate-300 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-secondary"
             >
-              <X size={12} aria-hidden="true" />
+              <X size={14} aria-hidden="true" />
             </button>
           </motion.div>
         )}

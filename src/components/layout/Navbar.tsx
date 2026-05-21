@@ -228,12 +228,13 @@ export const Navbar: React.FC = () => {
         {/* Right Actions (Desktop) */}
         <div className="hidden lg:flex items-center gap-6">
           {/* Language Toggle */}
-          <button type="button"
+          <button
+            type="button"
             onClick={toggleLanguage}
-            className="text-xs font-bold text-gray-400 hover:text-white transition-colors flex items-center gap-1 px-2 py-1 border border-white/10 rounded hover:bg-white/5"
+            className="text-xs font-bold text-gray-400 hover:text-white transition-colors inline-flex items-center justify-center gap-1.5 min-h-[44px] min-w-[44px] px-3 py-2 border border-white/10 rounded-md hover:bg-white/5 focus-visible:ring-2 focus-visible:ring-secondary outline-none"
             aria-label="Dili değiştir / Change language"
           >
-            <Globe size={14} />
+            <Globe size={14} aria-hidden="true" />
             <span>{lang === 'tr' ? 'EN' : 'TR'}</span>
           </button>
 
@@ -247,7 +248,8 @@ export const Navbar: React.FC = () => {
           </a>
 
           {/* Primary CTA — opens global booking modal */}
-          <button type="button"
+          <button
+            type="button"
             data-testid="navbar-book-call"
             onClick={() => {
               trackEvent('Navbar', 'Click', 'Book a Call');
@@ -260,7 +262,8 @@ export const Navbar: React.FC = () => {
         </div>
 
         {/* Mobile Toggle */}
-        <button type="button"
+        <button
+          type="button"
           className="lg:hidden text-white hover:bg-white/5 transition-colors p-2 z-50 outline-none focus:ring-2 focus:ring-secondary rounded-lg"
           data-testid="mobile-menu-toggle"
           onClick={() => setIsOpen(!isOpen)}
@@ -286,7 +289,8 @@ export const Navbar: React.FC = () => {
               <div key={item.id} className="mb-4 border-b border-white/5 last:border-0 pb-4">
                 {isDropdown ? (
                   <div>
-                    <button type="button"
+                    <button
+                      type="button"
                       onClick={() => toggleMobileAccordion(item.id)}
                       className="flex items-center justify-between w-full text-left text-xl font-sans font-medium text-white py-2 outline-none focus:text-secondary"
                       aria-expanded={isExpanded}
@@ -330,7 +334,8 @@ export const Navbar: React.FC = () => {
           {/* Mobile Actions */}
           <div className="mt-auto pt-8 space-y-4">
             <div className="flex justify-center gap-6 pb-4 border-b border-white/10">
-              <button type="button"
+              <button
+                type="button"
                 onClick={toggleLanguage}
                 className="font-bold text-slate-300 flex items-center gap-2 px-4 py-2 border border-white/10 rounded-lg"
               >

@@ -80,6 +80,10 @@ export const ExitIntentModalP53: React.FC = () => {
   if (!visible) return null;
 
   return (
+    // Modal backdrop click-outside-to-close. Keyboard users dismiss via the
+    // explicit close button below (Tab-focusable). The eslint-disable
+    // matches the carve-out documented in eslint.config.js header.
+    /* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions */
     <div
       role="dialog"
       aria-modal="true"
@@ -87,6 +91,9 @@ export const ExitIntentModalP53: React.FC = () => {
       className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200"
       onClick={onClose}
     >
+      {/* Stop-propagation guard so clicks inside the panel don't close it.
+          Pure event-bubbling defense — no interactive semantics. */}
+      {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
       <div
         className="relative max-w-md w-full bg-neutral border border-white/15 rounded-2xl shadow-2xl overflow-hidden"
         onClick={(e) => e.stopPropagation()}
@@ -95,7 +102,7 @@ export const ExitIntentModalP53: React.FC = () => {
           type="button"
           onClick={onClose}
           aria-label="Kapat"
-          className="absolute top-3 right-3 w-9 h-9 min-h-[36px] min-w-[36px] rounded-lg hover:bg-white/5 transition-colors flex items-center justify-center text-slate-400"
+          className="absolute top-3 right-3 w-11 h-11 min-h-[44px] min-w-[44px] rounded-lg hover:bg-white/5 transition-colors flex items-center justify-center text-slate-400"
         >
           <X size={18} />
         </button>
@@ -103,13 +110,16 @@ export const ExitIntentModalP53: React.FC = () => {
           <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-secondary/15 border border-secondary/30 mb-5">
             <Sparkles size={24} className="text-secondary" aria-hidden="true" />
           </div>
-          <h2 id="exit-intent-title" className="text-2xl md:text-3xl font-serif font-bold text-white mb-3">
+          <h2
+            id="exit-intent-title"
+            className="text-2xl md:text-3xl font-serif font-bold text-white mb-3"
+          >
             Önce bir konuşalım
           </h2>
           <p className="text-slate-300 leading-relaxed mb-6">
-            45 dakikalık <strong className="text-white">ücretsiz Discovery Call</strong> ile durumunuzu
-            birlikte değerlendirelim. Engagement uyumunu görür, 5-7 gün içinde yazılı önergeyi
-            iletiriz.
+            45 dakikalık <strong className="text-white">ücretsiz Discovery Call</strong> ile
+            durumunuzu birlikte değerlendirelim. Engagement uyumunu görür, 5-7 gün içinde yazılı
+            önergeyi iletiriz.
           </p>
           <div className="flex flex-col gap-3">
             <Link
@@ -138,7 +148,11 @@ export const ExitIntentModalP53: React.FC = () => {
             )}
           </div>
           <p className="text-xs text-slate-500 mt-5 italic">
-            Şu an vakit yoksa: <a href="mailto:info@ecypro.com" className="text-secondary hover:underline">info@ecypro.com</a> üzerinden de yazabilirsiniz.
+            Şu an vakit yoksa:{' '}
+            <a href="mailto:info@ecypro.com" className="text-secondary hover:underline">
+              info@ecypro.com
+            </a>{' '}
+            üzerinden de yazabilirsiniz.
           </p>
         </div>
       </div>

@@ -116,7 +116,7 @@ export const SimpleChatWidget: React.FC = () => {
               type="button"
               onClick={() => setOpen(false)}
               aria-label="Kapat"
-              className="w-9 h-9 min-h-[36px] min-w-[36px] rounded-lg hover:bg-white/5 transition-colors flex items-center justify-center"
+              className="w-11 h-11 min-h-[44px] min-w-[44px] rounded-lg hover:bg-white/5 transition-colors flex items-center justify-center"
             >
               <X size={18} className="text-slate-400" />
             </button>
@@ -182,7 +182,8 @@ export const SimpleChatWidget: React.FC = () => {
                 </p>
               )}
               <p className="text-[10px] text-slate-500 leading-relaxed">
-                Mesajınız SSL ile şifreli iletilir. KVKK kapsamında işlenir, 3. taraflarla paylaşılmaz.
+                Mesajınız SSL ile şifreli iletilir. KVKK kapsamında işlenir, 3. taraflarla
+                paylaşılmaz.
               </p>
             </form>
           )}
