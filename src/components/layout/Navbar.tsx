@@ -4,6 +4,7 @@ import { NAV_ITEMS } from '@/data/copy/common';
 import { MegaMenu } from './MegaMenu';
 import { useScrollToSection } from '../common/useScrollToSection';
 import { trackEvent } from '../../lib/analytics';
+import { getCalendlyCta, hasExternalCalendly } from '../../lib/cta/calendly';
 import { useTranslation } from '@/lib/i18n';
 import { useBodyLock } from '@/hooks/useBodyLock';
 import { useKeyPress } from '@/hooks/useKeyPress';
@@ -231,10 +232,10 @@ export const Navbar: React.FC = () => {
           <button
             type="button"
             onClick={toggleLanguage}
-            className="text-xs font-bold text-gray-400 hover:text-white transition-colors inline-flex items-center justify-center gap-1.5 min-h-[44px] min-w-[44px] px-3 py-2 border border-white/10 rounded-md hover:bg-white/5 focus-visible:ring-2 focus-visible:ring-secondary outline-none"
+            className="text-xs font-bold text-gray-400 hover:text-white transition-colors flex items-center gap-1 px-2 py-1 border border-white/10 rounded hover:bg-white/5"
             aria-label="Dili değiştir / Change language"
           >
-            <Globe size={14} aria-hidden="true" />
+            <Globe size={14} />
             <span>{lang === 'tr' ? 'EN' : 'TR'}</span>
           </button>
 
@@ -247,18 +248,39 @@ export const Navbar: React.FC = () => {
             {lang === 'tr' ? 'ÜCRETSİZ ANALİZ' : 'FREE ANALYSIS'}
           </a>
 
-          {/* Primary CTA — opens global booking modal */}
-          <button
-            type="button"
-            data-testid="navbar-book-call"
-            onClick={() => {
-              trackEvent('Navbar', 'Click', 'Book a Call');
-              window.dispatchEvent(new CustomEvent('open-booking'));
-            }}
-            className="btn-premium-gold text-xs tracking-wider uppercase shadow-[0_0_20px_rgba(212,175,55,0.3)] hover:shadow-[0_0_30px_rgba(212,175,55,0.5)]"
-          >
-            {lang === 'tr' ? 'Görüşme Planla' : 'Book a Call'}
-          </button>
+          {/* Primary CTA — Calendly if configured, else in-app booking modal */}
+          {(() => {
+            const cta = getCalendlyCta('navbar');
+            const useExternal = hasExternalCalendly();
+            const sharedClass =
+              'btn-premium-gold text-xs tracking-wider uppercase shadow-[0_0_20px_rgba(212,175,55,0.3)] hover:shadow-[0_0_30px_rgba(212,175,55,0.5)]';
+            return useExternal ? (
+              <a
+                href={cta.href}
+                target={cta.target}
+                rel={cta.rel}
+                {...cta.dataAttrs}
+                data-testid="navbar-book-call"
+                onClick={() => trackEvent('Navbar', 'Click', 'Book a Call')}
+                className={sharedClass}
+              >
+                {lang === 'tr' ? 'Görüşme Planla' : 'Book a Call'}
+              </a>
+            ) : (
+              <button
+                type="button"
+                data-testid="navbar-book-call"
+                {...cta.dataAttrs}
+                onClick={() => {
+                  trackEvent('Navbar', 'Click', 'Book a Call');
+                  window.dispatchEvent(new CustomEvent('open-booking'));
+                }}
+                className={sharedClass}
+              >
+                {lang === 'tr' ? 'Görüşme Planla' : 'Book a Call'}
+              </button>
+            );
+          })()}
         </div>
 
         {/* Mobile Toggle */}
