@@ -17,6 +17,8 @@ import crmRoutes from './crm';
 import devAnalyticsRoutes from './dev-analytics';
 import contactRoutes from './contact';
 import calendlyRoutes from './calendly';
+import quickCheckRoutes from './quick-check';
+import pricingCalcRoutes from './pricing-calc';
 import gdprRoutes from './gdpr';
 import searchRoutes from './search';
 import uploadRoutes from './upload';
@@ -421,6 +423,11 @@ router.use('/crm', crmRoutes);
 router.use('/dev/analytics', devAnalyticsRoutes);
 router.use('/contact', contactRoutes);
 router.use('/calendly', calendlyRoutes);
+// Track 1 launch — inbound assessment + paket recommender endpoints. They
+// share the v1 mount so paths land at /api/v1/quick-check-submit and
+// /api/v1/pricing-calculator-submit per the launch brief.
+router.use('/quick-check-submit', quickCheckRoutes);
+router.use('/pricing-calculator-submit', pricingCalcRoutes);
 router.use('/gdpr', gdprRoutes);
 router.use('/search', searchRoutes);
 // P18 BE Track 2 / Aşama 1 — upload pipeline.
