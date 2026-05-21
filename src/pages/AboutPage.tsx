@@ -20,6 +20,7 @@ import {
   CheckCircle2,
 } from 'lucide-react';
 import { FadeIn } from '../components/common/FadeIn';
+import { getCalendlyCta, hasExternalCalendly } from '../lib/cta/calendly';
 
 const VALUES = [
   {
@@ -429,14 +430,39 @@ export const AboutPage: React.FC = () => {
                 ? 'Organizasyonunuzun potansiyelini açığa çıkarmak için 30 dakikalık ücretsiz keşif görüşmesi planlayın.'
                 : "Schedule a free 30-minute discovery call to unlock your organization's potential."}
             </p>
-            <button
-              type="button"
-              onClick={() => window.dispatchEvent(new CustomEvent('open-booking'))}
-              className="inline-flex items-center gap-3 px-10 py-4 bg-secondary text-neutral font-bold rounded-full hover:bg-secondary/90 transition-all duration-300 shadow-[0_0_40px_rgba(var(--color-secondary-rgb),0.3)] hover:shadow-[0_0_60px_rgba(var(--color-secondary-rgb),0.5)] text-lg group"
-            >
-              {lang === 'tr' ? 'Görüşme Planla' : 'Book a Discovery Call'}
-              <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
-            </button>
+            {(() => {
+              const cta = getCalendlyCta('about-final');
+              const shared =
+                'inline-flex items-center gap-3 px-10 py-4 bg-secondary text-neutral font-bold rounded-full hover:bg-secondary/90 transition-all duration-300 shadow-[0_0_40px_rgba(var(--color-secondary-rgb),0.3)] hover:shadow-[0_0_60px_rgba(var(--color-secondary-rgb),0.5)] text-lg group';
+              return hasExternalCalendly() ? (
+                <a
+                  href={cta.href}
+                  target={cta.target}
+                  rel={cta.rel}
+                  {...cta.dataAttrs}
+                  className={shared}
+                >
+                  {lang === 'tr' ? 'Görüşme Planla' : 'Book a Discovery Call'}
+                  <ArrowRight
+                    size={18}
+                    className="group-hover:translate-x-1 transition-transform"
+                  />
+                </a>
+              ) : (
+                <button
+                  type="button"
+                  {...cta.dataAttrs}
+                  onClick={() => window.dispatchEvent(new CustomEvent('open-booking'))}
+                  className={shared}
+                >
+                  {lang === 'tr' ? 'Görüşme Planla' : 'Book a Discovery Call'}
+                  <ArrowRight
+                    size={18}
+                    className="group-hover:translate-x-1 transition-transform"
+                  />
+                </button>
+              );
+            })()}
           </FadeIn>
         </div>
       </section>

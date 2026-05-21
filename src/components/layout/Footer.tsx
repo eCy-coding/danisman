@@ -24,7 +24,11 @@ export const Footer: React.FC = () => {
     setState({ status: 'loading' });
     trackEvent('Newsletter', 'Subscribe', 'Footer');
     try {
-      const res = await fetch(`${API_BASE}/api/newsletter/subscribe`, {
+      const base = (API_BASE || '/api').replace(/\/$/, '');
+      const endpoint = API_BASE
+        ? `${base}/v1/newsletter/subscribe`
+        : '/api/v1/newsletter/subscribe';
+      const res = await fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, consent, source: 'footer' }),
@@ -259,6 +263,7 @@ export const Footer: React.FC = () => {
                 data-testid="newsletter-email"
                 autoComplete="email"
                 required
+                aria-required="true"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder={FOOTER_COPY.newsletterPlaceholder[lang]}
@@ -284,6 +289,9 @@ export const Footer: React.FC = () => {
               <button
                 type="submit"
                 data-testid="newsletter-submit"
+                data-cta="newsletter"
+                data-track="cta-click"
+                data-cta-source="footer"
                 disabled={state.status === 'loading' || state.status === 'success' || !consent}
                 className="bg-secondary text-neutral px-5 py-3 rounded-lg text-sm font-bold hover:bg-white hover:text-neutral transition-colors uppercase tracking-wide outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-secondary focus-visible:ring-offset-neutral disabled:opacity-60 disabled:cursor-not-allowed motion-reduce:transition-none"
               >

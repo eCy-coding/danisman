@@ -85,6 +85,25 @@ app.get('/api/newsletter/stats', (_req, res) => {
   res.json({ status: 'ok', count: 1247 });
 });
 
+// ── Contact (Track B parity for E2E) ──────────────────────
+function handleContact(req, res) {
+  const { name, email, message, kvkkConsent } = req.body || {};
+  if (!name || !email || !message) {
+    return res.status(400).json({ ok: false, code: 'INVALID_PAYLOAD', message: 'name + email + message required' });
+  }
+  if (!kvkkConsent) {
+    return res.status(400).json({ ok: false, code: 'KVKK_REQUIRED', message: 'KVKK consent required' });
+  }
+  res.json({ ok: true });
+}
+app.post('/api/contact', handleContact);
+app.post('/api/v1/contact', handleContact);
+
+// ── Calendly webhook stub (always 200, signature optional in mock) ────
+app.post('/api/v1/calendly', (_req, res) => {
+  res.json({ ok: true, received: true });
+});
+
 // ── Bookings ──────────────────────────────────────────────
 app.get('/api/bookings', (req, res) => {
   const auth = req.headers['authorization'];

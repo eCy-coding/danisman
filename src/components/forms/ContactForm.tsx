@@ -1,9 +1,9 @@
 import React from 'react';
 import posthog from 'posthog-js';
+import { useNavigate } from 'react-router-dom';
 import { contactSchema, ContactFormData } from '../../schemas/contact';
 import { Send, CheckCircle, AlertCircle, Loader2, Lock } from 'lucide-react';
 import { useTranslation } from '@/lib/i18n';
-import { Logger } from '../../lib/logger';
 import { trackForm } from '../../lib/analytics';
 import { createForm } from '../../lib/forms/createForm';
 
@@ -12,19 +12,31 @@ import { createForm } from '../../lib/forms/createForm';
 //   • idempotency-key, analytics start/success/error
 //   • honeypot (hp_field) — bot trap (schema'da `optional`)
 //
-// onSubmit eski 1500ms simülasyonu korur (E2E + offline UX). Endpoint wire-up
-// backend hazır olduğunda `endpoint: '/api/contact'` yapılır.
+// Track B — bağlı endpoint /api/v1/contact. createForm fetch'i kendi yapar;
+// dev/preview build'lerde aynı host'a relative POST eder. Mock-server (E2E)
+// 200 OK döndürerek mevcut success akışını korur.
+const CONTACT_ENDPOINT = ((import.meta.env.VITE_API_URL as string | undefined) ?? '/api').replace(
+  /\/$/,
+  '',
+);
 const contactForm = createForm({
   name: 'contact',
   schema: contactSchema,
-  onSubmit: async (data) => {
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    Logger.info('Form submitted:', data);
+  endpoint: `${CONTACT_ENDPOINT}/v1/contact`,
+  defaultValues: {
+    name: '',
+    email: '',
+    company: '',
+    subject: 'general',
+    message: '',
+    kvkkConsent: false,
+    hp_field: '',
   },
 });
 
 export const ContactForm: React.FC = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const { rhf, status, submit, reset } = contactForm.useTypedForm();
   const {
     register,
@@ -40,15 +52,20 @@ export const ContactForm: React.FC = () => {
         ? 'error'
         : 'idle';
 
-  // Reset form on success so the next submission starts clean.
+  // On success: brief inline confirmation, then route to /thank-you so the
+  // post-conversion experience (case studies + Calendly direct + newsletter)
+  // takes over instead of the user staring at an empty form.
   React.useEffect(() => {
     if (status === 'success') {
-      // Slight delay so the success message stays visible.
-      const t = setTimeout(() => reset(), 3000);
-      return () => clearTimeout(t);
+      const r = setTimeout(() => reset(), 3000);
+      const n = setTimeout(() => navigate('/thank-you'), 1200);
+      return () => {
+        clearTimeout(r);
+        clearTimeout(n);
+      };
     }
     return undefined;
-  }, [status, reset]);
+  }, [status, reset, navigate]);
 
   const onSubmit = (data: ContactFormData) => {
     // P97 — PostHog capture is a no-op when the user hasn't opted in
@@ -213,11 +230,56 @@ export const ContactForm: React.FC = () => {
         )}
       </div>
 
+      {/* KVKK explicit opt-in — required by server schema */}
+      <div className="space-y-2">
+        <label
+          htmlFor="kvkkConsent"
+          className="flex items-start gap-3 cursor-pointer text-sm text-slate-300 leading-relaxed"
+        >
+          <input
+            {...register('kvkkConsent')}
+            id="kvkkConsent"
+            type="checkbox"
+            data-testid="contact-kvkk"
+            aria-required="true"
+            aria-invalid={!!errors.kvkkConsent}
+            aria-describedby={errors.kvkkConsent ? 'kvkk-error' : undefined}
+            className="mt-1 w-4 h-4 accent-secondary cursor-pointer shrink-0"
+          />
+          <span>
+            {t('contact.form.kvkk_label') ||
+              'Verilerimin EcyPro tarafından bu talebi yanıtlamak amacıyla işlenmesini kabul ediyorum.'}{' '}
+            <a
+              href="/privacy"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-secondary hover:underline"
+              data-cta="privacy"
+              data-track="cta-click"
+            >
+              {t('contact.form.kvkk_link') || 'Gizlilik Politikası'}
+            </a>
+          </span>
+        </label>
+        {errors.kvkkConsent && (
+          <p
+            id="kvkk-error"
+            role="alert"
+            className="text-red-500 text-xs flex items-center gap-1 mt-1"
+          >
+            <AlertCircle size={12} aria-hidden="true" />{' '}
+            {t(errors.kvkkConsent.message || 'contact.form.kvkk_required')}
+          </p>
+        )}
+      </div>
+
       {/* Submit Button */}
       <button
         type="submit"
         disabled={isSubmitting}
         data-testid="contact-submit"
+        data-cta="contact"
+        data-track="cta-click"
         className={`w-full py-4 min-h-[52px] rounded-xl font-bold flex items-center justify-center gap-2 transition-all ${
           isSubmitting
             ? 'bg-white/5 text-slate-400 cursor-not-allowed'

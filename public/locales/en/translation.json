@@ -108,7 +108,10 @@
       "success_title": "Message Sent!",
       "success_desc": "We will get back to you as soon as possible.",
       "error_title": "Something Went Wrong",
-      "error_desc": "Please try again or contact us by phone."
+      "error_desc": "Please try again or contact us by phone.",
+      "kvkk_label": "I consent to EcyPro processing my data for the sole purpose of replying to this request.",
+      "kvkk_link": "Privacy Policy",
+      "kvkk_required": "GDPR / KVKK consent is required to continue."
     }
   },
   "cookies": {

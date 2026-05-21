@@ -16,6 +16,7 @@ import geoRoutes from './geo';
 import crmRoutes from './crm';
 import devAnalyticsRoutes from './dev-analytics';
 import contactRoutes from './contact';
+import calendlyRoutes from './calendly';
 import gdprRoutes from './gdpr';
 import searchRoutes from './search';
 import uploadRoutes from './upload';
@@ -419,6 +420,7 @@ router.use('/geo', geoRoutes);
 router.use('/crm', crmRoutes);
 router.use('/dev/analytics', devAnalyticsRoutes);
 router.use('/contact', contactRoutes);
+router.use('/calendly', calendlyRoutes);
 router.use('/gdpr', gdprRoutes);
 router.use('/search', searchRoutes);
 // P18 BE Track 2 / Aşama 1 — upload pipeline.

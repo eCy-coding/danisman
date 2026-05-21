@@ -3,6 +3,7 @@ import { CalendarDays, ArrowRight, Check, Sparkles } from 'lucide-react';
 import { motion } from 'motion/react';
 import { useTranslation } from 'react-i18next';
 import { FadeIn } from '../common/FadeIn';
+import { getCalendlyCta } from '../../lib/cta/calendly';
 
 const BOOKING_COPY = {
   badge: { tr: 'Ücretsiz Keşif Görüşmesi', en: 'Free Discovery Call' },
@@ -43,6 +44,7 @@ const checklistVariants = {
 export const Booking: React.FC = () => {
   const { i18n } = useTranslation();
   const lang = (i18n.language || 'en').startsWith('tr') ? 'tr' : 'en';
+  const cta = getCalendlyCta('booking-section');
 
   return (
     <section
@@ -98,9 +100,10 @@ export const Booking: React.FC = () => {
             {/* CTA Mobile */}
             <FadeIn delay={400} className="pt-4 lg:hidden">
               <a
-                href="https://calendly.com"
-                target="_blank"
-                rel="noreferrer"
+                href={cta.href}
+                target={cta.target}
+                rel={cta.rel}
+                {...cta.dataAttrs}
                 className="flex w-full items-center justify-center space-x-2 btn-premium-gold py-4 text-sm"
               >
                 <span>{BOOKING_COPY.bookVia[lang]}</span>
@@ -145,9 +148,10 @@ export const Booking: React.FC = () => {
                   </div>
 
                   <a
-                    href="https://calendly.com"
-                    target="_blank"
-                    rel="noreferrer"
+                    href={cta.href}
+                    target={cta.target}
+                    rel={cta.rel}
+                    {...cta.dataAttrs}
                     className="mt-4 px-8 py-3 btn-premium text-xs tracking-wider uppercase flex items-center space-x-2"
                   >
                     <span>{BOOKING_COPY.openCalendar[lang]}</span>
