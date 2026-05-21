@@ -48,14 +48,15 @@ export const LandingPage: React.FC = () => {
   // P46 C2: Homepage SEO — was relying on SeoManager defaults; now sets per-page
   // title/description/canonical so SeoManager fallback isn't needed.
   const { language: lang } = useTranslation();
+  // Track C #6 — anasayfa unique title + description (140-160 char body).
   const title =
     lang === 'tr'
-      ? 'eCyPro Premium Consulting — Stratejik Yönetim & Dijital Dönüşüm'
-      : 'eCyPro Premium Consulting — Strategic Management & Digital Transformation';
+      ? 'eCyPro — KVKK + EU Regulatory Consulting'
+      : 'eCyPro — KVKK + EU Regulatory Consulting';
   const description =
     lang === 'tr'
-      ? 'eCyverse ekosisteminin premium danışmanlık kolu. Organizasyonel dönüşüm, stratejik danışmanlık ve kültür mühendisliği ile Türkiye merkezli, AB pazarlarında engagement deneyimi.'
-      : 'The premium consulting arm of the eCyverse ecosystem. Organizational transformation, strategic advisory, and culture engineering — Türkiye-based with engagement experience across EU markets.';
+      ? 'eCyPro Premium Consulting: KVKK, GDPR ve AB regülasyon uyumu için stratejik danışmanlık. Veri yönetişimi, dijital dönüşüm ve kurumsal risk programları.'
+      : 'eCyPro Premium Consulting: KVKK, GDPR, and EU regulatory compliance advisory. Data governance, digital transformation, and enterprise risk programs.';
 
   return (
     <>

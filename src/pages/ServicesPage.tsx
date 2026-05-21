@@ -128,12 +128,16 @@ export const ServicesPage: React.FC = () => {
   return (
     <React.Fragment>
       <Helmet>
-        <title>{lang === 'tr' ? 'Hizmetler' : 'Services'} | eCyPro Premium Consulting</title>
+        <title>{lang === 'tr' ? 'Hizmetlerimiz' : 'Our Services'} | eCyPro</title>
         <meta
           name="description"
-          content="Global standartlarda stratejik yönetim, dijital dönüşüm ve kurumsal liderlik hizmetleri."
+          content={
+            lang === 'tr'
+              ? 'KVKK uyumu, EU regülasyonu, stratejik yönetim ve dijital dönüşüm hizmetleri. Premium consulting metodolojisi, sektörel benchmark.'
+              : 'KVKK compliance, EU regulatory advisory, strategic management, and digital transformation services. Premium consulting methodology with sector benchmarks.'
+          }
         />
-        <meta name="theme-color" content="#050810" />
+        <meta name="theme-color" content="#0d1b2a" />
         <link rel="canonical" href="https://ecypro.com/services" />
       </Helmet>
       <JsonLd

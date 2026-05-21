@@ -243,8 +243,15 @@ export const PricingPage: React.FC = () => {
   return (
     <React.Fragment>
       <Helmet>
-        <title>{`${t.title[lang]} | eCyPro`}</title>
-        <meta name="description" content={t.subtitle[lang]} />
+        <title>{lang === 'tr' ? 'Paketler ve Fiyatlandırma' : 'Packages & Pricing'} | eCyPro</title>
+        <meta
+          name="description"
+          content={
+            lang === 'tr'
+              ? 'eCyPro engagement paketleri ve şeffaf fiyatlandırma. Discovery, Sprint, Programme ve Retainer modelleri — kapsam, süre ve teslimatlarla.'
+              : 'eCyPro engagement packages and transparent pricing. Discovery, Sprint, Programme, and Retainer models — with scope, duration, and deliverables.'
+          }
+        />
         <link rel="canonical" href="https://ecypro.com/pricing" />
       </Helmet>
 
