@@ -39,5 +39,8 @@ export default defineConfig({
   projects: [
     { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
     { name: 'webkit', use: { ...devices['Desktop Safari'] } },
+    // iPhone SE (375px) — smallest mainstream viewport; guards the launch
+    // layout against overflow/tap-target regressions on a narrow screen.
+    { name: 'mobile-safari-se', use: { ...devices['iPhone SE'] } },
   ],
 });
