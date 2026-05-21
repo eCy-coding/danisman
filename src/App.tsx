@@ -114,6 +114,9 @@ const NewsletterStatusPage = React.lazy(() => import('./pages/NewsletterStatusPa
 const DiscoveryCallPage = React.lazy(() => import('./pages/DiscoveryCallPage'));
 // Track B: post-conversion landing
 const ThankYouPage = React.lazy(() => import('./pages/ThankYouPage'));
+// Track 4: KVKK Quick-Check + Pricing Calculator lead magnets
+const QuickCheckPage = React.lazy(() => import('./pages/QuickCheckPage'));
+const PricingCalculatorPage = React.lazy(() => import('./pages/PricingCalculatorPage'));
 
 const TerminalPage = React.lazy(() =>
   import('./pages/TerminalPage').then((module) => ({ default: module.TerminalPage })),
@@ -445,6 +448,22 @@ const AnimatedRoutes = () => {
               <Suspense fallback={<LoadingFallback />}>
                 <AssessmentPage />
               </Suspense>
+            }
+          />
+          <Route
+            path="/quick-check"
+            element={
+              <RouteContainer name="QuickCheckPage" fallback={<LoadingFallback />}>
+                <QuickCheckPage />
+              </RouteContainer>
+            }
+          />
+          <Route
+            path="/pricing-calculator"
+            element={
+              <RouteContainer name="PricingCalculatorPage" fallback={<LoadingFallback />}>
+                <PricingCalculatorPage />
+              </RouteContainer>
             }
           />
           <Route path="/antigravity-terminal" element={<TerminalPage />} />

@@ -20,6 +20,7 @@ import {
   Zap,
   LayoutDashboard,
 } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { useScrollToSection } from '../common/useScrollToSection';
 import { trackEvent } from '../../lib/analytics';
 import { getCalendlyCta } from '../../lib/cta/calendly';
@@ -407,12 +408,43 @@ export const Hero: React.FC = () => {
                 </button>
               </MagneticButton>
             </motion.div>
+            <motion.div
+              variants={itemVariants}
+              className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-slate-400"
+            >
+              <Link
+                to="/quick-check"
+                data-testid="hero-cta-quick-check"
+                data-cta="quick-check"
+                data-track="cta-click"
+                data-cta-source="hero"
+                onClick={() => trackEvent('Hero', 'Click', 'Hero Quick-Check')}
+                className="inline-flex items-center gap-2 text-secondary hover:text-white transition-colors font-semibold"
+              >
+                {lang === 'tr'
+                  ? 'KVKK Risk Skorunuzu Öğrenin — 5 dk'
+                  : 'See your KVKK risk score — 5 min'}
+                <ArrowRight size={14} aria-hidden="true" />
+              </Link>
+              <Link
+                to="/pricing-calculator"
+                data-testid="hero-cta-pricing-calc"
+                data-cta="pricing-calc"
+                data-track="cta-click"
+                data-cta-source="hero"
+                onClick={() => trackEvent('Hero', 'Click', 'Hero Pricing Calc')}
+                className="inline-flex items-center gap-2 hover:text-secondary transition-colors"
+              >
+                {lang === 'tr' ? 'Hangi paket size uygun?' : 'Which package fits?'}
+                <ArrowRight size={14} aria-hidden="true" />
+              </Link>
+            </motion.div>
             <VideoModal
               open={videoOpen}
               onClose={() => setVideoOpen(false)}
               videoId="dQw4w9WgXcQ"
               provider="youtube"
-              title={{ tr: 'EcyPro Platform Demosu', en: 'EcyPro Platform Demo' }}
+              title={{ tr: 'eCyPro Platform Demosu', en: 'eCyPro Platform Demo' }}
             />
           </MotionOrDiv>
 
