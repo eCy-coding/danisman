@@ -220,6 +220,12 @@ import { Navigate } from 'react-router-dom';
 import { LocaleRoute } from './components/routing/LocaleRoute';
 import { LocaleRedirect } from './components/routing/LocaleRedirect';
 
+// Admin panel exposure flag — disabled by default in production builds. Public
+// `/admin/*` would otherwise leak the login form to brute-force scanners on
+// Day 1 of launch. Production access goes through Cloudflare Access / IP
+// allowlist + a one-shot `VITE_ENABLE_ADMIN=1` build (or DEV mode locally).
+const ADMIN_ROUTES_ENABLED = import.meta.env.DEV || import.meta.env.VITE_ENABLE_ADMIN === '1';
+
 const LoadingFallback = () => (
   <div className="min-h-screen flex items-center justify-center bg-neutral">
     <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
@@ -787,254 +793,263 @@ const AnimatedRoutes = () => {
 
         {/* Keystatic Admin moved to /admin.html (MPA) */}
 
-        {/* --- ADMIN PANEL ROUTES (Lazy Loaded & Protected) --- */}
-        <Route
-          path="/admin/login"
-          element={
-            <Suspense fallback={<LoadingFallback />}>
-              <AdminLoginPage />
-            </Suspense>
-          }
-        />
-
-        <Route element={<ProtectedRoute />}>
+        {/* --- ADMIN PANEL ROUTES (Lazy Loaded & Protected) ---
+            ADMIN_ROUTES_ENABLED gates the entire tree at build time.
+            When disabled, every `/admin/*` request 302s to "/" so the login
+            form, password-reset endpoints, and route names are not even
+            announced to crawlers / scanners. */}
+        {!ADMIN_ROUTES_ENABLED && <Route path="/admin/*" element={<Navigate to="/" replace />} />}
+        {ADMIN_ROUTES_ENABLED && (
           <Route
-            path="/admin"
+            path="/admin/login"
             element={
               <Suspense fallback={<LoadingFallback />}>
-                <AdminLayout />
+                <AdminLoginPage />
               </Suspense>
             }
-          >
-            <Route index element={<Navigate to="/admin/overview" replace />} />
+          />
+        )}
+
+        {ADMIN_ROUTES_ENABLED && (
+          <Route element={<ProtectedRoute />}>
             <Route
-              path="overview"
+              path="/admin"
               element={
                 <Suspense fallback={<LoadingFallback />}>
-                  <AdminOverviewPage />
+                  <AdminLayout />
                 </Suspense>
               }
-            />
-            <Route
-              path="dashboard"
-              element={
-                <Suspense fallback={<LoadingFallback />}>
-                  <AdminDashboard />
-                </Suspense>
-              }
-            />
-            <Route
-              path="services"
-              element={
-                <Suspense fallback={<LoadingFallback />}>
-                  <AdminServicesPage />
-                </Suspense>
-              }
-            />
-            <Route
-              path="bookings"
-              element={
-                <Suspense fallback={<LoadingFallback />}>
-                  <AdminBookingsPage />
-                </Suspense>
-              }
-            />
-            <Route
-              path="ai"
-              element={
-                <Suspense fallback={<LoadingFallback />}>
-                  <AdminAIPage />
-                </Suspense>
-              }
-            />
-            <Route
-              path="contacts"
-              element={
-                <Suspense fallback={<LoadingFallback />}>
-                  <AdminContactsPage />
-                </Suspense>
-              }
-            />
-            <Route
-              path="newsletter"
-              element={
-                <Suspense fallback={<LoadingFallback />}>
-                  <AdminNewsletterPage />
-                </Suspense>
-              }
-            />
-            <Route
-              path="newsletter/campaigns"
-              element={
-                <Suspense fallback={<LoadingFallback />}>
-                  <AdminCampaignsPage />
-                </Suspense>
-              }
-            />
-            <Route
-              path="newsletter/campaigns/new"
-              element={
-                <Suspense fallback={<LoadingFallback />}>
-                  <AdminCampaignWizardPage />
-                </Suspense>
-              }
-            />
-            <Route
-              path="media"
-              element={
-                <Suspense fallback={<LoadingFallback />}>
-                  <AdminMediaLibraryPage />
-                </Suspense>
-              }
-            />
-            <Route
-              path="settings/tabs"
-              element={
-                <Suspense fallback={<LoadingFallback />}>
-                  <AdminSettingsTabsPage />
-                </Suspense>
-              }
-            />
-            <Route
-              path="security"
-              element={
-                <Suspense fallback={<LoadingFallback />}>
-                  <AdminSecurityPage />
-                </Suspense>
-              }
-            />
-            <Route
-              path="profile"
-              element={
-                <Suspense fallback={<LoadingFallback />}>
-                  <AdminProfilePage />
-                </Suspense>
-              }
-            />
-            <Route
-              path="help"
-              element={
-                <Suspense fallback={<LoadingFallback />}>
-                  <AdminHelpPage />
-                </Suspense>
-              }
-            />
-            <Route
-              path="blog"
-              element={
-                <Suspense fallback={<LoadingFallback />}>
-                  <AdminBlogPage />
-                </Suspense>
-              }
-            />
-            <Route
-              path="blog/:slug/edit"
-              element={
-                <Suspense fallback={<LoadingFallback />}>
-                  <AdminBlogEditPage />
-                </Suspense>
-              }
-            />
-            <Route
-              path="services/:slug/edit"
-              element={
-                <Suspense fallback={<LoadingFallback />}>
-                  <AdminServiceEditPage />
-                </Suspense>
-              }
-            />
-            <Route
-              path="pages"
-              element={
-                <Suspense fallback={<LoadingFallback />}>
-                  <AdminPagesListPage />
-                </Suspense>
-              }
-            />
-            <Route
-              path="pages/:id/edit"
-              element={
-                <Suspense fallback={<LoadingFallback />}>
-                  <AdminPageEditPage />
-                </Suspense>
-              }
-            />
-            <Route
-              path="collections/:type"
-              element={
-                <Suspense fallback={<LoadingFallback />}>
-                  <AdminCollectionPage />
-                </Suspense>
-              }
-            />
-            <Route
-              path="leads/:id"
-              element={
-                <Suspense fallback={<LoadingFallback />}>
-                  <AdminLeadDetailPage />
-                </Suspense>
-              }
-            />
-            <Route
-              path="analytics"
-              element={
-                <Suspense fallback={<LoadingFallback />}>
-                  <AdminAnalyticsPage />
-                </Suspense>
-              }
-            />
-            <Route
-              path="settings"
-              element={
-                <Suspense fallback={<LoadingFallback />}>
-                  <AdminSettingsPage />
-                </Suspense>
-              }
-            />
-            <Route
-              path="users"
-              element={
-                <Suspense fallback={<LoadingFallback />}>
-                  <AdminUsersPage />
-                </Suspense>
-              }
-            />
-            {/* P35-T09: Session management */}
-            <Route
-              path="sessions"
-              element={
-                <Suspense fallback={<LoadingFallback />}>
-                  <AdminSessionsPage />
-                </Suspense>
-              }
-            />
-            {/* P36-T07: Audit log */}
-            <Route
-              path="audit-log"
-              element={
-                <Suspense fallback={<LoadingFallback />}>
-                  <AdminAuditLogPage />
-                </Suspense>
-              }
-            />
-            <Route
-              path="crm"
-              element={
-                <Suspense fallback={<LoadingFallback />}>
-                  <AdminCrmPage />
-                </Suspense>
-              }
-            />
-            <Route
-              path="dev-analytics"
-              element={
-                <Suspense fallback={<LoadingFallback />}>
-                  <AdminDevAnalyticsPage />
-                </Suspense>
-              }
-            />
+            >
+              <Route index element={<Navigate to="/admin/overview" replace />} />
+              <Route
+                path="overview"
+                element={
+                  <Suspense fallback={<LoadingFallback />}>
+                    <AdminOverviewPage />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="dashboard"
+                element={
+                  <Suspense fallback={<LoadingFallback />}>
+                    <AdminDashboard />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="services"
+                element={
+                  <Suspense fallback={<LoadingFallback />}>
+                    <AdminServicesPage />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="bookings"
+                element={
+                  <Suspense fallback={<LoadingFallback />}>
+                    <AdminBookingsPage />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="ai"
+                element={
+                  <Suspense fallback={<LoadingFallback />}>
+                    <AdminAIPage />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="contacts"
+                element={
+                  <Suspense fallback={<LoadingFallback />}>
+                    <AdminContactsPage />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="newsletter"
+                element={
+                  <Suspense fallback={<LoadingFallback />}>
+                    <AdminNewsletterPage />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="newsletter/campaigns"
+                element={
+                  <Suspense fallback={<LoadingFallback />}>
+                    <AdminCampaignsPage />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="newsletter/campaigns/new"
+                element={
+                  <Suspense fallback={<LoadingFallback />}>
+                    <AdminCampaignWizardPage />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="media"
+                element={
+                  <Suspense fallback={<LoadingFallback />}>
+                    <AdminMediaLibraryPage />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="settings/tabs"
+                element={
+                  <Suspense fallback={<LoadingFallback />}>
+                    <AdminSettingsTabsPage />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="security"
+                element={
+                  <Suspense fallback={<LoadingFallback />}>
+                    <AdminSecurityPage />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="profile"
+                element={
+                  <Suspense fallback={<LoadingFallback />}>
+                    <AdminProfilePage />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="help"
+                element={
+                  <Suspense fallback={<LoadingFallback />}>
+                    <AdminHelpPage />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="blog"
+                element={
+                  <Suspense fallback={<LoadingFallback />}>
+                    <AdminBlogPage />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="blog/:slug/edit"
+                element={
+                  <Suspense fallback={<LoadingFallback />}>
+                    <AdminBlogEditPage />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="services/:slug/edit"
+                element={
+                  <Suspense fallback={<LoadingFallback />}>
+                    <AdminServiceEditPage />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="pages"
+                element={
+                  <Suspense fallback={<LoadingFallback />}>
+                    <AdminPagesListPage />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="pages/:id/edit"
+                element={
+                  <Suspense fallback={<LoadingFallback />}>
+                    <AdminPageEditPage />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="collections/:type"
+                element={
+                  <Suspense fallback={<LoadingFallback />}>
+                    <AdminCollectionPage />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="leads/:id"
+                element={
+                  <Suspense fallback={<LoadingFallback />}>
+                    <AdminLeadDetailPage />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="analytics"
+                element={
+                  <Suspense fallback={<LoadingFallback />}>
+                    <AdminAnalyticsPage />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="settings"
+                element={
+                  <Suspense fallback={<LoadingFallback />}>
+                    <AdminSettingsPage />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="users"
+                element={
+                  <Suspense fallback={<LoadingFallback />}>
+                    <AdminUsersPage />
+                  </Suspense>
+                }
+              />
+              {/* P35-T09: Session management */}
+              <Route
+                path="sessions"
+                element={
+                  <Suspense fallback={<LoadingFallback />}>
+                    <AdminSessionsPage />
+                  </Suspense>
+                }
+              />
+              {/* P36-T07: Audit log */}
+              <Route
+                path="audit-log"
+                element={
+                  <Suspense fallback={<LoadingFallback />}>
+                    <AdminAuditLogPage />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="crm"
+                element={
+                  <Suspense fallback={<LoadingFallback />}>
+                    <AdminCrmPage />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="dev-analytics"
+                element={
+                  <Suspense fallback={<LoadingFallback />}>
+                    <AdminDevAnalyticsPage />
+                  </Suspense>
+                }
+              />
+            </Route>
           </Route>
-        </Route>
+        )}
         {/* P39-T02: /locale-detect → redirects root domain to /tr or /en */}
         <Route path="/locale-detect" element={<LocaleRedirect />} />
         {/* P45 C1: Bare /founder ve /data-rights URL'leri NotFoundPage'e değil

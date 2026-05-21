@@ -21,10 +21,11 @@
          genelinde canonical homepage'i gösteriyor, alt sayfalar duplicate
          sayılıyor. SeoManager + per-page SEO component canonical'ı
          react-helmet-async ile route-aware yönetir. -->
-    <meta
-      http-equiv="Content-Security-Policy"
-      content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://www.googletagmanager.com https://www.google-analytics.com https://www.clarity.ms https://*.clarity.ms https://browser.sentry-cdn.com https://*.sentry.io https://*.ingest.us.sentry.io https://*.ingest.de.sentry.io https://cdn.growthbook.io; style-src 'self' 'unsafe-inline'; img-src 'self' data: https: blob:; font-src 'self' data:; connect-src 'self' https://huggingface.co https://cdn-lfs.huggingface.co https://www.googletagmanager.com https://www.google-analytics.com https://*.google-analytics.com https://www.clarity.ms https://*.clarity.ms https://browser.sentry-cdn.com https://*.sentry.io https://*.ingest.sentry.io https://*.ingest.us.sentry.io https://*.ingest.de.sentry.io https://cdn.growthbook.io https://api.ecypro.com https://*.ecypro.com wss://* http://localhost:* ws://localhost:* ws://127.0.0.1:*; worker-src 'self' blob:; frame-src 'self'; object-src 'none'; base-uri 'self'; report-uri https://o4511338639982592.ingest.us.sentry.io/api/4511403451088896/security/?sentry_key=0e06ef649f82d275d1ab21d4e28e65d1; report-to csp-endpoint;"
-    />
+    <!-- CSP is now served as an HTTP header via vercel.json so that the more
+         powerful directives (frame-ancestors, report-uri, form-action) are
+         honoured. The previous <meta> CSP could not enforce frame-ancestors
+         and let `wss://*` through, which the launch QA flagged. Dev (vite)
+         falls back to the dev server CSP — see vite.config.ts. -->
     <meta http-equiv="X-Content-Type-Options" content="nosniff" />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
 
@@ -50,16 +51,13 @@
       })(window, document, 'script', 'dataLayer', 'GTM-NH7RJ9FB');
     </script>
 
-    <!-- P72.1 — Microsoft Clarity (free heatmap + session recording + AI insights).
-         Project: wt86h3brrx. Async loader; DNS prefetch + dns-prefetch declared
-         below at line ~106 already. No env var (client-side ID, public by design). -->
-    <script type="text/javascript">
-      (function (c, l, a, r, i, t, y) {
-        c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments); };
-        t = l.createElement(r); t.async = 1; t.src = "https://www.clarity.ms/tag/" + i;
-        y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y);
-      })(window, document, "clarity", "script", "wt86h3brrx");
-    </script>
+    <!-- Microsoft Clarity is now consent-gated via src/lib/clarity.ts + the
+         AnalyticsProvider. The previous inline loader fired pre-consent (KVKK
+         violation) and double-bootstrapped the SDK when the React loader ran
+         later — the duplicate init was the console exception seen in QA.
+         DNS prefetch hint stays below to keep the warm connection. -->
+    <!-- clarity-inline-loader removed 2026-05-21 — see vercel.json CSP -->
+
 
     <!-- P15 — Statik hreflang tag'leri kaldırıldı. SeoManager (react-helmet-async)
          route-aware tek otorite olarak yönetir. Çift emit Google'da konfüzyon

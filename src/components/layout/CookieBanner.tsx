@@ -13,9 +13,12 @@ export const CookieBanner: React.FC = () => {
   const marketingId = useId();
   const [isVisible, setIsVisible] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
+  // KVKK md.5 + GDPR Art.7 — açık rıza alınmadan opt-in olmaz. Analytics ve
+  // marketing default false; kullanıcı "Tümünü Kabul Et" veya "Ayarlar"dan
+  // explicit toggle yapmadan hiçbir 3rd-party script yüklenmez.
   const [preferences, setPreferences] = useState({
     essential: true,
-    analytics: true,
+    analytics: false,
     marketing: false,
   });
 
@@ -41,20 +44,37 @@ export const CookieBanner: React.FC = () => {
     saveConsent('all');
   };
 
+  // KVKK uyumu için "Reddet" ayrı bir buton olmalı — kapatma davranışı
+  // (X / dışarı tıklama) kabul sayılmaz. Bu handler yalnızca zorunlu çerezleri
+  // saklar ve analytics/marketing'i kapatır.
+  const handleRejectAll = () => {
+    setPreferences({ essential: true, analytics: false, marketing: false });
+    saveConsent('rejected');
+  };
+
   const handleSavePreferences = () => {
     saveConsent('custom');
   };
 
   const saveConsent = (type: string) => {
+    const finalPrefs =
+      type === 'all'
+        ? { essential: true, analytics: true, marketing: true }
+        : type === 'rejected'
+          ? { essential: true, analytics: false, marketing: false }
+          : preferences;
     localStorage.setItem(
       'ecypro_cookie_consent',
       JSON.stringify({
         timestamp: new Date().toISOString(),
         type: type,
-        preferences:
-          type === 'all' ? { essential: true, analytics: true, marketing: true } : preferences,
+        preferences: finalPrefs,
       }),
     );
+    // Notify same-tab listeners (AnalyticsProvider only hears `storage` events
+    // from other tabs). Without this, the GA4 / Clarity loaders would only
+    // react after a route change.
+    window.dispatchEvent(new Event('storage'));
     trackEvent('CookieBanner', 'Consent', type);
     setIsVisible(false);
     setShowSettings(false);
@@ -77,7 +97,7 @@ export const CookieBanner: React.FC = () => {
                 {t('legal:cookies.bannerLink')}
               </Link>
             </p>
-            <div className="flex space-x-4 whitespace-nowrap">
+            <div className="flex flex-wrap gap-3 whitespace-nowrap justify-center md:justify-end">
               <button
                 type="button"
                 onClick={() => setShowSettings(true)}
@@ -87,7 +107,16 @@ export const CookieBanner: React.FC = () => {
               </button>
               <button
                 type="button"
+                onClick={handleRejectAll}
+                data-testid="cookie-reject"
+                className="text-sm font-bold border border-white/15 text-slate-200 hover:bg-white/5 transition-colors px-6 py-3 rounded-lg outline-none focus:ring-2 focus:ring-offset-2 focus:ring-secondary"
+              >
+                {lang === 'tr' ? 'Sadece Zorunlu' : 'Essential Only'}
+              </button>
+              <button
+                type="button"
                 onClick={handleAcceptAll}
+                data-testid="cookie-accept-all"
                 className="btn-premium-gold text-sm font-bold px-8 py-3 rounded-lg transition-colors shadow-md outline-none focus:ring-2 focus:ring-offset-2 focus:ring-secondary"
               >
                 {COOKIE_BANNER_COPY.accept[lang]}

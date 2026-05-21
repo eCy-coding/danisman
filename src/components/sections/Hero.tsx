@@ -203,6 +203,12 @@ const DataFlowBackground = () => {
   );
 };
 
+// Audience toggle (Executive / Developer) is a UX experiment, not finalized
+// product surface. In production builds it's off by default — opt in with
+// `VITE_DEV_AUDIENCE_TOGGLE=1` for staging or A/B test windows.
+const AUDIENCE_TOGGLE_ENABLED =
+  import.meta.env.DEV || import.meta.env.VITE_DEV_AUDIENCE_TOGGLE === '1';
+
 export const Hero: React.FC = () => {
   const scrollToSection = useScrollToSection();
   const { i18n } = useTranslation();
@@ -271,23 +277,25 @@ export const Hero: React.FC = () => {
           <div className="absolute inset-0 bg-radial-gradient from-transparent via-[#050810]/60 to-[#050810] pointer-events-none" />
         </div>
 
-        {/* Persona Switcher */}
-        <div className="absolute top-28 left-1/2 -translate-x-1/2 z-30 flex items-center bg-white/5 border border-white/10 rounded-full p-1 shadow-2xl">
-          <button
-            type="button"
-            onClick={() => setPersona('executive')}
-            className={`px-6 py-2 rounded-full text-sm font-bold transition-all duration-300 ${persona === 'executive' ? 'bg-primary text-white shadow-[0_0_20px_rgba(37,99,235,0.4)]' : 'text-slate-400 hover:text-white'}`}
-          >
-            Executive
-          </button>
-          <button
-            type="button"
-            onClick={() => setPersona('developer')}
-            className={`px-6 py-2 rounded-full text-sm font-bold transition-all duration-300 ${persona === 'developer' ? 'bg-secondary text-neutral shadow-[0_0_20px_rgba(56,189,248,0.4)]' : 'text-slate-400 hover:text-white'}`}
-          >
-            Developer
-          </button>
-        </div>
+        {/* Persona Switcher — env-gated, off in production by default. */}
+        {AUDIENCE_TOGGLE_ENABLED && (
+          <div className="absolute top-28 left-1/2 -translate-x-1/2 z-30 flex items-center bg-white/5 border border-white/10 rounded-full p-1 shadow-2xl">
+            <button
+              type="button"
+              onClick={() => setPersona('executive')}
+              className={`px-6 py-2 rounded-full text-sm font-bold transition-all duration-300 ${persona === 'executive' ? 'bg-primary text-white shadow-[0_0_20px_rgba(37,99,235,0.4)]' : 'text-slate-400 hover:text-white'}`}
+            >
+              Executive
+            </button>
+            <button
+              type="button"
+              onClick={() => setPersona('developer')}
+              className={`px-6 py-2 rounded-full text-sm font-bold transition-all duration-300 ${persona === 'developer' ? 'bg-secondary text-neutral shadow-[0_0_20px_rgba(56,189,248,0.4)]' : 'text-slate-400 hover:text-white'}`}
+            >
+              Developer
+            </button>
+          </div>
+        )}
 
         <div className="max-w-7xl mx-auto px-6 md:px-12 w-full relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center mt-8">
           {/* Left Content */}
