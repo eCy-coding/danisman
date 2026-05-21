@@ -28,15 +28,19 @@ export function buildOrganizationSchema() {
     description:
       'Premium kurumsal danışmanlık. Organizasyonel dönüşüm, stratejik danışmanlık, kültür mühendisliği.',
     email: 'info@ecypro.com',
-    foundingDate: '2020',
+    foundingDate: '2026-05-25',
     founder: { '@id': `${SITE_URL}/#founder` },
+    sameAs: [
+      'https://www.linkedin.com/company/ecypro',
+      'https://www.linkedin.com/in/emre-can-yalcin',
+    ],
     contactPoint: [
       {
         '@type': 'ContactPoint',
         contactType: 'customer service',
         email: 'info@ecypro.com',
         availableLanguage: ['Turkish', 'English'],
-        areaServed: ['TR', 'EU', 'GB'],
+        areaServed: ['TR', 'EU'],
       },
       {
         '@type': 'ContactPoint',
@@ -47,9 +51,7 @@ export function buildOrganizationSchema() {
     ],
     areaServed: [
       { '@type': 'Country', name: 'Turkey', identifier: 'TR' },
-      { '@type': 'Country', name: 'Germany', identifier: 'DE' },
-      { '@type': 'Country', name: 'United Kingdom', identifier: 'GB' },
-      { '@type': 'Country', name: 'United Arab Emirates', identifier: 'AE' },
+      { '@type': 'AdministrativeArea', name: 'European Union', identifier: 'EU' },
     ],
     knowsLanguage: ['tr', 'en'],
   };
