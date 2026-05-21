@@ -202,9 +202,9 @@ Three-layer chain with KVKK strict opt-in:
 
 | Layer | Role | Container / Key |
 |---|---|---|
-| **GTM** | Tag orchestration | `index.html` head + body, replace `GTM-PLACEHOLDER` |
+| **GTM** | Tag orchestration | Container `GTM-NH7RJ9FB` (Account `ecypro` · Container `ecypro-web`) — hard-wired in `index.html` head + body |
 | **GA4** | Page + event metrics | Measurement ID `G-3Q4T3KL83V` — configured as a GA4 Configuration tag inside the GTM workspace |
-| **PostHog** | Product analytics (EU host) | `VITE_POSTHOG_KEY` in `.env`, init runs with `opt_out_capturing_by_default: true` |
+| **PostHog** | Product analytics (EU host) | `VITE_POSTHOG_KEY` in Vercel ENV (do not commit), init runs with `opt_out_capturing_by_default: true` |
 
 `ConsentBanner` (`src/components/ConsentBanner.tsx`) keeps PostHog capturing
 disabled until the user explicitly accepts; the decision is persisted in
@@ -212,10 +212,10 @@ disabled until the user explicitly accepts; the decision is persisted in
 are gated inside GTM via Consent Mode v2.
 
 Launch checklist:
-1. Create GTM container → obtain `GTM-XXXXXXX`.
-2. Replace both `GTM-PLACEHOLDER` references in `index.html` with the real ID.
-3. In GTM workspace, add a GA4 Configuration tag with Measurement ID `G-3Q4T3KL83V`.
-4. Create a PostHog project in the EU region and set `VITE_POSTHOG_KEY`.
+1. ~~Create GTM container~~ — done; container ID `GTM-NH7RJ9FB` already wired.
+2. In GTM workspace, ensure a GA4 Configuration tag exists with Measurement ID `G-3Q4T3KL83V`.
+3. Set `VITE_POSTHOG_KEY` in Vercel (Production + Preview) — PostHog EU project key.
+4. Smoke-test `/` after deploy: ConsentBanner renders, `dataLayer` is populated, `posthog._opting_in === false` until user accepts.
 
 ---
 
