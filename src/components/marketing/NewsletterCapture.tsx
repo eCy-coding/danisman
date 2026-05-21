@@ -10,6 +10,7 @@ import React, { useState } from 'react';
 import { Mail, CheckCircle2, AlertCircle, Loader2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { trackNewsletterSubscribe } from '../../lib/integrations/analytics';
+import { KvkkLayered } from '../legal/KvkkLayered';
 
 type Status = 'idle' | 'submitting' | 'success' | 'error';
 
@@ -73,17 +74,13 @@ export const NewsletterCapture: React.FC<NewsletterCaptureProps> = ({
   }
 
   const containerClasses =
-    variant === 'card'
-      ? 'p-6 md:p-8 bg-white/5 border border-white/10 rounded-2xl'
-      : 'p-4';
+    variant === 'card' ? 'p-6 md:p-8 bg-white/5 border border-white/10 rounded-2xl' : 'p-4';
 
   return (
     <div className={`${containerClasses} ${className}`} data-testid="newsletter-capture">
       <div className="flex items-center gap-3 mb-4">
         <Mail size={20} className="text-secondary" aria-hidden="true" />
-        <h3 className="text-lg font-serif font-bold text-white">
-          Stratejik İçgörü Bülteni
-        </h3>
+        <h3 className="text-lg font-serif font-bold text-white">Stratejik İçgörü Bülteni</h3>
       </div>
       <p className="text-sm text-slate-400 mb-5 leading-relaxed">
         Ayda bir özet — premium consulting trendleri, sektörel pratik notları, aylık macro briefing.
@@ -130,6 +127,13 @@ export const NewsletterCapture: React.FC<NewsletterCaptureProps> = ({
             </Link>
           </span>
         </label>
+        <KvkkLayered
+          basis="a"
+          retention={{
+            tr: 'Aboneliğiniz aktif olduğu sürece; iptal sonrası 30 gün içinde silinir.',
+            en: 'For the duration of your subscription; deleted within 30 days of unsubscribe.',
+          }}
+        />
         {status === 'success' && message && (
           <p className="flex items-center gap-2 text-sm text-emerald-400" role="status">
             <CheckCircle2 size={16} /> {message}

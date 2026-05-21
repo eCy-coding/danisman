@@ -6,6 +6,7 @@ import { Send, CheckCircle, AlertCircle, Loader2, Lock } from 'lucide-react';
 import { useTranslation } from '@/lib/i18n';
 import { trackForm } from '../../lib/analytics';
 import { createForm } from '../../lib/forms/createForm';
+import { KvkkLayered } from '../legal/KvkkLayered';
 
 // P15 — Tek otorite: createForm factory.
 //   • zod resolver + submit-lock + AbortController + mountedRef
@@ -271,6 +272,7 @@ export const ContactForm: React.FC = () => {
             {t(errors.kvkkConsent.message || 'contact.form.kvkk_required')}
           </p>
         )}
+        <KvkkLayered basis="f" className="pt-1" />
       </div>
 
       {/* Submit Button */}

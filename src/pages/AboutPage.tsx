@@ -340,6 +340,93 @@ export const AboutPage: React.FC = () => {
         </div>
       </section>
 
+      {/* ── Founder Bio — gerçek profil (Atatürk Üni İşletme + Çukurova Üni YL +
+              Seyhan Belediyesi + Gümrük Müşavirliği). Hedge phrase yok, formal
+              "Siz" voice, KVKK + EU regülasyon pratisyenliği vurgusu. ── */}
+      <section
+        id="founder"
+        aria-labelledby="founder-heading"
+        className="py-24 border-t border-white/5"
+      >
+        <div className="max-w-5xl mx-auto px-6 md:px-12">
+          <FadeIn>
+            <div className="grid md:grid-cols-[180px_1fr] gap-10 items-start">
+              <div className="md:sticky md:top-32">
+                <div className="w-36 h-36 mx-auto md:mx-0 rounded-2xl bg-linear-to-br from-secondary/40 to-primary/40 flex items-center justify-center text-5xl font-serif font-bold text-white border border-white/10">
+                  ECY
+                </div>
+                <p className="mt-4 text-center md:text-left text-xs uppercase tracking-[0.2em] text-secondary font-semibold">
+                  {lang === 'tr' ? 'Kurucu' : 'Founder'}
+                </p>
+              </div>
+              <div className="prose prose-invert max-w-none">
+                <h2
+                  id="founder-heading"
+                  className="text-3xl md:text-4xl font-serif font-bold text-white mb-2"
+                >
+                  Emre Can Yalçın
+                </h2>
+                <p className="text-secondary text-sm font-semibold uppercase tracking-wide mb-6">
+                  {lang === 'tr'
+                    ? 'Kurucu · eCyPro Premium Consulting'
+                    : 'Founder · eCyPro Premium Consulting'}
+                </p>
+                <p className="text-slate-300 leading-relaxed mb-5 text-base">
+                  {lang === 'tr'
+                    ? "Emre Can Yalçın, eCyPro'nun kurucusu ve eCyverse Holding ekosisteminin premium consulting kolunun stratejistidir. Atatürk Üniversitesi İşletme lisans mezunudur; Çukurova Üniversitesi Yönetim ve Organizasyon yüksek lisansı devam etmektedir."
+                    : 'Emre Can Yalçın is the founder of eCyPro and the strategist of the premium consulting arm within the eCyverse Holding ecosystem. He holds a BSc in Business Administration from Atatürk University and is completing an MSc in Management & Organisation at Çukurova University.'}
+                </p>
+                <p className="text-slate-300 leading-relaxed mb-5 text-base">
+                  {lang === 'tr'
+                    ? "Profesyonel arka planı iki ana eksende ilerledi. Önce gümrük müşavirliğinde ithalat/ihracat operasyon ve iş takip uzmanlığı yaparak Türkiye'nin uluslararası ticaret mevzuatına saha düzeyinde nüfuz etti — birincil ve ikincil mevzuat arasındaki nüansları ve operasyonel uygulamanın kâğıt üstünde değil sahada nasıl işlediğini öğrendi."
+                    : "His professional track advanced on two axes. He first practised at a customs brokerage, leading import/export operations and case follow-up — gaining field-level mastery of Turkey's international trade regulation, learning the nuance between primary and secondary legislation, and how operational practice actually works on the ground rather than on paper."}
+                </p>
+                <p className="text-slate-300 leading-relaxed mb-5 text-base">
+                  {lang === 'tr'
+                    ? "Sonra Seyhan Belediyesi'nde kamu eğitmenliğine geçerek aynı mevzuat akıcılığını KVKK uygulama, eğitim çerçevesi ve kurumsal kapasite inşası alanlarında halka açtı. Bu iki deneyim — sahada öğrenilen regulatory fluency ile eğitim aracılığıyla içselleştirilmiş KVKK uygulama disiplini — eCyPro'nun mesleki omurgasını oluşturur."
+                    : 'He then moved into public-sector training at Seyhan Municipality, opening that same regulatory fluency to a public audience — KVKK implementation, training frameworks, and organisational capacity-building. These two experiences — field-level regulatory fluency and KVKK practice internalised through teaching — form the professional spine of eCyPro.'}
+                </p>
+                <p className="text-slate-300 leading-relaxed mb-5 text-base">
+                  {lang === 'tr'
+                    ? 'eCyverse Holding vizyonunun pratisyenidir: AI ekosistemi (eCyS Searcher, eCyMCP protokol katmanı, eCyE eğitim platformu) ile premium consulting kolu (eCyPro) arasında köprü kurar. Türkiye–AB regülasyon kavşağında çalışan KOBİ ve orta-büyük şirketlere KVKK, GDPR ve EU AI Act uyumu konusunda Türkçe ve İngilizce hizmet sunar.'
+                    : 'He is the practitioner of the eCyverse Holding vision: bridging the AI ecosystem (eCyS Searcher, eCyMCP protocol layer, eCyE education platform) with the premium consulting arm (eCyPro). He serves Turkish and EU-facing SMEs and mid-market firms on KVKK, GDPR, and EU AI Act compliance in Turkish and English.'}
+                </p>
+                <p className="text-slate-300 leading-relaxed mb-6 text-base">
+                  {lang === 'tr'
+                    ? "ICC'nin (Milletlerarası Ticaret Odası) bağımsız danışmanlık prensiplerini benimseyerek çalışır; çıkar çatışması yönetimi ve regulatory disclosure konularında her engagement öncesi yazılı bağımsızlık beyanı imzalar."
+                    : 'He works under the independence principles of the International Chamber of Commerce (ICC), signing a written independence declaration before each engagement, covering conflict-of-interest management and regulatory disclosure.'}
+                </p>
+                <div className="flex flex-wrap gap-2 not-prose">
+                  {[
+                    {
+                      tr: 'KVKK Uygulama',
+                      en: 'KVKK Implementation',
+                    },
+                    { tr: 'GDPR Uyum', en: 'GDPR Compliance' },
+                    { tr: 'EU AI Act', en: 'EU AI Act' },
+                    {
+                      tr: 'Gümrük & Dış Ticaret Mevzuatı',
+                      en: 'Customs & Trade Regulation',
+                    },
+                    {
+                      tr: 'Kurumsal Eğitim',
+                      en: 'Organisational Training',
+                    },
+                  ].map((tag) => (
+                    <span
+                      key={tag.tr}
+                      className="inline-flex items-center px-3 py-1 rounded-full bg-secondary/10 border border-secondary/20 text-xs text-secondary font-medium"
+                    >
+                      {tag[lang as 'tr' | 'en']}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </FadeIn>
+        </div>
+      </section>
+
       {/* ── Leadership Team ── */}
       <section className="py-24 bg-white/1.5">
         <div className="max-w-7xl mx-auto px-6 md:px-12">
