@@ -1,5 +1,5 @@
 import React from 'react';
-import posthog from 'posthog-js';
+import { getPostHog } from '@/lib/posthog';
 import { useNavigate } from 'react-router-dom';
 import { contactSchema, ContactFormData } from '../../schemas/contact';
 import { Send, CheckCircle, AlertCircle, Loader2, Lock } from 'lucide-react';
@@ -73,14 +73,17 @@ export const ContactForm: React.FC = () => {
     // (init runs with opt_out_capturing_by_default: true). Safe to call
     // unconditionally; payload carries no PII (name/email/message are
     // intentionally excluded — only structural signals).
-    try {
-      posthog.capture('contact_submit', {
-        has_company: Boolean(data.company),
-        message_length: data.message?.length ?? 0,
+    // Lazy PostHog — fire-and-forget, no await needed for form UX
+    getPostHog()
+      .then((ph) =>
+        ph?.capture('contact_submit', {
+          has_company: Boolean(data.company),
+          message_length: data.message?.length ?? 0,
+        }),
+      )
+      .catch(() => {
+        // PostHog not initialised (no env key) — silently degrade
       });
-    } catch {
-      // PostHog not initialised (no env key) — silently degrade
-    }
     void submit(data);
   };
 
