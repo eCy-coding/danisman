@@ -1,4 +1,3 @@
-
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
@@ -19,25 +18,37 @@ export const SeoHead: React.FC<SeoProps> = ({
   type = 'website',
   imageUrl = '/og-default.jpg',
   publishedTime,
-  schema
+  schema,
 }) => {
   const { pathname } = useLocation();
-  const canonicalUrl = `https://ecypro.com${pathname}`;
+  const SITE_URL = 'https://www.ecypro.com';
+  const canonicalUrl = `${SITE_URL}${pathname}`;
   const fullTitle = `${title} | eCyPro Premium Consulting`;
 
-  // Default Organization Schema
   const defaultSchema = {
-    "@context": "https://schema.org",
-    "@type": "ConsultingService",
-    "name": "eCyPro",
-    "url": "https://ecypro.com",
-    "logo": "https://ecypro.com/logo.png",
-    "description": "Premium Business Consulting for Global Scale.",
-    "priceRange": "$$$",
-    "address": {
-      "@type": "PostalAddress",
-      "addressCountry": "US"
-    }
+    '@context': 'https://schema.org',
+    '@type': ['Organization', 'ProfessionalService', 'ConsultingService'],
+    '@id': `${SITE_URL}/#organization`,
+    name: 'eCyPro Premium Consulting',
+    url: SITE_URL,
+    logo: `${SITE_URL}/pwa-512x512.png`,
+    description: 'Premium kurumsal danışmanlık. M&A, nesil geçişi, CSRD/AB regülatif uyum.',
+    foundingDate: '2026-05-25',
+    email: 'info@ecypro.com',
+    sameAs: [
+      'https://www.linkedin.com/company/ecypro',
+      'https://www.linkedin.com/in/emre-can-yalcin',
+    ],
+    areaServed: [
+      { '@type': 'Country', name: 'Turkey', identifier: 'TR' },
+      { '@type': 'AdministrativeArea', name: 'European Union', identifier: 'EU' },
+    ],
+    address: {
+      '@type': 'PostalAddress',
+      addressCountry: 'TR',
+      addressLocality: 'Istanbul',
+    },
+    priceRange: '$$$',
   };
 
   const activeSchema = schema || defaultSchema;
@@ -66,9 +77,7 @@ export const SeoHead: React.FC<SeoProps> = ({
       <meta name="twitter:image" content={imageUrl} />
 
       {/* Structured Data (JSON-LD) */}
-      <script type="application/ld+json">
-        {JSON.stringify(activeSchema)}
-      </script>
+      <script type="application/ld+json">{JSON.stringify(activeSchema)}</script>
     </Helmet>
   );
 };

@@ -5,7 +5,7 @@ import { useTranslation } from '../../lib/i18n';
 export const SchemaOrg: React.FC = () => {
   const { language } = useTranslation();
 
-  const baseUrl = 'https://ecypro.com';
+  const baseUrl = 'https://www.ecypro.com';
   const logoUrl = `${baseUrl}/pwa-512x512.png`;
 
   // 1. ProfessionalService Schema (The Core Identity)
@@ -37,10 +37,10 @@ export const SchemaOrg: React.FC = () => {
       opens: '09:00',
       closes: '18:00',
     },
+    foundingDate: '2026-05-25',
     sameAs: [
-      'https://linkedin.com/company/ecypro',
-      'https://twitter.com/ecypro',
-      'https://instagram.com/ecypro',
+      'https://www.linkedin.com/company/ecypro',
+      'https://www.linkedin.com/in/emre-can-yalcin',
     ],
     // P39-T05: International Schema.org — Google trust signal for multilingual / multi-country
     areaServed: [
