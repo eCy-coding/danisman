@@ -101,6 +101,26 @@ Alternatifler: [`docs/DEPLOYMENT_RENDER.md`](docs/DEPLOYMENT_RENDER.md) ·
 [`docs/DEPLOYMENT_HOSTINGER_VPS.md`](docs/DEPLOYMENT_HOSTINGER_VPS.md) ·
 [`docs/DEPLOYMENT_RAILWAY.md`](docs/DEPLOYMENT_RAILWAY.md).
 
+### Vercel ENV Checklist (frontend)
+
+Bu env değişkenleri **deploy öncesi** Vercel → Project Settings → Environment
+Variables paneline `Production` scope altında girilmiş olmalıdır. Bir tanesi
+bile eksikse ilgili özellik sessizce devre dışı kalır; bunu önlemek için
+`AnalyticsProvider` artık eksik anahtarları console.warn ile rapor eder.
+
+| Anahtar | Servis | Default | Kritiklik | Notlar |
+| --- | --- | --- | --- | --- |
+| `VITE_GA_TRACKING_ID` | Google Analytics 4 | — | **P0** | `G-` ile başlar; eksikse trafik ölçülmez |
+| `VITE_CLARITY_PROJECT_ID` | Microsoft Clarity | — | **P1** | 10 karakterli proje kimliği; eksikse heatmap kapalı |
+| `VITE_GROWTHBOOK_CLIENT_KEY` | GrowthBook | — | **P1** | A/B test özelliği için; eksikse default varyant kullanılır |
+| `VITE_SENTRY_DSN` | Sentry (frontend) | — | **P0** | DSN URL; eksikse error capture devre dışı |
+| `VITE_API_URL` | Backend gateway | `/api` | **P0** | Prod: `https://api.ecypro.com` |
+| `VITE_CALENDLY_URL` | Calendly | — | **P1** | Discovery Call iframe; eksikse fallback CTA gösterilir |
+| `VITE_ENABLE_ADMIN` | Build-time switch | `0` | **HARD-OFF** | `1` yapmadan asla prod build çıkmaz — `/admin/*` brute-force yüzeyi |
+| `VITE_DEV_AUDIENCE_TOGGLE` | Build-time switch | `0` | dev-only | Hero Executive/Developer toggle UX deneyimi |
+
+Detaylı liste: [`.env.production.example`](.env.production.example).
+
 ---
 
 ## Database (Prisma)

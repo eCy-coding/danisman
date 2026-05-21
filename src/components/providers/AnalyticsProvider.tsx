@@ -6,6 +6,12 @@ import { trackEvent as gaTrackEvent } from '../../lib/analytics';
 import { loadClarity, unloadClarity } from '../../lib/clarity';
 import { loadGrowthBookFeatures, destroyGrowthBook } from '../../lib/growthbook';
 
+// Missing-key warnings: emit once per process so a misconfigured Vercel ENV
+// surfaces in the console instead of silently disabling telemetry on launch.
+let warnedGA4 = false;
+let warnedClarity = false;
+let warnedGrowthBook = false;
+
 interface ConsentPreferences {
   essential: boolean;
   analytics: boolean;
@@ -61,7 +67,16 @@ export const AnalyticsProvider: React.FC<Props> = ({ children }) => {
   // GA4 lifecycle — consent-gated, idempotent
   useEffect(() => {
     const measurementId = import.meta.env.VITE_GA_TRACKING_ID as string | undefined;
-    if (!measurementId) return;
+    if (!measurementId) {
+      if (!warnedGA4) {
+        // eslint-disable-next-line no-console
+        console.warn(
+          '[analytics] VITE_GA_TRACKING_ID missing — GA4 disabled. Set the env var in Vercel → Project Settings → Environment Variables.',
+        );
+        warnedGA4 = true;
+      }
+      return;
+    }
     if (consent.analytics) {
       loadGA4(measurementId);
     } else {
@@ -72,7 +87,16 @@ export const AnalyticsProvider: React.FC<Props> = ({ children }) => {
   // P34-T05: Microsoft Clarity — consent-gated session recording
   useEffect(() => {
     const clarityId = import.meta.env.VITE_CLARITY_PROJECT_ID as string | undefined;
-    if (!clarityId) return;
+    if (!clarityId) {
+      if (!warnedClarity) {
+        // eslint-disable-next-line no-console
+        console.warn(
+          '[analytics] VITE_CLARITY_PROJECT_ID missing — Clarity disabled. Set the env var in Vercel.',
+        );
+        warnedClarity = true;
+      }
+      return;
+    }
     if (consent.analytics) {
       loadClarity(clarityId);
     } else {
@@ -83,7 +107,16 @@ export const AnalyticsProvider: React.FC<Props> = ({ children }) => {
   // P34-T04: GrowthBook A/B Testing — consent-gated feature loading
   useEffect(() => {
     const clientKey = import.meta.env.VITE_GROWTHBOOK_CLIENT_KEY as string | undefined;
-    if (!clientKey) return;
+    if (!clientKey) {
+      if (!warnedGrowthBook) {
+        // eslint-disable-next-line no-console
+        console.warn(
+          '[analytics] VITE_GROWTHBOOK_CLIENT_KEY missing — A/B testing disabled. Set the env var in Vercel.',
+        );
+        warnedGrowthBook = true;
+      }
+      return;
+    }
     if (consent.analytics) {
       void loadGrowthBookFeatures();
     } else {
