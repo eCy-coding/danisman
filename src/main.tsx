@@ -22,6 +22,27 @@ import { GlobalErrorBoundary } from './components/common/GlobalErrorBoundary';
 import { AppProviders } from './components/providers/AppProviders';
 import { Logger } from './lib/logger';
 import { scheduleHealthCheck } from './lib/api';
+import posthog from 'posthog-js';
+
+// P97 — PostHog analytics (KVKK strict opt-in).
+// Capturing disabled until ConsentBanner records explicit user consent.
+// EU host keeps data inside EEA; IP is dropped; DNT is respected.
+const POSTHOG_KEY = import.meta.env.VITE_POSTHOG_KEY as string | undefined;
+const POSTHOG_HOST =
+  (import.meta.env.VITE_POSTHOG_HOST as string | undefined) || 'https://eu.posthog.com';
+
+if (POSTHOG_KEY && typeof window !== 'undefined') {
+  posthog.init(POSTHOG_KEY, {
+    api_host: POSTHOG_HOST,
+    opt_out_capturing_by_default: true,
+    persistence: 'localStorage',
+    autocapture: false,
+    capture_pageview: false,
+    disable_session_recording: true,
+    ip: false,
+    respect_dnt: true,
+  });
+}
 
 if (import.meta.env.PROD) {
   initWebVitals();

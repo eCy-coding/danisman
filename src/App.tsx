@@ -1062,6 +1062,7 @@ const MissionControl = React.lazy(() =>
 );
 import { OfflineBanner } from './components/common/OfflineBanner';
 import { WhatsAppButton } from './components/contact/WhatsAppButton';
+import { ConsentBanner } from './components/ConsentBanner';
 const SimpleChatWidget = React.lazy(() =>
   import('./components/chat/SimpleChatWidget').then((m) => ({ default: m.SimpleChatWidget })),
 );
@@ -1196,6 +1197,7 @@ const App: React.FC = () => {
             <MobileCtaBar />
             <BookingModal isOpen={bookingOpen} onClose={() => setBookingOpen(false)} />
           </Suspense>
+          <ConsentBanner />
         </BrowserRouter>
       </AppProviders>
     </SovereignBoundary>

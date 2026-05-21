@@ -1,4 +1,5 @@
 import React from 'react';
+import posthog from 'posthog-js';
 import { contactSchema, ContactFormData } from '../../schemas/contact';
 import { Send, CheckCircle, AlertCircle, Loader2, Lock } from 'lucide-react';
 import { useTranslation } from '@/lib/i18n';
@@ -33,7 +34,11 @@ export const ContactForm: React.FC = () => {
 
   const isSubmitting = status === 'submitting';
   const submitStatus: 'idle' | 'success' | 'error' =
-    status === 'success' ? 'success' : status === 'error' || status === 'rate_limited' ? 'error' : 'idle';
+    status === 'success'
+      ? 'success'
+      : status === 'error' || status === 'rate_limited'
+        ? 'error'
+        : 'idle';
 
   // Reset form on success so the next submission starts clean.
   React.useEffect(() => {
@@ -46,6 +51,18 @@ export const ContactForm: React.FC = () => {
   }, [status, reset]);
 
   const onSubmit = (data: ContactFormData) => {
+    // P97 — PostHog capture is a no-op when the user hasn't opted in
+    // (init runs with opt_out_capturing_by_default: true). Safe to call
+    // unconditionally; payload carries no PII (name/email/message are
+    // intentionally excluded — only structural signals).
+    try {
+      posthog.capture('contact_submit', {
+        has_company: Boolean(data.company),
+        message_length: data.message?.length ?? 0,
+      });
+    } catch {
+      // PostHog not initialised (no env key) — silently degrade
+    }
     void submit(data);
   };
 
@@ -64,10 +81,23 @@ export const ContactForm: React.FC = () => {
       {/* P15 — Honeypot field, off-screen + tabIndex=-1 — bot trap. */}
       <div
         aria-hidden="true"
-        style={{ position: 'absolute', left: '-10000px', top: 'auto', width: '1px', height: '1px', overflow: 'hidden' }}
+        style={{
+          position: 'absolute',
+          left: '-10000px',
+          top: 'auto',
+          width: '1px',
+          height: '1px',
+          overflow: 'hidden',
+        }}
       >
         <label htmlFor="hp_field">Leave this empty</label>
-        <input id="hp_field" type="text" tabIndex={-1} autoComplete="off" {...register('hp_field')} />
+        <input
+          id="hp_field"
+          type="text"
+          tabIndex={-1}
+          autoComplete="off"
+          {...register('hp_field')}
+        />
       </div>
       {/* Name Field */}
       <div className="space-y-2">
