@@ -127,7 +127,7 @@ async function callOpenAI(
 
 async function buildBlogPost(topic: string, idx: number): Promise<GeneratedBlogPost> {
   const json = await callOpenAI(
-    'You are a senior consultant at EcyPro, a tier-1 boutique consulting firm. Output strict JSON with bilingual fields. Each bilingual field is an object {tr, en} of plain strings (no HTML).',
+    'You are a senior consultant at eCyPro, a tier-1 boutique consulting firm. Output strict JSON with bilingual fields. Each bilingual field is an object {tr, en} of plain strings (no HTML).',
     `Topic: "${topic}". Return JSON: {"title":{"tr","en"},"category":{"tr","en"},"date":{"tr":"<TR human date>","en":"<EN human date>"},"readTime":{"tr":"X dk okuma","en":"X min read"},"excerpt":{"tr","en"}}.`,
   );
   const image = await fetchPexelsImage(topic);
@@ -145,7 +145,7 @@ async function buildBlogPost(topic: string, idx: number): Promise<GeneratedBlogP
 
 async function buildCaseStudy(topic: string, idx: number): Promise<GeneratedCaseStudy> {
   const json = await callOpenAI(
-    'You are a senior consultant at EcyPro, writing a brief client case study. Output strict JSON with bilingual fields. Each bilingual field is {tr, en} plain strings.',
+    'You are a senior consultant at eCyPro, writing a brief client case study. Output strict JSON with bilingual fields. Each bilingual field is {tr, en} plain strings.',
     `Topic: "${topic}". Return JSON: {"client":"<string>","sector":{"tr","en"},"challenge":{"tr","en"},"solution":{"tr","en"},"result":{"tr","en"},"description":{"tr","en"},"category":{"tr","en"}}.`,
   );
   const image = await fetchPexelsImage(topic);

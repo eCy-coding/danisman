@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # scripts/run_tools.sh
-# EcyPro E2E Araç Paketi — Tek Komutla Çalıştır
+# eCyPro E2E Araç Paketi — Tek Komutla Çalıştır
 # istek5.txt 15-Pane Araç Merkezi
 #
 # KULLANIM (sadece tek argüman):

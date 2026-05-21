@@ -26,8 +26,7 @@ const KEY = process.env.INDEXNOW_KEY ?? '';
 const KEY_LOCATION = process.env.INDEXNOW_KEY_LOCATION ?? '';
 const HOST = process.env.INDEXNOW_HOST ?? 'www.ecypro.com';
 const SITEMAP_URL = process.env.INDEXNOW_SITEMAP_URL ?? `https://${HOST}/sitemap.xml`;
-const ENABLED =
-  process.env.INDEXNOW_ENABLED === '1' || process.env.NODE_ENV === 'production';
+const ENABLED = process.env.INDEXNOW_ENABLED === '1' || process.env.NODE_ENV === 'production';
 
 interface SitemapEntry {
   loc: string;
@@ -49,7 +48,7 @@ function parseSitemap(xml: string): SitemapEntry[] {
 
 async function fetchSitemap(): Promise<SitemapEntry[]> {
   const res = await fetch(SITEMAP_URL, {
-    headers: { 'user-agent': 'EcyPro-IndexNow-Cron/1.0' },
+    headers: { 'user-agent': 'eCyPro-IndexNow-Cron/1.0' },
   });
   if (!res.ok) throw new Error(`sitemap fetch ${res.status}`);
   const text = await res.text();
@@ -83,9 +82,11 @@ async function submitToIndexNow(urls: string[]): Promise<{ ok: boolean; status: 
   return { ok: res.ok, status: res.status };
 }
 
-export async function runIndexNowSubmit(args: {
-  windowMs?: number; // default 24h
-} = {}): Promise<{ submitted: number; status: number; ok: boolean }> {
+export async function runIndexNowSubmit(
+  args: {
+    windowMs?: number; // default 24h
+  } = {},
+): Promise<{ submitted: number; status: number; ok: boolean }> {
   if (!KEY || !KEY_LOCATION) {
     logger.info('[indexnow] DISABLED — INDEXNOW_KEY or INDEXNOW_KEY_LOCATION missing');
     return { submitted: 0, status: 0, ok: false };

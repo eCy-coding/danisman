@@ -62,7 +62,7 @@ const SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="${WIDTH}" height="${
       font-weight="700"
       fill="${PRIMARY}"
       letter-spacing="-2"
-    >EcyPro</text>
+    >eCyPro</text>
     <text
       x="0" y="62"
       font-family="'Inter', 'Helvetica Neue', sans-serif"

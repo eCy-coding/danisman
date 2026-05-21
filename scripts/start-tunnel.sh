@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# ─── EcyPro Cloudflare Tunnel Launcher ───────────────────────────────────────
+# ─── eCyPro Cloudflare Tunnel Launcher ───────────────────────────────────────
 # Cloudflare tunnel üzerinden lokal sunucuyu public HTTPS URL'e expose eder.
 # Kullanım: bash scripts/start-tunnel.sh
 # ─────────────────────────────────────────────────────────────────────────────

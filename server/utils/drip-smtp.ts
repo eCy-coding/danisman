@@ -18,7 +18,7 @@ import { redis } from '../config/redis';
 const SMTP_HOST = process.env.SMTP_HOST;
 const SMTP_USER = process.env.SMTP_USER;
 const SMTP_PASS = process.env.SMTP_PASS;
-const SMTP_FROM = process.env.SMTP_FROM ?? 'EcyPro <info@ecypro.com>';
+const SMTP_FROM = process.env.SMTP_FROM ?? 'eCyPro <info@ecypro.com>';
 const SMTP_PORT = Number(process.env.SMTP_PORT ?? 587);
 
 const TEMPLATE_DIR = path.join(process.cwd(), 'server', 'emails', 'mjml');
@@ -63,7 +63,7 @@ async function loadTemplate(key: string): Promise<string> {
   } catch {
     // Graceful fallback: template missing → empty MJML wrapper
     logger.warn('[drip-smtp] template not found, using fallback', { key });
-    const fallback = `<mjml><mj-body><mj-section><mj-column><mj-text>{{firstName}}, EcyPro size yazıyor.</mj-text></mj-column></mj-section></mj-body></mjml>`;
+    const fallback = `<mjml><mj-body><mj-section><mj-column><mj-text>{{firstName}}, eCyPro size yazıyor.</mj-text></mj-column></mj-section></mj-body></mjml>`;
     TEMPLATE_CACHE.set(key, fallback);
     return fallback;
   }
@@ -83,8 +83,10 @@ export async function renderTemplate(
   let html = substituted;
   try {
     // Optional: only if installed
-     
-    const mjmlMod = (await (new Function('m', 'return import(m)') as (m: string) => Promise<unknown>)('mjml').catch(() => null)) as unknown;
+
+    const mjmlMod = (await (
+      new Function('m', 'return import(m)') as (m: string) => Promise<unknown>
+    )('mjml').catch(() => null)) as unknown;
     if (mjmlMod && typeof mjmlMod === 'object' && 'default' in (mjmlMod as object)) {
       const mjml2html = (mjmlMod as { default: (s: string) => { html: string; errors: unknown[] } })
         .default;
@@ -160,7 +162,9 @@ async function sendViaSmtp(args: {
   html: string;
   text: string;
 }): Promise<void> {
-  const mod = (await (new Function('m', 'return import(m)') as (m: string) => Promise<unknown>)('nodemailer').catch(() => null)) as unknown;
+  const mod = (await (new Function('m', 'return import(m)') as (m: string) => Promise<unknown>)(
+    'nodemailer',
+  ).catch(() => null)) as unknown;
   if (!mod || typeof mod !== 'object' || !('createTransport' in (mod as object))) {
     logger.warn('[drip-smtp] nodemailer not installed — install via npm i nodemailer');
     return;

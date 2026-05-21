@@ -152,7 +152,10 @@ router.get(
             byStatus: statusDistL30,
           },
           trend: trendData,
-          byService: byService.map((s: any) => ({ serviceId: s.serviceId, count: s._count.id })),
+          byService: byService.map((s: { serviceId: string; _count: { id: number } }) => ({
+            serviceId: s.serviceId,
+            count: s._count.id,
+          })),
         },
       });
     } catch (err) {
@@ -259,11 +262,11 @@ router.post(
 
           const calInput = {
             uid: booking.id,
-            title: 'EcyPro — Stratejik Danışmanlık Görüşmesi',
+            title: 'eCyPro — Stratejik Danışmanlık Görüşmesi',
             startDate: ts,
             durationMinutes: durationMin,
             organizerEmail: ORGANIZER_EMAIL,
-            organizerName: 'EcyPro Premium Consulting',
+            organizerName: 'eCyPro Premium Consulting',
             attendeeEmail: emailLower,
             attendeeName,
           };

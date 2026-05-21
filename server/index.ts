@@ -297,7 +297,7 @@ if (process.env.NODE_ENV !== 'test') {
 }
 
 const server = app.listen(PORT, () => {
-  logger.info(`🚀 EcyPro API Server running on http://localhost:${PORT}`);
+  logger.info(`🚀 eCyPro API Server running on http://localhost:${PORT}`);
   logger.info(`📊 Health check: http://localhost:${PORT}/api/health`);
   logger.info(`🔐 Auth: POST /api/auth/login, POST /api/auth/register`);
   logger.info(`📅 Bookings: /api/bookings`);
@@ -318,7 +318,8 @@ const server = app.listen(PORT, () => {
 //   t+0    server.close() — finish in-flight HTTP, refuse new sockets
 //   t+30s  hard ceiling — Render aborts container at ~30s on rolling deploys.
 //   between: prisma.$disconnect + pgPool.end + Sentry.flush (in parallel)
-const SHUTDOWN_TIMEOUT_MS = Number.parseInt(process.env.SHUTDOWN_TIMEOUT_MS ?? '30000', 10) || 30_000;
+const SHUTDOWN_TIMEOUT_MS =
+  Number.parseInt(process.env.SHUTDOWN_TIMEOUT_MS ?? '30000', 10) || 30_000;
 
 let shuttingDownPromise: Promise<void> | null = null;
 

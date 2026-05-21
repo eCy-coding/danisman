@@ -68,11 +68,11 @@ export const createBooking = async (
 
         const calInput = {
           uid: booking.id,
-          title: `EcyPro — Stratejik Danışmanlık Görüşmesi`,
+          title: `eCyPro — Stratejik Danışmanlık Görüşmesi`,
           startDate: scheduledAt,
           durationMinutes: booking.durationMin,
           organizerEmail: ORGANIZER_EMAIL,
-          organizerName: 'EcyPro Premium Consulting',
+          organizerName: 'eCyPro Premium Consulting',
           attendeeEmail: booking.user.email,
           attendeeName,
           meetingUrl: booking.meetingUrl ?? undefined,

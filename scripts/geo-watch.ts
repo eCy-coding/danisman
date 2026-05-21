@@ -161,7 +161,7 @@ async function tick(): Promise<void> {
 }
 
 async function main(): Promise<void> {
-  log('info', '🧭 EcyPro Geo Watcher başlatılıyor...');
+  log('info', '🧭 eCyPro Geo Watcher başlatılıyor...');
   await refresh();
   lastRefresh = Date.now();
   log(

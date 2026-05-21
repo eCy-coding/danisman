@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # ═══════════════════════════════════════════════════════════════════════════
-# EcyPro 15-Pane Dev Orchestrator (istek5 disiplini)
+# eCyPro 15-Pane Dev Orchestrator (istek5 disiplini)
 # ═══════════════════════════════════════════════════════════════════════════
 # Tek komutla tüm geliştirme stack'ini ayağa kaldırır:
 #   - Docker (Postgres + Redis + Mailpit)

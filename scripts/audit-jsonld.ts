@@ -107,7 +107,7 @@ function auditJsonLd(html: string): SchemaResult[] {
 
 // ── Main ─────────────────────────────────────────────────────────────────────
 function main(): void {
-  console.log('\n🔍 EcyPro JSON-LD Schema Audit\n');
+  console.log('\n🔍 eCyPro JSON-LD Schema Audit\n');
 
   let htmlFiles: string[];
   try {

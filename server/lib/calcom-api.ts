@@ -22,7 +22,7 @@
  *
  * Slot normalization:
  *   Cal.com returns ISO-8601 UTC times.
- *   We convert to Istanbul (EcyPro primary market) + user tz.
+ *   We convert to Istanbul (eCyPro primary market) + user tz.
  *
  * Error handling:
  *   - Timeout: 8s (prevent hanging the booking UI)

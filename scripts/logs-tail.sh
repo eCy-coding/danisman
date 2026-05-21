@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # ═══════════════════════════════════════════════════════════════════════════
-# EcyPro Logs Tail — multitail tarzı paralel log akışı
+# eCyPro Logs Tail — multitail tarzı paralel log akışı
 # ═══════════════════════════════════════════════════════════════════════════
 # Aynı pane'de:
 #   - logs/ecypro-*.log (Winston rotating)
@@ -32,7 +32,7 @@ for f in ecypro-combined.log ecypro-error.log sec-watch.log analytics-dev.log lh
 done
 
 echo -e "${C_CYAN}╔═══════════════════════════════════════════════════════╗${C_RESET}"
-echo -e "${C_CYAN}║       EcyPro Logs Tail — paralel log akışı            ║${C_RESET}"
+echo -e "${C_CYAN}║       eCyPro Logs Tail — paralel log akışı            ║${C_RESET}"
 echo -e "${C_CYAN}╚═══════════════════════════════════════════════════════╝${C_RESET}"
 echo ""
 echo "İzlenen kaynaklar:"

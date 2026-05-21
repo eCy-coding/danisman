@@ -1,6 +1,6 @@
 #!/usr/bin/env tsx
 /**
- * Service Health CLI — EcyPro
+ * Service Health CLI — eCyPro
  *
  * Tüm dış servislerin bağlantısını tek komutla kontrol eder.
  * Exit code: 0 = tümü ok/degraded, 1 = en az 1 down
@@ -175,8 +175,8 @@ async function runAll(): Promise<Check[]> {
         })
       : Promise.resolve({ name: 'Gemini Models', status: 'unconfigured' as Status }),
 
-    httpCheck('EcyPro API Health', 'http://localhost:3001/api/health', { ms: 2000 }),
-    httpCheck('EcyPro Frontend :5173', 'http://localhost:5173', { ms: 2000 }).then((c) =>
+    httpCheck('eCyPro API Health', 'http://localhost:3001/api/health', { ms: 2000 }),
+    httpCheck('eCyPro Frontend :5173', 'http://localhost:5173', { ms: 2000 }).then((c) =>
       c.status === 'down'
         ? { ...c, status: 'degraded' as Status, detail: 'dev server kapalı (normal)' }
         : c,
@@ -196,7 +196,7 @@ const ICON: Record<Status, string> = {
 };
 
 (async () => {
-  process.stderr.write('\n🔍 EcyPro Servis Sağlık Kontrolü...\n\n');
+  process.stderr.write('\n🔍 eCyPro Servis Sağlık Kontrolü...\n\n');
   const checks = await runAll();
 
   let ok = 0,

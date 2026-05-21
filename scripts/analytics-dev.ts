@@ -134,7 +134,7 @@ const server = http.createServer(async (req, res) => {
     res.writeHead(200, { 'Content-Type': 'text/plain; charset=utf-8' });
     res.end(`
 ╔════════════════════════════════════════════════╗
-║  EcyPro Analytics Dev Server (mock GA4/GTM)    ║
+║  eCyPro Analytics Dev Server (mock GA4/GTM)    ║
 ╠════════════════════════════════════════════════╣
 ║  Toplam event: ${String(events.length).padStart(4)}                          ║
 ║  Endpoint'ler:                                 ║

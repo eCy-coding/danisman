@@ -213,7 +213,7 @@ async function runCheck(): Promise<void> {
     const delta = critical - baselineCritical;
     log('error', `🚨 Yeni güvenlik bulgusu: +${delta}`);
     await notifyTelegram(
-      `🚨 *EcyPro Security Alert*\n\n+${delta} yeni high/critical bulgu tespit edildi.\n\nDetay: \`logs/sec-watch.log\``,
+      `🚨 *eCyPro Security Alert*\n\n+${delta} yeni high/critical bulgu tespit edildi.\n\nDetay: \`logs/sec-watch.log\``,
     );
   }
 
@@ -237,7 +237,7 @@ async function tick(): Promise<void> {
 }
 
 async function main(): Promise<void> {
-  log('info', '🔐 EcyPro Security Watcher başlatılıyor...');
+  log('info', '🔐 eCyPro Security Watcher başlatılıyor...');
   log('info', `kontrol her ${CHECK_INTERVAL_MS / 60_000} dakika`);
   log(
     'info',

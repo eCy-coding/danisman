@@ -257,8 +257,8 @@ export const GENERATED_BLOG_POSTS: BlogPost[] = [
       en: 'Change Management in Digital Transformation: The Human Factor',
     },
     excerpt: {
-      tr: "Teknoloji projelerinin %70'i insani direnç nedeniyle başarısız olur. EcyPro'nun ADAPT çerçevesiyle değişimi yönetin.",
-      en: "70% of technology projects fail due to human resistance. Manage change with EcyPro's ADAPT framework.",
+      tr: "Teknoloji projelerinin %70'i insani direnç nedeniyle başarısız olur. eCyPro'nun ADAPT çerçevesiyle değişimi yönetin.",
+      en: "70% of technology projects fail due to human resistance. Manage change with eCyPro's ADAPT framework.",
     },
     image:
       'https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',

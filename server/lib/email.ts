@@ -12,14 +12,14 @@
  *   - HTML templates inline (no @react-email dep — server-only, plain HTML)
  *   - Fails gracefully: if RESEND_API_KEY not set → log warn + return ok
  *
- * ENV: RESEND_API_KEY, EMAIL_FROM (default: "EcyPro <noreply@ecypro.com>")
+ * ENV: RESEND_API_KEY, EMAIL_FROM (default: "eCyPro <noreply@ecypro.com>")
  */
 
 import { Resend } from 'resend';
 import { logger } from '../config/logger';
 
 const RESEND_KEY = process.env.RESEND_API_KEY;
-const FROM = process.env.EMAIL_FROM ?? 'EcyPro <noreply@ecypro.com>';
+const FROM = process.env.EMAIL_FROM ?? 'eCyPro <noreply@ecypro.com>';
 
 let resendClient: Resend | null = null;
 
@@ -61,7 +61,7 @@ function baseLayout(title: string, body: string): string {
         </div>
         <!-- Footer -->
         <p style="color:#475569;font-size:12px;margin-top:24px;text-align:center;line-height:1.6">
-          EcyPro Premium Consulting · İstanbul, Türkiye<br/>
+          eCyPro Premium Consulting · İstanbul, Türkiye<br/>
           Bu e-postayı almak istemiyorsanız <a href="https://ecypro.com/unsubscribe" style="color:#2563eb">aboneliğinizi iptal edin</a>.
         </p>
       </td>
@@ -177,7 +177,7 @@ export async function sendReminderEmail(data: ReminderEmailData): Promise<boolea
   const body = `
     <h2 style="color:#fff;font-size:20px;font-weight:700;margin:0 0 8px">${urgency} — Görüşme Hatırlatıcısı</h2>
     <p style="color:#94a3b8;font-size:14px;line-height:1.6;margin:0 0 24px">
-      Merhaba ${data.name}, EcyPro stratejik danışmanlık görüşmeniz yaklaşıyor.
+      Merhaba ${data.name}, eCyPro stratejik danışmanlık görüşmeniz yaklaşıyor.
     </p>
     <div style="background:rgba(37,99,235,0.08);border:1px solid rgba(37,99,235,0.2);border-radius:12px;padding:20px;margin-bottom:24px">
       <p style="color:#fff;font-weight:600;font-size:15px;margin:0">📅 ${data.date} · ${data.time}</p>
@@ -272,7 +272,7 @@ export async function sendFeedbackRequestEmail(
     const { error } = await client.emails.send({
       from: FROM,
       to,
-      subject: `⭐ ${meetingDate} Görüşmenizi Değerlendirin — EcyPro`,
+      subject: `⭐ ${meetingDate} Görüşmenizi Değerlendirin — eCyPro`,
       html: baseLayout('Görüşme Değerlendirmesi', body),
     });
     if (error) throw new Error(error.message);
@@ -291,7 +291,7 @@ export async function sendEmailVerification(to: string, verifyUrl: string): Prom
   const body = `
     <h2 style="color:#fff;font-size:20px;font-weight:700;margin:0 0 8px">E-posta Adresinizi Doğrulayın</h2>
     <p style="color:#94a3b8;font-size:14px;line-height:1.6;margin:0 0 24px">
-      EcyPro hesabınızı etkinleştirmek için aşağıdaki butona tıklayın. Link 24 saat geçerlidir.
+      eCyPro hesabınızı etkinleştirmek için aşağıdaki butona tıklayın. Link 24 saat geçerlidir.
     </p>
     ${ctaButton(verifyUrl, '✅ E-postamı Doğrula')}
   `;
@@ -300,7 +300,7 @@ export async function sendEmailVerification(to: string, verifyUrl: string): Prom
     const { error } = await client.emails.send({
       from: FROM,
       to,
-      subject: '🔐 EcyPro — E-posta Doğrulama',
+      subject: '🔐 eCyPro — E-posta Doğrulama',
       html: baseLayout('E-posta Doğrulama', body),
     });
     if (error) throw new Error(error.message);

@@ -50,7 +50,7 @@ function sh(cmd, opts = {}) {
 
 async function queryNotebookLM(brief) {
   try {
-    const notebookId = sh('nlm notebook list --json | jq -r \'.[] | select(.title | contains("EcyPro")) | .id\' | head -1');
+    const notebookId = sh('nlm notebook list --json | jq -r \'.[] | select(.title | contains("eCyPro")) | .id\' | head -1');
     if (!notebookId) {
       console.log('[nlm] notebook not found — falling back to brief-only generation');
       return null;

@@ -45,7 +45,7 @@ export async function checkPasswordBreached(password: string): Promise<BreachRes
     const res = await fetch(`${HIBP_URL}/${prefix}`, {
       headers: {
         'Add-Padding': 'true', // Reduces timing attacks via response size
-        'User-Agent': 'EcyPro-Auth/1.0',
+        'User-Agent': 'eCyPro-Auth/1.0',
       },
       signal: controller.signal,
     });

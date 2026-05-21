@@ -1,19 +1,19 @@
 /**
- * EcyPro — OpenAPI 3.0 Specification
+ * eCyPro — OpenAPI 3.0 Specification
  *
- * Machine-readable API documentation for the EcyPro backend.
+ * Machine-readable API documentation for the eCyPro backend.
  * Serves at /api/docs endpoint.
  */
 
 export const openApiSpec = {
   openapi: '3.0.3',
   info: {
-    title: 'EcyPro Premium Consulting API',
+    title: 'eCyPro Premium Consulting API',
     version: '1.0.0',
     description:
-      'RESTful API for the EcyPro Premium Consulting SAAS platform. Provides authentication, booking management, analytics tracking, and real-time dashboard streaming.',
+      'RESTful API for the eCyPro Premium Consulting SAAS platform. Provides authentication, booking management, analytics tracking, and real-time dashboard streaming.',
     contact: {
-      name: 'EcyPro Support',
+      name: 'eCyPro Support',
       email: 'support@ecypro.com',
     },
   },
@@ -1180,7 +1180,11 @@ export const openApiSpec = {
           { in: 'query', name: 'page', schema: { type: 'integer', default: 1 } },
           { in: 'query', name: 'limit', schema: { type: 'integer', default: 20 } },
           { in: 'query', name: 'search', schema: { type: 'string' } },
-          { in: 'query', name: 'role', schema: { type: 'string', enum: ['USER', 'ADMIN', 'CONSULTANT'] } },
+          {
+            in: 'query',
+            name: 'role',
+            schema: { type: 'string', enum: ['USER', 'ADMIN', 'CONSULTANT'] },
+          },
         ],
         responses: { '200': { description: 'Paginated user list' } },
       },
@@ -1312,8 +1316,7 @@ export const openApiSpec = {
       post: {
         tags: ['Admin'],
         summary: 'Mint a new API key (admin)',
-        description:
-          'Returns the raw key exactly once. The server only persists a SHA-256 hash.',
+        description: 'Returns the raw key exactly once. The server only persists a SHA-256 hash.',
         operationId: 'adminApiKeyCreate',
         security: [{ BearerAuth: [] }],
         requestBody: {
@@ -1434,9 +1437,22 @@ export const openApiSpec = {
         summary: 'Full-text search across services (Postgres tsvector + GIN)',
         operationId: 'searchQuery',
         parameters: [
-          { in: 'query', name: 'q', required: true, schema: { type: 'string', minLength: 1, maxLength: 256 } },
-          { in: 'query', name: 'lang', schema: { type: 'string', enum: ['tr', 'en'], default: 'tr' } },
-          { in: 'query', name: 'limit', schema: { type: 'integer', minimum: 1, maximum: 50, default: 20 } },
+          {
+            in: 'query',
+            name: 'q',
+            required: true,
+            schema: { type: 'string', minLength: 1, maxLength: 256 },
+          },
+          {
+            in: 'query',
+            name: 'lang',
+            schema: { type: 'string', enum: ['tr', 'en'], default: 'tr' },
+          },
+          {
+            in: 'query',
+            name: 'limit',
+            schema: { type: 'integer', minimum: 1, maximum: 50, default: 20 },
+          },
           { in: 'query', name: 'cursor', schema: { type: 'string' } },
         ],
         responses: {
@@ -1529,9 +1545,7 @@ export const openApiSpec = {
         tags: ['Admin'],
         summary: 'Fetch a blog post by slug including draft (admin)',
         security: [{ BearerAuth: [] }],
-        parameters: [
-          { in: 'path', name: 'slug', required: true, schema: { type: 'string' } },
-        ],
+        parameters: [{ in: 'path', name: 'slug', required: true, schema: { type: 'string' } }],
         responses: {
           '200': { description: 'Post detail' },
           '404': { description: 'Not found' },
@@ -1541,9 +1555,7 @@ export const openApiSpec = {
         tags: ['Admin'],
         summary: 'Update a blog post (admin)',
         security: [{ BearerAuth: [] }],
-        parameters: [
-          { in: 'path', name: 'slug', required: true, schema: { type: 'string' } },
-        ],
+        parameters: [{ in: 'path', name: 'slug', required: true, schema: { type: 'string' } }],
         requestBody: {
           required: true,
           content: { 'application/json': { schema: { type: 'object' } } },
@@ -1554,9 +1566,7 @@ export const openApiSpec = {
         tags: ['Admin'],
         summary: 'Delete a blog post (admin)',
         security: [{ BearerAuth: [] }],
-        parameters: [
-          { in: 'path', name: 'slug', required: true, schema: { type: 'string' } },
-        ],
+        parameters: [{ in: 'path', name: 'slug', required: true, schema: { type: 'string' } }],
         responses: { '200': { description: 'Post deleted' } },
       },
     },
@@ -1683,9 +1693,7 @@ export const openApiSpec = {
         tags: ['Admin'],
         summary: 'Top scoring leads (admin)',
         security: [{ BearerAuth: [] }],
-        parameters: [
-          { in: 'query', name: 'limit', schema: { type: 'integer', default: 10 } },
-        ],
+        parameters: [{ in: 'query', name: 'limit', schema: { type: 'integer', default: 10 } }],
         responses: { '200': { description: 'Ordered list of leads' } },
       },
     },
@@ -1765,7 +1773,12 @@ export const openApiSpec = {
         summary: 'Stored lead score for a contact (admin)',
         security: [{ BearerAuth: [] }],
         parameters: [
-          { in: 'path', name: 'contactId', required: true, schema: { type: 'string', format: 'uuid' } },
+          {
+            in: 'path',
+            name: 'contactId',
+            required: true,
+            schema: { type: 'string', format: 'uuid' },
+          },
         ],
         responses: { '200': { description: 'Score + tier' } },
       },
@@ -1785,9 +1798,7 @@ export const openApiSpec = {
         tags: ['Health'],
         summary: 'IP → country lookup (server-side proxy)',
         operationId: 'geoLookup',
-        parameters: [
-          { in: 'query', name: 'ip', schema: { type: 'string', format: 'ipv4' } },
-        ],
+        parameters: [{ in: 'query', name: 'ip', schema: { type: 'string', format: 'ipv4' } }],
         responses: { '200': { description: 'Country + region' } },
       },
     },
@@ -1883,7 +1894,11 @@ export const openApiSpec = {
                 type: 'object',
                 required: ['confirm'],
                 properties: {
-                  confirm: { type: 'string', enum: ['DELETE'], description: 'Type "DELETE" to confirm' },
+                  confirm: {
+                    type: 'string',
+                    enum: ['DELETE'],
+                    description: 'Type "DELETE" to confirm',
+                  },
                 },
               },
             },
@@ -1901,9 +1916,7 @@ export const openApiSpec = {
       get: {
         tags: ['Bookings'],
         summary: 'Public booking lookup via HMAC-signed manage token',
-        parameters: [
-          { in: 'query', name: 'token', required: true, schema: { type: 'string' } },
-        ],
+        parameters: [{ in: 'query', name: 'token', required: true, schema: { type: 'string' } }],
         responses: {
           '200': { description: 'Booking summary' },
           '400': { description: 'Invalid token' },
@@ -1970,7 +1983,7 @@ export const openApiSpec = {
         tags: ['admin-webhooks'],
         summary: 'P23: Webhook subscription listesi',
         description:
-          'Çağıran kullanıcı ADMIN ise tüm abonelikleri, değilse yalnızca kendi `userId`\'ına bağlı abonelikleri döndürür. Sıralama: createdAt DESC, max 100 kayıt. `secret` alanı bu yanıtta yer almaz.',
+          "Çağıran kullanıcı ADMIN ise tüm abonelikleri, değilse yalnızca kendi `userId`'ına bağlı abonelikleri döndürür. Sıralama: createdAt DESC, max 100 kayıt. `secret` alanı bu yanıtta yer almaz.",
         security: [{ BearerAuth: [] }],
         responses: {
           '200': {
@@ -2089,7 +2102,7 @@ export const openApiSpec = {
         tags: ['admin-webhooks'],
         summary: 'P23: Manual retry of a single delivery',
         description:
-          'Tek bir delivery kaydını `pending` statüsüne çekip `webhook-out` queue\'suna yeniden ekler. `attemptCount` değeri korunur — audit trail toplam (otomatik + operator) deneme sayısını yansıtır. Yanıtın `mode` alanı queue\'nun gerçekten enqueue edildiğini (`bullmq`) veya in-process fallback ile çalıştığını (`memory`) belirtir.',
+          "Tek bir delivery kaydını `pending` statüsüne çekip `webhook-out` queue'suna yeniden ekler. `attemptCount` değeri korunur — audit trail toplam (otomatik + operator) deneme sayısını yansıtır. Yanıtın `mode` alanı queue'nun gerçekten enqueue edildiğini (`bullmq`) veya in-process fallback ile çalıştığını (`memory`) belirtir.",
         security: [{ BearerAuth: [] }],
         parameters: [
           { in: 'path', name: 'id', required: true, schema: { type: 'string', format: 'uuid' } },
@@ -2119,7 +2132,8 @@ export const openApiSpec = {
           '401': { description: 'Auth required' },
           '403': { description: 'forbidden — non-admin caller is not the owner' },
           '404': {
-            description: 'not_found — subscription/delivery missing or delivery does not belong to subscription',
+            description:
+              'not_found — subscription/delivery missing or delivery does not belong to subscription',
           },
         },
       },
@@ -2133,7 +2147,7 @@ export const openApiSpec = {
         tags: ['stream'],
         summary: 'P23: SSE subscription',
         description:
-          'Virgülle ayrılmış `topic` query parametresi ile bir veya daha çok kanala abone olur. Yalnızca `PUBLIC_TOPICS` (`status:tick`) için anonim erişim açıktır; diğer topic\'ler `BearerAuth` zorunludur. Tek connection üzerinde en fazla 8 topic. SSE çıktısı `text/event-stream`; ilk frame `event: subscribed` ile gelir.',
+          "Virgülle ayrılmış `topic` query parametresi ile bir veya daha çok kanala abone olur. Yalnızca `PUBLIC_TOPICS` (`status:tick`) için anonim erişim açıktır; diğer topic'ler `BearerAuth` zorunludur. Tek connection üzerinde en fazla 8 topic. SSE çıktısı `text/event-stream`; ilk frame `event: subscribed` ile gelir.",
         security: [{ BearerAuth: [] }, {}],
         parameters: [
           {
@@ -2165,7 +2179,7 @@ export const openApiSpec = {
         tags: ['stream'],
         summary: 'P23: Admin fan-out to a stream topic',
         description:
-          'Bir worker yazmadan tüm aktif aboneye event göndermek için HTTP fan-out. ADMIN-only. Yanıttaki `fanout` alanı event\'in anlık ulaştığı abone sayısını verir.',
+          "Bir worker yazmadan tüm aktif aboneye event göndermek için HTTP fan-out. ADMIN-only. Yanıttaki `fanout` alanı event'in anlık ulaştığı abone sayısını verir.",
         security: [{ BearerAuth: [] }],
         requestBody: {
           required: true,
@@ -2195,7 +2209,7 @@ export const openApiSpec = {
         tags: ['stream'],
         summary: 'P23: SSE manager telemetry',
         description:
-          'In-process SSE yöneticisinin canlı istatistikleri: aktif connection sayısı, topic dağılımı. ADMIN-only — uçtaki worker / Render dashboard\'una alternatif tanı yüzeyi.',
+          "In-process SSE yöneticisinin canlı istatistikleri: aktif connection sayısı, topic dağılımı. ADMIN-only — uçtaki worker / Render dashboard'una alternatif tanı yüzeyi.",
         security: [{ BearerAuth: [] }],
         responses: {
           '200': {

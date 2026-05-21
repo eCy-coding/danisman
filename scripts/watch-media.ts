@@ -151,7 +151,7 @@ function watchRecursive(dir: string): void {
 }
 
 async function main(): Promise<void> {
-  log('info', '🎬 EcyPro Media Watcher başlatılıyor...');
+  log('info', '🎬 eCyPro Media Watcher başlatılıyor...');
   await tryLoadSharp();
   await loadManifest();
   WATCH_DIRS.forEach(watchRecursive);

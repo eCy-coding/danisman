@@ -175,7 +175,7 @@ async function tick(): Promise<void> {
 }
 
 async function main(): Promise<void> {
-  log('info', '🚀 EcyPro Deploy Watcher başlatılıyor...');
+  log('info', '🚀 eCyPro Deploy Watcher başlatılıyor...');
   log(
     'info',
     `Vercel: ${VERCEL_TOKEN ? 'aktif' : 'pasif'} | Render: ${RENDER_API_KEY && RENDER_SERVICE_ID ? 'aktif' : 'pasif'}`,

@@ -126,7 +126,7 @@ function formatPct(n: number | null): string {
 }
 
 function renderTable(steps: FunnelStep[]): void {
-  console.log(`\n📊 EcyPro Funnel Report — Last ${DAYS} Days`);
+  console.log(`\n📊 eCyPro Funnel Report — Last ${DAYS} Days`);
   console.log(`${'─'.repeat(80)}`);
   console.log(
     'Step'.padEnd(4) +
@@ -166,7 +166,7 @@ function generateMarkdown(steps: FunnelStep[], date: string): string {
     )
     .join('\n');
 
-  return `# EcyPro Funnel Report — ${date}
+  return `# eCyPro Funnel Report — ${date}
 
 **Period:** Last ${DAYS} days · **Generated:** ${new Date().toISOString()}
 

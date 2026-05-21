@@ -4,7 +4,7 @@ import { Prisma } from '@prisma/client';
 import { logger } from '../config/logger';
 
 /**
- * Standard API error envelope used across the EcyPro backend.
+ * Standard API error envelope used across the eCyPro backend.
  *
  * Clients can rely on stable `status` + `code` values for machine handling
  * while `message` remains human-friendly. `requestId` lets support triage
@@ -68,19 +68,17 @@ function normalizeZod(err: ZodError): ApiErrorEnvelope['issues'] {
   }));
 }
 
-export const errorHandler = (
-  err: unknown,
-  req: Request,
-  res: Response,
-  _next: NextFunction,
-) => {
+export const errorHandler = (err: unknown, req: Request, res: Response, _next: NextFunction) => {
   const requestId = (req.headers['x-request-id'] as string) || 'unknown';
   const isProd = process.env.NODE_ENV === 'production';
   const eventId = (err as { eventId?: string })?.eventId;
 
   // ── HttpError (explicit domain error) ──────────────────
   if (err instanceof HttpError) {
-    logger.warn(`[HttpError:${err.statusCode}] ${err.code}: ${err.message}`, { requestId, path: req.path });
+    logger.warn(`[HttpError:${err.statusCode}] ${err.code}: ${err.message}`, {
+      requestId,
+      path: req.path,
+    });
     const body: ApiErrorEnvelope = {
       status: 'error',
       code: err.code,
@@ -158,7 +156,7 @@ export const errorHandler = (
   return res.status(500).json({
     status: 'error',
     code: 'INTERNAL_ERROR',
-    message: isProd ? 'Internal server error' : baseErr?.message ?? 'Unknown error',
+    message: isProd ? 'Internal server error' : (baseErr?.message ?? 'Unknown error'),
     requestId,
     ...(eventId ? { eventId } : {}),
   } satisfies ApiErrorEnvelope);

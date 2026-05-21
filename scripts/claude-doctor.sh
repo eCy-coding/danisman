@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # ─────────────────────────────────────────────────────────────────────────────
-# EcyPro × Claude Code — Health Check (doctor)
+# eCyPro × Claude Code — Health Check (doctor)
 #
 # Çıkış kodları:
 #   0 — Her şey yolunda.
@@ -36,7 +36,7 @@ hdr()   { printf '\n%s%s%s\n' "${C_BOLD}${C_BLUE}" "$*" "${C_RESET}"; }
 EXIT_CODE=0
 PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
-printf '%sEcyPro × Claude Code — Doctor%s\n' "${C_BOLD}" "${C_RESET}"
+printf '%seCyPro × Claude Code — Doctor%s\n' "${C_BOLD}" "${C_RESET}"
 printf 'Proje kökü: %s\n' "${PROJECT_ROOT}"
 
 # ── 1. Binary kontrolü ─────────────────────────────────────────────────────

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # ═══════════════════════════════════════════════════════════
-# EcyPro Premium Consulting — One-Command Deploy Script
+# eCyPro Premium Consulting — One-Command Deploy Script
 # ═══════════════════════════════════════════════════════════
 # Usage:
 #   ./scripts/deploy.sh [frontend|backend|all|docker]
@@ -14,7 +14,7 @@ YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 NC='\033[0m'
 
-log() { echo -e "${BLUE}[EcyPro]${NC} $1"; }
+log() { echo -e "${BLUE}[eCyPro]${NC} $1"; }
 success() { echo -e "${GREEN}[✅]${NC} $1"; }
 warn() { echo -e "${YELLOW}[⚠️]${NC} $1"; }
 error() { echo -e "${RED}[❌]${NC} $1" && exit 1; }
@@ -109,7 +109,7 @@ TARGET=${1:-all}
 
 echo ""
 echo "═══════════════════════════════════════════"
-echo "  EcyPro Premium Consulting — Deploy"
+echo "  eCyPro Premium Consulting — Deploy"
 echo "  Target: $TARGET"
 echo "  Time:   $(date '+%Y-%m-%d %H:%M:%S')"
 echo "═══════════════════════════════════════════"

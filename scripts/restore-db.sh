@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# EcyPro — Database restore script (P15-BE Aşama 5).
+# eCyPro — Database restore script (P15-BE Aşama 5).
 #
 # Companion to scripts/backup-db.sh. Restores a pg_dump archive (custom
 # or plain SQL, optionally GPG-encrypted) into the database pointed at

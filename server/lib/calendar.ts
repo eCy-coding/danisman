@@ -46,9 +46,9 @@ function dateToIcsArray(date: Date): [number, number, number, number, number] {
  */
 export function generateICS(input: CalendarEventInput): string | null {
   const description = [
-    input.description ?? 'EcyPro Premium Consulting — Stratejik Danışmanlık Görüşmesi',
+    input.description ?? 'eCyPro Premium Consulting — Stratejik Danışmanlık Görüşmesi',
     input.meetingUrl ? `\nGörüşme linki: ${input.meetingUrl}` : '',
-    '\nEcyPro Premium Consulting | https://ecypro.com',
+    '\neCyPro Premium Consulting | https://ecypro.com',
   ].join('');
 
   const event: EventAttributes = {
@@ -113,7 +113,7 @@ export function googleCalendarUrl(input: CalendarEventInput): string {
     action: 'TEMPLATE',
     text: input.title,
     dates: `${fmt(input.startDate)}Z/${fmt(end)}Z`,
-    details: input.description ?? 'EcyPro Stratejik Danışmanlık Görüşmesi',
+    details: input.description ?? 'eCyPro Stratejik Danışmanlık Görüşmesi',
     location: input.meetingUrl ?? 'Online',
     add: input.attendeeEmail,
   });
@@ -133,7 +133,7 @@ export function outlookCalendarUrl(input: CalendarEventInput): string {
     subject: input.title,
     startdt: input.startDate.toISOString(),
     enddt: end.toISOString(),
-    body: input.description ?? 'EcyPro Stratejik Danışmanlık Görüşmesi',
+    body: input.description ?? 'eCyPro Stratejik Danışmanlık Görüşmesi',
     location: input.meetingUrl ?? 'Online',
   });
 

@@ -67,7 +67,7 @@ async function checkUrl(url: string, hops = 0): Promise<LinkResult> {
       const lib = currentUrl.startsWith('https') ? https : http;
       const req = lib.get(
         currentUrl,
-        { headers: { 'User-Agent': 'EcyPro-BrokenLinkAuditor/1.0' } },
+        { headers: { 'User-Agent': 'eCyPro-BrokenLinkAuditor/1.0' } },
         (res) => {
           const elapsed = Date.now() - start;
           const status = res.statusCode ?? 0;
@@ -262,7 +262,7 @@ ${redirects.map((r) => `- ${r.status} ${r.url} → ${r.finalUrl ?? 'unknown'}`).
 // ─── Main ────────────────────────────────────────────────────
 
 async function main(): Promise<void> {
-  console.log(`🔍 Broken Link Auditor — EcyPro`);
+  console.log(`🔍 Broken Link Auditor — eCyPro`);
   console.log(`   Base: ${BASE_URL}`);
   console.log(`   Sitemap: ${SITEMAP_URL}`);
   console.log(`   Concurrency: ${CONCURRENCY}`);

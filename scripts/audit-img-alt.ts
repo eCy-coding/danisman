@@ -157,7 +157,7 @@ function scanMdx(filePath: string): void {
 
 // ─── Main ─────────────────────────────────────────────────
 
-console.log('🔍 EcyPro Image Alt Text Audit\n');
+console.log('🔍 eCyPro Image Alt Text Audit\n');
 
 let scanned = 0;
 

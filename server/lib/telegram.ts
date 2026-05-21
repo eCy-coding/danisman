@@ -109,7 +109,7 @@ export async function notify(
   const ts = new Date().toLocaleString('tr-TR', { timeZone: 'Europe/Istanbul' });
   const emoji = EMOJI[level];
 
-  let text = `${emoji} <b>[EcyPro ${env.toUpperCase()}]</b> ${escapeHtml(title)}\n<i>${ts}</i>`;
+  let text = `${emoji} <b>[eCyPro ${env.toUpperCase()}]</b> ${escapeHtml(title)}\n<i>${ts}</i>`;
 
   if (details && Object.keys(details).length > 0) {
     const lines = Object.entries(details)

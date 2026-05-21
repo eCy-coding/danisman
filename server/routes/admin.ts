@@ -314,7 +314,7 @@ const DEFAULT_CONFIGS = [
   { key: 'site.maintenance', value: 'false', type: 'boolean', label: 'Bakım Modu' },
   { key: 'seo.og_image', value: '/og-image.jpg', type: 'string', label: 'OG Image URL' },
   { key: 'analytics.ga4_id', value: '', type: 'string', label: 'GA4 Measurement ID' },
-  { key: 'email.from', value: 'EcyPro <noreply@ecypro.com>', type: 'string', label: 'Email From' },
+  { key: 'email.from', value: 'eCyPro <noreply@ecypro.com>', type: 'string', label: 'Email From' },
   {
     key: 'booking.duration_min',
     value: '30',
@@ -519,7 +519,7 @@ router.get(
           category: meta.category ?? 'General',
           readTime: meta.readTime ?? '5 min',
           excerpt: meta.excerpt ?? '',
-          author: meta.author ?? 'EcyPro Consulting',
+          author: meta.author ?? 'eCyPro Consulting',
           lang: meta.lang ?? 'tr',
           status: meta.status ?? 'published',
           sizeBytes: stat.size,
@@ -588,7 +588,7 @@ date: "${today}"
 category: "Strategy"
 readTime: "5 min"
 excerpt: ""
-author: "EcyPro Consulting"
+author: "eCyPro Consulting"
 lang: "tr"
 status: "draft"
 ---

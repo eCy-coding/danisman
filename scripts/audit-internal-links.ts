@@ -58,7 +58,7 @@ function resolveHref(href: string): string {
 }
 
 function main(): void {
-  console.log('\n🔗 EcyPro Internal Links Audit\n');
+  console.log('\n🔗 eCyPro Internal Links Audit\n');
 
   let htmlFiles: string[];
   try {

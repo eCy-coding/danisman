@@ -85,7 +85,7 @@ function startPreviewServer() {
 }
 
 async function prerenderRoute(browser, route) {
-  const ctx = await browser.newContext({ ignoreHTTPSErrors: true, userAgent: 'EcyPro-Prerender/1.0' });
+  const ctx = await browser.newContext({ ignoreHTTPSErrors: true, userAgent: 'eCyPro-Prerender/1.0' });
   const page = await ctx.newPage();
   try {
     await page.goto(`${baseUrl}${route}`, { waitUntil: 'domcontentloaded', timeout: 30_000 });
