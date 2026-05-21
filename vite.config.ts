@@ -245,8 +245,9 @@ export default defineConfig(({ mode }) => {
             // App shell critical JS — initial paint zinciri
             'assets/main-*.js',
             'assets/vendor-*.js',
-            'assets/lp.js',
-            'assets/lc.js',
+            // P44: lp.js inlined into main (static import); lc.js split into
+            // LandingContent-*.js + per-section lazy chunks (Lighthouse perf).
+            'assets/LandingContent-*.js',
             'assets/i18n-*.js',
             'assets/client-*.js',
             'assets/sentry-*.js',
