@@ -317,9 +317,11 @@ export const Footer: React.FC = () => {
           </div>
         </div>
 
-        <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-slate-300 border-t border-white/5 pt-10">
+        <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-slate-300 border-t border-ecypro-gold/20 pt-10">
           <p>
-            &copy; {new Date().getFullYear()} eCyPro. {FOOTER_COPY.rights[lang]}
+            &copy; {new Date().getFullYear()}{' '}
+            <span className="text-ecypro-gold font-semibold">eCyPro</span>.{' '}
+            {FOOTER_COPY.rights[lang]}
           </p>
           <CountrySelector />
           <div className="flex space-x-6 mt-4 md:mt-0">

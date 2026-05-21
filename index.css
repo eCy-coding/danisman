@@ -51,6 +51,15 @@
   --color-text-main: #fafafa; /* Zinc-50 */
   --color-text-muted: #a1a1aa; /* Zinc-400 */
 
+  /* Track C #3 — eCyPro brand palette. These tokens map to Tailwind v4
+     `ecypro-*` utility names (bg-ecypro-navy, text-ecypro-gold, etc.) and
+     are layered on top of the existing dark surface so the brand spec is
+     reachable without refactoring every legacy class at once. */
+  --color-ecypro-navy: #0d1b2a;
+  --color-ecypro-gold: #d4a356;
+  --color-ecypro-cream: #f5f1eb;
+  --color-ecypro-ink: #1a1a1a;
+
   /* P44: axe-core WCAG AA contrast fix — slate-300 (#cad5e2) ve slate-500 (#62748e)
      dark `#0a0a0a` surface üzerinde 4.4:1 / 4.3:1 (4.5 minimum altında).
      Override → slate-400 equivalent (#94a3b8) → 7.0:1 (AA ✅, AAA için 7:1 sınırı).
@@ -180,15 +189,21 @@
     color: transparent;
   }
 
-  /* Shimmer effect for premium highlights */
+  /* Shimmer overlay for premium highlights. Track C #2 — when this class
+     was composed with `bg-clip-text + text-transparent + bg-linear-to-r`
+     it overwrote the gradient `background` shorthand and erased the
+     visible text (Hero "Sürdürülebilir" rendered as a gray sliver).
+     Now uses `background-image` only so it layers on top of any
+     gradient/clip background set by sibling utilities. */
   .shimmer {
-    background: linear-gradient(
+    background-image: linear-gradient(
       120deg,
       transparent 30%,
       rgba(255, 255, 255, 0.08) 50%,
       transparent 70%
     );
     background-size: 200% 100%;
+    background-repeat: no-repeat;
     animation: shimmer 2.5s ease-in-out infinite;
   }
 

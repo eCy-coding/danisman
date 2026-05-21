@@ -299,13 +299,13 @@ export const Hero: React.FC = () => {
           >
             <motion.div
               variants={itemVariants}
-              className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full border border-primary/30 bg-primary/5 mb-8 w-fit"
+              className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full border border-ecypro-gold/40 bg-ecypro-gold/10 mb-8 w-fit"
             >
               <span className="flex h-2.5 w-2.5 relative">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-80" />
-                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-secondary" />
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-ecypro-gold opacity-80" />
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-ecypro-gold" />
               </span>
-              <span className="text-xs font-bold tracking-[0.25em] text-blue-100 uppercase font-sans">
+              <span className="text-xs font-bold tracking-[0.25em] text-ecypro-gold uppercase font-sans">
                 {currentContent.badge[lang]}
               </span>
             </motion.div>
@@ -315,7 +315,12 @@ export const Hero: React.FC = () => {
                 <TextReveal immediate delay={0.05} text={currentContent.title.line1[lang]} />
               </span>
               <span className="block overflow-hidden pb-2">
-                <span className="bg-linear-to-r from-blue-400 via-primary to-secondary bg-clip-text text-transparent shimmer inline-block">
+                {/* Track C #2 — the rainbow gradient + bg-clip-text needs the
+                    `background-image` slot to render the visible glyphs.
+                    The old `.shimmer` utility also wrote into that slot and
+                    blanked "Sürdürülebilir" to a gray skeleton. Drop the
+                    shimmer overlay here; the gradient is the brand effect. */}
+                <span className="bg-linear-to-r from-blue-400 via-primary to-secondary bg-clip-text text-transparent inline-block">
                   <TextReveal immediate delay={0.15} text={currentContent.title.highlight[lang]} />
                 </span>
               </span>
@@ -348,7 +353,7 @@ export const Hero: React.FC = () => {
                   href="#contact"
                   data-testid="hero-cta-primary"
                   onClick={(e) => handleCtaClick(e, '#contact', 'Hero Primary')}
-                  className="group relative px-8 py-4 bg-primary hover:bg-blue-600 text-white font-bold uppercase tracking-widest rounded-xl shadow-[0_0_40px_rgba(37,99,235,0.3)] hover:shadow-[0_0_60px_rgba(37,99,235,0.5)] transition-all duration-300 flex items-center justify-center gap-3 min-w-50 w-full sm:w-auto overflow-hidden border border-white/10"
+                  className="group relative px-8 py-4 bg-ecypro-gold hover:bg-ecypro-gold/90 text-ecypro-navy font-bold uppercase tracking-widest rounded-xl shadow-[0_0_40px_rgba(212,163,86,0.35)] hover:shadow-[0_0_60px_rgba(212,163,86,0.55)] transition-all duration-300 flex items-center justify-center gap-3 min-w-50 w-full sm:w-auto overflow-hidden border border-ecypro-gold/40"
                 >
                   <div className="absolute inset-0 -translate-x-full group-hover:animate-[shimmer_1.5s_infinite] bg-linear-to-r from-transparent via-white/20 to-transparent skew-x-12" />
                   <span className="relative z-10">{primaryCtaLabel}</span>
