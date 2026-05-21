@@ -152,7 +152,7 @@ router.get(
             byStatus: statusDistL30,
           },
           trend: trendData,
-          byService: byService.map((s: { serviceId: string; _count: { id: number } }) => ({
+          byService: byService.map((s: { serviceId: string | null; _count: { id: number } }) => ({
             serviceId: s.serviceId,
             count: s._count.id,
           })),
