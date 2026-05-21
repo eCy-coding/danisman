@@ -5,21 +5,33 @@
  */
 
 @media print {
-  /* Hide non-content elements */
+  /* Track C #10 — print-friendly fallback. Hide all non-content chrome
+     (nav, banners, floating utilities, modal/dialog overlays, video,
+     iframes, decorative SVG) so consulting deliverables print as clean
+     B/W documents. Buttons hide by default; opt-in with [data-print-show]
+     on a specific element if the print should keep a CTA visible. */
   nav,
   header nav,
+  aside,
   .cookie-banner,
   .live-chat,
   [data-testid="cookie-banner"],
   [data-testid="geo-banner"],
+  [data-testid="language-toggle"],
+  [data-testid="hero-cta-primary"],
+  [data-testid="hero-cta-secondary"],
   [aria-label*="navigation"],
   [aria-label*="chat"],
+  [role="dialog"],
+  [aria-modal="true"],
   .mobile-bottom-nav,
   .back-to-top,
   button:not([data-print-show]),
   .cta-section,
   .booking-modal,
   video,
+  iframe,
+  svg[aria-hidden="true"],
   [data-noprint] {
     display: none !important;
   }
@@ -34,12 +46,37 @@
     text-shadow: none !important;
   }
 
+  html,
   body {
     font-family: Georgia, "Times New Roman", serif;
     font-size: 12pt;
     line-height: 1.5;
-    color: #000;
-    background: #fff;
+    color: #000 !important;
+    background: #fff !important;
+  }
+
+  /* Force the page layout to print-full-width: cancel max-width clamps,
+     drop the dark surface, neutralise sticky/fixed positioning so the
+     content reflows as a single linear column. */
+  main,
+  main > *,
+  .container,
+  [class*="max-w-"],
+  section,
+  article {
+    max-width: none !important;
+    width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  .sticky,
+  .fixed,
+  [class*="sticky"],
+  [class*="fixed"] {
+    position: static !important;
   }
 
   /* Page margins */
