@@ -61,7 +61,8 @@ export const ResultsChart: React.FC<ResultsChartProps> = ({
                 <XAxis dataKey="name" stroke="#94a3b8" />
                 <YAxis hide stroke="#94a3b8" />
                 <Tooltip 
-                    formatter={(value: number | undefined) => formatCurrency(value || 0)}
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    formatter={(value: any) => formatCurrency(Number(value) || 0)}
                 />
                 <Bar dataKey="value" radius={[4, 4, 0, 0]}>
                     {data.map((entry, index) => (
