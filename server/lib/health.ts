@@ -1,5 +1,5 @@
 /**
- * Multi-Service Health Checker — EcyPro
+ * Multi-Service Health Checker — eCyPro
  *
  * Async-checks all critical external services in parallel with timeouts.
  * Used by /api/health/services endpoint.

@@ -1,5 +1,5 @@
 /**
- * EcyPro — Performance Resource Hints
+ * eCyPro — Performance Resource Hints
  *
  * Dynamically injects preload, prefetch, and preconnect hints
  * to improve loading performance and Lighthouse scores.
@@ -45,7 +45,9 @@ export function prefetchRoutes(): void {
   };
 
   if ('requestIdleCallback' in window) {
-    (window as unknown as { requestIdleCallback: (cb: () => void) => void }).requestIdleCallback(prefetch);
+    (window as unknown as { requestIdleCallback: (cb: () => void) => void }).requestIdleCallback(
+      prefetch,
+    );
   } else {
     setTimeout(prefetch, 3000);
   }
@@ -75,7 +77,7 @@ export function setupLazyImages(): void {
     {
       rootMargin: '200px',
       threshold: 0.01,
-    }
+    },
   );
 
   // Observe all images with data-src

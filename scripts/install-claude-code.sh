@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # ─────────────────────────────────────────────────────────────────────────────
-# EcyPro × Claude Code — Idempotent Installer
+# eCyPro × Claude Code — Idempotent Installer
 #
 # Resmî yöntem (native): curl -fsSL https://claude.ai/install.sh | bash
 # Fallback (npm):        npm install -g @anthropic-ai/claude-code

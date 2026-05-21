@@ -117,6 +117,22 @@ Baseline migration uyarısı: `prisma/migrations/` boş → ilk cutover öncesi
 `prisma migrate dev --name baseline_p3_2026_05_15` çalıştırıp commit
 edilmesi gerekir. Detay: `outputs/PRISMA_DEPLOY_PLAN.md`.
 
+### Admin Bootstrap
+
+İlk deploy sonrası admin kullanıcı oluşturmak için:
+
+```bash
+ADMIN_EMAIL=founder@ecypro.com \
+ADMIN_PASSWORD=your-secure-password-here \
+DATABASE_URL="postgres://..." \
+npx tsx server/scripts/seed-admin.ts
+```
+
+Script idempotent — aynı email ile tekrar çalıştırılırsa mevcut kullanıcıyı
+ADMIN rolüne yükseltir ve şifreyi günceller.
+
+Detaylı operasyon rehberi: [`RUNBOOK.md`](RUNBOOK.md).
+
 ---
 
 ## Quality Gates (canlı durum — P27)

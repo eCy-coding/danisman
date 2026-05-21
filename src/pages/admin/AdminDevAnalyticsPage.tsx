@@ -76,7 +76,7 @@ export const AdminDevAnalyticsPage: React.FC = () => {
   return (
     <>
       <Helmet>
-        <title>Dev Analytics — EcyPro Admin</title>
+        <title>Dev Analytics — eCyPro Admin</title>
         <meta name="robots" content="noindex,nofollow" />
       </Helmet>
 

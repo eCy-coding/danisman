@@ -1,5 +1,5 @@
 /**
- * EcyPro — Sentry Error Reporting (Backend)
+ * eCyPro — Sentry Error Reporting (Backend)
  *
  * Server-side error tracking middleware and utilities.
  * Uses stub pattern when SENTRY_DSN is not configured.
@@ -123,7 +123,7 @@ export function clientErrorEndpoint() {
     if (process.env.SENTRY_DSN) {
       Sentry.captureMessage(`[Client] ${event.message}`, {
         level: 'error',
-        extra: event as unknown as Record<string, unknown>
+        extra: event as unknown as Record<string, unknown>,
       });
     }
 
@@ -155,13 +155,9 @@ export function getErrorStats() {
     const hour = 60 * 60 * 1000;
     const day = 24 * hour;
 
-    const lastHour = errorBuffer.filter(
-      (e) => new Date(e.timestamp).getTime() > now - hour
-    ).length;
+    const lastHour = errorBuffer.filter((e) => new Date(e.timestamp).getTime() > now - hour).length;
 
-    const last24h = errorBuffer.filter(
-      (e) => new Date(e.timestamp).getTime() > now - day
-    ).length;
+    const last24h = errorBuffer.filter((e) => new Date(e.timestamp).getTime() > now - day).length;
 
     const byStatusCode = errorBuffer.reduce(
       (acc, e) => {
@@ -169,7 +165,7 @@ export function getErrorStats() {
         acc[code] = (acc[code] || 0) + 1;
         return acc;
       },
-      {} as Record<string, number>
+      {} as Record<string, number>,
     );
 
     res.json({

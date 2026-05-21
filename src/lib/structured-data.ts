@@ -41,8 +41,8 @@ export function buildOrganizationSchema(): Record<string, unknown> {
     '@context': 'https://schema.org',
     '@type': 'ProfessionalService',
     '@id': ORG_ID,
-    name: 'EcyPro Premium Consulting',
-    alternateName: 'EcyPro',
+    name: 'eCyPro Premium Consulting',
+    alternateName: 'eCyPro',
     url: SITE_URL,
     logo: {
       '@type': 'ImageObject',
@@ -142,7 +142,7 @@ export function buildArticleSchema(input: ArticleSchemaInput): Record<string, un
     publisher: {
       '@type': 'Organization',
       '@id': ORG_ID,
-      name: 'EcyPro Premium Consulting',
+      name: 'eCyPro Premium Consulting',
       logo: { '@type': 'ImageObject', url: `${SITE_URL}/pwa-512x512.png` },
     },
     ...(input.category ? { articleSection: input.category } : {}),
@@ -182,7 +182,7 @@ export function buildServiceSchema(input: ServiceDetailSchemaInput): Record<stri
     description: input.description,
     serviceType: input.serviceType,
     url: input.url,
-    provider: { '@type': 'Organization', '@id': ORG_ID, name: 'EcyPro Premium Consulting' },
+    provider: { '@type': 'Organization', '@id': ORG_ID, name: 'eCyPro Premium Consulting' },
     areaServed: { '@type': 'Country', name: 'Global' },
   };
 }
@@ -228,7 +228,7 @@ export function buildCaseStudySchema(input: CaseStudySchemaInput): Record<string
     publisher: {
       '@type': 'Organization',
       '@id': ORG_ID,
-      name: 'EcyPro Premium Consulting',
+      name: 'eCyPro Premium Consulting',
       logo: { '@type': 'ImageObject', url: `${SITE_URL}/pwa-512x512.png` },
     },
     ...(input.goLive ? { datePublished: input.goLive } : {}),

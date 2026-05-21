@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# EcyPro — Post-Deploy Health Check
+# eCyPro — Post-Deploy Health Check
 #
 # Validates that a deployment is healthy by checking
 # critical endpoints and response times.
@@ -58,7 +58,7 @@ check_latency() {
 # ─── Run Checks ──────────────────────────────────────────
 
 echo ""
-echo "🏥 EcyPro Post-Deploy Health Check"
+echo "🏥 eCyPro Post-Deploy Health Check"
 echo "   Target: $BASE_URL"
 echo "   Time:   $(date -u +"%Y-%m-%dT%H:%M:%SZ")"
 echo "───────────────────────────────────"

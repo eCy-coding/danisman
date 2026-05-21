@@ -1,4 +1,3 @@
- 
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -28,18 +27,18 @@ if (!fs.existsSync(CONTENT_DIR)) {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const parseFrontmatter = (content: string): { data: any, content: string } => {
+const parseFrontmatter = (content: string): { data: any; content: string } => {
   const match = content.match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/);
   if (!match) {
     return { data: {}, content };
   }
-  
+
   const frontmatterRaw = match[1];
   const body = match[2];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const data: any = {};
-  
-  (frontmatterRaw || '').split('\n').forEach(line => {
+
+  (frontmatterRaw || '').split('\n').forEach((line) => {
     const [key, ...valueParts] = line.split(':');
     if (key && valueParts.length > 0) {
       let value = valueParts.join(':').trim();
@@ -52,16 +51,16 @@ const parseFrontmatter = (content: string): { data: any, content: string } => {
       }
       // Handle array syntax [a, b] fairly simply
       if (value.startsWith('[') && value.endsWith(']')) {
-         data[key.trim()] = value
+        data[key.trim()] = value
           .slice(1, -1)
           .split(',')
-          .map(s => s.trim().replace(/^['"]|['"]$/g, ''));
+          .map((s) => s.trim().replace(/^['"]|['"]$/g, ''));
       } else {
-         data[key.trim()] = value.replace(/^['"]|['"]$/g, '');
+        data[key.trim()] = value.replace(/^['"]|['"]$/g, '');
       }
     }
   });
-  
+
   return { data, content: body || '' };
 };
 
@@ -90,7 +89,7 @@ const extractFromBody = (body: string) => {
     if (!line) continue;
     if (/^---+$/.test(line)) continue;
     if (/^\*\*Kategori:|^\*\*Okuma|^\*\*Yazar:/.test(line)) continue;
-    if (/^[#>*\-]/.test(line)) continue;
+    if (/^[#>*-]/.test(line)) continue;
     excerpt = line.replace(/[*_`]/g, '').slice(0, 220);
     break;
   }
@@ -105,9 +104,9 @@ const extractFromBody = (body: string) => {
 };
 
 const generateBlogIndex = () => {
-  const files = fs.readdirSync(CONTENT_DIR).filter(file => file.endsWith('.mdx'));
+  const files = fs.readdirSync(CONTENT_DIR).filter((file) => file.endsWith('.mdx'));
 
-  const posts: BlogPostMetadata[] = files.map(filename => {
+  const posts: BlogPostMetadata[] = files.map((filename) => {
     const filePath = path.join(CONTENT_DIR, filename);
     const fileContent = fs.readFileSync(filePath, 'utf-8');
     const { data, content: body } = parseFrontmatter(fileContent);
@@ -119,7 +118,7 @@ const generateBlogIndex = () => {
       title: data.title || fallback.title || 'Untitled',
       excerpt: data.excerpt || fallback.excerpt || '',
       date: data.date ? new Date(data.date).toISOString() : new Date().toISOString(),
-      author: data.author || fallback.author || 'EcyPro Analiz Ekibi',
+      author: data.author || fallback.author || 'eCyPro Analiz Ekibi',
       coverImage: data.coverImage || '/images/blog-default.jpg',
       category: data.category || fallback.category || undefined,
       tags: data.tags || [],
@@ -144,4 +143,3 @@ try {
   console.error('❌ Error generating blog index:', error);
   process.exit(1);
 }
-

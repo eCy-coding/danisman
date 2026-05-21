@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# EcyPro — Ortam kurulum scripti
+# eCyPro — Ortam kurulum scripti
 # Çalıştır: bash scripts/setup-env.sh
 # Güvenli: mevcut .env'deki dolu değerlere dokunmaz.
 set -euo pipefail
@@ -8,7 +8,7 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 ENV_FILE="$ROOT/.env"
 EXAMPLE_FILE="$ROOT/.env.example"
 
-echo "=== EcyPro Setup ==="
+echo "=== eCyPro Setup ==="
 
 # ── 1. .env dosyası oluştur ───────────────────────────────
 if [ ! -f "$ENV_FILE" ]; then

@@ -1,5 +1,5 @@
-import { Logger } from "../logger";
-import { OllamaClient, OllamaError, type OllamaChatMessage } from "../ollama-client";
+import { Logger } from '../logger';
+import { OllamaClient, OllamaError, type OllamaChatMessage } from '../ollama-client';
 
 export interface AIResponse {
   text: string;
@@ -19,7 +19,8 @@ class AIEngine {
   private defaultModel: string;
 
   constructor() {
-    this.defaultModel = (import.meta.env.VITE_OLLAMA_DEFAULT_MODEL as string | undefined) ?? 'qwen2.5-coder:14b';
+    this.defaultModel =
+      (import.meta.env.VITE_OLLAMA_DEFAULT_MODEL as string | undefined) ?? 'qwen2.5-coder:14b';
   }
 
   async init(onProgress?: (status: { text: string }) => void): Promise<void> {
@@ -30,13 +31,13 @@ class AIEngine {
     const healthy = await client.isHealthy();
 
     if (healthy) {
-      this.ollama  = client;
-      this.mode    = 'ollama';
+      this.ollama = client;
+      this.mode = 'ollama';
       this.isReady = true;
       onProgress?.({ text: `Engine Ready (Ollama — ${this.defaultModel})` });
       Logger.success(`[The Muse] Ollama engine ready. Model: ${this.defaultModel}`);
     } else {
-      this.mode    = 'mock';
+      this.mode = 'mock';
       this.isReady = true;
       onProgress?.({ text: 'Engine Ready (Mock — Ollama offline)' });
       Logger.info('[The Muse] Ollama unavailable → Mock mode active.');
@@ -48,7 +49,9 @@ class AIEngine {
 
     if (this.mode === 'ollama' && this.ollama) {
       try {
-        const text = await this.ollama.generate(this.defaultModel, prompt, { system: systemPrompt });
+        const text = await this.ollama.generate(this.defaultModel, prompt, {
+          system: systemPrompt,
+        });
         return { text, model: this.defaultModel };
       } catch (err) {
         if (err instanceof OllamaError) {
@@ -89,7 +92,7 @@ class AIEngine {
     const words = this.mockResponse(prompt).split(' ');
     for (const word of words) {
       yield word + ' ';
-      await new Promise(r => setTimeout(r, 30));
+      await new Promise((r) => setTimeout(r, 30));
     }
   }
 
@@ -106,7 +109,7 @@ class AIEngine {
     const words = this.mockResponse(messages.at(-1)?.content ?? '').split(' ');
     for (const word of words) {
       yield word + ' ';
-      await new Promise(r => setTimeout(r, 30));
+      await new Promise((r) => setTimeout(r, 30));
     }
   }
 
@@ -114,12 +117,18 @@ class AIEngine {
     this.defaultModel = model;
   }
 
-  getMode(): AIEngineMode { return this.mode; }
-  getModel(): string      { return this.defaultModel; }
-  isEngineReady(): boolean { return this.isReady; }
+  getMode(): AIEngineMode {
+    return this.mode;
+  }
+  getModel(): string {
+    return this.defaultModel;
+  }
+  isEngineReady(): boolean {
+    return this.isReady;
+  }
 
   private mockResponse(prompt: string): string {
-    return `[EcyPro AI — Mock Mode] Received: "${prompt.slice(0, 60)}...". Connect Ollama for live inference.`;
+    return `[eCyPro AI — Mock Mode] Received: "${prompt.slice(0, 60)}...". Connect Ollama for live inference.`;
   }
 }
 

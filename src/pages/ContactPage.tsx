@@ -29,10 +29,17 @@ export const ContactPage: React.FC = () => {
   return (
     <React.Fragment>
       <Helmet>
-        <title>{t('contact.title') || 'İletişim'} | EcyPro Premium Consulting</title>
+        <title>
+          {lang.startsWith('tr') ? 'Discovery Call & İletişim' : 'Discovery Call & Contact'} |
+          eCyPro
+        </title>
         <meta
           name="description"
-          content="eCyPro ile hemen iletişime geçin. Stratejik büyüme hedefleriniz için profesyonel destek alın."
+          content={
+            lang.startsWith('tr')
+              ? 'Discovery Call rezervasyonu ve doğrudan iletişim — 45 dakikalık ücretsiz strateji görüşmesi. KVKK, EU regülasyon ve dijital dönüşüm pratiği.'
+              : 'Book a Discovery Call or contact us directly — a complimentary 45-minute strategy session. KVKK, EU regulatory, and digital transformation practice.'
+          }
         />
         <link rel="canonical" href="https://ecypro.com/contact" />
       </Helmet>

@@ -1,4 +1,4 @@
-# EcyPro Premium Consulting — ads.txt
+# eCyPro Premium Consulting — ads.txt
 #
 # This site does not currently participate in any programmatic advertising
 # program. The file exists to comply with the IAB Tech Lab spec

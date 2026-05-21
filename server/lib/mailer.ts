@@ -40,7 +40,7 @@ import {
 } from '../emails/templates';
 
 const RESEND_KEY = process.env.RESEND_API_KEY;
-const FROM = process.env.EMAIL_FROM ?? 'EcyPro <noreply@ecypro.com>';
+const FROM = process.env.EMAIL_FROM ?? 'eCyPro <noreply@ecypro.com>';
 
 let resendClient: Resend | null = null;
 

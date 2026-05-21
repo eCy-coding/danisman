@@ -1,5 +1,5 @@
 /**
- * EcyPro — AI (Ollama) Backend Proxy Router
+ * eCyPro — AI (Ollama) Backend Proxy Router
  * Rate-limited, Zod-validated, SSE-streaming proxy to local Ollama.
  */
 
@@ -14,7 +14,7 @@ const router = Router();
 
 const OLLAMA_BASE = (process.env.OLLAMA_BASE_URL ?? 'http://localhost:11434').replace(/\/$/, '');
 const DEFAULT_MODEL = process.env.OLLAMA_DEFAULT_MODEL ?? 'qwen2.5-coder:14b';
-const DEFAULT_TEMP  = parseFloat(process.env.OLLAMA_TEMPERATURE ?? '0.2');
+const DEFAULT_TEMP = parseFloat(process.env.OLLAMA_TEMPERATURE ?? '0.2');
 const REQUEST_TIMEOUT_MS = 120_000;
 
 // ─── Rate Limiters ────────────────────────────────────────
@@ -34,7 +34,7 @@ const aiStreamLimit = createRateLimiter({
 // ─── Zod Schemas ─────────────────────────────────────────
 
 const GenerateSchema = z.object({
-  model:  z.string().min(1).max(100).optional().default(DEFAULT_MODEL),
+  model: z.string().min(1).max(100).optional().default(DEFAULT_MODEL),
   prompt: z.string().min(1).max(32_000),
   system: z.string().max(4_000).optional(),
   temperature: z.number().min(0).max(2).optional().default(DEFAULT_TEMP),
@@ -42,15 +42,15 @@ const GenerateSchema = z.object({
 });
 
 const ChatMessageSchema = z.object({
-  role:    z.enum(['system', 'user', 'assistant']),
+  role: z.enum(['system', 'user', 'assistant']),
   content: z.string().min(1).max(32_000),
 });
 
 const ChatSchema = z.object({
-  model:    z.string().min(1).max(100).optional().default(DEFAULT_MODEL),
+  model: z.string().min(1).max(100).optional().default(DEFAULT_MODEL),
   messages: z.array(ChatMessageSchema).min(1).max(50),
   temperature: z.number().min(0).max(2).optional().default(DEFAULT_TEMP),
-  stream:   z.boolean().optional().default(false),
+  stream: z.boolean().optional().default(false),
 });
 
 // ─── Health: Ollama availability ─────────────────────────
@@ -64,7 +64,7 @@ router.get('/health', async (_req: Request, res: Response): Promise<void> => {
       res.status(503).json({ status: 'ollama_unreachable' });
       return;
     }
-    const data = await resp.json() as { models?: unknown[] };
+    const data = (await resp.json()) as { models?: unknown[] };
     res.json({
       status: 'ok',
       ollamaUrl: OLLAMA_BASE,
@@ -86,7 +86,7 @@ router.get('/models', aiCompletionLimit, async (_req: Request, res: Response): P
       res.status(502).json({ error: 'Ollama unavailable' });
       return;
     }
-    const data = await resp.json() as { models?: unknown[] };
+    const data = (await resp.json()) as { models?: unknown[] };
     res.json({ models: data.models ?? [] });
   } catch (err) {
     logger.error('[ai/models] error', { message: (err as Error).message });
@@ -110,19 +110,19 @@ router.post('/complete', aiCompletionLimit, async (req: Request, res: Response):
   }
 
   const ollamaBody = {
-    model:   parsed.model,
-    prompt:  parsed.prompt,
-    system:  parsed.system,
-    stream:  false,
+    model: parsed.model,
+    prompt: parsed.prompt,
+    system: parsed.system,
+    stream: false,
     options: { temperature: parsed.temperature },
   };
 
   try {
     const resp = await fetch(`${OLLAMA_BASE}/api/generate`, {
-      method:  'POST',
+      method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body:    JSON.stringify(ollamaBody),
-      signal:  AbortSignal.timeout(REQUEST_TIMEOUT_MS),
+      body: JSON.stringify(ollamaBody),
+      signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
     });
 
     if (!resp.ok) {
@@ -131,11 +131,15 @@ router.post('/complete', aiCompletionLimit, async (req: Request, res: Response):
       return;
     }
 
-    const data = await resp.json() as { response: string; eval_count?: number; total_duration?: number };
+    const data = (await resp.json()) as {
+      response: string;
+      eval_count?: number;
+      total_duration?: number;
+    };
     res.json({
-      text:          data.response,
-      model:         parsed.model,
-      eval_count:    data.eval_count,
+      text: data.response,
+      model: parsed.model,
+      eval_count: data.eval_count,
       total_duration: data.total_duration,
     });
   } catch (err) {
@@ -164,18 +168,18 @@ router.post('/chat', aiCompletionLimit, async (req: Request, res: Response): Pro
   }
 
   const ollamaBody = {
-    model:    parsed.model,
+    model: parsed.model,
     messages: parsed.messages,
-    stream:   false,
-    options:  { temperature: parsed.temperature },
+    stream: false,
+    options: { temperature: parsed.temperature },
   };
 
   try {
     const resp = await fetch(`${OLLAMA_BASE}/api/chat`, {
-      method:  'POST',
+      method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body:    JSON.stringify(ollamaBody),
-      signal:  AbortSignal.timeout(REQUEST_TIMEOUT_MS),
+      body: JSON.stringify(ollamaBody),
+      signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
     });
 
     if (!resp.ok) {
@@ -184,10 +188,13 @@ router.post('/chat', aiCompletionLimit, async (req: Request, res: Response): Pro
       return;
     }
 
-    const data = await resp.json() as { message: { role: string; content: string }; eval_count?: number };
+    const data = (await resp.json()) as {
+      message: { role: string; content: string };
+      eval_count?: number;
+    };
     res.json({
-      message:   data.message,
-      model:     parsed.model,
+      message: data.message,
+      model: parsed.model,
       eval_count: data.eval_count,
     });
   } catch (err) {
@@ -211,17 +218,17 @@ router.post('/stream', aiStreamLimit, async (req: Request, res: Response): Promi
     return;
   }
 
-  res.setHeader('Content-Type',  'text/event-stream; charset=utf-8');
+  res.setHeader('Content-Type', 'text/event-stream; charset=utf-8');
   res.setHeader('Cache-Control', 'no-cache');
-  res.setHeader('Connection',    'keep-alive');
+  res.setHeader('Connection', 'keep-alive');
   res.setHeader('X-Accel-Buffering', 'no');
   res.flushHeaders();
 
   const ollamaBody = {
-    model:   parsed.model,
-    prompt:  parsed.prompt,
-    system:  parsed.system,
-    stream:  true,
+    model: parsed.model,
+    prompt: parsed.prompt,
+    system: parsed.system,
+    stream: true,
     options: { temperature: parsed.temperature },
   };
 
@@ -234,10 +241,10 @@ router.post('/stream', aiStreamLimit, async (req: Request, res: Response): Promi
 
   try {
     const resp = await fetch(`${OLLAMA_BASE}/api/generate`, {
-      method:  'POST',
+      method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body:    JSON.stringify(ollamaBody),
-      signal:  AbortSignal.any([controller.signal, AbortSignal.timeout(REQUEST_TIMEOUT_MS)]),
+      body: JSON.stringify(ollamaBody),
+      signal: AbortSignal.any([controller.signal, AbortSignal.timeout(REQUEST_TIMEOUT_MS)]),
     });
 
     if (!resp.ok || !resp.body) {
@@ -246,9 +253,9 @@ router.post('/stream', aiStreamLimit, async (req: Request, res: Response): Promi
       return;
     }
 
-    const reader  = resp.body.getReader();
+    const reader = resp.body.getReader();
     const decoder = new TextDecoder();
-    let   buffer  = '';
+    let buffer = '';
 
     while (true) {
       const { value, done } = await reader.read();
@@ -300,9 +307,9 @@ router.post('/stream/chat', aiStreamLimit, async (req: Request, res: Response): 
     return;
   }
 
-  res.setHeader('Content-Type',  'text/event-stream; charset=utf-8');
+  res.setHeader('Content-Type', 'text/event-stream; charset=utf-8');
   res.setHeader('Cache-Control', 'no-cache');
-  res.setHeader('Connection',    'keep-alive');
+  res.setHeader('Connection', 'keep-alive');
   res.setHeader('X-Accel-Buffering', 'no');
   res.flushHeaders();
 
@@ -314,18 +321,18 @@ router.post('/stream/chat', aiStreamLimit, async (req: Request, res: Response): 
   };
 
   const ollamaBody = {
-    model:    parsed.model,
+    model: parsed.model,
     messages: parsed.messages,
-    stream:   true,
-    options:  { temperature: parsed.temperature },
+    stream: true,
+    options: { temperature: parsed.temperature },
   };
 
   try {
     const resp = await fetch(`${OLLAMA_BASE}/api/chat`, {
-      method:  'POST',
+      method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body:    JSON.stringify(ollamaBody),
-      signal:  AbortSignal.any([controller.signal, AbortSignal.timeout(REQUEST_TIMEOUT_MS)]),
+      body: JSON.stringify(ollamaBody),
+      signal: AbortSignal.any([controller.signal, AbortSignal.timeout(REQUEST_TIMEOUT_MS)]),
     });
 
     if (!resp.ok || !resp.body) {
@@ -334,9 +341,9 @@ router.post('/stream/chat', aiStreamLimit, async (req: Request, res: Response): 
       return;
     }
 
-    const reader  = resp.body.getReader();
+    const reader = resp.body.getReader();
     const decoder = new TextDecoder();
-    let   buffer  = '';
+    let buffer = '';
 
     while (true) {
       const { value, done } = await reader.read();

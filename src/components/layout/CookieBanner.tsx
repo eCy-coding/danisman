@@ -78,13 +78,15 @@ export const CookieBanner: React.FC = () => {
               </Link>
             </p>
             <div className="flex space-x-4 whitespace-nowrap">
-              <button type="button"
+              <button
+                type="button"
                 onClick={() => setShowSettings(true)}
                 className="text-sm font-bold text-slate-400 hover:text-secondary transition-colors px-4 py-2"
               >
                 {COOKIE_BANNER_COPY.settings[lang]}
               </button>
-              <button type="button"
+              <button
+                type="button"
                 onClick={handleAcceptAll}
                 className="btn-premium-gold text-sm font-bold px-8 py-3 rounded-lg transition-colors shadow-md outline-none focus:ring-2 focus:ring-offset-2 focus:ring-secondary"
               >
@@ -108,10 +110,11 @@ export const CookieBanner: React.FC = () => {
               <h3 id={modalTitleId} className="text-xl font-sans font-medium text-[#E3E3E3]">
                 {COOKIE_BANNER_COPY.modalTitle[lang]}
               </h3>
-              <button type="button"
+              <button
+                type="button"
                 onClick={() => setShowSettings(false)}
                 aria-label="Kapat"
-                className="text-slate-400 hover:text-primary"
+                className="min-h-[44px] min-w-[44px] inline-flex items-center justify-center rounded-md text-slate-400 hover:text-primary focus-visible:ring-2 focus-visible:ring-secondary outline-none"
               >
                 <X size={24} aria-hidden="true" />
               </button>
@@ -143,7 +146,11 @@ export const CookieBanner: React.FC = () => {
                     {COOKIE_BANNER_COPY.analyticsDesc[lang]}
                   </p>
                 </div>
-                <label htmlFor={analyticsId} className="relative inline-flex items-center cursor-pointer" aria-label={COOKIE_BANNER_COPY.analytics[lang]}>
+                <label
+                  htmlFor={analyticsId}
+                  className="relative inline-flex items-center cursor-pointer"
+                  aria-label={COOKIE_BANNER_COPY.analytics[lang]}
+                >
                   <input
                     id={analyticsId}
                     type="checkbox"
@@ -153,7 +160,10 @@ export const CookieBanner: React.FC = () => {
                     }
                     className="sr-only peer"
                   />
-                  <div aria-hidden="true" className="w-11 h-6 bg-white/10 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-secondary rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-secondary"></div>
+                  <div
+                    aria-hidden="true"
+                    className="w-11 h-6 bg-white/10 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-secondary rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-secondary"
+                  ></div>
                 </label>
               </div>
 
@@ -166,7 +176,11 @@ export const CookieBanner: React.FC = () => {
                     {COOKIE_BANNER_COPY.marketingDesc[lang]}
                   </p>
                 </div>
-                <label htmlFor={marketingId} className="relative inline-flex items-center cursor-pointer" aria-label={COOKIE_BANNER_COPY.marketing[lang]}>
+                <label
+                  htmlFor={marketingId}
+                  className="relative inline-flex items-center cursor-pointer"
+                  aria-label={COOKIE_BANNER_COPY.marketing[lang]}
+                >
                   <input
                     id={marketingId}
                     type="checkbox"
@@ -176,19 +190,24 @@ export const CookieBanner: React.FC = () => {
                     }
                     className="sr-only peer"
                   />
-                  <div aria-hidden="true" className="w-11 h-6 bg-white/10 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-secondary rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-secondary"></div>
+                  <div
+                    aria-hidden="true"
+                    className="w-11 h-6 bg-white/10 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-secondary rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-secondary"
+                  ></div>
                 </label>
               </div>
             </div>
 
             <div className="flex justify-end gap-3">
-              <button type="button"
+              <button
+                type="button"
                 onClick={handleAcceptAll}
                 className="text-sm font-bold text-slate-400 hover:text-white px-4 py-2"
               >
                 {COOKIE_BANNER_COPY.acceptAll[lang]}
               </button>
-              <button type="button"
+              <button
+                type="button"
                 onClick={handleSavePreferences}
                 className="btn-premium-gold text-sm font-bold px-6 py-3 rounded-lg transition-colors"
               >

@@ -152,7 +152,7 @@ async function ogTemplate(title, subtitle) {
     <rect x="0" y="0" width="12" height="630" fill="${BRAND.accent}"/>
     <text x="80" y="240" font-family="Inter, sans-serif" font-size="58" font-weight="700" fill="${BRAND.foreground}">${escape(title)}</text>
     <text x="80" y="320" font-family="Inter, sans-serif" font-size="32" font-weight="400" fill="#9AA0A6">${escape(subtitle)}</text>
-    <text x="80" y="560" font-family="Inter, sans-serif" font-size="24" font-weight="600" fill="${BRAND.accent}">EcyPro Premium Consulting</text>
+    <text x="80" y="560" font-family="Inter, sans-serif" font-size="24" font-weight="600" fill="${BRAND.accent}">eCyPro Premium Consulting</text>
     <text x="80" y="595" font-family="Inter, sans-serif" font-size="18" font-weight="400" fill="#7C8389">www.ecypro.com</text>
   </svg>`;
   return s(Buffer.from(svg)).png({ compressionLevel: 9 }).toBuffer();
@@ -163,12 +163,12 @@ function escape(str) {
 }
 
 const OG_VARIANTS = [
-  { file: 'og-image.png', title: 'EcyPro Premium Consulting', subtitle: 'Strateji · Yönetim · Veri', dir: PUBLIC_DIR },
+  { file: 'og-image.png', title: 'eCyPro Premium Consulting', subtitle: 'Strateji · Yönetim · Veri', dir: PUBLIC_DIR },
   { file: 'about.png', title: 'Hakkımızda', subtitle: 'Premium danışmanlık ekibimiz', dir: OG_DIR },
   { file: 'services-strategy.png', title: 'Strateji Danışmanlığı', subtitle: 'Vizyondan eyleme', dir: OG_DIR },
   { file: 'services-data.png', title: 'Veri & Analitik', subtitle: 'Karar destek mimarisi', dir: OG_DIR },
   { file: 'services-transform.png', title: 'Dijital Dönüşüm', subtitle: 'Süreç + teknoloji + insan', dir: OG_DIR },
-  { file: 'blog-default.png', title: 'EcyPro Insights', subtitle: 'Yönetim & strateji yazıları', dir: OG_DIR },
+  { file: 'blog-default.png', title: 'eCyPro Insights', subtitle: 'Yönetim & strateji yazıları', dir: OG_DIR },
 ];
 
 async function generateOG() {
@@ -217,7 +217,7 @@ async function validateManifest() {
 
 // ── Main ──────────────────────────────────────────────────────────────────────
 async function main() {
-  console.log('🛠 EcyPro asset pipeline');
+  console.log('🛠 eCyPro asset pipeline');
   console.log(dryRun ? '⚠ dry-run mode (yazma yok)' : '✏ write mode');
 
   const ran = [];

@@ -36,28 +36,23 @@ const PILLARS: Pillar[] = [
     sections: [
       {
         heading: 'Vizyon Mimarı: 3-5 Yıllık Kuzey Yıldızı',
-        body:
-          'Her engagement, stratejik netlik üretmekle başlar. "Nerede oynuyoruz" sorusunu yanıtlarız: hangi pazarlarda, hangi müşteri segmentleriyle, hangi değer önerisiyle. Üst yönetimle birlikte rekabet sınırlarını tanımlar, organizasyonun mevcut konumundan hedef konuma geçişin temel varsayımlarını masaya yatırırız. Çıktı: yönetim kurulu onaylı kuzey yıldızı dokümanı.',
+        body: 'Her engagement, stratejik netlik üretmekle başlar. "Nerede oynuyoruz" sorusunu yanıtlarız: hangi pazarlarda, hangi müşteri segmentleriyle, hangi değer önerisiyle. Üst yönetimle birlikte rekabet sınırlarını tanımlar, organizasyonun mevcut konumundan hedef konuma geçişin temel varsayımlarını masaya yatırırız. Çıktı: yönetim kurulu onaylı kuzey yıldızı dokümanı.',
       },
       {
         heading: 'Strateji Köprüsü: OKR + Quarterly Cadence',
-        body:
-          'Vizyon güzeldir, uygulama zordur. Strateji Köprüsü katmanı, kuzey yıldızı ile çeyreklik hedefler arasındaki köprüyü kurar. OKR setting, quarterly cadence ve karar mercii sorumluluk haritası bu katmanda netleşir. Hangi kararın kim tarafından verileceğini, hangi metrik eşiğinde eskalasyon olacağını birlikte tasarlarız.',
+        body: 'Vizyon güzeldir, uygulama zordur. Strateji Köprüsü katmanı, kuzey yıldızı ile çeyreklik hedefler arasındaki köprüyü kurar. OKR setting, quarterly cadence ve karar mercii sorumluluk haritası bu katmanda netleşir. Hangi kararın kim tarafından verileceğini, hangi metrik eşiğinde eskalasyon olacağını birlikte tasarlarız.',
       },
       {
         heading: 'Sonuç Mühendisliği: KPI Baseline + Ölçüm Sistemi',
-        body:
-          'Strateji ölçülemiyorsa stratejik değildir. KPI tasarımı, baseline ölçümü ve metric instrumentation\'a odaklanır. İlk haftada mevcut performansın baseline\'ını çıkarır, hangi metriklerin gerçekten engagement\'i temsil ettiğini birlikte seçeriz.',
+        body: "Strateji ölçülemiyorsa stratejik değildir. KPI tasarımı, baseline ölçümü ve metric instrumentation'a odaklanır. İlk haftada mevcut performansın baseline'ını çıkarır, hangi metriklerin gerçekten engagement'i temsil ettiğini birlikte seçeriz.",
       },
       {
         heading: 'Kültür Sürdürülebilirliği: Değişim Yönetimi',
-        body:
-          'En iyi stratejiler kültür uyumsuzluğunda erir. Yönetim toplantısı ritüellerini, performans konuşmalarının dili ve karar verme protokollerini engagement boyunca gözlemleyip rafine ederiz. Yöneticilere bire bir koçluk + "decision sprint" formatı.',
+        body: 'En iyi stratejiler kültür uyumsuzluğunda erir. Yönetim toplantısı ritüellerini, performans konuşmalarının dili ve karar verme protokollerini engagement boyunca gözlemleyip rafine ederiz. Yöneticilere bire bir koçluk + "decision sprint" formatı.',
       },
       {
-        heading: 'Anonim Sonuç Loop\'u: Sürekli Öğrenme',
-        body:
-          'Engagement\'in kapanışı, öğrenmenin başlangıcıdır. NDA çerçevesinde standartlaştırılmış retrospektif yapı kullanırız. 6 ay sonra anonim takip; öğrenmeler gelecek engagement\'lere yansır.',
+        heading: "Anonim Sonuç Loop'u: Sürekli Öğrenme",
+        body: "Engagement'in kapanışı, öğrenmenin başlangıcıdır. NDA çerçevesinde standartlaştırılmış retrospektif yapı kullanırız. 6 ay sonra anonim takip; öğrenmeler gelecek engagement'lere yansır.",
       },
     ],
     relatedServiceSlugs: ['strategic-transformation', 'mergers-acquisitions', 'family-business'],
@@ -66,24 +61,22 @@ const PILLARS: Pillar[] = [
   {
     slug: 'family-business',
     title: 'Aile Şirketi Yönetişimi · Nesilden Nesle',
-    subtitle: 'Türkiye iş ekonomisinin bel kemiği aile şirketlerinde kurumsallaşmayı birlikte tasarlıyoruz.',
+    subtitle:
+      'Türkiye iş ekonomisinin bel kemiği aile şirketlerinde kurumsallaşmayı birlikte tasarlıyoruz.',
     intro:
-      'Türk ekonomisinin %85+\'ı aile şirketleridir. Kurucu nesil emekliliğe yaklaştıkça, 2. ve 3. nesil arası yetki devri kritikleşir. Aile = şirket = kurucu denkleminden, profesyonel yönetim + aile konseyi + yazılı governance modeline geçiş, en zorlu transition deneyimi. Aile Anayasası engagement\'larımız tam bu süreci yapılandırılmış hale getirir.',
+      "Türk ekonomisinin %85+'ı aile şirketleridir. Kurucu nesil emekliliğe yaklaştıkça, 2. ve 3. nesil arası yetki devri kritikleşir. Aile = şirket = kurucu denkleminden, profesyonel yönetim + aile konseyi + yazılı governance modeline geçiş, en zorlu transition deneyimi. Aile Anayasası engagement'larımız tam bu süreci yapılandırılmış hale getirir.",
     sections: [
       {
         heading: 'Aile Anayasası Anatomisi',
-        body:
-          'Family mission, values, ownership policy, governance — 40 sayfa civarı doküman. Aile üyeleri ile iteratif review + hukuki validation ile finalize edilir. Hisse devri, kar payı, akraba istihdamı yazılı kurallarla netleşir.',
+        body: 'Family mission, values, ownership policy, governance — 40 sayfa civarı doküman. Aile üyeleri ile iteratif review + hukuki validation ile finalize edilir. Hisse devri, kar payı, akraba istihdamı yazılı kurallarla netleşir.',
       },
       {
         heading: 'Family Council vs Yönetim Kurulu',
-        body:
-          'İki ayrı yapı. Family Council aile üyelerinin "owner" rolündeki forumu. Yönetim Kurulu şirketin operasyonel karar mercii. Karışıklığa son: karar hakları matrisi (decision rights) bu sınırı netleştirir.',
+        body: 'İki ayrı yapı. Family Council aile üyelerinin "owner" rolündeki forumu. Yönetim Kurulu şirketin operasyonel karar mercii. Karışıklığa son: karar hakları matrisi (decision rights) bu sınırı netleştirir.',
       },
       {
         heading: 'Succession Planlaması (3-7 Yıllık)',
-        body:
-          'Yetki devir takvimi, kuşak transfer mentor programı, profesyonel CEO/CFO interview desteği. Acele değil, planlı geçiş. Kurucu hala aktif iken next-gen rotasyonu başlar.',
+        body: 'Yetki devir takvimi, kuşak transfer mentor programı, profesyonel CEO/CFO interview desteği. Acele değil, planlı geçiş. Kurucu hala aktif iken next-gen rotasyonu başlar.',
       },
     ],
     relatedServiceSlugs: ['family-business', 'hr-transformation', 'mergers-acquisitions'],
@@ -94,22 +87,19 @@ const PILLARS: Pillar[] = [
     title: 'Operasyonel Mükemmellik · Lean Six Sigma + Verimlilik',
     subtitle: 'OEE, cycle time, lead time metriklerinde %15-40 iyileşme — sahaya inerek.',
     intro:
-      'Maliyet yapısını sahaya inerek söker, operasyonel kayıpları sistematik tespit ederiz. Gemba walk, Value Stream Mapping, kaizen sprint\'leri, Six Sigma DMAIC projeler. Sürdürülebilirliği sağlamak için ekibe Green Belt eğitim + daily management board kurulumu.',
+      "Maliyet yapısını sahaya inerek söker, operasyonel kayıpları sistematik tespit ederiz. Gemba walk, Value Stream Mapping, kaizen sprint'leri, Six Sigma DMAIC projeler. Sürdürülebilirliği sağlamak için ekibe Green Belt eğitim + daily management board kurulumu.",
     sections: [
       {
         heading: 'Gemba Walk + Value Stream Mapping',
-        body:
-          'Sahada bizzat akış izleme. Current state value stream haritası. 7 müda (israf) tanımlama: aşırı üretim, bekleme, transport, aşırı işleme, envanter, hareket, kusur. Future state target çiziminde sektörel benchmark kullanırız.',
+        body: 'Sahada bizzat akış izleme. Current state value stream haritası. 7 müda (israf) tanımlama: aşırı üretim, bekleme, transport, aşırı işleme, envanter, hareket, kusur. Future state target çiziminde sektörel benchmark kullanırız.',
       },
       {
-        heading: 'Kaizen Sprint\'leri (6-8 hafta)',
-        body:
-          'Haftalık 2-3 günlük kaizen workshop\'ları. SMED ile setup time azaltma, 5S ile alan organizasyonu, kanban ile pull production, poka-yoke ile hata önleme.',
+        heading: "Kaizen Sprint'leri (6-8 hafta)",
+        body: "Haftalık 2-3 günlük kaizen workshop'ları. SMED ile setup time azaltma, 5S ile alan organizasyonu, kanban ile pull production, poka-yoke ile hata önleme.",
       },
       {
         heading: 'Sürdürülebilirlik Sistemleri',
-        body:
-          'Daily management board, ekip liderlerine moderasyon eğitimi, KPI dashboard kurulumu. Engagement bittikten 6-12 ay sonra metric tutarsa metodoloji kalıcıdır.',
+        body: 'Daily management board, ekip liderlerine moderasyon eğitimi, KPI dashboard kurulumu. Engagement bittikten 6-12 ay sonra metric tutarsa metodoloji kalıcıdır.',
       },
     ],
     relatedServiceSlugs: ['operational-excellence', 'digital-strategy', 'ai-analytics'],
@@ -118,24 +108,22 @@ const PILLARS: Pillar[] = [
   {
     slug: 'digital-ai',
     title: 'Dijital & AI Dönüşümü · Tool Değil Strateji',
-    subtitle: 'AI/dijital tool seçimi değil, strateji-süreç-teknoloji-kültür tetragramının uyumlandırılması.',
+    subtitle:
+      'AI/dijital tool seçimi değil, strateji-süreç-teknoloji-kültür tetragramının uyumlandırılması.',
     intro:
-      'Dijital dönüşüm projelerinin %70\'i başarısız olur — vendor seçimi değil organizasyon hazır olmadığı için. ERP/CRM 18 ay sonra %40 adoption, RPA pilotları 6 ay sonra unutuluyor, AI hype içinde use-case seçimi yapılmıyor. Vendor-agnostic yaklaşımla strateji + change management + operating model.',
+      "Dijital dönüşüm projelerinin %70'i başarısız olur — vendor seçimi değil organizasyon hazır olmadığı için. ERP/CRM 18 ay sonra %40 adoption, RPA pilotları 6 ay sonra unutuluyor, AI hype içinde use-case seçimi yapılmıyor. Vendor-agnostic yaklaşımla strateji + change management + operating model.",
     sections: [
       {
         heading: 'Dijital Olgunluk Audit (6 Boyut)',
-        body:
-          'Strateji, süreç, teknoloji, veri, kültür, organizasyon. Sektörel benchmark. 3-yıllık teknoloji vizyonu; build-buy-partner kararları.',
+        body: 'Strateji, süreç, teknoloji, veri, kültür, organizasyon. Sektörel benchmark. 3-yıllık teknoloji vizyonu; build-buy-partner kararları.',
       },
       {
         heading: 'AI Use-Case Portfolio',
-        body:
-          'Impact × feasibility matrisi. 5-10 use-case listesi. 2-3 pilot ML/GenAI projesi production-ready. MLOps pipeline (versioning + monitoring + retraining).',
+        body: 'Impact × feasibility matrisi. 5-10 use-case listesi. 2-3 pilot ML/GenAI projesi production-ready. MLOps pipeline (versioning + monitoring + retraining).',
       },
       {
         heading: 'IT Operating Model',
-        body:
-          'Centralized vs federated vs hybrid. CTO/CDO C-level decision table\'da. Change management plan + capability building.',
+        body: "Centralized vs federated vs hybrid. CTO/CDO C-level decision table'da. Change management plan + capability building.",
       },
     ],
     relatedServiceSlugs: ['digital-strategy', 'ai-analytics', 'data-governance'],
@@ -143,25 +131,22 @@ const PILLARS: Pillar[] = [
   },
   {
     slug: 'sustainability-esg',
-    title: 'Sürdürülebilirlik & ESG · CBAM\'a Hazır Strateji',
+    title: "Sürdürülebilirlik & ESG · CBAM'a Hazır Strateji",
     subtitle: 'AB Yeşil Mutabakatı 2026 takvimine sektörünüzü hazırlıyoruz.',
     intro:
-      'CBAM (Karbon Sınırı Düzenleme Mekanizması) 2026\'da tam aktif. AB pazarına ihracatçı Türk üreticilerin %42\'si karbon-yoğun sektörlerde — etki simülasyonu yapılmamış. Müşteriden Scope 3 emisyon talep ediliyor ama ölçüm metodolojisi belirsiz. ESG strategy engagement\'larımız ile materiality, karbon envanteri, decarbonization roadmap, yeşil finansman.',
+      "CBAM (Karbon Sınırı Düzenleme Mekanizması) 2026'da tam aktif. AB pazarına ihracatçı Türk üreticilerin %42'si karbon-yoğun sektörlerde — etki simülasyonu yapılmamış. Müşteriden Scope 3 emisyon talep ediliyor ama ölçüm metodolojisi belirsiz. ESG strategy engagement'larımız ile materiality, karbon envanteri, decarbonization roadmap, yeşil finansman.",
     sections: [
       {
         heading: 'Materiality Assessment',
-        body:
-          'Hangi ESG konuları sektör + paydaş için kritik. Öncelik haritası. GRI / SASB / TCFD framework seçimi.',
+        body: 'Hangi ESG konuları sektör + paydaş için kritik. Öncelik haritası. GRI / SASB / TCFD framework seçimi.',
       },
       {
         heading: 'Karbon Envanteri (Scope 1+2+3)',
-        body:
-          'ISO 14064 / GHG Protocol uyumlu. Scope 3 tedarikçi data toplama. CBAM etki simülasyonu — ihracat maliyetine etki.',
+        body: 'ISO 14064 / GHG Protocol uyumlu. Scope 3 tedarikçi data toplama. CBAM etki simülasyonu — ihracat maliyetine etki.',
       },
       {
         heading: 'Yeşil Finansman Erişimi',
-        body:
-          'Sustainable bond, green loan, EU Horizon hibe. Yıllık ESG raporu uluslararası standartlarda hazırlanır.',
+        body: 'Sustainable bond, green loan, EU Horizon hibe. Yıllık ESG raporu uluslararası standartlarda hazırlanır.',
       },
     ],
     relatedServiceSlugs: ['esg-strategy', 'investment-incentives', 'macro-risk'],
@@ -191,10 +176,10 @@ export const PillarPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-neutral text-slate-300">
       <Helmet>
-        <title>{`${pillar.title} | EcyPro Premium Consulting`}</title>
+        <title>{`${pillar.title} | eCyPro Premium Consulting`}</title>
         <meta name="description" content={pillar.subtitle} />
         <link rel="canonical" href={pageUrl} />
-        <meta property="og:title" content={`${pillar.title} | EcyPro`} />
+        <meta property="og:title" content={`${pillar.title} | eCyPro`} />
         <meta property="og:description" content={pillar.subtitle} />
         <meta property="og:url" content={pageUrl} />
         <meta property="og:type" content="article" />
@@ -205,7 +190,9 @@ export const PillarPage: React.FC = () => {
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_50%_at_50%_-10%,rgba(37,99,235,0.12),transparent)] pointer-events-none" />
         <div className="relative max-w-4xl mx-auto">
           <nav className="text-sm text-slate-500 mb-8" aria-label="Breadcrumb">
-            <Link to="/" className="hover:text-secondary transition-colors">Anasayfa</Link>
+            <Link to="/" className="hover:text-secondary transition-colors">
+              Anasayfa
+            </Link>
             <span className="mx-2 text-slate-700">/</span>
             <span className="text-slate-300">Pillar</span>
             <span className="mx-2 text-slate-700">/</span>
@@ -231,7 +218,9 @@ export const PillarPage: React.FC = () => {
               <div className="text-xs font-bold uppercase tracking-widest text-secondary mb-2">
                 Bölüm {i + 1}
               </div>
-              <h2 className="text-2xl md:text-3xl font-serif font-bold text-white mb-4">{s.heading}</h2>
+              <h2 className="text-2xl md:text-3xl font-serif font-bold text-white mb-4">
+                {s.heading}
+              </h2>
               <p className="text-slate-300 leading-relaxed">{s.body}</p>
             </article>
           ))}
@@ -241,7 +230,9 @@ export const PillarPage: React.FC = () => {
       {services.length > 0 && (
         <section className="py-12 px-6 md:px-12 border-t border-white/5 bg-white/[0.02]">
           <div className="max-w-6xl mx-auto">
-            <h2 className="text-2xl md:text-3xl font-serif font-bold text-white mb-8">İlgili Hizmetlerimiz</h2>
+            <h2 className="text-2xl md:text-3xl font-serif font-bold text-white mb-8">
+              İlgili Hizmetlerimiz
+            </h2>
             <div className="grid md:grid-cols-3 gap-5">
               {services.map((sv) => (
                 <Link
@@ -249,8 +240,12 @@ export const PillarPage: React.FC = () => {
                   to={sv.link}
                   className="group p-6 bg-white/5 border border-white/10 rounded-2xl hover:border-secondary/40 transition-all"
                 >
-                  <h3 className="text-lg font-bold text-white mb-3 group-hover:text-secondary transition-colors">{sv.title}</h3>
-                  <p className="text-slate-400 text-sm leading-relaxed mb-4 line-clamp-3">{sv.description}</p>
+                  <h3 className="text-lg font-bold text-white mb-3 group-hover:text-secondary transition-colors">
+                    {sv.title}
+                  </h3>
+                  <p className="text-slate-400 text-sm leading-relaxed mb-4 line-clamp-3">
+                    {sv.description}
+                  </p>
                   <span className="inline-flex items-center gap-1 text-xs text-secondary font-semibold">
                     Detayları gör <ArrowRight size={12} />
                   </span>
@@ -263,9 +258,12 @@ export const PillarPage: React.FC = () => {
 
       <section className="py-20 px-6 md:px-12 border-t border-white/5 bg-gradient-to-b from-transparent to-secondary/[0.04]">
         <div className="max-w-3xl mx-auto text-center">
-          <h2 className="text-3xl md:text-4xl font-serif font-bold text-white mb-5">Discovery Call ile başlayalım</h2>
+          <h2 className="text-3xl md:text-4xl font-serif font-bold text-white mb-5">
+            Discovery Call ile başlayalım
+          </h2>
           <p className="text-slate-400 mb-10 leading-relaxed text-lg">
-            45 dakikalık ücretsiz keşif görüşmesi; bu pillar kapsamında bir engagement değerlendirmesi.
+            45 dakikalık ücretsiz keşif görüşmesi; bu pillar kapsamında bir engagement
+            değerlendirmesi.
           </p>
           <Link
             to="/contact"

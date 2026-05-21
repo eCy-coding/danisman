@@ -24,8 +24,11 @@ export const CaseStudyDetailPage: React.FC = () => {
   return (
     <React.Fragment>
       <Helmet>
-        <title>{`${study.title} | EcyPro Case Study`}</title>
-        <meta name="description" content={`${study.title} — ${study.client}. Result: ${study.result}.`} />
+        <title>{`${study.title} | eCyPro Case Study`}</title>
+        <meta
+          name="description"
+          content={`${study.title} — ${study.client}. Result: ${study.result}.`}
+        />
         <link rel="canonical" href={`https://ecypro.com/case-studies/${study.slug}`} />
       </Helmet>
 
@@ -53,11 +56,25 @@ export const CaseStudyDetailPage: React.FC = () => {
           <FadeIn>
             <nav aria-label="Breadcrumb" className="mb-6">
               <ol className="flex items-center gap-2 text-sm text-slate-400">
-                <li><Link to="/" className="hover:text-white transition-colors">Home</Link></li>
-                <li aria-hidden="true" className="text-slate-600">/</li>
-                <li><Link to="/case-studies" className="hover:text-white transition-colors">Case Studies</Link></li>
-                <li aria-hidden="true" className="text-slate-600">/</li>
-                <li aria-current="page" className="text-white truncate max-w-xs">{study.title}</li>
+                <li>
+                  <Link to="/" className="hover:text-white transition-colors">
+                    Home
+                  </Link>
+                </li>
+                <li aria-hidden="true" className="text-slate-600">
+                  /
+                </li>
+                <li>
+                  <Link to="/case-studies" className="hover:text-white transition-colors">
+                    Case Studies
+                  </Link>
+                </li>
+                <li aria-hidden="true" className="text-slate-600">
+                  /
+                </li>
+                <li aria-current="page" className="text-white truncate max-w-xs">
+                  {study.title}
+                </li>
               </ol>
             </nav>
 
@@ -148,7 +165,8 @@ export const CaseStudyDetailPage: React.FC = () => {
               Ready for similar results?
             </h2>
             <p className="text-slate-300 mb-6 max-w-xl mx-auto">
-              Book a 15-minute strategy call to see how we can replicate this transformation for your organization.
+              Book a 15-minute strategy call to see how we can replicate this transformation for
+              your organization.
             </p>
             <Link
               to="/contact"

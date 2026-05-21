@@ -156,7 +156,7 @@ const nonBlockingCssPlugin = {
           `<link rel="preload" as="style" href="${href}" ${attrs} onload="this.onload=null;this.rel='stylesheet'">` +
           `<noscript><link rel="stylesheet" href="${href}" ${attrs}></noscript>`
         );
-      }
+      },
     );
   },
 };
@@ -351,8 +351,8 @@ export default defineConfig(({ mode }) => {
           // start_url with utm tagging, orientation, prefer_related_applications,
           // and a separate maskable icon (Chromium-recommended split from any).
           id: '/',
-          name: 'EcyPro Premium Consulting',
-          short_name: 'EcyPro',
+          name: 'eCyPro Premium Consulting',
+          short_name: 'eCyPro',
           description:
             'Yüksek performanslı yönetim danışmanlığı — KPI dashboard, oturum planlama ve uzman içerik tek panoda.',
           lang: 'tr',
@@ -469,7 +469,7 @@ export default defineConfig(({ mode }) => {
             }
             return 'assets/[name]-[hash][extname]';
           },
-          chunkFileNames: (chunkInfo: { name?: string }) => {
+          chunkFileNames: (_chunkInfo: { name?: string }) => {
             // P44: lp.js + lc.js had stable non-hashed names which let Vercel's
             // edge cache pin a stale response (wrong MIME type) and break
             // dynamic import('/assets/lp.js') for every visitor. Hash both so

@@ -258,7 +258,7 @@ def generate_html(reports: list[LHReport], output_path: str) -> None:
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lighthouse CI Raporu — EcyPro</title>
+  <title>Lighthouse CI Raporu — eCyPro</title>
   <style>
     *, *::before, *::after {{ box-sizing: border-box; margin: 0; padding: 0 }}
     body {{ font-family: system-ui, sans-serif; background: #0f172a; color: #e2e8f0; padding: 2rem }}
@@ -282,7 +282,7 @@ def generate_html(reports: list[LHReport], output_path: str) -> None:
   </style>
 </head>
 <body>
-  <h1>⚙️ Lighthouse CI Raporu — EcyPro</h1>
+  <h1>⚙️ Lighthouse CI Raporu — eCyPro</h1>
   <div class="meta">Oluşturulma: {datetime.now().strftime("%Y-%m-%d %H:%M")} | {len(reports)} rapor | istek5.txt Pane 7</div>
   <table>
     <thead>

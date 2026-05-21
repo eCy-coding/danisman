@@ -1,5 +1,5 @@
 /**
- * EcyPro — Database Seed Script
+ * eCyPro — Database Seed Script
  *
  * Seeds the PostgreSQL database with initial admin user,
  * sample services, and demo analytics data.
@@ -56,7 +56,7 @@ async function main() {
       },
       create: {
         email: adminEmail,
-        name: 'EcyPro Admin',
+        name: 'eCyPro Admin',
         passwordHash: hashPassword(adminPassword),
         role: 'ADMIN',
         emailVerified: true,

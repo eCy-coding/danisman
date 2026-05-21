@@ -12,14 +12,14 @@
  *   node scripts/nlm-sync.mjs --dry-run     # preview only
  *   node scripts/nlm-sync.mjs --type=blog   # blog only
  *
- * Notebook: "EcyPro Premium Consulting Corpus"
+ * Notebook: "eCyPro Premium Consulting Corpus"
  * Sources: 20 blog MDX + 10 case studies + 24 service descriptions + audit docs
  */
 import { execSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 
-const NOTEBOOK_NAME = 'EcyPro Premium Consulting Corpus';
+const NOTEBOOK_NAME = 'eCyPro Premium Consulting Corpus';
 const ROOT = path.resolve(import.meta.dirname, '..');
 const DRY = process.argv.includes('--dry-run');
 const TYPE_FILTER = process.argv.find((a) => a.startsWith('--type='))?.split('=')[1];

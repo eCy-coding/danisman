@@ -104,7 +104,7 @@ async function watchDir(dir: string, taskName: string): Promise<void> {
 }
 
 async function main(): Promise<void> {
-  log('info', '🔎 EcyPro SEO Watcher başlatılıyor...');
+  log('info', '🔎 eCyPro SEO Watcher başlatılıyor...');
   await Promise.all([watchDir(BLOG_DIR, 'blog'), watchDir(PAGES_DIR, 'pages')]);
   log('info', 'tetikleyiciler: gen:sitemap, gen:rss, audit:canonical');
   log('info', 'CTRL-C ile çıkış');

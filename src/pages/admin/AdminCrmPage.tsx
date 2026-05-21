@@ -26,7 +26,7 @@ export const AdminCrmPage: React.FC = () => {
   return (
     <>
       <Helmet>
-        <title>CRM — EcyPro Admin</title>
+        <title>CRM — eCyPro Admin</title>
         <meta name="robots" content="noindex,nofollow" />
       </Helmet>
 

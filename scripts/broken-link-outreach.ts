@@ -4,7 +4,7 @@
  *
  * Strategy:
  *   1. Scrape target domains for broken links (HTTP 404/410/5xx) pointing to
- *      content EcyPro has or can create
+ *      content eCyPro has or can create
  *   2. Generate personalized outreach email for each broken link found
  *   3. Export to CSV for CRM import
  *
@@ -16,7 +16,7 @@
  *     1. Fetch sitemap/page list
  *     2. Check all outbound links (HEAD request, follow redirects)
  *     3. Identify 4xx/5xx responses
- *     4. Match broken content to EcyPro's topic areas
+ *     4. Match broken content to eCyPro's topic areas
  *     5. Generate replacement link suggestion
  *
  * Usage:
@@ -35,7 +35,7 @@ import { fileURLToPath } from 'url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
 
-// ─── EcyPro content map for replacement suggestions ───────
+// ─── eCyPro content map for replacement suggestions ───────
 
 const ECYPRO_CONTENT_MAP: Record<string, { title: string; url: string; keywords: string[] }> = {
   'digital-transformation': {
@@ -92,7 +92,7 @@ function checkUrl(url: string, timeoutMs = 8000): Promise<CheckResult> {
   });
 }
 
-// ─── Find matching EcyPro replacement content ─────────────
+// ─── Find matching eCyPro replacement content ─────────────
 
 function findReplacement(brokenUrl: string): (typeof ECYPRO_CONTENT_MAP)[string] | null {
   const urlLower = brokenUrl.toLowerCase();
@@ -137,7 +137,7 @@ Would you consider updating the link? Happy to answer any questions.
 
 Best regards,
 [Name]
-EcyPro Premium Consulting | ecypro.com
+eCyPro Premium Consulting | ecypro.com
 `.trim();
 }
 

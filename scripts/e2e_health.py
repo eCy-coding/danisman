@@ -389,7 +389,7 @@ def generate_html(report: HealthReport, output_path: str) -> None:
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>EcyPro E2E Sağlık Dashboard</title>
+  <title>eCyPro E2E Sağlık Dashboard</title>
   <style>
     *, *::before, *::after {{ box-sizing: border-box; margin: 0; padding: 0 }}
     body {{
@@ -450,7 +450,7 @@ def generate_html(report: HealthReport, output_path: str) -> None:
 <body>
   <header>
     <span style="font-size:1.5rem">🏥</span>
-    <h1>EcyPro E2E Sağlık Dashboard</h1>
+    <h1>eCyPro E2E Sağlık Dashboard</h1>
     <span class="ts">{report['timestamp']}</span>
   </header>
   <main>
@@ -524,7 +524,7 @@ def generate_html(report: HealthReport, output_path: str) -> None:
 
 def main() -> None:
     parser = argparse.ArgumentParser(
-        description="EcyPro E2E Sağlık İzleyicisi",
+        description="eCyPro E2E Sağlık İzleyicisi",
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
     parser.add_argument("--output", "-o", help="HTML dashboard çıktı yolu",

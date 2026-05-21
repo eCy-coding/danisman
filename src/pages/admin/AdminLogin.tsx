@@ -97,7 +97,7 @@ export const AdminLoginPage: React.FC = () => {
             <ShieldCheck className="text-secondary w-8 h-8" />
           </div>
           <h1 className="text-2xl font-serif text-white tracking-wide">
-            EcyPro<span className="text-secondary">.</span>Control
+            eCyPro<span className="text-secondary">.</span>Control
           </h1>
           <p className="text-slate-400 text-sm mt-2 font-mono">
             {step === 'password' ? 'Admin Authentication' : '2-Factor Verification'}

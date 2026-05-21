@@ -1,5 +1,5 @@
 /**
- * EcyPro — Security Middleware
+ * eCyPro — Security Middleware
  *
  * Production security headers, request ID generation,
  * and structured request logging.
@@ -32,10 +32,7 @@ export function securityHeaders(req: Request, res: Response, next: NextFunction)
   }
 
   // CSP for API (restrictive)
-  res.setHeader(
-    'Content-Security-Policy',
-    "default-src 'none'; frame-ancestors 'none'"
-  );
+  res.setHeader('Content-Security-Policy', "default-src 'none'; frame-ancestors 'none'");
 
   next();
 }
@@ -91,7 +88,8 @@ export function structuredLogger(req: Request, res: Response, next: NextFunction
         Sentry.addBreadcrumb({
           category: 'http',
           type: 'http',
-          level: logData.statusCode >= 500 ? 'error' : logData.statusCode >= 400 ? 'warning' : 'info',
+          level:
+            logData.statusCode >= 500 ? 'error' : logData.statusCode >= 400 ? 'warning' : 'info',
           data: {
             url: req.originalUrl ?? req.url,
             method: logData.method,

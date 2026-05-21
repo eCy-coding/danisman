@@ -293,9 +293,10 @@ export const MEGA_MENUS = {
 // E.164 format: +905417143000 (Türkiye mobil) — tel: link compatible.
 // Display format: +90 541 714 30 00 (insanlar için okunabilir).
 // WhatsApp deep link: wa.me/<digits-only> + URL-encoded greeting.
-const ENV_PHONE = (typeof import.meta !== 'undefined' && import.meta.env?.VITE_CONTACT_PHONE)
-  ? String(import.meta.env.VITE_CONTACT_PHONE).trim()
-  : '';
+const ENV_PHONE =
+  typeof import.meta !== 'undefined' && import.meta.env?.VITE_CONTACT_PHONE
+    ? String(import.meta.env.VITE_CONTACT_PHONE).trim()
+    : '';
 const PHONE_E164 = ENV_PHONE || '+905417143000';
 const PHONE_DISPLAY = '+90 541 714 30 00';
 const WHATSAPP_DEEP_LINK = `https://wa.me/${PHONE_E164.replace(/[^0-9]/g, '')}?text=${encodeURIComponent('Merhaba eCyPro, web siteniz üzerinden ulaşıyorum.')}`;
@@ -320,12 +321,12 @@ export const CONTACT_CONFIG = {
 
 export const FOOTER_COPY = {
   copyright: {
-    tr: '© 2026 EcyPro Consulting. Tüm hakları saklıdır.',
-    en: '© 2026 EcyPro Consulting. All rights reserved.',
+    tr: '© 2026 eCyPro Consulting. Tüm hakları saklıdır.',
+    en: '© 2026 eCyPro Consulting. All rights reserved.',
   },
   disclaimer: {
-    tr: 'EcyPro, stratejik yönetim ve dijital dönüşüm alanında uzmanlaşmış global bir danışmanlık firmasıdır.',
-    en: 'EcyPro is a global consulting firm specializing in strategic management and digital transformation.',
+    tr: 'eCyPro, stratejik yönetim ve dijital dönüşüm alanında uzmanlaşmış global bir danışmanlık firmasıdır.',
+    en: 'eCyPro is a global consulting firm specializing in strategic management and digital transformation.',
   },
 
   companyTitle: { tr: 'Şirket', en: 'Company' },
@@ -357,8 +358,8 @@ export const FOOTER_COPY = {
   },
   // Added missing keys
   description: {
-    tr: 'EcyPro, stratejik yönetim ve dijital dönüşüm alanında uzmanlaşmış global bir danışmanlık firmasıdır.',
-    en: 'EcyPro is a global consulting firm specializing in strategic management and digital transformation.',
+    tr: 'eCyPro, stratejik yönetim ve dijital dönüşüm alanında uzmanlaşmış global bir danışmanlık firmasıdır.',
+    en: 'eCyPro is a global consulting firm specializing in strategic management and digital transformation.',
   },
   events: { tr: 'Etkinlikler', en: 'Events' },
   corporateTitle: { tr: 'Kurumsal', en: 'Corporate' },

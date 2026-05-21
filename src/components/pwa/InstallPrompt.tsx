@@ -43,7 +43,8 @@ function shouldShowYet(): boolean {
     }
     // Engagement criteria
     const count = Number.parseInt(localStorage.getItem(PAGEVIEW_KEY) ?? '0', 10) || 0;
-    const firstView = Number.parseInt(localStorage.getItem(FIRST_VIEW_KEY) ?? '0', 10) || Date.now();
+    const firstView =
+      Number.parseInt(localStorage.getItem(FIRST_VIEW_KEY) ?? '0', 10) || Date.now();
     const elapsed = Date.now() - firstView;
     return count >= ENGAGEMENT_MIN_PAGEVIEWS || elapsed >= ENGAGEMENT_MIN_MS;
   } catch {
@@ -119,7 +120,11 @@ export const InstallPrompt: React.FC = () => {
         );
       }
       if (choice.outcome === 'dismissed') {
-        try { localStorage.setItem(DISMISS_KEY, String(Date.now())); } catch { /* noop */ }
+        try {
+          localStorage.setItem(DISMISS_KEY, String(Date.now()));
+        } catch {
+          /* noop */
+        }
       }
     } catch {
       // user cancelled or browser refused — soft fail
@@ -131,7 +136,11 @@ export const InstallPrompt: React.FC = () => {
   }, [event]);
 
   const onDismiss = useCallback(() => {
-    try { localStorage.setItem(DISMISS_KEY, String(Date.now())); } catch { /* noop */ }
+    try {
+      localStorage.setItem(DISMISS_KEY, String(Date.now()));
+    } catch {
+      /* noop */
+    }
     if (typeof window !== 'undefined' && 'gtag' in window) {
       (window as unknown as { gtag: (...args: unknown[]) => void }).gtag(
         'event',
@@ -145,7 +154,7 @@ export const InstallPrompt: React.FC = () => {
   if (!visible || !event) return null;
 
   const copy = {
-    title: lang === 'tr' ? 'EcyPro\'yu yükle' : 'Install EcyPro',
+    title: lang === 'tr' ? "eCyPro'yu yükle" : 'Install eCyPro',
     body:
       lang === 'tr'
         ? 'Daha hızlı erişim ve çevrimdışı destek için ana ekrana ekleyin.'

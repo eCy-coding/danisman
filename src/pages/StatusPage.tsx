@@ -114,13 +114,13 @@ export const StatusPage: React.FC = () => {
   return (
     <>
       <Helmet>
-        <title>{lang === 'tr' ? 'Sistem Durumu | EcyPro' : 'System Status | EcyPro'}</title>
+        <title>{lang === 'tr' ? 'Sistem Durumu | eCyPro' : 'System Status | eCyPro'}</title>
         <meta
           name="description"
           content={
             lang === 'tr'
-              ? 'EcyPro platform sağlık paneli — API, veritabanı ve cache servislerinin canlı durumu.'
-              : 'EcyPro platform health dashboard — live status of API, database, and cache services.'
+              ? 'eCyPro platform sağlık paneli — API, veritabanı ve cache servislerinin canlı durumu.'
+              : 'eCyPro platform health dashboard — live status of API, database, and cache services.'
           }
         />
         {/* P15 — Status sayfası operational; SERP'te değer üretmez, noindex. */}
@@ -136,8 +136,8 @@ export const StatusPage: React.FC = () => {
             </h1>
             <p className="text-slate-400 text-sm sm:text-base max-w-2xl">
               {lang === 'tr'
-                ? 'EcyPro platformunun gerçek zamanlı sağlık göstergesi. Sayfa her 30 saniyede otomatik yenilenir.'
-                : 'Real-time health indicator for the EcyPro platform. This page auto-refreshes every 30 seconds.'}
+                ? 'eCyPro platformunun gerçek zamanlı sağlık göstergesi. Sayfa her 30 saniyede otomatik yenilenir.'
+                : 'Real-time health indicator for the eCyPro platform. This page auto-refreshes every 30 seconds.'}
             </p>
           </header>
 

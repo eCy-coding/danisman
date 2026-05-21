@@ -15,8 +15,8 @@ export function buildOrganizationSchema() {
     '@context': 'https://schema.org',
     '@type': ['Organization', 'ProfessionalService', 'ConsultingService'],
     '@id': `${SITE_URL}/#organization`,
-    name: 'EcyPro Premium Consulting',
-    alternateName: ['eCyverse', 'EcyPro'],
+    name: 'eCyPro Premium Consulting',
+    alternateName: ['eCyverse', 'eCyPro'],
     url: SITE_URL,
     logo: {
       '@type': 'ImageObject',
@@ -61,7 +61,7 @@ export function buildWebSiteSchema() {
     '@type': 'WebSite',
     '@id': `${SITE_URL}/#website`,
     url: SITE_URL,
-    name: 'EcyPro Premium Consulting',
+    name: 'eCyPro Premium Consulting',
     description:
       'eCyverse premium consulting hub — strategic management, organizational transformation, culture engineering.',
     publisher: { '@id': `${SITE_URL}/#organization` },

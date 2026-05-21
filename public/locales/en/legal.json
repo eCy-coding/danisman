@@ -9,13 +9,13 @@
   "printBtn": "Print",
   "placeholder": "The final text of this section will be added following review by qualified legal counsel. The current draft has been prepared under the KVKK and GDPR frameworks.",
   "entity": {
-    "name": "EcyPro Premium Consulting",
+    "name": "eCyPro Premium Consulting",
     "email": "info@ecypro.com",
     "website": "https://www.ecypro.com"
   },
   "privacy": {
-    "title": "Privacy Policy",
-    "metaDescription": "EcyPro KVKK and GDPR compliant privacy policy — how your personal data is collected, processed, and protected.",
+    "title": "Privacy Policy (KVKK)",
+    "metaDescription": "eCyPro KVKK and GDPR compliant privacy policy — how your personal data is collected, processed, and protected.",
     "sections": {
       "controller": "Data Controller",
       "data": "Data We Collect",
@@ -26,18 +26,18 @@
       "contact": "Contact and Requests"
     },
     "content": {
-      "controller": "As the data controller, EcyPro Premium Consulting is responsible for the processing of your personal data under Turkish Law No. 6698 on the Protection of Personal Data (KVKK) and the EU General Data Protection Regulation (GDPR). You may direct any request, question, or inquiry to info@ecypro.com.",
+      "controller": "As the data controller, eCyPro Premium Consulting is responsible for the processing of your personal data under Turkish Law No. 6698 on the Protection of Personal Data (KVKK) and the EU General Data Protection Regulation (GDPR). You may direct any request, question, or inquiry to info@ecypro.com.",
       "data": "When you visit our website, request our services, or submit contact forms, we collect: name and surname, email address, phone number, company information, IP address, browser metadata, cookie identifiers, and any other communication data you voluntarily share. We do not request or collect sensitive personal data (health, biometric, etc.).",
       "purpose": "Your personal data is processed for the purposes of: providing the services you request, fulfilling contractual obligations, managing customer relations, complying with legal obligations, ensuring website security, and improving services within the scope of legitimate interest. Legal bases: KVKK art. 5/2(a,c,e,f) and GDPR art. 6(1)(a,b,c,f).",
       "retention": "Your personal data is retained for as long as the processing purpose requires and for the minimum legal retention periods stipulated in applicable legislation. Once these periods expire, data is periodically destroyed, anonymized, or deleted in accordance with our data retention policy.",
       "rights": "Under KVKK art. 11 and GDPR art. 15-22, you have the right to: learn whether your personal data is being processed; be informed of the processing purpose and use; request rectification, erasure, or anonymization of incomplete or inaccurate data; object to automated decision-making; and seek compensation for damages. Submit requests to info@ecypro.com.",
       "transfer": "Your personal data may be transferred domestically and internationally through our service providers (hosting, email, analytics). International transfers are conducted under GDPR art. 46 Standard Contractual Clauses or under KVKK art. 9 explicit consent / adequacy decisions.",
-      "contact": "For all questions, requests, and submissions related to this Privacy Policy: info@ecypro.com — Data Controller: EcyPro Premium Consulting."
+      "contact": "For all questions, requests, and submissions related to this Privacy Policy: info@ecypro.com — Data Controller: eCyPro Premium Consulting."
     }
   },
   "terms": {
     "title": "Terms of Service",
-    "metaDescription": "EcyPro terms of service — rights, obligations, payment and refund policy.",
+    "metaDescription": "eCyPro terms of service — rights, obligations, payment and refund policy.",
     "sections": {
       "scope": "Scope of Service",
       "obligations": "User Obligations",
@@ -48,18 +48,18 @@
       "contact": "Contact"
     },
     "content": {
-      "scope": "EcyPro Premium Consulting provides corporate management consulting, event management, and digital brand solutions through www.ecypro.com. These Terms of Service are binding from the moment you visit the website or engage our services. The final scope and technical specifications of each engagement are defined in a separate service agreement executed per client.",
+      "scope": "eCyPro Premium Consulting provides corporate management consulting, event management, and digital brand solutions through www.ecypro.com. These Terms of Service are binding from the moment you visit the website or engage our services. The final scope and technical specifications of each engagement are defined in a separate service agreement executed per client.",
       "obligations": "When using the website, you agree to: comply with applicable laws, provide accurate and current information, respect third-party rights, and refrain from any behavior that could threaten site security. Automated scraping, reverse engineering, or unauthorized access attempts are prohibited.",
       "payment": "Payment and refund terms for paid services are defined in the individual service agreement signed with each client. Direct payments are not collected through this website; all commercial transactions are governed by the service agreement and invoicing process.",
-      "liability": "EcyPro Premium Consulting exercises reasonable care for the accuracy of website content but makes no absolute warranty regarding the error-free nature or uninterrupted availability of content. Within the limits of applicable law, no liability is accepted for indirect, incidental, or unforeseen damages arising from website use.",
-      "ip": "All text, images, logos, trademarks, software, and arrangements on the website are the intellectual property of EcyPro Premium Consulting or its licensors. They may not be reproduced, distributed, or used in derivative works without written permission. Third-party trademarks and content remain the property of their respective owners.",
+      "liability": "eCyPro Premium Consulting exercises reasonable care for the accuracy of website content but makes no absolute warranty regarding the error-free nature or uninterrupted availability of content. Within the limits of applicable law, no liability is accepted for indirect, incidental, or unforeseen damages arising from website use.",
+      "ip": "All text, images, logos, trademarks, software, and arrangements on the website are the intellectual property of eCyPro Premium Consulting or its licensors. They may not be reproduced, distributed, or used in derivative works without written permission. Third-party trademarks and content remain the property of their respective owners.",
       "dispute": "These Terms are governed by the laws of the Republic of Turkey. The parties shall first attempt to resolve any dispute amicably; failing that, the courts and execution offices of Istanbul shall have exclusive jurisdiction.",
       "contact": "For questions related to these Terms of Service: info@ecypro.com."
     }
   },
   "cookies": {
     "title": "Cookie Policy",
-    "metaDescription": "EcyPro cookie policy — which cookies are used, their purposes, and how to manage them.",
+    "metaDescription": "eCyPro cookie policy — which cookies are used, their purposes, and how to manage them.",
     "manageBtn": "Manage Cookie Settings",
     "bannerLink": "Cookie Policy",
     "sections": {

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * EcyPro — Integration Health Check
+ * eCyPro — Integration Health Check
  * P10 Aşama 2 — DevOps-Publisher
  *
  * Validates every external integration is correctly wired and ready for prod.

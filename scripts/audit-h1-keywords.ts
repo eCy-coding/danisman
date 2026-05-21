@@ -43,7 +43,7 @@ function extractH1s(html: string): string[] {
 }
 
 function main(): void {
-  console.log('\n🔍 EcyPro H1 Keyword Audit\n');
+  console.log('\n🔍 eCyPro H1 Keyword Audit\n');
 
   let htmlFiles: string[];
   try {

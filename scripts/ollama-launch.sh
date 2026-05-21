@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # ============================================================
-# EcyPro — Ollama + Claude Code Akıllı Başlatıcı
+# eCyPro — Ollama + Claude Code Akıllı Başlatıcı
 # Sistem RAM'ini ve mevcut modelleri analiz ederek
 # otomatik olarak en uygun modeli seçer.
 # ============================================================
@@ -21,7 +21,7 @@ export ANTHROPIC_API_KEY="ollama"
 export CLAUDE_CODE_SKIP_PROJECT_SETTINGS=1
 export CLAUDE_CODE_USE_SYSTEM_PROMPT=1
 export ANTHROPIC_CUSTOM_PROMPT="
-You are an elite AI software engineer running inside Claude Code for the EcyPro Premium Consulting project.
+You are an elite AI software engineer running inside Claude Code for the eCyPro Premium Consulting project.
 Rules:
 - Always inspect the repository before making changes.
 - Use file reading tools to understand context before coding.
@@ -97,7 +97,7 @@ select_best_model() {
 # ── Kullanım Bilgisi ──────────────────────────────────────
 usage() {
   cat <<USAGE
-${BOLD}EcyPro Ollama Başlatıcı${RESET}
+${BOLD}eCyPro Ollama Başlatıcı${RESET}
 
 Kullanım:
   $(basename "$0") [SEÇENEKLER]
@@ -147,7 +147,7 @@ esac
 # ── Ana Akış ─────────────────────────────────────────────
 echo ""
 echo -e "${BOLD}╔══════════════════════════════════════╗${RESET}"
-echo -e "${BOLD}║   EcyPro × Ollama × Claude Code      ║${RESET}"
+echo -e "${BOLD}║   eCyPro × Ollama × Claude Code      ║${RESET}"
 echo -e "${BOLD}╚══════════════════════════════════════╝${RESET}"
 echo ""
 

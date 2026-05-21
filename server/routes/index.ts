@@ -46,8 +46,7 @@ const router = Router();
 
 // BE-7: SERVICE_VERSION pulled from npm_package_version (set by node when run
 // via `npm`/`pnpm`) → falls back to RELEASE_VERSION env (set by Render) → "1.0.0".
-const SERVICE_VERSION =
-  process.env.npm_package_version || process.env.RELEASE_VERSION || '1.0.0';
+const SERVICE_VERSION = process.env.npm_package_version || process.env.RELEASE_VERSION || '1.0.0';
 
 // ─── Basic health check ──────────────────────────────────
 // Fast path — NO DB/Redis calls. For platform liveness probes.
@@ -211,15 +210,15 @@ router.get('/docs', (req, res, next) => {
 
   // Production + private → require Bearer token. Reuse the auth middleware
   // lazily so we don't pull it into the hot path for /health etc.
-  return import('../middleware/auth').then(({ authenticate, requireRole }) => {
-    authenticate(req, res, () => {
-      requireRole('ADMIN')(
-        req as Parameters<ReturnType<typeof requireRole>>[0],
-        res,
-        () => renderSwaggerUI(req, res),
-      );
-    });
-  }).catch(next);
+  return import('../middleware/auth')
+    .then(({ authenticate, requireRole }) => {
+      authenticate(req, res, () => {
+        requireRole('ADMIN')(req as Parameters<ReturnType<typeof requireRole>>[0], res, () =>
+          renderSwaggerUI(req, res),
+        );
+      });
+    })
+    .catch(next);
 });
 
 function renderSwaggerUI(_req: import('express').Request, res: import('express').Response): void {
@@ -229,7 +228,7 @@ function renderSwaggerUI(_req: import('express').Request, res: import('express')
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>EcyPro API — Swagger UI</title>
+  <title>eCyPro API — Swagger UI</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.17.14/swagger-ui.min.css" />
   <style>body{margin:0;background:#1E1F20;}</style>
 </head>
@@ -364,7 +363,7 @@ router.get('/status', async (_req, res) => {
       ? 'operational'
       : 'degraded';
     res.json({
-      page: { name: 'EcyPro API', url: 'https://ecypro.com' },
+      page: { name: 'eCyPro API', url: 'https://ecypro.com' },
       status: {
         indicator: overall,
         description: overall === 'operational' ? 'All Systems Operational' : 'Degraded Service',

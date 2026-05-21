@@ -23,7 +23,7 @@ export const TEAM_COPY = {
   ],
 };
 
-// P45 C4: EcyPro Premium Consulting metodolojisinin 5 katmanı. Her katman
+// P45 C4: eCyPro Premium Consulting metodolojisinin 5 katmanı. Her katman
 // Discovery Call sonrası engagement'in farklı bir fazına denk gelir. Bu
 // yapı Vision → Bridge → Engineering → Culture → Loop sırasıyla işler.
 export const METHODOLOGY_COPY = {
@@ -45,7 +45,7 @@ export const METHODOLOGY_COPY = {
       icon: 'Compass',
       title: { tr: 'Strateji Köprüsü', en: 'Strategy Bridge' },
       description: {
-        tr: "Vizyon güzeldir, uygulama zordur. Strateji Köprüsü katmanı, kuzey yıldızı ile çeyreklik hedefler arasındaki köprüyü kurar. OKR setting, quarterly cadence ve karar mercii sorumluluk haritası bu katmanda netleşir. Hangi kararın kim tarafından verileceğini, hangi metrik eşiğinde eskalasyon olacağını ve haftalık ritmin nasıl işleyeceğini birlikte tasarlarız. Çıktı: 90 günlük yol haritası, RACI matrisi ve haftalık operasyonel ritim takvimi.",
+        tr: 'Vizyon güzeldir, uygulama zordur. Strateji Köprüsü katmanı, kuzey yıldızı ile çeyreklik hedefler arasındaki köprüyü kurar. OKR setting, quarterly cadence ve karar mercii sorumluluk haritası bu katmanda netleşir. Hangi kararın kim tarafından verileceğini, hangi metrik eşiğinde eskalasyon olacağını ve haftalık ritmin nasıl işleyeceğini birlikte tasarlarız. Çıktı: 90 günlük yol haritası, RACI matrisi ve haftalık operasyonel ritim takvimi.',
         en: 'Vision is easy, execution is hard. The Strategy Bridge layer builds the connection between the north star and quarterly targets. OKR setting, quarterly cadence, and decision-rights mapping crystallize here. We co-design who decides what, the metric thresholds that trigger escalation, and how the weekly rhythm operates. Output: a 90-day roadmap, a RACI matrix, and a weekly operational cadence calendar.',
       },
     },
@@ -54,7 +54,7 @@ export const METHODOLOGY_COPY = {
       title: { tr: 'Sonuç Mühendisliği', en: 'Result Engineering' },
       description: {
         tr: "Strateji ölçülemiyorsa stratejik değildir. Sonuç Mühendisliği katmanı; KPI tasarımı, baseline ölçümü ve metric instrumentation'a odaklanır. İlk haftada mevcut performansın baseline'ını çıkarır, hangi metriklerin gerçekten engagement'i temsil ettiğini birlikte seçeriz. Veri toplama mekanizmasını, dashboard kurulumunu ve 90 günlük retrospektif raporun şablonunu kurarız. Hedef: engagement bittiğinde şirketin metriği kendi başına izleyebilmesi — bağımlılık değil, kapasite bırakırız.",
-        en: 'Strategy that cannot be measured is not strategy. The Result Engineering layer focuses on KPI design, baseline measurement, and metric instrumentation. In week one we establish the performance baseline and jointly choose the metrics that truly represent the engagement. We set up data collection, dashboarding, and the template for the 90-day retrospective report. Goal: by the engagement\'s end, the organization can track its own metrics — we leave capacity, not dependency.',
+        en: "Strategy that cannot be measured is not strategy. The Result Engineering layer focuses on KPI design, baseline measurement, and metric instrumentation. In week one we establish the performance baseline and jointly choose the metrics that truly represent the engagement. We set up data collection, dashboarding, and the template for the 90-day retrospective report. Goal: by the engagement's end, the organization can track its own metrics — we leave capacity, not dependency.",
       },
     },
     {

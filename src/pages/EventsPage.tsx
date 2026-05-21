@@ -78,8 +78,8 @@ const UPCOMING_EVENTS = [
     time: '09:00',
     duration: 480,
     title: {
-      tr: 'EcyPro Digital Operations Summit 2026',
-      en: 'EcyPro Digital Operations Summit 2026',
+      tr: 'eCyPro Digital Operations Summit 2026',
+      en: 'eCyPro Digital Operations Summit 2026',
     },
     desc: {
       tr: 'Dijital operasyon dönüşümü, RPA uygulamaları ve Lean 4.0 metodolojileri üzerine tam günlük konferans.',
@@ -154,7 +154,8 @@ export const EventsPage: React.FC = () => {
         <div className="max-w-7xl mx-auto px-6 md:px-12 py-4">
           <div className="flex gap-2 flex-wrap">
             {(['all', 'webinar', 'workshop', 'conference'] as const).map((f) => (
-              <button type="button"
+              <button
+                type="button"
                 key={f}
                 onClick={() => setFilter(f)}
                 data-testid={`event-filter-${f}`}

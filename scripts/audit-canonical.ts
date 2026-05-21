@@ -62,7 +62,7 @@ function auditRobots(): { ok: boolean; issues: string[] } {
 
 // ── Main ─────────────────────────────────────────────────────────────────────
 function main(): void {
-  console.log('\n🔍 EcyPro Canonical URL Audit\n');
+  console.log('\n🔍 eCyPro Canonical URL Audit\n');
 
   const robotsAudit = auditRobots();
   if (robotsAudit.ok) {

@@ -156,7 +156,7 @@ async function tick(): Promise<void> {
 }
 
 async function main(): Promise<void> {
-  log('info', '🧑‍💼 EcyPro CRM Watcher başlatılıyor...');
+  log('info', '🧑‍💼 eCyPro CRM Watcher başlatılıyor...');
   log('info', `polling her ${POLL_INTERVAL_MS / 1000}s | API: ${API_BASE}`);
   log('info', `Telegram: ${TELEGRAM_BOT_TOKEN ? 'aktif' : 'pasif (env eksik)'}`);
   await tick();

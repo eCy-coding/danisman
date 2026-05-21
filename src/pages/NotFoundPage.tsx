@@ -11,7 +11,15 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { useTranslation } from 'react-i18next';
-import { Home, Briefcase, Mail, ArrowRight, BookOpen, Building2, BadgeDollarSign } from 'lucide-react';
+import {
+  Home,
+  Briefcase,
+  Mail,
+  ArrowRight,
+  BookOpen,
+  Building2,
+  BadgeDollarSign,
+} from 'lucide-react';
 import { NotFoundSearch } from '../components/common/NotFoundSearch';
 
 interface Suggestion {
@@ -34,7 +42,7 @@ const COPY = {
     tr: 'Belki bunlar ilginizi çekebilir',
     en: 'You might be interested in',
   },
-  metaTitle: { tr: '404 — Sayfa Bulunamadı | EcyPro', en: '404 — Page Not Found | EcyPro' },
+  metaTitle: { tr: '404 — Sayfa Bulunamadı | eCyPro', en: '404 — Page Not Found | eCyPro' },
 };
 
 const SUGGESTIONS: Suggestion[] = [

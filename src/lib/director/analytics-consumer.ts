@@ -1,5 +1,5 @@
 /**
- * EcyPro Director — Analytics Consumer
+ * eCyPro Director — Analytics Consumer
  *
  * Bridges the analytics tracking layer with the Director's
  * personalization engine, building a real-time user context
@@ -24,8 +24,6 @@ interface UserContext {
   contactFormSubmitted: boolean;
   lastActivity: number;
 }
-
-
 
 function getStoredVisitCount(): number {
   try {
@@ -99,8 +97,7 @@ export class AnalyticsConsumer {
     const ua = navigator.userAgent || '';
     const isSynthetic =
       /\b(Lighthouse|Chrome-Lighthouse|HeadlessChrome)\b/.test(ua) ||
-      (typeof window.location !== 'undefined' &&
-        window.location.search.includes('ci=lighthouse'));
+      (typeof window.location !== 'undefined' && window.location.search.includes('ci=lighthouse'));
     if (isSynthetic) {
       Logger.info('[AnalyticsConsumer] Skipped (synthetic monitor detected)');
       return;

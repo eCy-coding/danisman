@@ -18,15 +18,20 @@ export const SEO: React.FC<SEOProps> = ({
   url,
   type = 'website',
 }) => {
-  const siteTitle = 'EcyPro | Premium Kurumsal Danışmanlık';
-  const siteDescription = 'Global ölçekte stratejik büyüme ve dijital dönüşüm ortağınız. Yönetim, etkinlik ve dijital çözümler.';
+  const siteTitle = 'eCyPro | Premium Kurumsal Danışmanlık';
+  const siteDescription =
+    'Global ölçekte stratejik büyüme ve dijital dönüşüm ortağınız. Yönetim, etkinlik ve dijital çözümler.';
   const siteUrl = 'https://www.ecypro.com';
   const defaultImage = `${siteUrl}/og-image.jpg`;
 
-  const metaTitle = title ? `${title} | EcyPro` : siteTitle;
+  const metaTitle = title ? `${title} | eCyPro` : siteTitle;
   const metaDescription = description || siteDescription;
   const metaUrl = url ? `${siteUrl}${url}` : siteUrl;
-  const metaImage = image ? (image.startsWith('http') ? image : `${siteUrl}${image}`) : defaultImage;
+  const metaImage = image
+    ? image.startsWith('http')
+      ? image
+      : `${siteUrl}${image}`
+    : defaultImage;
 
   return (
     <Helmet>

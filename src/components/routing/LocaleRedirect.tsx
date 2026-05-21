@@ -8,7 +8,7 @@
  *   1. localStorage 'i18nextLng' — returning user preference (highest priority)
  *   2. navigator.languages — browser Accept-Language (IETF BCP 47)
  *   3. navigator.language — single browser language
- *   4. Default: 'tr' (EcyPro primary market)
+ *   4. Default: 'tr' (eCyPro primary market)
  *
  * Algorithm:
  *   primaryTag = lang.toLowerCase().split(/[-_]/)[0]

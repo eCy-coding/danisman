@@ -24,7 +24,7 @@ export const ISTANBUL_TZ = 'Europe/Istanbul';
 
 /**
  * Get the user's browser timezone (IANA format).
- * Falls back to Istanbul (EcyPro's primary market) if detection fails.
+ * Falls back to Istanbul (eCyPro's primary market) if detection fails.
  */
 export function getUserTimezone(): string {
   try {
@@ -83,7 +83,7 @@ export function getTzLabel(tz: string, date: Date = new Date()): string {
 export interface BookingTimeDisplay {
   /** Time in user's local timezone: "14:30 EST" */
   local: string;
-  /** Time in Istanbul (EcyPro base): "22:30 TRT" */
+  /** Time in Istanbul (eCyPro base): "22:30 TRT" */
   istanbul: string;
   /** UTC offset of user's timezone: "UTC-5" */
   offset: string;

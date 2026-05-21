@@ -51,7 +51,7 @@ fi
 
 # ─── Setup ───────────────────────────────────────────────────────────────────
 mkdir -p "$BACKUP_DIR"
-echo "🗄️  EcyPro DB Backup — $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
+echo "🗄️  eCyPro DB Backup — $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
 
 # ─── Dump ────────────────────────────────────────────────────────────────────
 echo "  📦 Creating dump: $BACKUP_NAME"

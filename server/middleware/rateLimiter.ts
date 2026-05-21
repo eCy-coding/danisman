@@ -1,5 +1,5 @@
 /**
- * EcyPro — Rate Limiting Middleware
+ * eCyPro — Rate Limiting Middleware
  *
  * Production-grade rate limiting with Redis for horizontal scalability,
  * falling back to in-memory tracking if Redis is unavailable.

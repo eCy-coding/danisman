@@ -107,9 +107,9 @@ export interface WelcomeData {
 export function renderWelcome(data: WelcomeData): RenderedEmail {
   if (data.lang === 'tr') {
     const body = `
-      <h2 style="color:#fff;font-size:20px;font-weight:700;margin:0 0 8px">EcyPro'ya Hoş Geldiniz 🚀</h2>
+      <h2 style="color:#fff;font-size:20px;font-weight:700;margin:0 0 8px">eCyPro'ya Hoş Geldiniz 🚀</h2>
       <p style="color:#94a3b8;font-size:14px;line-height:1.6;margin:0 0 24px">
-        Merhaba ${escapeHtml(data.name)}, EcyPro Premium Consulting hesabınız başarıyla oluşturuldu.
+        Merhaba ${escapeHtml(data.name)}, eCyPro Premium Consulting hesabınız başarıyla oluşturuldu.
       </p>
       <p style="color:#94a3b8;font-size:14px;line-height:1.6;margin:0 0 24px">
         Stratejik danışmanlık, AI entegrasyonu ve dijital dönüşüm projelerinizde
@@ -118,15 +118,15 @@ export function renderWelcome(data: WelcomeData): RenderedEmail {
       ${ctaButton('https://ecypro.com/account', 'Hesabımı Yönet')}
     `;
     return {
-      subject: '🎉 EcyPro\'ya Hoş Geldiniz',
-      html: baseLayout('Hoş Geldiniz', body, 'EcyPro Premium Consulting · İstanbul, Türkiye'),
-      text: `Merhaba ${data.name}, EcyPro hesabınız oluşturuldu. https://ecypro.com/account`,
+      subject: "🎉 eCyPro'ya Hoş Geldiniz",
+      html: baseLayout('Hoş Geldiniz', body, 'eCyPro Premium Consulting · İstanbul, Türkiye'),
+      text: `Merhaba ${data.name}, eCyPro hesabınız oluşturuldu. https://ecypro.com/account`,
     };
   }
   const body = `
-    <h2 style="color:#fff;font-size:20px;font-weight:700;margin:0 0 8px">Welcome to EcyPro 🚀</h2>
+    <h2 style="color:#fff;font-size:20px;font-weight:700;margin:0 0 8px">Welcome to eCyPro 🚀</h2>
     <p style="color:#94a3b8;font-size:14px;line-height:1.6;margin:0 0 24px">
-      Hi ${escapeHtml(data.name)}, your EcyPro Premium Consulting account is ready.
+      Hi ${escapeHtml(data.name)}, your eCyPro Premium Consulting account is ready.
     </p>
     <p style="color:#94a3b8;font-size:14px;line-height:1.6;margin:0 0 24px">
       We're here to help with strategic consulting, AI integration, and digital transformation.
@@ -134,9 +134,9 @@ export function renderWelcome(data: WelcomeData): RenderedEmail {
     ${ctaButton('https://ecypro.com/account', 'Manage Account')}
   `;
   return {
-    subject: '🎉 Welcome to EcyPro',
-    html: baseLayout('Welcome', body, 'EcyPro Premium Consulting · Istanbul, Türkiye'),
-    text: `Hi ${data.name}, your EcyPro account is ready. https://ecypro.com/account`,
+    subject: '🎉 Welcome to eCyPro',
+    html: baseLayout('Welcome', body, 'eCyPro Premium Consulting · Istanbul, Türkiye'),
+    text: `Hi ${data.name}, your eCyPro account is ready. https://ecypro.com/account`,
   };
 }
 
@@ -162,8 +162,8 @@ export function renderPasswordReset(data: PasswordResetData): RenderedEmail {
       </p>
     `;
     return {
-      subject: '🔐 EcyPro Şifre Sıfırlama',
-      html: baseLayout('Şifre Sıfırlama', body, 'EcyPro Premium Consulting'),
+      subject: '🔐 eCyPro Şifre Sıfırlama',
+      html: baseLayout('Şifre Sıfırlama', body, 'eCyPro Premium Consulting'),
       text: `Şifrenizi sıfırlamak için: ${data.resetUrl}`,
     };
   }
@@ -179,8 +179,8 @@ export function renderPasswordReset(data: PasswordResetData): RenderedEmail {
     </p>
   `;
   return {
-    subject: '🔐 Reset your EcyPro password',
-    html: baseLayout('Password Reset', body, 'EcyPro Premium Consulting'),
+    subject: '🔐 Reset your eCyPro password',
+    html: baseLayout('Password Reset', body, 'eCyPro Premium Consulting'),
     text: `Reset your password: ${data.resetUrl}`,
   };
 }
@@ -213,7 +213,7 @@ export function renderGdprExportReady(data: GdprExportReadyData): RenderedEmail 
     `;
     return {
       subject: '📦 GDPR Veri İhracatınız Hazır',
-      html: baseLayout('Veri İhracatı', body, 'EcyPro Premium Consulting · GDPR'),
+      html: baseLayout('Veri İhracatı', body, 'eCyPro Premium Consulting · GDPR'),
       text: `Veri ihracatınız: ${data.downloadUrl} (son geçerlilik: ${expiry})`,
     };
   }
@@ -230,7 +230,7 @@ export function renderGdprExportReady(data: GdprExportReadyData): RenderedEmail 
   `;
   return {
     subject: '📦 Your GDPR data export is ready',
-    html: baseLayout('Data Export', body, 'EcyPro Premium Consulting · GDPR'),
+    html: baseLayout('Data Export', body, 'eCyPro Premium Consulting · GDPR'),
     text: `Data export: ${data.downloadUrl} (expires: ${expiry})`,
   };
 }
@@ -260,8 +260,8 @@ export function renderGdprDeleteConfirm(data: GdprDeleteConfirmData): RenderedEm
       </p>
     `;
     return {
-      subject: '⚠️ EcyPro Hesap Silme Onayı',
-      html: baseLayout('Silme Onayı', body, 'EcyPro Premium Consulting · GDPR'),
+      subject: '⚠️ eCyPro Hesap Silme Onayı',
+      html: baseLayout('Silme Onayı', body, 'eCyPro Premium Consulting · GDPR'),
       text: `Hesap silme talebinizi onaylayın: ${data.confirmUrl}`,
     };
   }
@@ -281,8 +281,8 @@ export function renderGdprDeleteConfirm(data: GdprDeleteConfirmData): RenderedEm
     </p>
   `;
   return {
-    subject: '⚠️ Confirm your EcyPro account deletion',
-    html: baseLayout('Account Deletion Confirm', body, 'EcyPro Premium Consulting · GDPR'),
+    subject: '⚠️ Confirm your eCyPro account deletion',
+    html: baseLayout('Account Deletion Confirm', body, 'eCyPro Premium Consulting · GDPR'),
     text: `Confirm account deletion: ${data.confirmUrl}`,
   };
 }

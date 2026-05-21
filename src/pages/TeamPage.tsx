@@ -43,8 +43,8 @@ const MEMBERS = [
     name: 'Mert D.',
     role: { tr: 'M&A Danışmanlık Ortağı', en: 'M&A Advisory Partner' },
     bio: {
-      tr: 'Goldman Sachs ve McKinsey kökenli; birleşme, satın alma ve değerleme alanında 8 yıl üst düzey deneyim.',
-      en: 'Ex-Goldman Sachs & McKinsey; 8 years of senior M&A, valuation, and exit strategy expertise.',
+      tr: 'Tier-1 yatırım bankacılığı ve premium consulting kökenli; birleşme, satın alma ve değerleme alanında 8 yıl üst düzey deneyim.',
+      en: 'Tier-1 investment banking and premium consulting background; 8 years of senior M&A, valuation, and exit strategy expertise.',
     },
     tags: {
       tr: ['Due Diligence', 'Değerleme', 'Exit Stratejisi'],

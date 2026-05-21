@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 scripts/seo_audit.py
-EcyPro SEO Otomatik Denetim Aracı
+eCyPro SEO Otomatik Denetim Aracı
 istek5.txt Pane 4 — 🔎 SEO-Geo-Admin
 
 Denetim Kategorileri:
@@ -85,7 +85,7 @@ class SEOReport(TypedDict):
 # ─── HTTP Yardımcıları ────────────────────────────────────────────────────────
 
 HEADERS = {
-    'User-Agent': 'EcyProSEOAudit/1.0 (+https://ecypro.com/bot)',
+    'User-Agent': 'eCyProSEOAudit/1.0 (+https://ecypro.com/bot)',
     'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
     'Accept-Language': 'tr,en;q=0.9',
 }
@@ -366,7 +366,7 @@ def color_score(score: int) -> str:
 def print_cli(report: SEOReport) -> None:
     W = 70
     print(f"\n{'='*W}")
-    print(f"{C['bold']}  🔎 SEO Denetim Raporu — EcyPro{C['reset']}")
+    print(f"{C['bold']}  🔎 SEO Denetim Raporu — eCyPro{C['reset']}")
     print(f"  {C['cyan']}{report['timestamp']}{C['reset']} | {report['base_url']}")
     print(f"{'='*W}")
 
@@ -437,7 +437,7 @@ def generate_html(report: SEOReport, output_path: str) -> None:
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SEO Denetim Raporu — EcyPro</title>
+  <title>SEO Denetim Raporu — eCyPro</title>
   <style>
     *, *::before, *::after {{ box-sizing: border-box; margin: 0; padding: 0 }}
     body {{ font-family: system-ui, sans-serif; background: #0f172a; color: #e2e8f0; padding: 2rem }}
@@ -460,7 +460,7 @@ def generate_html(report: SEOReport, output_path: str) -> None:
   </style>
 </head>
 <body>
-  <h1>🔎 SEO Denetim Raporu — EcyPro</h1>
+  <h1>🔎 SEO Denetim Raporu — eCyPro</h1>
   <div class="meta">{report['timestamp']} | {report['base_url']}</div>
 
   <div class="summary">
@@ -538,7 +538,7 @@ def run_audit(base_url: str) -> SEOReport:
 def main() -> None:
     # IDE terminal'de satır-içi yorumlar (# metin) literal geçebilir — filtrele
     sys.argv = [a for a in sys.argv if not a.startswith('#')]
-    parser = argparse.ArgumentParser(description='EcyPro SEO Denetim Aracı')
+    parser = argparse.ArgumentParser(description='eCyPro SEO Denetim Aracı')
     parser.add_argument('--base-url', '-u', default='http://localhost:4173')
     parser.add_argument('--output', '-o', default='public/tools/seo-audit.html')
     parser.add_argument('--json', '-j', action='store_true')

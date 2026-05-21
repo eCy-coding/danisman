@@ -1,64 +1,80 @@
 import React from 'react';
-import { Building2, Globe, Cpu, ShieldCheck, TrendingUp, Cloud } from 'lucide-react';
+import { Building2, Factory, Zap, Truck, ShieldCheck, Cpu } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
-const LOGOS = [
-  { icon: Building2, name: 'Stripe' },
-  { icon: Globe, name: 'Vercel' },
-  { icon: Cpu, name: 'Nvidia' },
-  { icon: ShieldCheck, name: 'Cloudflare' },
-  { icon: TrendingUp, name: 'McKinsey' },
-  { icon: Cloud, name: 'AWS' },
+// Track C #5 — Replaced the prior "Trusted by Industry Leaders" marquee that
+// displayed third-party wordmarks (Stripe / Vercel / Nvidia / Cloudflare /
+// McKinsey / AWS) we have no contractual right to claim. Showing those
+// names without permission is a Lanham Act / TTK reklam mevzuatı risk and
+// implies an endorsement that does not exist.
+//
+// New copy: "Çalıştığımız sektörler / Sectors we serve" — neutral category
+// labels with generic Lucide icons, no third-party brand marks.
+const SECTORS = [
+  {
+    id: 'finance',
+    icon: Building2,
+    label: { tr: 'Finansal Hizmetler', en: 'Financial Services' },
+  },
+  {
+    id: 'manufacturing',
+    icon: Factory,
+    label: { tr: 'Üretim', en: 'Manufacturing' },
+  },
+  {
+    id: 'energy',
+    icon: Zap,
+    label: { tr: 'Enerji & ESG', en: 'Energy & ESG' },
+  },
+  {
+    id: 'logistics',
+    icon: Truck,
+    label: { tr: 'Lojistik', en: 'Logistics' },
+  },
+  {
+    id: 'compliance',
+    icon: ShieldCheck,
+    label: { tr: 'Uyum & KVKK', en: 'Compliance & KVKK' },
+  },
+  {
+    id: 'technology',
+    icon: Cpu,
+    label: { tr: 'Teknoloji', en: 'Technology' },
+  },
 ];
 
 export const TrustMarquee = () => {
-  return (
-    <div className="w-full py-16 bg-neutral border-b border-white/5 overflow-hidden relative">
-      <div className="container mx-auto px-4 mb-8 text-center">
-        <p className="text-xs font-bold text-slate-400 uppercase tracking-[0.2em]">Trusted by Industry Leaders</p>
-      </div>
-      
-      {/* Premium Fade Mask for Marquee edges */}
-      <div className="relative flex overflow-x-hidden group [mask-image:linear-gradient(to_right,transparent,black_15%,black_85%,transparent)]">
-        <div className="animate-marquee whitespace-nowrap flex items-center space-x-16 px-8">
-          {[...LOGOS, ...LOGOS, ...LOGOS, ...LOGOS].map((logo, idx) => (
-            <div key={`orig-${idx}`} className="inline-flex items-center space-x-3 text-slate-400 hover:text-white transition-all opacity-60 hover:opacity-100 hover:scale-105 duration-500">
-              <logo.icon className="w-8 h-8 opacity-80" />
-              <span className="text-2xl font-bold tracking-tight">{logo.name}</span>
-            </div>
-          ))}
-        </div>
+  const { i18n } = useTranslation();
+  const lang = (i18n.language || 'en').startsWith('tr') ? ('tr' as const) : ('en' as const);
+  const heading = lang === 'tr' ? 'Çalıştığımız sektörler' : 'Sectors we serve';
 
-        <div className="absolute top-0 animate-marquee2 whitespace-nowrap flex items-center space-x-16 px-8">
-          {[...LOGOS, ...LOGOS, ...LOGOS, ...LOGOS].map((logo, idx) => (
-            <div key={`dup-${idx}`} className="inline-flex items-center space-x-3 text-slate-400 hover:text-white transition-all opacity-60 hover:opacity-100 hover:scale-105 duration-500">
-              <logo.icon className="w-8 h-8 opacity-80" />
-              <span className="text-2xl font-bold tracking-tight">{logo.name}</span>
-            </div>
-          ))}
-        </div>
+  return (
+    <section
+      className="w-full py-16 bg-neutral border-b border-ecypro-gold/15"
+      aria-labelledby="sectors-heading"
+    >
+      <div className="container mx-auto px-4 mb-10 text-center">
+        <p
+          id="sectors-heading"
+          className="text-xs font-bold text-ecypro-gold uppercase tracking-[0.25em]"
+        >
+          {heading}
+        </p>
       </div>
-      
-      {/* CSS for Tailwind config (inline for portability in this snippet, but ideally in tailwind.config.js) */}
-      <style>{`
-        @keyframes marquee {
-          0% { transform: translateX(0); }
-          100% { transform: translateX(-100%); }
-        }
-        @keyframes marquee2 {
-          0% { transform: translateX(100%); }
-          100% { transform: translateX(0); }
-        }
-        .animate-marquee {
-          animation: marquee 40s linear infinite;
-        }
-        .animate-marquee2 {
-          animation: marquee2 40s linear infinite;
-        }
-        .group:hover .animate-marquee,
-        .group:hover .animate-marquee2 {
-          animation-play-state: paused;
-        }
-      `}</style>
-    </div>
+      <ul className="container mx-auto px-4 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-6">
+        {SECTORS.map((s) => {
+          const Icon = s.icon;
+          return (
+            <li
+              key={s.id}
+              className="flex flex-col items-center gap-3 p-4 rounded-xl border border-white/5 bg-white/[0.02] text-slate-300 hover:border-ecypro-gold/30 hover:text-white transition-colors duration-300"
+            >
+              <Icon className="w-7 h-7 text-ecypro-gold/80" aria-hidden="true" />
+              <span className="text-sm font-medium tracking-wide text-center">{s.label[lang]}</span>
+            </li>
+          );
+        })}
+      </ul>
+    </section>
   );
 };

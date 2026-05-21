@@ -27,7 +27,7 @@ describe('renderWelcome', () => {
   it('renders the EN variant when lang=en', () => {
     const result = renderWelcome({ name: 'Ada', lang: 'en' });
     expect(result.subject).toMatch(/Welcome/);
-    expect(result.html).toContain('Welcome to EcyPro');
+    expect(result.html).toContain('Welcome to eCyPro');
   });
 });
 

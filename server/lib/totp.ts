@@ -105,7 +105,7 @@ export function decryptTotpSecret(stored: string): string {
   }
 }
 
-const APP_NAME = 'EcyPro';
+const APP_NAME = 'eCyPro';
 
 export interface TotpSetup {
   secret: string; // base32 secret for DB storage

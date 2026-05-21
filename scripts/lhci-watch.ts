@@ -209,7 +209,7 @@ async function tick(): Promise<void> {
 }
 
 async function main(): Promise<void> {
-  log('info', '⚙ EcyPro LHCI Watcher başlatılıyor...');
+  log('info', '⚙ eCyPro LHCI Watcher başlatılıyor...');
   log('info', `target: ${PREVIEW_URL} | interval: ${CHECK_INTERVAL_MS / 60_000}dk`);
   log('info', `history: ${path.relative(ROOT, HISTORY_PATH)}`);
   await tick();

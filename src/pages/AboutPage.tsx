@@ -91,7 +91,7 @@ const MILESTONES = [
   },
   {
     year: '2025',
-    title: { tr: 'EcyPro Premium Platformu', en: 'EcyPro Premium Platform' },
+    title: { tr: 'eCyPro Premium Platformu', en: 'eCyPro Premium Platform' },
     desc: {
       tr: 'Danışmanlık pratiğini destekleyen veri odaklı premium platform devreye girdi.',
       en: 'Data-driven premium platform supporting the consulting practice went live.',
@@ -142,7 +142,7 @@ export const AboutPage: React.FC = () => {
           <FadeIn>
             <div className="max-w-4xl">
               <span className="inline-block text-xs font-bold tracking-[0.2em] text-secondary uppercase mb-6 border border-secondary/30 px-4 py-1.5 rounded-full bg-secondary/5">
-                {lang === 'tr' ? 'Hakkımızda' : 'About EcyPro'}
+                {lang === 'tr' ? 'Hakkımızda' : 'About eCyPro'}
               </span>
               {/* P45: Sahte iddialı "Dünyanın En İyi" başlığı → eCyverse vizyonu copy. */}
               <h1 className="text-5xl md:text-7xl font-serif font-bold text-white leading-[1.05] mb-8">

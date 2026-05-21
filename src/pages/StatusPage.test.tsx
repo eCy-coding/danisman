@@ -46,7 +46,7 @@ import { apiClient } from '../lib/api';
 const mockedGet = vi.mocked(apiClient.get);
 
 const OK_RESPONSE = {
-  page: { name: 'EcyPro', url: 'https://ecypro.com' },
+  page: { name: 'eCyPro', url: 'https://ecypro.com' },
   status: { indicator: 'operational', description: 'Tüm sistemler çalışıyor' },
   components: [
     { name: 'API', status: 'operational' },

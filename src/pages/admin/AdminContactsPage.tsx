@@ -123,7 +123,8 @@ export const AdminContactsPage: React.FC = () => {
           </h1>
           <p className="text-slate-400 text-sm mt-1">{data?.data.total ?? 0} total submissions</p>
         </div>
-        <button type="button"
+        <button
+          type="button"
           onClick={exportCsv}
           className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-slate-300 hover:bg-white/10 transition-colors text-sm"
         >
@@ -144,7 +145,8 @@ export const AdminContactsPage: React.FC = () => {
           />
         </div>
         {(['all', 'unread', 'read'] as const).map((f) => (
-          <button type="button"
+          <button
+            type="button"
             key={f}
             onClick={() => setIsReadFilter(f)}
             className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors capitalize ${
@@ -166,7 +168,8 @@ export const AdminContactsPage: React.FC = () => {
             <div className="text-slate-400 text-sm py-8 text-center">No submissions found.</div>
           )}
           {filtered.map((c) => (
-            <button type="button"
+            <button
+              type="button"
               key={c.id}
               onClick={() => handleSelect(c)}
               className={`w-full text-left p-4 rounded-xl border transition-all ${
@@ -276,7 +279,7 @@ export const AdminContactsPage: React.FC = () => {
                   Received: {new Date(selected.createdAt).toLocaleString('tr-TR')}
                 </span>
                 <a
-                  href={`mailto:${selected.email}?subject=Re: EcyPro Consultation Inquiry`}
+                  href={`mailto:${selected.email}?subject=Re: eCyPro Consultation Inquiry`}
                   className="flex items-center gap-2 px-4 py-2 bg-secondary text-white rounded-lg text-sm font-medium hover:bg-blue-600 transition-colors"
                 >
                   <Mail size={14} /> Reply

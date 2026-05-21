@@ -1,4 +1,4 @@
-/** EcyPro Perspektifler — Kategori taksonomisi (servis alanlarıyla eşleştirilmiş) */
+/** eCyPro Perspektifler — Kategori taksonomisi (servis alanlarıyla eşleştirilmiş) */
 export type BlogCategory =
   | 'Strateji'
   | 'Yapay Zeka & Teknoloji'

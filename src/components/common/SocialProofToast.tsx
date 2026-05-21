@@ -33,7 +33,7 @@ const SEED_DATA: ProofItem[] = [
   {
     id: 's1',
     nameInitial: '·',
-    city: 'EcyPro',
+    city: 'eCyPro',
     action: {
       tr: 'Stratejik dijital dönüşüm rehberi yayında',
       en: 'Strategic digital transformation playbook is live',
@@ -45,7 +45,7 @@ const SEED_DATA: ProofItem[] = [
   {
     id: 's2',
     nameInitial: '·',
-    city: 'EcyPro',
+    city: 'eCyPro',
     action: {
       tr: 'Aile şirketlerinde kuşak geçişi — pratik notlar',
       en: 'Generational transition in family firms — practical notes',
@@ -57,7 +57,7 @@ const SEED_DATA: ProofItem[] = [
   {
     id: 's3',
     nameInitial: '·',
-    city: 'EcyPro',
+    city: 'eCyPro',
     action: {
       tr: 'Lean & AI birleşimi: operasyonel mükemmellik',
       en: 'Lean & AI convergence: operational excellence',
@@ -69,7 +69,7 @@ const SEED_DATA: ProofItem[] = [
   {
     id: 's4',
     nameInitial: '·',
-    city: 'EcyPro',
+    city: 'eCyPro',
     action: {
       tr: 'Yönetim kurulu çevikliği — belirsizlik çağı',
       en: 'Boardroom agility — in the age of uncertainty',
@@ -204,9 +204,9 @@ export const SocialProofToast: React.FC = () => {
               type="button"
               onClick={handleDismiss}
               aria-label="Kapat"
-              className="shrink-0 p-1 rounded-md text-slate-600 hover:text-slate-300 transition-colors focus:outline-none focus-visible:ring-1 focus-visible:ring-secondary"
+              className="shrink-0 inline-flex items-center justify-center min-h-[44px] min-w-[44px] rounded-md text-slate-600 hover:text-slate-300 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-secondary"
             >
-              <X size={12} aria-hidden="true" />
+              <X size={14} aria-hidden="true" />
             </button>
           </motion.div>
         )}
