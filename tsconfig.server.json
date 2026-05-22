@@ -14,7 +14,11 @@
     "declarationMap": true,
     "sourceMap": true,
     "noEmit": false,
-    "allowImportingTsExtensions": false
+    "allowImportingTsExtensions": false,
+    "ignoreDeprecations": "6.0",
+    "types": [
+      "node"
+    ]
   },
   "include": [
     "server/**/*.ts"
@@ -24,6 +28,8 @@
     "dist",
     "src",
     "e2e",
-    "tests"
+    "tests",
+    "**/*.test.ts",
+    "**/*.spec.ts"
   ]
 }
