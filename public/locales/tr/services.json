@@ -11,5 +11,38 @@
   "booking": {
     "title": "Projenizi Başlatalım",
     "desc": "İhtiyaçlarınızı belirleyin ve uzmanlarımızla iletişime geçin."
+  },
+  "common_ui": {
+    "discoveryCta": "Ücretsiz Keşif Görüşmesi Planlayın",
+    "exploreMethodology": "Metodolojiyi İnceleyin",
+    "trustBadges": {
+      "years": "5+ yıl saha tecrübesi",
+      "decisions": "120+ stratejik karar",
+      "compliance": "KVKK & GDPR uyumlu",
+      "sla": "24 saat yanıt SLA"
+    }
+  },
+  "list": {
+    "strategic-transformation": { "title": "Stratejik Dönüşüm & Kurumsal Planlama", "subtitle": "Belirsizlikte 3-5 yıllık kuzey yıldızı + 90 günlük uygulama köprüsü.", "valueProp": "Vizyon ile günlük operasyon arasındaki boşluğu kapatır — yönetim kararları sahada gerçekten karşılık bulur." },
+    "mergers-acquisitions": { "title": "Birleşme, Satın Alma (M&A) & Değerleme", "subtitle": "Değerleme, durum tespiti (due diligence), birleşme sonrası entegrasyon (PMI), çıkış stratejisi.", "valueProp": "Stratejik uyumdan PMI'ya nesnel danışmanlık; değerleme sektörel emsallere dayanır." },
+    "family-business": { "title": "Aile Şirketi Yönetişimi & Anayasası", "subtitle": "Nesil geçişi, kurumsallaşma, sürdürülebilir aile anayasası.", "valueProp": "Aile değerini korurken şirketi ölçekleyen yönetişimi birlikte tasarlarız." },
+    "operational-excellence": { "title": "Operasyonel Mükemmellik & Tedarik Zinciri", "subtitle": "Yalın üretim, Altı Sigma, uçtan uca lojistik optimizasyonu.", "valueProp": "OEE/çevrim süresi/temin süresi iyileştirmeleri 12 ayda tipik %15-40." },
+    "neuromarketing": { "title": "Nöropazarlama & Müşteri Deneyimi (CX)", "subtitle": "Veriye dayalı marka stratejisiyle davranışsal tüketici analizi.", "valueProp": "'Tüketici ne diyor'un ötesine geçer — 'ne yapıyor ve ne hissediyor'a odaklanır; ölçülebilir dönüşüm artışı." },
+    "hr-transformation": { "title": "İnsan Kaynakları & Organizasyon Tasarımı", "subtitle": "Yetenek matrisleri, performans yönetimi, çevik organizasyon yapıları.", "valueProp": "İK'yı bordro+izinden ölçülebilir yetenek metrikleriyle stratejik ortağa dönüştürür." },
+    "crisis-management": { "title": "Kriz Yönetimi & İş Sürekliliği", "subtitle": "Finansal veya operasyonel krizler için acil eylem planları, dayanıklılık testleri.", "valueProp": "72 saatlik stratejik triyaj + paydaş iletişimi + finansal manevralar." },
+    "ai-analytics": { "title": "Yapay Zeka & İş Analitiği", "subtitle": "Öngörücü analiz için ML modelleri ve yapay zeka entegrasyon stratejisi.", "valueProp": "Yapay zeka hype'ının ötesinde ROI odaklı kullanım senaryosu seçimi; pilotu ölçeklemeye taşıyan yol haritası." },
+    "digital-strategy": { "title": "Dijital Dönüşüm & Teknoloji Stratejisi", "subtitle": "ERP seçimi, süreç otomasyonu (RPA), dijital olgunluk analizi.", "valueProp": "Araç seçimi değil — strateji-süreç-teknoloji-kültür dörtgeninin hizalanması. Ölçülebilir ROI." },
+    "data-governance": { "title": "Veri Yönetişimi & KVKK/GDPR Uyumu", "subtitle": "Veri mahremiyeti, siber yönetişim, regülatif uyum (ISO 27001).", "valueProp": "KVKK/GDPR'ı uyum kontrol listesinin ötesinde stratejik veri yönetişimine taşır." },
+    "esg-strategy": { "title": "ESG Stratejisi & Yeşil Mutabakat", "subtitle": "Karbon ayak izi raporlama, sürdürülebilirlik stratejisi, yeşil finansmana erişim.", "valueProp": "AB Yeşil Mutabakatı + CBAM'a hazır stratejik yol haritası — yalnızca maliyet değil rekabet avantajı." },
+    "investment-incentives": { "title": "Yatırım Teşvikleri & Hibe Yönetimi", "subtitle": "Devlet destekleri, Ar-Ge hibeleri, proje bazlı yatırım teşvik belgeleri.", "valueProp": "Şirketinizi 200+ Türk teşvik programıyla eşler; başvuru + raporlamayı yönetir." },
+    "macro-risk": { "title": "Makroekonomik Risk & Piyasa Analizi", "subtitle": "Kur, faiz, enflasyon projeksiyonları; C-Level karar destek raporları.", "valueProp": "CFO/CEO what-if sorularına yapılandırılmış yanıt — senaryo planlaması + hedge stratejisi." },
+    "competition-economics": { "title": "Rekabet İktisadı & Regülasyon", "subtitle": "Antitröst incelemesi, pazar hakimiyeti analizi, regülatif uyum.", "valueProp": "Rekabet Kurumu / AB Komisyonu soruşturmaları + M&A bildirim riski için ekonomik analiz." },
+    "industrial-relations": { "title": "Endüstri İlişkileri & Sendikalar", "subtitle": "Toplu iş sözleşmesi, sendika ilişkileri, işyeri uyumu.", "valueProp": "Yapılandırılmış TİS müzakeresi; işveren maliyet zarfını + işyeri barışını korur." },
+    "payroll-audit": { "title": "Bordro Denetimi & İstihdam Teşvikleri", "subtitle": "SGK prim teşviklerini azamiye çıkarma, maliyet optimizasyonu, bordro risk denetimi.", "valueProp": "Sistematik teşvik optimizasyonuyla bordro maliyetinin %5-15'ini geri kazandırır." },
+    "employer-branding": { "title": "Yetenek Yönetimi & İşveren Markası", "subtitle": "Nitelikli iş gücünü çekmek ve elde tutmak için stratejik İşveren Markası.", "valueProp": "Veriye dayalı EVP ile işe alım maliyetini + devir oranını düşürür, çalışan bağlılığını artırır." },
+    "market-entry": { "title": "Uluslararası Pazara Giriş & İhracat", "subtitle": "Hedef pazar araştırması, distribütör tespiti, Turquality hazırlığı.", "valueProp": "2-3 hedef pazarda pazara giriş stratejisi: distribütör havuzu + Turquality + ihracat finansmanı." },
+    "global-intelligence": { "title": "Küresel Diplomasi & Ticari İstihbarat", "subtitle": "Jeopolitik risk haritaları, ticari istihbarat, devletlerarası kriz senaryoları.", "valueProp": "Sınır ötesi şirketler için aylık jeopolitik brifing + risk-olay simülasyonu." },
+    "smart-cities": { "title": "Akıllı Şehirler & Kamu Politikası", "subtitle": "Yerel yönetimler için dijital kentleşme stratejisi ve etki analizi.", "valueProp": "3-5 yıllık akıllı şehir yol haritası: vatandaş hizmetleri, mobilite, enerji, atık, güvenlik mimarisi." },
+    "government-relations": { "title": "Kurumsal İlişkiler & Lobicilik (GR)", "subtitle": "Paydaş haritalama, regülasyon takibi, Ankara ve Brüksel'de stratejik temsil.", "valueProp": "Sektörünüzü etkileyen regülasyon değişikliklerine erken sinyal + etik lobicilik desteği." }
   }
 }
