@@ -4,6 +4,7 @@ import React from 'react';
 import { Helmet } from '../../lib/seo-helmet';
 import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { buildAlternateLinks } from '@/i18n/canonical';
 
 interface SeoManagerProps {
   title?: string;
@@ -11,21 +12,6 @@ interface SeoManagerProps {
   image?: string;
   type?: 'website' | 'article';
   noIndex?: boolean;
-}
-
-const SITE_URL = 'https://www.ecypro.com';
-
-// P39-T01: Path-based hreflang (RFC 5646 + Google spec)
-// Pattern: /tr/... | /en/... | x-default = bare canonical
-const LOCALE_PREFIXES = ['/tr', '/en'] as const;
-
-function stripLocale(pathname: string): string {
-  for (const prefix of LOCALE_PREFIXES) {
-    if (pathname === prefix || pathname.startsWith(`${prefix}/`)) {
-      return pathname.slice(prefix.length) || '/';
-    }
-  }
-  return pathname;
 }
 
 export const SeoManager: React.FC<SeoManagerProps> = ({
@@ -52,13 +38,13 @@ export const SeoManager: React.FC<SeoManagerProps> = ({
   const ogLocale = currentLang === 'tr' ? 'tr_TR' : 'en_US';
   const ogLocaleAlt = currentLang === 'tr' ? 'en_US' : 'tr_TR';
 
-  // P39-T01: Path-based hreflang (RFC 5646). Doğrudan <Helmet> child olarak
-  // verilir; IIFE/Fragment ile sarmalanırsa shim flatten edemez.
-  const cleanPath = stripLocale(canonicalPath);
-  const normalizeUrl = (seg: string) => `${SITE_URL}/${seg}`.replace(/([^:]\/)\/+/g, '$1');
-  const hreflangTr = normalizeUrl(`tr${cleanPath}`);
-  const hreflangEn = normalizeUrl(`en${cleanPath}`);
-  const hreflangDefault = normalizeUrl(cleanPath === '/' ? '' : cleanPath);
+  // P39-T01: Path-based hreflang (RFC 5646) — tek merkezi util'den.
+  // Doğrudan <Helmet> child olarak verilir; IIFE/Fragment ile sarmalanırsa
+  // shim flatten edemez. x-default artık locale-stripped değil → /tr prefix'li.
+  const alternates = buildAlternateLinks(canonicalPath);
+  const hreflangTr = alternates.find((a) => a.hrefLang === 'tr-TR')!.href;
+  const hreflangEn = alternates.find((a) => a.hrefLang === 'en')!.href;
+  const hreflangDefault = alternates.find((a) => a.hrefLang === 'x-default')!.href;
 
   return (
     <Helmet>
