@@ -24,6 +24,8 @@
     "dist",
     "src",
     "e2e",
-    "tests"
+    "tests",
+    "**/*.test.ts",
+    "**/*.spec.ts"
   ]
 }
