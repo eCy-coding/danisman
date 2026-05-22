@@ -21,7 +21,6 @@
 
 import { Router, Request, Response, NextFunction } from 'express';
 import { z } from 'zod';
-import { Resend } from 'resend';
 import { contactStrictLimiter } from '../middleware/rateLimiter';
 import { idempotency } from '../middleware/idempotency';
 import { HttpError } from '../middleware/error';
@@ -29,6 +28,8 @@ import { notify } from '../lib/telegram';
 import { logger } from '../config/logger';
 import { capture as posthogCapture } from '../lib/posthog-server';
 import { upsertProspect } from '../services/notion';
+import { sendContactAck, isResendConfigured } from '../services/contact-ack';
+import { withOutboxRecord } from '../lib/outbox';
 
 const router = Router();
 
@@ -51,36 +52,6 @@ const ContactSchema = z.object({
 });
 
 export type ContactPayload = z.infer<typeof ContactSchema>;
-
-const RESEND_KEY = process.env.RESEND_API_KEY;
-const EMAIL_FROM = process.env.EMAIL_FROM ?? 'eCyPro <noreply@ecypro.com>';
-const FOUNDER_EMAIL = process.env.FOUNDER_EMAIL ?? 'hello@ecypro.com';
-let resendClient: Resend | null = null;
-function getResend(): Resend | null {
-  if (!RESEND_KEY) return null;
-  if (!resendClient) resendClient = new Resend(RESEND_KEY);
-  return resendClient;
-}
-
-function ackEmailHtml(name: string): string {
-  return `<!DOCTYPE html><html lang="tr"><body style="font-family:Inter,system-ui,sans-serif;background:#050810;color:#e2e8f0;margin:0;padding:40px 20px">
-<div style="max-width:560px;margin:0 auto;background:#0f172a;border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:32px">
-  <div style="margin-bottom:24px"><strong style="font-size:20px;color:#fff">e<span style="color:#2563eb">Cy</span>Pro</strong></div>
-  <h1 style="font-size:22px;color:#fff;margin:0 0 12px">Mesajınız bize ulaştı, ${escapeHtml(name)}</h1>
-  <p style="line-height:1.6;color:#cbd5e1;margin:0 0 12px">Talebinizi aldık. Bir iş günü içinde sizinle dönüş yaparak Discovery Call için uygun zaman dilimini netleştireceğiz.</p>
-  <p style="line-height:1.6;color:#cbd5e1;margin:0 0 24px">Acil bir konu varsa <a href="mailto:hello@ecypro.com" style="color:#38bdf8">hello@ecypro.com</a> adresine yazabilirsiniz.</p>
-  <p style="font-size:12px;color:#64748b;border-top:1px solid rgba(255,255,255,0.08);padding-top:16px;margin:0">eCyPro Premium Consulting · İstanbul, Türkiye · KVKK m.5/2-f</p>
-</div></body></html>`;
-}
-
-function escapeHtml(s: string): string {
-  return s
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;');
-}
 
 // ── Route ─────────────────────────────────────────────────────────────────────
 
@@ -145,23 +116,24 @@ router.post(
         IP: req.ip ?? 'unknown',
       });
 
-      // Best-effort ack to the lead — never block on email delivery.
-      // `reply_to` routes the lead's reply to the founder inbox so the
-      // conversation continues out of the noreply mailbox.
-      const resend = getResend();
-      if (resend) {
-        resend.emails
-          .send({
-            from: EMAIL_FROM,
-            to: data.email,
-            replyTo: FOUNDER_EMAIL,
-            subject:
-              data.kind === 'booking'
-                ? 'Rezervasyon talebiniz alındı — eCyPro'
-                : 'Mesajınız bize ulaştı — eCyPro',
-            html: ackEmailHtml(data.name),
-          })
-          .catch((err) => logger.warn('[contact] ack email failed', { err: String(err) }));
+      // Best-effort ack to the lead — never block on email delivery. Recorded
+      // through the integration Outbox / WAL so a Resend blip is retried by the
+      // process-outbox cron instead of silently dropping the autoresponder.
+      // payload carries only { to, name, kind } — no email body. Skip the WAL
+      // entirely when Resend is unconfigured (dev / CI) to avoid noise rows.
+      if (isResendConfigured()) {
+        void withOutboxRecord(
+          {
+            service: 'RESEND',
+            operation: 'sendAutoresponder',
+            payload: { to: data.email, name: data.name, kind: data.kind },
+          },
+          () => sendContactAck({ to: data.email, name: data.name, kind: data.kind }),
+        ).catch((err) =>
+          logger.warn('[contact] ack email failed — recorded in outbox for retry', {
+            err: String(err),
+          }),
+        );
       }
 
       // KVKK m.5/2-f — consent timestamp captured at submission time; Notion

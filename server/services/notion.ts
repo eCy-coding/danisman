@@ -24,6 +24,7 @@
 
 import * as Sentry from '@sentry/node';
 import { logger } from '../config/logger';
+import { withOutboxRecord } from '../lib/outbox';
 
 const NOTION_VERSION = '2022-06-28';
 const NOTION_API = 'https://api.notion.com/v1';
@@ -255,12 +256,18 @@ export async function findProspect(input: {
   return res?.results?.[0] ?? null;
 }
 
+/** True when NOTION_API_KEY + NOTION_PROSPECTS_DB_ID are present. */
+export function isNotionConfigured(): boolean {
+  return isConfigured();
+}
+
 /**
- * Upsert a Prospect by company (else email). On update we PATCH all mapped
- * fields but never overwrite İlk Temas Tarihi, preserving the first lawful-
- * basis timestamp. Returns the page id, or null on failure.
+ * Raw Notion upsert — the un-wrapped network operation. Returns the page id or
+ * null on failure (still swallows network errors internally). The retry cron
+ * (server/jobs/process-outbox.ts) calls THIS directly so a replay does not
+ * create a second outbox row; production traffic goes through `upsertProspect`.
  */
-export async function upsertProspect(input: ProspectUpsertInput): Promise<string | null> {
+export async function upsertProspectRaw(input: ProspectUpsertInput): Promise<string | null> {
   if (!isConfigured()) return null;
   const existing = await findProspect({ company: input.company, email: input.decisionMakerEmail });
   if (existing) {
@@ -282,6 +289,47 @@ export async function upsertProspect(input: ProspectUpsertInput): Promise<string
     },
   });
   return created?.id ?? null;
+}
+
+/**
+ * Upsert a Prospect by email, recorded through the integration Outbox / WAL so
+ * a Notion outage can no longer silently lose a lead (the retry cron replays
+ * the FAILED row). The public contract is unchanged: returns the page id, or
+ * null on failure — this never throws, so existing fire-and-forget callers
+ * keep working.
+ *
+ * When Notion is not configured (dev / CI / unit tests) we skip the WAL
+ * entirely and defer to the raw no-op, so no spurious rows accumulate.
+ *
+ * payload = the exact upsert input. It carries name/email/company/notes +
+ * the KVKK consent timestamp (needed for a faithful replay) — but no API
+ * tokens and no email bodies.
+ */
+export async function upsertProspect(input: ProspectUpsertInput): Promise<string | null> {
+  if (!isConfigured()) return upsertProspectRaw(input);
+
+  try {
+    return await withOutboxRecord<string | null>(
+      {
+        service: 'NOTION',
+        operation: 'upsertProspect',
+        payload: input as unknown as Record<string, unknown>,
+      },
+      async () => {
+        const id = await upsertProspectRaw(input);
+        if (id === null) {
+          throw new Error('Notion upsert returned null (write failed)');
+        }
+        return id;
+      },
+    );
+  } catch (err) {
+    // WAL row is already FAILED; preserve the never-throw contract for callers.
+    logger.warn('[notion] upsertProspect failed — recorded in outbox for retry', {
+      err: String(err),
+    });
+    return null;
+  }
 }
 
 /**
