@@ -47,7 +47,7 @@ let fetchMock: ReturnType<typeof vi.fn>;
 beforeEach(async () => {
   vi.resetModules();
   vi.stubEnv('NOTION_API_KEY', 'test-key');
-  vi.stubEnv('NOTION_PROSPECTS_DB_ID', 'test-db');
+  vi.stubEnv('NOTION_DB_PROSPECTS', 'test-db');
   fetchMock = vi.fn();
   vi.stubGlobal('fetch', fetchMock);
   notion = await import('./notion');

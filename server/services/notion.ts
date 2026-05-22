@@ -29,17 +29,15 @@ const NOTION_VERSION = '2022-06-28';
 const NOTION_API = 'https://api.notion.com/v1';
 
 const API_KEY = process.env.NOTION_API_KEY ?? '';
-const PROSPECTS_DB = process.env.NOTION_PROSPECTS_DB_ID ?? '';
-const INTERACTIONS_DB = process.env.NOTION_INTERACTIONS_DB_ID ?? '';
+const PROSPECTS_DB = process.env.NOTION_DB_PROSPECTS ?? '';
+const INTERACTIONS_DB = process.env.NOTION_DB_INTERACTIONS ?? '';
 
 let warnedMissing = false;
 function isConfigured(): boolean {
   if (!API_KEY || !PROSPECTS_DB) {
     if (!warnedMissing) {
       warnedMissing = true;
-      logger.warn(
-        '[notion] NOTION_API_KEY or NOTION_PROSPECTS_DB_ID not set — CRM writes are no-op',
-      );
+      logger.warn('[notion] NOTION_API_KEY or NOTION_DB_PROSPECTS not set — CRM writes are no-op');
     }
     return false;
   }
@@ -288,7 +286,7 @@ export async function upsertProspect(input: ProspectUpsertInput): Promise<string
 
 /**
  * Append an Interaction row tied to a Prospect. Silent no-op when
- * NOTION_INTERACTIONS_DB_ID is not configured (some workspaces start
+ * NOTION_DB_INTERACTIONS is not configured (some workspaces start
  * with only a Prospects DB and add Interactions later).
  */
 export async function createInteraction(input: InteractionInput): Promise<string | null> {
