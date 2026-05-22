@@ -35,6 +35,11 @@ import {
   renderPasswordReset,
   renderGdprExportReady,
   renderGdprDeleteConfirm,
+  renderFounderLetter,
+  renderQuickCheckResult,
+  renderPricingInquiryAck,
+  renderDiscoveryConfirmed,
+  renderGenericNotification,
   type RenderedEmail,
   type Lang,
 } from '../emails/templates';
@@ -70,6 +75,34 @@ function renderEmail(payload: EmailJobPayload): RenderedEmail | null {
     case 'gdpr-delete-confirm':
       return renderGdprDeleteConfirm({
         confirmUrl: payload.confirmUrl,
+        lang: normalizeLang(payload.lang),
+      });
+    case 'founder-letter':
+      return renderFounderLetter({
+        firstName: payload.firstName,
+        lang: normalizeLang(payload.lang),
+      });
+    case 'quickcheck-result':
+      return renderQuickCheckResult({
+        company: payload.company,
+        lang: normalizeLang(payload.lang),
+      });
+    case 'pricing-inquiry-ack':
+      return renderPricingInquiryAck({
+        firstName: payload.firstName,
+        lang: normalizeLang(payload.lang),
+      });
+    case 'discovery-confirmed':
+      return renderDiscoveryConfirmed({
+        date: payload.date,
+        lang: normalizeLang(payload.lang),
+      });
+    case 'generic-notif':
+      return renderGenericNotification({
+        heading: payload.heading,
+        message: payload.message,
+        ctaUrl: payload.ctaUrl,
+        ctaLabel: payload.ctaLabel,
         lang: normalizeLang(payload.lang),
       });
     case 'transactional':
@@ -108,13 +141,17 @@ export async function sendTransactionalMail(payload: EmailJobPayload): Promise<v
   }
 
   try {
-    const { error } = await client.emails.send({
+    const sendArgs: Parameters<Resend['emails']['send']>[0] = {
       from: FROM,
       to: payload.to,
       subject: rendered.subject,
       html: rendered.html,
       text: rendered.text,
-    });
+    };
+    if (payload.type === 'quickcheck-result' && payload.pdfBase64) {
+      sendArgs.attachments = [{ filename: 'kvkk-quick-check.pdf', content: payload.pdfBase64 }];
+    }
+    const { error } = await client.emails.send(sendArgs);
     if (error) {
       throw new Error(error.message);
     }
@@ -184,4 +221,65 @@ export async function queueGdprDeleteConfirm(
 ): Promise<void> {
   const { enqueue } = await import('../queues');
   await enqueue('email', { type: 'gdpr-delete-confirm', to, confirmUrl, lang });
+}
+
+/** Enqueue the founder lead-nurture letter. */
+export async function queueFounderLetter(
+  to: string,
+  firstName: string,
+  lang: Lang = 'tr',
+): Promise<void> {
+  const { enqueue } = await import('../queues');
+  await enqueue('email', { type: 'founder-letter', to, firstName, lang });
+}
+
+/** Enqueue the KVKK Quick-Check autoresponder (optional PDF attachment). */
+export async function queueQuickCheckResult(
+  to: string,
+  company: string,
+  lang: Lang = 'tr',
+  pdfBase64?: string,
+): Promise<void> {
+  const { enqueue } = await import('../queues');
+  await enqueue('email', { type: 'quickcheck-result', to, company, lang, pdfBase64 });
+}
+
+/** Enqueue the pricing-inquiry acknowledgment. */
+export async function queuePricingInquiryAck(
+  to: string,
+  firstName: string,
+  lang: Lang = 'tr',
+): Promise<void> {
+  const { enqueue } = await import('../queues');
+  await enqueue('email', { type: 'pricing-inquiry-ack', to, firstName, lang });
+}
+
+/** Enqueue the discovery-call confirmation. */
+export async function queueDiscoveryConfirmed(
+  to: string,
+  date: string,
+  lang: Lang = 'tr',
+): Promise<void> {
+  const { enqueue } = await import('../queues');
+  await enqueue('email', { type: 'discovery-confirmed', to, date, lang });
+}
+
+/** Enqueue a generic notification with optional CTA. */
+export async function queueGenericNotification(
+  to: string,
+  heading: string,
+  message: string,
+  lang: Lang = 'tr',
+  cta?: { url: string; label: string },
+): Promise<void> {
+  const { enqueue } = await import('../queues');
+  await enqueue('email', {
+    type: 'generic-notif',
+    to,
+    heading,
+    message,
+    ctaUrl: cta?.url,
+    ctaLabel: cta?.label,
+    lang,
+  });
 }

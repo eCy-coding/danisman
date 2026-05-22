@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useId, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import {
   DEFAULT_PREFS,
   readConsent,
@@ -48,13 +49,12 @@ const COPY = {
 
 type Lang = 'tr' | 'en';
 
-function detectLang(): Lang {
-  if (typeof navigator === 'undefined') return 'tr';
-  return navigator.language?.toLowerCase().startsWith('tr') ? 'tr' : 'en';
-}
-
 export const CookieBanner: React.FC = () => {
-  const [lang] = useState<Lang>(detectLang);
+  // KVKK/GDPR: consent copy MUST follow the site's selected locale (URL /tr |
+  // /en, synced into i18n by LocaleRoute) — NOT the browser's navigator.language.
+  // Reading i18n.language re-renders the banner when the locale switches.
+  const { i18n } = useTranslation();
+  const lang: Lang = (i18n.language || '').toLowerCase().startsWith('tr') ? 'tr' : 'en';
   const [isVisible, setIsVisible] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [prefs, setPrefs] = useState<ConsentPreferences>(DEFAULT_PREFS);

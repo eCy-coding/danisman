@@ -77,6 +77,14 @@ function selectorFor(parsed: ParsedTag): string {
     return '';
   }
   if (tag === 'link') {
+    // hreflang alternates: birden çok <link rel="alternate"> aynı anda var
+    // olmalı (tr-TR / en / x-default). Sadece rel'e göre key'lersek hepsi tek
+    // selector'a çöker ve son tag öncekini ezer. hreflang'i de selector'a kat.
+    // React JSX prop is `hrefLang` (camelCase); some callers pass `hreflang`.
+    const hl = attrs.hreflang ?? attrs.hrefLang;
+    if (attrs.rel === 'alternate' && hl) {
+      return `link[rel="alternate"][hreflang="${hl}"]`;
+    }
     // Canonical en kritik tag; rel="canonical" unique, yine de ilk match güvenli.
     if (attrs.rel) return `link[rel="${attrs.rel}"]`;
     return '';

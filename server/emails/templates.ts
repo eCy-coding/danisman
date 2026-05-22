@@ -22,9 +22,9 @@ export interface RenderedEmail {
   text: string;
 }
 
-function baseLayout(title: string, body: string, footerText: string): string {
+function baseLayout(title: string, body: string, footerText: string, lang: Lang = 'tr'): string {
   return `<!DOCTYPE html>
-<html lang="${title.length > 0 ? 'en' : 'tr'}">
+<html lang="${lang}">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -119,7 +119,7 @@ export function renderWelcome(data: WelcomeData): RenderedEmail {
     `;
     return {
       subject: "🎉 eCyPro'ya Hoş Geldiniz",
-      html: baseLayout('Hoş Geldiniz', body, 'eCyPro Premium Consulting · İstanbul, Türkiye'),
+      html: baseLayout('Hoş Geldiniz', body, 'eCyPro Premium Consulting · İstanbul, Türkiye', 'tr'),
       text: `Merhaba ${data.name}, eCyPro hesabınız oluşturuldu. https://ecypro.com/account`,
     };
   }
@@ -135,7 +135,7 @@ export function renderWelcome(data: WelcomeData): RenderedEmail {
   `;
   return {
     subject: '🎉 Welcome to eCyPro',
-    html: baseLayout('Welcome', body, 'eCyPro Premium Consulting · Istanbul, Türkiye'),
+    html: baseLayout('Welcome', body, 'eCyPro Premium Consulting · Istanbul, Türkiye', 'en'),
     text: `Hi ${data.name}, your eCyPro account is ready. https://ecypro.com/account`,
   };
 }
@@ -163,7 +163,7 @@ export function renderPasswordReset(data: PasswordResetData): RenderedEmail {
     `;
     return {
       subject: '🔐 eCyPro Şifre Sıfırlama',
-      html: baseLayout('Şifre Sıfırlama', body, 'eCyPro Premium Consulting'),
+      html: baseLayout('Şifre Sıfırlama', body, 'eCyPro Premium Consulting', 'tr'),
       text: `Şifrenizi sıfırlamak için: ${data.resetUrl}`,
     };
   }
@@ -180,7 +180,7 @@ export function renderPasswordReset(data: PasswordResetData): RenderedEmail {
   `;
   return {
     subject: '🔐 Reset your eCyPro password',
-    html: baseLayout('Password Reset', body, 'eCyPro Premium Consulting'),
+    html: baseLayout('Password Reset', body, 'eCyPro Premium Consulting', 'en'),
     text: `Reset your password: ${data.resetUrl}`,
   };
 }
@@ -213,7 +213,7 @@ export function renderGdprExportReady(data: GdprExportReadyData): RenderedEmail 
     `;
     return {
       subject: '📦 GDPR Veri İhracatınız Hazır',
-      html: baseLayout('Veri İhracatı', body, 'eCyPro Premium Consulting · GDPR'),
+      html: baseLayout('Veri İhracatı', body, 'eCyPro Premium Consulting · GDPR', 'tr'),
       text: `Veri ihracatınız: ${data.downloadUrl} (son geçerlilik: ${expiry})`,
     };
   }
@@ -230,7 +230,7 @@ export function renderGdprExportReady(data: GdprExportReadyData): RenderedEmail 
   `;
   return {
     subject: '📦 Your GDPR data export is ready',
-    html: baseLayout('Data Export', body, 'eCyPro Premium Consulting · GDPR'),
+    html: baseLayout('Data Export', body, 'eCyPro Premium Consulting · GDPR', 'en'),
     text: `Data export: ${data.downloadUrl} (expires: ${expiry})`,
   };
 }
@@ -261,7 +261,7 @@ export function renderGdprDeleteConfirm(data: GdprDeleteConfirmData): RenderedEm
     `;
     return {
       subject: '⚠️ eCyPro Hesap Silme Onayı',
-      html: baseLayout('Silme Onayı', body, 'eCyPro Premium Consulting · GDPR'),
+      html: baseLayout('Silme Onayı', body, 'eCyPro Premium Consulting · GDPR', 'tr'),
       text: `Hesap silme talebinizi onaylayın: ${data.confirmUrl}`,
     };
   }
@@ -282,8 +282,239 @@ export function renderGdprDeleteConfirm(data: GdprDeleteConfirmData): RenderedEm
   `;
   return {
     subject: '⚠️ Confirm your eCyPro account deletion',
-    html: baseLayout('Account Deletion Confirm', body, 'eCyPro Premium Consulting · GDPR'),
+    html: baseLayout('Account Deletion Confirm', body, 'eCyPro Premium Consulting · GDPR', 'en'),
     text: `Confirm account deletion: ${data.confirmUrl}`,
+  };
+}
+
+// ── Founder letter (lead nurture) ──────────────────────────────────────────
+
+export interface FounderLetterData {
+  firstName: string;
+  lang: Lang;
+}
+
+export function renderFounderLetter(data: FounderLetterData): RenderedEmail {
+  const name = escapeHtml(data.firstName);
+  if (data.lang === 'tr') {
+    const body = `
+      <h2 style="color:#fff;font-size:20px;font-weight:700;margin:0 0 8px">Sayın ${name},</h2>
+      <p style="color:#94a3b8;font-size:14px;line-height:1.7;margin:0 0 16px">
+        eCyPro olarak, işletmenizin uyum, veri güvenliği ve dijital dönüşüm
+        yolculuğunda yanınızda olmaktan memnuniyet duyuyoruz. Kişisel olarak
+        sürecinizi takip edeceğimi bilmenizi isterim.
+      </p>
+      <p style="color:#94a3b8;font-size:14px;line-height:1.7;margin:0 0 24px">
+        Sorularınız için doğrudan bana ulaşabilirsiniz. İlk adımı birlikte
+        atalım.
+      </p>
+      ${ctaButton('https://ecypro.com/tr/contact', 'Görüşme Planla')}
+      <p style="color:#64748b;font-size:13px;margin-top:24px">
+        Saygılarımla,<br/><strong style="color:#cbd5e1">eCyPro Kurucu Ekibi</strong>
+      </p>
+    `;
+    return {
+      subject: "eCyPro'ya Hoş Geldiniz",
+      html: baseLayout(
+        'Kurucu Mektubu',
+        body,
+        'eCyPro Premium Consulting · İstanbul, Türkiye',
+        'tr',
+      ),
+      text: `Sayın ${data.firstName}, eCyPro olarak uyum ve dijital dönüşüm yolculuğunuzda yanınızdayız. https://ecypro.com/tr/contact`,
+    };
+  }
+  const body = `
+    <h2 style="color:#fff;font-size:20px;font-weight:700;margin:0 0 8px">Dear ${name},</h2>
+    <p style="color:#94a3b8;font-size:14px;line-height:1.7;margin:0 0 16px">
+      At eCyPro, we're glad to stand beside you on your compliance, data
+      security, and digital transformation journey. I want you to know I'll
+      be following your process personally.
+    </p>
+    <p style="color:#94a3b8;font-size:14px;line-height:1.7;margin:0 0 24px">
+      Reach out to me directly with any questions. Let's take the first step
+      together.
+    </p>
+    ${ctaButton('https://ecypro.com/en/contact', 'Schedule a Call')}
+    <p style="color:#64748b;font-size:13px;margin-top:24px">
+      Warm regards,<br/><strong style="color:#cbd5e1">The eCyPro Founding Team</strong>
+    </p>
+  `;
+  return {
+    subject: 'Welcome to eCyPro',
+    html: baseLayout('Founder Letter', body, 'eCyPro Premium Consulting · Istanbul, Türkiye', 'en'),
+    text: `Dear ${data.firstName}, at eCyPro we stand beside you on your compliance and digital transformation journey. https://ecypro.com/en/contact`,
+  };
+}
+
+// ── Quick-Check autoresponder ──────────────────────────────────────────────
+
+export interface QuickCheckResultData {
+  company: string;
+  lang: Lang;
+}
+
+export function renderQuickCheckResult(data: QuickCheckResultData): RenderedEmail {
+  const company = escapeHtml(data.company);
+  if (data.lang === 'tr') {
+    const body = `
+      <h2 style="color:#fff;font-size:20px;font-weight:700;margin:0 0 8px">KVKK Hızlı Kontrol Sonuçlarınız 📊</h2>
+      <p style="color:#94a3b8;font-size:14px;line-height:1.7;margin:0 0 24px">
+        <strong style="color:#cbd5e1">${company}</strong> için hazırladığımız
+        KVKK Hızlı Kontrol sonuçlarınız ekteki PDF'tedir. Rapor, mevcut uyum
+        seviyenizi ve öncelikli aksiyon alanlarınızı özetler.
+      </p>
+      <p style="color:#94a3b8;font-size:14px;line-height:1.7;margin:0 0 24px">
+        Detaylı bir değerlendirme için ücretsiz bir keşif görüşmesi
+        planlayabilirsiniz.
+      </p>
+      ${ctaButton('https://ecypro.com/tr/contact', 'Keşif Görüşmesi Planla')}
+    `;
+    return {
+      subject: 'KVKK Hızlı Kontrol Sonuçlarınız',
+      html: baseLayout('KVKK Hızlı Kontrol', body, 'eCyPro Premium Consulting · KVKK', 'tr'),
+      text: `${data.company} için KVKK Hızlı Kontrol sonuçlarınız ekteki PDF'tedir. Keşif görüşmesi: https://ecypro.com/tr/contact`,
+    };
+  }
+  const body = `
+    <h2 style="color:#fff;font-size:20px;font-weight:700;margin:0 0 8px">Your KVKK Quick Check Results 📊</h2>
+    <p style="color:#94a3b8;font-size:14px;line-height:1.7;margin:0 0 24px">
+      Your KVKK Quick Check results for <strong style="color:#cbd5e1">${company}</strong>
+      are in the attached PDF. The report summarizes your current compliance
+      posture and the highest-priority action areas.
+    </p>
+    <p style="color:#94a3b8;font-size:14px;line-height:1.7;margin:0 0 24px">
+      For a deeper assessment, you can book a free discovery call.
+    </p>
+    ${ctaButton('https://ecypro.com/en/contact', 'Book a Discovery Call')}
+  `;
+  return {
+    subject: 'Your KVKK Quick Check Results',
+    html: baseLayout('KVKK Quick Check', body, 'eCyPro Premium Consulting · KVKK', 'en'),
+    text: `Your KVKK Quick Check results for ${data.company} are in the attached PDF. Discovery call: https://ecypro.com/en/contact`,
+  };
+}
+
+// ── Pricing inquiry acknowledgment ─────────────────────────────────────────
+
+export interface PricingInquiryAckData {
+  firstName: string;
+  lang: Lang;
+}
+
+export function renderPricingInquiryAck(data: PricingInquiryAckData): RenderedEmail {
+  const name = escapeHtml(data.firstName);
+  if (data.lang === 'tr') {
+    const body = `
+      <h2 style="color:#fff;font-size:20px;font-weight:700;margin:0 0 8px">Talebiniz Alındı ✅</h2>
+      <p style="color:#94a3b8;font-size:14px;line-height:1.7;margin:0 0 24px">
+        Merhaba ${name}, fiyatlandırma talebiniz başarıyla alındı.
+        İhtiyaçlarınıza özelleştirilmiş bir teklifi <strong style="color:#cbd5e1">24 saat
+        içinde</strong> sizinle paylaşacağız.
+      </p>
+      <p style="color:#94a3b8;font-size:14px;line-height:1.7;margin:0 0 24px">
+        Bu süre zarfında hizmetlerimizi daha yakından inceleyebilirsiniz.
+      </p>
+      ${ctaButton('https://ecypro.com/tr/services', 'Hizmetleri İncele')}
+    `;
+    return {
+      subject: 'Talebiniz Alındı — eCyPro',
+      html: baseLayout('Teklif Talebi', body, 'eCyPro Premium Consulting', 'tr'),
+      text: `Merhaba ${data.firstName}, talebiniz alındı. 24 saat içinde özelleştirilmiş teklif paylaşacağız. https://ecypro.com/tr/services`,
+    };
+  }
+  const body = `
+    <h2 style="color:#fff;font-size:20px;font-weight:700;margin:0 0 8px">Your Inquiry Has Been Received ✅</h2>
+    <p style="color:#94a3b8;font-size:14px;line-height:1.7;margin:0 0 24px">
+      Hi ${name}, your pricing inquiry has been received. We'll share a
+      customized proposal tailored to your needs <strong style="color:#cbd5e1">within
+      24 hours</strong>.
+    </p>
+    <p style="color:#94a3b8;font-size:14px;line-height:1.7;margin:0 0 24px">
+      In the meantime, feel free to explore our services in more detail.
+    </p>
+    ${ctaButton('https://ecypro.com/en/services', 'Explore Services')}
+  `;
+  return {
+    subject: 'Your inquiry has been received — eCyPro',
+    html: baseLayout('Pricing Inquiry', body, 'eCyPro Premium Consulting', 'en'),
+    text: `Hi ${data.firstName}, your inquiry has been received. A customized proposal within 24 hours. https://ecypro.com/en/services`,
+  };
+}
+
+// ── Discovery call confirmation ────────────────────────────────────────────
+
+export interface DiscoveryConfirmedData {
+  date: string;
+  lang: Lang;
+}
+
+export function renderDiscoveryConfirmed(data: DiscoveryConfirmedData): RenderedEmail {
+  const date = escapeHtml(data.date);
+  if (data.lang === 'tr') {
+    const body = `
+      <h2 style="color:#fff;font-size:20px;font-weight:700;margin:0 0 8px">Discovery Call Onaylandı 🗓️</h2>
+      <p style="color:#94a3b8;font-size:14px;line-height:1.7;margin:0 0 24px">
+        <strong style="color:#cbd5e1">${date}</strong> tarihinde Discovery Call
+        için randevunuz onaylandı. Görüşmeden önce ihtiyaçlarınızı not almanızı
+        öneririz.
+      </p>
+      ${ctaButton('https://ecypro.com/tr/account', 'Randevumu Yönet')}
+      <p style="color:#64748b;font-size:12px;margin-top:24px">
+        Tarihi değiştirmeniz gerekirse hesabınızdan randevuyu güncelleyebilirsiniz.
+      </p>
+    `;
+    return {
+      subject: 'Discovery Call Onayı — eCyPro',
+      html: baseLayout('Discovery Call Onayı', body, 'eCyPro Premium Consulting', 'tr'),
+      text: `${data.date} tarihinde Discovery Call için randevunuz onaylandı. https://ecypro.com/tr/account`,
+    };
+  }
+  const body = `
+    <h2 style="color:#fff;font-size:20px;font-weight:700;margin:0 0 8px">Discovery Call Confirmed 🗓️</h2>
+    <p style="color:#94a3b8;font-size:14px;line-height:1.7;margin:0 0 24px">
+      Your Discovery Call is confirmed for <strong style="color:#cbd5e1">${date}</strong>.
+      We recommend jotting down your needs before the call.
+    </p>
+    ${ctaButton('https://ecypro.com/en/account', 'Manage My Booking')}
+    <p style="color:#64748b;font-size:12px;margin-top:24px">
+      If you need to reschedule, you can update the booking from your account.
+    </p>
+  `;
+  return {
+    subject: 'Discovery Call Confirmed — eCyPro',
+    html: baseLayout('Discovery Call Confirmed', body, 'eCyPro Premium Consulting', 'en'),
+    text: `Your Discovery Call is confirmed for ${data.date}. https://ecypro.com/en/account`,
+  };
+}
+
+// ── Generic notification ───────────────────────────────────────────────────
+
+export interface GenericNotifData {
+  heading: string;
+  message: string;
+  ctaUrl?: string;
+  ctaLabel?: string;
+  lang: Lang;
+}
+
+export function renderGenericNotification(data: GenericNotifData): RenderedEmail {
+  const heading = escapeHtml(data.heading);
+  const message = escapeHtml(data.message);
+  const cta = data.ctaUrl && data.ctaLabel ? ctaButton(data.ctaUrl, data.ctaLabel) : '';
+  const footer =
+    data.lang === 'tr'
+      ? 'eCyPro Premium Consulting · İstanbul, Türkiye'
+      : 'eCyPro Premium Consulting · Istanbul, Türkiye';
+  const body = `
+    <h2 style="color:#fff;font-size:20px;font-weight:700;margin:0 0 8px">${heading}</h2>
+    <p style="color:#94a3b8;font-size:14px;line-height:1.7;margin:0 0 24px">${message}</p>
+    ${cta}
+  `;
+  return {
+    subject: data.heading,
+    html: baseLayout(data.heading, body, footer, data.lang),
+    text: `${data.heading}\n\n${data.message}${data.ctaUrl ? `\n\n${data.ctaUrl}` : ''}`,
   };
 }
 
