@@ -298,6 +298,15 @@ const AnimatedRoutes = () => {
               </Suspense>
             }
           />
+          {/* SEO alias for /about — keeps /about-us resolvable */}
+          <Route
+            path="/about-us"
+            element={
+              <Suspense fallback={<LoadingFallback />}>
+                <AboutPage />
+              </Suspense>
+            }
+          />
           <Route
             path="/team"
             element={
@@ -741,6 +750,31 @@ const AnimatedRoutes = () => {
                 <Suspense fallback={<LoadingFallback />}>
                   <AssessmentPage />
                 </Suspense>
+              }
+            />
+            {/* SEO alias for /about — keeps /:locale/about-us resolvable */}
+            <Route
+              path="about-us"
+              element={
+                <Suspense fallback={<LoadingFallback />}>
+                  <AboutPage />
+                </Suspense>
+              }
+            />
+            <Route
+              path="quick-check"
+              element={
+                <RouteContainer name="QuickCheckPage" fallback={<LoadingFallback />}>
+                  <QuickCheckPage />
+                </RouteContainer>
+              }
+            />
+            <Route
+              path="pricing-calculator"
+              element={
+                <RouteContainer name="PricingCalculatorPage" fallback={<LoadingFallback />}>
+                  <PricingCalculatorPage />
+                </RouteContainer>
               }
             />
           </Route>
