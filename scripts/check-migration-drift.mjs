@@ -63,18 +63,26 @@ function classifyDiff(result) {
   if (/binaries\.prisma\.sh|getaddrinfo|ENOTFOUND|ECONNREFUSED/i.test(result.stderr)) {
     return { drift: false, reason: 'engine_unreachable', skipped: true };
   }
+  // A missing connector (no migration_lock.toml) is a config error, not drift.
+  if (/migration_lock\.toml|Could not determine the connector/i.test(result.stderr)) {
+    return { drift: false, reason: 'connector_undeterminable', skipped: true };
+  }
   const combined = `${result.stdout}\n${result.stderr}`;
   if (/No difference detected/i.test(combined)) {
     return { drift: false, reason: 'in_sync', skipped: false };
   }
+  // Prisma 7 `--exit-code` contract: 0 = empty (in sync), 2 = not empty (drift),
+  // 1 = command error. The pre-7 wrapper treated any non-zero as drift, which
+  // flagged genuine CLI errors (e.g. removed flags) as false-positive drift.
   if (result.code === 0) {
-    return { drift: false, reason: 'cli_zero_exit', skipped: false };
+    return { drift: false, reason: 'in_sync', skipped: false };
   }
-  // Anything else → drift OR error. Inspect output.
-  if (/Drift detected|Database schema is not in sync/i.test(combined)) {
+  if (result.code === 2) {
     return { drift: true, reason: 'drift_detected', skipped: false };
   }
-  return { drift: true, reason: 'unknown_nonzero_exit', skipped: false, code: result.code };
+  // code === 1 (or anything else) → the CLI itself failed; surface as skipped
+  // error rather than asserting drift we cannot actually confirm.
+  return { drift: false, reason: 'cli_error', skipped: true, code: result.code };
 }
 
 async function main() {
@@ -85,7 +93,7 @@ async function main() {
     'diff',
     '--from-migrations',
     'prisma/migrations',
-    '--to-schema-datamodel',
+    '--to-schema',
     'prisma/schema.prisma',
     '--exit-code',
   ]);
@@ -97,7 +105,7 @@ async function main() {
   const fromSchemaToMigrations = await runPrisma([
     'migrate',
     'diff',
-    '--from-schema-datamodel',
+    '--from-schema',
     'prisma/schema.prisma',
     '--to-migrations',
     'prisma/migrations',
