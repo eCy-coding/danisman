@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { useTranslation, getLang, type MultiLang } from '@/lib/i18n';
+import { buildCanonical } from '@/i18n/canonical';
 import { CONTACT_CONFIG } from '../../constants';
 
 interface SEOProps {
@@ -90,7 +91,10 @@ export const SEO: React.FC<SEOProps> = ({
       : 'Your strategic partner for global growth and digital transformation. Management, events, and digital solutions.';
 
   const finalDescription = description || siteDescription;
-  const finalCanonical = canonical ? `${SITE_URL}${canonical}` : SITE_URL;
+  // Locale-aware canonical: always https://www.ecypro.com/{locale}{path}.
+  // Eski davranış canonical'ı locale-stripped bırakıyordu → Google duplicate
+  // content riski. buildCanonical /:locale prefix'i garanti eder.
+  const finalCanonical = buildCanonical(canonical ?? '/', language);
 
   // Default JSON-LD for the organization from constants
   const defaultJsonLd = React.useMemo(
