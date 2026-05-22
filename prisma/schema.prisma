@@ -552,3 +552,29 @@ model NewsletterSubscriber {
   @@index([unsubscribedAt])
   @@map("newsletter_subscribers")
 }
+
+// ─── Cross-service partial-failure resilience: Outbox / WAL ─
+// Write-Ahead Log for third-party integration side effects (Notion CRM,
+// Resend autoresponder). A PENDING row is written BEFORE the outbound call;
+// it transitions to COMPLETED on success or FAILED on error. A node-cron
+// processor (server/jobs/process-outbox.ts) retries FAILED/PENDING rows and
+// dead-letters (DLQ) after MAX_ATTEMPTS, alerting the operator via Telegram.
+// payload holds only what's needed to replay the operation — never API tokens
+// or full email bodies.
+model IntegrationOutbox {
+  id        String   @id @default(uuid())
+  service   String // 'NOTION' | 'RESEND' | 'CALENDLY'
+  operation String // 'upsertProspect' | 'sendAutoresponder' | …
+  payload   Json // sanitized replay payload (no tokens / no email bodies)
+  status    String   @default("PENDING") // PENDING | COMPLETED | FAILED | DLQ
+  attempts  Int      @default(0)
+  lastError String?  @db.Text
+  traceId   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([status, attempts])
+  @@index([service, status])
+  @@index([createdAt])
+  @@map("integration_outbox")
+}

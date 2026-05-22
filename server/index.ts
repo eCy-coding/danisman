@@ -294,6 +294,9 @@ app.use(errorHandler);
 import { startReminderJob } from './jobs/booking-reminders';
 import { notifyServerStart, notifyCriticalError } from './lib/telegram';
 import { startLeadPipeline, stopLeadPipeline } from './services/lead-pipeline';
+// Integration Outbox / WAL — retries FAILED/PENDING third-party side effects
+// (Notion, Resend) so a partial failure can't silently lose a lead.
+import { startOutboxProcessor, stopOutboxProcessor } from './jobs/process-outbox';
 // P17 BE Track 2 / Aşama 1 — BullMQ queue workers.
 //   In single-process dev the API container also hosts the workers; in
 //   prod the worker dyno bootstraps via `server/workers/standalone.ts` and
@@ -306,6 +309,7 @@ import { attachJobBridge } from './lib/realtime/publish';
 if (process.env.NODE_ENV !== 'test') {
   startReminderJob();
   startLeadPipeline();
+  startOutboxProcessor();
   if (process.env.DISABLE_INLINE_WORKERS !== '1') {
     startAllWorkers();
   }
@@ -353,6 +357,11 @@ const shutdown = (signal: string): Promise<void> => {
       stopLeadPipeline();
     } catch (err) {
       logger.warn(`[shutdown] stopLeadPipeline failed: ${(err as Error).message}`);
+    }
+    try {
+      stopOutboxProcessor();
+    } catch (err) {
+      logger.warn(`[shutdown] stopOutboxProcessor failed: ${(err as Error).message}`);
     }
 
     // P17 BE Track 2 / Aşama 1 — drain BullMQ workers + producer registry.
