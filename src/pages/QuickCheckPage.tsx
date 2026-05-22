@@ -2,6 +2,8 @@ import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { PageWrapper } from '../components/layout/PageWrapper';
 import { LazyMount } from '../components/common/LazyMount';
+import { useTranslation } from '@/lib/i18n';
+import { buildCanonical } from '@/i18n/canonical';
 
 // Mobile LCP: the 855-line wizard hydrating eagerly kept the main thread busy
 // past the LCP <p> in the header. Lazy + intersection-gated mount frees CPU so
@@ -11,6 +13,7 @@ const QuickCheckWizard = React.lazy(() =>
 );
 
 export const QuickCheckPage: React.FC = () => {
+  const { language } = useTranslation();
   return (
     <React.Fragment>
       <Helmet>
@@ -19,7 +22,7 @@ export const QuickCheckPage: React.FC = () => {
           name="description"
           content="10 soruda şirketinizin KVKK + EU regulatory compliance skorunu öğrenin. Risk seviyenize göre kişiselleştirilmiş aksiyon önerisi. KVKK m.5/2-f çerçevesinde işlenir."
         />
-        <link rel="canonical" href="https://www.ecypro.com/quick-check" />
+        <link rel="canonical" href={buildCanonical('/quick-check', language)} />
         <meta name="robots" content="index,follow" />
       </Helmet>
       <PageWrapper>

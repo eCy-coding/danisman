@@ -8,10 +8,13 @@ import { FadeIn } from '../components/common/FadeIn';
 import { PageWrapper } from '../components/layout/PageWrapper';
 import { JsonLd } from '../components/seo/JsonLd';
 import { buildBreadcrumbSchema } from '../lib/structured-data';
+import { useTranslation } from '@/lib/i18n';
+import { buildCanonical } from '@/i18n/canonical';
 
 const ALL_INDUSTRY = '__all__';
 
 export const CaseStudiesPage: React.FC = () => {
+  const { language } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
   const activeIndustry = searchParams.get('industry') ?? ALL_INDUSTRY;
 
@@ -46,7 +49,7 @@ export const CaseStudiesPage: React.FC = () => {
           name="description"
           content="Müşterilerimizle birlikte yazdığımız başarı hikayeleri. Dönüşüm yolculuklarına tanıklık edin."
         />
-        <link rel="canonical" href="https://ecypro.com/case-studies" />
+        <link rel="canonical" href={buildCanonical('/case-studies', language)} />
       </Helmet>
 
       <JsonLd

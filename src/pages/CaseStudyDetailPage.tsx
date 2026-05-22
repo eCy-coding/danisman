@@ -8,10 +8,13 @@ import { FadeIn } from '../components/common/FadeIn';
 import { PageWrapper } from '../components/layout/PageWrapper';
 import { JsonLd } from '../components/seo/JsonLd';
 import { buildCaseStudySchema, buildBreadcrumbSchema } from '../lib/structured-data';
+import { useTranslation } from '@/lib/i18n';
+import { buildCanonical } from '@/i18n/canonical';
 import { NotFoundPage } from './NotFoundPage';
 import { ResponsiveImage } from '../components/ui/ResponsiveImage';
 
 export const CaseStudyDetailPage: React.FC = () => {
+  const { language } = useTranslation();
   const { slug } = useParams<{ slug: string }>();
   const study = CASE_STUDIES.find((s) => s.slug === slug);
 
@@ -29,7 +32,7 @@ export const CaseStudyDetailPage: React.FC = () => {
           name="description"
           content={`${study.title} — ${study.client}. Result: ${study.result}.`}
         />
-        <link rel="canonical" href={`https://ecypro.com/case-studies/${study.slug}`} />
+        <link rel="canonical" href={buildCanonical(`/case-studies/${study.slug}`, language)} />
       </Helmet>
 
       <JsonLd

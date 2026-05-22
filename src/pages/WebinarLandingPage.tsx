@@ -14,6 +14,8 @@ import { useParams, Link, Navigate } from 'react-router-dom';
 import { ArrowRight, Calendar, Clock, Users, CheckCircle2, Loader2 } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
 import { trackFormSubmit } from '../lib/integrations/analytics';
+import { useTranslation } from '@/lib/i18n';
+import { buildCanonical } from '@/i18n/canonical';
 
 interface Webinar {
   slug: string;
@@ -84,6 +86,7 @@ const WEBINARS: Webinar[] = [
 ];
 
 export const WebinarLandingPage: React.FC = () => {
+  const { language } = useTranslation();
   const { slug } = useParams<{ slug: string }>();
   const webinar = useMemo(() => WEBINARS.find((w) => w.slug === slug), [slug]);
   const [email, setEmail] = useState('');
@@ -149,7 +152,7 @@ export const WebinarLandingPage: React.FC = () => {
           name="description"
           content={`${webinar.title} — ${webinar.speakers.join(', ')} ile ${dateFmt} ${timeFmt}.`}
         />
-        <link rel="canonical" href={`https://www.ecypro.com/webinars/${webinar.slug}`} />
+        <link rel="canonical" href={buildCanonical(`/webinars/${webinar.slug}`, language)} />
       </Helmet>
       <section className="pt-32 pb-12 px-6 md:px-12 border-b border-white/5">
         <div className="max-w-4xl mx-auto">

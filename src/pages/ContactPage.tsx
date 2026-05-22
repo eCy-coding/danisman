@@ -7,6 +7,7 @@ import { CONTACT_CONFIG } from '@/data/copy/common';
 import { Helmet } from 'react-helmet-async';
 import { JsonLd } from '../components/seo/JsonLd';
 import { buildBreadcrumbSchema } from '../lib/structured-data';
+import { buildCanonical } from '@/i18n/canonical';
 import { CalendlyEmbed } from '../components/booking/CalendlyEmbed';
 
 const PLAN_LABELS: Record<string, { tr: string; en: string }> = {
@@ -41,7 +42,7 @@ export const ContactPage: React.FC = () => {
               : 'Book a Discovery Call or contact us directly — a complimentary 45-minute strategy session. KVKK, EU regulatory, and digital transformation practice.'
           }
         />
-        <link rel="canonical" href="https://ecypro.com/contact" />
+        <link rel="canonical" href={buildCanonical('/contact', lang)} />
       </Helmet>
       <JsonLd
         data={buildBreadcrumbSchema([

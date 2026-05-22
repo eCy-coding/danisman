@@ -11,6 +11,7 @@ import { Calendar, Clock, Video, ShieldCheck } from 'lucide-react';
 import { PageWrapper } from '../components/layout/PageWrapper';
 import { CalendlyEmbed } from '../components/booking/CalendlyEmbed';
 import { useTranslation } from '@/lib/i18n';
+import { buildCanonical } from '@/i18n/canonical';
 
 export const DiscoveryCallPage: React.FC = () => {
   const { language } = useTranslation();
@@ -32,12 +33,12 @@ export const DiscoveryCallPage: React.FC = () => {
               : '30-minute free discovery call. Strategic transformation, M&A, ESG, or operational excellence — initial assessment.'
           }
         />
-        <link rel="canonical" href="https://www.ecypro.com/discovery-call" />
+        <link rel="canonical" href={buildCanonical('/discovery-call', language)} />
         <meta
           property="og:title"
           content="Ücretsiz Strateji Görüşmesi | eCyPro Premium Consulting"
         />
-        <meta property="og:url" content="https://www.ecypro.com/discovery-call" />
+        <meta property="og:url" content={buildCanonical('/discovery-call', language)} />
         <meta property="og:type" content="website" />
       </Helmet>
       <PageWrapper>

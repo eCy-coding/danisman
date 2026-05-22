@@ -11,6 +11,8 @@ import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { FileText, Download, Loader2, CheckCircle2 } from 'lucide-react';
 import { trackFormSubmit } from '../lib/integrations/analytics';
+import { useTranslation } from '@/lib/i18n';
+import { buildCanonical } from '@/i18n/canonical';
 
 const REPORT = {
   slug: 'turkey-premium-consulting-2026',
@@ -33,6 +35,7 @@ const REPORT = {
 };
 
 export const IndustryReportPage: React.FC = () => {
+  const { language } = useTranslation();
   const [form, setForm] = useState({ name: '', email: '', org: '', role: '' });
   const [consent, setConsent] = useState(false);
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
@@ -73,7 +76,7 @@ export const IndustryReportPage: React.FC = () => {
       <Helmet>
         <title>{`${REPORT.title} | eCyPro`}</title>
         <meta name="description" content={REPORT.subtitle} />
-        <link rel="canonical" href={`https://www.ecypro.com/industry-reports/${REPORT.slug}`} />
+        <link rel="canonical" href={buildCanonical(`/industry-reports/${REPORT.slug}`, language)} />
       </Helmet>
       <section className="pt-32 pb-12 px-6 md:px-12 border-b border-white/5">
         <div className="max-w-5xl mx-auto grid md:grid-cols-[1fr_320px] gap-10 items-start">
