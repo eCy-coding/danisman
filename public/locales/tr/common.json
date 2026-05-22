@@ -26,6 +26,7 @@
   },
   "loading": "Yükleniyor...",
   "noResults": "Sonuç bulunamadı.",
+  "skip_to_content": "İçeriğe atla",
   "empty": {
     "blogTitle": "Henüz blog yazısı yok",
     "blogDescription": "İlk yazıyı oluşturmak için aşağıdaki butonu kullan.",

@@ -26,6 +26,7 @@
   },
   "loading": "Loading...",
   "noResults": "No results found.",
+  "skip_to_content": "Skip to content",
   "empty": {
     "blogTitle": "No blog posts yet",
     "blogDescription": "Use the button below to create the first one.",
