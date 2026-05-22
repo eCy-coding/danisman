@@ -3,6 +3,7 @@ import { Linkedin, Twitter, Instagram, CheckCircle2, AlertCircle } from 'lucide-
 import { Link } from 'react-router-dom';
 import { trackEvent } from '../../lib/analytics';
 import { useTranslation } from '../../lib/i18n';
+import { localizedHref, type Locale } from '../../i18n/helpers';
 import { FOOTER_COPY } from '../../constants';
 import { CountrySelector } from '../common/CountrySelector';
 import { EcyLogo } from '@/components/ui/EcyLogo';
@@ -368,26 +369,35 @@ export const Footer: React.FC = () => {
           </p>
           <CountrySelector />
           <div className="flex flex-wrap gap-x-6 gap-y-2 mt-4 md:mt-0 justify-center md:justify-end">
-            <Link to="/privacy" className="hover:text-white transition-colors">
+            <Link
+              to={localizedHref('/privacy', lang as Locale)}
+              className="hover:text-white transition-colors"
+            >
               {FOOTER_COPY.privacy[lang]}
             </Link>
             <span className="text-slate-400" aria-hidden="true">
               |
             </span>
-            <Link to="/terms" className="hover:text-white transition-colors">
+            <Link
+              to={localizedHref('/terms', lang as Locale)}
+              className="hover:text-white transition-colors"
+            >
               {lang === 'tr' ? 'Kullanım Koşulları' : 'Terms of Use'}
             </Link>
             <span className="text-slate-400" aria-hidden="true">
               |
             </span>
-            <Link to="/cookies" className="hover:text-white transition-colors">
+            <Link
+              to={localizedHref('/cookies', lang as Locale)}
+              className="hover:text-white transition-colors"
+            >
               {FOOTER_COPY.cookies[lang]}
             </Link>
             <span className="text-slate-400" aria-hidden="true">
               |
             </span>
             <Link
-              to="/privacy#m10"
+              to={localizedHref('/privacy#m10', lang as Locale)}
               className="hover:text-white transition-colors"
               data-testid="kvkk-m10"
             >
@@ -397,7 +407,7 @@ export const Footer: React.FC = () => {
               |
             </span>
             <Link
-              to="/privacy/data-rights"
+              to={localizedHref('/privacy/data-rights', lang as Locale)}
               className="hover:text-white transition-colors"
               data-testid="kvkk-m11"
             >
@@ -407,7 +417,7 @@ export const Footer: React.FC = () => {
               |
             </span>
             <Link
-              to="/quick-check"
+              to={localizedHref('/quick-check', lang as Locale)}
               className="hover:text-white transition-colors"
               data-testid="quick-check"
             >

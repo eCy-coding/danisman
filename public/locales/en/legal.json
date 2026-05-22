@@ -40,6 +40,7 @@
     "metaDescription": "eCyPro terms of service — rights, obligations, payment and refund policy.",
     "sections": {
       "scope": "Scope of Service",
+      "independence": "Independence Affirmation",
       "obligations": "User Obligations",
       "payment": "Payment and Refund Terms",
       "liability": "Disclaimer of Liability",
@@ -49,6 +50,7 @@
     },
     "content": {
       "scope": "eCyPro Premium Consulting provides corporate management consulting, event management, and digital brand solutions through www.ecypro.com. **eCyPro is an independent consulting firm**; unless expressly authorised, it does not act as a law firm, audit/CPA practice, investment adviser, or financial institution. The opinions and analyses provided constitute strategic advice and do not substitute binding legal, accounting, or investment opinions. These Terms of Service are binding from the moment you visit the website or engage our services. The final scope and technical specifications of each engagement are defined in a separate service agreement executed per client.",
+      "independence": "**Independent by Design** — eCyPro maintains no partnership, affiliation, franchise, licensing, or service ties with any \"Big Four\" firm (Deloitte, PwC, EY, KPMG) or any other audit, accounting, or advisory network. We are not a member, correspondent, or subcontractor of any such organisation, and we receive no referral fees from them. This independence is structural and deliberate: it ensures our advice is free from the cross-service conflicts of interest, audit-consulting entanglements, and standardised playbooks that can compromise objectivity. Any reference to a Big Four firm on this website is purely comparative or illustrative and does not imply endorsement, association, or equivalence.",
       "obligations": "When using the website, you agree to: comply with applicable laws, provide accurate and current information, respect third-party rights, and refrain from any behavior that could threaten site security. Automated scraping, reverse engineering, or unauthorized access attempts are prohibited.",
       "payment": "Payment and refund terms for paid services are defined in the individual service agreement signed with each client. Direct payments are not collected through this website; all commercial transactions are governed by the service agreement and invoicing process.",
       "liability": "eCyPro Premium Consulting exercises reasonable care for the accuracy of website content but makes no absolute warranty regarding the error-free nature or uninterrupted availability of content. Within the limits of applicable law, no liability is accepted for indirect, incidental, or unforeseen damages arising from website use.",

@@ -26,6 +26,8 @@ const STATIC_ROUTES = [
   'cookies',
   'faq',
   'maturity-assessment',
+  'quick-check',
+  'pricing-calculator',
   // P52: P51 Phase 4 content pages
   'press',
   'speaking',

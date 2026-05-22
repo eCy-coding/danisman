@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Menu, X, ChevronDown, ChevronUp, Globe } from 'lucide-react';
+import { Menu, X, ChevronDown, ChevronUp } from 'lucide-react';
 import { NAV_ITEMS } from '@/data/copy/common';
+import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { MegaMenu } from './MegaMenu';
 import { useScrollToSection } from '../common/useScrollToSection';
 import { trackEvent } from '../../lib/analytics';
@@ -38,11 +39,6 @@ export const Navbar: React.FC = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-
-  const toggleLanguage = () => {
-    const newLang = lang === 'tr' ? 'en' : 'tr';
-    i18n.changeLanguage(newLang);
-  };
 
   const scrollToSection = useScrollToSection();
   const dropdownTimeoutRef = useRef<number | null>(null);
@@ -228,16 +224,8 @@ export const Navbar: React.FC = () => {
 
         {/* Right Actions (Desktop) */}
         <div className="hidden lg:flex items-center gap-6">
-          {/* Language Toggle */}
-          <button
-            type="button"
-            onClick={toggleLanguage}
-            className="text-xs font-bold text-gray-400 hover:text-white transition-colors flex items-center gap-1 px-2 py-1 border border-white/10 rounded hover:bg-white/5"
-            aria-label="Dili değiştir / Change language"
-          >
-            <Globe size={14} />
-            <span>{lang === 'tr' ? 'EN' : 'TR'}</span>
-          </button>
+          {/* Language Switcher (URL-aware) */}
+          <LanguageSwitcher className="border border-white/10 rounded px-1 py-0.5" />
 
           {/* Assessment CTA */}
           <a
@@ -356,13 +344,7 @@ export const Navbar: React.FC = () => {
           {/* Mobile Actions */}
           <div className="mt-auto pt-8 space-y-4">
             <div className="flex justify-center gap-6 pb-4 border-b border-white/10">
-              <button
-                type="button"
-                onClick={toggleLanguage}
-                className="font-bold text-slate-300 flex items-center gap-2 px-4 py-2 border border-white/10 rounded-lg"
-              >
-                <Globe size={18} /> {lang === 'tr' ? 'Türkçe' : 'English'}
-              </button>
+              <LanguageSwitcher className="text-base" />
             </div>
             <a
               href="#contact"
