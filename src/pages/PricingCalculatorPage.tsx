@@ -2,8 +2,11 @@ import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { PageWrapper } from '../components/layout/PageWrapper';
 import { PricingCalculatorWizard } from '../components/PricingCalculatorWizard';
+import { useTranslation } from '@/lib/i18n';
+import { buildCanonical } from '@/i18n/canonical';
 
 export const PricingCalculatorPage: React.FC = () => {
+  const { language } = useTranslation();
   return (
     <React.Fragment>
       <Helmet>
@@ -12,7 +15,7 @@ export const PricingCalculatorPage: React.FC = () => {
           name="description"
           content="4 soruda eCyPro premium consulting paketinden hangisinin şirketinize uygun olduğunu öğrenin. Quick-Check Pro’dan Annual Partnership’e 8 paket önerisi."
         />
-        <link rel="canonical" href="https://www.ecypro.com/pricing-calculator" />
+        <link rel="canonical" href={buildCanonical('/pricing-calculator', language)} />
         <meta name="robots" content="index,follow" />
       </Helmet>
       <PageWrapper>

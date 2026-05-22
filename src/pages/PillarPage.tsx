@@ -15,6 +15,8 @@ import { ArrowRight, Sparkles } from 'lucide-react';
 import { SERVICES } from '../data/services';
 import { JsonLd } from '../components/seo/JsonLd';
 import { buildBreadcrumbListSchema } from '../lib/seo/breadcrumb';
+import { useTranslation } from '@/lib/i18n';
+import { buildCanonical } from '@/i18n/canonical';
 
 interface Pillar {
   slug: string;
@@ -157,6 +159,7 @@ const PILLARS: Pillar[] = [
 const SITE_URL = 'https://www.ecypro.com';
 
 export const PillarPage: React.FC = () => {
+  const { language } = useTranslation();
   const { slug } = useParams<{ slug: string }>();
   const pillar = useMemo(() => PILLARS.find((p) => p.slug === slug), [slug]);
 
@@ -167,6 +170,7 @@ export const PillarPage: React.FC = () => {
     .filter((s): s is NonNullable<typeof s> => Boolean(s));
 
   const pageUrl = `${SITE_URL}/pillar/${pillar.slug}`;
+  const canonicalUrl = buildCanonical(`/pillar/${pillar.slug}`, language);
   const breadcrumbSchema = buildBreadcrumbListSchema([
     { name: 'Anasayfa', url: `${SITE_URL}/` },
     { name: 'Pillars', url: `${SITE_URL}/pillar` },
@@ -178,10 +182,10 @@ export const PillarPage: React.FC = () => {
       <Helmet>
         <title>{`${pillar.title} | eCyPro Premium Consulting`}</title>
         <meta name="description" content={pillar.subtitle} />
-        <link rel="canonical" href={pageUrl} />
+        <link rel="canonical" href={canonicalUrl} />
         <meta property="og:title" content={`${pillar.title} | eCyPro`} />
         <meta property="og:description" content={pillar.subtitle} />
-        <meta property="og:url" content={pageUrl} />
+        <meta property="og:url" content={canonicalUrl} />
         <meta property="og:type" content="article" />
       </Helmet>
       <JsonLd data={breadcrumbSchema} />

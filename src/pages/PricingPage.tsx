@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import { FadeIn } from '../components/common/FadeIn';
 import { PageWrapper } from '../components/layout/PageWrapper';
 import { useTranslation } from '@/lib/i18n';
+import { buildCanonical } from '@/i18n/canonical';
 import { trackEvent } from '../lib/analytics';
 import { JsonLd } from '../components/seo/JsonLd';
 import { useCurrencyStore } from '../stores/currencyStore';
@@ -269,7 +270,7 @@ export const PricingPage: React.FC = () => {
               : 'eCyPro engagement packages and transparent pricing. Discovery, Sprint, Programme, and Retainer models — with scope, duration, and deliverables.'
           }
         />
-        <link rel="canonical" href="https://ecypro.com/pricing" />
+        <link rel="canonical" href={buildCanonical('/pricing', lang)} />
       </Helmet>
 
       <JsonLd

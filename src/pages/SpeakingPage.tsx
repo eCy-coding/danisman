@@ -7,6 +7,8 @@
 import React, { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Mic, Calendar, ArrowRight, Loader2, CheckCircle2 } from 'lucide-react';
+import { useTranslation } from '@/lib/i18n';
+import { buildCanonical } from '@/i18n/canonical';
 
 const TOPICS = [
   {
@@ -69,6 +71,7 @@ const PAST_ENGAGEMENTS = [
 ];
 
 export const SpeakingPage: React.FC = () => {
+  const { language } = useTranslation();
   const [form, setForm] = useState({
     name: '',
     email: '',
@@ -108,7 +111,7 @@ export const SpeakingPage: React.FC = () => {
           name="description"
           content="Emre Can Yalçın konuşma konuları + speaking inquiry. AI, strateji, aile şirketi, ESG temaları."
         />
-        <link rel="canonical" href="https://www.ecypro.com/speaking" />
+        <link rel="canonical" href={buildCanonical('/speaking', language)} />
       </Helmet>
       <section className="pt-32 pb-12 px-6 md:px-12 border-b border-white/5">
         <div className="max-w-4xl mx-auto">

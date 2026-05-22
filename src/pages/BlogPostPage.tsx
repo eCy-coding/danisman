@@ -21,10 +21,13 @@ import { JsonLd } from '../components/seo/JsonLd';
 import { getBlogPosts } from '../lib/data';
 import { BlogPost } from '../schemas/blog';
 import { buildArticleSchema, buildBreadcrumbSchema } from '../lib/structured-data';
+import { useTranslation } from '@/lib/i18n';
+import { buildCanonical } from '@/i18n/canonical';
 
 const blogPosts = getBlogPosts();
 
 const BlogPostPage: React.FC = () => {
+  const { language } = useTranslation();
   const { slug } = useParams<{ slug: string }>();
   const [Content, setContent] = useState<React.ComponentType | null>(null);
   const articleRef = useRef<HTMLElement>(null);
@@ -64,11 +67,11 @@ const BlogPostPage: React.FC = () => {
       <Helmet>
         <title>{post.title} | eCyPro Blog</title>
         <meta name="description" content={post.excerpt} />
-        <link rel="canonical" href={`https://www.ecypro.com/blog/${post.slug}`} />
+        <link rel="canonical" href={buildCanonical(`/blog/${post.slug}`, language)} />
         <meta property="og:title" content={`${post.title} | eCyPro Blog`} />
         <meta property="og:description" content={post.excerpt} />
         <meta property="og:type" content="article" />
-        <meta property="og:url" content={`https://www.ecypro.com/blog/${post.slug}`} />
+        <meta property="og:url" content={buildCanonical(`/blog/${post.slug}`, language)} />
         <meta property="og:image" content={post.coverImage} />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={`${post.title} | eCyPro Blog`} />

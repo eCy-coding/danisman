@@ -10,6 +10,8 @@ import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { Download, Mail, ArrowRight } from 'lucide-react';
 import { FounderPortrait } from '../components/common/FounderPortrait';
+import { useTranslation } from '@/lib/i18n';
+import { buildCanonical } from '@/i18n/canonical';
 
 const BIO_50 =
   "Emre Can Yalçın, eCyPro Premium Consulting'in kurucusu ve baş stratejisti. Stratejik dönüşüm, kurumsal yönetişim ve kültür mühendisliği alanlarında pratik yürütüyor.";
@@ -21,6 +23,7 @@ const BIO_300 =
   "Emre Can Yalçın, eCyPro Premium Consulting'in kurucusu ve baş stratejisti olarak Türkiye iş dünyasında premium boutique consulting pazarında pozisyon almıştır. 5+ yıllık pratik deneyimi boyunca 120+ stratejik karar oluşumuna katkıda bulunmuş, 12+ sektörde engagement yürütmüştür. eCyverse ekosisteminin premium danışmanlık kolunu kurarak, Big4 mid-market boşluğunda boutique premium pozisyonunu hedeflemiştir. Çalıştığı engagement'larda kendi geliştirdiği 5-katmanlı metodolojiyi uygular: Vizyon Mimarı (3-5 yıllık kuzey yıldızı), Strateji Köprüsü (OKR + quarterly cadence + RACI), Sonuç Mühendisliği (KPI baseline + measurement), Kültür Sürdürülebilirliği (değişim yönetimi + leadership coaching), Anonim Sonuç Loop'u (NDA-friendly retrospective). Strategic management advisory, organizational transformation, M&A advisory, family business governance ve culture engineering uzmanlık alanlarıdır. Türkiye + AB pazarlarında engagement deneyimine sahip.";
 
 export const PressKitPage: React.FC = () => {
+  const { language } = useTranslation();
   return (
     <div className="min-h-screen bg-neutral text-slate-300">
       <Helmet>
@@ -29,7 +32,7 @@ export const PressKitPage: React.FC = () => {
           name="description"
           content="Medya kiti: logo, marka rehberi, founder bio (50w/150w/300w), basın iletişim. Medya mensupları için indirilebilir varlıklar."
         />
-        <link rel="canonical" href="https://www.ecypro.com/press" />
+        <link rel="canonical" href={buildCanonical('/press', language)} />
       </Helmet>
       <section className="pt-32 pb-12 px-6 md:px-12 border-b border-white/5">
         <div className="max-w-4xl mx-auto">

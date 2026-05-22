@@ -15,8 +15,11 @@ import { getServiceContent } from '@/data/service-content';
 import { ServiceDetailLayout } from '@/components/services/ServiceDetailLayout';
 import { JsonLd } from '../components/seo/JsonLd';
 import { buildBreadcrumbSchema } from '../lib/structured-data';
+import { useTranslation } from '@/lib/i18n';
+import { buildCanonical } from '@/i18n/canonical';
 
 export const ServiceDetailPage: React.FC = () => {
+  const { language } = useTranslation();
   const { slug } = useParams<{ slug: string }>();
   if (!slug) return <Navigate to="/services" replace />;
 
@@ -26,7 +29,7 @@ export const ServiceDetailPage: React.FC = () => {
 
   const fallbackTitle = service.title;
   const fallbackDescription = service.description;
-  const serviceUrl = `https://www.ecypro.com/services/${slug}`;
+  const serviceUrl = buildCanonical(`/services/${slug}`, language);
   const detailedContent = getServiceContent(slug);
 
   // ServiceDetailLayout her halükarda render olur; içerik yoksa hero + fallback CTA döner.

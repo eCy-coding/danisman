@@ -3,6 +3,7 @@ import { Search } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
 import { JsonLd } from '../components/seo/JsonLd';
 import { buildBreadcrumbSchema } from '../lib/structured-data';
+import { buildCanonical } from '@/i18n/canonical';
 import { FadeIn } from '../components/common/FadeIn';
 import { ServiceCard } from '../components/services/ServiceCard';
 import { ServiceFilter } from '../components/services/ServiceFilter';
@@ -138,7 +139,7 @@ export const ServicesPage: React.FC = () => {
           }
         />
         <meta name="theme-color" content="#0d1b2a" />
-        <link rel="canonical" href="https://ecypro.com/services" />
+        <link rel="canonical" href={buildCanonical('/services', lang)} />
       </Helmet>
       <JsonLd
         data={buildBreadcrumbSchema([
