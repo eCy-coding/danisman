@@ -10,16 +10,16 @@
 
 ## 1. Çalışan / Doğrulanmış Pipeline
 
-| Aşama | Komut | Durum |
-|---|---|---|
-| Type-check | `npm run typecheck` | ✅ 0 error (frontend + server) |
-| Lint | `npm run lint` | ✅ 0 error |
-| Unit + integration | `npm test` | ✅ 23/23 (5 spec) |
-| Build | `npm run build` | ✅ 68 PWA precache, 32 sitemap URL, 3 RSS item |
-| E2E sanity (3 browser) | `npm run test:e2e:fast` | ✅ 6/6 (chromium + firefox + webkit × 2) |
-| E2E lead-gen | `npx playwright test e2e/lead-gen.spec.ts` | ✅ 2/2 chromium |
-| E2E conversion-elements | `npx playwright test e2e/conversion-elements.spec.ts` | ✅ 2/2 chromium |
-| Prisma schema | `npx prisma validate` | ✅ |
+| Aşama                   | Komut                                                 | Durum                                          |
+| ----------------------- | ----------------------------------------------------- | ---------------------------------------------- |
+| Type-check              | `npm run typecheck`                                   | ✅ 0 error (frontend + server)                 |
+| Lint                    | `npm run lint`                                        | ✅ 0 error                                     |
+| Unit + integration      | `npm test`                                            | ✅ 23/23 (5 spec)                              |
+| Build                   | `npm run build`                                       | ✅ 68 PWA precache, 32 sitemap URL, 3 RSS item |
+| E2E sanity (3 browser)  | `npm run test:e2e:fast`                               | ✅ 6/6 (chromium + firefox + webkit × 2)       |
+| E2E lead-gen            | `npx playwright test e2e/lead-gen.spec.ts`            | ✅ 2/2 chromium                                |
+| E2E conversion-elements | `npx playwright test e2e/conversion-elements.spec.ts` | ✅ 2/2 chromium                                |
+| Prisma schema           | `npx prisma validate`                                 | ✅                                             |
 
 ### Final komut zinciri (publish öncesi şart)
 
@@ -38,12 +38,12 @@ Hepsi yeşil olduğunda **publish-go** kararı verilebilir.
 
 ## 2. Lighthouse Skorları (local preview, CPU throttled)
 
-| Kategori | Skor | Not |
-|---|---|---|
-| Performance | **62** | LCP 6.8s, FCP 5.0s, TBT 100ms, CLS 0.006 — local preview throttling. CDN + production build üzerinde ≥85 beklenir. |
-| Accessibility | **85** | 5 audit fail (aşağıda detayda). |
-| Best Practices | **92** | ✅ Üstün. |
-| SEO | **100** | ✅ Tam. JSON-LD + sitemap + robots.txt + canonical hepsi aktif. |
+| Kategori       | Skor    | Not                                                                                                                |
+| -------------- | ------- | ------------------------------------------------------------------------------------------------------------------ |
+| Performance    | **62**  | LCP 6.8s, FCP 5.0s, TBT 100ms, CLS 0.006 — local preview throttling. CDN + production build üzerinde ≥85 beklenir. |
+| Accessibility  | **85**  | 5 audit fail (aşağıda detayda).                                                                                    |
+| Best Practices | **92**  | ✅ Üstün.                                                                                                          |
+| SEO            | **100** | ✅ Tam. JSON-LD + sitemap + robots.txt + canonical hepsi aktif.                                                    |
 
 ### Performance opportunities (priority sırası)
 
@@ -80,13 +80,13 @@ Skipped: 12
 
 ### 149 fail — bilinen kök nedenler
 
-| Kök neden | Etkilenen spec sayısı | Açıklama |
-|---|---|---|
-| **Recharts `<circle cy="undefined">`** | ~14 spec (firefox + webkit) | Recharts upstream quirk; runtime `dot` koordinatları transient `undefined`. Chromium'da yok. Görsel etkisi yok. |
-| **Google Fonts blocked (sandbox)** | ~12 spec | `fonts.gstatic.com` sandbox'ta erişilemiyor. Sadece console error; layout etkilenmiyor. |
-| **i18n key fallback render** | ~50+ spec | `t('contact.form.name')` çevirisi yoksa string olarak render → testler "Ad Soyad" arıyor. Çözüm: i18next backend HTTP namespace tam yüklenmesi veya test selector'ları `data-testid`'e göç. |
-| **API mock eksik (`api_integration`)** | 15 fail | E2E `localhost:3001` mock-server beklemiyor; sadece preview port (4173). `npm run start:mock` paralel başlatılmalı. |
-| **Selector brittleness** | ~30+ fail | Eski text-based selector'lar i18n çevirisini varsayıyor. |
+| Kök neden                              | Etkilenen spec sayısı       | Açıklama                                                                                                                                                                                    |
+| -------------------------------------- | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Recharts `<circle cy="undefined">`** | ~14 spec (firefox + webkit) | Recharts upstream quirk; runtime `dot` koordinatları transient `undefined`. Chromium'da yok. Görsel etkisi yok.                                                                             |
+| **Google Fonts blocked (sandbox)**     | ~12 spec                    | `fonts.gstatic.com` sandbox'ta erişilemiyor. Sadece console error; layout etkilenmiyor.                                                                                                     |
+| **i18n key fallback render**           | ~50+ spec                   | `t('contact.form.name')` çevirisi yoksa string olarak render → testler "Ad Soyad" arıyor. Çözüm: i18next backend HTTP namespace tam yüklenmesi veya test selector'ları `data-testid`'e göç. |
+| **API mock eksik (`api_integration`)** | 15 fail                     | E2E `localhost:3001` mock-server beklemiyor; sadece preview port (4173). `npm run start:mock` paralel başlatılmalı.                                                                         |
+| **Selector brittleness**               | ~30+ fail                   | Eski text-based selector'lar i18n çevirisini varsayıyor.                                                                                                                                    |
 
 > Phase 24 plan: Selector strategy → `data-testid` global migrasyon; mock-server CI'da otomatik spawn; Recharts opsiyonel `<Dot dot={false}>`.
 
@@ -94,13 +94,13 @@ Skipped: 12
 
 ## 4. Repo Hijyen Durumu
 
-| Madde | Önce | Sonra |
-|---|---|---|
-| `browser-profile/` | 178 MB | **Silindi** (gitignored). |
-| Debug log artefaktları | 22 dosya, ~4 MB | **Silindi** (`build_log*.txt`, `e2e_output_*.txt`, `*.log`, `eslint-report.json`, `lighthouse-report.json`, `stats.html` vb.). |
-| `pnpm-lock.yaml` + `pnpm-workspace.yaml` | mevcut | **Silinmiş** (Phase 20). `.gitignore`'da. Proje **npm-only**. |
-| One-off scripts | `check-scores.cjs`, `fix-ts.cjs/.js`, `test-prisma.ts`, `constants_generated.ts` | **Silindi**; `constants_generated.ts` regenerated edilebilir (`npm run gen:content`) ve `.gitignore`'da. |
-| `.env.local.example` | tutarsız | Mock şablon harmonize edildi (VITE_API_URL `/api`, VITE_LIVECHAT_PROVIDER, JWT_EXPIRES_IN, TRUST_PROXY, ANTHROPIC_API_KEY). |
+| Madde                                    | Önce                                                                             | Sonra                                                                                                                          |
+| ---------------------------------------- | -------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| `browser-profile/`                       | 178 MB                                                                           | **Silindi** (gitignored).                                                                                                      |
+| Debug log artefaktları                   | 22 dosya, ~4 MB                                                                  | **Silindi** (`build_log*.txt`, `e2e_output_*.txt`, `*.log`, `eslint-report.json`, `lighthouse-report.json`, `stats.html` vb.). |
+| `pnpm-lock.yaml` + `pnpm-workspace.yaml` | mevcut                                                                           | **Silinmiş** (Phase 20). `.gitignore`'da. Proje **npm-only**.                                                                  |
+| One-off scripts                          | `check-scores.cjs`, `fix-ts.cjs/.js`, `test-prisma.ts`, `constants_generated.ts` | **Silindi**; `constants_generated.ts` regenerated edilebilir (`npm run gen:content`) ve `.gitignore`'da.                       |
+| `.env.local.example`                     | tutarsız                                                                         | Mock şablon harmonize edildi (VITE_API_URL `/api`, VITE_LIVECHAT_PROVIDER, JWT_EXPIRES_IN, TRUST_PROXY, ANTHROPIC_API_KEY).    |
 
 ---
 
@@ -145,30 +145,30 @@ docker run -p 3001:3001 --env-file .env ecypro:prod
 
 ### 6.1 Backend (Render / Docker)
 
-| Key | Açıklama | Örnek |
-|---|---|---|
-| `DATABASE_URL` | PostgreSQL bağlantı string'i | `postgresql://user:pass@host:5432/ecypro?schema=public` |
-| `JWT_SECRET` | ≥32 char random | `openssl rand -hex 32` |
-| `JWT_EXPIRES_IN` | Token süresi | `7d` |
-| `CORS_ORIGIN` | Frontend origin (virgülle çoklu) | `https://ecypro.com,https://www.ecypro.com` |
-| `REDIS_URL` | Opsiyonel; yoksa in-memory fallback | `redis://default:pwd@host:6379` |
-| `LOG_LEVEL` | Pino seviyesi | `info` |
-| `TRUST_PROXY` | Express trust proxy | `1` veya `true` |
-| `SENTRY_DSN` | Backend error reporting (opsiyonel) | `https://...@sentry.io/...` |
-| `NODE_ENV` | Mode | `production` |
-| `PORT` | Listen port | `3001` |
+| Key              | Açıklama                            | Örnek                                                   |
+| ---------------- | ----------------------------------- | ------------------------------------------------------- |
+| `DATABASE_URL`   | PostgreSQL bağlantı string'i        | `postgresql://user:pass@host:5432/ecypro?schema=public` |
+| `JWT_SECRET`     | ≥32 char random                     | `openssl rand -hex 32`                                  |
+| `JWT_EXPIRES_IN` | Token süresi                        | `7d`                                                    |
+| `CORS_ORIGIN`    | Frontend origin (virgülle çoklu)    | `https://ecypro.com,https://www.ecypro.com`             |
+| `REDIS_URL`      | Opsiyonel; yoksa in-memory fallback | `redis://default:pwd@host:6379`                         |
+| `LOG_LEVEL`      | Pino seviyesi                       | `info`                                                  |
+| `TRUST_PROXY`    | Express trust proxy                 | `1` veya `true`                                         |
+| `SENTRY_DSN`     | Backend error reporting (opsiyonel) | `https://...@sentry.io/...`                             |
+| `NODE_ENV`       | Mode                                | `production`                                            |
+| `PORT`           | Listen port                         | `3001`                                                  |
 
-### 6.2 Frontend (Vercel — VITE_* prefix zorunlu)
+### 6.2 Frontend (Vercel — VITE\_\* prefix zorunlu)
 
-| Key | Açıklama |
-|---|---|
-| `VITE_API_URL` | Backend URL + `/api` (örn: `https://api.ecypro.com/api`) |
-| `VITE_EMAILJS_SERVICE_ID`, `VITE_EMAILJS_TEMPLATE_ID`, `VITE_EMAILJS_PUBLIC_KEY` | Contact form integration |
-| `VITE_GA_TRACKING_ID` | GA4 measurement ID (opsiyonel) |
-| `VITE_SENTRY_DSN` | Frontend error reporting |
-| `VITE_LIVECHAT_PROVIDER` | `crisp` | `tawk` | `intercom` (boş bırakılırsa devre dışı) |
-| `VITE_LIVECHAT_ID` | Provider account id |
-| `VITE_LIVECHAT_TAWK_WIDGET_ID` | Sadece tawk için |
+| Key                                                                              | Açıklama                                                 |
+| -------------------------------------------------------------------------------- | -------------------------------------------------------- | ------ | --------------------------------------- |
+| `VITE_API_URL`                                                                   | Backend URL + `/api` (örn: `https://api.ecypro.com/api`) |
+| `VITE_EMAILJS_SERVICE_ID`, `VITE_EMAILJS_TEMPLATE_ID`, `VITE_EMAILJS_PUBLIC_KEY` | Contact form integration                                 |
+| `VITE_GA_TRACKING_ID`                                                            | GA4 measurement ID (opsiyonel)                           |
+| `VITE_SENTRY_DSN`                                                                | Frontend error reporting                                 |
+| `VITE_LIVECHAT_PROVIDER`                                                         | `crisp`                                                  | `tawk` | `intercom` (boş bırakılırsa devre dışı) |
+| `VITE_LIVECHAT_ID`                                                               | Provider account id                                      |
+| `VITE_LIVECHAT_TAWK_WIDGET_ID`                                                   | Sadece tawk için                                         |
 
 > Tam liste: `.env.example` ve `.env.local.example`.
 

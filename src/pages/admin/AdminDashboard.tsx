@@ -94,7 +94,8 @@ const ConnectionBadge: React.FC<{ isConnected: boolean; onReconnect: () => void 
           <WifiOff size={12} className="mt-0.5" />
           OFFLINE
         </div>
-        <button type="button"
+        <button
+          type="button"
           onClick={onReconnect}
           className="p-1 text-slate-400 hover:text-white transition-colors"
           title="Reconnect SSE"

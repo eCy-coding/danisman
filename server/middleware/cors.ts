@@ -26,10 +26,7 @@ const DEFAULT_DEV_ORIGINS = Object.freeze([
   'http://127.0.0.1:4173',
 ]);
 
-const PROD_FALLBACK_ORIGINS = Object.freeze([
-  'https://www.ecypro.com',
-  'https://ecypro.com',
-]);
+const PROD_FALLBACK_ORIGINS = Object.freeze(['https://www.ecypro.com', 'https://ecypro.com']);
 
 const ALLOWED_METHODS = ['GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'];
 

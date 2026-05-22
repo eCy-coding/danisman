@@ -47,7 +47,10 @@ export const AdminGuard: React.FC<AdminGuardProps> = ({ requiredRole = 'VIEWER',
   if (isLoading) {
     return (
       <div className="min-h-screen bg-neutral flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-secondary" aria-label="Yükleniyor" />
+        <div
+          className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-secondary"
+          aria-label="Yükleniyor"
+        />
       </div>
     );
   }

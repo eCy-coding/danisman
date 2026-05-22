@@ -38,9 +38,15 @@ interface MediaRecord {
 router.get('/', ...adminOnly, async (_req: Request, res: Response, next: NextFunction) => {
   try {
     const map = await redis.hgetall(KEY);
-    const items = Object.values(map).map((s) => {
-      try { return JSON.parse(s) as MediaRecord; } catch { return null; }
-    }).filter((x): x is MediaRecord => x !== null);
+    const items = Object.values(map)
+      .map((s) => {
+        try {
+          return JSON.parse(s) as MediaRecord;
+        } catch {
+          return null;
+        }
+      })
+      .filter((x): x is MediaRecord => x !== null);
     items.sort((a, b) => b.createdAt - a.createdAt);
     res.json({ status: 'ok', data: { items, total: items.length } });
   } catch (err) {
@@ -52,9 +58,18 @@ router.post('/upload', ...adminOnly, async (req: Request, res: Response, next: N
   try {
     // Stub: gerçek upload Multer middleware + Sharp pipeline ile genişletilecek.
     // Şimdilik yalnızca metadata oluştur — file URL `body.url` ile sağlanabilir.
-    const body = req.body as { filename?: string; url?: string; mimetype?: string; size?: number; width?: number; height?: number };
+    const body = req.body as {
+      filename?: string;
+      url?: string;
+      mimetype?: string;
+      size?: number;
+      width?: number;
+      height?: number;
+    };
     if (!body.filename || !body.url) {
-      return res.status(400).json({ status: 'error', message: 'filename + url required (multer pipeline pending)' });
+      return res
+        .status(400)
+        .json({ status: 'error', message: 'filename + url required (multer pipeline pending)' });
     }
     const record: MediaRecord = {
       id: crypto.randomUUID(),

@@ -9,9 +9,10 @@ export const AssessmentPage: React.FC = () => {
           Yapay Zeka Hazırlık Testi
         </h1>
         <p className="text-lg text-gray-400 max-w-2xl mx-auto mb-12">
-          İşletmenizin dijital olgunluk seviyesini ölçün ve size özel yapay zeka entegrasyon önerilerini sadece 2 dakikada öğrenin.
+          İşletmenizin dijital olgunluk seviyesini ölçün ve size özel yapay zeka entegrasyon
+          önerilerini sadece 2 dakikada öğrenin.
         </p>
-        
+
         <BusinessHealthQuiz />
       </div>
     </div>

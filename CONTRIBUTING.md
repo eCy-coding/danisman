@@ -12,15 +12,15 @@ iletişim dili, **İngilizce** kod + teknik terimler.
 
 ## 1. Branch Stratejisi
 
-| Branch | Amaç |
-| --- | --- |
-| `main` | Üretim. Sadece reviewed PR ile merge edilir, doğrudan push **yok**. |
-| `feature/<slug>` | Yeni özellik (`feature/sse-pubsub`, `feature/services-perf`). |
-| `fix/<slug>` | Bug fix (`fix/services-page-hung`). |
-| `chore/<slug>` | Bağımlılık güncelleme, lint, doc (`chore/bump-vite-6.1`). |
-| `docs/<slug>` | Sadece doküman değişikliği. |
-| `perf/<slug>` | Performans regresyonu çözümü. |
-| `refactor/<slug>` | Davranış değişmeden yapı düzeltmesi. |
+| Branch            | Amaç                                                                |
+| ----------------- | ------------------------------------------------------------------- |
+| `main`            | Üretim. Sadece reviewed PR ile merge edilir, doğrudan push **yok**. |
+| `feature/<slug>`  | Yeni özellik (`feature/sse-pubsub`, `feature/services-perf`).       |
+| `fix/<slug>`      | Bug fix (`fix/services-page-hung`).                                 |
+| `chore/<slug>`    | Bağımlılık güncelleme, lint, doc (`chore/bump-vite-6.1`).           |
+| `docs/<slug>`     | Sadece doküman değişikliği.                                         |
+| `perf/<slug>`     | Performans regresyonu çözümü.                                       |
+| `refactor/<slug>` | Davranış değişmeden yapı düzeltmesi.                                |
 
 `main` daima yeşil: lint + typecheck + test + build geçer.
 
@@ -40,19 +40,19 @@ Format:
 
 ### Type tablosu
 
-| Type | Kullanım |
-| --- | --- |
-| `feat` | Kullanıcıya görünen yeni özellik |
-| `fix` | Bug çözümü |
-| `perf` | Performans iyileştirme (davranış değişmez) |
-| `refactor` | Davranış değişmeden yapı düzeltmesi |
-| `test` | Test ekleme/düzeltme |
-| `docs` | Sadece dokümantasyon |
-| `chore` | Bağımlılık, config, build, repo bakımı |
-| `style` | Format (Prettier), kod davranışına etki etmeyen değişiklik |
-| `ci` | CI/CD pipeline değişiklikleri |
-| `build` | Build sistemine etki eden değişiklik (Vite, tsconfig) |
-| `revert` | Daha önceki commit'i geri alma |
+| Type       | Kullanım                                                   |
+| ---------- | ---------------------------------------------------------- |
+| `feat`     | Kullanıcıya görünen yeni özellik                           |
+| `fix`      | Bug çözümü                                                 |
+| `perf`     | Performans iyileştirme (davranış değişmez)                 |
+| `refactor` | Davranış değişmeden yapı düzeltmesi                        |
+| `test`     | Test ekleme/düzeltme                                       |
+| `docs`     | Sadece dokümantasyon                                       |
+| `chore`    | Bağımlılık, config, build, repo bakımı                     |
+| `style`    | Format (Prettier), kod davranışına etki etmeyen değişiklik |
+| `ci`       | CI/CD pipeline değişiklikleri                              |
+| `build`    | Build sistemine etki eden değişiklik (Vite, tsconfig)      |
+| `revert`   | Daha önceki commit'i geri alma                             |
 
 ### Scope örnekleri
 
@@ -84,14 +84,17 @@ perf(director): park Scheduler when idle to release main thread
 
 ```markdown
 ## Özet
+
 <bir-iki cümle ile ne yaptın + neden>
 
 ## Değişen davranış
+
 - [ ] Kullanıcıya görünen değişiklik (varsa ekran görüntüsü ekle)
 - [ ] API kontratı değişti (varsa endpoint + payload örneği)
 - [ ] DB şeması değişti (varsa migration adı)
 
 ## Test edildi mi?
+
 - [ ] `npm run typecheck` ✅
 - [ ] `npm run lint` ✅
 - [ ] `npm test -- --run` ✅
@@ -100,11 +103,13 @@ perf(director): park Scheduler when idle to release main thread
 - [ ] Lighthouse regresyon kontrol (varsa)
 
 ## Ekran görüntüsü / video
+
 <UI değişikliği varsa zorunlu>
 
 ## İlgili issue / phase
+
 Closes #...
-Refs outputs/P##_*.md
+Refs outputs/P##\_\*.md
 ```
 
 PR başlığı da Conventional Commits formatında (`fix(realtime): SSE
@@ -127,8 +132,8 @@ reconnection backoff`).
 - `key` prop'unu index ile değil stable id ile ver.
 - Zustand slice'larından **dilim** seç, full store'u subscribe etme:
   ```ts
-  const open = useUiStore(s => s.modalOpen);   // ✅
-  const store = useUiStore();                  // ❌ tüm değişiklikte re-render
+  const open = useUiStore((s) => s.modalOpen); // ✅
+  const store = useUiStore(); // ❌ tüm değişiklikte re-render
   ```
 
 ### Tailwind
@@ -208,13 +213,13 @@ Atlamak için `--no-verify` **yasak**. Acil durumda ekiple konuş.
 P9–P27 sprintlerinde Claude Code subagent çağrıları belirli kalıplara
 oturdu:
 
-| Sprint sınıfı | Subagent kullanımı |
-| --- | --- |
-| Atomic edit + commit | **Direct file ops** (Write/Edit/Bash). Subagent yok. |
-| Çoklu paralel keşif | `general-purpose` subagent (read-only) |
-| Plan + impact analysis | `Plan` subagent |
-| Kod arama (>3 round) | `Explore` subagent |
-| Phase recipe çalıştırma | Direct bash, subagent yok |
+| Sprint sınıfı           | Subagent kullanımı                                   |
+| ----------------------- | ---------------------------------------------------- |
+| Atomic edit + commit    | **Direct file ops** (Write/Edit/Bash). Subagent yok. |
+| Çoklu paralel keşif     | `general-purpose` subagent (read-only)               |
+| Plan + impact analysis  | `Plan` subagent                                      |
+| Kod arama (>3 round)    | `Explore` subagent                                   |
+| Phase recipe çalıştırma | Direct bash, subagent yok                            |
 
 P28 ve sonrası: pre-deploy sprintlerinde **subagent yasak**, çünkü her
 değişiklik atomik commit gerektiriyor ve subagent commit'leri görünmez
@@ -229,6 +234,7 @@ Proje 17 fazlı publish hazırlık sürecinde. Aktif faz:
 [`brain/PUBLISH_MASTER_PLAN.md`](brain/PUBLISH_MASTER_PLAN.md).
 
 Phase brief'i her zaman:
+
 1. Aşamalı plan (~30–70 dk tavan)
 2. Atomik commit listesi
 3. Kısıtlar (push yok, force yok, vs.)

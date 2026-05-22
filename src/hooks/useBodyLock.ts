@@ -1,4 +1,3 @@
-
 import { useEffect } from 'react';
 
 export const useBodyLock = (isLocked: boolean) => {

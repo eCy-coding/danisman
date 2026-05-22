@@ -24,8 +24,16 @@ const TONE_BORDER: Record<NonNullable<StatCardProps['tone']>, string> = {
   danger: 'border-red-500/30',
 };
 
-export const StatCard: React.FC<StatCardProps> = ({ label, value, delta, hint, icon, tone = 'default' }) => {
-  const DeltaIcon = delta?.direction === 'up' ? ArrowUp : delta?.direction === 'down' ? ArrowDown : Minus;
+export const StatCard: React.FC<StatCardProps> = ({
+  label,
+  value,
+  delta,
+  hint,
+  icon,
+  tone = 'default',
+}) => {
+  const DeltaIcon =
+    delta?.direction === 'up' ? ArrowUp : delta?.direction === 'down' ? ArrowDown : Minus;
   const deltaColor =
     delta?.direction === 'up'
       ? 'text-secondary'

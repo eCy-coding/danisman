@@ -21,40 +21,40 @@
 
 ### Soru 1 — Ciro Bandı (Kalifikasyon Filtresi)
 
-| Özellik | Değer |
-|---|---|
-| **Calendly tip** | Multiple Choice (single select) |
-| **Required** | Yes |
-| **Soru metni** | Şirketinizin 2025 konsolide cirosu hangi bandda? |
-| **Yardımcı metin** | Bu bilgi engagement scope ve ekip ölçeklendirmesi için kullanılır. |
-| **Seçenekler** | `$20M-$50M` · `$50M-$150M` · `$150M+` · `$20M altı (uygun değil)` |
+| Özellik            | Değer                                                                        |
+| ------------------ | ---------------------------------------------------------------------------- |
+| **Calendly tip**   | Multiple Choice (single select)                                              |
+| **Required**       | Yes                                                                          |
+| **Soru metni**     | Şirketinizin 2025 konsolide cirosu hangi bandda?                             |
+| **Yardımcı metin** | Bu bilgi engagement scope ve ekip ölçeklendirmesi için kullanılır.           |
+| **Seçenekler**     | `$20M-$50M` · `$50M-$150M` · `$150M+` · `$20M altı (uygun değil)`            |
 | **Routing kuralı** | `$20M altı` seçilirse otomatik "qualified=false" tag'i + nazik decline mail. |
 
 ---
 
 ### Soru 2 — Stratejik Odak (Service Slug Eşleme)
 
-| Özellik | Değer |
-|---|---|
-| **Calendly tip** | Multiple Choice (single select) |
-| **Required** | Yes |
-| **Soru metni** | Önümüzdeki 6 ayda en kritik odak noktanız hangisidir? |
-| **Yardımcı metin** | Bu seçim discovery call gündemini şekillendirir. |
-| **Seçenekler** | `M&A Danışmanlığı (alım/satım hazırlığı)` · `Nesil Geçişi & Kurumsallaşma` · `AB Regülatif Uyum (CSRD / CSDDD / CBAM)` · `IFRS Geçişi / Konsolidasyon` · `İç Denetim & Risk Yönetimi` · `Diğer` |
-| **Service slug eşlemesi** | M&A → `ma-advisory` · Nesil → `succession-planning` · CSRD → `csrd-eu-compliance` · IFRS → `ifrs-conversion` · İç Denetim → `internal-audit` · Diğer → manuel triaj |
+| Özellik                   | Değer                                                                                                                                                                                           |
+| ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Calendly tip**          | Multiple Choice (single select)                                                                                                                                                                 |
+| **Required**              | Yes                                                                                                                                                                                             |
+| **Soru metni**            | Önümüzdeki 6 ayda en kritik odak noktanız hangisidir?                                                                                                                                           |
+| **Yardımcı metin**        | Bu seçim discovery call gündemini şekillendirir.                                                                                                                                                |
+| **Seçenekler**            | `M&A Danışmanlığı (alım/satım hazırlığı)` · `Nesil Geçişi & Kurumsallaşma` · `AB Regülatif Uyum (CSRD / CSDDD / CBAM)` · `IFRS Geçişi / Konsolidasyon` · `İç Denetim & Risk Yönetimi` · `Diğer` |
+| **Service slug eşlemesi** | M&A → `ma-advisory` · Nesil → `succession-planning` · CSRD → `csrd-eu-compliance` · IFRS → `ifrs-conversion` · İç Denetim → `internal-audit` · Diğer → manuel triaj                             |
 
 ---
 
 ### Soru 3 — Bağımsız Denetim Firması (Independence Conflict Pre-Screen)
 
-| Özellik | Değer |
-|---|---|
-| **Calendly tip** | Multiple Choice (single select) |
-| **Required** | Yes |
-| **Soru metni** | Şirketinizin mevcut bağımsız denetim firması hangisidir? |
+| Özellik            | Değer                                                                                                                                                                                                                                           |
+| ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Calendly tip**   | Multiple Choice (single select)                                                                                                                                                                                                                 |
+| **Required**       | Yes                                                                                                                                                                                                                                             |
+| **Soru metni**     | Şirketinizin mevcut bağımsız denetim firması hangisidir?                                                                                                                                                                                        |
 | **Yardımcı metin** | **Big4 olup olmadığını bağımsızlık çatışması (independence conflict) analizi için soruyoruz.** Mevcut denetçinizin kim olduğu engagement kabul kararını etkileyebilir; bu standart bir mesleki yükümlülüktür (IESBA Code of Ethics, Bölüm 290). |
-| **Seçenekler** | `PwC` · `EY` · `Deloitte` · `KPMG` · `Big4 dışı yerli firma` · `Henüz bağımsız denetim yapılmıyor` · `Belirtmek istemiyorum` |
-| **Routing kuralı** | Big4 seçilirse engagement kabul öncesi içsel independence check tetikler. `Belirtmek istemiyorum` qualified kalır; discovery call'da ele alınır. |
+| **Seçenekler**     | `PwC` · `EY` · `Deloitte` · `KPMG` · `Big4 dışı yerli firma` · `Henüz bağımsız denetim yapılmıyor` · `Belirtmek istemiyorum`                                                                                                                    |
+| **Routing kuralı** | Big4 seçilirse engagement kabul öncesi içsel independence check tetikler. `Belirtmek istemiyorum` qualified kalır; discovery call'da ele alınır.                                                                                                |
 
 ---
 
@@ -62,11 +62,11 @@
 
 ### Spec
 
-| Özellik | Değer |
-|---|---|
-| **Calendly tip** | Single Checkbox (Yes/No), **default unchecked** |
-| **Required** | Yes (onay alınmadan submit edilemez) |
-| **Etiket metni** | Verilerimin eCyPro Gizlilik Politikası uyarınca işlenmesini kabul ediyorum (KVKK m.10 + GDPR Art.13). |
+| Özellik                   | Değer                                                                                                                                                                                                                                                                                                                                                                                      |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Calendly tip**          | Single Checkbox (Yes/No), **default unchecked**                                                                                                                                                                                                                                                                                                                                            |
+| **Required**              | Yes (onay alınmadan submit edilemez)                                                                                                                                                                                                                                                                                                                                                       |
+| **Etiket metni**          | Verilerimin eCyPro Gizlilik Politikası uyarınca işlenmesini kabul ediyorum (KVKK m.10 + GDPR Art.13).                                                                                                                                                                                                                                                                                      |
 | **Yardımcı metin (kısa)** | Bu randevu formundaki bilgileriniz; potansiyel iş görüşmesi yürütülmesi amacıyla, **KVKK m.5/2-f (meşru menfaat hukuki sebebi)** ile işlenir. Detaylı aydınlatma için [Gizlilik Politikası](https://www.ecypro.com/legal/kvkk) sayfasını okuyunuz. Verileriniz Big4 veya 3. kişilerle paylaşılmaz; AB/ABD transferi yapılmaz; iletişim talebiniz kalmazsa **kvkk@ecypro.com** ile silinir. |
 
 ### Katmanlı aydınlatma seviyeleri
@@ -97,16 +97,16 @@ Verilerinizin işlenmesi: KVKK m.5/2-f meşru menfaat — silme talebi için kvk
 
 Calendly webhook event `invitee.created` payload alanları → Notion property eşleşmesi:
 
-| Calendly alan | Notion property | Tip |
-|---|---|---|
-| `questions_and_answers[0].answer` (Ciro) | `Tahmini_Butce_USD` | select |
-| `questions_and_answers[1].answer` (Odak) | `Service_Slug` | select (eşleme tablosu §2) |
-| `questions_and_answers[2].answer` (Denetçi) | `Big4_Denetci` | select |
-| `name` | `Sirket` (parse) + `Notes` (raw) | title + rich_text |
-| `email` | `Contact_Email` | email |
-| `event.start_time` | `Meeting_Booked_At` | date |
-| `tracking.utm_source` | `Labels` (UTM tag) | multi_select |
-| Default | `Outreach_Status` = "Meeting Booked" | status |
+| Calendly alan                               | Notion property                      | Tip                        |
+| ------------------------------------------- | ------------------------------------ | -------------------------- |
+| `questions_and_answers[0].answer` (Ciro)    | `Tahmini_Butce_USD`                  | select                     |
+| `questions_and_answers[1].answer` (Odak)    | `Service_Slug`                       | select (eşleme tablosu §2) |
+| `questions_and_answers[2].answer` (Denetçi) | `Big4_Denetci`                       | select                     |
+| `name`                                      | `Sirket` (parse) + `Notes` (raw)     | title + rich_text          |
+| `email`                                     | `Contact_Email`                      | email                      |
+| `event.start_time`                          | `Meeting_Booked_At`                  | date                       |
+| `tracking.utm_source`                       | `Labels` (UTM tag)                   | multi_select               |
+| Default                                     | `Outreach_Status` = "Meeting Booked" | status                     |
 
 ---
 

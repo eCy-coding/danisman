@@ -37,9 +37,10 @@ function parseConfig(raw: string): Record<string, VariantWeight[]> {
   return out;
 }
 
-const RAW_CONFIG = (typeof import.meta !== 'undefined' && import.meta.env?.VITE_AB_TESTS)
-  ? String(import.meta.env.VITE_AB_TESTS).trim()
-  : '';
+const RAW_CONFIG =
+  typeof import.meta !== 'undefined' && import.meta.env?.VITE_AB_TESTS
+    ? String(import.meta.env.VITE_AB_TESTS).trim()
+    : '';
 const CONFIG = parseConfig(RAW_CONFIG);
 
 function pickVariant(variants: VariantWeight[]): string {

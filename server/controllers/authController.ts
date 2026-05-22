@@ -205,7 +205,9 @@ export const register = async (req: Request, res: Response, next: NextFunction):
     // back into. Wrapping in $transaction guarantees all-or-nothing.
     const { raw: refreshRaw, hash: refreshHash } = generateRefreshToken();
     const family = newFamily();
-    const refreshExpiresAt = new Date(Date.now() + REFRESH_TOKEN_EXPIRES_DAYS * 24 * 60 * 60 * 1000);
+    const refreshExpiresAt = new Date(
+      Date.now() + REFRESH_TOKEN_EXPIRES_DAYS * 24 * 60 * 60 * 1000,
+    );
 
     const { user, accessToken } = await prisma.$transaction(async (tx) => {
       const createdUser = await tx.user.create({

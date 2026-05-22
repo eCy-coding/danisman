@@ -1,4 +1,3 @@
-
 export const CHART_STYLES = {
   tooltip: {
     backgroundColor: '#050810',

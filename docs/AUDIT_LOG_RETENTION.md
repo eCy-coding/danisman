@@ -5,9 +5,9 @@ arşivleme akışı ve forensic restore prosedürünü tanımlar.
 
 ## Retention politikası
 
-| Window | Konum | Erişim |
-|---|---|---|
-| **0–90 gün** (hot) | Postgres `audit_logs` | Admin panel + API |
+| Window             | Konum                                                           | Erişim                              |
+| ------------------ | --------------------------------------------------------------- | ----------------------------------- |
+| **0–90 gün** (hot) | Postgres `audit_logs`                                           | Admin panel + API                   |
 | **90+ gün** (cold) | Object storage `audit-archive/<yyyy>/<mm>/<yyyy-mm-dd>.json.gz` | `scripts/restore-audit-archive.mjs` |
 
 90 gün, GDPR Madde 5 (storage limitation) + iç compliance gereksinimi uyumlu

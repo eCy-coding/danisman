@@ -11,15 +11,15 @@
 
 ALERT.txt (36 943 lines, 349 e2e failures) issues mapped to 7 distinct roots. Status after T0 manual recovery + FC v37 patches:
 
-| Root | Symptom Count | Root Cause | Status | Resolution |
-|---|---|---|---|---|
-| A | 16 TS errors | NotFoundPage cherry-pick conflict markers | ✅ RESOLVED | T0 commit `a290489` |
-| B | ~100 console errors | api.ecypro.com Render service `no-deploy` 502 | ✅ RESOLVED | T0 Render redeploy → 200 + CORS |
-| C | 14 visual fails | Snapshot baselines first-run, untracked | ⚠️ PENDING | `e2e/snapshots/` commit (Phase 2b) |
-| D | SEO 92 (non-home) | Per-route static HTML prerender missing | ⚠️ PENDING | `scripts/prerender.mjs` opt-in (Phase 2a) |
-| E | 16 cherry-pick fail | Cascade after first conflict | ✅ RESOLVED | `git cherry-pick --abort` |
-| F | 1 PR error | HEAD=main=base | ✅ N/A | User-side workflow |
-| G | ~50 specific | Backend connectivity cascade | ✅ AUTO-RESOLVED | Root B fix cascades to G |
+| Root | Symptom Count       | Root Cause                                    | Status           | Resolution                                |
+| ---- | ------------------- | --------------------------------------------- | ---------------- | ----------------------------------------- |
+| A    | 16 TS errors        | NotFoundPage cherry-pick conflict markers     | ✅ RESOLVED      | T0 commit `a290489`                       |
+| B    | ~100 console errors | api.ecypro.com Render service `no-deploy` 502 | ✅ RESOLVED      | T0 Render redeploy → 200 + CORS           |
+| C    | 14 visual fails     | Snapshot baselines first-run, untracked       | ⚠️ PENDING       | `e2e/snapshots/` commit (Phase 2b)        |
+| D    | SEO 92 (non-home)   | Per-route static HTML prerender missing       | ⚠️ PENDING       | `scripts/prerender.mjs` opt-in (Phase 2a) |
+| E    | 16 cherry-pick fail | Cascade after first conflict                  | ✅ RESOLVED      | `git cherry-pick --abort`                 |
+| F    | 1 PR error          | HEAD=main=base                                | ✅ N/A           | User-side workflow                        |
+| G    | ~50 specific        | Backend connectivity cascade                  | ✅ AUTO-RESOLVED | Root B fix cascades to G                  |
 
 Net: 5/7 fully resolved. 2 (C, D) addressed by FC v37 patches.
 
@@ -32,6 +32,7 @@ Net: 5/7 fully resolved. 2 (C, D) addressed by FC v37 patches.
 **Problem (Root D):** Vite SPA serves identical `dist/index.html` for all 18 routes. Per-page `<title>`, `<meta og:*>`, JSON-LD schemas inject via react-helmet-async AFTER React hydrates. Crawlers without JS engine (LinkedIn, Twitter, Slack, Facebook) only read static HTML → all share-cards show homepage meta. Confirmed via `curl https://www.ecypro.com/pricing | grep title` returning homepage title.
 
 **Solution:** Build-time prerender script using Playwright headless Chromium:
+
 1. Start `vite preview` on port 4179
 2. For each route in `dist/sitemap.xml`, navigate via Playwright
 3. Wait for `networkidle` (React + Helmet flushed)
@@ -41,6 +42,7 @@ Net: 5/7 fully resolved. 2 (C, D) addressed by FC v37 patches.
 Vercel SPA rewrite (`vercel.json`) then serves prerendered HTML per route.
 
 **Files modified:**
+
 - `scripts/prerender.mjs` (NEW, 145 LOC)
 - `package.json` — `postbuild` script chains `node scripts/prerender.mjs` (opt-in via `PRERENDER=1`)
 
@@ -49,6 +51,7 @@ Vercel SPA rewrite (`vercel.json`) then serves prerendered HTML per route.
 **Cost:** ~30-60 s build overhead (depends on route count). Bundle unchanged (HTML files only).
 
 **Verification:**
+
 ```bash
 cd /Users/emrecnyngmail.com/Desktop/ecypro
 PRERENDER=1 npm run build
@@ -105,12 +108,12 @@ PREVIEW_URL=https://www.ecypro.com npx tsx scripts/lighthouse.ts
 
 ### Social share preview (T0 manual, 5 min)
 
-| Platform | URL | Verify |
-|---|---|---|
-| LinkedIn | https://www.linkedin.com/post-inspector/ | Paste /pricing → expect "Fiyatlandırma..." title (not homepage) |
-| Twitter | https://cards-dev.twitter.com/validator | Paste /case-studies → expect case-study OG image |
-| Facebook | https://developers.facebook.com/tools/debug/ | Paste /services → expect services title |
-| Slack | Paste link in private channel | Preview shows page-specific title |
+| Platform | URL                                          | Verify                                                          |
+| -------- | -------------------------------------------- | --------------------------------------------------------------- |
+| LinkedIn | https://www.linkedin.com/post-inspector/     | Paste /pricing → expect "Fiyatlandırma..." title (not homepage) |
+| Twitter  | https://cards-dev.twitter.com/validator      | Paste /case-studies → expect case-study OG image                |
+| Facebook | https://developers.facebook.com/tools/debug/ | Paste /services → expect services title                         |
+| Slack    | Paste link in private channel                | Preview shows page-specific title                               |
 
 ---
 
@@ -145,6 +148,7 @@ PREVIEW_URL=https://www.ecypro.com npx tsx scripts/lighthouse.ts
 ### Uptime monitor (5 min)
 
 UptimeRobot (free) or BetterUptime:
+
 - Monitor 1: `https://www.ecypro.com` (5 min interval)
 - Monitor 2: `https://api.ecypro.com/api/health` (5 min interval)
 - Alert channel: email + Slack webhook
@@ -156,6 +160,7 @@ UptimeRobot (free) or BetterUptime:
 Worktree `claude/jolly-spence-49a11e` has 62 commits beyond `main`. Main P42 already implemented anonymized content (better UX than worktree empty arrays). FC v33-v35 worktree commits SKIPPED (main P42 superior).
 
 Valuable worktree-only that DID NOT get merged + are not critical for production:
+
 - 20 JSON-LD schema types (worktree FC v22-v30) — main has 5 base types. Could backport components individually if T0 wants richer Knowledge Graph signals.
 - HelmetShim FC v31 fix — main uses real react-helmet-async (different SEO arch). Not directly portable.
 - BlogCategoryPage + BlogAuthorPage routes (FC v20) — main lacks these. Optional add.
@@ -177,14 +182,17 @@ Valuable worktree-only that DID NOT get merged + are not critical for production
 ## Sprint Summary
 
 **FC v37 = 2 file changes:**
+
 - `scripts/prerender.mjs` (NEW, +145 LOC)
 - `package.json` postbuild + new `prerender` script (+1 line, +1 script)
 - `docs/FC_V37_HANDOFF.md` (THIS doc, +220 LOC)
 
 Plus optional:
+
 - `e2e/snapshots/` directory commit (visual baselines)
 
 **Total Impact:**
+
 - Fixes Root D (per-route SEO) when `PRERENDER=1` enabled
 - Fixes Root C (visual baselines) when snapshots committed
 - Documentation handoff for T0 monitoring + worktree decision
@@ -195,20 +203,20 @@ Plus optional:
 
 ## Hand-off Owner Actions
 
-| # | Action | Owner | Where | Estimated |
-|---|---|---|---|---|
-| 1 | Test `PRERENDER=1 npm run build` locally | T0 | Local | 2 min |
-| 2 | Inspect `dist/pricing/index.html` title differs from `dist/index.html` | T0 | Local | 1 min |
-| 3 | Commit FC v37 + push origin/main | T0 | git | 1 min |
-| 4 | Add `PRERENDER=1` env to Vercel Production | T0 | Vercel dashboard | 2 min |
-| 5 | Trigger redeploy on Vercel | T0 | Vercel dashboard | 5 min build |
-| 6 | Smoke test 4 routes (curl titles differ) | T0/Claude | bash | 1 min |
-| 7 | LinkedIn post-inspector test for /pricing | T0 | LinkedIn | 2 min |
-| 8 | Submit sitemap to Search Console + Bing | T0 | dashboards | 10 min |
-| 9 | Sentry alert rules config | T0 | sentry.io | 10 min |
-| 10 | Commit `e2e/snapshots/` baselines | T0/Claude | git | 1 min |
-| 11 | Production Lighthouse re-run (verify SEO 100) | Claude | bash | 5 min |
-| 12 | Close ALERT.txt issue thread | T0 | — | — |
+| #   | Action                                                                 | Owner     | Where            | Estimated   |
+| --- | ---------------------------------------------------------------------- | --------- | ---------------- | ----------- |
+| 1   | Test `PRERENDER=1 npm run build` locally                               | T0        | Local            | 2 min       |
+| 2   | Inspect `dist/pricing/index.html` title differs from `dist/index.html` | T0        | Local            | 1 min       |
+| 3   | Commit FC v37 + push origin/main                                       | T0        | git              | 1 min       |
+| 4   | Add `PRERENDER=1` env to Vercel Production                             | T0        | Vercel dashboard | 2 min       |
+| 5   | Trigger redeploy on Vercel                                             | T0        | Vercel dashboard | 5 min build |
+| 6   | Smoke test 4 routes (curl titles differ)                               | T0/Claude | bash             | 1 min       |
+| 7   | LinkedIn post-inspector test for /pricing                              | T0        | LinkedIn         | 2 min       |
+| 8   | Submit sitemap to Search Console + Bing                                | T0        | dashboards       | 10 min      |
+| 9   | Sentry alert rules config                                              | T0        | sentry.io        | 10 min      |
+| 10  | Commit `e2e/snapshots/` baselines                                      | T0/Claude | git              | 1 min       |
+| 11  | Production Lighthouse re-run (verify SEO 100)                          | Claude    | bash             | 5 min       |
+| 12  | Close ALERT.txt issue thread                                           | T0        | —                | —           |
 
 **Total:** ~45 min T0 dashboard time, ~10 min Claude verification.
 

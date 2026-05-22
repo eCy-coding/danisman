@@ -27,9 +27,7 @@ export function getStorage(): StorageAdapter {
   if (backend === 's3') {
     const bucket = process.env.STORAGE_S3_BUCKET;
     if (!bucket) {
-      throw new Error(
-        'STORAGE_BACKEND=s3 requires STORAGE_S3_BUCKET to be set',
-      );
+      throw new Error('STORAGE_BACKEND=s3 requires STORAGE_S3_BUCKET to be set');
     }
     cached = new S3StorageAdapter({
       bucket,

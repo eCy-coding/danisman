@@ -13,9 +13,10 @@ import { Calendar, ArrowRight, CheckCircle2, AlertCircle } from 'lucide-react';
 import { trackDiscoveryCallBook } from '../../lib/integrations/analytics';
 
 const CALENDLY_URL = (import.meta.env.VITE_CALENDLY_URL ?? '').trim();
-const API_BASE = (
-  (import.meta.env.VITE_API_URL as string | undefined) ?? '/api'
-).replace(/\/$/, '');
+const API_BASE = ((import.meta.env.VITE_API_URL as string | undefined) ?? '/api').replace(
+  /\/$/,
+  '',
+);
 
 interface CalendlyEmbedProps {
   source?: string;
@@ -151,17 +152,13 @@ export const CalendlyEmbed: React.FC<CalendlyEmbedProps> = ({
           role="status"
           aria-live="polite"
         >
-          <CheckCircle2
-            size={36}
-            className="text-emerald-400 mx-auto mb-4"
-            aria-hidden="true"
-          />
+          <CheckCircle2 size={36} className="text-emerald-400 mx-auto mb-4" aria-hidden="true" />
           <h3 className="text-2xl font-serif font-bold text-white mb-3">
             Görüşme talebiniz alındı
           </h3>
           <p className="text-slate-300 leading-relaxed max-w-md mx-auto mb-4">
-            Talebiniz iletildi. 24 saat içinde size uygun zaman dilimini onaylayan
-            takvim bağlantısı ile döneceğiz.
+            Talebiniz iletildi. 24 saat içinde size uygun zaman dilimini onaylayan takvim bağlantısı
+            ile döneceğiz.
           </p>
           <button
             type="button"
@@ -185,8 +182,8 @@ export const CalendlyEmbed: React.FC<CalendlyEmbedProps> = ({
           <h3 className="text-2xl font-serif font-bold text-white">Discovery Call Planla</h3>
         </div>
         <p className="text-slate-300 mb-6 leading-relaxed text-sm">
-          45 dakikalık ücretsiz keşif görüşmesi. Tercih ettiğiniz zaman dilimlerini
-          işaretleyin, 24 saat içinde takvim bağlantısı paylaşıyoruz.
+          45 dakikalık ücretsiz keşif görüşmesi. Tercih ettiğiniz zaman dilimlerini işaretleyin, 24
+          saat içinde takvim bağlantısı paylaşıyoruz.
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-4" noValidate>
@@ -237,8 +234,7 @@ export const CalendlyEmbed: React.FC<CalendlyEmbedProps> = ({
 
           <fieldset>
             <legend className="block text-sm font-medium text-slate-200 mb-2">
-              Tercih ettiğiniz zaman dilimleri{' '}
-              <span className="text-secondary">*</span>{' '}
+              Tercih ettiğiniz zaman dilimleri <span className="text-secondary">*</span>{' '}
               <span className="text-slate-500 font-normal">(birden fazla seçebilirsiniz)</span>
             </legend>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
@@ -299,8 +295,8 @@ export const CalendlyEmbed: React.FC<CalendlyEmbedProps> = ({
           </button>
 
           <p className="text-xs text-slate-500 pt-2 leading-relaxed">
-            Kişisel verileriniz KVKK uyumlu işlenir. Form sadece görüşme talebinizi
-            iletmek için kullanılır.{' '}
+            Kişisel verileriniz KVKK uyumlu işlenir. Form sadece görüşme talebinizi iletmek için
+            kullanılır.{' '}
             <a href="/privacy" className="text-secondary hover:underline">
               Gizlilik Politikası
             </a>

@@ -29,15 +29,15 @@ Akış:
 n_per_arm = (z_{α/(2|1)} + z_β)² · [p₁(1-p₁) + p₂(1-p₂)] / (p₂ - p₁)²
 ```
 
-| Sembol | Anlam | Tipik değer |
-|---|---|---|
-| `p₁` | Baseline conversion | 0.05 (%5) |
-| `mde` | Minimum detectable effect (relative) | 0.10 (%10 lift) |
-| `p₂` | `p₁ · (1 + mde)` | 0.055 |
-| `α` | Type-I error (false positive) | 0.05 |
-| `β` | Type-II error; `1-β` = power | 0.20 (power 0.80) |
-| `z_{α/2}` | Two-sided critical value | 1.9600 |
-| `z_β` | Power critical value | 0.8416 |
+| Sembol    | Anlam                                | Tipik değer       |
+| --------- | ------------------------------------ | ----------------- |
+| `p₁`      | Baseline conversion                  | 0.05 (%5)         |
+| `mde`     | Minimum detectable effect (relative) | 0.10 (%10 lift)   |
+| `p₂`      | `p₁ · (1 + mde)`                     | 0.055             |
+| `α`       | Type-I error (false positive)        | 0.05              |
+| `β`       | Type-II error; `1-β` = power         | 0.20 (power 0.80) |
+| `z_{α/2}` | Two-sided critical value             | 1.9600            |
+| `z_β`     | Power critical value                 | 0.8416            |
 
 **Hesap (örnek):**
 
@@ -56,14 +56,14 @@ Toplam: **62 460 visitor** (iki variant).
 
 ### Hızlı referans tablo
 
-| Baseline (p₁) | MDE (relative) | n per variant | Toplam |
-|---|---|---|---|
-| 0.05 | 0.20 | ≈ 7 870 | ≈ 15 740 |
-| 0.05 | 0.10 | ≈ 31 230 | ≈ 62 460 |
-| 0.05 | 0.05 | ≈ 122 100 | ≈ 244 200 |
-| 0.10 | 0.20 | ≈ 3 840 | ≈ 7 680 |
-| 0.10 | 0.10 | ≈ 14 750 | ≈ 29 500 |
-| 0.20 | 0.10 | ≈ 6 540 | ≈ 13 080 |
+| Baseline (p₁) | MDE (relative) | n per variant | Toplam    |
+| ------------- | -------------- | ------------- | --------- |
+| 0.05          | 0.20           | ≈ 7 870       | ≈ 15 740  |
+| 0.05          | 0.10           | ≈ 31 230      | ≈ 62 460  |
+| 0.05          | 0.05           | ≈ 122 100     | ≈ 244 200 |
+| 0.10          | 0.20           | ≈ 3 840       | ≈ 7 680   |
+| 0.10          | 0.10           | ≈ 14 750      | ≈ 29 500  |
+| 0.20          | 0.10           | ≈ 6 540       | ≈ 13 080  |
 
 Test edilen kodla **birebir aynı**: `sampleSizePerVariant({ baseline, mde })`.
 
@@ -95,9 +95,7 @@ function HeroCTA() {
   });
 
   return (
-    <button
-      onClick={() => trackOutcome('cta_click')}
-    >
+    <button onClick={() => trackOutcome('cta_click')}>
       {variant === 'explore' ? 'Explore Services' : 'Book Discovery Call'}
     </button>
   );
@@ -111,13 +109,13 @@ import { sampleSizePerVariant } from '@/lib/ab-test';
 
 const plan = sampleSizePerVariant({
   baseline: 0.05,
-  mde: 0.10,
+  mde: 0.1,
   alpha: 0.05,
   power: 0.8,
 });
 
 console.log(plan.perVariant); // ≈ 31 230
-console.log(plan.total);      // ≈ 62 460
+console.log(plan.total); // ≈ 62 460
 ```
 
 ### Active experiment kotası kontrolü
@@ -139,41 +137,41 @@ MDE'nin gerçekçi olduğuna karar ver.
 
 ## Flag Naming Konvansiyonu
 
-| Format | Örnek | Anlam |
-|---|---|---|
-| `<feature>-variant` | `hero-cta-variant` | Variant deneyi |
-| `<feature>-enabled` | `chatbot-enabled` | Boolean rollout |
+| Format              | Örnek                      | Anlam            |
+| ------------------- | -------------------------- | ---------------- |
+| `<feature>-variant` | `hero-cta-variant`         | Variant deneyi   |
+| `<feature>-enabled` | `chatbot-enabled`          | Boolean rollout  |
 | `<feature>-percent` | `pricing-discount-percent` | Numeric override |
 
 İsim KAB-CASE; namespace ayraç `-`. Underscore kullanma.
 
 ## Telemetry Disiplini
 
-| Event | Ne zaman |
-|---|---|
-| `experiment_viewed` | İlk variant okumada (GrowthBook trackingCallback) |
-| `experiment_assigned` | İlk hook render'ında (`useExperiment`) |
-| `<key>_converted` | `trackOutcome('metric')` çağrısında |
-| `<key>_value` | `trackOutcome('metric', 99.99)` (sayısal hedef) |
+| Event                 | Ne zaman                                          |
+| --------------------- | ------------------------------------------------- |
+| `experiment_viewed`   | İlk variant okumada (GrowthBook trackingCallback) |
+| `experiment_assigned` | İlk hook render'ında (`useExperiment`)            |
+| `<key>_converted`     | `trackOutcome('metric')` çağrısında               |
+| `<key>_value`         | `trackOutcome('metric', 99.99)` (sayısal hedef)   |
 
 GA4 + Sentry'ye eş zamanlı düşer — çift sayıma karşı `seenRef` ile idempotent.
 
 ## Yorumlama Rehberi
 
-| Sonuç | Aksiyon |
-|---|---|
-| `observed < planned` ve `p > 0.001` | Devam et, peek etme |
-| `observed ≥ planned` ve `p < α` (0.05) | Variant winner — kayıt et |
-| `observed ≥ planned` ve `p ≥ α` | Sonuç significant değil — variant'ı sonlandır |
+| Sonuç                                                        | Aksiyon                                                             |
+| ------------------------------------------------------------ | ------------------------------------------------------------------- |
+| `observed < planned` ve `p > 0.001`                          | Devam et, peek etme                                                 |
+| `observed ≥ planned` ve `p < α` (0.05)                       | Variant winner — kayıt et                                           |
+| `observed ≥ planned` ve `p ≥ α`                              | Sonuç significant değil — variant'ı sonlandır                       |
 | Conversion oranı `p₁`'den daha yüksek baseline'da seyrediyor | Test'i durdurma, baseline'ı güncelle ve sample size yeniden hesapla |
 
 ## Referanslar
 
 - Fleiss, J.L., Tytun, A., Ury, H.K. (1980). A simple approximation for
-  calculating sample sizes for comparing independent proportions. *Biometrics*
+  calculating sample sizes for comparing independent proportions. _Biometrics_
   36, 343–346.
-- Bonferroni, C.E. (1936). *Pubblicazioni del R Istituto Superiore di Scienze
-  Economiche e Commerciali di Firenze* 8, 3–62.
+- Bonferroni, C.E. (1936). _Pubblicazioni del R Istituto Superiore di Scienze
+  Economiche e Commerciali di Firenze_ 8, 3–62.
 - Web Vitals thresholds: https://web.dev/vitals/
 
 ## İlgili Dosyalar

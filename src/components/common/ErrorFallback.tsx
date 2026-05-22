@@ -32,7 +32,8 @@ export const ErrorFallback: React.FC<FallbackProps> = ({ error, resetErrorBounda
           </div>
         )}
 
-        <button type="button"
+        <button
+          type="button"
           onClick={resetErrorBoundary}
           className="inline-flex items-center gap-2 px-6 py-3 bg-white text-black rounded-lg font-medium hover:opacity-90 transition-opacity focus:ring-4 focus:ring-white/10"
         >

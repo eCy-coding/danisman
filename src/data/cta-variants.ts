@@ -532,9 +532,7 @@ const VARIANT_INDEX: Record<string, ServiceCtaVariants> = CTA_VARIANTS.reduce(
 export function getCtaVariant(slug: string, flavor: string): CtaVariant {
   const service = VARIANT_INDEX[slug];
   const safeFlavor: CtaFlavor =
-    flavor === 'urgency' || flavor === 'value' || flavor === 'social'
-      ? flavor
-      : 'value';
+    flavor === 'urgency' || flavor === 'value' || flavor === 'social' ? flavor : 'value';
   if (service) return service.variants[safeFlavor];
   return {
     flavor: safeFlavor,

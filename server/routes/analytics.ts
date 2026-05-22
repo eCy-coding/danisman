@@ -1,5 +1,10 @@
 import { Router } from 'express';
-import { trackPageView, trackInteraction, submitContact, getDashboardSummary } from '../controllers/analyticsController';
+import {
+  trackPageView,
+  trackInteraction,
+  submitContact,
+  getDashboardSummary,
+} from '../controllers/analyticsController';
 import { authenticate, requireRole } from '../middleware/auth';
 import { contactLimiter } from '../middleware/rateLimiter';
 import { clientErrorEndpoint, getRecentErrors, getErrorStats } from '../middleware/sentry';

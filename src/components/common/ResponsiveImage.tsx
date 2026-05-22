@@ -70,18 +70,10 @@ export const ResponsiveImage: React.FC<ResponsiveImageProps> = ({
   return (
     <picture>
       {formats.includes('avif') && (
-        <source
-          type="image/avif"
-          srcSet={buildSrcSet(deriveFormat(src, 'avif'))}
-          sizes={sizes}
-        />
+        <source type="image/avif" srcSet={buildSrcSet(deriveFormat(src, 'avif'))} sizes={sizes} />
       )}
       {formats.includes('webp') && (
-        <source
-          type="image/webp"
-          srcSet={buildSrcSet(deriveFormat(src, 'webp'))}
-          sizes={sizes}
-        />
+        <source type="image/webp" srcSet={buildSrcSet(deriveFormat(src, 'webp'))} sizes={sizes} />
       )}
       <img
         src={src}

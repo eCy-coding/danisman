@@ -3,29 +3,39 @@
 ## Failed Tests (4/5 Failed)
 
 ### 1. lead-gen.spec.ts - Form Submit
+
 **Error**: `strict mode violation: locator('button[type="submit"]') resolved to 2 elements`
+
 - Issue: Multiple submit buttons on page (main form + newsletter subscription).
 - Fix: Use more specific selector like `getByRole('button', { name: 'contact.form.submit' })` or `page.locator('form button[type="submit"]').first()`.
 
 ### 2. lead-gen.spec.ts - Form Validation
+
 **Error**: `getByText('Name must be at least 2 characters') not found`
+
 - Issue: Form error messages are not rendering or are in different language/format.
 - Cause: Likely i18n translation key mismatch or form validation not triggering.
 - Fix: Add explicit wait for validation message or check actual error text.
 
 ### 3. conversion-elements.spec.ts - Trust Marquee
+
 **Error**: `getByText('Trusted by Industry Leaders') not found`
+
 - Issue: Marquee component text is not visible or has different content.
 - Fix: Inspect actual marquee text in component and update selector.
 
 ### 4. conversion-elements.spec.ts - Smart CTA
+
 **Error**: Similar marquee/content visibility issue.
+
 - Fix: Verify element exists before scrolling test.
 
 ## Passing Tests (1/5)
+
 - diagnostic.spec.ts ✓ (basic page load test)
 
 ## Root Causes (Analysis)
+
 1. **Selector brittleness**: Tests use generic selectors that break with UI changes.
 2. **i18n**: Text-based assertions fail due to translations or missing keys.
 3. **Component rendering**: Elements may not be hydrated or may be hidden by default.
@@ -49,4 +59,5 @@
    - Implement visual regression testing (Percy/Applitools) to catch layout changes.
 
 ---
+
 Generated: 2025-01-07

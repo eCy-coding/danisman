@@ -15,15 +15,15 @@
   aside,
   .cookie-banner,
   .live-chat,
-  [data-testid="cookie-banner"],
-  [data-testid="geo-banner"],
-  [data-testid="language-toggle"],
-  [data-testid="hero-cta-primary"],
-  [data-testid="hero-cta-secondary"],
-  [aria-label*="navigation"],
-  [aria-label*="chat"],
-  [role="dialog"],
-  [aria-modal="true"],
+  [data-testid='cookie-banner'],
+  [data-testid='geo-banner'],
+  [data-testid='language-toggle'],
+  [data-testid='hero-cta-primary'],
+  [data-testid='hero-cta-secondary'],
+  [aria-label*='navigation'],
+  [aria-label*='chat'],
+  [role='dialog'],
+  [aria-modal='true'],
   .mobile-bottom-nav,
   .back-to-top,
   button:not([data-print-show]),
@@ -31,7 +31,7 @@
   .booking-modal,
   video,
   iframe,
-  svg[aria-hidden="true"],
+  svg[aria-hidden='true'],
   [data-noprint] {
     display: none !important;
   }
@@ -48,7 +48,7 @@
 
   html,
   body {
-    font-family: Georgia, "Times New Roman", serif;
+    font-family: Georgia, 'Times New Roman', serif;
     font-size: 12pt;
     line-height: 1.5;
     color: #000 !important;
@@ -61,7 +61,7 @@
   main,
   main > *,
   .container,
-  [class*="max-w-"],
+  [class*='max-w-'],
   section,
   article {
     max-width: none !important;
@@ -74,8 +74,8 @@
 
   .sticky,
   .fixed,
-  [class*="sticky"],
-  [class*="fixed"] {
+  [class*='sticky'],
+  [class*='fixed'] {
     position: static !important;
   }
 
@@ -89,15 +89,26 @@
   }
 
   /* Typography */
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     page-break-after: avoid;
     font-family: Georgia, serif;
     color: #000 !important;
   }
 
-  h1 { font-size: 24pt; }
-  h2 { font-size: 18pt; }
-  h3 { font-size: 14pt; }
+  h1 {
+    font-size: 24pt;
+  }
+  h2 {
+    font-size: 18pt;
+  }
+  h3 {
+    font-size: 14pt;
+  }
 
   /* Prevent orphans and widows */
   p {
@@ -107,15 +118,15 @@
 
   /* Links — show URL */
   a[href]::after {
-    content: " (" attr(href) ")";
+    content: ' (' attr(href) ')';
     font-size: 0.8em;
     color: #555 !important;
   }
 
   /* Don't show URLs for internal links or JS links */
-  a[href^="#"]::after,
-  a[href^="javascript:"]::after {
-    content: "";
+  a[href^='#']::after,
+  a[href^='javascript:']::after {
+    content: '';
   }
 
   /* Images */
@@ -136,7 +147,8 @@
     page-break-after: auto;
   }
 
-  th, td {
+  th,
+  td {
     border: 1px solid #999;
     padding: 6pt 8pt;
     text-align: left;

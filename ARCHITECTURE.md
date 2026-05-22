@@ -48,16 +48,19 @@ EcyPro Premium Consulting iki bağımsız servis olarak dağıtılır:
 ## Veri Akışları
 
 ### Discovery Call Booking
+
 1. User `/contact` formu doldurur → `POST /api/contact` → `ContactSubmission` insert + Telegram notify.
 2. (Opsiyonel) `enrollSubscriber({ sequenceKey: 'contact-followup-tr' })` → drip queue → ack mail T+0, follow-up T+1d, T+5d.
 
 ### Newsletter Subscribe (double opt-in)
+
 1. Footer formu → `POST /api/newsletter/subscribe` → `NewsletterSubscriber` create (consent=false).
 2. HMAC token üretilir → confirm mail gönderilir.
 3. User `GET /api/newsletter/confirm/:token` → consent=true + welcome drip enroll.
 4. Welcome sekansı: T+0 hoş geldin, T+3 metodoloji, T+7 case study, T+14 discovery invite.
 
 ### Admin Newsletter Campaign
+
 1. Admin `/admin/newsletter/campaigns` → kampanya oluştur (subject + body + audienceFilter).
 2. `POST /api/admin/newsletter/campaigns/:id/send` → `prisma.newsletterSubscriber.findMany` ile audience → her subscriber için `enrollSubscriber()` ile drip queue'ya yaz.
 3. Drip worker tick'leri (60s aralık) MJML render + SMTP send.
@@ -65,6 +68,7 @@ EcyPro Premium Consulting iki bağımsız servis olarak dağıtılır:
 ## Storage Modeli
 
 Prisma'da modellenen ana tablolar:
+
 - `User`, `Session`, `RefreshToken`, `EmailVerification`, `ApiKey` — kimlik
 - `ContactSubmission`, `Booking`, `BookingFeedback`, `Lead` — CRM
 - `NewsletterSubscriber` — pazarlama
@@ -73,6 +77,7 @@ Prisma'da modellenen ana tablolar:
 - `WebhookEvent`, `WebhookSubscription`, `WebhookDelivery` — entegrasyon
 
 Redis'te yaşayanlar (in-memory, persistence opsiyonel):
+
 - Rate limit + idempotency anahtarları
 - JWT blacklist
 - BullMQ queue + job state

@@ -14,7 +14,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 import { toast } from 'sonner';
-import { Check, ArrowLeft, ArrowRight, Send, Save, TestTube2 } from 'lucide-react';
+import { Check, ArrowLeft, ArrowRight, Save, TestTube2 } from 'lucide-react';
 import { apiClient } from '../../lib/api';
 import { Breadcrumb, FormField, fieldClassName } from '../../components/admin/ui';
 
@@ -71,12 +71,14 @@ export const AdminCampaignWizardPage: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      <Breadcrumb items={[
-        { label: 'Yönetim', to: '/admin' },
-        { label: 'Bülten', to: '/admin/newsletter' },
-        { label: 'Kampanyalar', to: '/admin/newsletter/campaigns' },
-        { label: 'Yeni' },
-      ]} />
+      <Breadcrumb
+        items={[
+          { label: 'Yönetim', to: '/admin' },
+          { label: 'Bülten', to: '/admin/newsletter' },
+          { label: 'Kampanyalar', to: '/admin/newsletter/campaigns' },
+          { label: 'Yeni' },
+        ]}
+      />
 
       <header>
         <h1 className="text-2xl font-serif font-bold text-white">Yeni Kampanya</h1>
@@ -90,11 +92,15 @@ export const AdminCampaignWizardPage: React.FC = () => {
           const done = idx < step;
           return (
             <li key={label} className="flex items-center gap-2">
-              <div className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold ${
-                done ? 'bg-secondary/15 text-secondary border border-secondary/30'
-                  : active ? 'bg-secondary text-neutral'
-                  : 'bg-white/5 text-slate-400 border border-white/10'
-              }`}>
+              <div
+                className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold ${
+                  done
+                    ? 'bg-secondary/15 text-secondary border border-secondary/30'
+                    : active
+                      ? 'bg-secondary text-neutral'
+                      : 'bg-white/5 text-slate-400 border border-white/10'
+                }`}
+              >
                 <span className="w-5 h-5 rounded-full bg-current/15 flex items-center justify-center text-xs">
                   {done ? <Check size={11} /> : idx + 1}
                 </span>
@@ -110,11 +116,24 @@ export const AdminCampaignWizardPage: React.FC = () => {
         {step === 0 && (
           <div className="space-y-4 max-w-xl">
             <h2 className="text-sm font-semibold text-white mb-2">Hedef Kitle</h2>
-            <FormField label="Kaynak Filtresi" tooltip="Boş bırakırsanız tüm aboneler" hint="footer / exit-intent / blog-cta">
-              <input type="text" value={draft.source} onChange={(e) => setDraft({ ...draft, source: e.target.value })} className={fieldClassName} />
+            <FormField
+              label="Kaynak Filtresi"
+              tooltip="Boş bırakırsanız tüm aboneler"
+              hint="footer / exit-intent / blog-cta"
+            >
+              <input
+                type="text"
+                value={draft.source}
+                onChange={(e) => setDraft({ ...draft, source: e.target.value })}
+                className={fieldClassName}
+              />
             </FormField>
             <label className="flex items-center gap-2 text-sm text-slate-300">
-              <input type="checkbox" checked={draft.consentOnly} onChange={(e) => setDraft({ ...draft, consentOnly: e.target.checked })} />
+              <input
+                type="checkbox"
+                checked={draft.consentOnly}
+                onChange={(e) => setDraft({ ...draft, consentOnly: e.target.checked })}
+              />
               Sadece çift-onaylı aboneler (KVKK)
             </label>
           </div>
@@ -123,10 +142,20 @@ export const AdminCampaignWizardPage: React.FC = () => {
           <div className="space-y-4 max-w-3xl">
             <h2 className="text-sm font-semibold text-white mb-2">İçerik</h2>
             <FormField label="Konu" required>
-              <input type="text" value={draft.subject} onChange={(e) => setDraft({ ...draft, subject: e.target.value })} className={fieldClassName} maxLength={150} />
+              <input
+                type="text"
+                value={draft.subject}
+                onChange={(e) => setDraft({ ...draft, subject: e.target.value })}
+                className={fieldClassName}
+                maxLength={150}
+              />
             </FormField>
             <FormField label="Şablon" tooltip="MJML şablonu (server/emails/mjml/<key>.mjml)">
-              <select value={draft.templateKey} onChange={(e) => setDraft({ ...draft, templateKey: e.target.value })} className={fieldClassName}>
+              <select
+                value={draft.templateKey}
+                onChange={(e) => setDraft({ ...draft, templateKey: e.target.value })}
+                className={fieldClassName}
+              >
                 <option value="welcome">welcome</option>
                 <option value="methodology">methodology</option>
                 <option value="case-study">case-study</option>
@@ -135,7 +164,11 @@ export const AdminCampaignWizardPage: React.FC = () => {
               </select>
             </FormField>
             <FormField label="Gövde (Markdown veya HTML)" required>
-              <textarea value={draft.body} onChange={(e) => setDraft({ ...draft, body: e.target.value })} className={`${fieldClassName} min-h-[260px] font-mono text-xs`} />
+              <textarea
+                value={draft.body}
+                onChange={(e) => setDraft({ ...draft, body: e.target.value })}
+                className={`${fieldClassName} min-h-[260px] font-mono text-xs`}
+              />
             </FormField>
           </div>
         )}
@@ -143,11 +176,17 @@ export const AdminCampaignWizardPage: React.FC = () => {
           <div className="max-w-3xl">
             <h2 className="text-sm font-semibold text-white mb-2">Önizleme</h2>
             <div className="bg-white text-neutral rounded-xl p-6 shadow-2xl">
-              <p className="text-xs uppercase tracking-[0.2em] text-slate-500 mb-2">eCyPro Premium Consulting</p>
+              <p className="text-xs uppercase tracking-[0.2em] text-slate-500 mb-2">
+                eCyPro Premium Consulting
+              </p>
               <h3 className="text-xl font-bold mb-3">{draft.subject || '(Konu yok)'}</h3>
-              <div className="text-sm whitespace-pre-wrap text-slate-700">{draft.body || '(Gövde yok)'}</div>
+              <div className="text-sm whitespace-pre-wrap text-slate-700">
+                {draft.body || '(Gövde yok)'}
+              </div>
             </div>
-            <p className="text-xs text-slate-500 mt-3">Bu basit önizleme; final HTML render MJML üzerinden yapılır.</p>
+            <p className="text-xs text-slate-500 mt-3">
+              Bu basit önizleme; final HTML render MJML üzerinden yapılır.
+            </p>
           </div>
         )}
         {step === 3 && (
@@ -155,7 +194,13 @@ export const AdminCampaignWizardPage: React.FC = () => {
             <h2 className="text-sm font-semibold text-white mb-2">Gönder</h2>
             <FormField label="Test Gönderim Adresi" hint="Önce kendinize test gönderin">
               <div className="flex gap-2">
-                <input type="email" value={testEmail} onChange={(e) => setTestEmail(e.target.value)} className={`${fieldClassName} flex-1`} placeholder="emre@ecypro.com" />
+                <input
+                  type="email"
+                  value={testEmail}
+                  onChange={(e) => setTestEmail(e.target.value)}
+                  className={`${fieldClassName} flex-1`}
+                  placeholder="emre@ecypro.com"
+                />
                 <button
                   type="button"
                   disabled={!testEmail || testSend.isPending}
@@ -175,7 +220,9 @@ export const AdminCampaignWizardPage: React.FC = () => {
               >
                 <Save size={14} /> Taslak Olarak Kaydet
               </button>
-              <p className="text-xs text-slate-500 self-center">Gerçek gönderim Kampanyalar listesinden "Gönder" ile yapılır.</p>
+              <p className="text-xs text-slate-500 self-center">
+                Gerçek gönderim Kampanyalar listesinden "Gönder" ile yapılır.
+              </p>
             </div>
           </div>
         )}

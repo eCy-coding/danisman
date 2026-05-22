@@ -10,22 +10,24 @@ interface QuestionCardProps {
   totalSteps: number;
 }
 
-export const QuestionCard: React.FC<QuestionCardProps> = ({ 
-  question, 
-  options, 
-  onAnswer, 
-  currentStep, 
-  totalSteps 
+export const QuestionCard: React.FC<QuestionCardProps> = ({
+  question,
+  options,
+  onAnswer,
+  currentStep,
+  totalSteps,
 }) => {
   return (
     <Card className="p-8 max-w-2xl mx-auto bg-white/5 border-white/10">
       <div className="mb-6">
         <div className="flex justify-between text-sm text-gray-400 mb-2">
-          <span>Soru {currentStep} / {totalSteps}</span>
+          <span>
+            Soru {currentStep} / {totalSteps}
+          </span>
           <span>{Math.round((currentStep / totalSteps) * 100)}%</span>
         </div>
         <div className="h-2 w-full bg-white/10 rounded-full overflow-hidden">
-          <motion.div 
+          <motion.div
             className="h-full bg-blue-500"
             initial={{ width: 0 }}
             animate={{ width: `${(currentStep / totalSteps) * 100}%` }}

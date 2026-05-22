@@ -51,23 +51,30 @@ export function useAdminEvents({ enabled = true, onEvent }: Options = {}): void 
       sourceRef.current = es;
 
       const types: AdminEventType[] = [
-        'lead.created', 'lead.updated', 'contact.submitted',
-        'newsletter.subscribed', 'campaign.sent', 'audit.action', 'ready',
+        'lead.created',
+        'lead.updated',
+        'contact.submitted',
+        'newsletter.subscribed',
+        'campaign.sent',
+        'audit.action',
+        'ready',
       ];
       for (const t of types) {
         // P76: event-source-polyfill types conflict with DOM EventListener;
         // cast via unknown to satisfy both type systems.
-        (es as unknown as EventSource).addEventListener(t, ((ev: Event) => {
+        (es as unknown as EventSource).addEventListener(t, (ev: Event) => {
           try {
             const parsed = JSON.parse((ev as MessageEvent).data) as AdminEvent;
             onEvent?.(parsed);
           } catch {
             /* ignore malformed */
           }
-        }));
+        });
       }
 
-      es.onopen = () => { attemptsRef.current = 0; };
+      es.onopen = () => {
+        attemptsRef.current = 0;
+      };
       es.onerror = () => {
         es.close();
         if (cancelled) return;

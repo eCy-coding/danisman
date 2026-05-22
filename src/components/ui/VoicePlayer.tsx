@@ -8,16 +8,9 @@ interface VoicePlayerProps {
 }
 
 export const VoicePlayer: React.FC<VoicePlayerProps> = ({ content }) => {
-  const { 
-    speak, 
-    pause, 
-    resume, 
-    stop, 
-    isPlaying, 
-    isPaused, 
-    currentSentence, 
-    supported 
-  } = useReader({ text: content });
+  const { speak, pause, resume, stop, isPlaying, isPaused, currentSentence, supported } = useReader(
+    { text: content },
+  );
 
   if (!supported) return null;
 
@@ -32,24 +25,25 @@ export const VoicePlayer: React.FC<VoicePlayerProps> = ({ content }) => {
             exit={{ opacity: 0, scale: 0.95 }}
             className="mb-2 max-w-sm rounded-xl bg-black/80 p-4 text-sm font-medium leading-relaxed text-white shadow-2xl"
           >
-             <div className="flex items-center gap-2 mb-2 text-xs text-neutral-400">
-                <Activity className="h-3 w-3 animate-pulse text-emerald-400" />
-                <span>The Sovereign Voice</span>
-             </div>
-             "{currentSentence}"
+            <div className="flex items-center gap-2 mb-2 text-xs text-neutral-400">
+              <Activity className="h-3 w-3 animate-pulse text-emerald-400" />
+              <span>The Sovereign Voice</span>
+            </div>
+            "{currentSentence}"
           </motion.div>
         )}
       </AnimatePresence>
 
       {/* Control Fab */}
-      <motion.div 
+      <motion.div
         className="flex items-center gap-2 rounded-full bg-neutral-900 p-2 shadow-xl ring-1 ring-white/10"
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 0.5 }}
       >
         {!isPlaying && !isPaused ? (
-          <button type="button"
+          <button
+            type="button"
             onClick={speak}
             className="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-600 text-white hover:bg-emerald-700 active:scale-95 transition-all"
             aria-label="Listen to article"
@@ -59,7 +53,8 @@ export const VoicePlayer: React.FC<VoicePlayerProps> = ({ content }) => {
         ) : (
           <>
             {isPlaying ? (
-              <button type="button"
+              <button
+                type="button"
                 onClick={pause}
                 className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white hover:bg-white/20"
                 aria-label="Pause"
@@ -67,7 +62,8 @@ export const VoicePlayer: React.FC<VoicePlayerProps> = ({ content }) => {
                 <Pause className="h-5 w-5" />
               </button>
             ) : (
-              <button type="button"
+              <button
+                type="button"
                 onClick={resume}
                 className="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-600 text-white hover:bg-emerald-700"
                 aria-label="Resume"
@@ -75,11 +71,12 @@ export const VoicePlayer: React.FC<VoicePlayerProps> = ({ content }) => {
                 <Play className="h-5 w-5 ml-0.5" />
               </button>
             )}
-            
-            <button type="button"
+
+            <button
+              type="button"
               onClick={stop}
               className="flex h-10 w-10 items-center justify-center rounded-full bg-red-500/10 text-red-400 hover:bg-red-500/20"
-               aria-label="Stop"
+              aria-label="Stop"
             >
               <Square className="h-4 w-4" />
             </button>

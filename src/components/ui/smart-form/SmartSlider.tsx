@@ -10,7 +10,15 @@ interface SmartSliderProps extends React.InputHTMLAttributes<HTMLInputElement> {
   formatValue?: (value: number) => string;
 }
 
-export const SmartSlider: React.FC<SmartSliderProps> = ({ name, label, min, max, step = 1, formatValue, ...props }) => {
+export const SmartSlider: React.FC<SmartSliderProps> = ({
+  name,
+  label,
+  min,
+  max,
+  step = 1,
+  formatValue,
+  ...props
+}) => {
   const { register, watch } = useFormContext();
   const value = watch(name);
 
@@ -24,7 +32,7 @@ export const SmartSlider: React.FC<SmartSliderProps> = ({ name, label, min, max,
           {formatValue ? formatValue(Number(value || min)) : value}
         </span>
       </div>
-      
+
       <div className="relative h-6 flex items-center">
         <input
           type="range"

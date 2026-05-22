@@ -7,6 +7,7 @@ Production'da hâlâ eksik 3 madde. Her biri 1-2 dakika.
 `.env.production` içindeki `VITE_SENTRY_DSN` ve `SENTRY_DSN` değerleri Sentry dashboard URL'i, gerçek DSN değil. SDK init başarısız oluyor → hata izleme çalışmıyor.
 
 **Doğru DSN biçimi:**
+
 ```
 https://<PUBLIC_KEY>@o<ORG_ID>.ingest.sentry.io/<PROJECT_ID>
 ```
@@ -16,6 +17,7 @@ https://<PUBLIC_KEY>@o<ORG_ID>.ingest.sentry.io/<PROJECT_ID>
 ## 2. Google Search Console verification
 
 `index.html`'e P43'te placeholder eklendi:
+
 ```html
 <meta name="google-site-verification" content="REPLACE_WITH_GSC_TOKEN" />
 ```

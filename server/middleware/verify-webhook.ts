@@ -139,11 +139,7 @@ export function verifyWebhook(provider: WebhookProviderName) {
     throw new Error(`[verify-webhook] Unknown provider: ${provider}`);
   }
 
-  return function verifyWebhookMiddleware(
-    req: Request,
-    res: Response,
-    next: NextFunction,
-  ): void {
+  return function verifyWebhookMiddleware(req: Request, res: Response, next: NextFunction): void {
     const secret = process.env[cfg.secretEnv];
     if (!secret) {
       if (process.env.NODE_ENV === 'production') {

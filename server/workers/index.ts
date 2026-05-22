@@ -18,15 +18,9 @@ import { startEmailWorker, stopEmailWorker } from './email-worker';
 import { startGdprExportWorker, stopGdprExportWorker } from './gdpr-export-worker';
 import { startCronWorker, stopCronWorker } from './cron-worker';
 import { startImageResizeWorker, stopImageResizeWorker } from './image-resize-worker';
-import {
-  startAuditArchiveWorker,
-  stopAuditArchiveWorker,
-} from './audit-archive-worker';
+import { startAuditArchiveWorker, stopAuditArchiveWorker } from './audit-archive-worker';
 // P23 BE Track 2 / Aşama 2 — outbound webhook delivery worker.
-import {
-  startWebhookDeliveryWorker,
-  stopWebhookDeliveryWorker,
-} from './webhook-delivery-worker';
+import { startWebhookDeliveryWorker, stopWebhookDeliveryWorker } from './webhook-delivery-worker';
 import { logger } from '../config/logger';
 
 export function startAllWorkers(): void {

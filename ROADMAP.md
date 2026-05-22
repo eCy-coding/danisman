@@ -8,25 +8,27 @@
 
 ## 📊 Mevcut Durum Özeti
 
-| Metrik | Değer | Hedef |
-|--------|-------|-------|
-| Toplam E2E Test | **846** | 1000+ |
-| Spec Dosyası | **85** | 100 |
-| 15-Pane Kapsam | **15/15** ✅ | 15/15 |
-| TS Derlemesi | **0 hata** ✅ | 0 hata |
-| LHCI Score | A11y ≥ 0.98 | 1.00 |
+| Metrik          | Değer         | Hedef  |
+| --------------- | ------------- | ------ |
+| Toplam E2E Test | **846**       | 1000+  |
+| Spec Dosyası    | **85**        | 100    |
+| 15-Pane Kapsam  | **15/15** ✅  | 15/15  |
+| TS Derlemesi    | **0 hata** ✅ | 0 hata |
+| LHCI Score      | A11y ≥ 0.98   | 1.00   |
 
 ---
 
 ## 🏗️ Phase 1 — Çekirdek Altyapı (Critical) ← ŞU AN
 
 ### Pane 0 — 🖥️ Frontend-Dev
+
 ```bash
 npm run dev          # Vite HMR + TypeScript watch
 npm run typecheck    # sıfır hata garantisi
 ```
 
 #### Cerrahi Müdahaleler:
+
 - [x] `vite.config.ts` — chunk stratejisi, rollupOptions optimizasyonu
 - [ ] `src/lib/fonts.ts` — Google Fonts self-host (performance)
 - [ ] `src/hooks/useIntersection.ts` — lazy section observer güçlendir
@@ -37,12 +39,14 @@ npm run typecheck    # sıfır hata garantisi
 ---
 
 ### Pane 1 — 🛠️ Backend-API
+
 ```bash
 npm run server       # tsx server/index.ts
 npm run start:dev    # NestJS/Express dev mode
 ```
 
 #### Cerrahi Müdahaleler:
+
 - [ ] `server/routes/contact.ts` — rate limiting middleware (express-rate-limit)
 - [ ] `server/routes/blog.ts` — pagination + search optimizasyonu
 - [ ] `server/middleware/security.ts` — helmet.js + cors sertleştirme
@@ -53,6 +57,7 @@ npm run start:dev    # NestJS/Express dev mode
 ---
 
 ### Pane 2 — 💾 DB-Postgres
+
 ```bash
 npm run dev:db       # docker compose postgres + redis + mailpit
 npx prisma migrate dev
@@ -60,6 +65,7 @@ npx prisma studio    # GUI
 ```
 
 #### Cerrahi Müdahaleler:
+
 - [ ] `prisma/schema.prisma` — index optimizasyonu (composite indexes)
 - [ ] `scripts/seed.ts` — production-like test data (100 blog, 50 contact)
 - [ ] Connection pooling: PgBouncer konfigürasyonu
@@ -72,11 +78,13 @@ npx prisma studio    # GUI
 ## 🎨 Phase 2 — UI/UX & Component Library (High)
 
 ### Pane 5 — 🎨 UI-Storybook
+
 ```bash
 npm run storybook    # port 6006
 ```
 
 #### Cerrahi Müdahaleler:
+
 - [ ] `.storybook/main.ts` — Vite builder, addon-a11y, addon-interactions ekle
 - [ ] `src/stories/Button.stories.tsx` — EcyPro buton varyantları
 - [ ] `src/stories/MediaPicture.stories.tsx` — WebP/AVIF bileşen
@@ -86,6 +94,7 @@ npm run storybook    # port 6006
 - [ ] `src/stories/DemoRequestModal.stories.tsx` — conversion modal
 
 #### CSS Geliştirme:
+
 ```css
 /* src/styles/tokens.css */
 :root {
@@ -101,11 +110,13 @@ npm run storybook    # port 6006
 ---
 
 ### Pane 12 — 🏗️ UI-Designer
+
 ```bash
 npx figma-to-react --watch   # Figma token sync
 ```
 
 #### Cerrahi Müdahaleler:
+
 - [ ] `src/components/ui/MediaPicture.tsx` — `<picture>` WebP/AVIF component
 - [ ] `src/components/ui/SkeletonLoader.tsx` — pulse animasyon varyantları
 - [ ] `src/components/ui/ScrollProgressBar.tsx` — blog okuma progress
@@ -114,15 +125,22 @@ npx figma-to-react --watch   # Figma token sync
 - [ ] `src/components/ui/PageLoadingBar.tsx` — route transition bar
 
 #### HTML5 Semantik:
+
 ```html
 <!-- Hero section semantic structure -->
 <section aria-labelledby="hero-title">
   <h1 id="hero-title" class="sr-only">Global Strategic Consulting</h1>
   <picture>
-    <source srcset="hero.avif" type="image/avif">
-    <source srcset="hero.webp" type="image/webp">
-    <img src="hero.jpg" alt="EcyPro Premium Consulting" 
-         fetchpriority="high" loading="eager" width="1920" height="1080">
+    <source srcset="hero.avif" type="image/avif" />
+    <source srcset="hero.webp" type="image/webp" />
+    <img
+      src="hero.jpg"
+      alt="EcyPro Premium Consulting"
+      fetchpriority="high"
+      loading="eager"
+      width="1920"
+      height="1080"
+    />
   </picture>
 </section>
 ```
@@ -134,12 +152,14 @@ npx figma-to-react --watch   # Figma token sync
 ## 📦 Phase 3 — Media & Asset Pipeline (Medium)
 
 ### Pane 6 — 📦 Media-Watcher
+
 ```bash
 node scripts/watch-media.js   # WebP/AVIF dönüştürücü
 npm run media:watch            # tsx scripts/watch-media.ts
 ```
 
 #### Cerrahi Müdahaleler:
+
 - [ ] `scripts/watch-media.ts` — sharp ile WebP/AVIF batch conversion
 - [ ] `scripts/watch-media.js` — node wrapper (tsx-less)
 - [ ] `public/images/` — hero, service, blog görselleri optimize et
@@ -147,12 +167,13 @@ npm run media:watch            # tsx scripts/watch-media.ts
 - [ ] SVG sprite: `public/sprite.svg` — tüm ikonları birleştir
 
 #### WebP Optimizasyon Hedefleri:
-| Görsel Tipi | Max Size | Format |
-|------------|----------|--------|
-| Hero | 100KB | AVIF + WebP |
-| Blog kapak | 50KB | WebP |
-| Avatar/Icon | 5KB | WebP/SVG |
-| OG Image | 120KB | JPG |
+
+| Görsel Tipi | Max Size | Format      |
+| ----------- | -------- | ----------- |
+| Hero        | 100KB    | AVIF + WebP |
+| Blog kapak  | 50KB     | WebP        |
+| Avatar/Icon | 5KB      | WebP/SVG    |
+| OG Image    | 120KB    | JPG         |
 
 #### Test Paketi: `crawl_media_optimization.spec.ts` + `crawl_image_lcp.spec.ts` (28 test)
 
@@ -161,11 +182,13 @@ npm run media:watch            # tsx scripts/watch-media.ts
 ## 🔎 Phase 4 — SEO & Geo (High)
 
 ### Pane 4 — 🔎 SEO-Geo-Admin
+
 ```bash
 npm run seo:watch    # tsx scripts/seo-watch.ts
 ```
 
 #### Cerrahi Müdahaleler:
+
 - [ ] `src/lib/seo.ts` — SSR meta generator (dynamic og:image)
 - [ ] `public/robots.txt` — Sitemap referansı, crawl budget
 - [ ] `public/sitemap.xml` — tüm URL'ler, hreflang, priority
@@ -173,6 +196,7 @@ npm run seo:watch    # tsx scripts/seo-watch.ts
 - [ ] `index.html` — hreflang alternate link tags
 
 #### JSON-LD Şema Hedefleri:
+
 ```json
 {
   "@context": "https://schema.org",
@@ -189,12 +213,14 @@ npm run seo:watch    # tsx scripts/seo-watch.ts
 ---
 
 ### Pane 13 — 🧭 Geo-Manager
+
 ```bash
 node scripts/geo-manager.js   # IP geolocation watch
 npm run geo:watch              # tsx scripts/geo-watch.ts
 ```
 
 #### Cerrahi Müdahaleler:
+
 - [ ] `server/routes/geo.ts` — IP lookup API (MaxMind GeoLite2)
 - [ ] `src/components/GeoBanner.tsx` — currency + language auto-detect
 - [ ] `src/hooks/useGeo.ts` — geolocation hook sertleştir
@@ -207,12 +233,14 @@ npm run geo:watch              # tsx scripts/geo-watch.ts
 ## 🧪 Phase 5 — Test & Quality (Critical)
 
 ### Pane 3 — 🧪 E2E-Playwright (Cypress → Playwright)
+
 ```bash
 npm run e2e:watch   # playwright UI mode
 npm run test:e2e    # headless CI mode
 ```
 
 #### Playwright Config Güçlendirmesi:
+
 - [x] `timeout: 90_000` — test başına 90sn
 - [x] `globalTimeout: 30 * 60_000` — suite 30dk
 - [x] `retries: CI ? 2 : 1` — flaky test retry
@@ -220,10 +248,11 @@ npm run test:e2e    # headless CI mode
 - [ ] `snapshotDir: './e2e/snapshots'` — visual regression
 
 #### Test Kapsam Hedefi (Mevcut → Hedef):
+
 ```
 Phase 1-Core:    57 → 80  test
 Phase 2-UI/UX:  111 → 140 test
-Phase 3-Media:   28 → 35  test  
+Phase 3-Media:   28 → 35  test
 Phase 4-SEO:    104 → 130 test
 Phase 5-Quality:134 → 170 test
 Phase 6-Obs:    112 → 140 test
@@ -232,25 +261,28 @@ TOPLAM:         649 → 815 test (net-unique, phase mapped)
 ```
 
 ### Pane 7 — ⚙️ CI-Lighthouse
+
 ```bash
 npm run lhci:watch        # continuous lighthouse
 npx lhci autorun          # tek seferlik
 ```
 
 #### Hedef Skorlar:
-| Metrik | Şu An | Hedef |
-|--------|-------|-------|
-| Performance | ≥ 0.70 | ≥ 0.85 |
-| Accessibility | ≥ 0.98 | 1.00 |
-| Best Practices | ≥ 0.95 | 1.00 |
-| SEO | 1.00 | 1.00 |
-| LCP | ≤ 4.0s | ≤ 2.5s |
-| CLS | ≤ 0.10 | ≤ 0.05 |
-| TBT | ≤ 600ms | ≤ 200ms |
+
+| Metrik         | Şu An   | Hedef   |
+| -------------- | ------- | ------- |
+| Performance    | ≥ 0.70  | ≥ 0.85  |
+| Accessibility  | ≥ 0.98  | 1.00    |
+| Best Practices | ≥ 0.95  | 1.00    |
+| SEO            | 1.00    | 1.00    |
+| LCP            | ≤ 4.0s  | ≤ 2.5s  |
+| CLS            | ≤ 0.10  | ≤ 0.05  |
+| TBT            | ≤ 600ms | ≤ 200ms |
 
 #### Test Paketi: `crawl_performance_vitals.spec.ts` (24 test)
 
 ### Pane 10 — 🔐 Sec-Watch
+
 ```bash
 npm run sec:watch    # tsx scripts/sec-watch.ts
 npm audit --audit-level=high
@@ -263,23 +295,27 @@ npm audit --audit-level=high
 ## 📈 Phase 6 — Observability (Medium)
 
 ### Pane 8 — 🗒️ Log-Tail
+
 ```bash
 npm run logs:tail    # bash scripts/logs-tail.sh
 docker logs -f ecypro_app ecypro_db
 ```
 
 #### Eklenecekler:
+
 - [ ] `scripts/logs-tail.sh` güçlendir — color coding, error filter
 - [ ] Sentry DSN — production error tracking
 - [ ] PM2 log rotation — ecosystem.config.cjs
 
 ### Pane 9 — 📈 Analytics-Dev
+
 ```bash
 npm run analytics:dev   # tsx scripts/analytics-dev.ts
 node scripts/analytics-dev.js
 ```
 
 #### Eklenecekler:
+
 - [ ] `scripts/analytics-dev.ts` — fake GA4/GTM dev server sertleştir
 - [ ] GTM preview mode entegrasyonu
 - [ ] Hotjar session replay mock
@@ -291,17 +327,20 @@ node scripts/analytics-dev.js
 ## 🚀 Phase 7 — Ops & Deploy (Low)
 
 ### Pane 11 — 🚀 Deploy-Watch
+
 ```bash
 npm run deploy:watch    # tsx scripts/deploy-watch.ts
 ```
 
 #### Eklenecekler:
+
 - [ ] GitHub Actions workflow — `.github/workflows/e2e.yml`
 - [ ] Blue-green deployment — nginx-bluegreen.conf aktifleştir
 - [ ] Cloudflare Workers — edge caching
 - [ ] Docker multi-stage build optimizasyonu
 
 ### Pane 14 — 🧑‍💼 Lead-CRM
+
 ```bash
 npm run crm:watch    # tsx scripts/crm-watch.ts
 node scripts/crm-sync.js
@@ -314,6 +353,7 @@ node scripts/crm-sync.js
 ## 🛠️ Kritik Eksik Dosyalar (Cerrahi Müdahale Listesi)
 
 ### A. Node.js Wrapper Scripts (istek5.txt pane komutları)
+
 ```
 scripts/watch-media.js    ← node scripts/watch-media.js
 scripts/analytics-dev.js  ← node scripts/analytics-dev.js
@@ -322,6 +362,7 @@ scripts/crm-sync.js       ← node scripts/crm-sync.js (crm-watch.ts wrapper)
 ```
 
 ### B. Python Araçları
+
 ```
 scripts/e2e_health.py     ← E2E sağlık dashboard + HTML rapor
 scripts/performance_report.py ← LHCI JSON → markdown + HTML
@@ -329,12 +370,14 @@ scripts/seo_audit.py      ← sitemap + robots + schema analyzer
 ```
 
 ### C. HTML5 Araçları
+
 ```
 public/tools/e2e-dashboard.html  ← canlı test sonuçları dashboard
 public/tools/lhci-report.html    ← Lighthouse CI HTML raporu
 ```
 
 ### D. CSS Geliştirmeler
+
 ```
 src/styles/tokens.css     ← Design token custom properties
 src/styles/a11y.css       ← Accessibility yardımcı sınıflar
@@ -342,6 +385,7 @@ src/styles/debug.css      ← E2E debugging CSS
 ```
 
 ### E. Playwright Güçlendirme
+
 ```
 e2e/global-setup.ts       ← Sunucu warmup + DB seed
 e2e/fixtures/index.ts     ← Ortak test fixture'ları
@@ -407,4 +451,4 @@ python3 scripts/performance_report.py --lhci-dir lighthouse-reports/
 
 ---
 
-*Son güncelleme: `python3 scripts/e2e_coverage_report.py` çıktısına göre otomatik*
+_Son güncelleme: `python3 scripts/e2e_coverage_report.py` çıktısına göre otomatik_

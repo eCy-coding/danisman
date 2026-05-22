@@ -26,18 +26,55 @@ interface ProofItem {
 
 const DEFAULT_ITEMS: ProofItem[] = [
   { id: '1', city: 'İstanbul', role: 'CEO', action: 'Discovery Call rezerve etti', minutesAgo: 4 },
-  { id: '2', city: 'Ankara', role: 'CFO', action: 'Annual Report 2025\'i indirdi', minutesAgo: 11 },
-  { id: '3', city: 'İzmir', role: 'COO', action: 'Operasyonel Mükemmellik hizmetini inceledi', minutesAgo: 17 },
-  { id: '4', city: 'Bursa', role: 'Genel Müdür', action: 'Aile Şirketleri pillar sayfasını okudu', minutesAgo: 23 },
-  { id: '5', city: 'Antalya', role: 'CIO', action: 'AI & Analytics widget\'ı denedi', minutesAgo: 31 },
-  { id: '6', city: 'Eskişehir', role: 'CFO', action: 'Yatırım Teşvikleri Hızlı Audit talep etti', minutesAgo: 38 },
-  { id: '7', city: 'Amsterdam', role: 'CSO', action: 'ESG Strategy sayfasında 9 dk geçirdi', minutesAgo: 44 },
-  { id: '8', city: 'Berlin', role: 'CEO', action: 'Methodology sayfasını paylaştı', minutesAgo: 52 },
+  { id: '2', city: 'Ankara', role: 'CFO', action: "Annual Report 2025'i indirdi", minutesAgo: 11 },
+  {
+    id: '3',
+    city: 'İzmir',
+    role: 'COO',
+    action: 'Operasyonel Mükemmellik hizmetini inceledi',
+    minutesAgo: 17,
+  },
+  {
+    id: '4',
+    city: 'Bursa',
+    role: 'Genel Müdür',
+    action: 'Aile Şirketleri pillar sayfasını okudu',
+    minutesAgo: 23,
+  },
+  {
+    id: '5',
+    city: 'Antalya',
+    role: 'CIO',
+    action: "AI & Analytics widget'ı denedi",
+    minutesAgo: 31,
+  },
+  {
+    id: '6',
+    city: 'Eskişehir',
+    role: 'CFO',
+    action: 'Yatırım Teşvikleri Hızlı Audit talep etti',
+    minutesAgo: 38,
+  },
+  {
+    id: '7',
+    city: 'Amsterdam',
+    role: 'CSO',
+    action: 'ESG Strategy sayfasında 9 dk geçirdi',
+    minutesAgo: 44,
+  },
+  {
+    id: '8',
+    city: 'Berlin',
+    role: 'CEO',
+    action: 'Methodology sayfasını paylaştı',
+    minutesAgo: 52,
+  },
 ];
 
-const FEED_URL = (typeof import.meta !== 'undefined' && import.meta.env?.VITE_SOCIAL_PROOF_FEED)
-  ? String(import.meta.env.VITE_SOCIAL_PROOF_FEED).trim()
-  : '';
+const FEED_URL =
+  typeof import.meta !== 'undefined' && import.meta.env?.VITE_SOCIAL_PROOF_FEED
+    ? String(import.meta.env.VITE_SOCIAL_PROOF_FEED).trim()
+    : '';
 
 const ROTATION_MS = 8_000;
 const VISIBLE_MS = 6_000;
@@ -126,11 +163,7 @@ export const SocialProofFeed: React.FC<SocialProofFeedProps> = ({
     .join(' ');
 
   return (
-    <aside
-      aria-label="Aktivite akışı"
-      data-testid="social-proof-feed"
-      className={wrapperClass}
-    >
+    <aside aria-label="Aktivite akışı" data-testid="social-proof-feed" className={wrapperClass}>
       <div className="max-w-xs bg-neutral/95 backdrop-blur-sm border border-white/10 rounded-xl shadow-2xl px-4 py-3 flex items-start gap-3">
         <div className="flex-shrink-0 w-9 h-9 rounded-full bg-secondary/15 border border-secondary/30 flex items-center justify-center">
           <Sparkles size={14} className="text-secondary" aria-hidden="true" />
@@ -142,12 +175,8 @@ export const SocialProofFeed: React.FC<SocialProofFeedProps> = ({
             <span aria-hidden="true">·</span>
             <span>{item.role}</span>
           </div>
-          <p className="text-xs text-white leading-snug">
-            {item.action}
-          </p>
-          <p className="text-[11px] text-slate-500 mt-1">
-            {item.minutesAgo} dk önce
-          </p>
+          <p className="text-xs text-white leading-snug">{item.action}</p>
+          <p className="text-[11px] text-slate-500 mt-1">{item.minutesAgo} dk önce</p>
         </div>
       </div>
     </aside>

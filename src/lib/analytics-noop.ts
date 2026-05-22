@@ -29,7 +29,9 @@ let warned = false;
 export function trackEventSafe(eventName: string, params?: AnalyticsParams): void {
   if (typeof window === 'undefined') return;
   if (!warned) {
-    Logger.warn('[analytics-noop] GA4 disabled (VITE_GA_TRACKING_ID empty) — events going to /dev/null');
+    Logger.warn(
+      '[analytics-noop] GA4 disabled (VITE_GA_TRACKING_ID empty) — events going to /dev/null',
+    );
     warned = true;
   }
   if (import.meta.env.DEV) {

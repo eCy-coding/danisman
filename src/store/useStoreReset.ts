@@ -43,10 +43,7 @@ export function resetAllStores(opts: { keepUiPrefs?: boolean } = {}): void {
   // Clear any other namespaced localStorage entries that bypassed Zustand.
   try {
     // Auth-namespaced keys must be wiped to prevent token revival on F5.
-    const sensitiveKeys = [
-      'ecypro_admin_token',
-      'ecypro_admin_refresh',
-    ];
+    const sensitiveKeys = ['ecypro_admin_token', 'ecypro_admin_refresh'];
     for (const k of sensitiveKeys) {
       try {
         localStorage.removeItem(k);

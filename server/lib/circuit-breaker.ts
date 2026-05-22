@@ -91,7 +91,10 @@ export class CircuitBreaker {
     }
 
     try {
-      const result = this.callTimeoutMs != null ? await withTimeout(op(), this.callTimeoutMs, this.name) : await op();
+      const result =
+        this.callTimeoutMs != null
+          ? await withTimeout(op(), this.callTimeoutMs, this.name)
+          : await op();
       this.onSuccess();
       return result;
     } catch (err) {
@@ -124,7 +127,8 @@ export class CircuitBreaker {
     this.state = 'OPEN';
     // P21-BE: ±jitterRatio × openMs noise on the cooldown so that N breakers
     // tripped by the same upstream outage don't probe in lock-step.
-    const noise = this.jitterRatio === 0 ? 0 : (Math.random() * 2 - 1) * this.jitterRatio * this.openMs;
+    const noise =
+      this.jitterRatio === 0 ? 0 : (Math.random() * 2 - 1) * this.jitterRatio * this.openMs;
     const cooldown = Math.max(0, Math.round(this.openMs + noise));
     this.nextProbeAt = Date.now() + cooldown;
     logger.warn('[CircuitBreaker] OPEN — tripping', {

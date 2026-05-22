@@ -59,9 +59,12 @@ export const UpdatePrompt: React.FC = () => {
       // Periodically poll for a new SW (every 60 min). This catches deployments
       // for sessions where the user keeps the tab open without reloading.
       if (reg) {
-        setInterval(() => {
-          reg.update().catch(() => undefined);
-        }, 60 * 60 * 1000);
+        setInterval(
+          () => {
+            reg.update().catch(() => undefined);
+          },
+          60 * 60 * 1000,
+        );
       }
       Logger.info?.(`[pwa] SW registered: ${swUrl}`);
     },

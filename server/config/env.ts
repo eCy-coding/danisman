@@ -135,9 +135,7 @@ const productionRequiredKeys = ['DATABASE_URL', 'JWT_SECRET', 'CORS_ORIGIN'] as 
 // ─── Validate ─────────────────────────────────────────────
 
 function format(issues: z.ZodIssue[]): string {
-  return issues
-    .map((i) => `  • ${i.path.join('.') || '(root)'}: ${i.message}`)
-    .join('\n');
+  return issues.map((i) => `  • ${i.path.join('.') || '(root)'}: ${i.message}`).join('\n');
 }
 
 function validate(): Env {
@@ -147,7 +145,7 @@ function validate(): Env {
       '[env] FATAL — environment validation failed:',
       format(parsed.error.issues),
     ].join('\n');
-     
+
     console.error(lines);
     if (process.env.NODE_ENV === 'production') {
       process.exit(1);
@@ -168,7 +166,6 @@ function validate(): Env {
   if (data.NODE_ENV === 'production') {
     const missing = productionRequiredKeys.filter((k) => !data[k]);
     if (missing.length > 0) {
-       
       console.error(
         `[env] FATAL — production requires: ${missing.join(', ')} (currently missing or empty)`,
       );

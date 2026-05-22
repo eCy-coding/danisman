@@ -20,8 +20,7 @@ const KPIItem: React.FC<{
   item: (typeof KPI_ITEMS)[0];
   delay: number;
   lang: 'tr' | 'en';
-  span?: string;
-}> = ({ item, delay, lang, span = 'col-span-1' }) => {
+}> = ({ item, delay, lang }) => {
   const getGradient = (category: string) => {
     switch (category) {
       case 'consulting':
@@ -148,12 +147,7 @@ export const KPI: React.FC = () => {
         <ul className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-6 lg:gap-8 list-none p-0 m-0">
           {KPI_ITEMS.map((item, idx) => (
             <li key={item.id} className={`${getSpanForItem(idx)} list-none h-full`}>
-              <KPIItem
-                item={item}
-                delay={idx * 150}
-                lang={lang}
-                span={getSpanForItem(idx)}
-              />
+              <KPIItem item={item} delay={idx * 150} lang={lang} />
             </li>
           ))}
         </ul>

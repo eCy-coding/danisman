@@ -43,12 +43,12 @@ const ZTABLE: ReadonlyArray<readonly [number, number]> = [
   [0.15, 1.0364],
   [0.1, 1.2816],
   [0.05, 1.6449],
-  [0.025, 1.9600],
+  [0.025, 1.96],
   [0.02, 2.0537],
   [0.01, 2.3263],
   [0.005, 2.5758],
   [0.001, 3.0902],
-  [0.0001, 3.7190],
+  [0.0001, 3.719],
 ];
 
 /**
@@ -250,10 +250,7 @@ export interface UseExperimentResult {
  * her invocation'da yeniden hesaplanır (memoized). `observedPerVariant`
  * verilirse `readiness` doldurulur.
  */
-export function useExperiment(
-  key: string,
-  options: UseExperimentOptions,
-): UseExperimentResult {
+export function useExperiment(key: string, options: UseExperimentOptions): UseExperimentResult {
   const defaultVariant = options.defaultVariant ?? options.variants[0] ?? 'control';
   const variant = useABVariant(key, defaultVariant);
   const isActive = variant !== defaultVariant || options.variants.length > 1;
@@ -278,10 +275,7 @@ export function useExperiment(
   // P23/T4: planned sample size — config verildiyse Fleiss z-test ile hesapla.
   const plannedSampleSize = useMemo<SampleSizeResult | null>(() => {
     if (!options.config) return null;
-    return recomputePlannedSampleSize(
-      options.config,
-      options.config.baseline ?? 0.05,
-    );
+    return recomputePlannedSampleSize(options.config, options.config.baseline ?? 0.05);
   }, [options.config]);
 
   const readiness = useMemo<ReadinessResult | null>(() => {

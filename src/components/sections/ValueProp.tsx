@@ -21,11 +21,11 @@ const cardHoverVariants = {
 export const ValueProp: React.FC = () => {
   const { i18n } = useTranslation();
   const lang = (i18n.language || 'en').startsWith('tr') ? 'tr' : 'en';
-  
+
   const sectionRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
     target: sectionRef,
-    offset: ["start end", "end start"]
+    offset: ['start end', 'end start'],
   });
 
   const yBg1 = useTransform(scrollYProgress, [0, 1], [0, 200]);
@@ -34,8 +34,14 @@ export const ValueProp: React.FC = () => {
   return (
     <section ref={sectionRef} className="py-24 lg:py-32 bg-neutral relative overflow-hidden">
       {/* Ambient Parallax Backgrounds */}
-      <motion.div style={{ y: yBg1 }} className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(37,99,235,0.06),transparent_50%)] pointer-events-none" />
-      <motion.div style={{ y: yBg2 }} className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-secondary/5 blur-3xl rounded-full pointer-events-none -translate-x-1/2 translate-y-1/4" />
+      <motion.div
+        style={{ y: yBg1 }}
+        className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(37,99,235,0.06),transparent_50%)] pointer-events-none"
+      />
+      <motion.div
+        style={{ y: yBg2 }}
+        className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-secondary/5 blur-3xl rounded-full pointer-events-none -translate-x-1/2 translate-y-1/4"
+      />
 
       <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
         <div className="mb-16 lg:mb-20 max-w-3xl">

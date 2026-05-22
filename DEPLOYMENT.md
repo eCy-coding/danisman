@@ -5,6 +5,7 @@
 ## Frontend — Vercel
 
 ### İlk kurulum
+
 1. Vercel Dashboard → New Project → GitHub repo bağla.
 2. Framework preset: **Vite**.
 3. Build command: `npm run build` (postbuild sitemap + rss üretir).
@@ -12,6 +13,7 @@
 5. Node version: 20.x.
 
 ### ENV variables (Production scope)
+
 ```
 VITE_API_BASE_URL          = https://api.ecypro.com
 VITE_GA4_MEASUREMENT_ID    = G-XXXXXXXXXX
@@ -26,11 +28,13 @@ VITE_NEWSLETTER_ENDPOINT   = /api/newsletter/subscribe
 ```
 
 ### Custom domain
+
 - `www.ecypro.com` → CNAME → `cname.vercel-dns.com`
 - `ecypro.com` (apex) → A record → Vercel anycast IP (76.76.21.21)
 - 301 redirect: ecypro.com → www.ecypro.com (Vercel `vercel.json` ile)
 
 ### Deploy
+
 - **Otomatik:** `git push origin main` tetikler.
 - **Manuel:** Vercel Dashboard → Deployments → "Redeploy".
 - **Rollback:** Önceki Production Deployment → "Promote to Production".
@@ -38,6 +42,7 @@ VITE_NEWSLETTER_ENDPOINT   = /api/newsletter/subscribe
 ## Backend — Render
 
 ### İlk kurulum
+
 1. Render Dashboard → New → Web Service → GitHub repo bağla.
 2. Root directory: `/` (repo root).
 3. Build command: `npm install && npm run build:server && npx prisma generate`.
@@ -46,11 +51,13 @@ VITE_NEWSLETTER_ENDPOINT   = /api/newsletter/subscribe
 6. Plan: Standard (en az 2 GB RAM, BullMQ + Prisma için yeterli).
 
 ### Worker servisi (ayrı process)
+
 - Render Dashboard → New → Background Worker.
 - Start command: `node dist/server/workers/standalone.js`.
 - ENV: aynı pool'u paylaşır (Render'da Environment Group olarak organize et).
 
 ### ENV variables
+
 ```
 NODE_ENV                   = production
 DATABASE_URL               = postgresql://user:pass@host/db?sslmode=require
@@ -90,6 +97,7 @@ TELEGRAM_CHAT_ID           = -100xxxxx
 ```
 
 ### Database — Neon Postgres
+
 1. Neon Dashboard → New Project → Region Frankfurt.
 2. Branch: `main` (production), `dev` (staging).
 3. Connection string'i `DATABASE_URL`'a koy.
@@ -100,6 +108,7 @@ TELEGRAM_CHAT_ID           = -100xxxxx
    ```
 
 ### Cache — Upstash Redis
+
 1. Upstash Dashboard → Create Database → Region Frankfurt → Region Replica eu-west-1.
 2. TLS connection string'i `REDIS_URL`'a koy.
 3. BullMQ + drip queue + rate limit + idempotency aynı pool'u kullanır.
@@ -107,6 +116,7 @@ TELEGRAM_CHAT_ID           = -100xxxxx
 ## Post-deploy verify checklist
 
 ### Vercel
+
 - [ ] Build success, deployment "Production" badge yeşil.
 - [ ] `https://www.ecypro.com` 200 + hero görünür.
 - [ ] Sitemap `https://www.ecypro.com/sitemap.xml` accessible.
@@ -115,24 +125,29 @@ TELEGRAM_CHAT_ID           = -100xxxxx
 - [ ] CSP / X-Frame-Options / HSTS headers var.
 
 ### Render
+
 - [ ] `https://api.ecypro.com/api/health` 200 + `{status:ok,db:ok,redis:ok}`.
 - [ ] `https://api.ecypro.com/api/newsletter/subscribe` POST + valid payload → 201.
 - [ ] Logs (Render Dashboard → Logs) — drip worker + indexnow cron başlangıç logları görünüyor.
 
 ### Email
+
 - [ ] SMTP smoke: `curl -X POST .../api/contact` ile contact form submit → ack mail T+10s içinde inbox'a düşüyor.
 
 ### SEO
+
 - [ ] Search Console → sitemap submitted, no crawl errors.
 - [ ] Bing IndexNow cron başarılı (`[indexnow] submitted X URLs`).
 
 ## Rollback prosedürü
 
 ### Frontend rollback
+
 1. Vercel Dashboard → Deployments → önceki yeşil deployment → "Promote to Production".
 2. Anında etki (CDN cache invalidation otomatik).
 
 ### Backend rollback
+
 1. Render Dashboard → Manual Deploy → önceki commit hash → "Deploy".
 2. Eğer DB migration kırıldıysa:
    ```bash
@@ -141,6 +156,7 @@ TELEGRAM_CHAT_ID           = -100xxxxx
 3. Veya Neon Branch Restore (point-in-time recovery, son 7 gün).
 
 ### Worker rollback
+
 1. Render Worker Service → "Suspend" → loglar incele.
 2. Fix push → "Resume".
 
@@ -152,16 +168,16 @@ TELEGRAM_CHAT_ID           = -100xxxxx
 
 ## Cost estimate (aylık)
 
-| Servis | Tier | Aylık |
-|---|---|---|
-| Vercel | Pro | $20 (Hobby tier $0 ama analytics + edge config kısıtlı) |
-| Render Web | Standard | $25 |
-| Render Worker | Starter | $7 |
-| Neon Postgres | Scale | $19 |
-| Upstash Redis | Pro Free 256MB | $0 (10K request/day free) |
-| Resend | Hobby 3K mail/day | $0 |
-| Sentry | Developer 5K events/mo | $0 |
-| **TOPLAM** |  | **~$71/ay** |
+| Servis        | Tier                   | Aylık                                                   |
+| ------------- | ---------------------- | ------------------------------------------------------- |
+| Vercel        | Pro                    | $20 (Hobby tier $0 ama analytics + edge config kısıtlı) |
+| Render Web    | Standard               | $25                                                     |
+| Render Worker | Starter                | $7                                                      |
+| Neon Postgres | Scale                  | $19                                                     |
+| Upstash Redis | Pro Free 256MB         | $0 (10K request/day free)                               |
+| Resend        | Hobby 3K mail/day      | $0                                                      |
+| Sentry        | Developer 5K events/mo | $0                                                      |
+| **TOPLAM**    |                        | **~$71/ay**                                             |
 
 ## Disaster recovery
 

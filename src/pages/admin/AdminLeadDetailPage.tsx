@@ -11,7 +11,13 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { ArrowLeft, MessageSquare, User, Mail, Phone, Globe } from 'lucide-react';
 import { apiClient } from '../../lib/api';
-import { Breadcrumb, FormField, fieldClassName, StatCard, EmptyState } from '../../components/admin/ui';
+import {
+  Breadcrumb,
+  FormField,
+  fieldClassName,
+  StatCard,
+  EmptyState,
+} from '../../components/admin/ui';
 
 interface Contact {
   id: string;
@@ -84,13 +90,25 @@ export const AdminLeadDetailPage: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      <Breadcrumb items={[{ label: 'Yönetim', to: '/admin' }, { label: 'Lead Yönetimi', to: '/admin/contacts' }, { label: c?.fullName ?? id }]} />
+      <Breadcrumb
+        items={[
+          { label: 'Yönetim', to: '/admin' },
+          { label: 'Lead Yönetimi', to: '/admin/contacts' },
+          { label: c?.fullName ?? id },
+        ]}
+      />
       <header className="flex items-center justify-between flex-wrap gap-3">
         <div className="flex items-center gap-3">
-          <Link to="/admin/contacts" aria-label="Lead listesine geri dön" className="text-slate-400 hover:text-white inline-flex items-center gap-1 text-sm">
+          <Link
+            to="/admin/contacts"
+            aria-label="Lead listesine geri dön"
+            className="text-slate-400 hover:text-white inline-flex items-center gap-1 text-sm"
+          >
             <ArrowLeft size={14} /> Geri
           </Link>
-          <h1 className="text-2xl font-serif font-bold text-white">{c?.fullName ?? 'Yükleniyor…'}</h1>
+          <h1 className="text-2xl font-serif font-bold text-white">
+            {c?.fullName ?? 'Yükleniyor…'}
+          </h1>
         </div>
         {c && (
           <div className="flex items-center gap-2">
@@ -108,7 +126,10 @@ export const AdminLeadDetailPage: React.FC = () => {
       {contact.isLoading ? (
         <p className="text-slate-400">Yükleniyor…</p>
       ) : !c ? (
-        <EmptyState title="Lead bulunamadı" description="Bu lead silinmiş veya geçersiz olabilir." />
+        <EmptyState
+          title="Lead bulunamadı"
+          description="Bu lead silinmiş veya geçersiz olabilir."
+        />
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
           {/* Overview */}
@@ -116,19 +137,39 @@ export const AdminLeadDetailPage: React.FC = () => {
             <section className="bg-white/[0.02] border border-white/10 rounded-xl p-5 space-y-3">
               <h2 className="text-sm font-semibold text-white mb-2">İletişim Bilgileri</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
-                <Field icon={<Mail size={14} />} label="E-posta" value={c.email} link={`mailto:${c.email}`} />
-                {c.phone && <Field icon={<Phone size={14} />} label="Telefon" value={c.phone} link={`tel:${c.phone}`} />}
+                <Field
+                  icon={<Mail size={14} />}
+                  label="E-posta"
+                  value={c.email}
+                  link={`mailto:${c.email}`}
+                />
+                {c.phone && (
+                  <Field
+                    icon={<Phone size={14} />}
+                    label="Telefon"
+                    value={c.phone}
+                    link={`tel:${c.phone}`}
+                  />
+                )}
                 {c.company && <Field icon={<User size={14} />} label="Şirket" value={c.company} />}
-                {c.service && <Field icon={<Globe size={14} />} label="Hizmet İlgisi" value={c.service} />}
+                {c.service && (
+                  <Field icon={<Globe size={14} />} label="Hizmet İlgisi" value={c.service} />
+                )}
                 {c.source && <Field icon={<Globe size={14} />} label="Kaynak" value={c.source} />}
-                <Field icon={<User size={14} />} label="Oluşturma" value={new Date(c.createdAt).toLocaleString('tr-TR')} />
+                <Field
+                  icon={<User size={14} />}
+                  label="Oluşturma"
+                  value={new Date(c.createdAt).toLocaleString('tr-TR')}
+                />
               </div>
             </section>
 
             {(c.messageTr || c.messageEn) && (
               <section className="bg-white/[0.02] border border-white/10 rounded-xl p-5">
                 <h2 className="text-sm font-semibold text-white mb-2">Mesaj</h2>
-                <p className="text-sm text-slate-300 whitespace-pre-wrap">{c.messageTr ?? c.messageEn}</p>
+                <p className="text-sm text-slate-300 whitespace-pre-wrap">
+                  {c.messageTr ?? c.messageEn}
+                </p>
               </section>
             )}
 
@@ -174,7 +215,11 @@ export const AdminLeadDetailPage: React.FC = () => {
           <aside className="space-y-3">
             <StatCard label="Skor (stub)" value="—" hint="P57.6'da scoring genişletme" />
             <StatCard label="Etkileşim" value={n.length} hint="not sayısı" />
-            <StatCard label="Durum" value={c.isRead ? 'Okundu' : 'Yeni'} tone={c.isRead ? 'default' : 'positive'} />
+            <StatCard
+              label="Durum"
+              value={c.isRead ? 'Okundu' : 'Yeni'}
+              tone={c.isRead ? 'default' : 'positive'}
+            />
           </aside>
         </div>
       )}
@@ -182,14 +227,24 @@ export const AdminLeadDetailPage: React.FC = () => {
   );
 };
 
-const Field: React.FC<{ icon: React.ReactNode; label: string; value: string; link?: string }> = ({ icon, label, value, link }) => (
+const Field: React.FC<{ icon: React.ReactNode; label: string; value: string; link?: string }> = ({
+  icon,
+  label,
+  value,
+  link,
+}) => (
   <div>
     <p className="text-xs text-slate-400 inline-flex items-center gap-1.5 mb-0.5">
       {icon}
       {label}
     </p>
     {link ? (
-      <a href={link} className="text-sm text-white hover:text-secondary transition-colors break-all">{value}</a>
+      <a
+        href={link}
+        className="text-sm text-white hover:text-secondary transition-colors break-all"
+      >
+        {value}
+      </a>
     ) : (
       <p className="text-sm text-white break-all">{value}</p>
     )}

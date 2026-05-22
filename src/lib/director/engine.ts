@@ -52,7 +52,7 @@ export class RuleEngine {
   }
 
   private checkConditions(conditions: Condition[], context: RuleContext): boolean {
-    return conditions.every(condition => {
+    return conditions.every((condition) => {
       const contextValue = context[condition.field];
       const conditionValue = condition.value;
 
@@ -64,22 +64,25 @@ export class RuleEngine {
         case 'NOT_EQUALS':
           return contextValue !== conditionValue;
         case 'GREATER_THAN':
-          return (typeof contextValue === 'number' && typeof conditionValue === 'number') 
-            ? contextValue > conditionValue 
+          return typeof contextValue === 'number' && typeof conditionValue === 'number'
+            ? contextValue > conditionValue
             : false;
         case 'LESS_THAN':
-          return (typeof contextValue === 'number' && typeof conditionValue === 'number') 
-            ? contextValue < conditionValue 
+          return typeof contextValue === 'number' && typeof conditionValue === 'number'
+            ? contextValue < conditionValue
             : false;
         case 'CONTAINS':
           if (Array.isArray(contextValue)) {
-             return (contextValue as unknown[]).includes(conditionValue as unknown);
+            return (contextValue as unknown[]).includes(conditionValue as unknown);
           } else if (typeof contextValue === 'string') {
-             return contextValue.includes(String(conditionValue));
+            return contextValue.includes(String(conditionValue));
           }
           return false;
         case 'IN':
-          return Array.isArray(conditionValue) && (conditionValue as unknown[]).includes(contextValue as unknown);
+          return (
+            Array.isArray(conditionValue) &&
+            (conditionValue as unknown[]).includes(contextValue as unknown)
+          );
         default:
           return false;
       }
@@ -90,11 +93,11 @@ export class RuleEngine {
 export class StateMachine {
   private state: ContentStatus = 'DRAFT';
   private transitions: Record<ContentStatus, ContentStatus[]> = {
-    'DRAFT': ['PROCESSING', 'ARCHIVED'],
-    'PROCESSING': ['READY', 'DRAFT'],
-    'READY': ['PUBLISHED', 'DRAFT', 'ARCHIVED'],
-    'PUBLISHED': ['ARCHIVED'],
-    'ARCHIVED': ['DRAFT']
+    DRAFT: ['PROCESSING', 'ARCHIVED'],
+    PROCESSING: ['READY', 'DRAFT'],
+    READY: ['PUBLISHED', 'DRAFT', 'ARCHIVED'],
+    PUBLISHED: ['ARCHIVED'],
+    ARCHIVED: ['DRAFT'],
   };
 
   constructor(initialState: ContentStatus = 'DRAFT') {

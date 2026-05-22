@@ -36,7 +36,7 @@ const flushQueue = () => {
   if (queue.length === 0) return;
 
   const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
-  
+
   // Send vitals via beacon (reliable even during page unload)
   const vitals = queue.filter((item) => item.type === 'vital');
   if (vitals.length > 0 && typeof navigator?.sendBeacon === 'function') {
@@ -51,7 +51,7 @@ const flushQueue = () => {
           delta: (v as VitalItem).delta,
         })),
         timestamp: Date.now(),
-      })
+      }),
     );
   }
 
@@ -62,15 +62,21 @@ const flushQueue = () => {
 export const checkHealth = async (): Promise<boolean> => {
   try {
     const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
-    
+
     // Skip health check if pointing to a production URL that won't resolve locally
-    if (apiUrl.includes('ecypro.com') && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')) {
+    if (
+      apiUrl.includes('ecypro.com') &&
+      (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+    ) {
       return true; // Assume healthy in local dev
     }
-    
+
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 3000);
-    const response = await fetch(`${apiUrl}/health`, { cache: 'no-store', signal: controller.signal });
+    const response = await fetch(`${apiUrl}/health`, {
+      cache: 'no-store',
+      signal: controller.signal,
+    });
     clearTimeout(timeout);
     if (!response.ok) throw new Error('Health check failed');
     const data = await response.json();
@@ -101,7 +107,9 @@ const reportVital = (metric: VitalMetric) => {
   };
 
   if ('requestIdleCallback' in window) {
-    (window as unknown as { requestIdleCallback: (cb: () => void) => void }).requestIdleCallback(report);
+    (window as unknown as { requestIdleCallback: (cb: () => void) => void }).requestIdleCallback(
+      report,
+    );
   } else {
     setTimeout(report, 0);
   }
@@ -113,7 +121,7 @@ export const initMonitoring = () => {
   onCLS(reportVital);
   onINP(reportVital);
   onLCP(reportVital);
-  
+
   // Other Vitals
   onFCP(reportVital);
   onTTFB(reportVital);
@@ -144,9 +152,7 @@ export const initMonitoring = () => {
     });
 
     // Report to Sentry
-    const error = event.reason instanceof Error
-      ? event.reason
-      : new Error(String(event.reason));
+    const error = event.reason instanceof Error ? event.reason : new Error(String(event.reason));
     sentry.captureException(error, { type: 'unhandled_rejection' });
   });
 
@@ -158,8 +164,7 @@ export const initMonitoring = () => {
   const ua = typeof navigator !== 'undefined' ? navigator.userAgent : '';
   const ciOptOut =
     typeof window !== 'undefined' && window.location.search.includes('ci=lighthouse');
-  const isSynthetic =
-    /\b(Lighthouse|Chrome-Lighthouse|HeadlessChrome)\b/.test(ua) || ciOptOut;
+  const isSynthetic = /\b(Lighthouse|Chrome-Lighthouse|HeadlessChrome)\b/.test(ua) || ciOptOut;
   if (!isSynthetic) {
     setInterval(flushQueue, 15_000);
   }

@@ -46,9 +46,7 @@ export type RouteNamespace =
  *
  * @param namespaces  Single ns string or array of ns strings.
  */
-export function useRouteNamespaces(
-  namespaces: RouteNamespace | readonly RouteNamespace[],
-): void {
+export function useRouteNamespaces(namespaces: RouteNamespace | readonly RouteNamespace[]): void {
   const list = Array.isArray(namespaces)
     ? (namespaces as readonly RouteNamespace[])
     : ([namespaces as RouteNamespace] as const);

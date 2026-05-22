@@ -48,7 +48,9 @@ function readEnvConfig(): ChatConfig | null {
 
 function readConsent(): boolean {
   try {
-    return typeof window !== 'undefined' && window.localStorage.getItem(CONSENT_STORAGE_KEY) === '1';
+    return (
+      typeof window !== 'undefined' && window.localStorage.getItem(CONSENT_STORAGE_KEY) === '1'
+    );
   } catch {
     return false;
   }

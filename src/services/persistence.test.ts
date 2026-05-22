@@ -4,7 +4,7 @@ import { z } from 'zod';
 
 const TestSchema = z.object({
   id: z.number(),
-  val: z.string()
+  val: z.string(),
 });
 
 describe('LocalPersistenceService', () => {

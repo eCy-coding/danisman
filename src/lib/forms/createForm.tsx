@@ -66,10 +66,7 @@ export interface CreateFormOptions<TData extends FieldValues> {
   /** Custom default values. */
   defaultValues?: DefaultValues<TData>;
   /** Manuel submit handler (endpoint yerine). */
-  onSubmit?: (
-    data: TData,
-    ctx: { idempotencyKey: string; signal: AbortSignal },
-  ) => Promise<void>;
+  onSubmit?: (data: TData, ctx: { idempotencyKey: string; signal: AbortSignal }) => Promise<void>;
   /** Extra headers (CSRF token wire-up vs.). */
   headers?: () => Record<string, string>;
 }

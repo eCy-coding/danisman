@@ -7,12 +7,14 @@
 Admin paneli `https://www.ecypro.com/admin` adresinden erişilir. Erişim için yetkili e-posta + şifre + 2FA kodu gerekir.
 
 ### İlk giriş
+
 1. Tarayıcınızda `/admin` adresini açın → otomatik olarak `/admin/login` sayfasına yönlendirilirsiniz.
 2. E-posta ve şifrenizi girin.
 3. 2FA aktif ise authenticator uygulamanızdan 6 haneli kodu girin.
 4. Başarılı giriş → "Operatör Panosu" (`/admin/overview`).
 
 ### Yetki seviyeleri
+
 - **ADMIN:** Her şeyi yapabilir (kullanıcı yönetimi, ayarlar, güvenlik)
 - **EDITOR:** İçerik düzenleyebilir, lead'lere not ekler — ayar değiştiremez
 - **VIEWER:** Sadece görüntüler, mutasyon yapamaz
@@ -24,6 +26,7 @@ Admin paneli `https://www.ecypro.com/admin` adresinden erişilir. Erişim için 
 **Ne işe yarar:** Son 30 günün hızlı özeti. Sabah açtığınız ilk sayfa.
 
 **Sayfada gördükleriniz:**
+
 - **6 KPI kartı:** Lead sayısı (30g), yeni abone (7g), hot lead, bu ay discovery call, conversion rate, ortalama lead skoru. Her kartın yanında bir önceki periyota göre delta (% yukarı/aşağı).
 - **Lead Trendi grafiği:** Son 30 günün günlük lead sayısı.
 - **Kaynak Dağılımı:** Organic / direct / referral / paid vb. pie chart.
@@ -41,6 +44,7 @@ Admin paneli `https://www.ecypro.com/admin` adresinden erişilir. Erişim için 
 **Ne işe yarar:** Blog yazılarını listelemek, yeni yazı eklemek, düzenlemek, silmek.
 
 ### Yeni yazı eklemek
+
 1. `/admin/blog` → "Yeni Yazı" düğmesi
 2. Slug (URL parçası) girin — küçük harf + tire. Örn: `kvkk-uyum-rehberi`.
 3. Yazı oluşturulur → otomatik olarak edit sayfasına yönlendirilir (`/admin/blog/<slug>/edit`).
@@ -51,6 +55,7 @@ Admin paneli `https://www.ecypro.com/admin` adresinden erişilir. Erişim için 
 6. "Kaydet" düğmesine basın. Taslak'taysanız otomatik 1 dakikada bir kaydedilir.
 
 ### Markdown ipuçları
+
 - `# Başlık` → büyük başlık
 - `**kalın**` → **kalın**
 - `[link metni](https://...)` → link
@@ -59,6 +64,7 @@ Admin paneli `https://www.ecypro.com/admin` adresinden erişilir. Erişim için 
 - Liste için `- madde` veya `1. madde`
 
 ### Yazı silmek
+
 Edit sayfasında "Sil" düğmesi → onay dialog'u → "Evet, sil". Bu işlem **geri alınamaz**.
 
 ---
@@ -68,6 +74,7 @@ Edit sayfasında "Sil" düğmesi → onay dialog'u → "Evet, sil". Bu işlem **
 **Ne işe yarar:** 21 hizmetin metnini override etmek (build-time data file'a dokunmadan).
 
 ### Bir hizmeti düzenlemek
+
 1. `/admin/services` → 21 hizmet listesinden seçin.
 2. "Düzenle" → 3 sekme açılır:
    - **Hero:** Başlık, alt başlık, value proposition
@@ -90,6 +97,7 @@ Her sayfa için "Düzenle" linkiyle block-based editöre erişirsiniz. (Şu an s
 ## 5. Koleksiyonlar (`/admin/collections/<type>`)
 
 **Ne işe yarar:** Tek arayüzden 7 koleksiyonu yönetmek:
+
 - `testimonials` — Müşteri sözleri
 - `team` — Ekip üyeleri
 - `case-studies` — Vaka analizleri
@@ -99,12 +107,14 @@ Her sayfa için "Düzenle" linkiyle block-based editöre erişirsiniz. (Şu an s
 - `faq-items` — SSS maddeleri
 
 ### Yeni öğe ekleme
+
 1. İlgili koleksiyona gidin (`/admin/collections/testimonials`)
 2. "Yeni Ekle" düğmesi → sağdan drawer açılır
 3. Field'ları doldurun → "Kaydet"
 4. Liste güncellenir
 
 ### Düzenleme / silme
+
 Tablo satırından "Düzenle" / "Sil". Silme onay dialog'u sorar.
 
 ---
@@ -114,11 +124,13 @@ Tablo satırından "Düzenle" / "Sil". Silme onay dialog'u sorar.
 **Ne işe yarar:** Web'den gelen iletişim formlarını yönetmek.
 
 ### Liste sayfası
+
 - DataTable: ad, e-posta, şirket, hizmet ilgisi, tarih, okundu/yeni durumu
 - Filtreler: durum, kaynak, tarih aralığı
 - Bulk action: okundu işaretle, durumu değiştir
 
 ### Detay sayfası
+
 - İletişim bilgileri (clickable mailto/tel)
 - Mesaj (TR/EN)
 - **Notlar:** Bu lead için admin'e özel notlar (müşteri görmez). Tarih + yazar eklenir.
@@ -130,10 +142,13 @@ Tablo satırından "Düzenle" / "Sil". Silme onay dialog'u sorar.
 ## 7. Bülten ve Kampanyalar
 
 ### Abone listesi (`/admin/newsletter`)
+
 Tüm aktif aboneleri görüntüleyin. Filtre: kaynak, tarih, abonelik durumu.
 
 ### Yeni kampanya (`/admin/newsletter/campaigns/new`)
+
 4 adımlı sihirbaz:
+
 1. **Audience:** Kaynak filtresi + sadece çift-onaylı (KVKK) checkbox
 2. **İçerik:** Konu + şablon + gövde (Markdown veya HTML)
 3. **Önizleme:** E-posta görünümü
@@ -142,6 +157,7 @@ Tüm aktif aboneleri görüntüleyin. Filtre: kaynak, tarih, abonelik durumu.
 **Önemli:** "Kaydet" sadece taslak oluşturur. Gerçek gönderim için Kampanyalar listesinden "Gönder" düğmesini kullanın → onay dialog'unda alıcı sayısı görüntülenir.
 
 ### Test gönderim
+
 Sihirbaz adım 4'te kendi e-postanıza test atın — gönderim öncesinde son kontrol.
 
 ---
@@ -151,11 +167,13 @@ Sihirbaz adım 4'te kendi e-postanıza test atın — gönderim öncesinde son k
 **Ne işe yarar:** Sitede kullanılan görselleri (logo, blog kapakları, takım fotoğrafları) tek noktadan yönetmek.
 
 ### Yükleme
+
 - "Yükle" düğmesi VEYA dosyayı sürükle-bırak alanına sürükleyin
 - Desteklenen format: JPG, PNG, WebP, AVIF (max 10MB)
 - Otomatik thumbnail + AVIF/WebP varyant oluşturulur
 
 ### Silme
+
 Görsel kartında "Sil" → onay → kalıcı silme.
 
 ---
@@ -209,38 +227,43 @@ Kendi hesap ayarlarınız:
 
 ## Klavye Kısayolları
 
-| Tuş | İşlev |
-|---|---|
-| `?` | Kısayolları göster |
-| `G` + `D` | Dashboard |
-| `G` + `L` | Lead yönetimi |
-| `G` + `B` | Blog |
-| `G` + `C` | Kampanyalar |
-| `G` + `S` | Ayarlar |
-| `/` | Genel arama (CommandPalette) |
-| `ESC` | Modal'ı kapat |
+| Tuş       | İşlev                        |
+| --------- | ---------------------------- |
+| `?`       | Kısayolları göster           |
+| `G` + `D` | Dashboard                    |
+| `G` + `L` | Lead yönetimi                |
+| `G` + `B` | Blog                         |
+| `G` + `C` | Kampanyalar                  |
+| `G` + `S` | Ayarlar                      |
+| `/`       | Genel arama (CommandPalette) |
+| `ESC`     | Modal'ı kapat                |
 
 ---
 
 ## Sık Karşılaşılan Sorunlar
 
 ### "401 Unauthorized" hatası
+
 Oturum süresi dolmuştur → sayfayı yenileyin → otomatik login sayfasına yönlendirilirsiniz.
 
 ### "Forbidden" hatası
+
 Yetkiniz yetmiyor → ADMIN rolü gerekiyorsa kullanıcı yöneticisine başvurun.
 
 ### Değişiklik canlıya yansımıyor
+
 1. 30 saniye bekleyin (cache).
 2. Tarayıcı cache'ini temizleyin (Cmd+Shift+R / Ctrl+Shift+R).
 3. Sorun devam ederse `operations@ecypro.com`.
 
 ### "Test gönderim" e-posta gelmedi
+
 1. Spam klasörüne bakın.
 2. SMTP env vars (Ayarlar → E-posta) doğru mu?
 3. Resend dashboard log'una bakın.
 
 ### Yanlışlıkla bir kayıt sildim
+
 **Maalesef geri alınamaz.** Silme öncesi onay dialog'u açık sebepledir. Eğer kritik bir kayıt silindiyse `operations@ecypro.com`'a yazın — DB yedeğinden geri alma denenebilir.
 
 ---

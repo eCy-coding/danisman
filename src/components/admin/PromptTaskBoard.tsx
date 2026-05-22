@@ -69,25 +69,30 @@ export const PromptTaskBoard: React.FC = () => {
             <Terminal size={20} className="text-secondary" />
             Prompt Optimization Engine
           </h2>
-          <p className="text-sm text-slate-400 mt-1">Real-time autonomous reasoning and refinement stream</p>
+          <p className="text-sm text-slate-400 mt-1">
+            Real-time autonomous reasoning and refinement stream
+          </p>
         </div>
         <div className="flex items-center gap-4">
-          <select 
+          <select
             value={projectId}
             onChange={(e) => setProjectId(Number(e.target.value))}
             className="bg-black/50 border border-white/10 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-secondary"
             disabled={isRunning}
           >
-            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(id => (
-              <option key={id} value={id}>Project {id}</option>
+            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((id) => (
+              <option key={id} value={id}>
+                Project {id}
+              </option>
             ))}
           </select>
-          <button type="button"
+          <button
+            type="button"
             onClick={handleStartTask}
             disabled={isRunning}
             className={`flex items-center gap-2 px-6 py-2 rounded-lg font-semibold transition-all ${
-              isRunning 
-                ? 'bg-secondary/20 text-secondary cursor-not-allowed' 
+              isRunning
+                ? 'bg-secondary/20 text-secondary cursor-not-allowed'
                 : 'bg-secondary hover:bg-secondary/80 text-black'
             }`}
           >
@@ -105,7 +110,7 @@ export const PromptTaskBoard: React.FC = () => {
             <span className="text-secondary font-mono">{Math.round(currentProgress)}%</span>
           </div>
           <div className="h-2 bg-black/50 rounded-full overflow-hidden border border-white/5">
-            <motion.div 
+            <motion.div
               initial={{ width: 0 }}
               animate={{ width: `${currentProgress}%` }}
               className={`h-full ${isFailed ? 'bg-red-500' : isCompleted ? 'bg-green-500' : 'bg-secondary'}`}
@@ -123,7 +128,7 @@ export const PromptTaskBoard: React.FC = () => {
         )}
         <AnimatePresence>
           {logs.map((log, index) => (
-            <motion.div 
+            <motion.div
               key={index}
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
@@ -137,11 +142,15 @@ export const PromptTaskBoard: React.FC = () => {
               ) : (
                 <span className="text-secondary mt-0.5 shrink-0">❯</span>
               )}
-              <span className={`${
-                log.type === 'FAILED' ? 'text-red-300' : 
-                log.type === 'COMPLETED' ? 'text-green-300' : 
-                'text-slate-300'
-              }`}>
+              <span
+                className={`${
+                  log.type === 'FAILED'
+                    ? 'text-red-300'
+                    : log.type === 'COMPLETED'
+                      ? 'text-green-300'
+                      : 'text-slate-300'
+                }`}
+              >
                 {log.message || JSON.stringify(log)}
               </span>
             </motion.div>

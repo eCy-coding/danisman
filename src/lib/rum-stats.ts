@@ -190,8 +190,7 @@ export class PSquaredQuantile {
     return (
       qi +
       (d / (nip - nim)) *
-        (((ni - nim + d) * (qip - qi)) / (nip - ni) +
-          ((nip - ni - d) * (qi - qim)) / (ni - nim))
+        (((ni - nim + d) * (qip - qi)) / (nip - ni) + ((nip - ni - d) * (qi - qim)) / (ni - nim))
     );
   }
 
@@ -568,9 +567,11 @@ export function initRumStats(
 
 export function recordVitalSample(metric: Pick<Metric, 'name' | 'value' | 'rating'>): void {
   if (!_aggregator) return;
-  const conn = (navigator as Navigator & {
-    connection?: { effectiveType?: string };
-  }).connection;
+  const conn = (
+    navigator as Navigator & {
+      connection?: { effectiveType?: string };
+    }
+  ).connection;
   _aggregator.push(metric, {
     userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : undefined,
     connectionType: conn?.effectiveType,

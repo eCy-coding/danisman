@@ -24,9 +24,30 @@ export const MOCK_ANALYTICS_DATA: AnalyticsData[] = [
 ];
 
 export const MOCK_SESSIONS: ConsultingSession[] = [
-  { id: 1, client: 'Acme Corp', type: 'Stratejik Planlama', date: '2023-11-14', status: 'Planlandı', time: '14:00' },
-  { id: 2, client: 'Global Tech', type: 'Dijital Dönüşüm', date: '2023-11-15', status: 'Tamamlandı', time: '10:00' },
-  { id: 3, client: 'Bosphorus Retail', type: 'Kurumsal Etkinlik', date: '2023-11-18', status: 'Beklemede', time: '16:30' },
+  {
+    id: 1,
+    client: 'Acme Corp',
+    type: 'Stratejik Planlama',
+    date: '2023-11-14',
+    status: 'Planlandı',
+    time: '14:00',
+  },
+  {
+    id: 2,
+    client: 'Global Tech',
+    type: 'Dijital Dönüşüm',
+    date: '2023-11-15',
+    status: 'Tamamlandı',
+    time: '10:00',
+  },
+  {
+    id: 3,
+    client: 'Bosphorus Retail',
+    type: 'Kurumsal Etkinlik',
+    date: '2023-11-18',
+    status: 'Beklemede',
+    time: '16:30',
+  },
 ];
 
 // Service simulation
@@ -40,5 +61,5 @@ export const MockService = {
     return new Promise((resolve) => {
       setTimeout(() => resolve(MOCK_SESSIONS), 500);
     });
-  }
+  },
 };

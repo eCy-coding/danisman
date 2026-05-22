@@ -1,13 +1,13 @@
 import React, { useRef, useState } from 'react';
 import { motion, HTMLMotionProps } from 'motion/react';
 
-interface MagneticButtonProps extends HTMLMotionProps<"div"> {
+interface MagneticButtonProps extends HTMLMotionProps<'div'> {
   children: React.ReactNode;
   strength?: number;
 }
 
-export const MagneticButton: React.FC<MagneticButtonProps> = ({ 
-  children, 
+export const MagneticButton: React.FC<MagneticButtonProps> = ({
+  children,
   strength = 30,
   className = '',
   ...props
@@ -35,7 +35,7 @@ export const MagneticButton: React.FC<MagneticButtonProps> = ({
       onMouseMove={handleMouse}
       onMouseLeave={reset}
       animate={{ x, y }}
-      transition={{ type: "spring", stiffness: 150, damping: 15, mass: 0.1 }}
+      transition={{ type: 'spring', stiffness: 150, damping: 15, mass: 0.1 }}
       className={`inline-block ${className}`}
       {...props}
     >

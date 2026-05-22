@@ -42,7 +42,7 @@
 .aria-hidden {
   visibility: hidden;
 }
-[aria-hidden="true"] {
+[aria-hidden='true'] {
   pointer-events: none;
 }
 
@@ -82,7 +82,7 @@
 
 /* Butonlar */
 button:focus-visible,
-[role="button"]:focus-visible {
+[role='button']:focus-visible {
   outline: 2px solid var(--color-brand-500, #6366f1);
   outline-offset: 3px;
   box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2);
@@ -106,8 +106,8 @@ textarea:focus-visible {
 }
 
 /* Checkbox / Radio */
-input[type="checkbox"]:focus-visible,
-input[type="radio"]:focus-visible {
+input[type='checkbox']:focus-visible,
+input[type='radio']:focus-visible {
   outline: 2px solid var(--color-brand-500, #6366f1);
   outline-offset: 3px;
 }
@@ -131,7 +131,9 @@ input[type="radio"]:focus-visible {
   * {
     border-color: ButtonText;
   }
-  a, button, [role="button"] {
+  a,
+  button,
+  [role='button'] {
     color: ButtonText;
   }
   :focus-visible {
@@ -144,7 +146,9 @@ input[type="radio"]:focus-visible {
   border: 1px solid transparent;
 }
 @media (forced-colors: active) {
-  .hcm-border { border-color: ButtonText; }
+  .hcm-border {
+    border-color: ButtonText;
+  }
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -191,7 +195,9 @@ input[type="radio"]:focus-visible {
     --color-border-default: var(--color-neutral-400);
     --color-text-muted: var(--color-neutral-300);
   }
-  a { text-decoration: underline; }
+  a {
+    text-decoration: underline;
+  }
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -212,11 +218,11 @@ input[type="radio"]:focus-visible {
    ═══════════════════════════════════════════════════════════ */
 
 /** Hata durumu (aria-invalid) */
-[aria-invalid="true"] {
+[aria-invalid='true'] {
   border-color: var(--color-error-500, #ef4444) !important;
   box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2);
 }
-[aria-invalid="true"]:focus-visible {
+[aria-invalid='true']:focus-visible {
   outline-color: var(--color-error-500, #ef4444);
 }
 
@@ -275,7 +281,9 @@ body.modal-open {
   z-index: var(--z-overlay, 50);
 }
 @media (forced-colors: active) {
-  .modal-backdrop { background: Canvas; }
+  .modal-backdrop {
+    background: Canvas;
+  }
 }
 
 /* ═══════════════════════════════════════════════════════════

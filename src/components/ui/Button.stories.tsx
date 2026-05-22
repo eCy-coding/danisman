@@ -19,7 +19,15 @@ const meta: Meta<typeof Button> = {
   argTypes: {
     variant: {
       control: 'select',
-      options: ['primary', 'secondary', 'outline', 'ghost', 'destructive', 'premium', 'premium-gold'],
+      options: [
+        'primary',
+        'secondary',
+        'outline',
+        'ghost',
+        'destructive',
+        'premium',
+        'premium-gold',
+      ],
     },
     size: { control: 'select', options: ['sm', 'md', 'lg', 'icon'] },
     isLoading: { control: 'boolean' },
@@ -65,14 +73,30 @@ export const Disabled: Story = {
 export const Matrix: Story = {
   render: () => (
     <div className="grid grid-cols-2 gap-4 p-6 bg-[#1E1F20]">
-      <Button variant="primary" size="sm">Primary sm</Button>
-      <Button variant="primary" size="lg">Primary lg</Button>
-      <Button variant="secondary" size="md">Secondary md</Button>
-      <Button variant="outline" size="md">Outline md</Button>
-      <Button variant="ghost" size="md">Ghost md</Button>
-      <Button variant="destructive" size="md">Destructive md</Button>
-      <Button variant="premium" size="md">Premium md</Button>
-      <Button variant="premium-gold" size="md">Premium-gold md</Button>
+      <Button variant="primary" size="sm">
+        Primary sm
+      </Button>
+      <Button variant="primary" size="lg">
+        Primary lg
+      </Button>
+      <Button variant="secondary" size="md">
+        Secondary md
+      </Button>
+      <Button variant="outline" size="md">
+        Outline md
+      </Button>
+      <Button variant="ghost" size="md">
+        Ghost md
+      </Button>
+      <Button variant="destructive" size="md">
+        Destructive md
+      </Button>
+      <Button variant="premium" size="md">
+        Premium md
+      </Button>
+      <Button variant="premium-gold" size="md">
+        Premium-gold md
+      </Button>
     </div>
   ),
 };

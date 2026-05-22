@@ -298,7 +298,8 @@ export const AdminAnalyticsPage: React.FC = () => {
             Real-time platform metrics • Auto-refresh 30s
           </p>
         </div>
-        <button type="button"
+        <button
+          type="button"
           onClick={() => void refetch()}
           disabled={isFetching}
           className="flex items-center gap-2 px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-slate-400 hover:text-white text-sm transition-colors"

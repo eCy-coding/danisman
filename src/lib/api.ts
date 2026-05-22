@@ -60,9 +60,11 @@ export function scheduleHealthCheck(): void {
   };
 
   // Defer to idle to avoid contending with hydration.
-  const idle = (window as typeof window & {
-    requestIdleCallback?: (cb: () => void, opts?: { timeout?: number }) => number;
-  }).requestIdleCallback;
+  const idle = (
+    window as typeof window & {
+      requestIdleCallback?: (cb: () => void, opts?: { timeout?: number }) => number;
+    }
+  ).requestIdleCallback;
   if (idle) {
     idle(run, { timeout: 5_000 });
   } else {

@@ -83,10 +83,7 @@ export const BlogCardSkeleton: React.FC<{ className?: string }> = ({ className }
     role="status"
     aria-busy="true"
     aria-label="Blog yazısı yükleniyor"
-    className={cn(
-      'rounded-2xl border border-white/8 overflow-hidden bg-[#1E1F20]',
-      className,
-    )}
+    className={cn('rounded-2xl border border-white/8 overflow-hidden bg-[#1E1F20]', className)}
   >
     {/* Cover image — 16:9, BlogCard ile 1:1 eşleşir */}
     <Skeleton variant="rect" width="100%" height={216} className="rounded-none" />

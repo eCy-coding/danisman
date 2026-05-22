@@ -49,22 +49,23 @@ curl http://localhost:3001/__health            # LB health (zero-deps)
 
 ## 2) Test koşturma
 
-| Komut | Kapsam |
-|---|---|
-| `npm run typecheck` | Frontend + server TS strict |
-| `npm run lint` | ESLint --max-warnings 0 |
-| `npm run format` | Prettier --write |
-| `npm test -- --run` | Vitest unit (web 77 + setup) |
-| `npm run test:server` | Vitest server (155 test) |
-| `npm run test:e2e` | Playwright tam suite |
-| `npm run test:e2e:fast` | Sanity duman (17 check) |
-| `npm run e2e:local` | mock + preview + e2e zinciri |
-| `/integration-health` | env validation + format check |
-| `/integration-health --probe` | + live endpoint probe |
+| Komut                         | Kapsam                        |
+| ----------------------------- | ----------------------------- |
+| `npm run typecheck`           | Frontend + server TS strict   |
+| `npm run lint`                | ESLint --max-warnings 0       |
+| `npm run format`              | Prettier --write              |
+| `npm test -- --run`           | Vitest unit (web 77 + setup)  |
+| `npm run test:server`         | Vitest server (155 test)      |
+| `npm run test:e2e`            | Playwright tam suite          |
+| `npm run test:e2e:fast`       | Sanity duman (17 check)       |
+| `npm run e2e:local`           | mock + preview + e2e zinciri  |
+| `/integration-health`         | env validation + format check |
+| `/integration-health --probe` | + live endpoint probe         |
 
 ### Pre-commit (Lefthook)
 
 Her commit'te otomatik:
+
 - lint-staged (eslint + prettier)
 - gitleaks (secret scan)
 - commitlint (Conventional Commits)
@@ -72,6 +73,7 @@ Her commit'te otomatik:
 ### Pre-push (Lefthook)
 
 Her push'ta:
+
 - typecheck (web + server)
 - build (vite + postbuild)
 
@@ -93,11 +95,13 @@ npm run build:all              # ikisi birden
 ### Deploy
 
 Tek-tık zinciri:
+
 ```bash
 ./DEPLOY_NOW.command
 ```
 
 Adımlar:
+
 1. Pre-checks (typecheck + lint + test + build + integration-health)
 2. Git status temizliği
 3. Backend deploy (Render API veya manual)
@@ -108,6 +112,7 @@ Adımlar:
 8. SEO submit (`npm run seo:push`)
 
 Credentials env vars:
+
 - `RENDER_API_KEY`, `RENDER_SERVICE_ID` (Render API)
 - `HOSTINGER_FTP_HOST`, `HOSTINGER_FTP_USER`, `HOSTINGER_FTP_PASS` (Hostinger FTP)
 - `INDEXNOW_KEY` (in `.env.production`)
@@ -130,6 +135,7 @@ Veya Render Dashboard'tan **Deploy → Rollback to previous**.
 **Belirti:** Hostinger'da `/about` direkt erişimde 404.
 
 **Çözüm:** `public/.htaccess` SPA fallback rule'unun deploy edildiğini kontrol et:
+
 ```apache
 RewriteEngine On
 RewriteCond %{REQUEST_FILENAME} !-f
@@ -142,6 +148,7 @@ RewriteRule . /index.html [L]
 **Belirti:** İlk istek 30s gecikiyor, ardından normal.
 
 **Çözüm:** Render Free tier 5 dakika inaktivite sonrası uyuyor. Çözüm:
+
 - Render Starter tier'a geç (~$7/ay)
 - Veya `cron-job.org` ile 4 dakikada bir `/__health` ping
 
@@ -150,6 +157,7 @@ RewriteRule . /index.html [L]
 **Belirti:** Form submit 200 ama Telegram'a mesaj gelmiyor.
 
 **Adımlar:**
+
 1. `/integration-health --probe` çalıştır → Telegram getMe PASS mi?
 2. Browser DevTools → Console → CSP violation var mı? (`api.telegram.org` connect-src'de olmalı, P10'da eklendi)
 3. Network tab → `https://api.telegram.org/...` request status 200 mü?
@@ -161,6 +169,7 @@ RewriteRule . /index.html [L]
 **Belirti:** Sentry'de hata patlaması.
 
 **Adımlar:**
+
 1. Sentry Dashboard → Issues → en yeni issue
 2. **Event detail** → stack trace, breadcrumbs
 3. Release version match mi? (`ecypro@1.0.0`)
@@ -173,6 +182,7 @@ RewriteRule . /index.html [L]
 **Belirti:** Lighthouse skoru -5 puan düştü.
 
 **Adımlar:**
+
 1. `git log --oneline` son commit'leri incele
 2. `npm run lh:audit` lokal Lighthouse koş, hangi sayfada düştü?
 3. Bundle size diff: `npm run build` + `ls -lh dist/assets/*.js`
@@ -185,6 +195,7 @@ RewriteRule . /index.html [L]
 **Belirti:** Backend "too many connections" hatası.
 
 **Çözüm:** `DATABASE_URL`'e pool config ekle:
+
 ```
 postgresql://user:pass@host:5432/db?connection_limit=10&pool_timeout=20
 ```
@@ -197,29 +208,29 @@ Prisma 7 driver adapter ile pgBouncer entegrasyonu mümkün — bkz. `docs/DEPLO
 
 `.env.production` doldurma checklist'i:
 
-| Değişken | Format | Kaynak | Zorunlu? |
-|---|---|---|---|
-| `VITE_API_URL` | `https://api.ecypro.com/api` veya `""` (simulation) | Plan C/A kararı | ✅ |
-| `VITE_PROD_URL` | `https://www.ecypro.com` | sabit | ✅ |
-| `VITE_SENTRY_DSN` | `https://<key>@<org>.ingest.sentry.io/<id>` | Sentry → Settings → Client Keys | ✅ |
-| `VITE_GA_TRACKING_ID` | `G-XXXXXXXXXX` | GA4 → Admin → Data Streams | ✅ |
-| `VITE_TELEGRAM_BOT_TOKEN` | `123456:ABC-DEF...` | @BotFather → /newbot | ✅ |
-| `VITE_TELEGRAM_CHAT_ID` | `-1001234567890` veya numeric | @userinfobot veya getUpdates | ✅ |
-| `VITE_GROWTHBOOK_CLIENT_KEY` | `sdk-...` | growthbook.io → SDK Connection | ⚠ opsiyonel |
-| `VITE_GROWTHBOOK_API_HOST` | `https://cdn.growthbook.io` | default | ⚠ opsiyonel |
-| `VITE_CLARITY_PROJECT_ID` | `<10-char>` | clarity.microsoft.com | ⚠ opsiyonel |
-| `VITE_LIVECHAT_PROVIDER` | `crisp` / `tawk` / `intercom` / `""` | provider seçimi | ⚠ opsiyonel |
-| `VITE_LIVECHAT_ID` | provider account ID | provider dashboard | ⚠ opsiyonel |
-| `SENTRY_AUTH_TOKEN` | `sntrys_...` | Sentry → Settings → Auth Tokens | ⚠ source-map için |
-| `SENTRY_ORG` | `ecypro` | Sentry slug | ⚠ source-map için |
-| `SENTRY_PROJECT` | `ecypro-frontend` | Sentry project slug | ⚠ source-map için |
-| `INDEXNOW_KEY` | UUID benzeri | rastgele üret + `public/<key>.txt` | ⚠ SEO submit için |
-| `DATABASE_URL` | `postgresql://...` | Render Postgres / Hostinger MySQL | ✅ backend |
-| `JWT_SECRET` | `openssl rand -hex 32` | local üret | ✅ backend |
-| `REDIS_URL` | `redis://...` | Upstash/Render | ⚠ in-memory fallback |
-| `RENDER_API_KEY` | `rnd_...` | Render → Account → API Keys | ⚠ DEPLOY_NOW için |
-| `RENDER_SERVICE_ID` | `srv-...` | Render service settings | ⚠ DEPLOY_NOW için |
-| `HOSTINGER_FTP_HOST/USER/PASS` | — | Hostinger panel → FTP Accounts | ⚠ DEPLOY_NOW için |
+| Değişken                       | Format                                              | Kaynak                             | Zorunlu?             |
+| ------------------------------ | --------------------------------------------------- | ---------------------------------- | -------------------- |
+| `VITE_API_URL`                 | `https://api.ecypro.com/api` veya `""` (simulation) | Plan C/A kararı                    | ✅                   |
+| `VITE_PROD_URL`                | `https://www.ecypro.com`                            | sabit                              | ✅                   |
+| `VITE_SENTRY_DSN`              | `https://<key>@<org>.ingest.sentry.io/<id>`         | Sentry → Settings → Client Keys    | ✅                   |
+| `VITE_GA_TRACKING_ID`          | `G-XXXXXXXXXX`                                      | GA4 → Admin → Data Streams         | ✅                   |
+| `VITE_TELEGRAM_BOT_TOKEN`      | `123456:ABC-DEF...`                                 | @BotFather → /newbot               | ✅                   |
+| `VITE_TELEGRAM_CHAT_ID`        | `-1001234567890` veya numeric                       | @userinfobot veya getUpdates       | ✅                   |
+| `VITE_GROWTHBOOK_CLIENT_KEY`   | `sdk-...`                                           | growthbook.io → SDK Connection     | ⚠ opsiyonel          |
+| `VITE_GROWTHBOOK_API_HOST`     | `https://cdn.growthbook.io`                         | default                            | ⚠ opsiyonel          |
+| `VITE_CLARITY_PROJECT_ID`      | `<10-char>`                                         | clarity.microsoft.com              | ⚠ opsiyonel          |
+| `VITE_LIVECHAT_PROVIDER`       | `crisp` / `tawk` / `intercom` / `""`                | provider seçimi                    | ⚠ opsiyonel          |
+| `VITE_LIVECHAT_ID`             | provider account ID                                 | provider dashboard                 | ⚠ opsiyonel          |
+| `SENTRY_AUTH_TOKEN`            | `sntrys_...`                                        | Sentry → Settings → Auth Tokens    | ⚠ source-map için    |
+| `SENTRY_ORG`                   | `ecypro`                                            | Sentry slug                        | ⚠ source-map için    |
+| `SENTRY_PROJECT`               | `ecypro-frontend`                                   | Sentry project slug                | ⚠ source-map için    |
+| `INDEXNOW_KEY`                 | UUID benzeri                                        | rastgele üret + `public/<key>.txt` | ⚠ SEO submit için    |
+| `DATABASE_URL`                 | `postgresql://...`                                  | Render Postgres / Hostinger MySQL  | ✅ backend           |
+| `JWT_SECRET`                   | `openssl rand -hex 32`                              | local üret                         | ✅ backend           |
+| `REDIS_URL`                    | `redis://...`                                       | Upstash/Render                     | ⚠ in-memory fallback |
+| `RENDER_API_KEY`               | `rnd_...`                                           | Render → Account → API Keys        | ⚠ DEPLOY_NOW için    |
+| `RENDER_SERVICE_ID`            | `srv-...`                                           | Render service settings            | ⚠ DEPLOY_NOW için    |
+| `HOSTINGER_FTP_HOST/USER/PASS` | —                                                   | Hostinger panel → FTP Accounts     | ⚠ DEPLOY_NOW için    |
 
 ---
 
@@ -233,12 +244,12 @@ Prisma 7 driver adapter ile pgBouncer entegrasyonu mümkün — bkz. `docs/DEPLO
 
 ### Issue triage
 
-| Severity | Aksiyon |
-|---|---|
+| Severity                                       | Aksiyon                                   |
+| ---------------------------------------------- | ----------------------------------------- |
 | **Crash** (component error, unhandled promise) | Acil — replay incele, root cause + hotfix |
-| **Error** (logger.error, captureException) | 24 saat içinde fix planla |
-| **Warning** (logger.warn) | Sprint kuyruğuna |
-| **Info** (breadcrumb) | İzlem — aksiyon yok |
+| **Error** (logger.error, captureException)     | 24 saat içinde fix planla                 |
+| **Warning** (logger.warn)                      | Sprint kuyruğuna                          |
+| **Info** (breadcrumb)                          | İzlem — aksiyon yok                       |
 
 ### Alert kuralları (önerilen)
 
@@ -260,6 +271,7 @@ Lighthouse skoru düştüğünde:
 6. Gelmediyse: bisect'i derinleştir
 
 **Yaygın suspectler:**
+
 - Yeni `npm install` paketi (bundle bloat)
 - `useEffect` dependency değişimi (infinite render — P10 ServicesPage bulgusu!)
 - `motion/react` layout animation
@@ -330,13 +342,13 @@ npm run perf:budget          # lighthouse-budget check
 
 ## 9) On-call escalation
 
-| Durum | Aksiyon | İletişim |
-|---|---|---|
-| Site down (frontend 5xx) | Hostinger panel + DNS check | Hostinger support |
-| API down (Render 5xx) | Render Dashboard + logs | Render status page |
-| Contact form çalışmıyor | `/integration-health --probe` Telegram | Bot owner |
-| DB down | `DATABASE_URL` validate + Render Postgres logs | Render Postgres |
-| Sentry overflow | Sample rate düşür `.env.production` `tracesSampleRate` | Sentry dashboard |
+| Durum                    | Aksiyon                                                | İletişim           |
+| ------------------------ | ------------------------------------------------------ | ------------------ |
+| Site down (frontend 5xx) | Hostinger panel + DNS check                            | Hostinger support  |
+| API down (Render 5xx)    | Render Dashboard + logs                                | Render status page |
+| Contact form çalışmıyor  | `/integration-health --probe` Telegram                 | Bot owner          |
+| DB down                  | `DATABASE_URL` validate + Render Postgres logs         | Render Postgres    |
+| Sentry overflow          | Sample rate düşür `.env.production` `tracesSampleRate` | Sentry dashboard   |
 
 ---
 
@@ -345,6 +357,7 @@ npm run perf:budget          # lighthouse-budget check
 Proje P0 → P10 fazlardan geçti. P11+ için `outputs/PROJECT_COMPLETE.md` Section 8 önerilerine bak.
 
 Yeni faz başlatırken:
+
 1. `outputs/P11_PROMPT.md` yaz (P10 prompt pattern'ini izle)
 2. Atomik commit disiplin korunsun
 3. Test silmek yasak (kullanıcı açık talep etmediği sürece)

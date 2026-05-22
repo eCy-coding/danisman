@@ -3,12 +3,7 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import {
-  computeJobPriority,
-  splitCapacity,
-  poolForPriority,
-  clampPriority,
-} from './priority';
+import { computeJobPriority, splitCapacity, poolForPriority, clampPriority } from './priority';
 
 describe('computeJobPriority', () => {
   it('maps admin → 1', () => {

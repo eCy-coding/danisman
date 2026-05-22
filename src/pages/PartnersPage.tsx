@@ -21,10 +21,10 @@ export const PartnersPage: React.FC = () => {
             Birlikte <span className="text-primary">Değer Yaratırız</span>
           </h1>
           <p className="max-w-2xl mx-auto text-lg text-slate-400 font-light mb-12">
-            eCyverse Premium Consulting; teknoloji sağlayıcıları, hukuk firmaları, akademik
-            kurumlar ve sektörel uzmanlarla iş birliği yapar. Ortaklık ağımız ihtiyaca göre
-            engagement bazında kurulur. Gerçek partnership anlaşmaları aktive oldukça bu
-            sayfada şeffaf biçimde paylaşılacaktır.
+            eCyverse Premium Consulting; teknoloji sağlayıcıları, hukuk firmaları, akademik kurumlar
+            ve sektörel uzmanlarla iş birliği yapar. Ortaklık ağımız ihtiyaca göre engagement
+            bazında kurulur. Gerçek partnership anlaşmaları aktive oldukça bu sayfada şeffaf biçimde
+            paylaşılacaktır.
           </p>
         </FadeIn>
 
@@ -32,12 +32,10 @@ export const PartnersPage: React.FC = () => {
           <div className="w-16 h-16 rounded-2xl bg-secondary/10 border border-secondary/20 flex items-center justify-center mx-auto mb-8">
             <Handshake className="w-8 h-8 text-secondary" />
           </div>
-          <h2 className="text-3xl font-serif font-bold text-white mb-6">
-            Ortaklık Görüşmesi
-          </h2>
+          <h2 className="text-3xl font-serif font-bold text-white mb-6">Ortaklık Görüşmesi</h2>
           <p className="text-slate-400 max-w-xl mx-auto mb-10">
-            Premium consulting ekosistemine değer katacak bir iş birliği önerin var mı?
-            Sizinle birlikte engagement çerçevesini konuşalım.
+            Premium consulting ekosistemine değer katacak bir iş birliği önerin var mı? Sizinle
+            birlikte engagement çerçevesini konuşalım.
           </p>
           <Link
             to="/contact"

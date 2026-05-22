@@ -37,9 +37,7 @@ vi.mock('../config/db', () => {
       create: vi.fn().mockResolvedValue({}),
     },
   };
-  prismaMock.$transaction = vi.fn(async (cb: (tx: typeof prismaMock) => unknown) =>
-    cb(prismaMock),
-  );
+  prismaMock.$transaction = vi.fn(async (cb: (tx: typeof prismaMock) => unknown) => cb(prismaMock));
   return { prisma: prismaMock };
 });
 

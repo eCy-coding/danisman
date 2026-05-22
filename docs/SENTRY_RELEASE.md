@@ -22,12 +22,12 @@ them, so external forks and PRs without secret access still build successfully.
 
 Set these in **GitHub → Settings → Secrets and variables → Actions**:
 
-| Name | Type | Description |
-|------|------|-------------|
-| `SENTRY_AUTH_TOKEN` | Secret | Sentry CLI auth token with `project:releases` + `org:read` scopes |
-| `VITE_SENTRY_DSN` | Secret | DSN for the **frontend** Sentry project (also bundled into client) |
-| `SENTRY_ORG` | Variable | Sentry organization slug (default: `ecypro`) |
-| `SENTRY_PROJECT` | Variable | Sentry project slug (default: `ecypro-frontend`) |
+| Name                | Type     | Description                                                        |
+| ------------------- | -------- | ------------------------------------------------------------------ |
+| `SENTRY_AUTH_TOKEN` | Secret   | Sentry CLI auth token with `project:releases` + `org:read` scopes  |
+| `VITE_SENTRY_DSN`   | Secret   | DSN for the **frontend** Sentry project (also bundled into client) |
+| `SENTRY_ORG`        | Variable | Sentry organization slug (default: `ecypro`)                       |
+| `SENTRY_PROJECT`    | Variable | Sentry project slug (default: `ecypro-frontend`)                   |
 
 Alternative: use repository **Variables** (not Secrets) for `SENTRY_ORG` and
 `SENTRY_PROJECT` if your org policy treats them as non-secret.

@@ -3,12 +3,7 @@
  */
 
 import { describe, it, expect, vi } from 'vitest';
-import {
-  buildCacheControl,
-  setCache,
-  cacheControl,
-  defaultCacheByMethod,
-} from './cache-control';
+import { buildCacheControl, setCache, cacheControl, defaultCacheByMethod } from './cache-control';
 
 describe('buildCacheControl', () => {
   it('returns immutable + 1y for static-immutable', () => {

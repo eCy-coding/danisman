@@ -213,8 +213,7 @@ export function startImageResizeWorker(): MinimalWorker | null {
   const opts: MinimalWorkerOptions = {
     connection: conn,
     prefix: QUEUE_PREFIX,
-    concurrency:
-      Number.parseInt(process.env.IMAGE_RESIZE_WORKER_CONCURRENCY ?? '2', 10) || 2,
+    concurrency: Number.parseInt(process.env.IMAGE_RESIZE_WORKER_CONCURRENCY ?? '2', 10) || 2,
     lockDuration: 120_000,
   };
 

@@ -59,12 +59,16 @@ export const FadeIn: React.FC<FadeInProps> = ({
         ...offset,
         ...(scale ? { scale: 0.95 } : {}),
       }}
-      animate={isInView ? {
-        opacity: 1,
-        x: 0,
-        y: 0,
-        scale: 1,
-      } : {}}
+      animate={
+        isInView
+          ? {
+              opacity: 1,
+              x: 0,
+              y: 0,
+              scale: 1,
+            }
+          : {}
+      }
       transition={{
         duration,
         delay: delay / 1000, // Convert ms to seconds for framer-motion
@@ -123,7 +127,10 @@ export const StaggerItem: React.FC<{ children: React.ReactNode; className?: stri
       visible: {
         opacity: 1,
         y: 0,
-        transition: { duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] as [number, number, number, number] },
+        transition: {
+          duration: 0.5,
+          ease: [0.25, 0.46, 0.45, 0.94] as [number, number, number, number],
+        },
       },
     }}
   >

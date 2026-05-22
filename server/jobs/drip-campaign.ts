@@ -51,10 +51,26 @@ export const DRIP_SEQUENCES: DripSequence[] = [
     locale: 'tr',
     trigger: 'newsletter_confirm',
     steps: [
-      { delayMinutes: 0, templateKey: 'welcome', subject: 'Hoş geldiniz · eCyPro Premium Consulting' },
-      { delayMinutes: 60 * 24 * 3, templateKey: 'methodology', subject: '5 katmanlı engagement metodolojimiz' },
-      { delayMinutes: 60 * 24 * 7, templateKey: 'case-study', subject: 'Anonim engagement vaka analizi' },
-      { delayMinutes: 60 * 24 * 14, templateKey: 'discovery-invite', subject: 'Discovery Call için bir gün?' },
+      {
+        delayMinutes: 0,
+        templateKey: 'welcome',
+        subject: 'Hoş geldiniz · eCyPro Premium Consulting',
+      },
+      {
+        delayMinutes: 60 * 24 * 3,
+        templateKey: 'methodology',
+        subject: '5 katmanlı engagement metodolojimiz',
+      },
+      {
+        delayMinutes: 60 * 24 * 7,
+        templateKey: 'case-study',
+        subject: 'Anonim engagement vaka analizi',
+      },
+      {
+        delayMinutes: 60 * 24 * 14,
+        templateKey: 'discovery-invite',
+        subject: 'Discovery Call için bir gün?',
+      },
     ],
   },
   {
@@ -62,20 +78,31 @@ export const DRIP_SEQUENCES: DripSequence[] = [
     locale: 'tr',
     trigger: 'contact_form_submit',
     steps: [
-      { delayMinutes: 0, templateKey: 'discovery-call-confirm', subject: 'Mesajınızı aldık · 1 iş günü içinde dönüyoruz' },
-      { delayMinutes: 60 * 24, templateKey: 'discovery-offer', subject: 'Discovery Call için 3 uygun slot' },
-      { delayMinutes: 60 * 24 * 5, templateKey: 'soft-followup', subject: 'Hâlâ devam ediyor musunuz?' },
+      {
+        delayMinutes: 0,
+        templateKey: 'discovery-call-confirm',
+        subject: 'Mesajınızı aldık · 1 iş günü içinde dönüyoruz',
+      },
+      {
+        delayMinutes: 60 * 24,
+        templateKey: 'discovery-offer',
+        subject: 'Discovery Call için 3 uygun slot',
+      },
+      {
+        delayMinutes: 60 * 24 * 5,
+        templateKey: 'soft-followup',
+        subject: 'Hâlâ devam ediyor musunuz?',
+      },
     ],
   },
 ];
 
-const SEQUENCE_INDEX: Record<string, DripSequence> = DRIP_SEQUENCES.reduce<Record<string, DripSequence>>(
-  (acc, s) => {
-    acc[s.key] = s;
-    return acc;
-  },
-  {},
-);
+const SEQUENCE_INDEX: Record<string, DripSequence> = DRIP_SEQUENCES.reduce<
+  Record<string, DripSequence>
+>((acc, s) => {
+  acc[s.key] = s;
+  return acc;
+}, {});
 
 const QUEUE_KEY = 'drip:queue';
 const DLQ_KEY = 'drip:dlq';

@@ -1,6 +1,7 @@
 # Deployment Guide
 
 ## Prerequisites
+
 - Node.js 20+
 - npm 10+
 - Docker (optional)
@@ -32,6 +33,7 @@ cp .env.example .env
 ```
 
 Required variables:
+
 - `VITE_API_URL` - Backend API endpoint
 - `VITE_EMAILJS_*` - EmailJS credentials for contact form
 

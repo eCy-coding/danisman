@@ -152,7 +152,8 @@ export const TwoFactorSettings: React.FC = () => {
 
       {/* ── IDLE: 2FA disabled ─────────────────────────────── */}
       {step === 'idle' && !is2FAEnabled && (
-        <button type="button"
+        <button
+          type="button"
           onClick={() => setupMutation.mutate()}
           disabled={setupMutation.isPending}
           className="flex items-center gap-2 px-4 py-2 bg-secondary text-neutral rounded-lg text-sm font-medium hover:bg-secondary/90 transition-colors disabled:opacity-50"
@@ -169,7 +170,8 @@ export const TwoFactorSettings: React.FC = () => {
       {/* ── 2FA ENABLED controls ───────────────────────────── */}
       {step === 'idle' && is2FAEnabled && (
         <div className="flex gap-3">
-          <button type="button"
+          <button
+            type="button"
             onClick={() => setStep('disable')}
             className="px-4 py-2 border border-red-500/30 text-red-400 rounded-lg text-sm hover:bg-red-500/10 transition-colors"
           >
@@ -197,7 +199,8 @@ export const TwoFactorSettings: React.FC = () => {
               <code className="text-xs text-secondary font-mono flex-1 break-all">
                 {setupData.manualEntryKey}
               </code>
-              <button type="button"
+              <button
+                type="button"
                 onClick={() => copyToClipboard(setupData.manualEntryKey)}
                 className="shrink-0"
               >
@@ -209,7 +212,8 @@ export const TwoFactorSettings: React.FC = () => {
               </button>
             </div>
           </div>
-          <button type="button"
+          <button
+            type="button"
             onClick={() => setStep('setup-verify')}
             className="w-full px-4 py-2 bg-secondary text-neutral rounded-lg text-sm font-medium hover:bg-secondary/90 transition-colors"
           >
@@ -238,7 +242,8 @@ export const TwoFactorSettings: React.FC = () => {
             className="w-full text-center text-2xl tracking-[0.5em] font-mono bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-secondary"
           />
           <div className="flex gap-2">
-            <button type="button"
+            <button
+              type="button"
               onClick={() => {
                 if (step === 'setup-verify') verifySetupMutation.mutate(token);
                 else disableMutation.mutate(token);
@@ -253,7 +258,11 @@ export const TwoFactorSettings: React.FC = () => {
               ) : null}
               {step === 'disable' ? 'Devre Dışı Bırak' : 'Doğrula & Etkinleştir'}
             </button>
-            <button type="button" onClick={reset} className="px-3 py-2 text-slate-400 hover:text-white">
+            <button
+              type="button"
+              onClick={reset}
+              className="px-3 py-2 text-slate-400 hover:text-white"
+            >
               <X size={16} />
             </button>
           </div>
@@ -278,14 +287,16 @@ export const TwoFactorSettings: React.FC = () => {
             ))}
           </div>
           <div className="flex gap-2">
-            <button type="button"
+            <button
+              type="button"
               onClick={() => copyToClipboard(backupCodes.join('\n'))}
               className="flex items-center gap-2 px-3 py-2 text-xs text-slate-400 hover:text-white border border-white/10 rounded-lg transition-colors"
             >
               <KeyRound size={12} />
               {copied ? 'Kopyalandı!' : 'Tümünü Kopyala'}
             </button>
-            <button type="button"
+            <button
+              type="button"
               onClick={reset}
               className="ml-auto flex items-center gap-2 px-4 py-2 bg-secondary/20 text-secondary rounded-lg text-xs font-medium hover:bg-secondary/30 transition-colors"
             >

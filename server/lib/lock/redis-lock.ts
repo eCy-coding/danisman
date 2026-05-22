@@ -81,15 +81,11 @@ export async function acquireLock(key: string, ttlMs: number): Promise<Lock | nu
   try {
     // ioredis `set(key, value, 'PX', ttlMs, 'NX')` returns 'OK' on success
     // and null when the key already exists.
-    const r = await (redis as unknown as {
-      set: (
-        k: string,
-        v: string,
-        m1: 'PX',
-        ms: number,
-        m2: 'NX',
-      ) => Promise<string | null>;
-    }).set(key, token, 'PX', ttlMs, 'NX');
+    const r = await (
+      redis as unknown as {
+        set: (k: string, v: string, m1: 'PX', ms: number, m2: 'NX') => Promise<string | null>;
+      }
+    ).set(key, token, 'PX', ttlMs, 'NX');
     if (r === 'OK') {
       return { key, token, ttlMs, acquiredAt: Date.now() };
     }
@@ -107,14 +103,11 @@ export async function acquireLock(key: string, ttlMs: number): Promise<Lock | nu
 
 export async function renewLock(lock: Lock): Promise<boolean> {
   try {
-    const r = await (redis as unknown as {
-      eval: (
-        script: string,
-        numKeys: number,
-        key: string,
-        ...args: string[]
-      ) => Promise<number>;
-    }).eval(RENEW_LUA, 1, lock.key, lock.token, String(lock.ttlMs));
+    const r = await (
+      redis as unknown as {
+        eval: (script: string, numKeys: number, key: string, ...args: string[]) => Promise<number>;
+      }
+    ).eval(RENEW_LUA, 1, lock.key, lock.token, String(lock.ttlMs));
     return r === 1;
   } catch (err) {
     logger.warn('[lock] renew failed', { key: lock.key, message: (err as Error).message });
@@ -124,14 +117,11 @@ export async function renewLock(lock: Lock): Promise<boolean> {
 
 export async function releaseLock(lock: Lock): Promise<boolean> {
   try {
-    const r = await (redis as unknown as {
-      eval: (
-        script: string,
-        numKeys: number,
-        key: string,
-        ...args: string[]
-      ) => Promise<number>;
-    }).eval(RELEASE_LUA, 1, lock.key, lock.token);
+    const r = await (
+      redis as unknown as {
+        eval: (script: string, numKeys: number, key: string, ...args: string[]) => Promise<number>;
+      }
+    ).eval(RELEASE_LUA, 1, lock.key, lock.token);
     return r === 1;
   } catch (err) {
     logger.warn('[lock] release failed', { key: lock.key, message: (err as Error).message });
@@ -180,9 +170,7 @@ export async function withLock<T>(
  * Diagnostic — peek a lock's current state. Returns null when the key is
  * not held. Used by /metrics + admin "who owns this cron?" view.
  */
-export async function inspectLock(
-  key: string,
-): Promise<{ token: string; ttlMs: number } | null> {
+export async function inspectLock(key: string): Promise<{ token: string; ttlMs: number } | null> {
   try {
     const [val, ttl] = await Promise.all([
       (redis as unknown as { get: (k: string) => Promise<string | null> }).get(key),

@@ -107,7 +107,8 @@ export const AdminOverviewPage: React.FC = () => {
 
   const activity = useQuery<ActivityResponse>({
     queryKey: ['admin-overview-activity'],
-    queryFn: () => apiClient.get('/admin/dashboard/activity').then((r) => r.data as ActivityResponse),
+    queryFn: () =>
+      apiClient.get('/admin/dashboard/activity').then((r) => r.data as ActivityResponse),
     staleTime: 30_000,
     refetchInterval: 30_000,
   });
@@ -140,25 +141,25 @@ export const AdminOverviewPage: React.FC = () => {
       <section className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
         <StatCard
           label="Lead (30g)"
-          value={kpi.isLoading ? '—' : k?.totalLeads30d ?? 0}
+          value={kpi.isLoading ? '—' : (k?.totalLeads30d ?? 0)}
           delta={k ? fmtDelta(k.leadsDelta) : undefined}
           icon={<Users size={14} />}
         />
         <StatCard
           label="Yeni Abone (7g)"
-          value={kpi.isLoading ? '—' : k?.newSubscribers7d ?? 0}
+          value={kpi.isLoading ? '—' : (k?.newSubscribers7d ?? 0)}
           delta={k ? fmtDelta(k.subscribersDelta) : undefined}
           icon={<Mail size={14} />}
         />
         <StatCard
           label="Hot Lead"
-          value={kpi.isLoading ? '—' : k?.hotLeads ?? 0}
+          value={kpi.isLoading ? '—' : (k?.hotLeads ?? 0)}
           icon={<Flame size={14} />}
           tone={k && k.hotLeads > 0 ? 'positive' : 'default'}
         />
         <StatCard
           label="Disc. Call (Ay)"
-          value={kpi.isLoading ? '—' : k?.discoveryCallsThisMonth ?? 0}
+          value={kpi.isLoading ? '—' : (k?.discoveryCallsThisMonth ?? 0)}
           icon={<CalendarCheck size={14} />}
         />
         <StatCard
@@ -168,7 +169,7 @@ export const AdminOverviewPage: React.FC = () => {
         />
         <StatCard
           label="Avg Score"
-          value={kpi.isLoading ? '—' : k?.avgLeadScore ?? 0}
+          value={kpi.isLoading ? '—' : (k?.avgLeadScore ?? 0)}
           icon={<Gauge size={14} />}
         />
       </section>
@@ -178,7 +179,9 @@ export const AdminOverviewPage: React.FC = () => {
         <article className="lg:col-span-2 bg-white/[0.02] border border-white/10 rounded-xl p-5">
           <h2 className="text-sm font-semibold text-white mb-3">Lead Trendi — 30 gün</h2>
           {charts.isLoading || !c ? (
-            <div className="h-64 flex items-center justify-center text-slate-500 text-sm">Yükleniyor…</div>
+            <div className="h-64 flex items-center justify-center text-slate-500 text-sm">
+              Yükleniyor…
+            </div>
           ) : (
             <div className="h-64">
               <ResponsiveContainer width="100%" height="100%">
@@ -194,7 +197,13 @@ export const AdminOverviewPage: React.FC = () => {
                       fontSize: '12px',
                     }}
                   />
-                  <Line type="monotone" dataKey="count" stroke="#F59E0B" strokeWidth={2} dot={false} />
+                  <Line
+                    type="monotone"
+                    dataKey="count"
+                    stroke="#F59E0B"
+                    strokeWidth={2}
+                    dot={false}
+                  />
                 </LineChart>
               </ResponsiveContainer>
             </div>
@@ -203,14 +212,22 @@ export const AdminOverviewPage: React.FC = () => {
         <article className="bg-white/[0.02] border border-white/10 rounded-xl p-5">
           <h2 className="text-sm font-semibold text-white mb-3">Kaynak Dağılımı</h2>
           {charts.isLoading || !c ? (
-            <div className="h-64 flex items-center justify-center text-slate-500 text-sm">Yükleniyor…</div>
+            <div className="h-64 flex items-center justify-center text-slate-500 text-sm">
+              Yükleniyor…
+            </div>
           ) : c.sourceBreakdown.length === 0 ? (
             <EmptyState title="Veri yok" description="Henüz lead kaynağı verisi yok." />
           ) : (
             <div className="h-64">
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
-                  <Pie data={c.sourceBreakdown} dataKey="value" nameKey="name" innerRadius={40} outerRadius={70}>
+                  <Pie
+                    data={c.sourceBreakdown}
+                    dataKey="value"
+                    nameKey="name"
+                    innerRadius={40}
+                    outerRadius={70}
+                  >
                     {c.sourceBreakdown.map((_, idx) => (
                       <Cell key={idx} fill={PIE_COLORS[idx % PIE_COLORS.length]} />
                     ))}
@@ -235,14 +252,22 @@ export const AdminOverviewPage: React.FC = () => {
         <article className="lg:col-span-2 bg-white/[0.02] border border-white/10 rounded-xl p-5">
           <h2 className="text-sm font-semibold text-white mb-3">Dönüşüm Hunisi</h2>
           {charts.isLoading || !c ? (
-            <div className="h-56 flex items-center justify-center text-slate-500 text-sm">Yükleniyor…</div>
+            <div className="h-56 flex items-center justify-center text-slate-500 text-sm">
+              Yükleniyor…
+            </div>
           ) : (
             <div className="h-56">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={c.funnel} layout="vertical">
                   <CartesianGrid strokeDasharray="3 3" stroke="#1f2937" />
                   <XAxis type="number" stroke="#64748b" fontSize={11} />
-                  <YAxis type="category" dataKey="stage" stroke="#64748b" fontSize={11} width={90} />
+                  <YAxis
+                    type="category"
+                    dataKey="stage"
+                    stroke="#64748b"
+                    fontSize={11}
+                    width={90}
+                  />
                   <Tooltip
                     contentStyle={{
                       backgroundColor: '#0F172A',
@@ -269,8 +294,14 @@ export const AdminOverviewPage: React.FC = () => {
           ) : (
             <ul className="space-y-2 text-sm">
               {a.slice(0, 10).map((evt) => (
-                <li key={evt.id} className="flex items-start gap-2 pb-2 border-b border-white/5 last:border-0">
-                  <span className="w-1.5 h-1.5 rounded-full bg-secondary mt-1.5 flex-shrink-0" aria-hidden="true" />
+                <li
+                  key={evt.id}
+                  className="flex items-start gap-2 pb-2 border-b border-white/5 last:border-0"
+                >
+                  <span
+                    className="w-1.5 h-1.5 rounded-full bg-secondary mt-1.5 flex-shrink-0"
+                    aria-hidden="true"
+                  />
                   <div className="min-w-0 flex-1">
                     <p className="text-slate-200 truncate">{evt.subject}</p>
                     <p className="text-xs text-slate-500">
@@ -290,7 +321,11 @@ export const AdminOverviewPage: React.FC = () => {
           <h2 className="text-sm font-semibold text-white mb-3">Hızlı Eylemler</h2>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
             <QuickAction to="/admin/leads" icon={<Users size={16} />} label="Lead Listesi" />
-            <QuickAction to="/admin/newsletter/campaigns" icon={<Send size={16} />} label="Yeni Kampanya" />
+            <QuickAction
+              to="/admin/newsletter/campaigns"
+              icon={<Send size={16} />}
+              label="Yeni Kampanya"
+            />
             <QuickAction to="/admin/blog" icon={<FileText size={16} />} label="Yeni Blog" />
             <QuickAction to="/admin/newsletter" icon={<Mail size={16} />} label="Newsletter" />
             <QuickAction to="/admin/contacts" icon={<PlusCircle size={16} />} label="İletişim" />
@@ -324,7 +359,11 @@ export const AdminOverviewPage: React.FC = () => {
   );
 };
 
-const QuickAction: React.FC<{ to: string; icon: React.ReactNode; label: string }> = ({ to, icon, label }) => (
+const QuickAction: React.FC<{ to: string; icon: React.ReactNode; label: string }> = ({
+  to,
+  icon,
+  label,
+}) => (
   <Link
     to={to}
     className="flex items-center gap-2 px-3 py-3 rounded-lg bg-white/[0.03] border border-white/10 hover:border-secondary/30 hover:bg-white/5 transition-colors text-sm text-white"
@@ -335,7 +374,10 @@ const QuickAction: React.FC<{ to: string; icon: React.ReactNode; label: string }
   </Link>
 );
 
-const HealthRow: React.FC<{ label: string; status: 'ok' | 'degraded' | 'down' }> = ({ label, status }) => {
+const HealthRow: React.FC<{ label: string; status: 'ok' | 'degraded' | 'down' }> = ({
+  label,
+  status,
+}) => {
   const colorClass =
     status === 'ok' ? 'text-secondary' : status === 'degraded' ? 'text-amber-400' : 'text-red-400';
   const Icon = status === 'ok' ? CheckCircle2 : XCircle;

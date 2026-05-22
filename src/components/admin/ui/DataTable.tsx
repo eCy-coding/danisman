@@ -211,13 +211,19 @@ export function DataTable<T>({
           <tbody>
             {loading ? (
               <tr>
-                <td colSpan={columns.length + (selectable ? 1 : 0) + (onRowAction ? 1 : 0)} className="p-6 text-center text-slate-400 text-sm">
+                <td
+                  colSpan={columns.length + (selectable ? 1 : 0) + (onRowAction ? 1 : 0)}
+                  className="p-6 text-center text-slate-400 text-sm"
+                >
                   Yükleniyor…
                 </td>
               </tr>
             ) : pageData.length === 0 ? (
               <tr>
-                <td colSpan={columns.length + (selectable ? 1 : 0) + (onRowAction ? 1 : 0)} className="p-6 text-center text-slate-400 text-sm">
+                <td
+                  colSpan={columns.length + (selectable ? 1 : 0) + (onRowAction ? 1 : 0)}
+                  className="p-6 text-center text-slate-400 text-sm"
+                >
                   {emptyMessage}
                 </td>
               </tr>
@@ -246,10 +252,16 @@ export function DataTable<T>({
                       <td
                         key={String(c.key)}
                         className={`px-3 py-3 text-slate-200 ${
-                          c.align === 'right' ? 'text-right' : c.align === 'center' ? 'text-center' : ''
+                          c.align === 'right'
+                            ? 'text-right'
+                            : c.align === 'center'
+                              ? 'text-center'
+                              : ''
                         } ${c.hideOnMobile ? 'hidden md:table-cell' : ''} ${c.className ?? ''}`}
                       >
-                        {c.render ? c.render(row) : String((row as Record<string, unknown>)[c.key as string] ?? '')}
+                        {c.render
+                          ? c.render(row)
+                          : String((row as Record<string, unknown>)[c.key as string] ?? '')}
                       </td>
                     ))}
                     {onRowAction && (

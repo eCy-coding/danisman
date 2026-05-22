@@ -42,7 +42,10 @@ export const TestimonialVideo: React.FC<TestimonialVideoProps> = ({
     : null;
 
   return (
-    <figure className={`bg-white/5 border border-white/10 rounded-2xl overflow-hidden ${className}`} data-testid="testimonial-video">
+    <figure
+      className={`bg-white/5 border border-white/10 rounded-2xl overflow-hidden ${className}`}
+      data-testid="testimonial-video"
+    >
       <div className="relative aspect-video bg-neutral">
         {playing ? (
           <iframe
@@ -61,7 +64,12 @@ export const TestimonialVideo: React.FC<TestimonialVideoProps> = ({
             aria-label={`Müşteri görüşünü oynat: ${speaker}`}
             className="absolute inset-0 group focus:outline-none focus-visible:ring-2 focus-visible:ring-secondary"
           >
-            <img src={posterSrc} alt="" className="w-full h-full object-cover opacity-60" loading="lazy" />
+            <img
+              src={posterSrc}
+              alt=""
+              className="w-full h-full object-cover opacity-60"
+              loading="lazy"
+            />
             <div className="absolute inset-0 bg-gradient-to-t from-neutral via-neutral/40 to-transparent" />
             <div className="absolute inset-0 flex flex-col items-center justify-center">
               <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-secondary text-neutral flex items-center justify-center group-hover:scale-110 transition-transform shadow-2xl shadow-secondary/30">

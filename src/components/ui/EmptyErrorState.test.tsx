@@ -15,12 +15,7 @@ describe('<EmptyState>', () => {
 
   it('action butonu onClick tetikler', () => {
     const fn = vi.fn();
-    render(
-      <EmptyState
-        title="Boş"
-        action={{ label: 'Oluştur', onClick: fn }}
-      />,
-    );
+    render(<EmptyState title="Boş" action={{ label: 'Oluştur', onClick: fn }} />);
     fireEvent.click(screen.getByRole('button', { name: 'Oluştur' }));
     expect(fn).toHaveBeenCalledOnce();
   });
@@ -37,12 +32,7 @@ describe('<EmptyState>', () => {
   });
 
   it('href varsa anchor render eder', () => {
-    render(
-      <EmptyState
-        title="Boş"
-        action={{ label: 'Anasayfa', href: '/' }}
-      />,
-    );
+    render(<EmptyState title="Boş" action={{ label: 'Anasayfa', href: '/' }} />);
     const anchor = screen.getByRole('link', { name: 'Anasayfa' });
     expect(anchor.getAttribute('href')).toBe('/');
   });

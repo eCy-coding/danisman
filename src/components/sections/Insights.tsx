@@ -10,8 +10,11 @@ import { MouseGlow } from '../ui/MouseGlow';
 const INSIGHTS_COPY = {
   badge: { tr: 'İçgörüler', en: 'Insights' },
   title: { tr: 'Sektörel Bakış Açısı', en: 'Sectoral Perspective' },
-  description: { tr: 'Uzman ekibimizin hazırladığı güncel analizler, trend raporları ve stratejik öngörüler.', en: 'Current analyses, trend reports, and strategic foresights prepared by our expert team.' },
-  viewAll: { tr: 'Tüm Yazılar', en: 'All Articles' }
+  description: {
+    tr: 'Uzman ekibimizin hazırladığı güncel analizler, trend raporları ve stratejik öngörüler.',
+    en: 'Current analyses, trend reports, and strategic foresights prepared by our expert team.',
+  },
+  viewAll: { tr: 'Tüm Yazılar', en: 'All Articles' },
 };
 
 export const Insights: React.FC = () => {
@@ -32,7 +35,7 @@ export const Insights: React.FC = () => {
     <section id="insights" className="py-32 lg:py-48 bg-neutral relative overflow-hidden">
       <div className="absolute top-0 left-0 w-full h-px bg-linear-to-r from-transparent via-white/10 to-transparent"></div>
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(30,58,138,0.05),transparent_60%)] pointer-events-none" />
-      
+
       <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
         <div className="flex flex-col md:flex-row justify-between items-end mb-16 lg:mb-24 gap-6">
           <FadeIn>
@@ -40,7 +43,10 @@ export const Insights: React.FC = () => {
               <span className="w-2 h-2 rounded-full bg-secondary animate-pulse" />
               {INSIGHTS_COPY.badge[lang]}
             </div>
-            <h2 id="insights-heading" className="text-h2-d font-sans font-light text-white mb-6 tracking-tight leading-tight">
+            <h2
+              id="insights-heading"
+              className="text-h2-d font-sans font-light text-white mb-6 tracking-tight leading-tight"
+            >
               {INSIGHTS_COPY.title[lang]}
             </h2>
             <p className="text-slate-400 max-w-2xl text-xl font-light leading-relaxed">
@@ -64,18 +70,18 @@ export const Insights: React.FC = () => {
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
+              viewport={{ once: true, margin: '-100px' }}
               transition={{ duration: 0.8, ease: [0.21, 0.47, 0.32, 0.98] }}
               className="lg:col-span-7"
             >
-              <Link 
-                to={`/blog/${filteredPosts[0].slug}`} 
+              <Link
+                to={`/blog/${filteredPosts[0].slug}`}
                 className="block h-full group relative rounded-3xl overflow-hidden border border-white/5 bg-white/2 outline-none"
                 onClick={() => trackEvent('Blog', 'Read', filteredPosts[0]?.title[lang] || '')}
               >
                 <MouseGlow />
                 <div className="absolute inset-0 bg-linear-to-t from-neutral via-neutral/50 to-transparent z-10 opacity-80" />
-                
+
                 {filteredPosts[0].image && (
                   <img
                     src={filteredPosts[0].image}
@@ -87,7 +93,7 @@ export const Insights: React.FC = () => {
                     className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
                   />
                 )}
-                
+
                 <div className="relative z-20 p-8 lg:p-12 h-full flex flex-col justify-end min-h-100 lg:min-h-125">
                   <div className="flex flex-wrap items-center gap-3 text-xs font-bold text-slate-300 uppercase tracking-widest mb-4">
                     <span className="text-secondary">{filteredPosts[0].category[lang]}</span>
@@ -102,7 +108,10 @@ export const Insights: React.FC = () => {
                   </p>
                   <span className="inline-flex items-center text-white font-medium group-hover:text-secondary transition-colors">
                     {lang === 'tr' ? 'Makaleyi Oku' : 'Read Article'}
-                    <ArrowRight size={18} className="ml-2 group-hover:translate-x-2 transition-transform duration-300" />
+                    <ArrowRight
+                      size={18}
+                      className="ml-2 group-hover:translate-x-2 transition-transform duration-300"
+                    />
                   </span>
                 </div>
               </Link>
@@ -116,12 +125,16 @@ export const Insights: React.FC = () => {
                 key={post.id}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-100px" }}
-                transition={{ duration: 0.8, delay: 0.2 + (index * 0.1), ease: [0.21, 0.47, 0.32, 0.98] }}
+                viewport={{ once: true, margin: '-100px' }}
+                transition={{
+                  duration: 0.8,
+                  delay: 0.2 + index * 0.1,
+                  ease: [0.21, 0.47, 0.32, 0.98],
+                }}
                 className="flex-1"
               >
-                <Link 
-                  to={`/blog/${post.slug}`} 
+                <Link
+                  to={`/blog/${post.slug}`}
                   className="block h-full group relative rounded-3xl overflow-hidden border border-white/5 bg-white/2 p-8 lg:p-10 outline-none hover:bg-white/4 transition-colors duration-500"
                   onClick={() => trackEvent('Blog', 'Read', post.title[lang])}
                 >
@@ -140,7 +153,10 @@ export const Insights: React.FC = () => {
                     </p>
                     <span className="mt-auto inline-flex items-center text-white/70 font-medium group-hover:text-secondary transition-colors text-sm">
                       {lang === 'tr' ? 'İncele' : 'Explore'}
-                      <ArrowRight size={16} className="ml-2 group-hover:translate-x-1 transition-transform" />
+                      <ArrowRight
+                        size={16}
+                        className="ml-2 group-hover:translate-x-1 transition-transform"
+                      />
                     </span>
                   </div>
                 </Link>

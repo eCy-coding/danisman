@@ -8,15 +8,17 @@ interface AntigravityTerminalProps {
   wsUrl?: string; // Default to ws://localhost:8080
 }
 
-export const AntigravityTerminal = ({ wsUrl = 'ws://localhost:8080' }: AntigravityTerminalProps) => {
+export const AntigravityTerminal = ({
+  wsUrl = 'ws://localhost:8080',
+}: AntigravityTerminalProps) => {
   const terminalRef = useRef<HTMLDivElement>(null);
   const wsRef = useRef<WebSocket | null>(null);
 
   useEffect(() => {
     Logger.info('AntigravityTerminal: Mounting...');
     if (!terminalRef.current) {
-        Logger.error('AntigravityTerminal: Ref is null!');
-        return;
+      Logger.error('AntigravityTerminal: Ref is null!');
+      return;
     }
 
     // Initialize xterm
@@ -25,14 +27,14 @@ export const AntigravityTerminal = ({ wsUrl = 'ws://localhost:8080' }: Antigravi
       cursorStyle: 'bar', // Modern feel
       fontSize: 14,
       fontWeight: '500', // Semi-bold for clarity
-      letterSpacing: 1,  // Breathable text
+      letterSpacing: 1, // Breathable text
       fontFamily: '"JetBrains Mono", "Fira Code", Menlo, monospace', // Prefer modern fonts if available
       scrollback: 5000,
       theme: {
         background: '#0d1117', // GitHub Dark Dimmed (Premium)
         foreground: '#c9d1d9', // Soft White
-        cursor: '#58a6ff',     // A nice blue cursor
-        selectionBackground: '#3fb95040' // Subtle selection
+        cursor: '#58a6ff', // A nice blue cursor
+        selectionBackground: '#3fb95040', // Subtle selection
       },
     });
 
@@ -48,7 +50,7 @@ export const AntigravityTerminal = ({ wsUrl = 'ws://localhost:8080' }: Antigravi
 
     ws.onopen = () => {
       term.writeln('\x1b[32mConnected to Antigravity Terminal Service...\x1b[0m');
-      
+
       // Send resize event
       const dims = { cols: term.cols, rows: term.rows };
       ws.send(JSON.stringify({ type: 'resize', ...dims }));
@@ -77,8 +79,8 @@ export const AntigravityTerminal = ({ wsUrl = 'ws://localhost:8080' }: Antigravi
     const handleResize = () => {
       fitAddon.fit();
       if (ws.readyState === WebSocket.OPEN) {
-          const dims = { cols: term.cols, rows: term.rows };
-          ws.send(JSON.stringify({ type: 'resize', ...dims }));
+        const dims = { cols: term.cols, rows: term.rows };
+        ws.send(JSON.stringify({ type: 'resize', ...dims }));
       }
     };
 
@@ -92,8 +94,8 @@ export const AntigravityTerminal = ({ wsUrl = 'ws://localhost:8080' }: Antigravi
   }, [wsUrl]);
 
   return (
-    <div 
-      ref={terminalRef} 
+    <div
+      ref={terminalRef}
       data-testid="terminal"
       className="w-full h-full min-h-[400px] bg-[#1e1e1e] rounded-md overflow-hidden" // Styling
     />

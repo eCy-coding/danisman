@@ -19,12 +19,12 @@ segment is mandatory for new integrations.
 
 ### Why URI, not header
 
-| Aspect | URI (`/api/v1/...`) | Header (`Accept: …+v1`) |
-|---|---|---|
-| Cache key (CDN / Cloudflare) | Built in | Requires `Vary: Accept` discipline |
-| Browser tooling (DevTools, curl) | Trivially copy-pasteable | Needs custom header |
-| Server routing complexity | Simple Express mount | Custom content negotiation |
-| API consumer onboarding cost | Effectively zero | Documentation overhead |
+| Aspect                           | URI (`/api/v1/...`)      | Header (`Accept: …+v1`)            |
+| -------------------------------- | ------------------------ | ---------------------------------- |
+| Cache key (CDN / Cloudflare)     | Built in                 | Requires `Vary: Accept` discipline |
+| Browser tooling (DevTools, curl) | Trivially copy-pasteable | Needs custom header                |
+| Server routing complexity        | Simple Express mount     | Custom content negotiation         |
+| API consumer onboarding cost     | Effectively zero         | Documentation overhead             |
 
 The trade-off accepts that URI versioning is slightly less RESTful for
 the sake of operational simplicity. ADR-A1 (this document) records the
@@ -136,10 +136,10 @@ major version.
 
 ## 6) Quick reference
 
-| Question | Answer |
-|---|---|
-| What URL do I call today? | `https://api.ecypro.com/api/v1/<path>` |
-| Will `/api/<path>` still work? | Yes, until **2026-12-01** with deprecation headers. |
-| What if I depend on a v1 field that needs to change? | File a `v2` proposal; v1 keeps the old behaviour. |
-| Where is the contract? | `GET /api/v1/docs.json` (OpenAPI 3.0). |
-| Where is this policy? | `docs/API_VERSIONING.md`. |
+| Question                                             | Answer                                              |
+| ---------------------------------------------------- | --------------------------------------------------- |
+| What URL do I call today?                            | `https://api.ecypro.com/api/v1/<path>`              |
+| Will `/api/<path>` still work?                       | Yes, until **2026-12-01** with deprecation headers. |
+| What if I depend on a v1 field that needs to change? | File a `v2` proposal; v1 keeps the old behaviour.   |
+| Where is the contract?                               | `GET /api/v1/docs.json` (OpenAPI 3.0).              |
+| Where is this policy?                                | `docs/API_VERSIONING.md`.                           |

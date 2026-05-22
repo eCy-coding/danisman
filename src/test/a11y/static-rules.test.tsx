@@ -52,20 +52,32 @@ async function scan(): Promise<Finding[]> {
     let m: RegExpExecArray | null;
     while ((m = imgRe.exec(src))) {
       if (!/\balt\s*=/.test(m[0])) {
-        found.push({ rule: 'IMG_NO_ALT', file: rel, line: src.slice(0, m.index).split('\n').length });
+        found.push({
+          rule: 'IMG_NO_ALT',
+          file: rel,
+          line: src.slice(0, m.index).split('\n').length,
+        });
       }
     }
 
     // empty aria-label
     const emptyAriaRe = /aria-label\s*=\s*['"]\s*['"]/g;
     while ((m = emptyAriaRe.exec(src))) {
-      found.push({ rule: 'EMPTY_ARIA_LABEL', file: rel, line: src.slice(0, m.index).split('\n').length });
+      found.push({
+        rule: 'EMPTY_ARIA_LABEL',
+        file: rel,
+        line: src.slice(0, m.index).split('\n').length,
+      });
     }
 
     // positive tabindex (anti-pattern, breaks tab order)
     const tabRe = /tabIndex\s*=\s*\{?\s*([1-9]\d*)\s*\}?/g;
     while ((m = tabRe.exec(src))) {
-      found.push({ rule: 'POSITIVE_TABINDEX', file: rel, line: src.slice(0, m.index).split('\n').length });
+      found.push({
+        rule: 'POSITIVE_TABINDEX',
+        file: rel,
+        line: src.slice(0, m.index).split('\n').length,
+      });
     }
   }
 

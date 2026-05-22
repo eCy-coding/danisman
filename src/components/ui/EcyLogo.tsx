@@ -77,7 +77,14 @@ export const EcyLogo: React.FC<EcyLogoProps> = ({
             <stop offset="0%" stopColor="#2563EB" />
             <stop offset="100%" stopColor="#7C3AED" />
           </linearGradient>
-          <linearGradient id="ecyMarkBg" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+          <linearGradient
+            id="ecyMarkBg"
+            x1="0"
+            y1="0"
+            x2="64"
+            y2="64"
+            gradientUnits="userSpaceOnUse"
+          >
             <stop offset="0%" stopColor="#0F172A" />
             <stop offset="100%" stopColor="#1E1B3A" />
           </linearGradient>
@@ -116,12 +123,7 @@ export const EcyLogo: React.FC<EcyLogoProps> = ({
   );
 
   const wordColor = mono === 'light' ? '#FFFFFF' : mono === 'dark' ? '#0F172A' : '#F8FAFC';
-  const proColor =
-    mono === 'light'
-      ? '#FFFFFF'
-      : mono === 'dark'
-        ? '#0F172A'
-        : 'transparent'; // gradient via background-clip
+  const proColor = mono === 'light' ? '#FFFFFF' : mono === 'dark' ? '#0F172A' : 'transparent'; // gradient via background-clip
   const proStyle: React.CSSProperties =
     mono === 'none'
       ? {
@@ -134,10 +136,7 @@ export const EcyLogo: React.FC<EcyLogoProps> = ({
       : { color: proColor };
 
   const Wordmark = () => (
-    <span
-      className="inline-flex flex-col leading-none"
-      data-testid="ecy-logo-wordmark"
-    >
+    <span className="inline-flex flex-col leading-none" data-testid="ecy-logo-wordmark">
       <span
         style={{
           fontFamily: 'Inter, system-ui, sans-serif',
@@ -173,8 +172,7 @@ export const EcyLogo: React.FC<EcyLogoProps> = ({
         fontWeight: 600,
         fontSize: s.tagline,
         letterSpacing: '0.32em',
-        color:
-          mono === 'light' ? 'rgba(255,255,255,0.7)' : mono === 'dark' ? '#475569' : '#94A3B8',
+        color: mono === 'light' ? 'rgba(255,255,255,0.7)' : mono === 'dark' ? '#475569' : '#94A3B8',
         marginTop: '0.4em',
       }}
     >

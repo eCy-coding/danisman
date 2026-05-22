@@ -125,7 +125,11 @@ export interface EventMap {
 
   // system
   app_loaded: { coldStart: boolean; ms: number };
-  web_vital: { name: 'CLS' | 'FCP' | 'INP' | 'LCP' | 'TTFB'; value: number; rating: 'good' | 'needs-improvement' | 'poor' };
+  web_vital: {
+    name: 'CLS' | 'FCP' | 'INP' | 'LCP' | 'TTFB';
+    value: number;
+    rating: 'good' | 'needs-improvement' | 'poor';
+  };
   performance_mark: { mark: string; ms: number };
 
   // consent
@@ -208,12 +212,13 @@ export function emit<K extends EventName>(name: K, payload: EventMap[K]): void {
     ...ctx(),
     ...payload,
   };
-  const w = typeof window !== 'undefined'
-    ? (window as unknown as {
-        gtag?: (...args: unknown[]) => void;
-        _last_analytics_event?: { action: string; timestamp: string; [k: string]: unknown };
-      })
-    : null;
+  const w =
+    typeof window !== 'undefined'
+      ? (window as unknown as {
+          gtag?: (...args: unknown[]) => void;
+          _last_analytics_event?: { action: string; timestamp: string; [k: string]: unknown };
+        })
+      : null;
   if (w?.gtag) {
     w.gtag('event', name, fullPayload);
   }
@@ -234,9 +239,10 @@ export function emit<K extends EventName>(name: K, payload: EventMap[K]): void {
  * AVOID — prefer emit() for new code so taxonomy stays enforced.
  */
 export function emitRaw(name: string, payload: Record<string, unknown>): void {
-  const w = typeof window !== 'undefined'
-    ? (window as unknown as { gtag?: (...args: unknown[]) => void })
-    : null;
+  const w =
+    typeof window !== 'undefined'
+      ? (window as unknown as { gtag?: (...args: unknown[]) => void })
+      : null;
   if (w?.gtag) {
     w.gtag('event', name, { ...ctx(), ...payload });
   }

@@ -1,9 +1,8 @@
-import { 
-  BarChart, 
-  Users, 
-  TrendingUp, 
-  Globe, 
-
+import {
+  BarChart,
+  Users,
+  TrendingUp,
+  Globe,
   Briefcase,
   Scale,
   ShieldCheck,
@@ -19,7 +18,7 @@ import {
   GanttChart,
   Zap,
   Building,
-  Calculator
+  Calculator,
 } from 'lucide-react';
 
 import { Service } from '../schemas/service';
@@ -44,7 +43,8 @@ export const SERVICES: Service[] = [
     id: 'stratejik-donusum',
     title: 'Stratejik Dönüşüm & Kurumsal Planlama',
     category: 'isletme',
-    description: 'Belirsizlik ortamında rekabet avantajı sağlamak için oyun teorisi tabanlı senaryo planlama ve vizyoner yol haritaları.',
+    description:
+      'Belirsizlik ortamında rekabet avantajı sağlamak için oyun teorisi tabanlı senaryo planlama ve vizyoner yol haritaları.',
     icon: TrendingUp,
     link: '/services/strategic-transformation',
   },
@@ -52,7 +52,8 @@ export const SERVICES: Service[] = [
     id: 'ma-degerleme',
     title: 'Birleşme, Satın Alma (M&A) & Değerleme',
     category: 'isletme',
-    description: 'Şirket değerleme, due diligence, birleşme sonrası entegrasyon (PMI) ve exit stratejileri.',
+    description:
+      'Şirket değerleme, due diligence, birleşme sonrası entegrasyon (PMI) ve exit stratejileri.',
     icon: Handshake,
     link: '/services/mergers-acquisitions',
   },
@@ -60,7 +61,8 @@ export const SERVICES: Service[] = [
     id: 'aile-sirketleri',
     title: 'Aile Şirketleri Yönetişimi & Anayasa',
     category: 'isletme',
-    description: 'Nesiller arası devir süreçleri, kurumsallaşma ve sürdürülebilir aile anayasasının hazırlanması.',
+    description:
+      'Nesiller arası devir süreçleri, kurumsallaşma ve sürdürülebilir aile anayasasının hazırlanması.',
     icon: Users,
     link: '/services/family-business',
   },
@@ -68,7 +70,8 @@ export const SERVICES: Service[] = [
     id: 'operasyonel-mukemmellik',
     title: 'Operasyonel Mükemmellik & Tedarik Zinciri',
     category: 'isletme',
-    description: 'Yalın üretim (Lean), Altı Sigma metodolojileri ve uçtan uca lojistik optimizasyonu.',
+    description:
+      'Yalın üretim (Lean), Altı Sigma metodolojileri ve uçtan uca lojistik optimizasyonu.',
     icon: Factory,
     link: '/services/operational-excellence',
   },
@@ -76,7 +79,8 @@ export const SERVICES: Service[] = [
     id: 'noropazarlama',
     title: 'Nöropazarlama & Tüketici Deneyimi (CX)',
     category: 'isletme',
-    description: 'Bilinçdışı tüketici davranışlarını analiz ederek, veri odaklı marka ve iletişim stratejileri.',
+    description:
+      'Bilinçdışı tüketici davranışlarını analiz ederek, veri odaklı marka ve iletişim stratejileri.',
     icon: BrainCircuit,
     link: '/services/neuromarketing',
   },
@@ -84,7 +88,8 @@ export const SERVICES: Service[] = [
     id: 'insan-kaynaklari',
     title: 'İnsan Kaynakları & Org. Tasarım',
     category: 'isletme',
-    description: 'Yetenek matrisleri, performans yönetim sistemleri ve çevik organizasyonel yapıların kurgulanması.',
+    description:
+      'Yetenek matrisleri, performans yönetim sistemleri ve çevik organizasyonel yapıların kurgulanması.',
     icon: GanttChart,
     link: '/services/hr-transformation',
   },
@@ -92,7 +97,8 @@ export const SERVICES: Service[] = [
     id: 'kriz-yonetimi',
     title: 'Kriz Yönetimi & İş Sürekliliği',
     category: 'isletme',
-    description: 'Finansal veya operasyonel kriz anlarında acil eylem planları ve dayanıklılık (resilience) testleri.',
+    description:
+      'Finansal veya operasyonel kriz anlarında acil eylem planları ve dayanıklılık (resilience) testleri.',
     icon: Zap,
     link: '/services/crisis-management',
   },
@@ -102,7 +108,8 @@ export const SERVICES: Service[] = [
     id: 'yapay-zeka',
     title: 'Yapay Zeka (AI) & İş Analitiği',
     category: 'ybs',
-    description: 'Makine öğrenmesi modelleri ile tahmine dayalı analizler ve yapay zeka entegrasyon stratejileri.',
+    description:
+      'Makine öğrenmesi modelleri ile tahmine dayalı analizler ve yapay zeka entegrasyon stratejileri.',
     icon: Cpu,
     link: '/services/ai-analytics',
   },
@@ -110,7 +117,8 @@ export const SERVICES: Service[] = [
     id: 'dijital-teknoloji',
     title: 'Dijital Dönüşüm & Teknoloji Stratejisi',
     category: 'ybs',
-    description: 'ERP seçimi, süreç otomasyonu (RPA) ve dijital olgunluk analizleri ile teknolojik kaldıraç.',
+    description:
+      'ERP seçimi, süreç otomasyonu (RPA) ve dijital olgunluk analizleri ile teknolojik kaldıraç.',
     icon: Network,
     link: '/services/digital-strategy',
   },
@@ -118,7 +126,8 @@ export const SERVICES: Service[] = [
     id: 'veri-yonetisimi',
     title: 'Veri Yönetişimi & KVKK/GDPR Uyum',
     category: 'ybs',
-    description: 'Veri gizliliği, siber güvenlik yönetişimi ve yasal uyumluluk (ISO 27001) danışmanlığı.',
+    description:
+      'Veri gizliliği, siber güvenlik yönetişimi ve yasal uyumluluk (ISO 27001) danışmanlığı.',
     icon: ShieldCheck,
     link: '/services/data-governance',
   },
@@ -128,7 +137,8 @@ export const SERVICES: Service[] = [
     id: 'esg-yesil',
     title: 'ESG Stratejisi & Yeşil Mutabakat',
     category: 'iktisat',
-    description: 'Karbon ayak izi raporlaması, sürdürülebilirlik stratejileri ve yeşil finansman erişimi.',
+    description:
+      'Karbon ayak izi raporlaması, sürdürülebilirlik stratejileri ve yeşil finansman erişimi.',
     icon: Globe,
     link: '/services/esg-strategy',
   },
@@ -136,7 +146,8 @@ export const SERVICES: Service[] = [
     id: 'yatirim-tesvik',
     title: 'Yatırım Teşvikleri & Hibe Yönetimi',
     category: 'iktisat',
-    description: 'Devlet destekleri, Ar-Ge hibeleri ve proje bazlı yatırım teşvik belgesi süreçleri.',
+    description:
+      'Devlet destekleri, Ar-Ge hibeleri ve proje bazlı yatırım teşvik belgesi süreçleri.',
     icon: Landmark,
     link: '/services/investment-incentives',
   },
@@ -144,7 +155,8 @@ export const SERVICES: Service[] = [
     id: 'makro-risk',
     title: 'Makroekonomik Risk & Piyasa Analizi',
     category: 'iktisat',
-    description: 'Kur, faiz ve enflasyon projeksiyonları ile C-Level stratejik karar destek raporları.',
+    description:
+      'Kur, faiz ve enflasyon projeksiyonları ile C-Level stratejik karar destek raporları.',
     icon: BarChart,
     link: '/services/macro-risk',
   },
@@ -152,7 +164,8 @@ export const SERVICES: Service[] = [
     id: 'rekabet-ekonomisi',
     title: 'Rekabet Ekonomisi & Regülasyon',
     category: 'iktisat',
-    description: 'Antitröst incelemeleri, pazar hakimiyeti analizleri ve regülasyon uyum danışmanlığı.',
+    description:
+      'Antitröst incelemeleri, pazar hakimiyeti analizleri ve regülasyon uyum danışmanlığı.',
     icon: Scale,
     link: '/services/competition-economics',
   },
@@ -162,7 +175,8 @@ export const SERVICES: Service[] = [
     id: 'endustriyel',
     title: 'Endüstriyel İlişkiler & Sendika',
     category: 'calisma',
-    description: 'Toplu iş sözleşmesi müzakereleri, sendikal ilişkiler yönetimi ve çalışma barışının korunması.',
+    description:
+      'Toplu iş sözleşmesi müzakereleri, sendikal ilişkiler yönetimi ve çalışma barışının korunması.',
     icon: Briefcase,
     link: '/services/industrial-relations',
   },
@@ -170,7 +184,8 @@ export const SERVICES: Service[] = [
     id: 'bordro-denetimi',
     title: 'Bordro Denetimi & İstihdam Teşvikleri',
     category: 'calisma',
-    description: 'SGK prim teşviklerinden maksimum yararlanma, maliyet optimizasyonu ve bordro risk denetimi.',
+    description:
+      'SGK prim teşviklerinden maksimum yararlanma, maliyet optimizasyonu ve bordro risk denetimi.',
     icon: Calculator,
     link: '/services/payroll-audit',
   },
@@ -178,7 +193,8 @@ export const SERVICES: Service[] = [
     id: 'isveren-markasi',
     title: 'Yetenek Yönetimi & İşveren Markası',
     category: 'calisma',
-    description: 'Nitelikli işgücünü çekmek ve elde tutmak için stratejik işveren markası (Employer Branding) tasarımı.',
+    description:
+      'Nitelikli işgücünü çekmek ve elde tutmak için stratejik işveren markası (Employer Branding) tasarımı.',
     icon: Lightbulb,
     link: '/services/employer-branding',
   },
@@ -196,7 +212,8 @@ export const SERVICES: Service[] = [
     id: 'global-diplomasi',
     title: 'Global Diplomasi & Ticari İstihbarat',
     category: 'uluslararasi',
-    description: 'Jeopolitik risk haritaları, ticari istihbarat ve devletlerarası kriz senaryoları.',
+    description:
+      'Jeopolitik risk haritaları, ticari istihbarat ve devletlerarası kriz senaryoları.',
     icon: Building,
     link: '/services/global-intelligence',
   },
@@ -206,7 +223,8 @@ export const SERVICES: Service[] = [
     id: 'akilli-sehirler',
     title: 'Akıllı Şehirler & Kamu Politikaları',
     category: 'kamu',
-    description: 'Yerel yönetimler için dijital şehircilik stratejileri ve etki analizi raporlaması.',
+    description:
+      'Yerel yönetimler için dijital şehircilik stratejileri ve etki analizi raporlaması.',
     icon: Building2,
     link: '/services/smart-cities',
   },
@@ -214,10 +232,9 @@ export const SERVICES: Service[] = [
     id: 'kurumsal-iliskiler',
     title: 'Kurumsal İlişkiler & Lobicilik (GR)',
     category: 'kamu',
-    description: 'Ankara ve Brüksel nezdinde paydaş haritalama, mevzuat takibi ve stratejik temsil.',
+    description:
+      'Ankara ve Brüksel nezdinde paydaş haritalama, mevzuat takibi ve stratejik temsil.',
     icon: Users, // Reusing Users or finding alternative like Handshake
     link: '/services/government-relations',
-  }
+  },
 ];
-
-

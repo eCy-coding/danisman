@@ -27,11 +27,7 @@ import { metrics, normaliseRouteLabel } from './metrics';
 export function httpMetricsMiddleware(req: Request, res: Response, next: NextFunction): void {
   // Skip the scrape endpoint and its docs path — recursive accounting
   // would distort the histogram.
-  if (
-    req.path === '/metrics' ||
-    req.path === '/api/metrics' ||
-    req.path === '/api/v1/metrics'
-  ) {
+  if (req.path === '/metrics' || req.path === '/api/metrics' || req.path === '/api/v1/metrics') {
     return next();
   }
 
