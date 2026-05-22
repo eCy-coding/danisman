@@ -168,15 +168,16 @@ router.post(
       // stores the timestamp on the Prospect row for audit provenance.
       // Best-effort: a Notion outage MUST NOT fail the user submission.
       void upsertProspect({
-        name: data.name,
-        email: data.email,
         company: data.company || undefined,
+        decisionMaker: data.name,
+        decisionMakerEmail: data.email,
         sector: data.sector || undefined,
-        source: data.kind === 'booking' ? 'Booking form inbound' : 'Contact form inbound',
-        stage: 'Lead',
-        priority: data.budget ? 'High' : 'Medium',
+        outreachStatus: 'Replied',
+        serviceSlug: data.serviceInterest || undefined,
+        firstContactDate: new Date().toISOString(),
         kvkkConsentAt: new Date().toISOString(),
         notes: [
+          data.kind === 'booking' ? 'Source: Booking form' : 'Source: Contact form',
           data.serviceInterest && `Service: ${data.serviceInterest}`,
           data.budget && `Budget: ${data.budget}`,
           data.phone && `Phone: ${data.phone}`,

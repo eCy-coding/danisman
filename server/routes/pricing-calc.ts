@@ -163,17 +163,17 @@ router.post(
       }
 
       const paket = recommendPaket(data.answers);
-      const priority = paket === 'enterprise' ? 'High' : paket === 'growth' ? 'Medium' : 'Low';
+      const nowIso = new Date().toISOString();
 
       void upsertProspect({
-        name: data.name,
-        email: data.email,
         company: data.company || undefined,
+        decisionMaker: data.name,
+        decisionMakerEmail: data.email,
         sector: data.sector || undefined,
-        source: 'Pricing-Calculator inbound',
-        stage: 'Lead',
-        priority,
-        kvkkConsentAt: new Date().toISOString(),
+        outreachStatus: 'Replied',
+        serviceSlug: 'pricing-calculator',
+        firstContactDate: nowIso,
+        kvkkConsentAt: nowIso,
         notes: [
           `Recommended paket: ${paket}`,
           `Team: ${data.answers.teamSize}`,
