@@ -8,6 +8,7 @@
  */
 
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface FounderPortraitProps {
   size?: 'sm' | 'md' | 'lg' | 'xl';
@@ -23,10 +24,13 @@ export const FounderPortrait: React.FC<FounderPortraitProps> = ({
   className = '',
   realSrc = '/founder.jpg',
 }) => {
+  const { t } = useTranslation('common');
   const [errored, setErrored] = useState(false);
   const px = SIZE_PX[size];
   const src = errored ? '/brand/founder-fallback.svg' : realSrc;
 
+  // Keep alt before onError below: the static a11y audit regex halts at the
+  // arrow function's closing bracket, so an alt placed after onError is missed.
   return (
     <img
       src={src}
@@ -34,8 +38,8 @@ export const FounderPortrait: React.FC<FounderPortraitProps> = ({
       height={px}
       loading="lazy"
       decoding="async"
+      alt={t('founder_portrait_alt')}
       onError={() => setErrored(true)}
-      alt="Emre Can Yalçın — Founder & Chief Strategist, eCyPro Premium Consulting"
       className={`rounded-2xl object-cover ${className}`}
       style={{ width: px, height: px }}
       data-testid="founder-portrait"
