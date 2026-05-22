@@ -44,6 +44,10 @@ on:
 env:
   TARGET_URL: ${{ github.event.inputs.target_url || secrets.ZAP_TARGET_URL || 'https://www.ecypro.com' }}
 
+permissions:
+  contents: read
+  pull-requests: write
+
 jobs:
   zap-baseline-scan:
     name: OWASP ZAP Baseline Scan

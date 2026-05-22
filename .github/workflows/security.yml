@@ -8,6 +8,9 @@ on:
   pull_request:
     branches: [main]
 
+permissions:
+  contents: read
+
 jobs:
   # ── P35-T10: npm audit + dependency vulnerability scan ──────────────────────
   dependency-audit:
