@@ -8,18 +8,19 @@
 
 ## 1) Severity tiers
 
-| Tier | Tanım | Reaction time | Communication |
-|---|---|---|---|
-| **P0** | Tüm trafik etkilenir; site/API down veya veri kaybı riski | <15 dk | Tüm kanallar; sosyal medya status update |
-| **P1** | Ana akış kırık (form, login, ödeme); part of users etkilenir | <30 dk | Status page + email customer notification |
-| **P2** | Kısmi bozulma (bir route, analytics drop) | <2 saat | Status page update |
-| **P3** | UX/cosmetic defect; veri/akış etkilenmiyor | <24 saat | Backlog'a ekle |
+| Tier   | Tanım                                                        | Reaction time | Communication                             |
+| ------ | ------------------------------------------------------------ | ------------- | ----------------------------------------- |
+| **P0** | Tüm trafik etkilenir; site/API down veya veri kaybı riski    | <15 dk        | Tüm kanallar; sosyal medya status update  |
+| **P1** | Ana akış kırık (form, login, ödeme); part of users etkilenir | <30 dk        | Status page + email customer notification |
+| **P2** | Kısmi bozulma (bir route, analytics drop)                    | <2 saat       | Status page update                        |
+| **P3** | UX/cosmetic defect; veri/akış etkilenmiyor                   | <24 saat      | Backlog'a ekle                            |
 
 ---
 
 ## 2) P0 — All-hands procedure
 
 ### Tetikleyiciler
+
 - Site (`www.ecypro.com`) 5xx >30 saniye sürekli
 - API (`api.ecypro.com/api/health`) 5xx veya unreachable
 - Database connection failures sürekli
@@ -65,6 +66,7 @@
 ## 3) P1 — Customer impact
 
 ### Tetikleyiciler
+
 - Login akışı bozuk
 - Contact form submit etmiyor
 - Tek bir kritik route (services, pricing) render olmuyor
@@ -84,6 +86,7 @@
 ## 4) P2 — Partial degradation
 
 ### Tetikleyiciler
+
 - Analytics drop %20+
 - 1 sayfa 4xx (404/410) artıyor
 - Search/filter performance düşüşü
@@ -146,11 +149,12 @@ EcyPro Ekibi
 
 ## 6) On-call rotation (1 kişilik şirket bile olsa)
 
-| Hafta | On-call | Backup |
-|---|---|---|
-| Her hafta | owner | — |
+| Hafta     | On-call | Backup |
+| --------- | ------- | ------ |
+| Her hafta | owner   | —      |
 
 1 kişilik durumda "on-call" demek pratikte 7/24. Tatil/uzun seyahat planı:
+
 - Tatilden 2 hafta önce: Sentry alert email rerouting'i devre dışı bırak / read-only mode duyur
 - Status page: "Reduced support during DD-DD" banner
 
@@ -187,12 +191,12 @@ Yeni deploy <30 dk?
 
 Her 3 ayda bir yapay incident senaryosu:
 
-| Tatbikat | Senaryo | Süre |
-|---|---|---|
-| Q1 | Backend rollback | 30 dk |
-| Q2 | Hostinger SPA redeploy | 30 dk |
-| Q3 | Postgres restore (snapshot'tan) | 1 saat |
-| Q4 | Full-site outage simulation | 2 saat |
+| Tatbikat | Senaryo                         | Süre   |
+| -------- | ------------------------------- | ------ |
+| Q1       | Backend rollback                | 30 dk  |
+| Q2       | Hostinger SPA redeploy          | 30 dk  |
+| Q3       | Postgres restore (snapshot'tan) | 1 saat |
+| Q4       | Full-site outage simulation     | 2 saat |
 
 Sonuçlar `outputs/drills/<date>.md`'ye yazılır.
 

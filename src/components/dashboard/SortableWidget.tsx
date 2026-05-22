@@ -9,20 +9,15 @@ interface SortableWidgetProps {
 }
 
 export const SortableWidget: React.FC<SortableWidgetProps> = ({ id, children, className }) => {
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-    isDragging
-  } = useSortable({ id });
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+    id,
+  });
 
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
     zIndex: isDragging ? 50 : 'auto',
-    position: isDragging ? 'relative' as const : undefined,
+    position: isDragging ? ('relative' as const) : undefined,
   };
 
   return (

@@ -41,10 +41,13 @@ interface RateEntry {
 const rateBucket = new Map<string, RateEntry>();
 const RATE_WINDOW_MS = 24 * 60 * 60 * 1000;
 
-setInterval(() => {
-  const now = Date.now();
-  for (const [k, v] of rateBucket) if (now > v.resetAt) rateBucket.delete(k);
-}, 5 * 60 * 1000).unref?.();
+setInterval(
+  () => {
+    const now = Date.now();
+    for (const [k, v] of rateBucket) if (now > v.resetAt) rateBucket.delete(k);
+  },
+  5 * 60 * 1000,
+).unref?.();
 
 function rateKey(kind: 'export' | 'delete', email: string): string {
   return `${kind}:${email.toLowerCase()}`;
@@ -155,7 +158,8 @@ function makeHandler(kind: 'export' | 'delete') {
 
       // Telegram admin notify (best-effort — failure shouldn't block ack).
       try {
-        const title = kind === 'export' ? '📤 KVKK Veri Dışa Aktarım Talebi' : '🗑️ KVKK Veri Silme Talebi';
+        const title =
+          kind === 'export' ? '📤 KVKK Veri Dışa Aktarım Talebi' : '🗑️ KVKK Veri Silme Talebi';
         await notify('warn', title, {
           'E-posta': data.email,
           IP: auditPayload.ip,

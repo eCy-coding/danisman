@@ -29,7 +29,7 @@ const calcPath = (
   containerRef: React.RefObject<HTMLElement>,
   fromRef: React.RefObject<HTMLElement>,
   toRef: React.RefObject<HTMLElement>,
-  curvature: number
+  curvature: number,
 ): PathCoords | null => {
   if (!containerRef.current || !fromRef.current || !toRef.current) return null;
   const containerRect = containerRef.current.getBoundingClientRect();
@@ -105,12 +105,7 @@ export const AnimatedBeam: React.FC<AnimatedBeamProps> = ({
         </linearGradient>
       </defs>
 
-      <path
-        d={pathD}
-        stroke={pathColor}
-        strokeWidth={pathWidth}
-        fill="none"
-      />
+      <path d={pathD} stroke={pathColor} strokeWidth={pathWidth} fill="none" />
 
       {!prefersReducedMotion && (
         <motion.path
@@ -122,7 +117,13 @@ export const AnimatedBeam: React.FC<AnimatedBeamProps> = ({
           initial={{ pathLength: 0, opacity: 0 }}
           animate={{ pathLength: 1, opacity: [0, 1, 0] }}
           transition={{
-            pathLength: { duration, delay, ease: 'easeInOut', repeat: Infinity, repeatType: 'loop' },
+            pathLength: {
+              duration,
+              delay,
+              ease: 'easeInOut',
+              repeat: Infinity,
+              repeatType: 'loop',
+            },
             opacity: { duration, delay, ease: 'easeInOut', repeat: Infinity, repeatType: 'loop' },
           }}
         />

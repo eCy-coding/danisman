@@ -1,4 +1,3 @@
-
 import { AntigravityTerminal } from '@/components/features/AntigravityTerminal';
 import { SeoManager } from '@/components/seo/SeoManager';
 

@@ -23,21 +23,21 @@
 
 ## Tech Stack
 
-| Katman | Bileşen |
-| --- | --- |
-| **Frontend** | React 19 · Vite 6 · TypeScript strict · Tailwind v4 (PostCSS) |
-| **State / Data** | Zustand · TanStack Query · React Router DOM v7 |
-| **Forms** | React Hook Form · Zod |
-| **Backend** | Express 5 · Prisma 7 · Postgres · Redis (ioredis) · BullMQ |
-| **Auth** | JWT · bcrypt |
-| **Email** | EmailJS (frontend) · nodemailer (server transactional) |
-| **Charts** | Recharts |
-| **Realtime** | Server-Sent Events (`/events`) — auth + topic-based pub/sub |
-| **Testing** | Vitest (unit) · Playwright (E2E) · axe-core (a11y) |
-| **Tooling** | ESLint 9 · Prettier · Lefthook · Husky · commitlint · gitleaks |
-| **Monitoring** | Sentry (FE + node) · Web Vitals · synthetic monitor |
-| **CMS** | Keystatic |
-| **i18n** | i18next (EN + TR) |
+| Katman           | Bileşen                                                        |
+| ---------------- | -------------------------------------------------------------- |
+| **Frontend**     | React 19 · Vite 6 · TypeScript strict · Tailwind v4 (PostCSS)  |
+| **State / Data** | Zustand · TanStack Query · React Router DOM v7                 |
+| **Forms**        | React Hook Form · Zod                                          |
+| **Backend**      | Express 5 · Prisma 7 · Postgres · Redis (ioredis) · BullMQ     |
+| **Auth**         | JWT · bcrypt                                                   |
+| **Email**        | EmailJS (frontend) · nodemailer (server transactional)         |
+| **Charts**       | Recharts                                                       |
+| **Realtime**     | Server-Sent Events (`/events`) — auth + topic-based pub/sub    |
+| **Testing**      | Vitest (unit) · Playwright (E2E) · axe-core (a11y)             |
+| **Tooling**      | ESLint 9 · Prettier · Lefthook · Husky · commitlint · gitleaks |
+| **Monitoring**   | Sentry (FE + node) · Web Vitals · synthetic monitor            |
+| **CMS**          | Keystatic                                                      |
+| **i18n**         | i18next (EN + TR)                                              |
 
 ---
 
@@ -87,12 +87,12 @@ Tek kalite kapısı: [`/publish-check`](.claude/commands/publish-check.md) →
 
 ## Deploy Strategy — Senaryo C
 
-| Hedef | Sağlayıcı | Tetikleyici |
-| --- | --- | --- |
-| Frontend (`www.ecypro.com`) | **Hostinger** static hosting | `npm run build` + rsync/SFTP |
-| Backend (`api.ecypro.com`) | **Render** Web Service + Postgres | `render.yaml` (Blueprint) |
-| Background jobs | Render Worker (BullMQ email/gdpr/cron) | aynı blueprint |
-| CDN + SSL | Cloudflare proxy (opsiyonel) + Let's Encrypt | Hostinger panel |
+| Hedef                       | Sağlayıcı                                    | Tetikleyici                  |
+| --------------------------- | -------------------------------------------- | ---------------------------- |
+| Frontend (`www.ecypro.com`) | **Hostinger** static hosting                 | `npm run build` + rsync/SFTP |
+| Backend (`api.ecypro.com`)  | **Render** Web Service + Postgres            | `render.yaml` (Blueprint)    |
+| Background jobs             | Render Worker (BullMQ email/gdpr/cron)       | aynı blueprint               |
+| CDN + SSL                   | Cloudflare proxy (opsiyonel) + Let's Encrypt | Hostinger panel              |
 
 Tek master rehber: **[`docs/DEPLOY_RUNBOOK.md`](docs/DEPLOY_RUNBOOK.md)** —
 6 phase (pre-flight, BE, FE, DNS/SSL, validation, monitoring).
@@ -108,16 +108,16 @@ Variables paneline `Production` scope altında girilmiş olmalıdır. Bir tanesi
 bile eksikse ilgili özellik sessizce devre dışı kalır; bunu önlemek için
 `AnalyticsProvider` artık eksik anahtarları console.warn ile rapor eder.
 
-| Anahtar | Servis | Default | Kritiklik | Notlar |
-| --- | --- | --- | --- | --- |
-| `VITE_GA_TRACKING_ID` | Google Analytics 4 | — | **P0** | `G-` ile başlar; eksikse trafik ölçülmez |
-| `VITE_CLARITY_PROJECT_ID` | Microsoft Clarity | — | **P1** | 10 karakterli proje kimliği; eksikse heatmap kapalı |
-| `VITE_GROWTHBOOK_CLIENT_KEY` | GrowthBook | — | **P1** | A/B test özelliği için; eksikse default varyant kullanılır |
-| `VITE_SENTRY_DSN` | Sentry (frontend) | — | **P0** | DSN URL; eksikse error capture devre dışı |
-| `VITE_API_URL` | Backend gateway | `/api` | **P0** | Prod: `https://api.ecypro.com` |
-| `VITE_CALENDLY_URL` | Calendly | — | **P1** | Discovery Call iframe; eksikse fallback CTA gösterilir |
-| `VITE_ENABLE_ADMIN` | Build-time switch | `0` | **HARD-OFF** | `1` yapmadan asla prod build çıkmaz — `/admin/*` brute-force yüzeyi |
-| `VITE_DEV_AUDIENCE_TOGGLE` | Build-time switch | `0` | dev-only | Hero Executive/Developer toggle UX deneyimi |
+| Anahtar                      | Servis             | Default | Kritiklik    | Notlar                                                              |
+| ---------------------------- | ------------------ | ------- | ------------ | ------------------------------------------------------------------- |
+| `VITE_GA_TRACKING_ID`        | Google Analytics 4 | —       | **P0**       | `G-` ile başlar; eksikse trafik ölçülmez                            |
+| `VITE_CLARITY_PROJECT_ID`    | Microsoft Clarity  | —       | **P1**       | 10 karakterli proje kimliği; eksikse heatmap kapalı                 |
+| `VITE_GROWTHBOOK_CLIENT_KEY` | GrowthBook         | —       | **P1**       | A/B test özelliği için; eksikse default varyant kullanılır          |
+| `VITE_SENTRY_DSN`            | Sentry (frontend)  | —       | **P0**       | DSN URL; eksikse error capture devre dışı                           |
+| `VITE_API_URL`               | Backend gateway    | `/api`  | **P0**       | Prod: `https://api.ecypro.com`                                      |
+| `VITE_CALENDLY_URL`          | Calendly           | —       | **P1**       | Discovery Call iframe; eksikse fallback CTA gösterilir              |
+| `VITE_ENABLE_ADMIN`          | Build-time switch  | `0`     | **HARD-OFF** | `1` yapmadan asla prod build çıkmaz — `/admin/*` brute-force yüzeyi |
+| `VITE_DEV_AUDIENCE_TOGGLE`   | Build-time switch  | `0`     | dev-only     | Hero Executive/Developer toggle UX deneyimi                         |
 
 Detaylı liste: [`.env.production.example`](.env.production.example).
 
@@ -126,22 +126,22 @@ Detaylı liste: [`.env.production.example`](.env.production.example).
 Bu değişkenler Render / API host'una **deploy öncesi** girilmelidir. Boş kalan
 servisler sessizce no-op'a düşer; KVKK + lead pipeline işlevleri için kritik.
 
-| Anahtar | Servis | Kritiklik | Notlar |
-| --- | --- | --- | --- |
-| `SENTRY_DSN` | Sentry (Node) | **P0** | Boşsa server-side error capture devre dışı |
-| `RESEND_API_KEY` | Resend | **P0** | Eksikse contact/quick-check/pricing-calc ack maili gönderilmez |
-| `FOUNDER_EMAIL` | Reply-to | **P0** | Tüm transactional Resend gönderilerinde `replyTo` olarak kullanılır |
-| `NOTION_API_KEY` | Notion CRM | **P0** | Boşsa Prospect/Interaction yazımları no-op |
-| `NOTION_PROSPECTS_DB_ID` | Notion | **P0** | Prospects veritabanı ID'si (URL slug'ı) |
-| `NOTION_INTERACTIONS_DB_ID` | Notion | **P1** | Interactions DB; boşsa sadece Prospect yazılır |
-| `NOTION_ENGAGEMENTS_DB_ID` | Notion | **P2** | Gelecek rollup'lar için rezerve |
-| `NOTION_DELIVERABLES_DB_ID` | Notion | **P2** | Gelecek rollup'lar için rezerve |
-| `CALENDLY_WEBHOOK_SIGNING_KEY` | Calendly | **P0** | Boşsa prod'da `/api/v1/calendly` 503 döner (HMAC zorunlu) |
-| `POSTHOG_API_KEY` | PostHog (server) | **P1** | Server-side event ingestion; boşsa client-side `VITE_POSTHOG_KEY` üzerinden devam eder |
-| `POSTHOG_HOST` | PostHog | **P1** | Default `https://eu.i.posthog.com` |
-| `TELEGRAM_BOT_TOKEN` | Telegram | **P1** | Booking + lead notifier; eksikse `/api/v1/contact` prod'da 503 |
-| `TELEGRAM_CHAT_ID` | Telegram | **P1** | Default ops channel |
-| `TELEGRAM_FOUNDER_CHAT_ID` | Telegram | **P2** | Opsiyonel founder-only kanal |
+| Anahtar                        | Servis           | Kritiklik | Notlar                                                                                 |
+| ------------------------------ | ---------------- | --------- | -------------------------------------------------------------------------------------- |
+| `SENTRY_DSN`                   | Sentry (Node)    | **P0**    | Boşsa server-side error capture devre dışı                                             |
+| `RESEND_API_KEY`               | Resend           | **P0**    | Eksikse contact/quick-check/pricing-calc ack maili gönderilmez                         |
+| `FOUNDER_EMAIL`                | Reply-to         | **P0**    | Tüm transactional Resend gönderilerinde `replyTo` olarak kullanılır                    |
+| `NOTION_API_KEY`               | Notion CRM       | **P0**    | Boşsa Prospect/Interaction yazımları no-op                                             |
+| `NOTION_PROSPECTS_DB_ID`       | Notion           | **P0**    | Prospects veritabanı ID'si (URL slug'ı)                                                |
+| `NOTION_INTERACTIONS_DB_ID`    | Notion           | **P1**    | Interactions DB; boşsa sadece Prospect yazılır                                         |
+| `NOTION_ENGAGEMENTS_DB_ID`     | Notion           | **P2**    | Gelecek rollup'lar için rezerve                                                        |
+| `NOTION_DELIVERABLES_DB_ID`    | Notion           | **P2**    | Gelecek rollup'lar için rezerve                                                        |
+| `CALENDLY_WEBHOOK_SIGNING_KEY` | Calendly         | **P0**    | Boşsa prod'da `/api/v1/calendly` 503 döner (HMAC zorunlu)                              |
+| `POSTHOG_API_KEY`              | PostHog (server) | **P1**    | Server-side event ingestion; boşsa client-side `VITE_POSTHOG_KEY` üzerinden devam eder |
+| `POSTHOG_HOST`                 | PostHog          | **P1**    | Default `https://eu.i.posthog.com`                                                     |
+| `TELEGRAM_BOT_TOKEN`           | Telegram         | **P1**    | Booking + lead notifier; eksikse `/api/v1/contact` prod'da 503                         |
+| `TELEGRAM_CHAT_ID`             | Telegram         | **P1**    | Default ops channel                                                                    |
+| `TELEGRAM_FOUNDER_CHAT_ID`     | Telegram         | **P2**    | Opsiyonel founder-only kanal                                                           |
 
 ---
 
@@ -179,22 +179,23 @@ Detaylı operasyon rehberi: [`RUNBOOK.md`](RUNBOOK.md).
 
 ## Quality Gates (canlı durum — P27)
 
-| Gate | Durum |
-| --- | --- |
-| TypeScript strict (web + server) | ✅ clean |
-| ESLint | ✅ clean |
-| Vitest unit | ✅ passing |
-| Vitest server | ✅ passing |
-| Playwright sanity_check | ✅ green |
-| API contract strict | ✅ green |
-| i18n parity (EN/TR) | ✅ aligned |
-| Lighthouse `/services` | ✅ Perf **69** · A11y **98** · BP **96** · SEO **92** |
-| Bundle size-limit | ✅ within budget |
-| gitleaks (working tree) | ✅ 0 leak |
-| Total commits (local) | **201** |
+| Gate                             | Durum                                                 |
+| -------------------------------- | ----------------------------------------------------- |
+| TypeScript strict (web + server) | ✅ clean                                              |
+| ESLint                           | ✅ clean                                              |
+| Vitest unit                      | ✅ passing                                            |
+| Vitest server                    | ✅ passing                                            |
+| Playwright sanity_check          | ✅ green                                              |
+| API contract strict              | ✅ green                                              |
+| i18n parity (EN/TR)              | ✅ aligned                                            |
+| Lighthouse `/services`           | ✅ Perf **69** · A11y **98** · BP **96** · SEO **92** |
+| Bundle size-limit                | ✅ within budget                                      |
+| gitleaks (working tree)          | ✅ 0 leak                                             |
+| Total commits (local)            | **201**                                               |
 
 `/services` `PAGE_HUNG` regression P27'de **çözüldü** — synthetic-UA gating
-+ Scheduler park-when-idle (`outputs/P27_EXEC_FINAL.md`).
+
+- Scheduler park-when-idle (`outputs/P27_EXEC_FINAL.md`).
 
 ---
 
@@ -242,11 +243,11 @@ outputs/                # phase reports (P10–P28) + recipes
 
 Three-layer chain with KVKK strict opt-in:
 
-| Layer | Role | Container / Key |
-|---|---|---|
-| **GTM** | Tag orchestration | Container `GTM-NH7RJ9FB` (Account `ecypro` · Container `ecypro-web`) — hard-wired in `index.html` head + body |
-| **GA4** | Page + event metrics | Measurement ID `G-3Q4T3KL83V` — configured as a GA4 Configuration tag inside the GTM workspace |
-| **PostHog** | Product analytics (EU host) | `VITE_POSTHOG_KEY` in Vercel ENV (do not commit), init runs with `opt_out_capturing_by_default: true` |
+| Layer       | Role                        | Container / Key                                                                                               |
+| ----------- | --------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| **GTM**     | Tag orchestration           | Container `GTM-NH7RJ9FB` (Account `ecypro` · Container `ecypro-web`) — hard-wired in `index.html` head + body |
+| **GA4**     | Page + event metrics        | Measurement ID `G-3Q4T3KL83V` — configured as a GA4 Configuration tag inside the GTM workspace                |
+| **PostHog** | Product analytics (EU host) | `VITE_POSTHOG_KEY` in Vercel ENV (do not commit), init runs with `opt_out_capturing_by_default: true`         |
 
 `ConsentBanner` (`src/components/ConsentBanner.tsx`) keeps PostHog capturing
 disabled until the user explicitly accepts; the decision is persisted in
@@ -254,6 +255,7 @@ disabled until the user explicitly accepts; the decision is persisted in
 are gated inside GTM via Consent Mode v2.
 
 Launch checklist:
+
 1. ~~Create GTM container~~ — done; container ID `GTM-NH7RJ9FB` already wired.
 2. In GTM workspace, ensure a GA4 Configuration tag exists with Measurement ID `G-3Q4T3KL83V`.
 3. Set `VITE_POSTHOG_KEY` in Vercel (Production + Preview) — PostHog EU project key.

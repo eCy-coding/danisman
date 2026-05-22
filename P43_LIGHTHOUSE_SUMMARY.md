@@ -5,35 +5,35 @@
 
 ## Lighthouse Scores
 
-| Performance | Accessibility | Best-Practices | SEO |
-|---|---|---|---|
-| **89** | **100** | **92** | **100** |
+| Performance | Accessibility | Best-Practices | SEO     |
+| ----------- | ------------- | -------------- | ------- |
+| **89**      | **100**       | **92**         | **100** |
 
 ## Web Vitals (mobile, simulated)
 
-| Metric | Value | Verdict |
-|---|---|---|
-| LCP | 3069 ms (3.1 s) | needs-improvement (>2500ms) |
-| FCP | 2769 ms (2.8 s) | ok |
-| CLS | 0 | excellent |
-| TBT (INP proxy) | 0 ms | excellent |
-| Speed Index | 2879 ms (2.9 s) | ok |
-| TTI | 3069 ms | ok |
-| Total bytes | 410 KB | lean |
-| Unused JS | 0 KB | clean |
-| Render-block | 0 ms | clean |
+| Metric          | Value           | Verdict                     |
+| --------------- | --------------- | --------------------------- |
+| LCP             | 3069 ms (3.1 s) | needs-improvement (>2500ms) |
+| FCP             | 2769 ms (2.8 s) | ok                          |
+| CLS             | 0               | excellent                   |
+| TBT (INP proxy) | 0 ms            | excellent                   |
+| Speed Index     | 2879 ms (2.9 s) | ok                          |
+| TTI             | 3069 ms         | ok                          |
+| Total bytes     | 410 KB          | lean                        |
+| Unused JS       | 0 KB            | clean                       |
+| Render-block    | 0 ms            | clean                       |
 
 ## SEO Health
 
-| Check | Status |
-|---|---|
-| `/sitemap.xml` | 200, valid XML, hreflang tr/en/x-default |
-| `/robots.txt` | 200, `Allow: /`, 4 sitemap entries |
-| Canonical | present (`https://www.ecypro.com/`) |
-| og:title / og:description / og:image | all present |
-| twitter:card, twitter:image | present (`summary_large_image`) |
-| `google-site-verification` meta | **MISSING** — GSC ownership not verified via meta |
-| meta robots | `index, follow` |
+| Check                                | Status                                            |
+| ------------------------------------ | ------------------------------------------------- |
+| `/sitemap.xml`                       | 200, valid XML, hreflang tr/en/x-default          |
+| `/robots.txt`                        | 200, `Allow: /`, 4 sitemap entries                |
+| Canonical                            | present (`https://www.ecypro.com/`)               |
+| og:title / og:description / og:image | all present                                       |
+| twitter:card, twitter:image          | present (`summary_large_image`)                   |
+| `google-site-verification` meta      | **MISSING** — GSC ownership not verified via meta |
+| meta robots                          | `index, follow`                                   |
 
 ## Triage
 

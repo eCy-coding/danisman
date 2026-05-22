@@ -18,28 +18,108 @@ interface RouteHint {
 }
 
 const KNOWN_ROUTES: RouteHint[] = [
-  { path: '/services', label: { tr: 'Hizmetler', en: 'Services' }, keywords: ['hizmet', 'service', 'kapsam'] },
-  { path: '/services/strategic-transformation', label: { tr: 'Stratejik Dönüşüm', en: 'Strategic Transformation' }, keywords: ['strateji', 'dönüşüm', 'transformation', 'vision'] },
-  { path: '/services/mergers-acquisitions', label: { tr: 'Birleşme & Devralmalar', en: 'M&A' }, keywords: ['m&a', 'birleşme', 'merger', 'satın alma'] },
-  { path: '/services/family-business', label: { tr: 'Aile Şirketleri', en: 'Family Business' }, keywords: ['aile', 'kuşak', 'family'] },
-  { path: '/services/operational-excellence', label: { tr: 'Operasyonel Mükemmellik', en: 'Operational Excellence' }, keywords: ['operasyon', 'verim', 'efficiency'] },
-  { path: '/services/esg-strategy', label: { tr: 'ESG Stratejisi', en: 'ESG Strategy' }, keywords: ['esg', 'sürdürülebilirlik', 'sustainability', 'cbam'] },
-  { path: '/services/ai-analytics', label: { tr: 'AI & Analitik', en: 'AI & Analytics' }, keywords: ['ai', 'analitik', 'analytics', 'yapay zeka'] },
-  { path: '/pillar/stratejik-donusum', label: { tr: 'Pillar: Stratejik Dönüşüm', en: 'Pillar: Strategic Transformation' }, keywords: ['pillar', 'kapsamli', 'rehber'] },
-  { path: '/annual-report/2025', label: { tr: 'Yıllık Rapor 2025', en: 'Annual Report 2025' }, keywords: ['annual', 'yıllık', 'rapor', 'report', '2025'] },
-  { path: '/methodology', label: { tr: '5 Katmanlı Metodoloji', en: 'Methodology' }, keywords: ['methodology', 'metodoloji', 'method'] },
-  { path: '/about', label: { tr: 'Hakkımızda', en: 'About' }, keywords: ['about', 'hakkımızda', 'biz kimiz'] },
-  { path: '/contact', label: { tr: 'İletişim', en: 'Contact' }, keywords: ['contact', 'iletişim', 'görüşme', 'discovery'] },
-  { path: '/pricing', label: { tr: 'Ücretlendirme', en: 'Pricing' }, keywords: ['pricing', 'fiyat', 'ücret', 'tarife'] },
-  { path: '/blog', label: { tr: 'Perspektifler', en: 'Perspectives' }, keywords: ['blog', 'perspektif', 'içgörü', 'insight'] },
-  { path: '/case-studies', label: { tr: 'Vaka Analizleri', en: 'Case Studies' }, keywords: ['case', 'vaka', 'study'] },
+  {
+    path: '/services',
+    label: { tr: 'Hizmetler', en: 'Services' },
+    keywords: ['hizmet', 'service', 'kapsam'],
+  },
+  {
+    path: '/services/strategic-transformation',
+    label: { tr: 'Stratejik Dönüşüm', en: 'Strategic Transformation' },
+    keywords: ['strateji', 'dönüşüm', 'transformation', 'vision'],
+  },
+  {
+    path: '/services/mergers-acquisitions',
+    label: { tr: 'Birleşme & Devralmalar', en: 'M&A' },
+    keywords: ['m&a', 'birleşme', 'merger', 'satın alma'],
+  },
+  {
+    path: '/services/family-business',
+    label: { tr: 'Aile Şirketleri', en: 'Family Business' },
+    keywords: ['aile', 'kuşak', 'family'],
+  },
+  {
+    path: '/services/operational-excellence',
+    label: { tr: 'Operasyonel Mükemmellik', en: 'Operational Excellence' },
+    keywords: ['operasyon', 'verim', 'efficiency'],
+  },
+  {
+    path: '/services/esg-strategy',
+    label: { tr: 'ESG Stratejisi', en: 'ESG Strategy' },
+    keywords: ['esg', 'sürdürülebilirlik', 'sustainability', 'cbam'],
+  },
+  {
+    path: '/services/ai-analytics',
+    label: { tr: 'AI & Analitik', en: 'AI & Analytics' },
+    keywords: ['ai', 'analitik', 'analytics', 'yapay zeka'],
+  },
+  {
+    path: '/pillar/stratejik-donusum',
+    label: { tr: 'Pillar: Stratejik Dönüşüm', en: 'Pillar: Strategic Transformation' },
+    keywords: ['pillar', 'kapsamli', 'rehber'],
+  },
+  {
+    path: '/annual-report/2025',
+    label: { tr: 'Yıllık Rapor 2025', en: 'Annual Report 2025' },
+    keywords: ['annual', 'yıllık', 'rapor', 'report', '2025'],
+  },
+  {
+    path: '/methodology',
+    label: { tr: '5 Katmanlı Metodoloji', en: 'Methodology' },
+    keywords: ['methodology', 'metodoloji', 'method'],
+  },
+  {
+    path: '/about',
+    label: { tr: 'Hakkımızda', en: 'About' },
+    keywords: ['about', 'hakkımızda', 'biz kimiz'],
+  },
+  {
+    path: '/contact',
+    label: { tr: 'İletişim', en: 'Contact' },
+    keywords: ['contact', 'iletişim', 'görüşme', 'discovery'],
+  },
+  {
+    path: '/pricing',
+    label: { tr: 'Ücretlendirme', en: 'Pricing' },
+    keywords: ['pricing', 'fiyat', 'ücret', 'tarife'],
+  },
+  {
+    path: '/blog',
+    label: { tr: 'Perspektifler', en: 'Perspectives' },
+    keywords: ['blog', 'perspektif', 'içgörü', 'insight'],
+  },
+  {
+    path: '/case-studies',
+    label: { tr: 'Vaka Analizleri', en: 'Case Studies' },
+    keywords: ['case', 'vaka', 'study'],
+  },
   { path: '/team', label: { tr: 'Ekip', en: 'Team' }, keywords: ['team', 'ekip', 'kadro'] },
-  { path: '/careers', label: { tr: 'Kariyer', en: 'Careers' }, keywords: ['career', 'kariyer', 'iş ilanları'] },
+  {
+    path: '/careers',
+    label: { tr: 'Kariyer', en: 'Careers' },
+    keywords: ['career', 'kariyer', 'iş ilanları'],
+  },
   { path: '/faq', label: { tr: 'SSS', en: 'FAQ' }, keywords: ['faq', 'sss', 'soru', 'cevap'] },
-  { path: '/press', label: { tr: 'Press Kit', en: 'Press Kit' }, keywords: ['press', 'medya', 'basın'] },
-  { path: '/privacy', label: { tr: 'Gizlilik', en: 'Privacy' }, keywords: ['privacy', 'gizlilik', 'kvkk', 'gdpr'] },
-  { path: '/data-rights', label: { tr: 'KVKK Hakları', en: 'KVKK Rights' }, keywords: ['kvkk', 'data', 'gdpr', 'haklar'] },
-  { path: '/terms', label: { tr: 'Kullanım Şartları', en: 'Terms' }, keywords: ['terms', 'şartlar', 'kullanım'] },
+  {
+    path: '/press',
+    label: { tr: 'Press Kit', en: 'Press Kit' },
+    keywords: ['press', 'medya', 'basın'],
+  },
+  {
+    path: '/privacy',
+    label: { tr: 'Gizlilik', en: 'Privacy' },
+    keywords: ['privacy', 'gizlilik', 'kvkk', 'gdpr'],
+  },
+  {
+    path: '/data-rights',
+    label: { tr: 'KVKK Hakları', en: 'KVKK Rights' },
+    keywords: ['kvkk', 'data', 'gdpr', 'haklar'],
+  },
+  {
+    path: '/terms',
+    label: { tr: 'Kullanım Şartları', en: 'Terms' },
+    keywords: ['terms', 'şartlar', 'kullanım'],
+  },
 ];
 
 function score(hint: RouteHint, query: string): number {
@@ -61,14 +141,14 @@ export const NotFoundSearch: React.FC<{ lang?: 'tr' | 'en' }> = ({ lang = 'tr' }
 
   const results = useMemo(() => {
     if (query.trim().length < 2) return [];
-    return KNOWN_ROUTES
-      .map((r) => ({ hint: r, s: score(r, query) }))
+    return KNOWN_ROUTES.map((r) => ({ hint: r, s: score(r, query) }))
       .filter((r) => r.s > 0)
       .sort((a, b) => b.s - a.s)
       .slice(0, 5);
   }, [query]);
 
-  const placeholder = lang === 'tr' ? 'örn. M&A, KVKK, yıllık rapor…' : 'e.g. M&A, KVKK, annual report…';
+  const placeholder =
+    lang === 'tr' ? 'örn. M&A, KVKK, yıllık rapor…' : 'e.g. M&A, KVKK, annual report…';
 
   return (
     <div className="max-w-xl mx-auto mb-12">

@@ -114,9 +114,7 @@ export async function networkFetch(
 
     const ac = new AbortController();
     const tid = setTimeout(() => ac.abort(), timeoutMs);
-    const composed = externalSignal
-      ? composeSignals([ac.signal, externalSignal])
-      : ac.signal;
+    const composed = externalSignal ? composeSignals([ac.signal, externalSignal]) : ac.signal;
 
     try {
       const res = await fetch(input, { ...init, headers, signal: composed });

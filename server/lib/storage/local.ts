@@ -46,9 +46,7 @@ function resolveSigningSecret(provided?: string): string {
   if (fromEnv.length >= 32) return fromEnv;
   // In production we must fail loudly so an operator wires a real secret.
   if (process.env.NODE_ENV === 'production') {
-    throw new Error(
-      'STORAGE_SIGNING_SECRET must be set and >=32 chars when STORAGE_BACKEND=local',
-    );
+    throw new Error('STORAGE_SIGNING_SECRET must be set and >=32 chars when STORAGE_BACKEND=local');
   }
   logger.warn(
     '[storage/local] STORAGE_SIGNING_SECRET missing — using insecure dev fallback. NEVER use in prod.',
@@ -65,9 +63,7 @@ export class LocalStorageAdapter implements StorageAdapter {
   constructor(opts: LocalStorageOptions = {}) {
     this.root = path.resolve(opts.root ?? process.env.STORAGE_LOCAL_ROOT ?? DEFAULT_ROOT);
     this.publicBaseUrl =
-      opts.publicBaseUrl ??
-      process.env.STORAGE_PUBLIC_BASE_URL ??
-      '/api/uploads/get';
+      opts.publicBaseUrl ?? process.env.STORAGE_PUBLIC_BASE_URL ?? '/api/uploads/get';
     this.signingSecret = resolveSigningSecret(opts.signingSecret);
   }
 
@@ -150,9 +146,7 @@ export class LocalStorageAdapter implements StorageAdapter {
   /** Constant-time HMAC verification. Used by the Express get handler. */
   verifySignature(key: string, exp: number, sig: string): boolean {
     if (!Number.isFinite(exp) || exp < Math.floor(Date.now() / 1000)) return false;
-    const expected = createHmac('sha256', this.signingSecret)
-      .update(`${key}.${exp}`)
-      .digest('hex');
+    const expected = createHmac('sha256', this.signingSecret).update(`${key}.${exp}`).digest('hex');
     const a = Buffer.from(expected);
     const b = Buffer.from(sig);
     if (a.length !== b.length) return false;

@@ -18,7 +18,13 @@ describe('outbound webhook signer', () => {
   it('produces deterministic sha256= prefix signature', () => {
     const ts = 1715800000;
     const body = '{"hello":"world"}';
-    const headers = sign({ secret: SECRET, body, timestamp: ts * 1000, deliveryId: 'd1', eventType: 'x' });
+    const headers = sign({
+      secret: SECRET,
+      body,
+      timestamp: ts * 1000,
+      deliveryId: 'd1',
+      eventType: 'x',
+    });
     const expected = createHmac('sha256', SECRET).update(`${ts}.${body}`).digest('hex');
     expect(headers['X-Webhook-Signature']).toBe(`sha256=${expected}`);
     expect(headers['X-Webhook-Timestamp']).toBe(String(ts));
@@ -56,7 +62,8 @@ describe('outbound webhook signer', () => {
 
   it('verify() rejects length mismatch without throwing', () => {
     const ts = Math.floor(Date.now() / 1000);
-    expect(verify({ secret: SECRET, body: 'x', timestamp: ts, signature: 'sha256=deadbeef' }))
-      .toMatchObject({ ok: false, reason: 'sig_length' });
+    expect(
+      verify({ secret: SECRET, body: 'x', timestamp: ts, signature: 'sha256=deadbeef' }),
+    ).toMatchObject({ ok: false, reason: 'sig_length' });
   });
 });

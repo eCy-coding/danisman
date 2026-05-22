@@ -38,12 +38,7 @@ const router = Router();
 // ── Tunables ─────────────────────────────────────────────────────────────────
 
 const MAX_BYTES = Number.parseInt(process.env.UPLOAD_MAX_BYTES ?? '', 10) || 5 * 1024 * 1024;
-const ALLOWED_MIME = new Set([
-  'image/jpeg',
-  'image/png',
-  'image/webp',
-  'image/avif',
-]);
+const ALLOWED_MIME = new Set(['image/jpeg', 'image/png', 'image/webp', 'image/avif']);
 const EXT_BY_MIME: Record<string, string> = {
   'image/jpeg': 'jpg',
   'image/png': 'png',
@@ -54,11 +49,14 @@ const EXT_BY_MIME: Record<string, string> = {
 // ── busboy loader (dynamic require for sandbox / lazy install) ──────────────
 
 interface BusboyInstance {
-  on(event: 'file', listener: (
-    fieldname: string,
-    file: NodeJS.ReadableStream,
-    info: { filename?: string; mimeType?: string; mimetype?: string; encoding?: string },
-  ) => void): this;
+  on(
+    event: 'file',
+    listener: (
+      fieldname: string,
+      file: NodeJS.ReadableStream,
+      info: { filename?: string; mimeType?: string; mimetype?: string; encoding?: string },
+    ) => void,
+  ): this;
   on(event: 'error', listener: (err: Error) => void): this;
   on(event: 'finish', listener: () => void): this;
   on(event: 'close', listener: () => void): this;
@@ -94,7 +92,10 @@ interface ParsedUpload {
 async function parseSingleFile(req: Request): Promise<ParsedUpload> {
   const busboyFactory = loadBusboy();
   if (!busboyFactory) {
-    throw Object.assign(new Error('busboy not installed'), { code: 'UPLOAD_PARSER_UNAVAILABLE', status: 500 });
+    throw Object.assign(new Error('busboy not installed'), {
+      code: 'UPLOAD_PARSER_UNAVAILABLE',
+      status: 500,
+    });
   }
 
   return new Promise<ParsedUpload>((resolve, reject) => {
@@ -218,14 +219,18 @@ router.post(
       const existing = await (prisma as any).image.findUnique({ where: { hash: result.hash } });
       if (existing) {
         // Delete the just-written duplicate to reclaim space.
-        await storage.delete(storageKey).catch((err: Error) =>
-          logger.warn('[upload] dedupe cleanup failed', { message: err.message }),
-        );
+        await storage
+          .delete(storageKey)
+          .catch((err: Error) =>
+            logger.warn('[upload] dedupe cleanup failed', { message: err.message }),
+          );
         res.status(200).json({
           status: 'success',
           data: {
             id: existing.id,
-            url: storage.publicUrl(existing.storageKey) ?? (await storage.signedUrl(existing.storageKey, 3600)),
+            url:
+              storage.publicUrl(existing.storageKey) ??
+              (await storage.signedUrl(existing.storageKey, 3600)),
             key: existing.storageKey,
             hash: existing.hash,
             size: existing.sizeBytes,

@@ -140,8 +140,7 @@ const dashboardHandler = (req: AuthRequest, res: Response, next: NextFunction): 
     res.status(503).json({
       status: 'error',
       code: 'ADMIN_QUEUES_DEPS_MISSING',
-      message:
-        'Install @bull-board/api @bull-board/express to enable the queue dashboard',
+      message: 'Install @bull-board/api @bull-board/express to enable the queue dashboard',
     });
     return;
   }

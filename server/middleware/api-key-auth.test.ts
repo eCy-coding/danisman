@@ -42,13 +42,17 @@ describe('safeEqual', () => {
 
 describe('invalidateCachedKey', () => {
   it('removes the entry from the auth cache', () => {
-    _testing.cache.set('hashed-x', {
-      id: 'k1',
-      name: 'test',
-      scopes: ['read:bookings'],
-      userId: null,
-      expiresAt: null,
-    }, 60_000);
+    _testing.cache.set(
+      'hashed-x',
+      {
+        id: 'k1',
+        name: 'test',
+        scopes: ['read:bookings'],
+        userId: null,
+        expiresAt: null,
+      },
+      60_000,
+    );
     expect(_testing.cache.get('hashed-x')).toBeTruthy();
     invalidateCachedKey('hashed-x');
     expect(_testing.cache.get('hashed-x')).toBeUndefined();

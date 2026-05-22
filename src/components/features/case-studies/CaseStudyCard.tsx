@@ -34,18 +34,18 @@ export const CaseStudyCard: React.FC<CaseStudyCardProps> = ({ study }) => {
       className="group bg-white/5 rounded-2xl border border-white/10 overflow-hidden hover:border-white/20 transition-all duration-300 flex flex-col h-full"
     >
       {study.image && (
-          <div className="h-48 overflow-hidden relative">
-              <img
-                  src={study.image}
-                  alt={study.title}
-                  width={800}
-                  height={600}
-                  loading="lazy"
-                  decoding="async"
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-              />
-              <div className="absolute inset-0 bg-linear-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-          </div>
+        <div className="h-48 overflow-hidden relative">
+          <img
+            src={study.image}
+            alt={study.title}
+            width={800}
+            height={600}
+            loading="lazy"
+            decoding="async"
+            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+          />
+          <div className="absolute inset-0 bg-linear-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+        </div>
       )}
       <div className="p-8 pb-4 grow">
         <div className="flex items-center space-x-2 text-sm text-primary font-medium mb-3">
@@ -57,9 +57,7 @@ export const CaseStudyCard: React.FC<CaseStudyCardProps> = ({ study }) => {
           {study.title}
         </h3>
 
-        <p className="text-slate-400 text-sm mb-4">
-          Client: {study.client}
-        </p>
+        <p className="text-slate-400 text-sm mb-4">Client: {study.client}</p>
 
         <div className="inline-flex items-center space-x-2 bg-emerald-500/10 text-emerald-400 px-3 py-1 rounded-full text-xs font-semibold">
           <Trophy className="w-3 h-3" />
@@ -73,9 +71,9 @@ export const CaseStudyCard: React.FC<CaseStudyCardProps> = ({ study }) => {
       </div>
 
       <div className="p-6 pt-0 mt-auto border-t border-white/5 bg-white/5">
-        <Link 
-            to={`/case-studies/${study.slug}`} // Assuming individual pages exist or will exist 
-            className="flex items-center space-x-2 text-sm font-semibold text-white group-hover:translate-x-1 transition-transform mt-4"
+        <Link
+          to={`/case-studies/${study.slug}`} // Assuming individual pages exist or will exist
+          className="flex items-center space-x-2 text-sm font-semibold text-white group-hover:translate-x-1 transition-transform mt-4"
         >
           <span>Read Case Study</span>
           <ArrowUpRight className="w-4 h-4" />

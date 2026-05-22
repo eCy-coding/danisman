@@ -13,18 +13,18 @@ export class MarkovGenerator {
   }
 
   train(corpus: string[]) {
-    corpus.forEach(text => {
+    corpus.forEach((text) => {
       const words = text.toLowerCase().split(/\s+/);
       if (words.length === 0) return;
 
       if (words.length > 0 && words[0]) {
-           this.startWords.push(words[0]);
+        this.startWords.push(words[0]);
       }
-  
+
       for (let i = 0; i < words.length - 1; i++) {
         const word = words[i];
         const nextWord = words[i + 1];
-        
+
         if (!word || !nextWord) continue;
 
         if (!this.chain[word]) {
@@ -36,7 +36,7 @@ export class MarkovGenerator {
   }
 
   generate(minLength: number = 5, maxLength: number = 15): string {
-    if (this.startWords.length === 0) return "";
+    if (this.startWords.length === 0) return '';
 
     let currentWord = this.startWords[Math.floor(Math.random() * this.startWords.length)];
     const result = [currentWord];
@@ -45,7 +45,7 @@ export class MarkovGenerator {
       if (!currentWord) break;
       const nextOptions = this.chain[currentWord] || [];
       if (nextOptions.length === 0) break;
-  
+
       const nextWord = nextOptions[Math.floor(Math.random() * nextOptions.length)];
       result.push(nextWord);
       currentWord = nextWord; // Update current word
@@ -70,7 +70,7 @@ export class SyntheticData {
     return x - Math.floor(x);
   }
 
-  generateTimeSeries(points: number, min: number, max: number): { time: string, value: number }[] {
+  generateTimeSeries(points: number, min: number, max: number): { time: string; value: number }[] {
     const data = [];
     let currentValue = (min + max) / 2;
     const now = new Date();
@@ -79,17 +79,17 @@ export class SyntheticData {
       const change = (this.random() - 0.5) * ((max - min) * 0.1);
       currentValue += change;
       currentValue = Math.max(min, Math.min(max, currentValue));
-      
+
       const date = new Date(now.getTime() - (points - i) * 24 * 60 * 60 * 1000);
       data.push({
-        time: ((date || new Date()).toISOString().split('T')[0]) as string,
-        value: Math.round(currentValue)
+        time: (date || new Date()).toISOString().split('T')[0] as string,
+        value: Math.round(currentValue),
       });
     }
     return data;
   }
 
-  generateCategoryDistribution(categories: string[]): { name: string, value: number }[] {
+  generateCategoryDistribution(categories: string[]): { name: string; value: number }[] {
     let remaining = 100;
     return categories.map((cat, index) => {
       if (index === categories.length - 1) return { name: cat, value: remaining };

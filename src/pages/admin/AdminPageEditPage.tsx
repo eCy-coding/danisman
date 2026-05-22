@@ -35,7 +35,8 @@ export const AdminPageEditPage: React.FC = () => {
 
   const query = useQuery<OverrideResponse>({
     queryKey: ['admin-page-override', id],
-    queryFn: () => apiClient.get(`/admin/content/page/${id}`).then((r) => r.data as OverrideResponse),
+    queryFn: () =>
+      apiClient.get(`/admin/content/page/${id}`).then((r) => r.data as OverrideResponse),
     enabled: !!id,
   });
 
@@ -49,15 +50,18 @@ export const AdminPageEditPage: React.FC = () => {
     onError: () => toast.error('Kayıt başarısız oldu'),
   });
 
-  const upd = <K extends keyof PageOverride>(k: K, v: PageOverride[K]) => setData((d) => ({ ...d, [k]: v }));
+  const upd = <K extends keyof PageOverride>(k: K, v: PageOverride[K]) =>
+    setData((d) => ({ ...d, [k]: v }));
 
   return (
     <div className="space-y-6">
-      <Breadcrumb items={[
-        { label: 'Yönetim', to: '/admin' },
-        { label: 'Sayfalar', to: '/admin/pages' },
-        { label: id },
-      ]} />
+      <Breadcrumb
+        items={[
+          { label: 'Yönetim', to: '/admin' },
+          { label: 'Sayfalar', to: '/admin/pages' },
+          { label: id },
+        ]}
+      />
       <header className="flex items-center justify-between flex-wrap gap-3">
         <div className="flex items-center gap-3">
           <button
@@ -83,26 +87,64 @@ export const AdminPageEditPage: React.FC = () => {
 
       <div className="max-w-3xl space-y-4">
         <FormField label="Başlık" tooltip="Sayfanın H1'i (override).">
-          <input type="text" value={data.title ?? ''} onChange={(e) => upd('title', e.target.value)} className={fieldClassName} />
+          <input
+            type="text"
+            value={data.title ?? ''}
+            onChange={(e) => upd('title', e.target.value)}
+            className={fieldClassName}
+          />
         </FormField>
         <FormField label="Hero Başlık" tooltip="Üst banner başlığı.">
-          <input type="text" value={data.heroTitle ?? ''} onChange={(e) => upd('heroTitle', e.target.value)} className={fieldClassName} />
+          <input
+            type="text"
+            value={data.heroTitle ?? ''}
+            onChange={(e) => upd('heroTitle', e.target.value)}
+            className={fieldClassName}
+          />
         </FormField>
         <FormField label="Hero Alt Başlık">
-          <textarea value={data.heroSubtitle ?? ''} onChange={(e) => upd('heroSubtitle', e.target.value)} className={`${fieldClassName} min-h-[80px]`} />
+          <textarea
+            value={data.heroSubtitle ?? ''}
+            onChange={(e) => upd('heroSubtitle', e.target.value)}
+            className={`${fieldClassName} min-h-[80px]`}
+          />
         </FormField>
         <FormField label="Gövde" hint="Markdown desteklenir. Block editor P59'da gelir.">
-          <textarea value={data.body ?? ''} onChange={(e) => upd('body', e.target.value)} className={`${fieldClassName} min-h-[300px] font-mono text-xs`} />
+          <textarea
+            value={data.body ?? ''}
+            onChange={(e) => upd('body', e.target.value)}
+            className={`${fieldClassName} min-h-[300px] font-mono text-xs`}
+          />
         </FormField>
         <h2 className="text-sm font-semibold text-white pt-4 border-t border-white/5">SEO</h2>
-        <FormField label="Meta Title" hint="Tarayıcı sekmesi ve arama sonuçları başlığı (max 60 karakter)">
-          <input type="text" value={data.metaTitle ?? ''} onChange={(e) => upd('metaTitle', e.target.value)} className={fieldClassName} maxLength={60} />
+        <FormField
+          label="Meta Title"
+          hint="Tarayıcı sekmesi ve arama sonuçları başlığı (max 60 karakter)"
+        >
+          <input
+            type="text"
+            value={data.metaTitle ?? ''}
+            onChange={(e) => upd('metaTitle', e.target.value)}
+            className={fieldClassName}
+            maxLength={60}
+          />
         </FormField>
-        <FormField label="Meta Description" hint="Arama sonuçlarındaki kısa açıklama (max 160 karakter)">
-          <textarea value={data.metaDescription ?? ''} onChange={(e) => upd('metaDescription', e.target.value)} className={`${fieldClassName} min-h-[80px]`} maxLength={160} />
+        <FormField
+          label="Meta Description"
+          hint="Arama sonuçlarındaki kısa açıklama (max 160 karakter)"
+        >
+          <textarea
+            value={data.metaDescription ?? ''}
+            onChange={(e) => upd('metaDescription', e.target.value)}
+            className={`${fieldClassName} min-h-[80px]`}
+            maxLength={160}
+          />
         </FormField>
 
-        <Link to="/admin/pages" className="text-xs text-slate-400 hover:text-white inline-block mt-4">
+        <Link
+          to="/admin/pages"
+          className="text-xs text-slate-400 hover:text-white inline-block mt-4"
+        >
           ← Tüm sayfaları gör
         </Link>
       </div>

@@ -1,4 +1,3 @@
-
 import { useEffect } from 'react';
 
 export const useKeyPress = (key: string, callback: () => void) => {

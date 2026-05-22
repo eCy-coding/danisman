@@ -27,7 +27,7 @@ class SovereignSync {
       type,
       store,
       id,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     };
     this.channel.postMessage(msg);
   }
@@ -35,12 +35,12 @@ class SovereignSync {
   public subscribe(callback: (msg: SyncMessage) => void): () => void {
     this.listeners.push(callback);
     return () => {
-      this.listeners = this.listeners.filter(l => l !== callback);
+      this.listeners = this.listeners.filter((l) => l !== callback);
     };
   }
 
   private notifyListeners(msg: SyncMessage) {
-    this.listeners.forEach(cb => cb(msg));
+    this.listeners.forEach((cb) => cb(msg));
   }
 }
 

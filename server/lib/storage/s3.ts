@@ -158,7 +158,8 @@ export class S3StorageAdapter implements StorageAdapter {
         size: result.ContentLength ?? bytes.byteLength,
       };
     } catch (err) {
-      const code = (err as { name?: string; Code?: string }).name ?? (err as { Code?: string }).Code;
+      const code =
+        (err as { name?: string; Code?: string }).name ?? (err as { Code?: string }).Code;
       if (code === 'NoSuchKey' || code === 'NotFound') return null;
       logger.warn('[storage/s3] get failed', { key, message: (err as Error).message });
       throw err;
@@ -175,9 +176,7 @@ export class S3StorageAdapter implements StorageAdapter {
     assertSafeStorageKey(key);
     const presigner = loadPresigner();
     if (!presigner) {
-      throw new Error(
-        'S3StorageAdapter.signedUrl: @aws-sdk/s3-request-presigner is not installed',
-      );
+      throw new Error('S3StorageAdapter.signedUrl: @aws-sdk/s3-request-presigner is not installed');
     }
     const cmd = new this.mod.GetObjectCommand({ Bucket: this.bucket, Key: key });
     return presigner.getSignedUrl(this.client, cmd, {

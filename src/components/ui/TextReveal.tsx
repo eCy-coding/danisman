@@ -9,14 +9,14 @@ interface TextRevealProps {
   immediate?: boolean; // skip useInView + opacity:0 for above-fold LCP elements
 }
 
-export const TextReveal: React.FC<TextRevealProps> = ({ 
-  text, 
-  className = '', 
+export const TextReveal: React.FC<TextRevealProps> = ({
+  text,
+  className = '',
   delay = 0,
   immediate = false,
 }) => {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-10% 0px" });
+  const isInView = useInView(ref, { once: true, margin: '-10% 0px' });
 
   const container = {
     hidden: { opacity: immediate ? 1 : 0 },
@@ -31,7 +31,7 @@ export const TextReveal: React.FC<TextRevealProps> = ({
       opacity: 1,
       y: 0,
       transition: {
-        type: "spring" as const,
+        type: 'spring' as const,
         damping: 14,
         stiffness: 120,
       },
@@ -42,15 +42,15 @@ export const TextReveal: React.FC<TextRevealProps> = ({
     },
   };
 
-  // Split text into words, then optionally into characters if needed. 
+  // Split text into words, then optionally into characters if needed.
   // We'll do words for a cleaner effect on large headings.
-  const words = text.split(" ");
+  const words = text.split(' ');
 
   // For above-fold LCP elements: render as plain text immediately (no opacity:0 / y offset)
   // This ensures LCP is measured at React mount time, not after animation completes
   if (immediate) {
     return (
-      <span style={{ display: "inline-block" }} className={className}>
+      <span style={{ display: 'inline-block' }} className={className}>
         {text}
       </span>
     );
@@ -59,16 +59,16 @@ export const TextReveal: React.FC<TextRevealProps> = ({
   return (
     <motion.span
       ref={ref}
-      style={{ overflow: "hidden", display: "inline-block" }}
+      style={{ overflow: 'hidden', display: 'inline-block' }}
       variants={container}
       initial="hidden"
-      animate={isInView ? "visible" : "hidden"}
+      animate={isInView ? 'visible' : 'hidden'}
       className={className}
     >
       {words.map((word, index) => (
         <motion.span
           variants={child}
-          style={{ marginRight: "0.25em", display: "inline-block" }}
+          style={{ marginRight: '0.25em', display: 'inline-block' }}
           key={index}
         >
           {word}

@@ -113,11 +113,7 @@ export function notifyRouteChange(pathname: string): void {
  * Wrap a critical async op so it appears as a Sentry transaction.
  * P76: Uses lazy Sentry ref; falls back to plain execution if not loaded.
  */
-export async function tracedOp<T>(
-  name: string,
-  op: string,
-  fn: () => Promise<T>,
-): Promise<T> {
+export async function tracedOp<T>(name: string, op: string, fn: () => Promise<T>): Promise<T> {
   const Sentry = sentry.module;
   if (!Sentry) return fn();
   return Sentry.startSpan({ name, op }, async () => fn());

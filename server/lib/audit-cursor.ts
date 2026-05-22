@@ -83,7 +83,10 @@ export function parseAuditFilters(input: AuditFilterInput): ParseFiltersResult {
   if (startRaw) {
     const d = new Date(startRaw);
     if (Number.isNaN(d.getTime())) {
-      return { filters, error: { code: 'INVALID_DATE_RANGE', message: 'startDate is not a valid ISO date.' } };
+      return {
+        filters,
+        error: { code: 'INVALID_DATE_RANGE', message: 'startDate is not a valid ISO date.' },
+      };
     }
     range.gte = d;
   }
@@ -91,7 +94,10 @@ export function parseAuditFilters(input: AuditFilterInput): ParseFiltersResult {
   if (endRaw) {
     const d = new Date(endRaw);
     if (Number.isNaN(d.getTime())) {
-      return { filters, error: { code: 'INVALID_DATE_RANGE', message: 'endDate is not a valid ISO date.' } };
+      return {
+        filters,
+        error: { code: 'INVALID_DATE_RANGE', message: 'endDate is not a valid ISO date.' },
+      };
     }
     range.lte = d;
   }

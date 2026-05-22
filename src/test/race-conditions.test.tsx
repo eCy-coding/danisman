@@ -26,24 +26,22 @@ type FetchSpy = ReturnType<typeof vi.fn>;
 let fetchSpy: FetchSpy;
 
 beforeEach(() => {
-  fetchSpy = vi.fn(
-    (_url: string, init?: RequestInit): Promise<Response> => {
-      return new Promise((resolve, reject) => {
-        const t = setTimeout(() => {
-          resolve(
-            new Response(JSON.stringify({ ok: true, message: 'done' }), {
-              status: 200,
-              headers: { 'Content-Type': 'application/json' },
-            }),
-          );
-        }, 200);
-        init?.signal?.addEventListener('abort', () => {
-          clearTimeout(t);
-          reject(new DOMException('Aborted', 'AbortError'));
-        });
+  fetchSpy = vi.fn((_url: string, init?: RequestInit): Promise<Response> => {
+    return new Promise((resolve, reject) => {
+      const t = setTimeout(() => {
+        resolve(
+          new Response(JSON.stringify({ ok: true, message: 'done' }), {
+            status: 200,
+            headers: { 'Content-Type': 'application/json' },
+          }),
+        );
+      }, 200);
+      init?.signal?.addEventListener('abort', () => {
+        clearTimeout(t);
+        reject(new DOMException('Aborted', 'AbortError'));
       });
-    },
-  );
+    });
+  });
   // @ts-expect-error overriding for test
   globalThis.fetch = fetchSpy;
 });

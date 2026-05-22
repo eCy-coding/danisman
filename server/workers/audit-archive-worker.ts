@@ -46,12 +46,14 @@ interface AuditRow {
 }
 
 /** Pure function — given rows, return a deterministic cold-storage payload. */
-export function buildArchivePayload(
-  rows: AuditRow[],
-): { json: string; gz: Buffer; rowCount: number; windowStart: Date; windowEnd: Date } {
-  const sorted = [...rows].sort(
-    (a, b) => a.createdAt.getTime() - b.createdAt.getTime(),
-  );
+export function buildArchivePayload(rows: AuditRow[]): {
+  json: string;
+  gz: Buffer;
+  rowCount: number;
+  windowStart: Date;
+  windowEnd: Date;
+} {
+  const sorted = [...rows].sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
   const windowStart = sorted[0]?.createdAt ?? new Date(0);
   const windowEnd = sorted[sorted.length - 1]?.createdAt ?? new Date(0);
   const json = JSON.stringify(
@@ -83,9 +85,7 @@ function archiveKey(windowEnd: Date): string {
  * Returns a JSON-friendly summary an operator (or scheduled-task UI) can
  * surface.
  */
-export async function archiveAuditLogs(opts: {
-  retentionDays: number;
-}): Promise<{
+export async function archiveAuditLogs(opts: { retentionDays: number }): Promise<{
   rowsArchived: number;
   bytesCompressed: number;
   coldKey: string | null;
@@ -202,9 +202,7 @@ let started = false;
 export function startAuditArchiveWorker(): void {
   if (started) return;
   started = true;
-  logger.info(
-    '[workers/audit-archive] dispatch ready (handled inline by cron-worker)',
-  );
+  logger.info('[workers/audit-archive] dispatch ready (handled inline by cron-worker)');
 }
 
 export async function stopAuditArchiveWorker(): Promise<void> {

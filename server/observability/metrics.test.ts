@@ -51,9 +51,7 @@ describe('metrics helpers (no prom-client)', () => {
   });
 
   it('never throws when emitting HTTP events', () => {
-    expect(() =>
-      metrics.observeHttpRequest('GET', '/api/health', 200, 0.012),
-    ).not.toThrow();
+    expect(() => metrics.observeHttpRequest('GET', '/api/health', 200, 0.012)).not.toThrow();
   });
 
   it('render returns a parseable text exposition (synthetic when prom-client absent)', async () => {

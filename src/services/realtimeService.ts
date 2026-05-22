@@ -22,8 +22,6 @@ class RealTimeService {
   connect() {
     if (this.isConnected || this.eventSource) return;
 
-
-    
     // Connect to the Edge Function or Fallback to Simulation
     this.eventSource = new EventSource('/api/events');
 
@@ -39,12 +37,12 @@ class RealTimeService {
         const targetChannel = data.channel || 'global';
         this.broadcast(targetChannel, data);
       } catch (e) {
-      Logger.error('[RealTime] Parse Error', e);
-    }
-  };
+        Logger.error('[RealTime] Parse Error', e);
+      }
+    };
 
-  this.eventSource.onerror = (_err) => {
-    Logger.warn('[RealTime] Live API unreachable, switching to Client Simulation Mode.');
+    this.eventSource.onerror = (_err) => {
+      Logger.warn('[RealTime] Live API unreachable, switching to Client Simulation Mode.');
       this.disconnect();
       this.startSimulationMode();
     };
@@ -59,20 +57,24 @@ class RealTimeService {
     // Simulate events every 2 seconds
     if (this.simulationTimer) clearInterval(this.simulationTimer);
     this.simulationTimer = setInterval(() => {
-        const services = ['strategic-management', 'digital-transformation', 'corporate-training', 'consulting'];
-        const serviceName = services[Math.floor(Math.random() * services.length)];
-        const viewerCount = Math.floor(Math.random() * 15) + 3;
+      const services = [
+        'strategic-management',
+        'digital-transformation',
+        'corporate-training',
+        'consulting',
+      ];
+      const serviceName = services[Math.floor(Math.random() * services.length)];
+      const viewerCount = Math.floor(Math.random() * 15) + 3;
 
-        const mockEvent: RealTimeEvent = {
-            type: 'viewer-update',
-            channel: `service:${serviceName}`,
-            payload: { count: viewerCount, service: serviceName },
-            timestamp: Date.now()
-        };
-        this.broadcast(mockEvent.channel || 'global', mockEvent);
+      const mockEvent: RealTimeEvent = {
+        type: 'viewer-update',
+        channel: `service:${serviceName}`,
+        payload: { count: viewerCount, service: serviceName },
+        timestamp: Date.now(),
+      };
+      this.broadcast(mockEvent.channel || 'global', mockEvent);
     }, 2000);
   }
-
 
   disconnect() {
     this.isConnected = false;
@@ -97,7 +99,7 @@ class RealTimeService {
       this.listeners.set(channel, new Set());
     }
     this.listeners.get(channel)!.add(listener);
-    
+
     return () => {
       const channelListeners = this.listeners.get(channel);
       if (channelListeners) {
@@ -117,7 +119,7 @@ class RealTimeService {
   private broadcast(channel: string, event: RealTimeEvent) {
     const channelListeners = this.listeners.get(channel);
     if (channelListeners) {
-      channelListeners.forEach(listener => listener(event));
+      channelListeners.forEach((listener) => listener(event));
     }
   }
 }

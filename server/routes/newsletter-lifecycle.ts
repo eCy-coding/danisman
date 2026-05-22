@@ -40,10 +40,7 @@ interface TokenPayload {
 function sign(payload: TokenPayload): string {
   if (!HMAC_SECRET) return '';
   const body = Buffer.from(JSON.stringify(payload)).toString('base64url');
-  const sig = crypto
-    .createHmac('sha256', HMAC_SECRET)
-    .update(body)
-    .digest('base64url');
+  const sig = crypto.createHmac('sha256', HMAC_SECRET).update(body).digest('base64url');
   return `${body}.${sig}`;
 }
 
@@ -51,10 +48,7 @@ function verify(token: string): TokenPayload | null {
   if (!HMAC_SECRET) return null;
   const [body, sig] = token.split('.');
   if (!body || !sig) return null;
-  const expectedSig = crypto
-    .createHmac('sha256', HMAC_SECRET)
-    .update(body)
-    .digest('base64url');
+  const expectedSig = crypto.createHmac('sha256', HMAC_SECRET).update(body).digest('base64url');
   if (sig.length !== expectedSig.length) return null;
   if (!crypto.timingSafeEqual(Buffer.from(sig), Buffer.from(expectedSig))) return null;
   try {
@@ -162,20 +156,24 @@ const feedbackSchema = z.object({
     .optional(),
 });
 
-router.post('/feedback', contactLimiter, async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const data = feedbackSchema.parse(req.body);
-    logger.info('[newsletter-lifecycle] unsubscribe feedback', {
-      email: data.email.toLowerCase(),
-      category: data.category ?? 'none',
-      reasonLen: data.reason?.length ?? 0,
-    });
-    // We intentionally do NOT store reason content in DB to respect privacy —
-    // category + counter aggregation only.
-    return res.status(204).end();
-  } catch (err) {
-    next(err);
-  }
-});
+router.post(
+  '/feedback',
+  contactLimiter,
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const data = feedbackSchema.parse(req.body);
+      logger.info('[newsletter-lifecycle] unsubscribe feedback', {
+        email: data.email.toLowerCase(),
+        category: data.category ?? 'none',
+        reasonLen: data.reason?.length ?? 0,
+      });
+      // We intentionally do NOT store reason content in DB to respect privacy —
+      // category + counter aggregation only.
+      return res.status(204).end();
+    } catch (err) {
+      next(err);
+    }
+  },
+);
 
 export default router;

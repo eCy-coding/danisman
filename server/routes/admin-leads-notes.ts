@@ -31,9 +31,15 @@ router.get('/:id/notes', ...adminOnly, async (req: Request, res: Response, next:
     const id = req.params.id;
     if (!id) return res.status(400).json({ status: 'error', message: 'id required' });
     const raw = await redis.lrange(KEY(id), 0, 99);
-    const notes = raw.map((s) => {
-      try { return JSON.parse(s) as NoteRecord; } catch { return null; }
-    }).filter((x): x is NoteRecord => x !== null);
+    const notes = raw
+      .map((s) => {
+        try {
+          return JSON.parse(s) as NoteRecord;
+        } catch {
+          return null;
+        }
+      })
+      .filter((x): x is NoteRecord => x !== null);
     res.json({ status: 'ok', data: notes });
   } catch (err) {
     next(err);
@@ -61,27 +67,31 @@ router.post('/:id/notes', ...adminOnly, async (req: Request, res: Response, next
   }
 });
 
-router.delete('/:id/notes/:noteId', ...adminOnly, async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const id = req.params.id;
-    const noteId = req.params.noteId;
-    if (!id || !noteId) return res.status(400).json({ status: 'error', message: 'invalid' });
-    const raw = await redis.lrange(KEY(id), 0, 99);
-    for (const entry of raw) {
-      try {
-        const parsed = JSON.parse(entry) as NoteRecord;
-        if (parsed.id === noteId) {
-          await redis.lrem(KEY(id), 1, entry);
-          break;
+router.delete(
+  '/:id/notes/:noteId',
+  ...adminOnly,
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const id = req.params.id;
+      const noteId = req.params.noteId;
+      if (!id || !noteId) return res.status(400).json({ status: 'error', message: 'invalid' });
+      const raw = await redis.lrange(KEY(id), 0, 99);
+      for (const entry of raw) {
+        try {
+          const parsed = JSON.parse(entry) as NoteRecord;
+          if (parsed.id === noteId) {
+            await redis.lrem(KEY(id), 1, entry);
+            break;
+          }
+        } catch {
+          /* skip */
         }
-      } catch {
-        /* skip */
       }
+      res.status(204).end();
+    } catch (err) {
+      next(err);
     }
-    res.status(204).end();
-  } catch (err) {
-    next(err);
-  }
-});
+  },
+);
 
 export default router;

@@ -24,24 +24,22 @@ vi.mock('../lib/analytics', () => ({
 const realFetch = globalThis.fetch;
 
 beforeEach(() => {
-  globalThis.fetch = vi.fn(
-    (_url: string, init?: RequestInit): Promise<Response> => {
-      return new Promise((resolve, reject) => {
-        const t = setTimeout(() => {
-          resolve(
-            new Response(JSON.stringify({ ok: true, message: 'done' }), {
-              status: 200,
-              headers: { 'Content-Type': 'application/json' },
-            }),
-          );
-        }, 50);
-        init?.signal?.addEventListener('abort', () => {
-          clearTimeout(t);
-          reject(new DOMException('Aborted', 'AbortError'));
-        });
+  globalThis.fetch = vi.fn((_url: string, init?: RequestInit): Promise<Response> => {
+    return new Promise((resolve, reject) => {
+      const t = setTimeout(() => {
+        resolve(
+          new Response(JSON.stringify({ ok: true, message: 'done' }), {
+            status: 200,
+            headers: { 'Content-Type': 'application/json' },
+          }),
+        );
+      }, 50);
+      init?.signal?.addEventListener('abort', () => {
+        clearTimeout(t);
+        reject(new DOMException('Aborted', 'AbortError'));
       });
-    },
-  ) as typeof fetch;
+    });
+  }) as typeof fetch;
 });
 
 afterEach(() => {

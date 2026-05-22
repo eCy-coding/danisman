@@ -102,7 +102,8 @@ export const AdminSettingsPage: React.FC = () => {
           <p className="text-slate-400 text-sm mt-1">Global site configuration</p>
         </div>
 
-        <button type="button"
+        <button
+          type="button"
           onClick={handleSave}
           disabled={!hasChanges || saveMutation.isPending}
           className="flex items-center gap-2 px-5 py-2.5 bg-secondary text-white rounded-xl font-medium text-sm hover:bg-blue-600 transition-colors disabled:opacity-50"
@@ -160,7 +161,8 @@ export const AdminSettingsPage: React.FC = () => {
 
                     <div className="shrink-0">
                       {c.type === 'boolean' ? (
-                        <button type="button"
+                        <button
+                          type="button"
                           onClick={() => handleToggle(c.key, val)}
                           className={`transition-colors ${val === 'true' ? 'text-green-400' : 'text-slate-500'}`}
                           aria-label={`Toggle ${c.label}`}

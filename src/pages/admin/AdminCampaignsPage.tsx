@@ -116,11 +116,7 @@ export const AdminCampaignsPage: React.FC = () => {
 
       {/* Metrics strip */}
       <section className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        <MetricCard
-          label="Queue depth"
-          value={metrics?.queue ?? 0}
-          icon={<Activity size={16} />}
-        />
+        <MetricCard label="Queue depth" value={metrics?.queue ?? 0} icon={<Activity size={16} />} />
         <MetricCard
           label="DLQ depth"
           value={metrics?.dlq ?? 0}

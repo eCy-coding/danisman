@@ -40,7 +40,9 @@ export interface SignedHeaders extends Record<string, string> {
 }
 
 export function sign(opts: SignOptions): SignedHeaders {
-  const ts = Math.floor((opts.timestamp ?? Date.now()) / (opts.timestamp && opts.timestamp < 1e12 ? 1 : 1000));
+  const ts = Math.floor(
+    (opts.timestamp ?? Date.now()) / (opts.timestamp && opts.timestamp < 1e12 ? 1 : 1000),
+  );
   const sig = createHmac('sha256', opts.secret).update(`${ts}.${opts.body}`).digest('hex');
   return {
     'X-Webhook-Timestamp': String(ts),
@@ -63,7 +65,8 @@ export function verify(opts: {
   /** Max age in seconds. Default 300 (5 min). */
   maxAgeSec?: number;
 }): { ok: boolean; reason?: string } {
-  const ts = typeof opts.timestamp === 'string' ? Number.parseInt(opts.timestamp, 10) : opts.timestamp;
+  const ts =
+    typeof opts.timestamp === 'string' ? Number.parseInt(opts.timestamp, 10) : opts.timestamp;
   if (!Number.isFinite(ts)) return { ok: false, reason: 'bad_timestamp' };
   const now = Math.floor(Date.now() / 1000);
   const maxAge = opts.maxAgeSec ?? 300;

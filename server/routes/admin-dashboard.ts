@@ -54,8 +54,10 @@ router.get('/kpi', ...adminOnly, async (_req: Request, res: Response, next: Next
       safeCount(prisma.newsletterSubscriber.count({ where: { unsubscribedAt: null } })),
     ]);
 
-    const leadsDelta = leadsPrev30 > 0 ? Math.round(((leads30 - leadsPrev30) / leadsPrev30) * 100) : 0;
-    const subscribersDelta = subsPrev7 > 0 ? Math.round(((subs7 - subsPrev7) / subsPrev7) * 100) : 0;
+    const leadsDelta =
+      leadsPrev30 > 0 ? Math.round(((leads30 - leadsPrev30) / leadsPrev30) * 100) : 0;
+    const subscribersDelta =
+      subsPrev7 > 0 ? Math.round(((subs7 - subsPrev7) / subsPrev7) * 100) : 0;
 
     // Hot leads = high-recent ContactSubmission unread (heuristic; gerçek skor API'siyle değiştirilecek)
     const hotLeads = await safeCount(
@@ -154,7 +156,12 @@ router.get('/activity', ...adminOnly, async (_req: Request, res: Response, next:
       prisma.booking.findMany({
         orderBy: { createdAt: 'desc' },
         take: 5,
-        select: { id: true, createdAt: true, scheduledAt: true, user: { select: { email: true, name: true } } },
+        select: {
+          id: true,
+          createdAt: true,
+          scheduledAt: true,
+          user: { select: { email: true, name: true } },
+        },
       }),
     ]);
 

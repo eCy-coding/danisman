@@ -27,6 +27,7 @@ Typography:             Golden ratio (16,21,26,42,68,110)
 ## Template 1 — Hero variant (A/B test)
 
 **Prompt:**
+
 ```
 Design a premium consulting landing hero section.
 Background: solid #050810. NO glassmorphism, NO blur, NO gradient mesh.
@@ -44,6 +45,7 @@ No avatars/photos. Premium minimalism.
 ## Template 2 — Pricing tier card (₺ format)
 
 **Prompt:**
+
 ```
 Design 3-tier pricing card grid, side-by-side.
 Each card: bg #0A101F, border 1px #ffffff14, rounded-2xl, padding 34px.
@@ -64,6 +66,7 @@ Honest features, no fluff.
 ## Template 3 — Case study card
 
 **Prompt:**
+
 ```
 Design a case study card for an anonymized client engagement.
 Bg #0A101F. Border #ffffff14. Rounded 24px. Width 380px.
@@ -90,6 +93,7 @@ CTA link: "Detayları gör →" (gold underline-on-hover).
 ## Template 4 — Blog post grid card
 
 **Prompt:**
+
 ```
 Design a blog post grid card.
 Bg #0A101F. Hover lift +4px shadow.
@@ -110,6 +114,7 @@ Grid: 3 columns desktop, 2 tablet, 1 mobile. Gap 21px.
 ## Template 5 — Testimonial card (when real client consents)
 
 **Prompt:**
+
 ```
 Design a testimonial card — only use AFTER written client consent.
 Bg #0A101F. Border #ffffff14. Rounded 24px. Padding 34px.
@@ -129,6 +134,7 @@ NO fake names. Only published with written approval + NDA release verified.
 ## Template 6 — Newsletter signup banner
 
 **Prompt:**
+
 ```
 Design a full-width newsletter signup banner (within container max-w-1280).
 Bg #0A101F with subtle gold accent border-top.
@@ -160,6 +166,7 @@ Below form: small chip line "GDPR + KVKK uyumlu · Her zaman çıkış" slate-50
 ## Save as Project Assets
 
 In claude.ai/design dashboard:
+
 - Create asset library "EcyPro Premium Consulting"
 - Save each template variant
 - Tag: hero / pricing / case / blog / testimonial / newsletter

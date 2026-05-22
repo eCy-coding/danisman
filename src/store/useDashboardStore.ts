@@ -32,15 +32,13 @@ export const useDashboardStore = create<DashboardState>()(
       widgets: DEFAULT_WIDGETS,
       toggleWidget: (id) =>
         set((state) => ({
-          widgets: state.widgets.map((w) =>
-            w.id === id ? { ...w, visible: !w.visible } : w
-          ),
+          widgets: state.widgets.map((w) => (w.id === id ? { ...w, visible: !w.visible } : w)),
         })),
       setWidgets: (widgets) => set({ widgets }),
       resetLayout: () => set({ widgets: DEFAULT_WIDGETS }),
     }),
     {
       name: 'dashboard-layout',
-    }
-  )
+    },
+  ),
 );

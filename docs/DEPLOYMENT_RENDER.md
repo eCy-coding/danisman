@@ -39,6 +39,7 @@ render blueprint apply
 ```
 
 Veya web UI'dan:
+
 1. Dashboard → New → Blueprint
 2. Repo seç → `render.yaml` algılanır
 3. Apply
@@ -47,18 +48,18 @@ Veya web UI'dan:
 
 `render.yaml` içinde `sync: false` olan değişkenler manuel set edilmeli:
 
-| Key | Where to get |
-|-----|--------------|
-| `SENTRY_DSN` | Sentry → Project Settings → Client Keys |
+| Key                    | Where to get                             |
+| ---------------------- | ---------------------------------------- |
+| `SENTRY_DSN`           | Sentry → Project Settings → Client Keys  |
 | `LOGTAIL_SOURCE_TOKEN` | (opsiyonel) Better Stack → Source create |
-| `REDIS_URL` | Upstash veya Render Redis service |
-| `CALCOM_API_KEY` | cal.com → Settings → API Keys |
-| `CALCOM_EVENT_TYPE_ID` | cal.com → Event Types → URL slug |
-| `RESEND_API_KEY` | resend.com → API Keys |
-| `GEMINI_API_KEY` | aistudio.google.com → API key |
-| `TELEGRAM_BOT_TOKEN` | @BotFather → /newbot |
-| `TELEGRAM_CHAT_ID` | @userinfobot ile chat ID al |
-| `HIBP_API_KEY` | (opsiyonel) haveibeenpwned.com/API/Key |
+| `REDIS_URL`            | Upstash veya Render Redis service        |
+| `CALCOM_API_KEY`       | cal.com → Settings → API Keys            |
+| `CALCOM_EVENT_TYPE_ID` | cal.com → Event Types → URL slug         |
+| `RESEND_API_KEY`       | resend.com → API Keys                    |
+| `GEMINI_API_KEY`       | aistudio.google.com → API key            |
+| `TELEGRAM_BOT_TOKEN`   | @BotFather → /newbot                     |
+| `TELEGRAM_CHAT_ID`     | @userinfobot ile chat ID al              |
+| `HIBP_API_KEY`         | (opsiyonel) haveibeenpwned.com/API/Key   |
 
 `JWT_SECRET` ve `WEBHOOK_HMAC_SECRET` Render tarafından otomatik üretilir (`generateValue: true`).
 
@@ -138,11 +139,11 @@ curl -i -X OPTIONS https://api.ecypro.com/api/auth/login \
 
 ## 12. Maliyet (Mayıs 2026)
 
-| Bileşen | Plan | $/ay |
-|---------|------|------|
-| Web Service | Starter | $7 |
-| Postgres | Starter | $7 |
-| Toplam | | **$14** |
+| Bileşen     | Plan    | $/ay    |
+| ----------- | ------- | ------- |
+| Web Service | Starter | $7      |
+| Postgres    | Starter | $7      |
+| Toplam      |         | **$14** |
 
 Trafik artışında `scaling: maxInstances: 3` otomatik genişler (her ek instance $7).
 

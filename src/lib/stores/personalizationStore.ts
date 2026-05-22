@@ -28,8 +28,8 @@ export const usePersonalizationStore = create<InterestProfile & PersonalizationA
 
       trackVisit: (tags, pageId) => {
         const { scores, history, totalVisits } = get();
-        
-        // Prevent duplicate scoring for same session reload? 
+
+        // Prevent duplicate scoring for same session reload?
         // For simplicity (Zen), we just allow it but maybe limit history length.
         if (history.includes(pageId)) {
           // Maybe score less if already visited?
@@ -37,14 +37,14 @@ export const usePersonalizationStore = create<InterestProfile & PersonalizationA
         }
 
         const newScores = { ...scores };
-        tags.forEach(tag => {
-            newScores[tag] = (newScores[tag] || 0) + SCORING_WEIGHTS.VISIT;
+        tags.forEach((tag) => {
+          newScores[tag] = (newScores[tag] || 0) + SCORING_WEIGHTS.VISIT;
         });
 
         set({
           scores: newScores,
           history: [...history, pageId].slice(-50), // Keep last 50
-          totalVisits: totalVisits + 1
+          totalVisits: totalVisits + 1,
         });
       },
 
@@ -64,10 +64,10 @@ export const usePersonalizationStore = create<InterestProfile & PersonalizationA
         return maxScore > 2 ? topTag : null;
       },
 
-      reset: () => set({ scores: {}, history: [], totalVisits: 0 })
+      reset: () => set({ scores: {}, history: [], totalVisits: 0 }),
     }),
     {
       name: 'ecypro-brain', // unique name in localStorage
-    }
-  )
+    },
+  ),
 );

@@ -23,9 +23,7 @@ export function findRelatedBlogPosts(
   limit = 3,
 ): BlogPost[] {
   const sourceTags = new Set((source.tags ?? []).map((t) => t.toLowerCase()));
-  const sourceCats = new Set(
-    (source.serviceCategories ?? []).map((c) => c.toLowerCase()),
-  );
+  const sourceCats = new Set((source.serviceCategories ?? []).map((c) => c.toLowerCase()));
   const sourceCategory = source.category?.toLowerCase();
 
   const scored: ScoredItem<BlogPost>[] = candidates
@@ -52,9 +50,7 @@ export function findRelatedServices(
   source: BlogPost,
   limit = 2,
 ): { slug: string; title: string; description: string; category: string }[] {
-  const sourceCats = new Set(
-    (source.serviceCategories ?? []).map((c) => c.toLowerCase()),
-  );
+  const sourceCats = new Set((source.serviceCategories ?? []).map((c) => c.toLowerCase()));
   const sourceTags = new Set((source.tags ?? []).map((t) => t.toLowerCase()));
 
   const scored = SERVICES.map((svc) => {

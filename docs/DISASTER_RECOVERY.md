@@ -9,11 +9,11 @@
 
 ## 1) Targets
 
-| Metric | Target | Definition |
-|---|---|---|
-| **RTO** (recovery time objective) | **1 hour** | Time from incident declared → critical user flows green |
-| **RPO** (recovery point objective) | **24 hours** | Maximum acceptable data loss |
-| **MTTR** drill target | < 30 minutes | Time the practiced runbook should consume |
+| Metric                             | Target       | Definition                                              |
+| ---------------------------------- | ------------ | ------------------------------------------------------- |
+| **RTO** (recovery time objective)  | **1 hour**   | Time from incident declared → critical user flows green |
+| **RPO** (recovery point objective) | **24 hours** | Maximum acceptable data loss                            |
+| **MTTR** drill target              | < 30 minutes | Time the practiced runbook should consume               |
 
 These targets drive the backup cadence (daily dumps + weekly + monthly
 promotions) and the architectural choices (no on-host writes other than
@@ -71,7 +71,7 @@ Postgres + Redis; both have point-in-time-recovery upstream).
      (`DATABASE_URL`, `JWT_SECRET`, `CAL_WEBHOOK_SECRET`).
   2. Call `revokeAllUserSessions(userId, 'COMPROMISE')` against the
      suspected account, or run `UPDATE "Session" SET "revokedAt" = NOW()
-     WHERE …` server-wide if scope is broader.
+WHERE …` server-wide if scope is broader.
   3. Force a fresh deploy so the new secret bakes into running
      containers.
 - **Recover:** users re-authenticate; their data is intact. Audit-log
@@ -225,12 +225,12 @@ within the same quarter.
 
 ## 7) Quick reference
 
-| Question | Answer |
-|---|---|
-| Where do backups live? | `./backups/{daily,weekly,monthly}/` + S3 if `BACKUP_REMOTE_PUSH=1` |
-| How fresh is the most recent backup? | `ls -lt backups/daily/ \| head -1` |
-| How long to restore? | Drill target 30 min, RTO 1 h |
-| How much data could we lose? | Up to 24 h (RPO) |
-| How is this tested? | Quarterly DR drill (next 2026-08-16) |
-| Where is the script? | `scripts/backup-db.sh` and `scripts/restore-db.sh` |
-| Where is the policy? | This file (`docs/DISASTER_RECOVERY.md`) |
+| Question                             | Answer                                                             |
+| ------------------------------------ | ------------------------------------------------------------------ |
+| Where do backups live?               | `./backups/{daily,weekly,monthly}/` + S3 if `BACKUP_REMOTE_PUSH=1` |
+| How fresh is the most recent backup? | `ls -lt backups/daily/ \| head -1`                                 |
+| How long to restore?                 | Drill target 30 min, RTO 1 h                                       |
+| How much data could we lose?         | Up to 24 h (RPO)                                                   |
+| How is this tested?                  | Quarterly DR drill (next 2026-08-16)                               |
+| Where is the script?                 | `scripts/backup-db.sh` and `scripts/restore-db.sh`                 |
+| Where is the policy?                 | This file (`docs/DISASTER_RECOVERY.md`)                            |

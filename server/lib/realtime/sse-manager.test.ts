@@ -12,7 +12,11 @@ import { describe, it, expect, vi } from 'vitest';
 import { SseManager, formatFrame } from './sse-manager';
 
 /** Build a minimal Express `Response` stub with a writable spy. */
-function fakeRes(): { write: ReturnType<typeof vi.fn>; end: ReturnType<typeof vi.fn>; writableEnded: boolean } {
+function fakeRes(): {
+  write: ReturnType<typeof vi.fn>;
+  end: ReturnType<typeof vi.fn>;
+  writableEnded: boolean;
+} {
   return {
     write: vi.fn(() => true),
     end: vi.fn(),
@@ -85,9 +89,7 @@ describe('formatFrame', () => {
   it('emits event: when type is set', () => {
     // String payloads are passed through verbatim (no re-stringification)
     // so partners receive exactly what we sent.
-    expect(formatFrame({ type: 'job:done', data: 'hi' })).toBe(
-      'event: job:done\ndata: hi\n\n',
-    );
+    expect(formatFrame({ type: 'job:done', data: 'hi' })).toBe('event: job:done\ndata: hi\n\n');
   });
 
   it('splits multi-line strings per SSE spec', () => {

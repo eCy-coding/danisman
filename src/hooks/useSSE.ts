@@ -44,7 +44,8 @@ export function useSSE({
   const [isConnected, setIsConnected] = useState(false);
   const [lastEvent, setLastEvent] = useState<SSEEvent | null>(null);
 
-  const sseUrl = url || `${import.meta.env.VITE_API_URL || 'http://localhost:3001/api'}/sse/dashboard`;
+  const sseUrl =
+    url || `${import.meta.env.VITE_API_URL || 'http://localhost:3001/api'}/sse/dashboard`;
 
   const connect = useCallback(() => {
     // Clean up existing connection

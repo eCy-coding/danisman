@@ -30,7 +30,7 @@ class SovereignDB {
 
       request.onupgradeneeded = (event) => {
         const db = (event.target as IDBOpenDBRequest).result;
-        
+
         // Define Stores
         if (!db.objectStoreNames.contains('projects')) {
           db.createObjectStore('projects', { keyPath: 'id' });
@@ -43,7 +43,10 @@ class SovereignDB {
         }
         // Offline Action Queue (Mutation Outbox)
         if (!db.objectStoreNames.contains('action_queue')) {
-          const queueStore = db.createObjectStore('action_queue', { keyPath: 'id', autoIncrement: true });
+          const queueStore = db.createObjectStore('action_queue', {
+            keyPath: 'id',
+            autoIncrement: true,
+          });
           queueStore.createIndex('createdAt', 'createdAt', { unique: false });
         }
       };
@@ -68,15 +71,15 @@ class SovereignDB {
   // Stores secure encrypted data
   async putSecure<T extends { id: string }>(storeName: StoreName, data: T): Promise<void> {
     const db = await this.init();
-    
+
     // Encrypt content
     const { iv, content } = await vaultCrypto.encrypt(data);
-    
+
     const record: EncryptedRecord = {
       id: data.id,
       iv,
       content,
-      updatedAt: Date.now()
+      updatedAt: Date.now(),
     };
 
     return new Promise((resolve, reject) => {
@@ -95,19 +98,19 @@ class SovereignDB {
       const tx = db.transaction(storeName, 'readonly');
       const store = tx.objectStore(storeName);
       const req = store.get(id);
-      
+
       req.onsuccess = async () => {
         const record = req.result as EncryptedRecord;
         if (!record) {
-            resolve(null);
-            return;
+          resolve(null);
+          return;
         }
         try {
-            const data = await vaultCrypto.decrypt<T>(record.iv, record.content);
-            resolve(data);
+          const data = await vaultCrypto.decrypt<T>(record.iv, record.content);
+          resolve(data);
         } catch (_e) {
-            Logger.error('[Vault] Decryption failed for record:', id);
-            resolve(null); // Or reject
+          Logger.error('[Vault] Decryption failed for record:', id);
+          resolve(null); // Or reject
         }
       };
       req.onerror = () => reject(req.error);
@@ -124,17 +127,17 @@ class SovereignDB {
       req.onsuccess = async () => {
         const records = req.result as EncryptedRecord[];
         if (!records) {
-            resolve([]);
-            return;
+          resolve([]);
+          return;
         }
         try {
-            const decryptedItems = await Promise.all(
-                records.map(rec => vaultCrypto.decrypt<T>(rec.iv, rec.content))
-            );
-            resolve(decryptedItems);
+          const decryptedItems = await Promise.all(
+            records.map((rec) => vaultCrypto.decrypt<T>(rec.iv, rec.content)),
+          );
+          resolve(decryptedItems);
         } catch (_e) {
-             Logger.error('[Vault] Bulk decryption failed');
-             resolve([]);
+          Logger.error('[Vault] Bulk decryption failed');
+          resolve([]);
         }
       };
       req.onerror = () => reject(req.error);
@@ -156,23 +159,23 @@ class SovereignDB {
   async get<T>(storeName: StoreName, key: string): Promise<T | null> {
     const db = await this.init();
     return new Promise((resolve, reject) => {
-        const tx = db.transaction(storeName, 'readonly');
-        const store = tx.objectStore(storeName);
-        const req = store.get(key);
-        req.onsuccess = () => resolve(req.result);
-        req.onerror = () => reject(req.error);
+      const tx = db.transaction(storeName, 'readonly');
+      const store = tx.objectStore(storeName);
+      const req = store.get(key);
+      req.onsuccess = () => resolve(req.result);
+      req.onerror = () => reject(req.error);
     });
   }
-  
+
   async delete(storeName: StoreName, id: string): Promise<void> {
-     const db = await this.init();
-     return new Promise((resolve, reject) => {
-        const tx = db.transaction(storeName, 'readwrite');
-        const store = tx.objectStore(storeName);
-        const req = store.delete(id);
-        req.onsuccess = () => resolve();
-        req.onerror = () => reject(req.error);
-     });
+    const db = await this.init();
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction(storeName, 'readwrite');
+      const store = tx.objectStore(storeName);
+      const req = store.delete(id);
+      req.onsuccess = () => resolve();
+      req.onerror = () => reject(req.error);
+    });
   }
 }
 

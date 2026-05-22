@@ -127,7 +127,9 @@ describe('idempotency middleware', () => {
     const store = new _testing.RedisIdempotencyStore();
     // Mocked redis status === 'end' → not usable → get returns null + set no-op.
     expect(await store.get('any-key')).toBeNull();
-    await expect(store.set('any-key', { status: 200, body: {}, bodyHash: 'h', storedAt: 0 }, 60_000)).resolves.toBeUndefined();
+    await expect(
+      store.set('any-key', { status: 200, body: {}, bodyHash: 'h', storedAt: 0 }, 60_000),
+    ).resolves.toBeUndefined();
   });
 
   it('P16/5: TieredIdempotencyStore writes to volatile even when persistent silently fails', async () => {

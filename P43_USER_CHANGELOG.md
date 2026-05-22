@@ -3,21 +3,27 @@
 Kısa hikaye: Site canlıya alındı, simülasyon temizlendi, içerik gerçekleşti, performans + güvenlik açıkları kapatıldı.
 
 ## P34 — ROI Calculator GA4 Funnel'ı
+
 4-adımlı yapı: ROI hesap aracı, kullanıcının kuruluşunda paydaş gibi davranıyor. GA4 event'leri ile "start → input → result → cta_click" boyunca lead-scoring veriyor. Conservative default'lar kullanıldı (`efficiencyGain: 15` — P42'de daha da düşürüldü).
 
 ## P35-38 — Performans Hattı
+
 Hero LCP fix'leri: `blur(8px)` kaldırıldı, FadeIn'a `immediate` prop'u eklendi, opacity animasyonu hero `<p>`'den çıkarıldı. Inter font'un 300/500/600 ağırlıkları + Playfair 700 budandı (6 woff2 yarışı azaldı). CSS minify lightningcss'e çevrildi. AnalyticsConsumer synthetic monitor'lerde devre dışı.
 
 ## P39 — Pre-Publish Snapshot
+
 Final yayın hazırlığı: autonomous snapshot commit, Render Starter plan tuning, postDeployCommand comment, security audit (0 leak / 0 critical). README + CONTRIBUTING + DEPLOY_RUNBOOK konsolide.
 
 ## P40 — Render Free Tier'a Geçiş
+
 `render.yaml` refactor'u: Starter'dan Free'ye geçildi, Neon external Postgres'e bağlandı. Free tier cold-start (30-50s) tolere edilir, çünkü API agresif kullanılmıyor.
 
 ## P41 — Bootstrap & Build Sertleştirme
+
 Üç ardışık fix: (1) `constants_generated.ts`'i build pipeline'a dahil et + `dotenv` runtime dep'e taşı, (2) `npm ci --include=dev` Render build için, (3) Fresh Neon DB için Prisma bootstrap script'i.
 
 ## P42 — DE-SIMULATE (En Büyük Adım)
+
 Site canlıydı ama her şey sahte: "Fortune 500 müşterilerimiz · 240% ROI · 50M aktif kullanıcı · 99.99% uptime · 2017'den beri 0 ihlal" Hepsi temizlendi.
 
 - **Hero:** "Vizyon. Strateji. Sürdürülebilir Sonuç." + eCyverse vurgusu + `5+ yıl / 120+ stratejik karar / TR·AB`
@@ -31,6 +37,7 @@ Site canlıydı ama her şey sahte: "Fortune 500 müşterilerimiz · 240% ROI ·
 - 7 yeni branded SVG asset üretildi
 
 ## P43 — END-USER READY PUSH
+
 Bugün canlı doğrulama + paralel content yaratma + perf audit.
 
 - **Faz 0-1:** Push doğrulandı, Vercel deploy aktif. Live mock kalıntısı yok. Yeni `lp.js` bundle CDN'de.
@@ -46,17 +53,17 @@ Bugün canlı doğrulama + paralel content yaratma + perf audit.
 
 ## Production Readiness Scorecard
 
-| Kriter | Durum | Notu |
-|---|---|---|
-| Frontend canlı, gerçek içerik | ✅ | P42 sonrası simülasyon yok |
-| Backend health endpoint | ✅ | `/api/health` 200 |
-| Sitemap + robots.txt | ✅ | Valid XML + hreflang TR/EN |
-| OG + Twitter cards + canonical | ✅ | Tümü present |
-| HTTPS + HSTS + security headers | ✅ | Vercel HSTS, X-Frame-Options DENY |
-| CSP — frontend↔backend connect | ✅ (P43 fix) | Deploy bekliyor |
-| GA4 + GTM | ✅ | `G-89FNB9PWE5` aktif |
-| Sentry (frontend + backend) | ⚠️ | DSN format yanlış — USER_TODO #1 |
-| Google Search Console verification | ⚠️ | Placeholder var, token bekliyor — USER_TODO #2 |
-| Lighthouse Perf ≥ 90 (mobile) | 🟡 | 89 — LCP 3.07s, hedef 2.5s (USER_TODO #3 opsiyonel) |
+| Kriter                             | Durum        | Notu                                                |
+| ---------------------------------- | ------------ | --------------------------------------------------- |
+| Frontend canlı, gerçek içerik      | ✅           | P42 sonrası simülasyon yok                          |
+| Backend health endpoint            | ✅           | `/api/health` 200                                   |
+| Sitemap + robots.txt               | ✅           | Valid XML + hreflang TR/EN                          |
+| OG + Twitter cards + canonical     | ✅           | Tümü present                                        |
+| HTTPS + HSTS + security headers    | ✅           | Vercel HSTS, X-Frame-Options DENY                   |
+| CSP — frontend↔backend connect     | ✅ (P43 fix) | Deploy bekliyor                                     |
+| GA4 + GTM                          | ✅           | `G-89FNB9PWE5` aktif                                |
+| Sentry (frontend + backend)        | ⚠️           | DSN format yanlış — USER_TODO #1                    |
+| Google Search Console verification | ⚠️           | Placeholder var, token bekliyor — USER_TODO #2      |
+| Lighthouse Perf ≥ 90 (mobile)      | 🟡           | 89 — LCP 3.07s, hedef 2.5s (USER_TODO #3 opsiyonel) |
 
 **Verdict:** 🟢 Yayına hazır — kalan 3 madde toplam 5 dk kullanıcı işi.

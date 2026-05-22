@@ -47,9 +47,9 @@ export async function initSentryIntegration(): Promise<void> {
 
   try {
     // Dynamic import — production build'da bu module sadece DSN varsa execute olur.
-    const Sentry = (await import('@sentry/react' as string).catch(() => null)) as unknown as
-      | SentryAPI
-      | null;
+    const Sentry = (await import('@sentry/react' as string).catch(
+      () => null,
+    )) as unknown as SentryAPI | null;
     if (!Sentry || typeof Sentry.init !== 'function') {
       // Sentry package mevcut değil, skip
       // eslint-disable-next-line no-console

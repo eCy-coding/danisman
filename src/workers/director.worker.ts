@@ -19,11 +19,9 @@ const defaultRules: Rule[] = [
     priority: 10,
     conditions: [
       { field: 'status', operator: 'EQUALS', value: 'DRAFT' },
-      { field: 'daysSinceUpdate', operator: 'GREATER_THAN', value: 30 }
+      { field: 'daysSinceUpdate', operator: 'GREATER_THAN', value: 30 },
     ],
-    actions: [
-      { type: 'UPDATE_STATUS', payload: 'ARCHIVED' }
-    ]
+    actions: [{ type: 'UPDATE_STATUS', payload: 'ARCHIVED' }],
   },
   {
     id: 'promote-high-score',
@@ -31,12 +29,10 @@ const defaultRules: Rule[] = [
     priority: 5,
     conditions: [
       { field: 'status', operator: 'EQUALS', value: 'DRAFT' },
-      { field: 'heuristicScore', operator: 'GREATER_THAN', value: 80 }
+      { field: 'heuristicScore', operator: 'GREATER_THAN', value: 80 },
     ],
-    actions: [
-      { type: 'UPDATE_STATUS', payload: 'READY' }
-    ]
-  }
+    actions: [{ type: 'UPDATE_STATUS', payload: 'READY' }],
+  },
 ];
 
 // Message Handler

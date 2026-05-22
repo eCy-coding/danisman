@@ -12,14 +12,14 @@
 
 ## Skorbord — 6 Phase
 
-| Phase | Süre | Ne yapılır | Rollback |
-| --- | --- | --- | --- |
-| **1. Pre-flight** | 5 dk | Kalite kapıları + commit + env doğrulama | n/a |
-| **2. Backend (Render)** | 15 dk | Blueprint apply + env + migrate + health | önceki revision'a `Roll back` |
-| **3. Frontend (Hostinger)** | 10 dk | build + zip + extract + .htaccess | `public_html-backup-*` rename geri |
-| **4. DNS + SSL** | 10 dk | A + CNAME + Let's Encrypt + Render custom domain | DNS TTL 300 → 5 dk geri çevir |
-| **5. Live validation** | 10 dk | smoke + Lighthouse + Sentry test + IndexNow | Cut-back FE backup + Render previous |
-| **6. 24h monitoring** | 24 sa | Sentry + Render logs + GA4 + perf baseline | İncident runbook |
+| Phase                       | Süre  | Ne yapılır                                       | Rollback                             |
+| --------------------------- | ----- | ------------------------------------------------ | ------------------------------------ |
+| **1. Pre-flight**           | 5 dk  | Kalite kapıları + commit + env doğrulama         | n/a                                  |
+| **2. Backend (Render)**     | 15 dk | Blueprint apply + env + migrate + health         | önceki revision'a `Roll back`        |
+| **3. Frontend (Hostinger)** | 10 dk | build + zip + extract + .htaccess                | `public_html-backup-*` rename geri   |
+| **4. DNS + SSL**            | 10 dk | A + CNAME + Let's Encrypt + Render custom domain | DNS TTL 300 → 5 dk geri çevir        |
+| **5. Live validation**      | 10 dk | smoke + Lighthouse + Sentry test + IndexNow      | Cut-back FE backup + Render previous |
+| **6. 24h monitoring**       | 24 sa | Sentry + Render logs + GA4 + perf baseline       | İncident runbook                     |
 
 ---
 
@@ -64,17 +64,17 @@ Remote yoksa: GitHub repo oluştur → `git remote add origin git@github.com:<or
 
 **Kritik (production blocking):**
 
-| Anahtar | Nereden |
-| --- | --- |
-| `VITE_GA_TRACKING_ID` | GA4 → Admin → Data Streams (`G-XXXXXXXXXX`) |
-| `VITE_SENTRY_DSN` | Sentry → Project Settings → Client Keys (DSN) |
-| `SENTRY_DSN` | Backend (aynı veya ayrı server-side project) |
-| `SENTRY_AUTH_TOKEN` | Sentry → User → Auth Tokens (`project:releases` scope) |
-| `SENTRY_ORG`, `SENTRY_PROJECT` | Sentry org + project slug |
-| `DATABASE_URL` | Render Postgres → Internal/External URL |
-| `REDIS_URL` | Render Redis veya Upstash URL |
-| `RESEND_API_KEY` | resend.com → API Keys |
-| `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID` | @BotFather + @userinfobot |
+| Anahtar                                  | Nereden                                                |
+| ---------------------------------------- | ------------------------------------------------------ |
+| `VITE_GA_TRACKING_ID`                    | GA4 → Admin → Data Streams (`G-XXXXXXXXXX`)            |
+| `VITE_SENTRY_DSN`                        | Sentry → Project Settings → Client Keys (DSN)          |
+| `SENTRY_DSN`                             | Backend (aynı veya ayrı server-side project)           |
+| `SENTRY_AUTH_TOKEN`                      | Sentry → User → Auth Tokens (`project:releases` scope) |
+| `SENTRY_ORG`, `SENTRY_PROJECT`           | Sentry org + project slug                              |
+| `DATABASE_URL`                           | Render Postgres → Internal/External URL                |
+| `REDIS_URL`                              | Render Redis veya Upstash URL                          |
+| `RESEND_API_KEY`                         | resend.com → API Keys                                  |
+| `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID` | @BotFather + @userinfobot                              |
 
 **Auto-generated (P19'da üretildi):** `JWT_SECRET`, `SESSION_SECRET`,
 `API_KEY_SALT`, `CORS_ORIGIN`, `NODE_ENV`, `PORT`, `RATE_LIMIT_*`.
@@ -191,12 +191,14 @@ npm run build                  # gen:blog + vite build + postbuild
 ```
 
 Build çıktısı:
+
 - `dist/` ~36MB, ~628 dosya
 - `dist/index.html` + `dist/.htaccess` (SPA rewrite, CSP, HSTS, brotli/gzip)
 - `dist/robots.txt`, `dist/sitemap*.xml`, `dist/manifest.webmanifest`
 - Sourcemap (`.map`) Sentry release upload için (Phase 5'te)
 
 Zip paketi:
+
 ```bash
 ZIP="outputs/ecypro-frontend-$(date +%Y%m%d-%H%M).zip"
 cd dist && zip -rq "../$ZIP" . && cd ..
@@ -228,6 +230,7 @@ lftp -e "mirror -R --delete --parallel=4 dist/ /public_html/; bye" \
 ### 3.5 `.htaccess` doğrula
 
 `dist/.htaccess` zaten şunları içerir:
+
 - SPA fallback: `RewriteRule ^ index.html [L]`
 - Cache headers: 1 yıl statics, no-cache HTML
 - Brotli + gzip negotiation
@@ -247,15 +250,15 @@ curl -sI https://<temp-hostinger-url>/ | head -5
 
 **Frontend (apex + www → Hostinger IP):**
 
-| Type | Name | Value | TTL |
-| --- | --- | --- | --- |
-| A | `@` | `<Hostinger IP>` (hpanel → Server Information → IPv4) | 300 |
-| CNAME | `www` | `ecypro.com.` | 300 |
+| Type  | Name  | Value                                                 | TTL |
+| ----- | ----- | ----------------------------------------------------- | --- |
+| A     | `@`   | `<Hostinger IP>` (hpanel → Server Information → IPv4) | 300 |
+| CNAME | `www` | `ecypro.com.`                                         | 300 |
 
 **Backend (api → Render):**
 
-| Type | Name | Value | TTL |
-| --- | --- | --- | --- |
+| Type  | Name  | Value                     | TTL |
+| ----- | ----- | ------------------------- | --- |
 | CNAME | `api` | `<service>.onrender.com.` | 300 |
 
 ### 4.2 DNS propagation doğrula
@@ -275,6 +278,7 @@ TTL 300 → propagation ~5 dk.
 ### 4.3 SSL — Let's Encrypt
 
 **Frontend (Hostinger):**
+
 1. hpanel → **Security → SSL**
 2. `www.ecypro.com` ve `ecypro.com` için **Install Free SSL**
 3. ~2 dk içinde "Active"
@@ -286,6 +290,7 @@ TTL 300 → propagation ~5 dk.
    ```
 
 **Backend (Render):**
+
 1. Render dashboard → Service → **Settings → Custom Domains**
 2. `api.ecypro.com` ekle
 3. Render Let's Encrypt sertifikası otomatik kesilir (~5 dk)
@@ -312,13 +317,13 @@ curl -s https://api.ecypro.com/api/ready  | jq .
 
 **Beklenen 17 check kategorisi:**
 
-| Kategori | Check |
-| --- | --- |
-| HTTP | status 200, response <3 s, SPA fallback |
-| HTML | `<title>`, `og:image`, canonical, `html lang` |
-| Sitemap | valid XML root, urlset count >0 |
-| Security | HSTS, X-Content-Type-Options, CSP active |
-| API | `/api/health` 200 JSON, CORS allow-origin |
+| Kategori | Check                                         |
+| -------- | --------------------------------------------- |
+| HTTP     | status 200, response <3 s, SPA fallback       |
+| HTML     | `<title>`, `og:image`, canonical, `html lang` |
+| Sitemap  | valid XML root, urlset count >0               |
+| Security | HSTS, X-Content-Type-Options, CSP active      |
+| API      | `/api/health` 200 JSON, CORS allow-origin     |
 
 ### 5.2 Production Lighthouse
 
@@ -364,14 +369,14 @@ GA4 Realtime → ilk pageview 30 sn içinde görünmeli.
 
 ### 5.6 Manuel cutover smoke (kullanıcı bakışıyla)
 
-| Akış | Beklenen |
-| --- | --- |
-| `/` home | Hero + CTA + lazy-load 3 sn altında |
-| `/services` | Lighthouse fix sonrası hung yok, ROI kalkülatör çalışır |
-| `/insights` | Blog listing + ilk yazı 200 |
-| `/contact` POST | rate limit + Idempotency-Key respect + Telegram notify |
-| `/privacy/data-rights` | GDPR form submit → 1/24h/email rate limit |
-| `/admin` (login) | JWT + bcrypt auth flow |
+| Akış                   | Beklenen                                                |
+| ---------------------- | ------------------------------------------------------- |
+| `/` home               | Hero + CTA + lazy-load 3 sn altında                     |
+| `/services`            | Lighthouse fix sonrası hung yok, ROI kalkülatör çalışır |
+| `/insights`            | Blog listing + ilk yazı 200                             |
+| `/contact` POST        | rate limit + Idempotency-Key respect + Telegram notify  |
+| `/privacy/data-rights` | GDPR form submit → 1/24h/email rate limit               |
+| `/admin` (login)       | JWT + bcrypt auth flow                                  |
 
 ---
 
@@ -379,18 +384,19 @@ GA4 Realtime → ilk pageview 30 sn içinde görünmeli.
 
 ### 6.1 Watch dashboards
 
-| Dashboard | Eşik | Aksiyon |
-| --- | --- | --- |
-| Sentry — error rate | <0.5% per session | >1% → triage + revert düşün |
-| Render — service logs | 0 unhandled rejection | tail -f, alarm Telegram |
-| Render — DB CPU | <60% sustained | >80% → pool tune (P18) |
-| Render — Redis ops | normal aralık | spike → rate limit kontrol |
-| GA4 — bounce rate | <70% home | >85% → smoke regression |
-| Hostinger — bandwidth | aylık quota | aşım → CDN proxy (Cloudflare) |
+| Dashboard             | Eşik                  | Aksiyon                       |
+| --------------------- | --------------------- | ----------------------------- |
+| Sentry — error rate   | <0.5% per session     | >1% → triage + revert düşün   |
+| Render — service logs | 0 unhandled rejection | tail -f, alarm Telegram       |
+| Render — DB CPU       | <60% sustained        | >80% → pool tune (P18)        |
+| Render — Redis ops    | normal aralık         | spike → rate limit kontrol    |
+| GA4 — bounce rate     | <70% home             | >85% → smoke regression       |
+| Hostinger — bandwidth | aylık quota           | aşım → CDN proxy (Cloudflare) |
 
 ### 6.2 Performance baseline document
 
 İlk 24 saatte:
+
 - Web Vitals p75 (Sentry RUM): LCP <2.5s, FID <100ms, CLS <0.1
 - Bundle size: `npm run size` (size-limit budget altı)
 - 5 saatlik trend snapshot → `outputs/P29_PERF_BASELINE.md`
@@ -398,6 +404,7 @@ GA4 Realtime → ilk pageview 30 sn içinde görünmeli.
 ### 6.3 İncident runbook referansı
 
 İncident sınıflandırması ve ilk 5 dk response:
+
 - **P0 (down):** `docs/INCIDENT_RUNBOOK.md` § P0 sequence
 - **P1 (degraded):** `docs/INCIDENT_RUNBOOK.md` § P1 sequence
 - **P2 (perf regression):** `docs/PERFORMANCE_REPORT.md` triage
@@ -409,16 +416,16 @@ Sentry alert → Telegram bot → on-call rotation (`docs/INCIDENT_RESPONSE.md`)
 
 ## Sıkça Görülen Fail + Triaj
 
-| Hata | Çözüm |
-| --- | --- |
-| `api.ecypro.com` CORS reject | Render env `CORS_ORIGIN` doğru mu? (`https://www.ecypro.com,https://ecypro.com`) |
-| `Strict-Transport-Security` yok | Hostinger `.htaccess` aktif mi? (`mod_headers` enabled) |
-| Sentry capture fail | `VITE_SENTRY_DSN` build env'de var mı? (build-time inline) |
-| Mixed content warning | `VITE_API_URL` `https://` mi? |
-| Prisma migrate deploy fail | `DATABASE_URL` Render Internal mı? Baseline migration commit edildi mi? |
-| 502 Bad Gateway (Render) | Build started ama crash → Render logs → genelde env var eksik |
-| `/services` PAGE_HUNG geri döndü | P27 Scheduler park regresyonu → `src/lib/director/scheduler.ts` rollback test |
-| GA4 realtime'da pageview yok | `VITE_GA_TRACKING_ID` build env'de mi? consent banner accept edildi mi? |
+| Hata                             | Çözüm                                                                            |
+| -------------------------------- | -------------------------------------------------------------------------------- |
+| `api.ecypro.com` CORS reject     | Render env `CORS_ORIGIN` doğru mu? (`https://www.ecypro.com,https://ecypro.com`) |
+| `Strict-Transport-Security` yok  | Hostinger `.htaccess` aktif mi? (`mod_headers` enabled)                          |
+| Sentry capture fail              | `VITE_SENTRY_DSN` build env'de var mı? (build-time inline)                       |
+| Mixed content warning            | `VITE_API_URL` `https://` mi?                                                    |
+| Prisma migrate deploy fail       | `DATABASE_URL` Render Internal mı? Baseline migration commit edildi mi?          |
+| 502 Bad Gateway (Render)         | Build started ama crash → Render logs → genelde env var eksik                    |
+| `/services` PAGE_HUNG geri döndü | P27 Scheduler park regresyonu → `src/lib/director/scheduler.ts` rollback test    |
+| GA4 realtime'da pageview yok     | `VITE_GA_TRACKING_ID` build env'de mi? consent banner accept edildi mi?          |
 
 Fail varsa atomik fix commit → push → Hostinger re-upload (sadece değişen
 `dist/` dosyaları) veya Render auto-redeploy.
@@ -427,14 +434,14 @@ Fail varsa atomik fix commit → push → Hostinger re-upload (sadece değişen
 
 ## Rollback Stratejisi
 
-| Phase | Rollback |
-| --- | --- |
-| Pre-flight kapısı kırıldı | Sprint planına dön, fix commit, baştan |
-| Backend (Render) | Dashboard → Service → Events → **Roll back to previous** |
-| Frontend (Hostinger) | File Manager → `public_html/` sil → `public_html-backup-*` rename geri |
-| DNS yanlış | TTL 300 → 5 dk içinde geri çevir |
-| SSL provisioning fail | DNS doğru mu? CAA record blokluyor mu? `dig CAA ecypro.com` |
-| Live validation fail (P0) | Cut-back FE backup + Render previous → 24h freeze + post-mortem |
+| Phase                     | Rollback                                                               |
+| ------------------------- | ---------------------------------------------------------------------- |
+| Pre-flight kapısı kırıldı | Sprint planına dön, fix commit, baştan                                 |
+| Backend (Render)          | Dashboard → Service → Events → **Roll back to previous**               |
+| Frontend (Hostinger)      | File Manager → `public_html/` sil → `public_html-backup-*` rename geri |
+| DNS yanlış                | TTL 300 → 5 dk içinde geri çevir                                       |
+| SSL provisioning fail     | DNS doğru mu? CAA record blokluyor mu? `dig CAA ecypro.com`            |
+| Live validation fail (P0) | Cut-back FE backup + Render previous → 24h freeze + post-mortem        |
 
 Acil rollback recipe: `bash scripts/emergency-rollback.sh` (sadece P0).
 
@@ -454,18 +461,19 @@ Acil rollback recipe: `bash scripts/emergency-rollback.sh` (sadece P0).
 
 ## Recipe Dosyaları (host'ta çift-tıkla)
 
-| Recipe | Amaç |
-| --- | --- |
-| `PUSH_TO_REMOTE.command` | GitHub remote ekle + push |
-| `APPLY_P##_COMMITS.command` | Phase commit recipe (atomik) |
-| `RUN_SMOKE.command` | Production smoke test |
-| `scripts/emergency-rollback.sh` | P0 acil cut-back |
+| Recipe                          | Amaç                         |
+| ------------------------------- | ---------------------------- |
+| `PUSH_TO_REMOTE.command`        | GitHub remote ekle + push    |
+| `APPLY_P##_COMMITS.command`     | Phase commit recipe (atomik) |
+| `RUN_SMOKE.command`             | Production smoke test        |
+| `scripts/emergency-rollback.sh` | P0 acil cut-back             |
 
 ---
 
 ## Geçmiş Referansları
 
 Bu runbook konsolide eder:
+
 - `outputs/P11_FINAL.md` — visual baseline + integration probe + production runbook
 - `outputs/P13_FINAL.md` — backend hardness + RUM + GDPR + asset pipeline
 - `outputs/P19_PREFLIGHT.md` + `P19_RENDER_DEPLOY_GUIDE.md` + `P19_HOSTINGER_DEPLOY_GUIDE.md` + `P19_DNS_SSL_SMOKE_GUIDE.md` + `P19_SEO_SENTRY_GUIDE.md` + `P19_LAUNCH.md`
@@ -475,4 +483,4 @@ Bu runbook konsolide eder:
 
 ---
 
-*Master rehber — son güncelleme: P28 Track 2 (2026-05-16).*
+_Master rehber — son güncelleme: P28 Track 2 (2026-05-16)._

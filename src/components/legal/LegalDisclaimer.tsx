@@ -17,31 +17,31 @@ export const LegalDisclaimer: React.FC = () => {
   const lang = language === 'tr' ? 'tr' : 'en';
 
   return (
-    <div
-      role="note"
-      className="border border-white/10 bg-white/3 p-4 mb-8 rounded-lg"
-    >
+    <div role="note" className="border border-white/10 bg-white/3 p-4 mb-8 rounded-lg">
       <div className="flex items-start gap-3">
-        <Info
-          size={18}
-          className="text-secondary shrink-0 mt-0.5"
-          aria-hidden="true"
-        />
+        <Info size={18} className="text-secondary shrink-0 mt-0.5" aria-hidden="true" />
         <div className="text-xs text-slate-400 leading-relaxed">
           {lang === 'tr' ? (
             <>
               Bu sayfa bilgilendirme amaçlıdır ve hukuki tavsiye niteliği taşımaz. KVKK ve GDPR
               kapsamında kişisel verilerinize ilişkin hak taleplerinizi{' '}
-              <Link to="/privacy/data-rights" className="text-secondary underline hover:no-underline">
+              <Link
+                to="/privacy/data-rights"
+                className="text-secondary underline hover:no-underline"
+              >
                 KVKK / GDPR Veri Hakları Başvurusu
               </Link>{' '}
-              sayfasından iletebilirsiniz. Hukuki yorum gerektiren konularda lütfen bir avukata danışın.
+              sayfasından iletebilirsiniz. Hukuki yorum gerektiren konularda lütfen bir avukata
+              danışın.
             </>
           ) : (
             <>
               This page is informational and does not constitute legal advice. To exercise your KVKK
               and GDPR rights regarding personal data, use the{' '}
-              <Link to="/privacy/data-rights" className="text-secondary underline hover:no-underline">
+              <Link
+                to="/privacy/data-rights"
+                className="text-secondary underline hover:no-underline"
+              >
                 KVKK / GDPR Data Rights Request
               </Link>{' '}
               page. Consult an attorney for matters requiring legal interpretation.

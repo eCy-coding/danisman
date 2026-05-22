@@ -25,7 +25,7 @@ export const MouseGlow: React.FC<MouseGlowProps> = ({
     const handleMouseMove = (e: MouseEvent) => {
       smoothX.set(e.clientX - size / 2);
       smoothY.set(e.clientY - size / 2);
-      
+
       if (!isHovering) setIsHovering(true);
     };
 

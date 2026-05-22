@@ -47,24 +47,15 @@ vi.mock('../config/db', () => ({
 }));
 
 vi.mock('../lib/health', () => ({
-  checkAllServices: vi
-    .fn()
-    .mockResolvedValue({ overall: 'ok', services: {} }),
+  checkAllServices: vi.fn().mockResolvedValue({ overall: 'ok', services: {} }),
 }));
 
 // Avoid pulling the auth/middleware tree that some sub-routers expect
 vi.mock('../middleware/auth', () => ({
-  authenticate: (
-    _req: express.Request,
-    _res: express.Response,
-    next: express.NextFunction,
-  ) => next(),
-  requireRole: () =>
-    (
-      _req: express.Request,
-      _res: express.Response,
-      next: express.NextFunction,
-    ) => next(),
+  authenticate: (_req: express.Request, _res: express.Response, next: express.NextFunction) =>
+    next(),
+  requireRole: () => (_req: express.Request, _res: express.Response, next: express.NextFunction) =>
+    next(),
 }));
 
 // ── Build a tiny app that mounts only the router we need ─────────────────────
@@ -99,7 +90,9 @@ describe('GET /api/health', () => {
     const { prisma } = await import('../config/db');
     const app = await buildApp();
     await request(app).get('/api/health');
-    expect((prisma as unknown as { $queryRaw: ReturnType<typeof vi.fn> }).$queryRaw).not.toHaveBeenCalled();
+    expect(
+      (prisma as unknown as { $queryRaw: ReturnType<typeof vi.fn> }).$queryRaw,
+    ).not.toHaveBeenCalled();
   });
 });
 

@@ -1,6 +1,16 @@
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { motion } from 'motion/react';
-import { Sparkles, FileText, Briefcase, BarChart2, RefreshCw, Copy, Check, Zap, Bot } from 'lucide-react';
+import {
+  Sparkles,
+  FileText,
+  Briefcase,
+  BarChart2,
+  RefreshCw,
+  Copy,
+  Check,
+  Zap,
+  Bot,
+} from 'lucide-react';
 import { OllamaAssistant } from '../../components/admin/OllamaAssistant';
 import { useOllama } from '../../hooks/useOllama';
 
@@ -8,43 +18,43 @@ import { useOllama } from '../../hooks/useOllama';
 
 const CONTENT_TEMPLATES = [
   {
-    id:       'blog',
-    icon:     FileText,
-    label:    'Blog Post',
-    color:    'text-blue-400',
-    bg:       'bg-blue-900/20',
-    border:   'border-blue-900/30',
-    prompt:   (topic: string) =>
+    id: 'blog',
+    icon: FileText,
+    label: 'Blog Post',
+    color: 'text-blue-400',
+    bg: 'bg-blue-900/20',
+    border: 'border-blue-900/30',
+    prompt: (topic: string) =>
       `Write a premium consulting blog post about "${topic}". Include: executive summary, 3-4 key insights, data-backed recommendations, and a strong CTA. Tone: authoritative, data-driven, McKinsey-style.`,
   },
   {
-    id:       'case-study',
-    icon:     Briefcase,
-    label:    'Case Study',
-    color:    'text-green-400',
-    bg:       'bg-green-900/20',
-    border:   'border-green-900/30',
-    prompt:   (topic: string) =>
+    id: 'case-study',
+    icon: Briefcase,
+    label: 'Case Study',
+    color: 'text-green-400',
+    bg: 'bg-green-900/20',
+    border: 'border-green-900/30',
+    prompt: (topic: string) =>
       `Create a B2B consulting case study for "${topic}". Structure: Client Challenge → Our Approach → Methodology → Quantified Results → Key Learnings. Include 3+ specific metrics.`,
   },
   {
-    id:       'analysis',
-    icon:     BarChart2,
-    label:    'SWOT Analysis',
-    color:    'text-purple-400',
-    bg:       'bg-purple-900/20',
-    border:   'border-purple-900/30',
-    prompt:   (topic: string) =>
+    id: 'analysis',
+    icon: BarChart2,
+    label: 'SWOT Analysis',
+    color: 'text-purple-400',
+    bg: 'bg-purple-900/20',
+    border: 'border-purple-900/30',
+    prompt: (topic: string) =>
       `Perform a structured SWOT analysis for "${topic}" from a premium consulting perspective. Each quadrant: 4-5 specific, actionable points. End with 3 strategic recommendations.`,
   },
   {
-    id:       'service-desc',
-    icon:     Sparkles,
-    label:    'Service Description',
-    color:    'text-secondary',
-    bg:       'bg-secondary/10',
-    border:   'border-secondary/20',
-    prompt:   (topic: string) =>
+    id: 'service-desc',
+    icon: Sparkles,
+    label: 'Service Description',
+    color: 'text-secondary',
+    bg: 'bg-secondary/10',
+    border: 'border-secondary/20',
+    prompt: (topic: string) =>
       `Write an enterprise-grade service description for "${topic}" consulting service. Include: value proposition, methodology overview, deliverables, and ROI promise. 150-200 words.`,
   },
 ] as const;
@@ -52,17 +62,17 @@ const CONTENT_TEMPLATES = [
 // ─── Content Generator Panel ──────────────────────────────
 
 const ContentGenerator: React.FC = () => {
-  const [selected, setSelected] = useState<typeof CONTENT_TEMPLATES[number]['id']>('blog');
-  const [topic,    setTopic]    = useState('');
-  const [output,   setOutput]   = useState('');
-  const [copied,   setCopied]   = useState(false);
+  const [selected, setSelected] = useState<(typeof CONTENT_TEMPLATES)[number]['id']>('blog');
+  const [topic, setTopic] = useState('');
+  const [output, setOutput] = useState('');
+  const [copied, setCopied] = useState(false);
   const outputRef = useRef<HTMLDivElement>(null);
 
-  const template = CONTENT_TEMPLATES.find(t => t.id === selected)!;
+  const template = CONTENT_TEMPLATES.find((t) => t.id === selected)!;
 
   const { generateStream, isStreaming, abort, error } = useOllama({
     onChunk: useCallback((chunk: string) => {
-      setOutput(prev => prev + chunk);
+      setOutput((prev) => prev + chunk);
     }, []),
     onComplete: useCallback(() => {
       outputRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
@@ -97,17 +107,20 @@ const ContentGenerator: React.FC = () => {
           <Sparkles size={18} className="text-secondary" />
         </div>
         <div>
-          <h3 className="text-lg font-serif text-white" data-testid="generator-title">Content Generator</h3>
+          <h3 className="text-lg font-serif text-white" data-testid="generator-title">
+            Content Generator
+          </h3>
           <p className="text-xs text-slate-500">AI-powered premium consulting content</p>
         </div>
       </div>
 
       {/* Template Selection */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        {CONTENT_TEMPLATES.map(t => {
+        {CONTENT_TEMPLATES.map((t) => {
           const Icon = t.icon;
           return (
-            <button type="button"
+            <button
+              type="button"
               key={t.id}
               onClick={() => setSelected(t.id)}
               className={`flex flex-col items-center gap-2 p-3 rounded-xl border text-xs font-medium transition-all ${
@@ -129,15 +142,16 @@ const ContentGenerator: React.FC = () => {
         <input
           type="text"
           value={topic}
-          onChange={e => setTopic(e.target.value)}
-          onKeyDown={e => e.key === 'Enter' && void handleGenerate()}
+          onChange={(e) => setTopic(e.target.value)}
+          onKeyDown={(e) => e.key === 'Enter' && void handleGenerate()}
           placeholder={`Enter topic for ${template.label}...`}
           className="flex-1 bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-secondary/50 transition-colors"
           data-testid="generator-topic"
           disabled={isStreaming}
         />
         {isStreaming ? (
-          <button type="button"
+          <button
+            type="button"
             onClick={abort}
             className="px-5 py-3 bg-red-900/30 border border-red-900/30 text-red-400 rounded-xl text-sm font-medium hover:bg-red-900/50 transition-colors"
             data-testid="generator-stop"
@@ -145,7 +159,8 @@ const ContentGenerator: React.FC = () => {
             Stop
           </button>
         ) : (
-          <button type="button"
+          <button
+            type="button"
             onClick={() => void handleGenerate()}
             disabled={!topic.trim()}
             className="px-5 py-3 bg-secondary text-black rounded-xl text-sm font-semibold hover:bg-secondary/80 disabled:opacity-40 disabled:cursor-not-allowed transition-all flex items-center gap-2"
@@ -177,14 +192,16 @@ const ContentGenerator: React.FC = () => {
 
           {!isStreaming && output && (
             <div className="absolute top-3 right-3 flex gap-2">
-              <button type="button"
+              <button
+                type="button"
                 onClick={copyOutput}
                 className="p-1.5 bg-black/50 border border-white/10 rounded-lg text-slate-400 hover:text-white hover:border-white/20 transition-all"
                 aria-label="Copy output"
               >
                 {copied ? <Check size={13} className="text-green-400" /> : <Copy size={13} />}
               </button>
-              <button type="button"
+              <button
+                type="button"
                 onClick={() => void handleGenerate()}
                 className="p-1.5 bg-black/50 border border-white/10 rounded-lg text-slate-400 hover:text-white hover:border-white/20 transition-all"
                 aria-label="Regenerate"
@@ -232,10 +249,10 @@ export const AdminAIPage: React.FC = () => (
     {/* Stats Row */}
     <div className="grid grid-cols-3 gap-4">
       {[
-        { label: 'Privacy',     value: '100%', desc: 'Data stays local' },
-        { label: 'Latency',     value: '< 1s',  desc: 'First token (14B)' },
-        { label: 'Models',      value: '11',    desc: 'Available locally' },
-      ].map(s => (
+        { label: 'Privacy', value: '100%', desc: 'Data stays local' },
+        { label: 'Latency', value: '< 1s', desc: 'First token (14B)' },
+        { label: 'Models', value: '11', desc: 'Available locally' },
+      ].map((s) => (
         <motion.div
           key={s.label}
           initial={{ opacity: 0, y: 16 }}
@@ -244,7 +261,9 @@ export const AdminAIPage: React.FC = () => (
           data-testid={`ai-stat-${s.label.toLowerCase()}`}
         >
           <p className="text-2xl font-serif text-secondary">{s.value}</p>
-          <p className="text-xs text-slate-400 uppercase tracking-wider font-semibold mt-1">{s.label}</p>
+          <p className="text-xs text-slate-400 uppercase tracking-wider font-semibold mt-1">
+            {s.label}
+          </p>
           <p className="text-xs text-slate-600 mt-0.5">{s.desc}</p>
         </motion.div>
       ))}

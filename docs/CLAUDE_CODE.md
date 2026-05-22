@@ -22,12 +22,12 @@ EcyPro Premium Consulting projesinde **Claude Code CLI**'ın kurulumu, konfigür
 
 ## Önkoşullar
 
-| Bileşen | Sürüm | Doğrulama |
-|---|---|---|
-| Node.js | ≥ 22 | `node --version` |
-| npm | ≥ 10 | `npm --version` |
-| Platform | macOS / Linux | `uname -s` |
-| `curl` veya `npm` | global | installer için |
+| Bileşen           | Sürüm         | Doğrulama        |
+| ----------------- | ------------- | ---------------- |
+| Node.js           | ≥ 22          | `node --version` |
+| npm               | ≥ 10          | `npm --version`  |
+| Platform          | macOS / Linux | `uname -s`       |
+| `curl` veya `npm` | global        | installer için   |
 
 > Windows kullanıcıları için **WSL2** önerilir (installer POSIX shell'e bağımlıdır).
 
@@ -103,15 +103,15 @@ Anahtar oluşturma: <https://console.anthropic.com/settings/keys>
 
 Repo kökünde `claude` çalıştırdığında `.claude/commands/`'daki tüm slash komutlar otomatik yüklenir.
 
-| Komut | Tetiklediği |
-|---|---|
-| `/lint-fix` | `npm run lint -- --fix && npm run format` |
-| `/typecheck` | `npm run typecheck` (web + server) |
-| `/e2e` | `npm run e2e:local` (mock + preview + playwright) |
-| `/e2e-fast` | `npm run test:e2e:fast` (sanity duman) |
-| `/publish-check` | lint + typecheck + test + build + e2e:fast zinciri |
-| `/phase-status` | Publish phase 1-17 ilerleme raporu |
-| `/secret-scan` | `npx gitleaks detect --no-banner --no-git --redact --source=.` |
+| Komut            | Tetiklediği                                                    |
+| ---------------- | -------------------------------------------------------------- |
+| `/lint-fix`      | `npm run lint -- --fix && npm run format`                      |
+| `/typecheck`     | `npm run typecheck` (web + server)                             |
+| `/e2e`           | `npm run e2e:local` (mock + preview + playwright)              |
+| `/e2e-fast`      | `npm run test:e2e:fast` (sanity duman)                         |
+| `/publish-check` | lint + typecheck + test + build + e2e:fast zinciri             |
+| `/phase-status`  | Publish phase 1-17 ilerleme raporu                             |
+| `/secret-scan`   | `npx gitleaks detect --no-banner --no-git --redact --source=.` |
 
 ### Yeni slash komut ekleme
 
@@ -252,6 +252,7 @@ head -3 .claude/commands/*.md
 ### CI'da `npm run claude:install` çalıştırma?
 
 **Çalıştırma.** CI üzerindeki `.github/workflows/claude-smoke.yml` sadece:
+
 - `bash -n` syntax kontrolü
 - `shellcheck` linting
 - `.claude/settings.json` JSON validation

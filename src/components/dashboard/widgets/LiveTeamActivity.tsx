@@ -16,24 +16,25 @@ export const LiveTeamActivity: React.FC = () => {
   useEffect(() => {
     // Add initial fake activity
     setActivities([
-      { id: '1', message: 'System baseline established', type: 'system', time: 'Just now' }
+      { id: '1', message: 'System baseline established', type: 'system', time: 'Just now' },
     ]);
 
     const unsubscribe = realtimeService.subscribeGlobal((_event) => {
-
       const newItem: ActivityItem = {
         id: Date.now().toString(),
         time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
         message: '',
-        type: 'system'
+        type: 'system',
       };
 
       if (newItem.message) {
-        setActivities(prev => [newItem, ...prev].slice(0, 5)); // Keep only latest 5
+        setActivities((prev) => [newItem, ...prev].slice(0, 5)); // Keep only latest 5
       }
     });
 
-    return () => { unsubscribe(); };
+    return () => {
+      unsubscribe();
+    };
   }, []);
 
   return (
@@ -44,8 +45,8 @@ export const LiveTeamActivity: React.FC = () => {
           Live Activity
         </h3>
         <span className="flex h-2 w-2 relative">
-           <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-           <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+          <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
         </span>
       </div>
 
@@ -60,12 +61,22 @@ export const LiveTeamActivity: React.FC = () => {
               transition={{ duration: 0.3 }}
               className="flex items-start gap-3 border-b border-white/5 pb-2 last:border-0"
             >
-              <div className={`mt-0.5 p-1 rounded-md ${
-                  item.type === 'lead' ? 'bg-orange-500/10 text-orange-400' :
-                  item.type === 'user' ? 'bg-blue-500/10 text-blue-400' : 
-                  'bg-white/5 text-slate-400'
-              }`}>
-                {item.type === 'lead' ? <Zap size={12} /> : item.type === 'user' ? <Users size={12} /> : <Activity size={12} />}
+              <div
+                className={`mt-0.5 p-1 rounded-md ${
+                  item.type === 'lead'
+                    ? 'bg-orange-500/10 text-orange-400'
+                    : item.type === 'user'
+                      ? 'bg-blue-500/10 text-blue-400'
+                      : 'bg-white/5 text-slate-400'
+                }`}
+              >
+                {item.type === 'lead' ? (
+                  <Zap size={12} />
+                ) : item.type === 'user' ? (
+                  <Users size={12} />
+                ) : (
+                  <Activity size={12} />
+                )}
               </div>
               <div>
                 <p className="text-slate-400 leading-tight">{item.message}</p>

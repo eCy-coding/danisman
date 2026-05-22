@@ -30,6 +30,7 @@ BAŞARI   : [%X relative artış] / [%95 istatistiksel güven / n=X örneklem]
 ```
 
 **Örnek:**
+
 ```
 GÖZLEM   : Hero CTA "Görüşme Planla" → scroll heatmap'te %40 görünüm oranı, %2.1 CTR
 HİPOTEZ  : CTA metnini "Ücretsiz Strateji Görüşmesi Al" olarak değiştirirsek CTR %15 artacak
@@ -44,13 +45,14 @@ BAŞARI   : CTR ≥ %2.4 (15% relative lift) / %95 CI / n ≥ 385 per variant
 
 **ICE Score = (Impact × Confidence × Ease) / 3**
 
-| Boyut | Tanım | Ölçek |
-|-------|-------|-------|
-| **Impact** | Birincil KPI üzerindeki beklenen etki | 1-10 |
-| **Confidence** | Hipotezin doğru olma olasılığı | 1-10 |
-| **Ease** | Uygulama zorluğunun tersi (kolay=10) | 1-10 |
+| Boyut          | Tanım                                 | Ölçek |
+| -------------- | ------------------------------------- | ----- |
+| **Impact**     | Birincil KPI üzerindeki beklenen etki | 1-10  |
+| **Confidence** | Hipotezin doğru olma olasılığı        | 1-10  |
+| **Ease**       | Uygulama zorluğunun tersi (kolay=10)  | 1-10  |
 
 **ICE Eşiği:**
+
 - ≥ 6.0 → Sprint'e dahil et
 - 4.0-5.9 → Backlog
 - < 4.0 → Şimdilik reddedildi
@@ -59,18 +61,18 @@ BAŞARI   : CTR ≥ %2.4 (15% relative lift) / %95 CI / n ≥ 385 per variant
 
 ## 4. Aktif Hipotezler (ICE Sıralı)
 
-| # | Hipotez | Impact | Confidence | Ease | ICE | Durum |
-|---|---------|--------|------------|------|-----|-------|
-| H1 | Hero CTA: "Görüşme Planla" → "Ücretsiz Strateji Görüşmesi Al" | 8 | 7 | 9 | **8.0** | 🟡 Test |
-| H2 | Pricing page: Fiyat kartı → Karşılaştırma tablosu | 7 | 6 | 7 | **6.7** | ⬜ Beklemede |
-| H3 | Contact form: 6 alan → 3 alan (name, email, message) | 9 | 8 | 8 | **8.3** | 🟡 Test |
-| H4 | Hero: Video background yerine statik + animasyon | 6 | 5 | 6 | **5.7** | 📦 Backlog |
-| H5 | ROI Calculator: "Potansiyel Tasarruf" başlığı görünürlüğü artırma | 7 | 7 | 9 | **7.7** | ⬜ Beklemede |
-| H6 | Trust bar: Logo sırasını değiştir (tanınan markalar önce) | 5 | 6 | 9 | **6.7** | ⬜ Beklemede |
-| H7 | Booking modal: 3 adım → 2 adım (takvim+form birleşik) | 8 | 6 | 5 | **6.3** | 📦 Backlog |
-| H8 | Blog post: Her post'ta sticky CTA sidebar | 7 | 6 | 7 | **6.7** | ⬜ Beklemede |
-| H9 | Exit-intent popup: %10 indirim kuponu | 5 | 4 | 7 | **5.3** | 📦 Backlog |
-| H10 | Mobile: Floating "Görüşme Planla" button (sticky bottom) | 8 | 7 | 8 | **7.7** | ⬜ Beklemede |
+| #   | Hipotez                                                           | Impact | Confidence | Ease | ICE     | Durum        |
+| --- | ----------------------------------------------------------------- | ------ | ---------- | ---- | ------- | ------------ |
+| H1  | Hero CTA: "Görüşme Planla" → "Ücretsiz Strateji Görüşmesi Al"     | 8      | 7          | 9    | **8.0** | 🟡 Test      |
+| H2  | Pricing page: Fiyat kartı → Karşılaştırma tablosu                 | 7      | 6          | 7    | **6.7** | ⬜ Beklemede |
+| H3  | Contact form: 6 alan → 3 alan (name, email, message)              | 9      | 8          | 8    | **8.3** | 🟡 Test      |
+| H4  | Hero: Video background yerine statik + animasyon                  | 6      | 5          | 6    | **5.7** | 📦 Backlog   |
+| H5  | ROI Calculator: "Potansiyel Tasarruf" başlığı görünürlüğü artırma | 7      | 7          | 9    | **7.7** | ⬜ Beklemede |
+| H6  | Trust bar: Logo sırasını değiştir (tanınan markalar önce)         | 5      | 6          | 9    | **6.7** | ⬜ Beklemede |
+| H7  | Booking modal: 3 adım → 2 adım (takvim+form birleşik)             | 8      | 6          | 5    | **6.3** | 📦 Backlog   |
+| H8  | Blog post: Her post'ta sticky CTA sidebar                         | 7      | 6          | 7    | **6.7** | ⬜ Beklemede |
+| H9  | Exit-intent popup: %10 indirim kuponu                             | 5      | 4          | 7    | **5.3** | 📦 Backlog   |
+| H10 | Mobile: Floating "Görüşme Planla" button (sticky bottom)          | 8      | 7          | 8    | **7.7** | ⬜ Beklemede |
 
 ---
 
@@ -134,26 +136,26 @@ Karar:
 Hipotez → ICE Puanla → Tasarım → GrowthBook setup → Çalıştır → Analiz → Karar
 ```
 
-| Aşama | Eylem | Sorumluluk |
-|-------|-------|-----------|
-| **Hipotez** | Gözlem + ICE puanla | Growth Lead |
-| **Tasarım** | Kontrol/Varyant fark tanımla | UI/UX |
-| **Uygulama** | GrowthBook feature flag + `useABVariant` | Dev |
-| **Çalıştır** | Min 7 gün, min n örneklem | Otomatik |
-| **Analiz** | Z-test p-değeri + relative lift | Data |
-| **Karar** | p<0.05 → uygula; p≥0.05 → devam/iptal | Growth Lead |
-| **Uygulama** | Kazanan variant kalıcı hale getirilir | Dev |
-| **Belge** | Bu dokümana test sonucu eklenir | Growth Lead |
+| Aşama        | Eylem                                    | Sorumluluk  |
+| ------------ | ---------------------------------------- | ----------- |
+| **Hipotez**  | Gözlem + ICE puanla                      | Growth Lead |
+| **Tasarım**  | Kontrol/Varyant fark tanımla             | UI/UX       |
+| **Uygulama** | GrowthBook feature flag + `useABVariant` | Dev         |
+| **Çalıştır** | Min 7 gün, min n örneklem                | Otomatik    |
+| **Analiz**   | Z-test p-değeri + relative lift          | Data        |
+| **Karar**    | p<0.05 → uygula; p≥0.05 → devam/iptal    | Growth Lead |
+| **Uygulama** | Kazanan variant kalıcı hale getirilir    | Dev         |
+| **Belge**    | Bu dokümana test sonucu eklenir          | Growth Lead |
 
 ---
 
 ## 8. Test Sonuçları (Tamamlananlar)
 
-*Henüz tamamlanmış test yok. İlk test tamamlandığında buraya eklenecek.*
+_Henüz tamamlanmış test yok. İlk test tamamlandığında buraya eklenecek._
 
-| # | Hipotez | Süre | p-değeri | Lift | Karar |
-|---|---------|------|----------|------|-------|
-| - | - | - | - | - | - |
+| #   | Hipotez | Süre | p-değeri | Lift | Karar |
+| --- | ------- | ---- | -------- | ---- | ----- |
+| -   | -       | -    | -        | -    | -     |
 
 ---
 
@@ -161,14 +163,14 @@ Hipotez → ICE Puanla → Tasarım → GrowthBook setup → Çalıştır → An
 
 GA4 → Reports → Custom → Funnel:
 
-| Huni Adımı | Event | Beklenen Oran |
-|-----------|-------|---------------|
-| Ziyaretçi | `page_view` (/) | %100 |
-| Hero → CTA | `cta_click` (hero) | %5-10 |
-| Modal açık | `booking_modal_open` | %3-7 |
-| Takvim adım | `booking_step_2` | %60-80 |
-| Görüşme tamamlandı | `booking_completed` | %40-70 |
-| **End-to-End** | Ziyaret → Booking | **%1-3** |
+| Huni Adımı         | Event                | Beklenen Oran |
+| ------------------ | -------------------- | ------------- |
+| Ziyaretçi          | `page_view` (/)      | %100          |
+| Hero → CTA         | `cta_click` (hero)   | %5-10         |
+| Modal açık         | `booking_modal_open` | %3-7          |
+| Takvim adım        | `booking_step_2`     | %60-80        |
+| Görüşme tamamlandı | `booking_completed`  | %40-70        |
+| **End-to-End**     | Ziyaret → Booking    | **%1-3**      |
 
 Haftalık hedef: Funnel conversion ≥ %1.5 (6 aylık hedef: %3)
 

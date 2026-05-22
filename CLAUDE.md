@@ -38,6 +38,7 @@ EcyPro Premium Consulting — yüksek performanslı, premium yönetim panosu + l
 ## Komut Kataloğu
 
 ### Geliştirme
+
 ```bash
 npm run dev              # vite + server + terminal eşzamanlı
 npm run dev:server       # sadece backend (tsx server/index.ts)
@@ -46,6 +47,7 @@ npm run preview          # vite preview --port 4173
 ```
 
 ### Build
+
 ```bash
 npm run build            # gen:blog + vite build (postbuild: sitemap + rss)
 npm run build:server     # tsc -p tsconfig.server.json
@@ -53,6 +55,7 @@ npm run build:wp         # WordPress tema bundle
 ```
 
 ### Kalite Kapısı
+
 ```bash
 npm run lint             # ESLint
 npm run format           # Prettier --write
@@ -62,6 +65,7 @@ npm run typecheck:server # sadece backend
 ```
 
 ### Test
+
 ```bash
 npm run test             # Vitest (watch)
 npm run test -- --run    # Vitest tek geçiş (CI modu)
@@ -71,6 +75,7 @@ npm run e2e:local        # mock + preview + e2e zinciri
 ```
 
 ### Veritabanı (Prisma)
+
 ```bash
 npm run db:push          # şemayı DB'ye uygula (dev)
 npm run db:generate      # Prisma client üret
@@ -79,6 +84,7 @@ npm run db:seed          # seed verisi
 ```
 
 ### Deploy
+
 ```bash
 npm run deploy           # bash scripts/deploy.sh
 npm run deploy:docker    # docker hedefi
@@ -87,6 +93,7 @@ npm run lh:audit         # Lighthouse budget
 ```
 
 ### Claude Code (bu entegrasyon)
+
 ```bash
 npm run claude:install   # Claude CLI kur (idempotent, native + npm fallback)
 npm run claude:doctor    # Sağlık kontrolü
@@ -125,15 +132,15 @@ Proje 17 fazlı publish hazırlık sürecinde. Detay: `brain/PUBLISH_MASTER_PLAN
 
 ## Slash Komutları (.claude/commands/)
 
-| Slash | Açıklama |
-|---|---|
-| `/lint-fix` | ESLint --fix + Prettier --write |
-| `/typecheck` | Frontend + server tip kontrolü |
-| `/e2e` | Tam Playwright suite |
-| `/e2e-fast` | Sanity duman testi |
+| Slash            | Açıklama                                   |
+| ---------------- | ------------------------------------------ |
+| `/lint-fix`      | ESLint --fix + Prettier --write            |
+| `/typecheck`     | Frontend + server tip kontrolü             |
+| `/e2e`           | Tam Playwright suite                       |
+| `/e2e-fast`      | Sanity duman testi                         |
 | `/publish-check` | lint + typecheck + test + build + e2e:fast |
-| `/phase-status` | Mevcut phase durumu |
-| `/secret-scan` | gitleaks scan (working tree) |
+| `/phase-status`  | Mevcut phase durumu                        |
+| `/secret-scan`   | gitleaks scan (working tree)               |
 
 ## İletişim Dili
 
@@ -143,6 +150,7 @@ Proje 17 fazlı publish hazırlık sürecinde. Detay: `brain/PUBLISH_MASTER_PLAN
 ## Acil Durum
 
 Bir kuralı ihlal ettiğini fark edersen:
+
 1. Dur.
 2. Değişikliği geri al (`git restore <file>` veya revert).
 3. Kullanıcıya bildir.

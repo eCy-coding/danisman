@@ -146,7 +146,10 @@ function appendVary(res: Response, fields: string[]): void {
   if (typeof existing === 'string' && existing.length > 0) {
     const have = new Set(existing.split(',').map((s) => s.trim().toLowerCase()));
     const merged = [
-      ...existing.split(',').map((s) => s.trim()).filter(Boolean),
+      ...existing
+        .split(',')
+        .map((s) => s.trim())
+        .filter(Boolean),
       ...fields.filter((f) => !have.has(f.toLowerCase())),
     ];
     res.setHeader('Vary', merged.join(', '));

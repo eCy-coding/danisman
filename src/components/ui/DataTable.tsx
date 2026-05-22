@@ -11,14 +11,7 @@ import {
   ColumnFiltersState,
 } from '@tanstack/react-table';
 
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from './Table';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './Table';
 
 import { Button } from './Button';
 import { Input } from './Input';
@@ -59,20 +52,20 @@ export function DataTable<TData, TValue>({
     <div className="w-full space-y-4">
       {searchKey && (
         <div className="flex items-center">
-            <div className="relative max-w-sm w-full">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4" />
-                <Input
-                    placeholder="Search..."
-                    value={(table.getColumn(searchKey)?.getFilterValue() as string) ?? ''}
-                    onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                        table.getColumn(searchKey)?.setFilterValue(event.target.value)
-                    }
-                    className="pl-9 bg-white/5"
-                />
-            </div>
+          <div className="relative max-w-sm w-full">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4" />
+            <Input
+              placeholder="Search..."
+              value={(table.getColumn(searchKey)?.getFilterValue() as string) ?? ''}
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                table.getColumn(searchKey)?.setFilterValue(event.target.value)
+              }
+              className="pl-9 bg-white/5"
+            />
+          </div>
         </div>
       )}
-      
+
       <div className="rounded-xl border border-white/10 overflow-hidden bg-white/5">
         <Table>
           <TableHeader className="bg-white/5">
@@ -80,13 +73,13 @@ export function DataTable<TData, TValue>({
               <TableRow key={headerGroup.id} className="border-b border-white/10 hover:bg-white/5">
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id} className="text-xs font-bold uppercase tracking-wider text-slate-400 py-4">
+                    <TableHead
+                      key={header.id}
+                      className="text-xs font-bold uppercase tracking-wider text-slate-400 py-4"
+                    >
                       {header.isPlaceholder
                         ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
+                        : flexRender(header.column.columnDef.header, header.getContext())}
                     </TableHead>
                   );
                 })}
@@ -121,22 +114,22 @@ export function DataTable<TData, TValue>({
 
       {pagination && (
         <div className="flex items-center justify-end space-x-2 py-4">
-            <Button
+          <Button
             variant="outline"
             size="sm"
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
-            >
+          >
             <ChevronLeft size={16} /> Previous
-            </Button>
-            <Button
+          </Button>
+          <Button
             variant="outline"
             size="sm"
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
-            >
+          >
             Next <ChevronRight size={16} />
-            </Button>
+          </Button>
         </div>
       )}
     </div>

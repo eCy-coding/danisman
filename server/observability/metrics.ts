@@ -230,12 +230,7 @@ export function normaliseRouteLabel(path: string): string {
 export const metrics = {
   /** Emit a request lifecycle increment + duration sample. Safe under
    *  prom-client-absent (no-op). */
-  observeHttpRequest(
-    method: string,
-    route: string,
-    status: number,
-    durationSeconds: number,
-  ): void {
+  observeHttpRequest(method: string, route: string, status: number, durationSeconds: number): void {
     const h = ensureRegistry();
     if (!h.httpRequestsTotal || !h.httpRequestDurationSeconds) return;
     const labels = { method, route, status: String(status) };

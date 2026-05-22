@@ -9,30 +9,31 @@
 
 ## 0. Hızlı Referans
 
-| Sistem | URL | Kontrol |
-|--------|-----|---------|
-| Status Page | https://status.ecypro.com | Uptime |
-| Sentry (Frontend) | https://sentry.io/ecypro/frontend | Errors |
-| Sentry (Backend) | https://sentry.io/ecypro/backend | Errors |
-| Vercel Dashboard | https://vercel.com/ecypro | Deploy |
-| Render Dashboard | https://render.com | Backend |
-| Database (Render) | Render PostgreSQL panel | DB |
-| Redis (Render) | Render Redis panel | Cache |
+| Sistem            | URL                               | Kontrol |
+| ----------------- | --------------------------------- | ------- |
+| Status Page       | https://status.ecypro.com         | Uptime  |
+| Sentry (Frontend) | https://sentry.io/ecypro/frontend | Errors  |
+| Sentry (Backend)  | https://sentry.io/ecypro/backend  | Errors  |
+| Vercel Dashboard  | https://vercel.com/ecypro         | Deploy  |
+| Render Dashboard  | https://render.com                | Backend |
+| Database (Render) | Render PostgreSQL panel           | DB      |
+| Redis (Render)    | Render Redis panel                | Cache   |
 
 ## 1. Severity Seviyeleri
 
-| Seviye | Tanım | Örnek | Yanıt Süresi |
-|--------|-------|-------|--------------|
-| **SEV-1** | Production tam devre dışı | Site 404, API down | 15 dakika |
-| **SEV-2** | Kritik fonksiyon bozuk | Booking çalışmıyor, login hataları | 1 saat |
-| **SEV-3** | Önemli degradasyon | Yavaş API, tek sayfa hatalı | 4 saat |
-| **SEV-4** | Küçük sorun | Görsel bozuk, küçük UI hatası | 24 saat |
+| Seviye    | Tanım                     | Örnek                              | Yanıt Süresi |
+| --------- | ------------------------- | ---------------------------------- | ------------ |
+| **SEV-1** | Production tam devre dışı | Site 404, API down                 | 15 dakika    |
+| **SEV-2** | Kritik fonksiyon bozuk    | Booking çalışmıyor, login hataları | 1 saat       |
+| **SEV-3** | Önemli degradasyon        | Yavaş API, tek sayfa hatalı        | 4 saat       |
+| **SEV-4** | Küçük sorun               | Görsel bozuk, küçük UI hatası      | 24 saat      |
 
 ---
 
 ## 2. Incident Başlatma
 
 ### Adım 1 — Tespit
+
 ```bash
 # UptimeRobot alert geldi veya kullanıcı bildirdi
 # Hemen şunu doğrula:
@@ -41,6 +42,7 @@ curl -s https://ecypro.com/api/health | jq .
 ```
 
 ### Adım 2 — Scope Belirleme
+
 ```bash
 # Frontend çalışıyor mu?
 curl -o /dev/null -w "%{http_code}" https://ecypro.com/
@@ -53,7 +55,9 @@ curl https://api.ecypro.com/api/ready | jq .checks
 ```
 
 ### Adım 3 — Severity Ata
+
 Yukarıdaki tablo ile severity belirle. SEV-1 veya SEV-2 ise:
+
 - [ ] Status Page'de "investigating" yayınla
 - [ ] Slack/email ile stakeholder bildirim (şimdilik sadece Emre)
 
@@ -207,48 +211,50 @@ pg_restore --clean --no-acl --no-owner -d $DATABASE_URL ./backups/ecypro_LATEST.
 **Affected:** {feature/service}
 
 ### Özet (1-2 cümle)
+
 _Ne oldu, kim etkilendi, ne kadar sürdü._
 
 ### Timeline (UTC)
 
-| Zaman | Olay |
-|-------|------|
+| Zaman | Olay                       |
+| ----- | -------------------------- |
 | HH:MM | Incident başladı (tahmini) |
-| HH:MM | İlk tespit |
-| HH:MM | Scope belirlendi |
-| HH:MM | Mitigation başladı |
-| HH:MM | Incident çözüldü |
+| HH:MM | İlk tespit                 |
+| HH:MM | Scope belirlendi           |
+| HH:MM | Mitigation başladı         |
+| HH:MM | Incident çözüldü           |
 
 ### Kök Neden (5-Why)
 
-1. **Neden?** ___
-2. **Neden?** ___
-3. **Neden?** ___
-4. **Neden?** ___
-5. **Kök Neden:** ___
+1. **Neden?** \_\_\_
+2. **Neden?** \_\_\_
+3. **Neden?** \_\_\_
+4. **Neden?** \_\_\_
+5. **Kök Neden:** \_\_\_
 
 ### Etkisi
 
-- Etkilenen kullanıcı sayısı: ___
-- Etkilenen transaction/booking: ___
-- Revenue impact (tahmini): ___
+- Etkilenen kullanıcı sayısı: \_\_\_
+- Etkilenen transaction/booking: \_\_\_
+- Revenue impact (tahmini): \_\_\_
 
 ### Çözüm Öğesi (Action Items)
 
-| # | Aksiyon | Sorumlu | Deadline |
-|---|---------|---------|----------|
-| 1 | | | |
-| 2 | | | |
+| #   | Aksiyon | Sorumlu | Deadline |
+| --- | ------- | ------- | -------- |
+| 1   |         |         |          |
+| 2   |         |         |          |
 
 ### Prevention (Bu tekrar nasıl önlenir?)
 
-___
+---
 
 ---
 
 ## 6. Deployment Rollback (Emergency)
 
 ### Vercel Frontend Rollback
+
 ```bash
 # Option A: Vercel CLI
 npx vercel rollback --token=$VERCEL_TOKEN
@@ -258,12 +264,14 @@ npx vercel rollback --token=$VERCEL_TOKEN
 ```
 
 ### Render Backend Rollback
+
 ```bash
 # Render dashboard → Service → Deployments → previous → "Rollback"
 # NOT: Render otomatik rollback desteklemiyor CLI'da
 ```
 
 ### Database Rollback (son çare)
+
 ```bash
 # UYARI: Bu tüm son işlemleri siler!
 # Onay al: Emre (Baş)
@@ -280,6 +288,7 @@ pg_restore --clean --no-acl --no-owner -d $DATABASE_URL ecypro_BACKUP.dump
 ## 7. Yıllık DR Testi (Disaster Recovery)
 
 Her 6 ayda bir:
+
 - [ ] Backup restore testi (staging DB)
 - [ ] Rollback prosedürü testi
 - [ ] On-call rotation güncellemesi

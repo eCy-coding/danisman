@@ -38,7 +38,8 @@ export class TaskQueue {
   private sortQueue() {
     this.queue.sort((a, b) => {
       // Primary Sort: Execution Time (Ascending - Sooner first)
-      if (Math.abs(a.executeAt - b.executeAt) > 100) { // Tolerance for "same time"
+      if (Math.abs(a.executeAt - b.executeAt) > 100) {
+        // Tolerance for "same time"
         return a.executeAt - b.executeAt;
       }
       // Secondary Sort: Priority (Descending - Higher first)

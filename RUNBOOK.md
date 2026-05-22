@@ -4,12 +4,12 @@
 
 ## Architecture Overview
 
-| Component   | Host      | URL                              |
-|-------------|-----------|----------------------------------|
-| Frontend    | Vercel    | https://ecypro.com               |
-| API         | Render    | https://api.ecypro.com           |
-| Database    | Render PG | (internal, via DATABASE_URL)     |
-| DNS/CDN     | Cloudflare| ecypro.com zone                  |
+| Component | Host       | URL                          |
+| --------- | ---------- | ---------------------------- |
+| Frontend  | Vercel     | https://ecypro.com           |
+| API       | Render     | https://api.ecypro.com       |
+| Database  | Render PG  | (internal, via DATABASE_URL) |
+| DNS/CDN   | Cloudflare | ecypro.com zone              |
 
 ## Health Checks
 
@@ -30,17 +30,20 @@ Render dashboard for deploy failures or env var issues.
 ## Deployment
 
 ### Frontend (Vercel)
+
 - Auto-deploys on push to `main` branch.
 - Build command: `pnpm build` (Vite).
 - Preview deploys on PRs.
 
 ### API (Render)
+
 - Auto-deploys on push to `main` branch.
 - Build: `pnpm install && pnpm build:server`
 - Start: `node dist/server/index.js`
 - Health check path: `/api/v1/health`
 
 ### Database Migrations
+
 ```bash
 # Run pending migrations (production)
 DATABASE_URL="postgres://..." npx prisma migrate deploy
@@ -64,35 +67,38 @@ npx tsx server/scripts/seed-admin.ts
 
 Critical production env vars (validated by Zod at boot):
 
-| Variable        | Required | Description                       |
-|-----------------|----------|-----------------------------------|
-| DATABASE_URL    | Yes      | Postgres connection string        |
-| JWT_SECRET      | Yes      | ≥32 char signing secret           |
-| CORS_ORIGIN     | Yes      | Frontend origin (https://ecypro.com) |
-| NODE_ENV        | Yes      | Must be `production`              |
-| PORT            | No       | Default 3001                      |
-| SENTRY_DSN      | No       | Sentry error tracking             |
-| TELEGRAM_BOT_TOKEN | No   | Ops notification bot              |
-| TELEGRAM_CHAT_ID   | No   | Founder chat for alerts           |
-| RESEND_API_KEY  | No       | Transactional email               |
+| Variable           | Required | Description                          |
+| ------------------ | -------- | ------------------------------------ |
+| DATABASE_URL       | Yes      | Postgres connection string           |
+| JWT_SECRET         | Yes      | ≥32 char signing secret              |
+| CORS_ORIGIN        | Yes      | Frontend origin (https://ecypro.com) |
+| NODE_ENV           | Yes      | Must be `production`                 |
+| PORT               | No       | Default 3001                         |
+| SENTRY_DSN         | No       | Sentry error tracking                |
+| TELEGRAM_BOT_TOKEN | No       | Ops notification bot                 |
+| TELEGRAM_CHAT_ID   | No       | Founder chat for alerts              |
+| RESEND_API_KEY     | No       | Transactional email                  |
 
 Missing critical vars in production → server exits with code 1.
 
 ## Incident Response
 
 ### API 502 (Render cold start vs real outage)
+
 1. Wait 30s, retry `curl -f https://api.ecypro.com/api/v1/health`
 2. If still 502 → check Render dashboard for deploy status
 3. Check Render logs: `render logs --service ecypro-api --tail 100`
 4. Verify env vars haven't been cleared (Render dashboard → Environment)
 
 ### Database connection failures
+
 1. Check Render PG dashboard for status
 2. Verify `DATABASE_URL` is correct in Render env
 3. Check connection pool: `PG_POOL_MAX` default is 10
 4. If pool exhaustion → restart service or increase pool
 
 ### Frontend build failures
+
 1. Check Vercel dashboard for build logs
 2. Common: TypeScript errors — run `pnpm typecheck` locally
 3. Prerender failures are non-blocking (graceful skip in place)

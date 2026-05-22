@@ -68,19 +68,19 @@ const TIERS = {
   session: {
     name: 'Strateji Oturumu',
     duration: '1 hafta',
-    price: '₺12.000\'den başlayan',
+    price: "₺12.000'den başlayan",
     description: 'Kuzey yıldızı + kısa yol haritası için 2 saatlik premium audit.',
   },
   quarterly: {
     name: 'Çeyreklik Engagement',
     duration: '12 hafta',
-    price: '₺75.000\'den başlayan',
+    price: "₺75.000'den başlayan",
     description: 'OKR cadence + RACI + haftalık ritim implementasyonu.',
   },
   annual: {
     name: 'Yıllık Partnerlik',
     duration: '12 ay',
-    price: '₺350.000\'den başlayan',
+    price: "₺350.000'den başlayan",
     description: 'Sürekli stratejik partnerlik; çeyreklik döngülerle 5+ yıllık ufuk.',
   },
 } as const;
@@ -127,11 +127,15 @@ export const StrategicMaturityLadder: React.FC = () => {
           <div className="text-xs font-bold uppercase tracking-[0.25em] text-secondary mb-3">
             İnteraktif Teşhis
           </div>
-          <h2 id="maturity-ladder-heading" className="text-3xl md:text-4xl font-serif font-bold text-white mb-3">
+          <h2
+            id="maturity-ladder-heading"
+            className="text-3xl md:text-4xl font-serif font-bold text-white mb-3"
+          >
             Stratejik Olgunluk Asansörü
           </h2>
           <p className="text-slate-400 max-w-2xl">
-            Şirketinizin bugün hangi seviyede olduğunu seçin — size uygun engagement formatını birlikte belirleyelim.
+            Şirketinizin bugün hangi seviyede olduğunu seçin — size uygun engagement formatını
+            birlikte belirleyelim.
           </p>
         </div>
 
@@ -175,7 +179,10 @@ export const StrategicMaturityLadder: React.FC = () => {
                         Seviye {level.id}/5
                       </span>
                     </div>
-                    <p id={`level-${level.id}-desc`} className="text-slate-300 text-sm md:text-base leading-relaxed">
+                    <p
+                      id={`level-${level.id}-desc`}
+                      className="text-slate-300 text-sm md:text-base leading-relaxed"
+                    >
                       {level.tagline}
                     </p>
                     <p className="text-slate-400 text-xs md:text-sm mt-2 italic">

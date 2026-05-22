@@ -53,11 +53,9 @@ describe('config/env Zod validator', () => {
     delete process.env.DATABASE_URL;
     delete process.env.CORS_ORIGIN;
 
-    const exitSpy = vi
-      .spyOn(process, 'exit')
-      .mockImplementation(((code?: number) => {
-        throw new Error(`process.exit(${code})`);
-      }) as never);
+    const exitSpy = vi.spyOn(process, 'exit').mockImplementation(((code?: number) => {
+      throw new Error(`process.exit(${code})`);
+    }) as never);
     const errSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 
     await expect(import('./env')).rejects.toThrow(/process\.exit\(1\)/);

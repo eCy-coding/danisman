@@ -26,7 +26,7 @@ export const LanguageToggle: React.FC = () => {
           ? 'TR — Switch language to English'
           : "EN — Dili Türkçe'ye değiştir"
       }
-      title={(i18n.language || 'en').startsWith('tr') ? 'Switch to English' : 'Türkçe\'ye Geç'}
+      title={(i18n.language || 'en').startsWith('tr') ? 'Switch to English' : "Türkçe'ye Geç"}
     >
       <div className="flex items-center justify-center gap-1 font-bold text-xs">
         <Globe size={16} aria-hidden="true" />

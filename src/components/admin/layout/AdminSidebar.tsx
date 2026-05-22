@@ -99,7 +99,8 @@ export const AdminSidebar: React.FC = () => {
 
       <div className="p-4 border-t border-white/5 space-y-1">
         {/* P36-T09: Keyboard shortcuts hint — opens ? help modal */}
-        <button type="button"
+        <button
+          type="button"
           onClick={openAdminHelpModal}
           className="w-full flex items-center gap-3 px-4 py-2 rounded-lg text-slate-500 hover:text-slate-300 hover:bg-white/5 transition-colors"
         >
@@ -109,7 +110,8 @@ export const AdminSidebar: React.FC = () => {
             ?
           </kbd>
         </button>
-        <button type="button"
+        <button
+          type="button"
           onClick={logout}
           className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-colors"
         >

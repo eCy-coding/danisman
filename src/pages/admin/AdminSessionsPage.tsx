@@ -151,14 +151,16 @@ export const AdminSessionsPage: React.FC = () => {
           </p>
         </div>
         <div className="flex items-center gap-3">
-          <button type="button"
+          <button
+            type="button"
             onClick={() => refetch()}
             className="flex items-center gap-2 px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-slate-300 hover:bg-white/10 transition-colors text-sm"
           >
             <RefreshCw size={14} /> Yenile
           </button>
           {activeSessions.length > 0 && (
-            <button type="button"
+            <button
+              type="button"
               onClick={() => revokeAllMutation.mutate()}
               disabled={revokeAllMutation.isPending}
               className="flex items-center gap-2 px-3 py-2 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 hover:bg-red-500/20 transition-colors text-sm disabled:opacity-50"
@@ -298,7 +300,8 @@ const SessionCard: React.FC<SessionCardProps> = ({ session, isRevoking, onRevoke
 
       {/* Revoke button */}
       {!session.isCurrent && (
-        <button type="button"
+        <button
+          type="button"
           onClick={onRevoke}
           disabled={disabled}
           className="shrink-0 flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 hover:bg-red-500/20 transition-all disabled:opacity-40"

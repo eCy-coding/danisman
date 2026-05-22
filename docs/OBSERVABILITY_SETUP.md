@@ -8,10 +8,12 @@ All other P40 items are automated in CI/CD.
 ## P40-T04: UptimeRobot Setup (5 monitors, free tier)
 
 ### Account setup
+
 1. Register: https://uptimerobot.com (free — 50 monitors)
 2. Login → **+ Add New Monitor**
 
 ### Monitor 1: Landing Page HTTP
+
 ```
 Type:         HTTP(s)
 Friendly Name: EcyPro Website
@@ -21,6 +23,7 @@ Alert Contacts: [your email]
 ```
 
 ### Monitor 2: API Health
+
 ```
 Type:         HTTP(s) + Keyword
 Friendly Name: EcyPro API Health
@@ -30,6 +33,7 @@ Monitoring Interval: 5 minutes
 ```
 
 ### Monitor 3: API Readiness
+
 ```
 Type:         HTTP(s)
 Friendly Name: EcyPro API Ready
@@ -39,6 +43,7 @@ Alert: If status not 200
 ```
 
 ### Monitor 4: SSL Certificate
+
 ```
 Type:         SSL Expiry
 Friendly Name: EcyPro SSL
@@ -47,6 +52,7 @@ Alert when:   30 days before expiry
 ```
 
 ### Monitor 5: API Docs
+
 ```
 Type:         HTTP(s)
 Friendly Name: EcyPro API Docs
@@ -55,11 +61,13 @@ Monitoring Interval: 15 minutes
 ```
 
 ### Alert Channels
+
 - Email: primary notification
 - Telegram: `Settings → Alert Contacts → Telegram` (optional, instant)
 - Webhook: POST to Slack/Discord (optional)
 
 ### Verify
+
 After setup: UptimeRobot dashboard → all 5 monitors green.
 Down simulation: temporarily block port → alert email arrives <6min.
 
@@ -68,10 +76,12 @@ Down simulation: temporarily block port → alert email arrives <6min.
 ## P40-T05: Status Page (Instatus — free tier)
 
 ### Account setup
+
 1. Register: https://instatus.com (free — up to 5 components)
 2. Create project: `EcyPro` → subdomain: `status` (→ `status.ecypro.com`)
 
 ### Components to add
+
 ```
 1. Website        — https://ecypro.com/
 2. API            — https://ecypro.com/api/health
@@ -81,18 +91,22 @@ Down simulation: temporarily block port → alert email arrives <6min.
 ```
 
 ### UptimeRobot Integration (auto-update status)
+
 1. Instatus → Settings → Integrations → UptimeRobot
 2. Connect UptimeRobot account
 3. Map each UptimeRobot monitor → Instatus component
 4. Enable: auto-create incident on monitor down
 
 ### DNS CNAME Setup
+
 Add to DNS provider (Vercel/Cloudflare):
+
 ```
 CNAME   status   cname.instatus.com
 ```
 
 ### Verify
+
 - https://status.ecypro.com → Instatus public page
 - 3+ components "Operational"
 - Simulate downtime → component turns red within 2min

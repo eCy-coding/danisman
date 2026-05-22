@@ -60,7 +60,8 @@ export class ErrorBoundary extends Component<Props, State> {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button type="button"
+              <button
+                type="button"
                 onClick={this.handleReload}
                 className="px-8 py-4 bg-linear-to-r from-primary to-primary-dark text-white font-bold rounded-xl hover:shadow-lg hover:shadow-primary/25 transition-all flex items-center justify-center gap-3 active:scale-95 group"
               >
@@ -71,7 +72,8 @@ export class ErrorBoundary extends Component<Props, State> {
                 Sistemi Yenile
               </button>
 
-              <button type="button"
+              <button
+                type="button"
                 onClick={this.handleReset}
                 className="px-8 py-4 bg-white/5 text-gray-300 font-bold rounded-xl border border-white/10 hover:bg-white/10 transition-all flex items-center justify-center gap-3 active:scale-95 hover:text-white"
               >

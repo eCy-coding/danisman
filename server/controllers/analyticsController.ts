@@ -15,7 +15,14 @@ const trackPageViewSchema = z.object({
 
 const trackInteractionSchema = z.object({
   sessionId: z.string().min(1),
-  type: z.enum(['PAGE_VIEW', 'CTA_CLICK', 'FORM_SUBMIT', 'BOOKING_START', 'DOWNLOAD', 'SCROLL_DEPTH']),
+  type: z.enum([
+    'PAGE_VIEW',
+    'CTA_CLICK',
+    'FORM_SUBMIT',
+    'BOOKING_START',
+    'DOWNLOAD',
+    'SCROLL_DEPTH',
+  ]),
   target: z.string().min(1),
   metadata: z.record(z.string(), z.unknown()).optional(),
 });
@@ -41,7 +48,11 @@ function detectContactLocale(req: Request): 'tr' | 'en' {
   return header.startsWith('tr') ? 'tr' : 'en';
 }
 
-export const trackPageView = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+export const trackPageView = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
   try {
     const data = trackPageViewSchema.parse(req.body);
 
@@ -61,7 +72,11 @@ export const trackPageView = async (req: Request, res: Response, next: NextFunct
   }
 };
 
-export const trackInteraction = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+export const trackInteraction = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
   try {
     const data = trackInteractionSchema.parse(req.body);
 
@@ -71,7 +86,8 @@ export const trackInteraction = async (req: Request, res: Response, next: NextFu
         type: data.type,
         target: data.target,
         // Prisma expects Prisma.InputJsonValue; zod's Record<string, unknown> is compatible at runtime.
-        metadata: (data.metadata ?? undefined) as unknown as import('@prisma/client').Prisma.InputJsonValue,
+        metadata: (data.metadata ??
+          undefined) as unknown as import('@prisma/client').Prisma.InputJsonValue,
       },
     });
 
@@ -81,7 +97,11 @@ export const trackInteraction = async (req: Request, res: Response, next: NextFu
   }
 };
 
-export const submitContact = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+export const submitContact = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
   try {
     const data = contactSubmissionSchema.parse(req.body);
     const locale = detectContactLocale(req);
@@ -94,8 +114,8 @@ export const submitContact = async (req: Request, res: Response, next: NextFunct
         phone: data.phone ?? null,
         service: data.service ?? null,
         // B5: respect Accept-Language — route message to the correct locale column.
-        messageTr: locale === 'tr' ? data.message ?? null : null,
-        messageEn: locale === 'en' ? data.message ?? null : null,
+        messageTr: locale === 'tr' ? (data.message ?? null) : null,
+        messageEn: locale === 'en' ? (data.message ?? null) : null,
         source: data.source ?? null,
       },
     });
@@ -120,7 +140,11 @@ export const submitContact = async (req: Request, res: Response, next: NextFunct
   }
 };
 
-export const getDashboardSummary = async (_req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
+export const getDashboardSummary = async (
+  _req: AuthRequest,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
   try {
     const now = new Date();
     const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);

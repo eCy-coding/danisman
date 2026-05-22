@@ -28,7 +28,7 @@ const AnimatedNumber = ({ value }: { value: number }) => {
     const animate = (timestamp: number) => {
       if (!startTime) startTime = timestamp;
       const progress = Math.min((timestamp - startTime) / duration, 1);
-      
+
       // Easing function (easeOutExpo)
       const ease = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
       setDisplayValue(startValue + change * ease);
@@ -53,7 +53,7 @@ export const GrowthCalculator: React.FC = () => {
   useEffect(() => {
     setIsMounted(true);
   }, []);
-  
+
   const methods = useForm<CalculatorForm>({
     resolver: zodResolver(calculatorSchema),
     defaultValues: {
@@ -79,7 +79,7 @@ export const GrowthCalculator: React.FC = () => {
   const chartData = useMemo(() => {
     return Array.from({ length: 5 }).map((_, i) => {
       const baseGrowth = activeRevenue * Math.pow(1.05, i); // 5% organic growth
-      const optimizedGrowth = activeRevenue * Math.pow(1.15, i) + (activeTeam * 5000 * (i + 1)); // 15% growth + productivity compounding
+      const optimizedGrowth = activeRevenue * Math.pow(1.15, i) + activeTeam * 5000 * (i + 1); // 15% growth + productivity compounding
       return {
         name: `Year ${i + 1}`,
         Organic: Math.round(baseGrowth),
@@ -90,9 +90,9 @@ export const GrowthCalculator: React.FC = () => {
 
   useEffect(() => {
     if (values.revenue && values.teamSize) {
-      updateCalculator({ 
-        revenue: values.revenue, 
-        teamSize: values.teamSize 
+      updateCalculator({
+        revenue: values.revenue,
+        teamSize: values.teamSize,
       });
     }
   }, [values.revenue, values.teamSize, updateCalculator]);
@@ -105,18 +105,23 @@ export const GrowthCalculator: React.FC = () => {
 
       <div className="p-8 md:p-12 relative z-10">
         <div className="text-center mb-12">
-          <motion.div 
-            initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm font-medium mb-6"
           >
             <Target className="w-4 h-4" />
             ROI Projector
           </motion.div>
           <h2 className="text-3xl md:text-5xl font-serif font-medium text-white mb-4 tracking-tight">
-            Data-Driven <span className="text-transparent bg-clip-text bg-linear-to-r from-primary to-secondary">Growth</span>
+            Data-Driven{' '}
+            <span className="text-transparent bg-clip-text bg-linear-to-r from-primary to-secondary">
+              Growth
+            </span>
           </h2>
           <p className="text-slate-400 max-w-2xl mx-auto text-lg">
-            Simulate the compounded impact of strategic digital transformation and process optimization on your bottom line.
+            Simulate the compounded impact of strategic digital transformation and process
+            optimization on your bottom line.
           </p>
         </div>
 
@@ -124,8 +129,10 @@ export const GrowthCalculator: React.FC = () => {
           {/* Controls - Left Side */}
           <div className="lg:col-span-5 space-y-8">
             <FormProvider {...methods}>
-              <motion.div 
-                initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.1 }}
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.1 }}
                 className="p-6 bg-white/5 border border-white/10 rounded-2xl space-y-8"
               >
                 <div className="space-y-4">
@@ -172,20 +179,28 @@ export const GrowthCalculator: React.FC = () => {
             </FormProvider>
 
             {/* Micro Stats */}
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
               className="grid grid-cols-2 gap-4"
             >
               <div className="p-4 rounded-2xl bg-white/5 border border-white/10">
-                <span className="text-slate-400 text-xs uppercase tracking-wider font-semibold">Efficiency Lift</span>
+                <span className="text-slate-400 text-xs uppercase tracking-wider font-semibold">
+                  Efficiency Lift
+                </span>
                 <div className="text-2xl font-bold text-white mt-1">
-                  +$<AnimatedNumber value={activeTeam * 5000} />
+                  +$
+                  <AnimatedNumber value={activeTeam * 5000} />
                 </div>
               </div>
               <div className="p-4 rounded-2xl bg-white/5 border border-white/10">
-                <span className="text-slate-400 text-xs uppercase tracking-wider font-semibold">Revenue Boost</span>
+                <span className="text-slate-400 text-xs uppercase tracking-wider font-semibold">
+                  Revenue Boost
+                </span>
                 <div className="text-2xl font-bold text-white mt-1">
-                  +$<AnimatedNumber value={activeRevenue * 0.15} />
+                  +$
+                  <AnimatedNumber value={activeRevenue * 0.15} />
                 </div>
               </div>
             </motion.div>
@@ -194,11 +209,15 @@ export const GrowthCalculator: React.FC = () => {
           {/* Visualization - Right Side */}
           <div className="lg:col-span-7 flex flex-col justify-between">
             {/* Big Impact Number */}
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.3 }}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.3 }}
               className="mb-8"
             >
-              <h3 className="text-slate-400 text-sm uppercase tracking-[0.2em] font-semibold mb-3">Projected Annual Impact</h3>
+              <h3 className="text-slate-400 text-sm uppercase tracking-[0.2em] font-semibold mb-3">
+                Projected Annual Impact
+              </h3>
               <div className="text-6xl md:text-7xl font-bold text-transparent bg-clip-text bg-linear-to-b from-white to-white/60 tracking-tight flex items-baseline gap-2">
                 $<AnimatedNumber value={projection} />
                 <span className="text-2xl font-medium text-slate-400">/yr</span>
@@ -206,46 +225,86 @@ export const GrowthCalculator: React.FC = () => {
             </motion.div>
 
             {/* Chart */}
-            <motion.div 
-              initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.4 }}
               className="h-64 w-full mt-4"
             >
               {isMounted && (
-              <ResponsiveContainer width="100%" height="100%" minWidth={1} minHeight={1}>
-                <AreaChart data={chartData} margin={{ top: 10, right: 0, left: 0, bottom: 0 }}>
-                  <defs>
-                    <linearGradient id="colorOptimized" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3}/>
-                      <stop offset="95%" stopColor="#3b82f6" stopOpacity={0}/>
-                    </linearGradient>
-                    <linearGradient id="colorOrganic" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#64748b" stopOpacity={0.1}/>
-                      <stop offset="95%" stopColor="#64748b" stopOpacity={0}/>
-                    </linearGradient>
-                  </defs>
-                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
-                  <XAxis dataKey="name" stroke="rgba(255,255,255,0.2)" fontSize={12} tickLine={false} axisLine={false} />
-                  <Tooltip 
-                    contentStyle={{ backgroundColor: 'rgba(5, 8, 16, 0.9)', borderColor: 'rgba(255,255,255,0.1)', borderRadius: '12px', color: '#fff' }}
-                    itemStyle={{ color: '#fff' }}
-                    formatter={(value) => [`$${new Intl.NumberFormat('en-US').format(Number(value) || 0)}`, 'Revenue'] as [string, 'Revenue']}
-                  />
-                  <Area type="monotone" dataKey="Organic" stroke="#64748b" fillOpacity={1} fill="url(#colorOrganic)" />
-                  <Area type="monotone" dataKey="Optimized" stroke="#3b82f6" strokeWidth={2} fillOpacity={1} fill="url(#colorOptimized)" />
-                </AreaChart>
-              </ResponsiveContainer>
+                <ResponsiveContainer width="100%" height="100%" minWidth={1} minHeight={1}>
+                  <AreaChart data={chartData} margin={{ top: 10, right: 0, left: 0, bottom: 0 }}>
+                    <defs>
+                      <linearGradient id="colorOptimized" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3} />
+                        <stop offset="95%" stopColor="#3b82f6" stopOpacity={0} />
+                      </linearGradient>
+                      <linearGradient id="colorOrganic" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="#64748b" stopOpacity={0.1} />
+                        <stop offset="95%" stopColor="#64748b" stopOpacity={0} />
+                      </linearGradient>
+                    </defs>
+                    <CartesianGrid
+                      strokeDasharray="3 3"
+                      stroke="rgba(255,255,255,0.05)"
+                      vertical={false}
+                    />
+                    <XAxis
+                      dataKey="name"
+                      stroke="rgba(255,255,255,0.2)"
+                      fontSize={12}
+                      tickLine={false}
+                      axisLine={false}
+                    />
+                    <Tooltip
+                      contentStyle={{
+                        backgroundColor: 'rgba(5, 8, 16, 0.9)',
+                        borderColor: 'rgba(255,255,255,0.1)',
+                        borderRadius: '12px',
+                        color: '#fff',
+                      }}
+                      itemStyle={{ color: '#fff' }}
+                      formatter={(value) =>
+                        [
+                          `$${new Intl.NumberFormat('en-US').format(Number(value) || 0)}`,
+                          'Revenue',
+                        ] as [string, 'Revenue']
+                      }
+                    />
+                    <Area
+                      type="monotone"
+                      dataKey="Organic"
+                      stroke="#64748b"
+                      fillOpacity={1}
+                      fill="url(#colorOrganic)"
+                    />
+                    <Area
+                      type="monotone"
+                      dataKey="Optimized"
+                      stroke="#3b82f6"
+                      strokeWidth={2}
+                      fillOpacity={1}
+                      fill="url(#colorOptimized)"
+                    />
+                  </AreaChart>
+                </ResponsiveContainer>
               )}
             </motion.div>
 
             {/* Action Area */}
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5 }}
               className="mt-8 pt-8 border-t border-white/10 flex items-center justify-between"
             >
               <p className="text-sm text-slate-400 max-w-xs">
                 Numbers are estimates based on average client results in the first 12 months.
               </p>
-              <button type="button" className="group relative px-6 py-3 bg-white text-neutral font-medium rounded-xl hover:bg-slate-100 transition-colors overflow-hidden flex items-center gap-2">
+              <button
+                type="button"
+                className="group relative px-6 py-3 bg-white text-neutral font-medium rounded-xl hover:bg-slate-100 transition-colors overflow-hidden flex items-center gap-2"
+              >
                 <span className="relative z-10">Get Detailed Blueprint</span>
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform relative z-10" />
               </button>

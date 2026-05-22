@@ -16,7 +16,7 @@ describe('Button', () => {
     const button = screen.getByRole('button');
     expect(button.hasAttribute('disabled')).toBe(true);
     // The button text "Click me" is still present
-    expect(screen.getByText('Click me')).toBeDefined();   
+    expect(screen.getByText('Click me')).toBeDefined();
   });
 
   it('renders variants correctly', () => {

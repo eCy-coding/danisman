@@ -72,7 +72,10 @@ export const LoginPage: React.FC = () => {
         </Link>
       </div>
       <div className="mt-2 text-center text-xs">
-        <Link to="/forgot-password" className="text-slate-400 hover:text-secondary transition-colors">
+        <Link
+          to="/forgot-password"
+          className="text-slate-400 hover:text-secondary transition-colors"
+        >
           {getLang(AUTH_COPY.forgotPwTitle as MultiLang, lang)}
         </Link>
       </div>

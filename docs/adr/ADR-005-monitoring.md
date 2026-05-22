@@ -32,7 +32,7 @@ Use **Sentry** as the single error and performance monitoring tool:
 - `@sentry/node` on the backend with `tracesSampleRate=0.1` (10%) and
   `profilesSampleRate=0.1`.
 - `@sentry/react` on the frontend with `BrowserTracing` integration
-  + `replayIntegration` (5% session, 100% error sessions).
+  - `replayIntegration` (5% session, 100% error sessions).
 - `@sentry/vite-plugin` uploads sourcemaps on `npm run build`.
 - Web Vitals captured via `web-vitals` package and forwarded to Sentry
   Performance via `setMeasurement`. NOT sent to Google Analytics.

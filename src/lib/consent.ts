@@ -112,9 +112,7 @@ export function setConsent(
   };
   if (typeof window !== 'undefined') {
     window.localStorage.setItem(STORAGE_KEY_V2, JSON.stringify(record));
-    window.dispatchEvent(
-      new CustomEvent('ecypro:consent-changed', { detail: record }),
-    );
+    window.dispatchEvent(new CustomEvent('ecypro:consent-changed', { detail: record }));
   }
   return record;
 }
@@ -133,9 +131,7 @@ export function clearConsent(): void {
 }
 
 /** Convenience: subscribe to consent changes (returns unsubscribe). */
-export function onConsentChange(
-  handler: (record: ConsentRecord | null) => void,
-): () => void {
+export function onConsentChange(handler: (record: ConsentRecord | null) => void): () => void {
   if (typeof window === 'undefined') return () => {};
   const wrap = (e: Event) =>
     handler((e as CustomEvent<ConsentRecord | null>).detail ?? getConsent());

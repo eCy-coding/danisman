@@ -1,4 +1,4 @@
-import { Toaster as Sonner } from "sonner";
+import { Toaster as Sonner } from 'sonner';
 import React from 'react';
 
 type ToasterProps = React.ComponentProps<typeof Sonner>;
@@ -11,15 +11,13 @@ export const Toaster = ({ ...props }: ToasterProps) => {
       toastOptions={{
         classNames: {
           toast:
-            "group toast group-[.toaster]:bg-neutral-900 group-[.toaster]:text-white group-[.toaster]:border-white/10 group-[.toaster]:shadow-lg group-[.toaster]:",
-          description: "group-[.toast]:text-slate-500",
-          actionButton:
-            "group-[.toast]:bg-slate-900 group-[.toast]:text-slate-50",
-          cancelButton:
-            "group-[.toast]:bg-slate-100 group-[.toast]:text-slate-500",
+            'group toast group-[.toaster]:bg-neutral-900 group-[.toaster]:text-white group-[.toaster]:border-white/10 group-[.toaster]:shadow-lg group-[.toaster]:',
+          description: 'group-[.toast]:text-slate-500',
+          actionButton: 'group-[.toast]:bg-slate-900 group-[.toast]:text-slate-50',
+          cancelButton: 'group-[.toast]:bg-slate-100 group-[.toast]:text-slate-500',
         },
       }}
       {...props}
     />
   );
-}
+};

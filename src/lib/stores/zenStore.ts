@@ -14,6 +14,6 @@ export const useZenStore = create<ZenState>()(
     }),
     {
       name: 'ecypro-zen',
-    }
-  )
+    },
+  ),
 );

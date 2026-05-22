@@ -21,10 +21,10 @@ class Director {
     if (this.initialized) return; // Already initialized
 
     Logger.info('[Director] System Starting...');
-    
+
     // Initialize Web Worker
     this.worker = new DirectorWorker();
-    
+
     // Initialize Scheduler
     this.scheduler = new Scheduler(this.worker);
     this.scheduler.start();
@@ -40,14 +40,18 @@ class Director {
 
     this.initialized = true;
     Logger.success('🎬 The Automatic Director is Online');
-    
+
     // Expose for E2E Testing
     if (typeof window !== 'undefined') {
       window.__DIRECTOR__ = this;
     }
   }
 
-  scheduleTask(type: 'ONE_TIME' | 'RECURRING', payload: Record<string, unknown>, delay: number = 0) {
+  scheduleTask(
+    type: 'ONE_TIME' | 'RECURRING',
+    payload: Record<string, unknown>,
+    delay: number = 0,
+  ) {
     Logger.debug(`[Director] Scheduling task: ${type} in ${delay}ms`);
     if (!this.scheduler) {
       Logger.error('[Director] Scheduler not initialized');

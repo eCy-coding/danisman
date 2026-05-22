@@ -147,7 +147,8 @@ export const ANNUAL_REPORT_2025: AnnualReportData = {
       body: '2025 yılında toplam faturalanan saatin %6’sı pro bono engagement’a ayrıldı. 4 sivil toplum kuruluşu ve 2 sosyal girişim engagement’ı tam ücretsiz yürütüldü. Mentorluk programı kapsamında 19 üniversite öğrencisine birebir kariyer + danışmanlık girişi mentorluğu sağlandı. Tüm pro bono saatler bağımsız raporda izlenmektedir.',
     },
   ],
-  outlook2026: 'Vision 2026: Ölçek değil derinlik konseptini koruyacağız. Engagement sayısı sınırı 42; bu sayının üzerine çıkmayacağız. Avrupa hattını kalıcılaştırma kararını aldık; Hollanda ve Almanya’da yerel ortaklık yapıları araştırılıyor. Methodoloji tarafında "Anonymous Result Loop"u dijital ürün haline getirme (private SaaS) çalışmasını başlattık; 2026’nın son çeyreğinde sınırlı beta planlanıyor. Sektör derinleştirme: 2026’da finans + sağlık + üretim eksenlerini daha derinleştireceğiz, yeni sektör girişi kasıtlı olarak ertelenecek.',
+  outlook2026:
+    'Vision 2026: Ölçek değil derinlik konseptini koruyacağız. Engagement sayısı sınırı 42; bu sayının üzerine çıkmayacağız. Avrupa hattını kalıcılaştırma kararını aldık; Hollanda ve Almanya’da yerel ortaklık yapıları araştırılıyor. Methodoloji tarafında "Anonymous Result Loop"u dijital ürün haline getirme (private SaaS) çalışmasını başlattık; 2026’nın son çeyreğinde sınırlı beta planlanıyor. Sektör derinleştirme: 2026’da finans + sağlık + üretim eksenlerini daha derinleştireceğiz, yeni sektör girişi kasıtlı olarak ertelenecek.',
   signoff:
     'Bu rapor; eCyPro Premium Consulting’in 2025 yılı agrege deneyimini paylaşmak ve müşteri tarafı şeffaflığını desteklemek için hazırlanmıştır. Detaylı görüşme için: info@ecypro.com — Engagement süreci hakkında 45 dakikalık ücretsiz Discovery Call rezervasyonu yapabilirsiniz.',
 };

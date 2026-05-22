@@ -25,13 +25,14 @@ export const SmartCTA = () => {
   if (location.pathname === '/contact' || isDismissed) return null;
 
   return (
-    <div 
+    <div
       className={`fixed bottom-6 right-6 z-40 transition-all duration-500 transform ${
         isVisible ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0 pointer-events-none'
       }`}
     >
       <div className="relative group">
-        <button type="button" 
+        <button
+          type="button"
           onClick={() => setIsDismissed(true)}
           className="absolute -top-2 -left-2 bg-gray-200 hover:bg-gray-300 text-gray-600 rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
           aria-label="Dismiss CTA"
@@ -45,11 +46,13 @@ export const SmartCTA = () => {
           className="flex items-center space-x-3 bg-gray-900 text-white px-6 py-4 rounded-full shadow-2xl hover:bg-black hover:scale-105 transition-all border border-gray-800"
         >
           <div className="relative">
-             <Calendar className="w-5 h-5" />
-             <span className="absolute -top-1 -right-1 w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+            <Calendar className="w-5 h-5" />
+            <span className="absolute -top-1 -right-1 w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
           </div>
           <div className="flex flex-col text-left leading-none">
-            <span className="text-[10px] text-gray-400 uppercase tracking-wider font-semibold">Available Now</span>
+            <span className="text-[10px] text-gray-400 uppercase tracking-wider font-semibold">
+              Available Now
+            </span>
             <span className="font-bold text-sm">Book Discovery Call</span>
           </div>
           <ArrowRight className="w-4 h-4 text-gray-400 group-hover:text-white transition-colors" />

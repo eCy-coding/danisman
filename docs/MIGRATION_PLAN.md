@@ -12,12 +12,12 @@ anlatır. Her migration için kart açılır, sırayla yürütülür, log'lanır
 
 ## 1. Risk sınıfları
 
-| Sınıf | Tanım | Örnek | Maintenance window? |
-|---|---|---|---|
-| **A — Additive, idempotent** | `ADD COLUMN nullable`, `CREATE INDEX IF NOT EXISTS`, yeni tablo | P14-BE indexes + soft-delete kolonları | Hayır |
-| **B — Additive ama uzun** | Geniş tabloya `CREATE INDEX` (CONCURRENTLY gerekli) | Booking composite indexes (50K+ satır) | Düşük trafik penceresi |
-| **C — Destructive ama geri-alınabilir** | `DROP INDEX`, `DROP COLUMN nullable` | Redundant unique index temizliği | Düşük trafik penceresi |
-| **D — Destructive ve geri-alınamaz** | `DROP TABLE`, `DROP COLUMN NOT NULL`, type değişimi | Yok (henüz) | Tam bakım penceresi + backup gating |
+| Sınıf                                   | Tanım                                                           | Örnek                                  | Maintenance window?                 |
+| --------------------------------------- | --------------------------------------------------------------- | -------------------------------------- | ----------------------------------- |
+| **A — Additive, idempotent**            | `ADD COLUMN nullable`, `CREATE INDEX IF NOT EXISTS`, yeni tablo | P14-BE indexes + soft-delete kolonları | Hayır                               |
+| **B — Additive ama uzun**               | Geniş tabloya `CREATE INDEX` (CONCURRENTLY gerekli)             | Booking composite indexes (50K+ satır) | Düşük trafik penceresi              |
+| **C — Destructive ama geri-alınabilir** | `DROP INDEX`, `DROP COLUMN nullable`                            | Redundant unique index temizliği       | Düşük trafik penceresi              |
+| **D — Destructive ve geri-alınamaz**    | `DROP TABLE`, `DROP COLUMN NOT NULL`, type değişimi             | Yok (henüz)                            | Tam bakım penceresi + backup gating |
 
 P14-BE Track 1+2 migration'larının tamamı **A sınıfı** (additive +
 idempotent). Online uygulamayı kolaylaştırmak için her migration klasörünün
@@ -59,17 +59,21 @@ oturumunda yürütülebilen versiyonudur.
 ## 3. Geri-alma (rollback)
 
 ### Sınıf A (additive)
+
 Yeni index'i / kolonu **bırak**. Rollback maliyeti = sıfıra yakın. Acil
 durumda `DROP INDEX CONCURRENTLY <name>` ile çıkar.
 
 ### Sınıf B
+
 Aynı şekilde — index online drop edilir. Hiçbir veri kaybı yok.
 
 ### Sınıf C
+
 Önceki `pg_dump --schema-only` snapshot'ından **eski şema parçası** elle
 çalıştırılır. Veri kolonu drop edilmemişse, sadece kolon eklenir.
 
 ### Sınıf D
+
 **Restore from backup**. Render UI → Database → "Restore from backup" →
 en son snapshot. Pencere boyunca uygulama 503 verir (graceful-shutdown
 flag'i devrede tutulur).
@@ -78,10 +82,10 @@ flag'i devrede tutulur).
 
 ## 4. P14-BE migration envanteri
 
-| Migration | Sınıf | İçerik | Online safe? |
-|---|---|---|---|
-| `20260516112231_p14_schema_hardening` | A | Index trimming + composite indexes (Booking/Analytics/Interactions/ContactSubmission/Newsletter) + soft-delete (User/ContactSubmission) | ✅ — `online.sql` mevcut |
-| `20260516125000_p14_be_t2_auditlog_indexes` | A | AuditLog `(targetType,targetId)` ve `(adminId,createdAt)` composite indexes | ✅ — `online.sql` mevcut |
+| Migration                                   | Sınıf | İçerik                                                                                                                                  | Online safe?             |
+| ------------------------------------------- | ----- | --------------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `20260516112231_p14_schema_hardening`       | A     | Index trimming + composite indexes (Booking/Analytics/Interactions/ContactSubmission/Newsletter) + soft-delete (User/ContactSubmission) | ✅ — `online.sql` mevcut |
+| `20260516125000_p14_be_t2_auditlog_indexes` | A     | AuditLog `(targetType,targetId)` ve `(adminId,createdAt)` composite indexes                                                             | ✅ — `online.sql` mevcut |
 
 İlk uygulama:
 
@@ -135,11 +139,11 @@ göstermek zorunlu (template var: `.github/pull_request_template.md`).
 
 ## 7. Acil durum kontak listesi
 
-| Rol | Kim | Ne zaman çağrılır |
-|---|---|---|
+| Rol             | Kim                      | Ne zaman çağrılır         |
+| --------------- | ------------------------ | ------------------------- |
 | Backend on-call | rotation @ Render alerts | Migration sırasında error |
-| Database SME | (ekip büyüdükçe atanır) | Plan bozulduğunda |
-| Founder gating | @emre | Sınıf D migration onayı |
+| Database SME    | (ekip büyüdükçe atanır)  | Plan bozulduğunda         |
+| Founder gating  | @emre                    | Sınıf D migration onayı   |
 
 ---
 

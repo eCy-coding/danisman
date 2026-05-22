@@ -21,31 +21,39 @@ function bridgeQueryToken(req: Request, _res: Response, next: NextFunction): voi
   next();
 }
 
-router.get('/', bridgeQueryToken, authenticate, requireRole('ADMIN'), (req: Request, res: Response) => {
-  res.setHeader('Content-Type', 'text/event-stream');
-  res.setHeader('Cache-Control', 'no-cache, no-transform');
-  res.setHeader('Connection', 'keep-alive');
-  res.setHeader('X-Accel-Buffering', 'no');
-  res.flushHeaders?.();
+router.get(
+  '/',
+  bridgeQueryToken,
+  authenticate,
+  requireRole('ADMIN'),
+  (req: Request, res: Response) => {
+    res.setHeader('Content-Type', 'text/event-stream');
+    res.setHeader('Cache-Control', 'no-cache, no-transform');
+    res.setHeader('Connection', 'keep-alive');
+    res.setHeader('X-Accel-Buffering', 'no');
+    res.flushHeaders?.();
 
-  const write = (data: string) => res.write(data);
+    const write = (data: string) => res.write(data);
 
-  write(`: connected ${new Date().toISOString()}\n`);
-  write(`event: ready\ndata: ${JSON.stringify({ listeners: adminEventBus.listenerCount() + 1 })}\n\n`);
+    write(`: connected ${new Date().toISOString()}\n`);
+    write(
+      `event: ready\ndata: ${JSON.stringify({ listeners: adminEventBus.listenerCount() + 1 })}\n\n`,
+    );
 
-  const onEvent = (evt: AdminEvent) => {
-    write(`event: ${evt.type}\n`);
-    write(`data: ${JSON.stringify(evt)}\n\n`);
-  };
-  const unsubscribe = adminEventBus.subscribe(onEvent);
+    const onEvent = (evt: AdminEvent) => {
+      write(`event: ${evt.type}\n`);
+      write(`data: ${JSON.stringify(evt)}\n\n`);
+    };
+    const unsubscribe = adminEventBus.subscribe(onEvent);
 
-  const heartbeat = setInterval(() => write(`: heartbeat ${Date.now()}\n\n`), 30_000);
+    const heartbeat = setInterval(() => write(`: heartbeat ${Date.now()}\n\n`), 30_000);
 
-  req.on('close', () => {
-    clearInterval(heartbeat);
-    unsubscribe();
-    logger.info('[admin-events] client disconnected');
-  });
-});
+    req.on('close', () => {
+      clearInterval(heartbeat);
+      unsubscribe();
+      logger.info('[admin-events] client disconnected');
+    });
+  },
+);
 
 export default router;

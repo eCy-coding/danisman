@@ -34,6 +34,7 @@ SEO 92→100 jump on non-homepage routes confirms prerender working.
 Open https://sentry.io → Project: ecypro → Alerts → Create Alert Rule.
 
 ### Rule 1: Frontend error spike
+
 - **Type:** Issues
 - **Condition:** When an issue is seen more than `5` times in `15 min`
 - **Action:** Send notification to `email: emrecnyn@gmail.com` + Slack #alerts
@@ -41,6 +42,7 @@ Open https://sentry.io → Project: ecypro → Alerts → Create Alert Rule.
 - **Filter:** `level:error`
 
 ### Rule 2: API 5xx rate
+
 - **Type:** Metric Alert
 - **Metric:** `http.server.response_time_count` filtered `http.status:5xx`
 - **Window:** 5 min rolling
@@ -48,6 +50,7 @@ Open https://sentry.io → Project: ecypro → Alerts → Create Alert Rule.
 - **Action:** Page on-call
 
 ### Rule 3: Performance regression
+
 - **Type:** Metric Alert
 - **Metric:** `transaction.duration` (LCP)
 - **Window:** 1 hour rolling
@@ -55,6 +58,7 @@ Open https://sentry.io → Project: ecypro → Alerts → Create Alert Rule.
 - **Action:** Email warning
 
 ### Rule 4: Release tracking
+
 Already wired: `SENTRY_RELEASE=$(git rev-parse --short HEAD)` env in Render + Vercel. Each deploy creates release tag automatically.
 
 ---
@@ -64,6 +68,7 @@ Already wired: `SENTRY_RELEASE=$(git rev-parse --short HEAD)` env in Render + Ve
 **Status:** 🟡 T0 dashboard — 8 min total
 
 ### Google Search Console (5 min)
+
 1. https://search.google.com/search-console
 2. Add property: `https://www.ecypro.com`
 3. Verify via DNS TXT (already done at Vercel deploy) OR HTML meta tag
@@ -77,6 +82,7 @@ Already wired: `SENTRY_RELEASE=$(git rev-parse --short HEAD)` env in Render + Ve
    - `/blog`
 
 ### Bing Webmaster Tools (3 min)
+
 1. https://www.bing.com/webmaster
 2. Add site `https://www.ecypro.com`
 3. Import from Google Search Console (one-click)
@@ -101,6 +107,7 @@ Mark these as conversions:
 | `case_study_view` | Auto-tracked | Case study detail page view ≥30s |
 
 Set up funnels:
+
 - Landing → Pricing → Contact (consulting funnel)
 - Blog → Newsletter (content funnel)
 
@@ -125,6 +132,7 @@ done
 ```
 
 **Manual validators (T0 — 5 min):**
+
 - LinkedIn Post Inspector: https://www.linkedin.com/post-inspector/
   - Test: `/pricing` → expect "Şeffaf Fiyatlandırma | EcyPro"
 - Twitter Card Validator: https://cards-dev.twitter.com/validator
@@ -140,11 +148,11 @@ done
 
 https://betteruptime.com → Add Monitors
 
-| Monitor | URL | Interval | Alert |
-|---|---|---|---|
-| FE Live | `https://www.ecypro.com` | 3 min | email + SMS |
-| API Health | `https://api.ecypro.com/api/health` | 5 min | email |
-| SSL Expiry | `https://www.ecypro.com` (TLS check) | daily | 30-day warning |
+| Monitor    | URL                                  | Interval | Alert          |
+| ---------- | ------------------------------------ | -------- | -------------- |
+| FE Live    | `https://www.ecypro.com`             | 3 min    | email + SMS    |
+| API Health | `https://api.ecypro.com/api/health`  | 5 min    | email          |
+| SSL Expiry | `https://www.ecypro.com` (TLS check) | daily    | 30-day warning |
 
 Status page: enable public status page at `https://status.ecypro.com` (optional, add CNAME).
 
@@ -157,6 +165,7 @@ curl -sI https://www.ecypro.com | grep -iE "^(strict-transport|content-security|
 ```
 
 Production HEAD response includes:
+
 - `strict-transport-security: max-age=63072000; includeSubDomains; preload` ✓
 - `x-content-type-options: nosniff` ✓
 - `x-frame-options: DENY` ✓
@@ -175,6 +184,7 @@ Production HEAD response includes:
 `.github/workflows/a11y-ci.yml` runs `npx playwright test e2e/a11y.spec.ts` on schedule.
 
 Manual production scan:
+
 ```bash
 npx @axe-core/cli https://www.ecypro.com --tags wcag2a,wcag2aa --exit
 ```
@@ -188,15 +198,18 @@ Last result (worktree e2e): 0 violations on all routes except known webkit oklch
 **Status:** ⏳ design ready — T0 verify Neon dashboard
 
 **Postgres (Neon):**
+
 - Point-in-Time Recovery: enable on Neon dashboard → Branch settings → PITR (7 days free)
 - Automated daily snapshot: free tier provides
 - Manual backup: `pg_dump $DATABASE_URL > backup-$(date +%F).sql`
 
 **Redis (Upstash):**
+
 - Free tier: persistence on, eviction-only on max memory
 - Manual: `redis-cli --rdb dump.rdb`
 
 **DR drill (quarterly):**
+
 1. Spin up Neon branch from yesterday's snapshot
 2. Update DATABASE_URL in Render staging
 3. Verify auth + bookings + analytics
@@ -207,11 +220,13 @@ Last result (worktree e2e): 0 violations on all routes except known webkit oklch
 ## P92 — Rate Limit Production Tuning ✅ AUTO
 
 `server/middleware/rateLimiter.ts` already exposes:
+
 - `generalLimiter` — 100 req/15min per IP
 - `sseLimiter` — 5 concurrent SSE per IP
 - `authLimiter` — 5 login attempts per 10 min per IP
 
 Production verify:
+
 ```bash
 for i in $(seq 1 5); do
   curl -s -o /dev/null -w "%{http_code} " https://api.ecypro.com/api/health
@@ -254,6 +269,7 @@ Saves ~200ms per first paint. Implement after P100.
 Current: `sitemap.xml` + `sitemap-tr.xml` + `sitemap-en.xml` (106 URLs each).
 
 Add:
+
 - `sitemap-images.xml` — blog cover images (Google Image search)
 - `sitemap-news.xml` — last 90 days blog posts (Google News inclusion)
 
@@ -270,6 +286,7 @@ node scripts/internal-link-audit.mjs
 ```
 
 Walk every page, extract `<a href>`, build directed graph. Flag:
+
 - Orphan routes (in sitemap but 0 incoming links)
 - Dead links (404)
 - Excessive depth (>4 clicks from /)
@@ -303,6 +320,7 @@ Set alerts at 80% of each limit.
 **Status:** ✅ live, freeze pending
 
 Pages:
+
 - `/privacy` — KVKK + GDPR
 - `/terms` — Terms of use
 - `/cookies` — Cookie policy
@@ -322,13 +340,13 @@ git push --tags
 
 ## Phase Status Summary
 
-| Status | Count | Phases |
-|---|---|---|
-| ✅ Auto-pass | 4 | P89, P92, P96 + P78 deployed |
-| ⏳ Auto-verify post-deploy | 4 | P83, P87, P90, P95 |
-| 🟡 T0 dashboard (~40 min) | 6 | P84, P85, P86, P88, P97, P98 |
-| 🟢 Design ready (defer) | 2 | P93, P94 |
-| 🎯 Final gate | 1 | P100 |
+| Status                     | Count | Phases                       |
+| -------------------------- | ----- | ---------------------------- |
+| ✅ Auto-pass               | 4     | P89, P92, P96 + P78 deployed |
+| ⏳ Auto-verify post-deploy | 4     | P83, P87, P90, P95           |
+| 🟡 T0 dashboard (~40 min)  | 6     | P84, P85, P86, P88, P97, P98 |
+| 🟢 Design ready (defer)    | 2     | P93, P94                     |
+| 🎯 Final gate              | 1     | P100                         |
 
 **Total to P100:** 17 phases (P78-P98 + P100). Each addressed above.
 

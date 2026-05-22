@@ -11,12 +11,7 @@
  */
 
 import { useEffect, useMemo, useRef, useState } from 'react';
-import {
-  getDefaultSSEClient,
-  type SSEClient,
-  type SSEMessage,
-  type SSEStatus,
-} from './sse-client';
+import { getDefaultSSEClient, type SSEClient, type SSEMessage, type SSEStatus } from './sse-client';
 
 export interface UseRealtimeOptions {
   /** Custom client (test/mock) — verilmezse singleton kullanılır. */

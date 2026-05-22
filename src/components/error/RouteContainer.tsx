@@ -36,11 +36,7 @@ interface Props {
 }
 
 const DEFAULT_FALLBACK = (
-  <div
-    aria-hidden="true"
-    style={{ minHeight: '40vh' }}
-    data-testid="route-suspense-fallback"
-  />
+  <div aria-hidden="true" style={{ minHeight: '40vh' }} data-testid="route-suspense-fallback" />
 );
 
 export const RouteContainer: React.FC<Props> = ({

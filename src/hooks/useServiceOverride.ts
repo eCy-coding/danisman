@@ -57,7 +57,7 @@ export function useServiceOverride(slug: string): FetcherState {
       setState({ data: cache.get(slug) ?? null, loading: false, error: null });
       return;
     }
-    const existing = inflight.get(slug) ?? (inflight.set(slug, fetchOverride(slug)).get(slug)!);
+    const existing = inflight.get(slug) ?? inflight.set(slug, fetchOverride(slug)).get(slug)!;
     existing
       .then((data) => {
         cache.set(slug, data);

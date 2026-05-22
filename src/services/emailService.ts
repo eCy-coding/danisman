@@ -155,10 +155,7 @@ export async function submitBooking(data: BookingData): Promise<EmailResponse> {
     Logger.error('Booking notification error', error);
     return {
       success: false,
-      message: tn(
-        'notifications.bookingError',
-        'Rezervasyon gönderilirken bir hata oluştu.',
-      ),
+      message: tn('notifications.bookingError', 'Rezervasyon gönderilirken bir hata oluştu.'),
     };
   }
 }

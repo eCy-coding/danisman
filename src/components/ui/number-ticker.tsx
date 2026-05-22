@@ -28,8 +28,9 @@ export const NumberTicker: React.FC<NumberTickerProps> = ({
     damping: 60,
     stiffness: 100,
   });
-  const displayVal = useTransform(springVal, (v) =>
-    `${prefix}${v.toFixed(decimalPlaces)}${suffix}`
+  const displayVal = useTransform(
+    springVal,
+    (v) => `${prefix}${v.toFixed(decimalPlaces)}${suffix}`,
   );
 
   useEffect(() => {
@@ -43,7 +44,9 @@ export const NumberTicker: React.FC<NumberTickerProps> = ({
   if (prefersReducedMotion) {
     return (
       <span ref={ref} className={className}>
-        {prefix}{value.toFixed(decimalPlaces)}{suffix}
+        {prefix}
+        {value.toFixed(decimalPlaces)}
+        {suffix}
       </span>
     );
   }

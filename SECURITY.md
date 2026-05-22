@@ -22,12 +22,14 @@ Raporunuzu aldıktan sonra:
 ## Scope
 
 **In-scope hedefler:**
+
 - `https://www.ecypro.com` — production frontend
 - `https://api.ecypro.com` — production backend API
 - `https://admin.ecypro.com` (varsa) — admin paneli
 - npm paket bağımlılıklarındaki vulnerable versiyonlar
 
 **Out-of-scope:**
+
 - Üçüncü taraf servisler (Vercel, Render, Neon, Upstash, Resend, Sentry, GA4) — direkt sağlayıcıya rapor edin
 - Sosyal mühendislik (phishing, vishing, premise breach)
 - DoS / DDoS volumetric saldırılar
@@ -38,12 +40,12 @@ Raporunuzu aldıktan sonra:
 
 [CVSS 3.1](https://www.first.org/cvss/calculator/3.1) baz alınır. Genel sınıflandırma:
 
-| Severity | CVSS | SLA fix |
-|---|---|---|
-| Critical | 9.0-10.0 | 7 gün |
-| High | 7.0-8.9 | 30 gün |
-| Medium | 4.0-6.9 | 60 gün |
-| Low | 0.1-3.9 | 90 gün |
+| Severity | CVSS     | SLA fix |
+| -------- | -------- | ------- |
+| Critical | 9.0-10.0 | 7 gün   |
+| High     | 7.0-8.9  | 30 gün  |
+| Medium   | 4.0-6.9  | 60 gün  |
+| Low      | 0.1-3.9  | 90 gün  |
 
 ## Önerdiğimiz raporlama formatı
 

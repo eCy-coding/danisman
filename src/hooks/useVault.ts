@@ -14,12 +14,12 @@ export function useVault<T extends { id: string }>(store: StoreName) {
       // For general settings we might use simple get, but let's default to secure for now or check store type
       let items: T[] = [];
       if (store === 'settings') {
-         // Settings implies key-value mostly, handling array fetch for generic store might be different
-         // For now, let's assume 'projects' or 'assets' uses secure getAll
-         // For settings, you usually fetch by key. This hook is designed for lists.
-         // Let's implement getAllSecure first.
+        // Settings implies key-value mostly, handling array fetch for generic store might be different
+        // For now, let's assume 'projects' or 'assets' uses secure getAll
+        // For settings, you usually fetch by key. This hook is designed for lists.
+        // Let's implement getAllSecure first.
       }
-      
+
       items = await sovereignDB.getAllSecure<T>(store);
       setData(items);
       setLoading(false);
@@ -62,8 +62,8 @@ export function useVault<T extends { id: string }>(store: StoreName) {
       sovereignSync.publish(store as VaultStore, 'UPDATE', item.id);
       await fetchData();
     } catch (err) {
-        Logger.error('[Vault] Update failed:', err);
-        throw err;
+      Logger.error('[Vault] Update failed:', err);
+      throw err;
     }
   };
 
@@ -73,8 +73,8 @@ export function useVault<T extends { id: string }>(store: StoreName) {
       sovereignSync.publish(store as VaultStore, 'DELETE', id);
       await fetchData();
     } catch (err) {
-        Logger.error('[Vault] Delete failed:', err);
-        throw err;
+      Logger.error('[Vault] Delete failed:', err);
+      throw err;
     }
   };
 

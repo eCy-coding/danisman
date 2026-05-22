@@ -22,12 +22,11 @@ export const HeuristicWeights = {
   SIZE_PENALTY: -2, // Minor penalty for large files
 };
 
-
 export function scoreAsset(asset: Asset, context: ScoringContext): number {
   let score = 0;
 
   // 1. Tag Matching (High Impact)
-  const matchedTags = asset.tags.filter(tag => context.targetTags.includes(tag));
+  const matchedTags = asset.tags.filter((tag) => context.targetTags.includes(tag));
   score += matchedTags.length * HeuristicWeights.TAG_MATCH;
 
   // 2. Type Matching (Critical)
@@ -37,7 +36,7 @@ export function scoreAsset(asset: Asset, context: ScoringContext): number {
 
   // 3. Usage Frequency (Variance Control)
   // Fewer uses = Higher score
-  score += Math.max(0, 10 - asset.usageCount) * 2; 
+  score += Math.max(0, 10 - asset.usageCount) * 2;
   if (asset.usageCount > 5) {
     score += (asset.usageCount - 5) * HeuristicWeights.USAGE_PENALTY;
   }

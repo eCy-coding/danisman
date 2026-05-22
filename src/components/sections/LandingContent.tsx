@@ -28,11 +28,11 @@ import { Services } from '@/components/sections/Services';
 
 // ── Below-fold: lazy imports (JS chunk deferred until IntersectionObserver fires) ──
 const GeoPersonalizedHero = React.lazy(() =>
-  import('@/components/sections/GeoPersonalizedHero').then((m) => ({ default: m.GeoPersonalizedHero })),
+  import('@/components/sections/GeoPersonalizedHero').then((m) => ({
+    default: m.GeoPersonalizedHero,
+  })),
 );
-const KPI = React.lazy(() =>
-  import('@/components/sections/KPI').then((m) => ({ default: m.KPI })),
-);
+const KPI = React.lazy(() => import('@/components/sections/KPI').then((m) => ({ default: m.KPI })));
 const SuccessStories = React.lazy(() =>
   import('@/components/sections/SuccessStories').then((m) => ({ default: m.SuccessStories })),
 );
@@ -40,7 +40,9 @@ const ConversionBanner = React.lazy(() =>
   import('@/components/sections/ConversionBanner').then((m) => ({ default: m.ConversionBanner })),
 );
 const TestimonialsCarousel = React.lazy(() =>
-  import('@/components/sections/TestimonialsCarousel').then((m) => ({ default: m.TestimonialsCarousel })),
+  import('@/components/sections/TestimonialsCarousel').then((m) => ({
+    default: m.TestimonialsCarousel,
+  })),
 );
 const ProcessTimeline = React.lazy(() =>
   import('@/components/sections/ProcessTimeline').then((m) => ({ default: m.ProcessTimeline })),
@@ -77,9 +79,7 @@ const SectionShell: React.FC<{ minHeight?: string; cards?: number; children: Rea
   return (
     <div ref={ref} style={{ minHeight: inView ? undefined : minHeight }}>
       {inView ? (
-        <Suspense fallback={<SectionSkeleton cards={cards} />}>
-          {children}
-        </Suspense>
+        <Suspense fallback={<SectionSkeleton cards={cards} />}>{children}</Suspense>
       ) : (
         <SectionSkeleton cards={cards} />
       )}

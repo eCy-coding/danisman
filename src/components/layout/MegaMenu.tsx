@@ -1,9 +1,22 @@
 import React from 'react';
 import {
-  Target, Handshake, Network, Brain, Zap, Cloud,
-  TrendingUp, BarChart3, Settings, DollarSign, Cpu,
-  BookOpen, FileText, Compass, Building2, ArrowRight,
-  Factory
+  Target,
+  Handshake,
+  Network,
+  Brain,
+  Zap,
+  Cloud,
+  TrendingUp,
+  BarChart3,
+  Settings,
+  DollarSign,
+  Cpu,
+  BookOpen,
+  FileText,
+  Compass,
+  Building2,
+  ArrowRight,
+  Factory,
 } from 'lucide-react';
 import { MEGA_MENUS } from '@/data/copy/common';
 
@@ -55,12 +68,13 @@ export const MegaMenu: React.FC<MegaMenuProps> = ({
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
       className={`absolute top-full left-1/2 -translate-x-1/2 pt-3 w-225 max-w-[95vw] transition-all duration-250 origin-top z-50 ${
-        isOpen ? 'opacity-100 scale-100 visible translate-y-0' : 'opacity-0 scale-[0.97] invisible -translate-y-2'
+        isOpen
+          ? 'opacity-100 scale-100 visible translate-y-0'
+          : 'opacity-0 scale-[0.97] invisible -translate-y-2'
       }`}
     >
       <div className="bg-[#0a0f1c]/98 rounded-2xl shadow-[0_20px_60px_-15px_rgba(0,0,0,0.7)] border border-white/8 overflow-hidden ring-1 ring-white/5">
         <div className="grid grid-cols-4 divide-x divide-white/5">
-
           {/* 3 content columns */}
           {data.sections.map((section) => (
             <div key={section.id} className="p-6">
@@ -95,7 +109,9 @@ export const MegaMenu: React.FC<MegaMenuProps> = ({
           ))}
 
           {/* Featured panel */}
-          <div className={`p-6 bg-linear-to-br ${data.featured.gradient} flex flex-col justify-between`}>
+          <div
+            className={`p-6 bg-linear-to-br ${data.featured.gradient} flex flex-col justify-between`}
+          >
             <div>
               <span className="inline-block text-[10px] font-bold tracking-[0.2em] text-secondary uppercase border border-secondary/30 bg-secondary/10 rounded-full px-2.5 py-1 mb-4">
                 {data.featured.tag[lang]}

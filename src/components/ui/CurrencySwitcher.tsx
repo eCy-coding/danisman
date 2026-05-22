@@ -55,7 +55,8 @@ export const CurrencySwitcher: React.FC = () => {
 
   return (
     <div ref={menuRef} className="relative">
-      <button type="button"
+      <button
+        type="button"
         onClick={() => setOpen((o) => !o)}
         aria-haspopup="listbox"
         aria-expanded={open}
@@ -78,7 +79,8 @@ export const CurrencySwitcher: React.FC = () => {
           className="absolute right-0 mt-1 w-28 bg-[#0f172a] border border-white/10 rounded-xl shadow-2xl overflow-hidden z-50"
         >
           {CURRENCY_LIST.map((c) => (
-            <button type="button"
+            <button
+              type="button"
               key={c}
               role="option"
               aria-selected={c === currency}

@@ -11,7 +11,8 @@ export const FilterBar: React.FC<FilterBarProps> = ({ categories, activeCategory
   return (
     <div className="flex flex-wrap justify-center gap-4 mb-12">
       {categories.map((category) => (
-        <button type="button"
+        <button
+          type="button"
           key={category}
           onClick={() => onSelect(category)}
           className={`relative px-6 py-2 rounded-full text-sm font-semibold transition-colors ${
@@ -24,7 +25,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({ categories, activeCategory
             <motion.div
               layoutId="activeFilter"
               className="absolute inset-0 bg-blue-600 rounded-full"
-              transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+              transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
             />
           )}
           <span className="relative z-10">{category}</span>

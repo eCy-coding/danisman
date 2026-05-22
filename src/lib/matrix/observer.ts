@@ -43,13 +43,13 @@ export class MatrixObserver {
           if (entry.entryType === 'layout-shift') {
             // @ts-expect-error - 'hadRecentInput' exists on LayoutShiftEntry but types might be outdated
             if (!entry.hadRecentInput) {
-               // @ts-expect-error - 'value' exists on LayoutShiftEntry
+              // @ts-expect-error - 'value' exists on LayoutShiftEntry
               this.logMetric('CLS', entry.value);
             }
           }
           // Handle INP (approximate via first-input or event duration)
           if (entry.entryType === 'first-input') {
-             this.logMetric('FID', entry.duration);
+            this.logMetric('FID', entry.duration);
           }
         }
       });
@@ -72,31 +72,31 @@ export class MatrixObserver {
       if (value > 0.1) rating = 'needs-improvement';
       if (value > 0.25) rating = 'poor';
     } else if (name === 'INP' || name === 'FID') {
-       if (value > 200) rating = 'needs-improvement';
-       if (value > 500) rating = 'poor';
+      if (value > 200) rating = 'needs-improvement';
+      if (value > 500) rating = 'poor';
     }
 
     const metric: Metric = { name, value, rating };
     this.metrics.push(metric);
-    
+
     // In dev, log specific poor metrics
     if (rating === 'poor') {
-        Logger.warn(`[Matrix] Poor Performance Detected: ${name} = ${value.toFixed(2)}`);
+      Logger.warn(`[Matrix] Poor Performance Detected: ${name} = ${value.toFixed(2)}`);
     }
   }
 
   private startMemoryMonitoring() {
     // Check every 10 seconds in dev/preview
     this.memoryInterval = setInterval(() => {
-        // @ts-expect-error - performance.memory is generic chrome extension
-        const memory = performance.memory;
-        if (memory) {
-            const usedMB = memory.usedJSHeapSize / 1048576;
-            // Leak detection heuristic: sustained growth > 200MB is potential concern
-             if (usedMB > 200) {
-                 // Silent log for Oracle dashboard
-             }
+      // @ts-expect-error - performance.memory is generic chrome extension
+      const memory = performance.memory;
+      if (memory) {
+        const usedMB = memory.usedJSHeapSize / 1048576;
+        // Leak detection heuristic: sustained growth > 200MB is potential concern
+        if (usedMB > 200) {
+          // Silent log for Oracle dashboard
         }
+      }
     }, 10000);
   }
 
@@ -132,20 +132,22 @@ export class MatrixObserver {
 
   private flushData() {
     if (this.metrics.length > 0) {
-        // Use sendBeacon for reliability during unload
-        const _blob = new Blob([JSON.stringify(this.metrics)], { type: 'application/json' });
-        // navigator.sendBeacon(this.REPORT_URL, _blob); 
-        // For now, we just keep it in memory for the Oracle dashboard or local storage
-        try {
-            const history = JSON.parse(sessionStorage.getItem('matrix_metrics') || '[]');
-            sessionStorage.setItem('matrix_metrics', JSON.stringify([...history, ...this.metrics]));
-        } catch (_e) {/* Ignore storage quota */}
-        this.metrics = [];
+      // Use sendBeacon for reliability during unload
+      const _blob = new Blob([JSON.stringify(this.metrics)], { type: 'application/json' });
+      // navigator.sendBeacon(this.REPORT_URL, _blob);
+      // For now, we just keep it in memory for the Oracle dashboard or local storage
+      try {
+        const history = JSON.parse(sessionStorage.getItem('matrix_metrics') || '[]');
+        sessionStorage.setItem('matrix_metrics', JSON.stringify([...history, ...this.metrics]));
+      } catch (_e) {
+        /* Ignore storage quota */
+      }
+      this.metrics = [];
     }
   }
 
   public getMetrics() {
-      return [...JSON.parse(sessionStorage.getItem('matrix_metrics') || '[]'), ...this.metrics];
+    return [...JSON.parse(sessionStorage.getItem('matrix_metrics') || '[]'), ...this.metrics];
   }
 }
 

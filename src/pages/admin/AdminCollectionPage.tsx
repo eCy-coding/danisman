@@ -88,7 +88,13 @@ const CONFIGS: Record<string, CollectionConfig> = {
   pillars: {
     title: 'Pillar Sayfaları',
     fields: [
-      { key: 'slug', label: 'Slug', type: 'text', required: true, tooltip: 'URL parçası, örn: stratejik-donusum' },
+      {
+        key: 'slug',
+        label: 'Slug',
+        type: 'text',
+        required: true,
+        tooltip: 'URL parçası, örn: stratejik-donusum',
+      },
       { key: 'title', label: 'Başlık', type: 'text', required: true },
       { key: 'subtitle', label: 'Alt Başlık', type: 'text' },
       { key: 'executiveSummary', label: 'Yönetici Özeti', type: 'textarea' },
@@ -121,7 +127,12 @@ const CONFIGS: Record<string, CollectionConfig> = {
     fields: [
       { key: 'question', label: 'Soru', type: 'text', required: true },
       { key: 'answer', label: 'Cevap', type: 'textarea', required: true },
-      { key: 'category', label: 'Kategori', type: 'text', hint: 'genel / engagement / ücret / gizlilik' },
+      {
+        key: 'category',
+        label: 'Kategori',
+        type: 'text',
+        hint: 'genel / engagement / ücret / gizlilik',
+      },
     ],
     displayCols: ['question', 'category'],
   },
@@ -173,7 +184,11 @@ export const AdminCollectionPage: React.FC = () => {
       key: k,
       label: config.fields.find((f) => f.key === k)?.label ?? k,
       sortable: true,
-      render: (r) => <span className="text-slate-200 truncate inline-block max-w-xs align-middle">{String(r[k] ?? '')}</span>,
+      render: (r) => (
+        <span className="text-slate-200 truncate inline-block max-w-xs align-middle">
+          {String(r[k] ?? '')}
+        </span>
+      ),
     }));
     cols.push({
       key: 'actions',
@@ -186,7 +201,9 @@ export const AdminCollectionPage: React.FC = () => {
             onClick={(e) => {
               e.stopPropagation();
               setEditing(r);
-              setFormData(Object.fromEntries(Object.entries(r).map(([k, v]) => [k, String(v ?? '')])));
+              setFormData(
+                Object.fromEntries(Object.entries(r).map(([k, v]) => [k, String(v ?? '')])),
+              );
               setDrawerOpen(true);
             }}
             className="text-xs text-secondary hover:underline"
@@ -219,11 +236,13 @@ export const AdminCollectionPage: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      <Breadcrumb items={[
-        { label: 'Yönetim', to: '/admin' },
-        { label: 'İçerik', to: '/admin' },
-        { label: config.title },
-      ]} />
+      <Breadcrumb
+        items={[
+          { label: 'Yönetim', to: '/admin' },
+          { label: 'İçerik', to: '/admin' },
+          { label: config.title },
+        ]}
+      />
       <header className="flex items-center justify-between flex-wrap gap-3">
         <div>
           <h1 className="text-2xl font-serif font-bold text-white">{config.title}</h1>
@@ -260,7 +279,13 @@ export const AdminCollectionPage: React.FC = () => {
         width="md"
         footer={
           <>
-            <button type="button" onClick={() => setDrawerOpen(false)} className="px-4 py-2 rounded-lg bg-white/5 text-white text-sm">İptal</button>
+            <button
+              type="button"
+              onClick={() => setDrawerOpen(false)}
+              className="px-4 py-2 rounded-lg bg-white/5 text-white text-sm"
+            >
+              İptal
+            </button>
             <button
               type="button"
               onClick={() => save.mutate(formData)}
@@ -274,7 +299,13 @@ export const AdminCollectionPage: React.FC = () => {
       >
         <div className="space-y-4">
           {config.fields.map((f) => (
-            <FormField key={f.key} label={f.label} required={f.required} tooltip={f.tooltip} hint={f.hint}>
+            <FormField
+              key={f.key}
+              label={f.label}
+              required={f.required}
+              tooltip={f.tooltip}
+              hint={f.hint}
+            >
               {f.type === 'textarea' ? (
                 <textarea
                   className={`${fieldClassName} min-h-[100px]`}

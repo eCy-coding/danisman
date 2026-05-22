@@ -27,7 +27,8 @@ export const BackToTop: React.FC = () => {
   }, []);
 
   return (
-    <button type="button"
+    <button
+      type="button"
       onClick={scrollToTop}
       aria-label="Yukarı Çık"
       className={`fixed bottom-8 right-8 z-40 p-3 rounded-full bg-white/10 text-white border border-white/10 shadow-lg hover:bg-secondary hover:text-neutral hover:border-transparent transition-all duration-300 transform ${

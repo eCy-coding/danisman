@@ -11,14 +11,7 @@ import { LegalLayout } from '@/components/legal/LegalLayout';
 const LAST_UPDATED_ISO = '2026-05-10';
 const LAST_UPDATED_DISPLAY = '10.05.2026';
 
-const SECTION_KEYS = [
-  'what',
-  'types',
-  'thirdParty',
-  'management',
-  'consent',
-  'contact',
-] as const;
+const SECTION_KEYS = ['what', 'types', 'thirdParty', 'management', 'consent', 'contact'] as const;
 
 /**
  * Dispatches a custom event the CookieBanner can listen for to re-open

@@ -126,7 +126,7 @@ export class SSEClient {
       autoReconnect: options.autoReconnect ?? true,
       baseDelayMs: options.baseDelayMs ?? 1000,
       maxDelayMs: options.maxDelayMs ?? 32000,
-      jitterCeilingMs: options.jitterCeilingMs ?? (options.baseDelayMs ?? 1000),
+      jitterCeilingMs: options.jitterCeilingMs ?? options.baseDelayMs ?? 1000,
       heartbeatIntervalMs: options.heartbeatIntervalMs ?? 30000,
       missedHeartbeatThreshold: options.missedHeartbeatThreshold ?? 2,
       closeOnHidden: options.closeOnHidden ?? true,
@@ -283,7 +283,10 @@ export class SSEClient {
           try {
             h(msg);
           } catch (err) {
-            this.breadcrumb('error', 'sse.topic_handler_throw', { topic: msg.topic, err: String(err) });
+            this.breadcrumb('error', 'sse.topic_handler_throw', {
+              topic: msg.topic,
+              err: String(err),
+            });
           }
         }
       }
@@ -296,14 +299,17 @@ export class SSEClient {
     const threshold = this.opts.missedHeartbeatThreshold;
     // Tolerans: 5s gevşeklik — server scheduler jitter'ı için.
     const zombieAfter = interval * threshold + 5000;
-    this.heartbeatTimer = setInterval(() => {
-      if (this.status !== 'open') return;
-      const idle = Date.now() - this.lastPingAt;
-      if (idle > zombieAfter) {
-        this.breadcrumb('warning', 'sse.heartbeat_lost', { idle, zombieAfter });
-        this.recycleConnection();
-      }
-    }, Math.max(1000, Math.floor(interval / 2)));
+    this.heartbeatTimer = setInterval(
+      () => {
+        if (this.status !== 'open') return;
+        const idle = Date.now() - this.lastPingAt;
+        if (idle > zombieAfter) {
+          this.breadcrumb('warning', 'sse.heartbeat_lost', { idle, zombieAfter });
+          this.recycleConnection();
+        }
+      },
+      Math.max(1000, Math.floor(interval / 2)),
+    );
   }
 
   private recycleConnection(): void {

@@ -43,8 +43,10 @@
 import React from 'react';
 import { useSaveData } from '../../hooks/useSaveData';
 
-export interface ResponsiveImageProps
-  extends Omit<React.ImgHTMLAttributes<HTMLImageElement>, 'srcSet'> {
+export interface ResponsiveImageProps extends Omit<
+  React.ImgHTMLAttributes<HTMLImageElement>,
+  'srcSet'
+> {
   /** Required: pixel width — CLS prevention. */
   width: number;
   /** Required: pixel height — CLS prevention. */
@@ -108,9 +110,7 @@ function buildSrcSet(src: string, widths: readonly number[]): string {
   const m = src.match(/^(.*)\.([a-z0-9]+)(\?.*)?$/i);
   if (!m) return '';
   const [, base, ext, query = ''] = m;
-  return widths
-    .map((w) => `${base}-${w}.${ext}${query} ${w}w`)
-    .join(', ');
+  return widths.map((w) => `${base}-${w}.${ext}${query} ${w}w`).join(', ');
 }
 
 export const ResponsiveImage: React.FC<ResponsiveImageProps> = ({

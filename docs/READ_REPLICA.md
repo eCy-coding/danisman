@@ -39,11 +39,13 @@ const services = await db.read.service.findMany();
 ```
 
 Write işlemleri **her zaman primary**:
+
 ```ts
 await db.write.booking.create({ data: ... });
 ```
 
 Post-write-then-read (eventual consistency boğazı):
+
 ```ts
 // "Yeni kaydı hemen göster" pattern → primary'den oku
 const fresh = await db.write.booking.findUnique({ where: { id } });
@@ -56,6 +58,7 @@ const fresh = await db.write.booking.findUnique({ where: { id } });
 - Replica read-only; schema replication Render replication tarafından
   ~100 ms içinde replay edilir.
 - Yeni migration deploy'undan **sonra** sanity check:
+
   ```bash
   # primary'de migration_lock'ı doğrula
   psql "$DATABASE_URL" -c "SELECT * FROM _prisma_migrations ORDER BY started_at DESC LIMIT 3;"
@@ -86,6 +89,7 @@ Lag > 1 MB sustained → write-heavy load veya network bottleneck.
 ## 6) Failover senaryosu
 
 Render replica primary olamaz (managed PaaS). Replica down olursa:
+
 - `DATABASE_URL_REPLICA` env'i temizle veya geçici primary URL ata.
 - Redeploy → `read-replica.ts` fallback path primary'ye düşer.
 - Zero-downtime; latency artar (extra hop yok ama primary load bumps).
@@ -94,6 +98,7 @@ Render replica primary olamaz (managed PaaS). Replica down olursa:
 
 Render Postgres Standard replica: primary ile aynı plan tier'ı (~$35/ay).
 Pro replica: ~$95/ay. Cost vs. throughput trade-off:
+
 - Starter (single primary): $7 → ~30 req/sec ceiling
 - Standard primary + replica: $70 → ~200 req/sec sustained
 - Pro primary + replica: $190 → ~500 req/sec sustained

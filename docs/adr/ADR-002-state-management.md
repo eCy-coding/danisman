@@ -22,7 +22,7 @@ Forces:
 - Most state slices are small and independent; we do not need a
   unified action/reducer hierarchy.
 - We want a 4-line store, not a 40-line slice + reducer + action types
-  + selectors + middleware boilerplate.
+  - selectors + middleware boilerplate.
 - Persistence is required for some slices (theme, locale) but must NOT
   touch the auth tokens (those are in-memory only — see ADR-002 +
   Aşama 4 of P14 FE).

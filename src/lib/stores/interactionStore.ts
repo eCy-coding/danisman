@@ -11,10 +11,10 @@ interface WizardState {
 interface InteractionStore {
   // Booking Wizard State
   booking: WizardState;
-  
+
   // Quiz State
   quiz: WizardState & { score: number };
-  
+
   // Calculator State
   calculator: {
     revenue: number;
@@ -30,7 +30,7 @@ interface InteractionStore {
   setQuizStep: (step: number) => void;
   updateQuizScore: (score: number) => void;
   updateQuizData: (data: Partial<Record<string, unknown>>) => void;
-  
+
   updateCalculator: (data: { revenue?: number; teamSize?: number }) => void;
 }
 
@@ -57,34 +57,41 @@ export const useInteractionStore = create<InteractionStore>()(
       },
 
       // Booking Actions
-      setBookingStep: (step) => set((state) => ({ 
-        booking: { ...state.booking, currentStep: step } 
-      })),
-      updateBookingData: (data) => set((state) => ({ 
-        booking: { ...state.booking, data: { ...state.booking.data, ...data } } 
-      })),
-      resetBooking: () => set((state) => ({ 
-        booking: { ...state.booking, currentStep: 0, data: {}, isComplete: false } 
-      })),
+      setBookingStep: (step) =>
+        set((state) => ({
+          booking: { ...state.booking, currentStep: step },
+        })),
+      updateBookingData: (data) =>
+        set((state) => ({
+          booking: { ...state.booking, data: { ...state.booking.data, ...data } },
+        })),
+      resetBooking: () =>
+        set((state) => ({
+          booking: { ...state.booking, currentStep: 0, data: {}, isComplete: false },
+        })),
 
       // Quiz Actions
-      setQuizStep: (step) => set((state) => ({ 
-        quiz: { ...state.quiz, currentStep: step } 
-      })),
-      updateQuizScore: (score) => set((state) => ({ 
-        quiz: { ...state.quiz, score: state.quiz.score + score } 
-      })),
-      updateQuizData: (data) => set((state) => ({ 
-        quiz: { ...state.quiz, data: { ...state.quiz.data, ...data } } 
-      })),
+      setQuizStep: (step) =>
+        set((state) => ({
+          quiz: { ...state.quiz, currentStep: step },
+        })),
+      updateQuizScore: (score) =>
+        set((state) => ({
+          quiz: { ...state.quiz, score: state.quiz.score + score },
+        })),
+      updateQuizData: (data) =>
+        set((state) => ({
+          quiz: { ...state.quiz, data: { ...state.quiz.data, ...data } },
+        })),
 
       // Calculator Actions
-      updateCalculator: (data) => set((state) => ({ 
-        calculator: { ...state.calculator, ...data } 
-      })),
+      updateCalculator: (data) =>
+        set((state) => ({
+          calculator: { ...state.calculator, ...data },
+        })),
     }),
     {
       name: 'ecypro-interaction-storage', // unique name
-    }
-  )
+    },
+  ),
 );

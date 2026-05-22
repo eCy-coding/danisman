@@ -8,7 +8,9 @@ import { enqueue, size, clear, flush } from '../lib/network/retry-queue';
 beforeEach(() => {
   // jsdom localStorage isolation
   globalThis.localStorage.clear();
-  globalThis.fetch = vi.fn(async () => new Response('{"ok":true}', { status: 200 })) as typeof fetch;
+  globalThis.fetch = vi.fn(
+    async () => new Response('{"ok":true}', { status: 200 }),
+  ) as typeof fetch;
 });
 
 afterEach(() => {

@@ -15,6 +15,7 @@ emit('form_submit', { form_id: 'contact', success: true });
 ```
 
 `emit()` her event'e otomatik olarak şunları ekler:
+
 - `timestamp` (ISO)
 - `path` (`window.location.pathname`)
 - `title` (sayfa başlığı, 120 char clamp)
@@ -27,7 +28,8 @@ emit('form_submit', { form_id: 'contact', success: true });
 
 `src/lib/analytics-events.ts` içinde **3 yerde** değişiklik:
 
-1. **`EventName` union'a ekle** — snake_case, `<category>_<verb>`:
+1. **`EventName` union'a ekle** — snake*case, `<category>*<verb>`:
+
    ```ts
    export type EventName =
      | 'page_view'
@@ -36,6 +38,7 @@ emit('form_submit', { form_id: 'contact', success: true });
    ```
 
 2. **`EventMap` interface'ine payload tipini ekle**:
+
    ```ts
    export interface EventMap {
      ...
@@ -57,16 +60,17 @@ Artık `emit('my_new_event', { item_id: 'x', count: 3 })` type-checked.
 
 ## 3) Naming kuralları
 
-| Pattern | Örnek |
-|---|---|
-| `<category>_<verb>` snake_case | `cta_click`, `form_submit` |
-| Plural değil singular | `video_play` (NOT `videos_played`) |
-| Verb past tense yok | `form_submit` (NOT `form_submitted`) |
+| Pattern                           | Örnek                                                                      |
+| --------------------------------- | -------------------------------------------------------------------------- |
+| `<category>_<verb>` snake_case    | `cta_click`, `form_submit`                                                 |
+| Plural değil singular             | `video_play` (NOT `videos_played`)                                         |
+| Verb past tense yok               | `form_submit` (NOT `form_submitted`)                                       |
 | Reserved GA4 event'lerinden kaçın | `page_view` OK (GA4 native), `purchase` kullanma — ecommerce taxonomy ayrı |
 
 ### Reserved (kullanma)
 
 GA4 otomatik yarattığı + ecommerce taxonomy:
+
 - `purchase`, `add_to_cart`, `begin_checkout`, `sign_up`, `login`, `search`, `select_content`, `view_item`, `add_to_wishlist`
 
 Bunlar yerine: `lead_capture`, `form_submit` vs.
@@ -75,15 +79,15 @@ Bunlar yerine: `lead_capture`, `form_submit` vs.
 
 ## 4) Kategori rehberi
 
-| Kategori | Ne zaman | Örnek event |
-|---|---|---|
-| **navigation** | Sayfa/route geçişleri, breadcrumb | `page_view`, `route_change` |
-| **engagement** | İçerikle etkileşim, scroll, video | `cta_click`, `faq_expand` |
-| **conversion** | Form, lead, booking, satın alma niyeti | `form_submit`, `lead_capture` |
-| **error** | Hata + kullanıcı görmesin/görsün her ikisi | `form_error`, `api_error` |
-| **system** | App lifecycle + perf | `web_vital`, `app_loaded` |
-| **consent** | Cookie/marketing tercih değişimi | `consent_change` |
-| **pwa** | PWA install/offline | `pwa_install`, `pwa_offline_view` |
+| Kategori       | Ne zaman                                   | Örnek event                       |
+| -------------- | ------------------------------------------ | --------------------------------- |
+| **navigation** | Sayfa/route geçişleri, breadcrumb          | `page_view`, `route_change`       |
+| **engagement** | İçerikle etkileşim, scroll, video          | `cta_click`, `faq_expand`         |
+| **conversion** | Form, lead, booking, satın alma niyeti     | `form_submit`, `lead_capture`     |
+| **error**      | Hata + kullanıcı görmesin/görsün her ikisi | `form_error`, `api_error`         |
+| **system**     | App lifecycle + perf                       | `web_vital`, `app_loaded`         |
+| **consent**    | Cookie/marketing tercih değişimi           | `consent_change`                  |
+| **pwa**        | PWA install/offline                        | `pwa_install`, `pwa_offline_view` |
 
 ---
 
@@ -114,10 +118,12 @@ emit('cta_click', { cta_name: 'Hero CTA', cta_location: 'hero' });
 ## 7) Test + doğrulama
 
 Geliştirme modunda her `emit()` çağrısı:
+
 - `Logger.debug` ile console'a log
 - `window._last_analytics_event`'e yazılır → E2E test'ler okuyabilir
 
 Playwright örnek:
+
 ```ts
 await page.click('[data-testid="hero-cta"]');
 const ev = await page.evaluate(() => window._last_analytics_event);
@@ -139,23 +145,23 @@ Consent revoke → GA4 unload → mevcut session sonlanır → yeni event'ler bu
 
 Admin'in Sentry/GA4 panel'inde tanımlaması gereken custom dimensions (geçmişe dönük backfill yok):
 
-| Dimension | Event scope | Source param |
-|---|---|---|
-| Page Language | event | `language` |
-| Page Title | event | `title` |
-| CTA Name | event | `cta_name` |
-| CTA Location | event | `cta_location` |
-| Form ID | event | `form_id` |
-| Form Success | event | `success` |
-| Booking Step | event | `booking_step` (auto-mapped) |
-| ROI Step | event | `roi_step` (legacy) / `step` (yeni) |
-| Vital Name | event | `name` (web_vital event'i için) |
-| Vital Rating | event | `rating` |
-| Consent Category | event | `category` |
-| Consent Source | event | `source` |
-| PWA Source | event | `source` (pwa_install*) |
-| Lead Source | event | `source` (lead_capture) |
-| Lead Tier | event | `tier` |
+| Dimension        | Event scope | Source param                        |
+| ---------------- | ----------- | ----------------------------------- |
+| Page Language    | event       | `language`                          |
+| Page Title       | event       | `title`                             |
+| CTA Name         | event       | `cta_name`                          |
+| CTA Location     | event       | `cta_location`                      |
+| Form ID          | event       | `form_id`                           |
+| Form Success     | event       | `success`                           |
+| Booking Step     | event       | `booking_step` (auto-mapped)        |
+| ROI Step         | event       | `roi_step` (legacy) / `step` (yeni) |
+| Vital Name       | event       | `name` (web_vital event'i için)     |
+| Vital Rating     | event       | `rating`                            |
+| Consent Category | event       | `category`                          |
+| Consent Source   | event       | `source`                            |
+| PWA Source       | event       | `source` (pwa_install\*)            |
+| Lead Source      | event       | `source` (lead_capture)             |
+| Lead Tier        | event       | `tier`                              |
 
 GA4 Admin → Custom definitions → Custom dimensions → Create. Event scope, parameter name aynen (snake_case).
 
@@ -174,6 +180,7 @@ GA4 Admin → Custom definitions → Custom dimensions → Create. Event scope, 
 ## 11) Anti-pattern listesi
 
 ❌ **YAPMA:**
+
 - `emit('thing-clicked', ...)` — kebab-case → snake_case kuralını bozar
 - `emit('contactFormSubmitted', ...)` — camelCase ve past tense
 - `emitRaw('user_email_collected', { email: 'a@b.com' })` — PII leak
@@ -181,6 +188,7 @@ GA4 Admin → Custom definitions → Custom dimensions → Create. Event scope, 
 - Aynı event'i farklı param'larla çağırmak — dashboard breaks
 
 ✅ **YAP:**
+
 - `emit('form_submit', { form_id: 'contact', success: true })`
 - `emit('cta_click', { cta_name: 'Hero', cta_location: 'hero' })`
 - `emit('lead_capture', { source: 'pricing_modal', tier: 'warm' })`

@@ -1,4 +1,3 @@
-
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
@@ -8,7 +7,7 @@ import { useTranslation } from '../../lib/i18n';
 
 export const ROICalculator: React.FC = () => {
   const { t, language } = useTranslation();
-  
+
   const [revenue, setRevenue] = useState([1000000]); // Annual Revenue
   const [efficiency, setEfficiency] = useState([15]); // Efficiency Gain %
   const [duration, setDuration] = useState([12]); // Project Duration (months)
@@ -32,7 +31,6 @@ export const ROICalculator: React.FC = () => {
     <section className="py-24 bg-transparent" id="roi-calculator">
       <div className="max-w-7xl mx-auto px-6 md:px-12">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-          
           {/* Inputs Section */}
           <div className="space-y-12">
             <div className="space-y-4">
@@ -44,14 +42,13 @@ export const ROICalculator: React.FC = () => {
                 {language === 'tr' ? 'Yatırım Getirisi Hesapla' : 'Calculate Your ROI'}
               </h2>
               <p className="text-slate-400">
-                {language === 'tr' 
-                  ? 'Danışmanlık hizmetlerimizin işletmenize katacağı potansiyel değeri gerçek zamanlı hesaplayın.' 
+                {language === 'tr'
+                  ? 'Danışmanlık hizmetlerimizin işletmenize katacağı potansiyel değeri gerçek zamanlı hesaplayın.'
                   : 'Real-time calculation of the potential value our consulting services will add to your business.'}
               </p>
             </div>
 
             <div className="space-y-8 bg-white/5 p-8 rounded-2xl shadow-sm border border-white/10">
-              
               {/* Revenue Slider */}
               <div className="space-y-4">
                 <div className="flex justify-between items-center bg-white/5 p-3 rounded-lg">
@@ -71,9 +68,9 @@ export const ROICalculator: React.FC = () => {
                   className="py-4"
                   aria-label={language === 'tr' ? 'Yıllık Ciro' : 'Annual Revenue'}
                 />
-                 <div className="flex justify-between text-xs text-slate-400">
-                    <span>{formatCurrency(100000)}</span>
-                    <span>{formatCurrency(10000000)}</span>
+                <div className="flex justify-between text-xs text-slate-400">
+                  <span>{formatCurrency(100000)}</span>
+                  <span>{formatCurrency(10000000)}</span>
                 </div>
               </div>
 
@@ -83,9 +80,7 @@ export const ROICalculator: React.FC = () => {
                   <label className="text-sm font-bold text-slate-300">
                     {language === 'tr' ? 'Hedeflenen Verimlilik Artışı' : 'Target Efficiency Gain'}
                   </label>
-                  <span className="text-primary font-mono font-bold">
-                    {efficiency[0]}%
-                  </span>
+                  <span className="text-primary font-mono font-bold">{efficiency[0]}%</span>
                 </div>
                 <Slider
                   defaultValue={[15]}
@@ -97,87 +92,95 @@ export const ROICalculator: React.FC = () => {
                   aria-label="Efficiency Gain"
                 />
                 <div className="flex justify-between text-xs text-slate-400">
-                    <span>1%</span>
-                    <span>50%</span>
+                  <span>1%</span>
+                  <span>50%</span>
                 </div>
               </div>
-
             </div>
           </div>
 
           {/* Results Section */}
           <div className="relative">
-             {/* Decorative Background for Results */}
+            {/* Decorative Background for Results */}
             <div className="absolute -inset-4 bg-linear-to-r from-blue-500 to-indigo-600 rounded-4xl opacity-30 blur-2xl"></div>
-            
+
             <div className="relative bg-linear-to-br from-slate-900 to-slate-800 text-white rounded-4xl p-10 shadow-2xl overflow-hidden border border-slate-700/50">
-                {/* Result Cards */}
-                <div className="grid grid-cols-1 gap-8 mb-10">
-                    <div>
-                        <p className="text-slate-200 text-sm uppercase tracking-wider font-bold mb-2">
-                            {language === 'tr' ? 'Tahmini Yıllık Tasarruf' : 'Estimated Annual Savings'}
-                        </p>
-                        <AnimatePresence mode="wait">
-                            <motion.h3 
-                                key={annualSavings}
-                                initial={{ opacity: 0, y: 10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0, y: -10 }}
-                                className="text-5xl font-bold text-transparent bg-clip-text bg-linear-to-r from-blue-200 to-white"
-                            >
-                                {formatCurrency(annualSavings)}
-                            </motion.h3>
-                        </AnimatePresence>
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-4 pt-8 border-t border-slate-700/50">
-                        <div>
-                            <p className="text-slate-200 text-xs uppercase tracking-wider font-bold mb-1">
-                                {language === 'tr' ? '5 Yıllık ROI' : '5-Year ROI'}
-                            </p>
-                             <AnimatePresence mode="wait">
-                                <motion.p 
-                                    key={fiveYearROI}
-                                    initial={{ opacity: 0 }}
-                                    animate={{ opacity: 1 }}
-                                    className="text-2xl font-bold text-green-400"
-                                >
-                                    {formatCurrency(fiveYearROI)}
-                                </motion.p>
-                            </AnimatePresence>
-                        </div>
-                        <div>
-                             <p className="text-slate-200 text-xs uppercase tracking-wider font-bold mb-1">
-                                {language === 'tr' ? 'İlk Yıl Net Getiri' : 'Net First Year'}
-                            </p>
-                             <AnimatePresence mode="wait">
-                                <motion.p 
-                                    key={netFirstYear}
-                                    initial={{ opacity: 0 }}
-                                    animate={{ opacity: 1 }}
-                                    className="text-2xl font-bold text-blue-400"
-                                >
-                                    {formatCurrency(netFirstYear)}
-                                </motion.p>
-                            </AnimatePresence>
-                        </div>
-                    </div>
+              {/* Result Cards */}
+              <div className="grid grid-cols-1 gap-8 mb-10">
+                <div>
+                  <p className="text-slate-200 text-sm uppercase tracking-wider font-bold mb-2">
+                    {language === 'tr' ? 'Tahmini Yıllık Tasarruf' : 'Estimated Annual Savings'}
+                  </p>
+                  <AnimatePresence mode="wait">
+                    <motion.h3
+                      key={annualSavings}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      className="text-5xl font-bold text-transparent bg-clip-text bg-linear-to-r from-blue-200 to-white"
+                    >
+                      {formatCurrency(annualSavings)}
+                    </motion.h3>
+                  </AnimatePresence>
                 </div>
 
-                {/* CTAs */}
-                <div className="space-y-4">
-                    <button type="button" className="w-full py-4 bg-white/10 text-white rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-white/20 transition-colors shadow-lg group">
-                        {language === 'tr' ? 'Detaylı Raporu İndir' : 'Download Detailed Report'}
-                        <Download size={18} className="text-slate-400 group-hover:text-white transition-colors" />
-                    </button>
-                    <button type="button" onClick={() => window.location.href='/contact'} className="w-full py-4 bg-transparent border border-slate-600 text-white rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-slate-800 transition-colors">
-                        {language === 'tr' ? 'Uzmanımıza Danışın' : 'Consult an Expert'}
-                        <ArrowRight size={18} />
-                    </button>
+                <div className="grid grid-cols-2 gap-4 pt-8 border-t border-slate-700/50">
+                  <div>
+                    <p className="text-slate-200 text-xs uppercase tracking-wider font-bold mb-1">
+                      {language === 'tr' ? '5 Yıllık ROI' : '5-Year ROI'}
+                    </p>
+                    <AnimatePresence mode="wait">
+                      <motion.p
+                        key={fiveYearROI}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        className="text-2xl font-bold text-green-400"
+                      >
+                        {formatCurrency(fiveYearROI)}
+                      </motion.p>
+                    </AnimatePresence>
+                  </div>
+                  <div>
+                    <p className="text-slate-200 text-xs uppercase tracking-wider font-bold mb-1">
+                      {language === 'tr' ? 'İlk Yıl Net Getiri' : 'Net First Year'}
+                    </p>
+                    <AnimatePresence mode="wait">
+                      <motion.p
+                        key={netFirstYear}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        className="text-2xl font-bold text-blue-400"
+                      >
+                        {formatCurrency(netFirstYear)}
+                      </motion.p>
+                    </AnimatePresence>
+                  </div>
                 </div>
+              </div>
+
+              {/* CTAs */}
+              <div className="space-y-4">
+                <button
+                  type="button"
+                  className="w-full py-4 bg-white/10 text-white rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-white/20 transition-colors shadow-lg group"
+                >
+                  {language === 'tr' ? 'Detaylı Raporu İndir' : 'Download Detailed Report'}
+                  <Download
+                    size={18}
+                    className="text-slate-400 group-hover:text-white transition-colors"
+                  />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => (window.location.href = '/contact')}
+                  className="w-full py-4 bg-transparent border border-slate-600 text-white rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-slate-800 transition-colors"
+                >
+                  {language === 'tr' ? 'Uzmanımıza Danışın' : 'Consult an Expert'}
+                  <ArrowRight size={18} />
+                </button>
+              </div>
             </div>
           </div>
-
         </div>
       </div>
     </section>

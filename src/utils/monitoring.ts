@@ -3,7 +3,7 @@ import { onCLS, onFCP, onINP, onLCP, onTTFB, type Metric } from 'web-vitals';
 /**
  * Performance Monitoring Utility
  * Tracks Core Web Vitals and sends to analytics endpoint
- * 
+ *
  * Note: FID (First Input Delay) has been replaced with INP (Interaction to Next Paint)
  * in web-vitals v4 as a more comprehensive responsiveness metric.
  */
@@ -47,16 +47,16 @@ function formatMetric({ name, value, rating, delta, id }: Metric): AnalyticsPayl
 export function initWebVitals(): void {
   // Cumulative Layout Shift
   onCLS((metric) => sendToAnalytics(formatMetric(metric)));
-  
+
   // First Contentful Paint
   onFCP((metric) => sendToAnalytics(formatMetric(metric)));
-  
+
   // Interaction to Next Paint (replaces FID in web-vitals v4)
   onINP((metric) => sendToAnalytics(formatMetric(metric)));
-  
+
   // Largest Contentful Paint
   onLCP((metric) => sendToAnalytics(formatMetric(metric)));
-  
+
   // Time to First Byte
   onTTFB((metric) => sendToAnalytics(formatMetric(metric)));
 }

@@ -53,10 +53,10 @@ for future readers.
 
 ## Index
 
-| # | Title | Status |
-|---|---|---|
-| [001](./ADR-001-hosting-strategy.md) | Hosting strategy — Render + Hostinger split | accepted |
+| #                                    | Title                                        | Status   |
+| ------------------------------------ | -------------------------------------------- | -------- |
+| [001](./ADR-001-hosting-strategy.md) | Hosting strategy — Render + Hostinger split  | accepted |
 | [002](./ADR-002-state-management.md) | Client state management — Zustand over Redux | accepted |
-| [003](./ADR-003-i18n-strategy.md) | i18n — i18next namespaces over JSON-per-page | accepted |
-| [004](./ADR-004-database-orm.md) | Database / ORM — Postgres + Prisma | accepted |
-| [005](./ADR-005-monitoring.md) | Monitoring — Sentry RUM + Web Vitals | accepted |
+| [003](./ADR-003-i18n-strategy.md)    | i18n — i18next namespaces over JSON-per-page | accepted |
+| [004](./ADR-004-database-orm.md)     | Database / ORM — Postgres + Prisma           | accepted |
+| [005](./ADR-005-monitoring.md)       | Monitoring — Sentry RUM + Web Vitals         | accepted |

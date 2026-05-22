@@ -119,9 +119,7 @@ router.get('/stream', async (req, res) => {
 
   // Initial "hello" frame so the client can confirm subscription without
   // waiting for the first real event.
-  res.write(
-    `event: subscribed\ndata: ${JSON.stringify({ id: client.id, topics })}\n\n`,
-  );
+  res.write(`event: subscribed\ndata: ${JSON.stringify({ id: client.id, topics })}\n\n`);
 
   req.on('close', () => manager.remove(client.id));
   req.on('error', () => manager.remove(client.id));

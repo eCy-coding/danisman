@@ -29,7 +29,7 @@ async function loadBlogPosts(): Promise<BlogPostMeta[]> {
       readingTime?: string;
       excerpt?: string;
     };
-    const items = ((raw.default ?? []) as RawPost[]);
+    const items = (raw.default ?? []) as RawPost[];
     return items.map((p) => ({
       slug: p.slug ?? '',
       title: p.title ?? '',
@@ -126,7 +126,8 @@ export const AdminBlogPage: React.FC = () => {
             {loaded ? `${posts.length} posts` : 'Loading…'} · MDX-based content management
           </p>
         </div>
-        <button type="button"
+        <button
+          type="button"
           onClick={() => setCreating(true)}
           className="flex items-center gap-2 px-4 py-2.5 bg-secondary text-white rounded-xl font-medium text-sm hover:bg-blue-600 transition-colors"
         >
@@ -181,13 +182,15 @@ export const AdminBlogPage: React.FC = () => {
               </div>
             </div>
             <div className="flex gap-3 justify-end">
-              <button type="button"
+              <button
+                type="button"
                 onClick={() => setCreating(false)}
                 className="px-4 py-2 text-sm text-slate-400 hover:text-white transition-colors"
               >
                 Cancel
               </button>
-              <button type="button"
+              <button
+                type="button"
                 onClick={handleCreate}
                 disabled={!newSlug}
                 className="flex items-center gap-2 px-4 py-2 bg-secondary text-white rounded-lg text-sm font-medium hover:bg-blue-600 transition-colors disabled:opacity-50"
