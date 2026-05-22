@@ -182,3 +182,50 @@ export const env: Env = validate();
 export const isProd = env.NODE_ENV === 'production';
 export const isTest = env.NODE_ENV === 'test';
 export const isDev = env.NODE_ENV === 'development';
+
+// ─── Runtime env-presence check ───────────────────────────
+// Distinct from `productionRequiredKeys` (boot-time infra: DB/JWT/CORS).
+// This set is the lead-pipeline integration surface a live preflight probe
+// reports on. Returns key NAMES only — never values — so it is safe to
+// serialize into a public /api/health/preflight payload.
+
+export const REQUIRED_RUNTIME_ENV = [
+  'DATABASE_URL',
+  'RESEND_API_KEY',
+  'NOTION_API_KEY',
+  'NOTION_PROSPECTS_DB_ID',
+  'NOTION_INTERACTIONS_DB_ID',
+] as const;
+
+export const OPTIONAL_RUNTIME_ENV = [
+  'CALENDLY_WEBHOOK_SIGNING_KEY',
+  'SENTRY_DSN',
+  'TELEGRAM_BOT_TOKEN',
+  'TELEGRAM_CHAT_ID',
+] as const;
+
+export interface EnvGroupCheck {
+  ok: boolean;
+  missing: string[];
+}
+
+export interface EnvPresenceCheck {
+  required: EnvGroupCheck;
+  optional: EnvGroupCheck;
+}
+
+export function checkEnvPresence(source: NodeJS.ProcessEnv = process.env): EnvPresenceCheck {
+  const missingFrom = (keys: readonly string[]): string[] =>
+    keys.filter((k) => {
+      const v = source[k];
+      return v === undefined || v === '';
+    });
+
+  const requiredMissing = missingFrom(REQUIRED_RUNTIME_ENV);
+  const optionalMissing = missingFrom(OPTIONAL_RUNTIME_ENV);
+
+  return {
+    required: { ok: requiredMissing.length === 0, missing: requiredMissing },
+    optional: { ok: optionalMissing.length === 0, missing: optionalMissing },
+  };
+}

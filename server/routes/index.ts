@@ -44,6 +44,7 @@ import { redis } from '../config/redis';
 import { prisma } from '../config/db';
 import { logger } from '../config/logger';
 import { checkAllServices } from '../lib/health';
+import { checkEnvPresence } from '../config/env';
 
 const router = Router();
 
@@ -179,6 +180,65 @@ router.get('/ready', async (_req, res) => {
     uptime: process.uptime(),
     checks,
     timestamp: new Date().toISOString(),
+  });
+});
+
+// ─── Runtime preflight health ────────────────────────────
+// Phase 6.A — deeper-than-liveness probe for post-deploy verification.
+// Reports lead-pipeline integration readiness: required/optional env
+// presence (NAMES only, never values), a 1s DB round-trip, and
+// env-presence for Notion/Resend (no live API call — both are rate-limited).
+//
+// Status semantics:
+//   - "healthy"    required env present + DB ok                 → 200
+//   - "degraded"   required + DB ok, some optional env missing  → 200
+//   - "unhealthy"  required env missing OR DB probe fails        → 503
+router.get('/health/preflight', async (_req, res) => {
+  const envCheck = checkEnvPresence();
+
+  // DB — 1s timeout. Latency recorded regardless of outcome.
+  const dbStart = Date.now();
+  let dbOk = false;
+  let timer: NodeJS.Timeout | undefined;
+  try {
+    await Promise.race([
+      prisma.$queryRaw`SELECT 1`,
+      new Promise((_, reject) => {
+        timer = setTimeout(() => reject(new Error('database probe timeout (1s)')), 1000);
+      }),
+    ]);
+    dbOk = true;
+  } catch (err) {
+    logger.warn('[health/preflight] DB check failed', { message: (err as Error).message });
+  } finally {
+    if (timer) clearTimeout(timer);
+  }
+  const dbLatencyMs = Date.now() - dbStart;
+
+  // Notion / Resend — env-presence only. A live probe would burn a
+  // rate-limited external call on every health poll.
+  const notionOk = Boolean(process.env.NOTION_API_KEY);
+  const resendOk = Boolean(process.env.RESEND_API_KEY);
+
+  const status: 'healthy' | 'degraded' | 'unhealthy' =
+    !envCheck.required.ok || !dbOk ? 'unhealthy' : !envCheck.optional.ok ? 'degraded' : 'healthy';
+
+  const httpStatus = status === 'unhealthy' ? 503 : 200;
+
+  res.setHeader('Cache-Control', 'no-store');
+  res.status(httpStatus).json({
+    status,
+    timestamp: new Date().toISOString(),
+    checks: {
+      env: {
+        required: envCheck.required,
+        optional: envCheck.optional,
+      },
+      database: { ok: dbOk, latencyMs: dbLatencyMs },
+      notion: { ok: notionOk, checked: 'env-presence-only' },
+      resend: { ok: resendOk, checked: 'env-presence-only' },
+    },
+    version: SERVICE_VERSION,
   });
 });
 

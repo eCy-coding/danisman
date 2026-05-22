@@ -11,7 +11,7 @@
  *   2. Defensively stub fetch so a leaking TELEGRAM_BOT_TOKEN can never
  *      cause a real network probe inside this test file.
  */
-import { describe, it, expect, vi, beforeEach, beforeAll } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach, beforeAll } from 'vitest';
 import request from 'supertest';
 import express from 'express';
 
@@ -148,6 +148,106 @@ describe('GET /api/ready', () => {
     } finally {
       if (prevToken !== undefined) process.env.TELEGRAM_BOT_TOKEN = prevToken;
     }
+  });
+});
+
+describe('GET /api/health/preflight', () => {
+  // Required runtime env (lead-pipeline integration surface).
+  const REQUIRED: Record<string, string> = {
+    DATABASE_URL: 'postgresql://user:pass@localhost:5432/db',
+    RESEND_API_KEY: 're_LIVE_SECRET_VALUE_ABC',
+    NOTION_API_KEY: 'ntn_SECRET_VALUE_DEF',
+    NOTION_PROSPECTS_DB_ID: 'prospects-db-id',
+    NOTION_INTERACTIONS_DB_ID: 'interactions-db-id',
+  };
+  const OPTIONAL: Record<string, string> = {
+    CALENDLY_WEBHOOK_SIGNING_KEY: 'calendly-secret-key',
+    SENTRY_DSN: 'https://sentry.example/123',
+    TELEGRAM_BOT_TOKEN: 'telegram-bot-secret-token',
+    TELEGRAM_CHAT_ID: '123456',
+  };
+  const ALL_KEYS = [...Object.keys(REQUIRED), ...Object.keys(OPTIONAL)];
+
+  let snapshot: Record<string, string | undefined>;
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+    snapshot = {};
+    for (const k of ALL_KEYS) snapshot[k] = process.env[k];
+    for (const [k, v] of Object.entries({ ...REQUIRED, ...OPTIONAL })) process.env[k] = v;
+  });
+
+  afterEach(() => {
+    for (const k of ALL_KEYS) {
+      if (snapshot[k] === undefined) delete process.env[k];
+      else process.env[k] = snapshot[k];
+    }
+  });
+
+  it('returns 200 + healthy when all env present and DB ok', async () => {
+    const app = await buildApp();
+    const res = await request(app).get('/api/health/preflight');
+    expect(res.status).toBe(200);
+    expect(res.body.status).toBe('healthy');
+    expect(res.body.checks.env.required.ok).toBe(true);
+    expect(res.body.checks.env.required.missing).toEqual([]);
+    expect(res.body.checks.env.optional.ok).toBe(true);
+    expect(res.body.checks.database.ok).toBe(true);
+    expect(res.body.checks.notion).toMatchObject({ ok: true, checked: 'env-presence-only' });
+    expect(res.body.checks.resend).toMatchObject({ ok: true, checked: 'env-presence-only' });
+    expect(typeof res.body.version).toBe('string');
+    expect(typeof res.body.timestamp).toBe('string');
+  });
+
+  it('populates database.latencyMs', async () => {
+    const app = await buildApp();
+    const res = await request(app).get('/api/health/preflight');
+    expect(typeof res.body.checks.database.latencyMs).toBe('number');
+    expect(res.body.checks.database.latencyMs).toBeGreaterThanOrEqual(0);
+  });
+
+  it('returns 200 + degraded when an optional env var is missing', async () => {
+    delete process.env.TELEGRAM_BOT_TOKEN;
+    const app = await buildApp();
+    const res = await request(app).get('/api/health/preflight');
+    expect(res.status).toBe(200);
+    expect(res.body.status).toBe('degraded');
+    expect(res.body.checks.env.required.ok).toBe(true);
+    expect(res.body.checks.env.optional.ok).toBe(false);
+    expect(res.body.checks.env.optional.missing).toContain('TELEGRAM_BOT_TOKEN');
+  });
+
+  it('returns 503 + unhealthy when a required env var is missing', async () => {
+    delete process.env.NOTION_API_KEY;
+    const app = await buildApp();
+    const res = await request(app).get('/api/health/preflight');
+    expect(res.status).toBe(503);
+    expect(res.body.status).toBe('unhealthy');
+    expect(res.body.checks.env.required.ok).toBe(false);
+    expect(res.body.checks.env.required.missing).toContain('NOTION_API_KEY');
+  });
+
+  it('returns 503 + unhealthy when the database probe rejects', async () => {
+    const { prisma } = (await import('../config/db')) as unknown as {
+      prisma: { $queryRaw: ReturnType<typeof vi.fn> };
+    };
+    prisma.$queryRaw.mockRejectedValueOnce(new Error('ECONNREFUSED'));
+    const app = await buildApp();
+    const res = await request(app).get('/api/health/preflight');
+    expect(res.status).toBe(503);
+    expect(res.body.status).toBe('unhealthy');
+    expect(res.body.checks.database.ok).toBe(false);
+    expect(typeof res.body.checks.database.latencyMs).toBe('number');
+  });
+
+  it('never leaks token VALUES — only key NAMES appear in the payload', async () => {
+    const app = await buildApp();
+    const res = await request(app).get('/api/health/preflight');
+    const serialized = JSON.stringify(res.body);
+    expect(serialized).not.toContain('SECRET_VALUE');
+    expect(serialized).not.toContain('telegram-bot-secret-token');
+    expect(serialized).not.toContain('calendly-secret-key');
+    expect(serialized).not.toContain('postgresql://');
   });
 });
 
