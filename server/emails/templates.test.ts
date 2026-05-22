@@ -13,6 +13,11 @@ import {
   renderPasswordReset,
   renderGdprExportReady,
   renderGdprDeleteConfirm,
+  renderFounderLetter,
+  renderQuickCheckResult,
+  renderPricingInquiryAck,
+  renderDiscoveryConfirmed,
+  renderGenericNotification,
   _testing,
 } from './templates';
 
@@ -89,6 +94,98 @@ describe('renderGdprDeleteConfirm', () => {
       lang: 'en',
     });
     expect(result.html).toContain('irreversible');
+  });
+});
+
+describe('renderFounderLetter', () => {
+  it('TR variant greets with the escaped first name and sets html lang=tr', () => {
+    const result = renderFounderLetter({ firstName: '<Ada>', lang: 'tr' });
+    expect(result.subject).toMatch(/Hoş Geldiniz/);
+    expect(result.html).toContain('Sayın &lt;Ada&gt;');
+    expect(result.html).toContain('<html lang="tr">');
+    expect(result.html).not.toContain('<Ada>');
+  });
+
+  it('EN variant greets with "Dear" and sets html lang=en', () => {
+    const result = renderFounderLetter({ firstName: 'Ada', lang: 'en' });
+    expect(result.subject).toMatch(/Welcome/);
+    expect(result.html).toContain('Dear Ada');
+    expect(result.html).toContain('<html lang="en">');
+  });
+});
+
+describe('renderQuickCheckResult', () => {
+  it('TR variant references the company and KVKK PDF', () => {
+    const result = renderQuickCheckResult({ company: 'Acme A.Ş.', lang: 'tr' });
+    expect(result.subject).toMatch(/KVKK Hızlı Kontrol/);
+    expect(result.html).toContain('Acme A.Ş.');
+    expect(result.text).toMatch(/PDF/);
+  });
+
+  it('EN variant references the company and Quick Check results', () => {
+    const result = renderQuickCheckResult({ company: 'Acme Inc', lang: 'en' });
+    expect(result.subject).toMatch(/Quick Check Results/);
+    expect(result.html).toContain('Acme Inc');
+  });
+
+  it('escapes a malicious company name', () => {
+    const result = renderQuickCheckResult({ company: '<img src=x>', lang: 'en' });
+    expect(result.html).not.toContain('<img src=x>');
+    expect(result.html).toContain('&lt;img');
+  });
+});
+
+describe('renderPricingInquiryAck', () => {
+  it('TR variant promises a 24h proposal', () => {
+    const result = renderPricingInquiryAck({ firstName: 'Ada', lang: 'tr' });
+    expect(result.html).toContain('24 saat');
+    expect(result.subject).toMatch(/Talebiniz Alındı/);
+  });
+
+  it('EN variant promises a 24-hour proposal', () => {
+    const result = renderPricingInquiryAck({ firstName: 'Ada', lang: 'en' });
+    expect(result.html).toMatch(/24 hours/);
+    expect(result.subject).toMatch(/received/i);
+  });
+});
+
+describe('renderDiscoveryConfirmed', () => {
+  it('TR variant confirms the date', () => {
+    const result = renderDiscoveryConfirmed({ date: '5 Haziran 2026', lang: 'tr' });
+    expect(result.html).toContain('5 Haziran 2026');
+    expect(result.subject).toMatch(/Discovery Call Onayı/);
+  });
+
+  it('EN variant confirms the date', () => {
+    const result = renderDiscoveryConfirmed({ date: 'June 5, 2026', lang: 'en' });
+    expect(result.html).toContain('June 5, 2026');
+    expect(result.subject).toMatch(/Confirmed/);
+  });
+});
+
+describe('renderGenericNotification', () => {
+  it('renders heading + message and the CTA when provided', () => {
+    const result = renderGenericNotification({
+      heading: 'Bakım Bildirimi',
+      message: 'Sistem 02:00-03:00 arası bakımda.',
+      ctaUrl: 'https://ecypro.com/status',
+      ctaLabel: 'Durum Sayfası',
+      lang: 'tr',
+    });
+    expect(result.subject).toBe('Bakım Bildirimi');
+    expect(result.html).toContain('Bakım Bildirimi');
+    expect(result.html).toContain('Durum Sayfası');
+    expect(result.html).toContain('href="https://ecypro.com/status"');
+  });
+
+  it('omits the CTA when url/label missing and escapes the message', () => {
+    const result = renderGenericNotification({
+      heading: 'Notice',
+      message: '<b>hi</b>',
+      lang: 'en',
+    });
+    expect(result.html).toContain('&lt;b&gt;hi&lt;/b&gt;');
+    expect(result.html).not.toContain('<a href');
   });
 });
 

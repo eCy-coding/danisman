@@ -73,6 +73,25 @@ export type EmailJobPayload =
       confirmUrl: string;
       lang: 'tr' | 'en';
     }
+  | { type: 'founder-letter'; to: string; firstName: string; lang: 'tr' | 'en' }
+  | {
+      type: 'quickcheck-result';
+      to: string;
+      company: string;
+      lang: 'tr' | 'en';
+      pdfBase64?: string;
+    }
+  | { type: 'pricing-inquiry-ack'; to: string; firstName: string; lang: 'tr' | 'en' }
+  | { type: 'discovery-confirmed'; to: string; date: string; lang: 'tr' | 'en' }
+  | {
+      type: 'generic-notif';
+      to: string;
+      heading: string;
+      message: string;
+      ctaUrl?: string;
+      ctaLabel?: string;
+      lang: 'tr' | 'en';
+    }
   | { type: 'transactional'; to: string; subject: string; html: string };
 
 export type GdprExportJobPayload = {
