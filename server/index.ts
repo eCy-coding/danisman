@@ -16,6 +16,13 @@ import { authenticate } from './middleware/auth';
 import { requestTimeout } from './middleware/timeout';
 import { logger } from './config/logger';
 import { shutdownDatabase } from './config/db';
+import { validateEnv } from './lib/preflight';
+import { sendTelegramAlert } from './lib/telegram-alert';
+
+// Pre-flight: fail fast at boot if required ENV is unset, rather than losing
+// leads silently at runtime (form chain breaks if NOTION_*/RESEND_API_KEY
+// are missing). Runs after `import './env'` has loaded .env/.env.local.
+validateEnv();
 
 // BE-8: Sentry — environment + release tracking + tunable sampling.
 //   - `release` reads from RELEASE_VERSION (set by Render/Railway build) or
@@ -70,6 +77,15 @@ if (process.env.SENTRY_DSN) {
         }
       } catch {
         /* never let scrubbing fail the event */
+      }
+      // Operational bridge: page the founder on fatal/error events. Fire-and-
+      // forget — beforeSend is sync-only, so we never await. Env-gated +
+      // cooldown live inside sendTelegramAlert; no-op when token/chat unset.
+      if (event.level === 'fatal' || event.level === 'error') {
+        void sendTelegramAlert(event.level, event.message ?? 'Sentry event', {
+          event_id: event.event_id,
+          transaction: event.transaction,
+        });
       }
       return event;
     },
