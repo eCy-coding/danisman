@@ -40,6 +40,7 @@
     "metaDescription": "eCyPro hizmet kullanım koşulları — haklar, yükümlülükler, ödeme ve iade politikası.",
     "sections": {
       "scope": "Hizmetin Kapsamı",
+      "independence": "Bağımsızlık Beyanı",
       "obligations": "Kullanıcı Yükümlülükleri",
       "payment": "Ödeme ve İade Koşulları",
       "liability": "Sorumluluk Reddi",
@@ -49,6 +50,7 @@
     },
     "content": {
       "scope": "eCyPro Premium Consulting, kurumsal yönetim danışmanlığı, etkinlik yönetimi ve dijital marka çözümleri hizmetlerini www.ecypro.com aracılığıyla sunar. **eCyPro bağımsız bir danışmanlık firmasıdır**; herhangi bir hukuk bürosu, denetim/SMMM, yatırım danışmanlığı veya finansal kuruluş yetkili kılınmadığı sürece bu nitelikte bir hizmet sunmaz. Sağlanan görüş ve analizler stratejik tavsiye niteliğindedir, bağlayıcı hukuki/mali görüş yerine geçmez. Bu kullanım koşulları, web sitesini ziyaret ettiğiniz veya hizmetlerimize başvurduğunuz andan itibaren bağlayıcıdır. Hizmetlerimizin nihai kapsamı ve teknik şartları her müşteri için ayrı ayrı düzenlenecek hizmet sözleşmesinde tanımlanır.",
+      "independence": "**Bağımsız Tasarımla** — eCyPro, hiçbir \"Big Four\" firması (Deloitte, PwC, EY, KPMG) veya başka herhangi bir denetim, muhasebe ya da danışmanlık ağı ile ortaklık, iştirak, franchise, lisans veya hizmet bağı içinde değildir. Bu tür hiçbir kuruluşun üyesi, muhabiri veya alt yüklenicisi olmadığımız gibi, onlardan yönlendirme ücreti de almıyoruz. Bu bağımsızlık yapısal ve bilinçlidir: tavsiyelerimizin, nesnelliği zedeleyebilecek çapraz hizmet çıkar çatışmalarından, denetim-danışmanlık iç içe geçmelerinden ve standartlaştırılmış kalıplardan arınmış olmasını güvence altına alır. Bu web sitesinde herhangi bir Big Four firmasına yapılan atıf yalnızca karşılaştırma veya örnekleme amaçlıdır; onay, ilişki veya denklik anlamına gelmez.",
       "obligations": "Web sitesini kullanırken; yürürlükteki mevzuata uymakla, doğru ve güncel bilgi sağlamakla, üçüncü kişilerin haklarına saygı göstermekle ve site güvenliğini tehdit edebilecek davranışlardan kaçınmakla yükümlüsünüz. Otomatik araçlarla içerik kazıma, tersine mühendislik veya yetkisiz erişim girişimleri kabul edilemez.",
       "payment": "Ücretli hizmetlere ilişkin ödeme ve iade koşulları her müşteri için imzalanan ayrı hizmet sözleşmesinde tanımlanır. Web sitesi üzerinden doğrudan ödeme alınmamaktadır; tüm ticari işlemler hizmet sözleşmesi ve fatura çerçevesinde yürütülür.",
       "liability": "eCyPro Premium Consulting, web sitesi içeriğinin doğruluğu için makul özeni gösterir ancak içeriklerin hatasızlığı veya kesintisiz erişilebilirliği konusunda kesin garanti vermez. Web sitesi kullanımından doğan dolaylı, arızi veya beklenmeyen zararlardan, yasal sınırlar dahilinde, sorumluluk kabul edilmez.",

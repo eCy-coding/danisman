@@ -13,6 +13,7 @@ const LAST_UPDATED_DISPLAY = '10.05.2026';
 
 const SECTION_KEYS = [
   'scope',
+  'independence',
   'obligations',
   'payment',
   'liability',
