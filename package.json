@@ -140,6 +140,7 @@
     "tunnel": "bash scripts/start-tunnel.sh",
     "setup": "bash scripts/setup-auto.sh",
     "health:check": "npx tsx scripts/service-health.ts",
+    "launch:readiness": "tsx scripts/launch-readiness.ts",
     "test:urls": "npx playwright test e2e/crawl_url_integrity.spec.ts --project=chromium",
     "test:urls:all": "npx playwright test e2e/crawl_url_integrity.spec.ts --project=chromium --project=firefox --project=webkit",
     "crowler:content": "cd crowler && .venv/bin/python3 scripts/11_content_quality_audit.py --output json",
