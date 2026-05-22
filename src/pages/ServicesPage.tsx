@@ -71,7 +71,7 @@ const InteractiveLazyMount: React.FC<{ children: React.ReactNode; placeholderHei
 };
 
 export const ServicesPage: React.FC = () => {
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation('services');
   const lang = ((i18n.language || 'en').startsWith('tr') ? 'tr' : 'en') as 'tr' | 'en';
 
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
@@ -160,17 +160,16 @@ export const ServicesPage: React.FC = () => {
             {/* P31-T02: immediate — LCP element <p> below; skip opacity:0 */}
             <FadeIn immediate>
               <span className="inline-block py-1 px-3 rounded-full bg-white/5 border border-white/10 text-[10px] font-bold tracking-[0.2em] text-slate-400 uppercase mb-6">
-                Akademik Derinlik, Profesyonel Çözüm
+                {t('hero_badge')}
               </span>
               <h1 className="text-4xl md:text-6xl font-serif font-medium text-white mb-6 leading-tight">
-                Entegre Danışmanlık <br />
+                {t('hero_title_lead')} <br />
                 <span className="text-transparent bg-clip-text bg-linear-to-r from-primary to-primary-dark">
-                  Ekosistemi
+                  {t('hero_title_accent')}
                 </span>
               </h1>
               <p className="text-slate-400 max-w-2xl mx-auto text-lg font-light leading-relaxed">
-                İktisadi ve İdari Bilimler Fakültesi'nin tüm disiplinlerini tek bir çatıda topladık.
-                Makrodan mikroya, veriye dayalı bütüncül stratejiler.
+                {t('hero_intro')} {t('subtitle')}
               </p>
             </FadeIn>
           </div>
@@ -183,7 +182,7 @@ export const ServicesPage: React.FC = () => {
                 <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-secondary transition-colors duration-300 w-5 h-5 pointer-events-none" />
                 <input
                   type="text"
-                  placeholder="Hizmetlerde arayın..."
+                  placeholder={t('search_placeholder')}
                   data-testid="services-search-input"
                   className="w-full pl-12 pr-6 py-4 bg-white/5 border border-white/10 rounded-2xl
                                              focus:outline-none focus:border-secondary/50 focus:bg-white/10 focus:shadow-glow
