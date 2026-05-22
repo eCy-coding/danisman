@@ -250,14 +250,15 @@ export default defineConfig(({ mode }) => {
             'assets/LandingContent-*.js',
             'assets/i18n-*.js',
             'assets/client-*.js',
-            'assets/sentry-*.js',
             'assets/query-*.js',
             'assets/utils-*.js',
             'assets/ui-*.js',
             'assets/icons-*.js',
             'assets/motion-*.js',
-            'assets/ab-*.js',
-            'assets/monitoring-*.js',
+            // P-Lighthouse: sentry (455K), ab (43K), monitoring (6K) moved
+            // from precache → runtime CacheFirst. These are lazy-loaded via
+            // requestIdleCallback and don't affect initial paint. Saves ~504K
+            // from SW install payload → faster first-visit on slow 3G.
             // Critical CSS
             'assets/main-*.css',
             'assets/index-*.css',
