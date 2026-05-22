@@ -13,6 +13,7 @@ import { CheckCircle2, ArrowRight, BookOpen, Calendar, Sparkles } from 'lucide-r
 import { PageWrapper } from '../components/layout/PageWrapper';
 import { NewsletterSection } from '../components/sections/NewsletterSection';
 import { useTranslation } from '@/lib/i18n';
+import { BRAND_NAME } from '@/constants/brand';
 import { trackEvent } from '../lib/analytics';
 import { getCalendlyCta, hasExternalCalendly } from '../lib/cta/calendly';
 
@@ -31,8 +32,8 @@ export const ThankYouPage: React.FC = () => {
       <Helmet>
         <title>
           {isTr
-            ? 'Teşekkürler — Talebiniz Alındı | EcyPro'
-            : 'Thanks — We Received Your Request | EcyPro'}
+            ? `Teşekkürler — Talebiniz Alındı | ${BRAND_NAME}`
+            : `Thanks — We Received Your Request | ${BRAND_NAME}`}
         </title>
         <meta name="robots" content="noindex,follow" />
         <link rel="canonical" href="https://www.ecypro.com/thank-you" />
