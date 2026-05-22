@@ -171,20 +171,21 @@ router.post(
       }
 
       const { score, tier, redFlag } = scoreAnswers(data.answers);
-      const priority = tier === 'high-risk' ? 'High' : tier === 'medium' ? 'Medium' : 'Low';
+      const nowIso = new Date().toISOString();
 
       void upsertProspect({
-        name: data.name,
-        email: data.email,
         company: data.company || undefined,
+        decisionMaker: data.name,
+        decisionMakerEmail: data.email,
         sector: data.sector || undefined,
-        source: 'Quick-Check inbound',
-        stage: 'Lead',
-        priority,
-        kvkkConsentAt: new Date().toISOString(),
-        score,
-        tier,
+        outreachStatus: 'Replied',
+        quickCheckScore: score,
+        quickCheckDate: nowIso,
+        firstContactDate: nowIso,
+        serviceSlug: 'quick-check',
+        kvkkConsentAt: nowIso,
         notes: [
+          `Maturity tier: ${tier}`,
           `Quick-Check answers: ${data.answers.join('')}`,
           redFlag && '🚩 Red flag: Q8/Q9 D cevabı',
         ]

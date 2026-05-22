@@ -47,50 +47,60 @@ function isConfigured(): boolean {
 }
 
 // ── Column names ─────────────────────────────────────────────────────────────
-// Centralized so a Notion schema rename only touches this block.
+// Live Prospects DB is Turkish-named. These MUST match the workspace schema
+// exactly — a single mismatch makes Notion reject the whole page with a 400
+// validation_error, which notionFetch swallows → silent lead loss. Verified
+// against the live schema 2026-05-22.
 const PROP = {
+  company: 'Şirket', // title
+  linkedin: 'LinkedIn', // url
+  sector: 'Sektör', // select
+  engagementTier: 'Engagement Tier', // select
+  budgetUsd: 'Tahmini Bütçe USD', // select
+  big4Auditor: 'Big4 Denetçisi', // select
+  outreachStatus: 'Outreach Status', // select
+  score: 'Quick-Check Skoru', // number
+  quickCheckDate: 'Quick-Check Tarihi', // date
+  discoveryCallDate: 'Discovery Call Tarihi', // date
+  firstContactDate: 'İlk Temas Tarihi', // date
+  serviceSlug: 'Service Slug', // rich_text
+  notes: 'Notes', // rich_text
+  decisionMaker: 'Decision Maker', // rich_text
+  decisionMakerEmail: 'Decision Maker Email', // email
+  tags: 'Etiketler', // multi_select
+} as const;
+
+// Interactions DB keeps its own (English) schema; out of scope for the
+// Prospects contract fix, so its column names live separately here.
+const IPROP = {
   name: 'Name',
-  email: 'Email',
-  company: 'Company',
-  sector: 'Sector',
-  source: 'Source',
-  stage: 'Stage',
-  priority: 'Priority',
-  consentAt: 'KVKK Consent At',
-  notes: 'Notes',
-  score: 'Score',
-  tier: 'Tier',
   prospect: 'Prospect',
   type: 'Type',
   outcome: 'Outcome',
   occurredAt: 'Occurred At',
+  notes: 'Notes',
 } as const;
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
-export type ProspectStage =
-  | 'Lead'
-  | 'Discovery Booked'
-  | 'Discovery Done'
-  | 'Proposal'
-  | 'Active'
-  | 'Closed Won'
-  | 'Closed Lost';
-
-export type ProspectPriority = 'Low' | 'Medium' | 'High';
-
 export interface ProspectUpsertInput {
-  name: string;
-  email: string;
-  company?: string;
-  sector?: string;
-  source: string;
-  stage: ProspectStage;
-  priority?: ProspectPriority;
-  kvkkConsentAt: string; // ISO-8601 — required for KVKK provenance
-  notes?: string;
-  score?: number;
-  tier?: string;
+  company?: string; // → Şirket (title); falls back to decisionMaker/email
+  decisionMaker?: string; // → Decision Maker (person name)
+  decisionMakerEmail: string; // → Decision Maker Email (dedup fallback key)
+  sector?: string; // → Sektör
+  engagementTier?: string; // → Engagement Tier
+  budgetUsd?: string; // → Tahmini Bütçe USD
+  big4Auditor?: string; // → Big4 Denetçisi
+  outreachStatus?: string; // → Outreach Status
+  quickCheckScore?: number; // → Quick-Check Skoru
+  quickCheckDate?: string; // → Quick-Check Tarihi (ISO-8601)
+  discoveryCallDate?: string; // → Discovery Call Tarihi (ISO-8601)
+  firstContactDate?: string; // → İlk Temas Tarihi (ISO-8601)
+  serviceSlug?: string; // → Service Slug
+  linkedin?: string; // → LinkedIn
+  notes?: string; // → Notes
+  tags?: string[]; // → Etiketler
+  kvkkConsentAt: string; // ISO-8601 — folded into İlk Temas Tarihi + Notes
 }
 
 export interface InteractionInput {
@@ -159,8 +169,12 @@ function selectProp(value: string): Record<string, unknown> {
   return { select: { name: value } };
 }
 
-function statusProp(value: string): Record<string, unknown> {
-  return { status: { name: value } };
+function multiSelectProp(values: string[]): Record<string, unknown> {
+  return { multi_select: values.map((name) => ({ name })) };
+}
+
+function urlProp(value: string): Record<string, unknown> {
+  return { url: value };
 }
 
 function dateProp(iso: string): Record<string, unknown> {
@@ -175,20 +189,37 @@ function relationProp(ids: string[]): Record<string, unknown> {
   return { relation: ids.map((id) => ({ id })) };
 }
 
+function prospectTitle(input: ProspectUpsertInput): string {
+  return input.company || input.decisionMaker || input.decisionMakerEmail;
+}
+
 function buildProspectProperties(input: ProspectUpsertInput): Record<string, unknown> {
   const props: Record<string, unknown> = {
-    [PROP.name]: titleProp(input.name),
-    [PROP.email]: emailProp(input.email),
-    [PROP.source]: selectProp(input.source),
-    [PROP.stage]: statusProp(input.stage),
-    [PROP.consentAt]: dateProp(input.kvkkConsentAt),
+    [PROP.company]: titleProp(prospectTitle(input)),
   };
-  if (input.company) props[PROP.company] = richTextProp(input.company);
-  if (input.sector) props[PROP.sector] = richTextProp(input.sector);
-  if (input.priority) props[PROP.priority] = selectProp(input.priority);
-  if (input.notes) props[PROP.notes] = richTextProp(input.notes);
-  if (typeof input.score === 'number') props[PROP.score] = numberProp(input.score);
-  if (input.tier) props[PROP.tier] = selectProp(input.tier);
+  if (input.decisionMaker) props[PROP.decisionMaker] = richTextProp(input.decisionMaker);
+  if (input.decisionMakerEmail)
+    props[PROP.decisionMakerEmail] = emailProp(input.decisionMakerEmail);
+  if (input.sector) props[PROP.sector] = selectProp(input.sector);
+  if (input.engagementTier) props[PROP.engagementTier] = selectProp(input.engagementTier);
+  if (input.budgetUsd) props[PROP.budgetUsd] = selectProp(input.budgetUsd);
+  if (input.big4Auditor) props[PROP.big4Auditor] = selectProp(input.big4Auditor);
+  if (input.outreachStatus) props[PROP.outreachStatus] = selectProp(input.outreachStatus);
+  if (typeof input.quickCheckScore === 'number')
+    props[PROP.score] = numberProp(input.quickCheckScore);
+  if (input.quickCheckDate) props[PROP.quickCheckDate] = dateProp(input.quickCheckDate);
+  if (input.discoveryCallDate) props[PROP.discoveryCallDate] = dateProp(input.discoveryCallDate);
+  if (input.serviceSlug) props[PROP.serviceSlug] = richTextProp(input.serviceSlug);
+  if (input.linkedin) props[PROP.linkedin] = urlProp(input.linkedin);
+  if (input.tags?.length) props[PROP.tags] = multiSelectProp(input.tags);
+
+  // The live Prospects schema has no dedicated KVKK column. Stamp the lawful-
+  // basis timestamp into İlk Temas Tarihi (first-contact date) and prepend it
+  // to Notes so consent provenance stays auditable inside the CRM itself.
+  props[PROP.firstContactDate] = dateProp(input.firstContactDate ?? input.kvkkConsentAt);
+  const consentLine = `KVKK m.5/2-f onayı: ${input.kvkkConsentAt}`;
+  props[PROP.notes] = richTextProp(input.notes ? `${consentLine}\n${input.notes}` : consentLine);
+
   return props;
 }
 
@@ -203,30 +234,41 @@ interface NotionQueryResponse {
   results: NotionPage[];
 }
 
-export async function findProspectByEmail(email: string): Promise<NotionPage | null> {
+/**
+ * Locate a Prospect for dedup. Keyed on company (Şirket title) when present —
+ * the CRM identity for a B2B account — else falls back to the decision-maker
+ * email. Returns null when neither key is provided.
+ */
+export async function findProspect(input: {
+  company?: string;
+  email?: string;
+}): Promise<NotionPage | null> {
   if (!isConfigured()) return null;
+  const filter = input.company
+    ? { property: PROP.company, title: { equals: input.company } }
+    : input.email
+      ? { property: PROP.decisionMakerEmail, email: { equals: input.email } }
+      : null;
+  if (!filter) return null;
   const res = await notionFetch<NotionQueryResponse>(`/databases/${PROSPECTS_DB}/query`, {
     method: 'POST',
-    body: {
-      filter: { property: PROP.email, email: { equals: email } },
-      page_size: 1,
-    },
+    body: { filter, page_size: 1 },
   });
   return res?.results?.[0] ?? null;
 }
 
 /**
- * Upsert a Prospect by email. If a row exists we PATCH stage/priority/notes
- * but never overwrite the original `KVKK Consent At` (preserving the first
- * lawful basis timestamp). Returns the page id, or null on failure.
+ * Upsert a Prospect by company (else email). On update we PATCH all mapped
+ * fields but never overwrite İlk Temas Tarihi, preserving the first lawful-
+ * basis timestamp. Returns the page id, or null on failure.
  */
 export async function upsertProspect(input: ProspectUpsertInput): Promise<string | null> {
   if (!isConfigured()) return null;
-  const existing = await findProspectByEmail(input.email);
+  const existing = await findProspect({ company: input.company, email: input.decisionMakerEmail });
   if (existing) {
     const patchProps = buildProspectProperties(input);
-    // Don't clobber original consent timestamp on update.
-    delete patchProps[PROP.consentAt];
+    // Don't clobber the original first-contact / consent stamp on update.
+    delete patchProps[PROP.firstContactDate];
     const updated = await notionFetch<NotionPage>(`/pages/${existing.id}`, {
       method: 'PATCH',
       body: { properties: patchProps },
@@ -253,13 +295,13 @@ export async function createInteraction(input: InteractionInput): Promise<string
   if (!isConfigured() || !INTERACTIONS_DB) return null;
   const occurredAt = input.occurredAt ?? new Date().toISOString();
   const props: Record<string, unknown> = {
-    [PROP.name]: titleProp(`${input.type} — ${input.outcome}`),
-    [PROP.prospect]: relationProp([input.prospectId]),
-    [PROP.type]: selectProp(input.type),
-    [PROP.outcome]: selectProp(input.outcome),
-    [PROP.occurredAt]: dateProp(occurredAt),
+    [IPROP.name]: titleProp(`${input.type} — ${input.outcome}`),
+    [IPROP.prospect]: relationProp([input.prospectId]),
+    [IPROP.type]: selectProp(input.type),
+    [IPROP.outcome]: selectProp(input.outcome),
+    [IPROP.occurredAt]: dateProp(occurredAt),
   };
-  if (input.notes) props[PROP.notes] = richTextProp(input.notes);
+  if (input.notes) props[IPROP.notes] = richTextProp(input.notes);
 
   const created = await notionFetch<NotionPage>(`/pages`, {
     method: 'POST',

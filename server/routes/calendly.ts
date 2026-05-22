@@ -134,14 +134,17 @@ router.post(
       // would otherwise retry indefinitely).
       (async () => {
         try {
+          const nowIso = new Date().toISOString();
           const prospectId = await upsertProspect({
-            name: invitee.name ?? invitee.email ?? 'Unknown',
-            email: invitee.email ?? '',
-            source: body.payload?.tracking?.utm_source ?? 'Calendly inbound',
-            stage: 'Discovery Booked',
-            priority: 'High',
-            kvkkConsentAt: new Date().toISOString(),
+            decisionMaker: invitee.name ?? invitee.email ?? 'Unknown',
+            decisionMakerEmail: invitee.email ?? '',
+            outreachStatus: 'Discovery Booked',
+            discoveryCallDate: scheduled.start_time ?? nowIso,
+            firstContactDate: nowIso,
+            serviceSlug: 'calendly-discovery',
+            kvkkConsentAt: nowIso,
             notes: [
+              `Source: ${body.payload?.tracking?.utm_source ?? 'Calendly inbound'}`,
               scheduled.start_time && `Scheduled: ${scheduled.start_time}`,
               invitee.timezone && `Timezone: ${invitee.timezone}`,
             ]
@@ -180,11 +183,9 @@ router.post(
       (async () => {
         try {
           const prospectId = await upsertProspect({
-            name: invitee.name ?? invitee.email ?? 'Unknown',
-            email: invitee.email ?? '',
-            source: 'Calendly inbound',
-            stage: 'Lead',
-            priority: 'Low',
+            decisionMaker: invitee.name ?? invitee.email ?? 'Unknown',
+            decisionMakerEmail: invitee.email ?? '',
+            outreachStatus: 'Cold',
             kvkkConsentAt: new Date().toISOString(),
             notes: 'Discovery call canceled by invitee',
           });
