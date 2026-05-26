@@ -219,6 +219,7 @@ const StatusPage = React.lazy(() =>
   import('./pages/StatusPage').then((module) => ({ default: module.StatusPage })),
 );
 import { ProtectedRoute } from './components/admin/auth/ProtectedRoute';
+import { AdminGuard } from './components/admin/auth/AdminGuard';
 import { Navigate } from 'react-router-dom';
 import { LocaleRoute } from './components/routing/LocaleRoute';
 import { LocaleRedirect } from './components/routing/LocaleRedirect';
@@ -868,9 +869,11 @@ const AnimatedRoutes = () => {
             <Route
               path="/admin"
               element={
-                <Suspense fallback={<LoadingFallback />}>
-                  <AdminLayout />
-                </Suspense>
+                <AdminGuard requiredRole="ADMIN">
+                  <Suspense fallback={<LoadingFallback />}>
+                    <AdminLayout />
+                  </Suspense>
+                </AdminGuard>
               }
             >
               <Route index element={<Navigate to="/admin/overview" replace />} />
