@@ -25,6 +25,8 @@ import { useInViewDefer } from '@/hooks/useInViewDefer';
 import { TrustMarquee } from '@/components/sections/TrustMarquee';
 import { ValueProp } from '@/components/sections/ValueProp';
 import { Services } from '@/components/sections/Services';
+import { HomeServicePreview } from '@/components/sections/HomeServicePreview';
+import { FounderSnippet } from '@/components/sections/FounderSnippet';
 
 // ── Below-fold: lazy imports (JS chunk deferred until IntersectionObserver fires) ──
 const GeoPersonalizedHero = React.lazy(() =>
@@ -97,6 +99,11 @@ export const LandingContent: React.FC = () => {
       </Suspense>
       <ValueProp />
       <Services />
+      {/* atom-1-3: Home service preview 4-cluster (M&A / ESG / Fintech / Aile) */}
+      <HomeServicePreview />
+
+      {/* atom-1-4: Founder snippet — foto + manifesto */}
+      <FounderSnippet />
 
       {/* Below-fold: deferred until ~300px before viewport entry */}
       <SectionShell minHeight="500px">
