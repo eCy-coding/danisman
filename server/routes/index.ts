@@ -48,6 +48,8 @@ import adminBreachRoutes from './admin-breach';
 import adminVerbisRoutes from './admin-verbis';
 import adminRetentionRoutes from './admin-retention';
 import adminIndependenceRoutes from './admin-independence';
+// Phase 4 — RBAC Hardening
+import adminRbacRoutes from './admin-rbac';
 import { openApiSpec } from '../config/openapi';
 import { redis } from '../config/redis';
 import { prisma } from '../config/db';
@@ -490,6 +492,8 @@ router.use('/admin/breach', adminBreachRoutes);
 router.use('/admin/verbis', adminVerbisRoutes);
 router.use('/admin/retention', adminRetentionRoutes);
 router.use('/admin/independence', adminIndependenceRoutes);
+// Phase 4 — RBAC Hardening
+router.use('/admin/rbac', adminRbacRoutes);
 router.use('/webhooks', webhookRoutes);
 router.use('/manage', manageRoutes);
 router.use('/auth/2fa', totpRoutes);
