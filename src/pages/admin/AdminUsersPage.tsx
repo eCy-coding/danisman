@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Users, Search, Shield, ShieldOff, ChevronDown, Calendar, Bookmark } from 'lucide-react';
 import { apiClient } from '../../lib/api';
+import { VirtualTable, type Column } from '../../components/admin/ui/VirtualTable';
 
 const ROLES = ['USER', 'CLIENT', 'CONSULTANT', 'ADMIN', 'PREMIUM'] as const;
 type Role = (typeof ROLES)[number];
@@ -92,87 +93,107 @@ export const AdminUsersPage: React.FC = () => {
         />
       </div>
 
-      <div className="bg-white/3 border border-white/5 rounded-2xl overflow-hidden">
-        <div className="grid grid-cols-12 text-xs font-medium text-slate-500 uppercase tracking-widest px-6 py-3 border-b border-white/5">
-          <div className="col-span-4">User</div>
-          <div className="col-span-2">Role</div>
-          <div className="col-span-2">Bookings</div>
-          <div className="col-span-2">Last Login</div>
-          <div className="col-span-2 text-right">Actions</div>
-        </div>
-
-        {isLoading && <div className="text-center py-10 text-slate-400 text-sm">Loading…</div>}
-        {!isLoading && users.length === 0 && (
-          <div className="text-center py-10 text-slate-400 text-sm">No users found.</div>
-        )}
-
-        <div className="divide-y divide-white/5">
-          {users.map((u) => (
-            <div
-              key={u.id}
-              className={`grid grid-cols-12 items-center px-6 py-3 transition-colors ${u.isActive ? 'hover:bg-white/2' : 'opacity-60 bg-slate-900/30'}`}
-            >
-              <div className="col-span-4">
-                <p className="text-sm text-white font-medium truncate">{u.name ?? '—'}</p>
-                <p className="text-xs text-slate-400 truncate">{u.email}</p>
-              </div>
-
-              <div className="col-span-2">
-                {editingRole === u.id ? (
-                  <select
-                    defaultValue={u.role}
-                    ref={(el) => el?.focus()}
-                    aria-label={`Role for user ${u.id}`}
-                    className="text-xs bg-[#0f172a] border border-secondary/30 rounded-lg px-2 py-1 text-white outline-none"
-                    onChange={(e) => roleMutation.mutate({ id: u.id, role: e.target.value })}
-                    onBlur={() => setEditingRole(null)}
-                  >
-                    {ROLES.map((r) => (
-                      <option key={r} value={r}>
-                        {r}
-                      </option>
-                    ))}
-                  </select>
-                ) : (
+      {isLoading && <div className="text-center py-10 text-slate-400 text-sm">Loading…</div>}
+      {!isLoading && (
+        <div
+          data-testid="users-virtual-table"
+          className="bg-white/3 border border-white/5 rounded-2xl overflow-hidden"
+        >
+          <VirtualTable<User>
+            data={users}
+            virtualThreshold={50}
+            containerHeight={520}
+            rowHeight={52}
+            getRowKey={(u) => u.id}
+            emptyNode={<span className="text-slate-400 text-sm">No users found.</span>}
+            columns={[
+              {
+                key: 'user',
+                header: 'User',
+                width: 'w-[33%]',
+                render: (u) => (
+                  <div>
+                    <p className="text-sm text-white font-medium truncate">{u.name ?? '—'}</p>
+                    <p className="text-xs text-slate-400 truncate">{u.email}</p>
+                  </div>
+                ),
+              } satisfies Column<User>,
+              {
+                key: 'role',
+                header: 'Role',
+                width: 'w-[17%]',
+                render: (u) =>
+                  editingRole === u.id ? (
+                    <select
+                      defaultValue={u.role}
+                      ref={(el) => el?.focus()}
+                      aria-label={`Role for user ${u.id}`}
+                      className="text-xs bg-[#0f172a] border border-secondary/30 rounded-lg px-2 py-1 text-white outline-none"
+                      onChange={(e) => roleMutation.mutate({ id: u.id, role: e.target.value })}
+                      onBlur={() => setEditingRole(null)}
+                    >
+                      {ROLES.map((r) => (
+                        <option key={r} value={r}>
+                          {r}
+                        </option>
+                      ))}
+                    </select>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => setEditingRole(u.id)}
+                      className={`flex items-center gap-1 text-xs px-2 py-0.5 rounded-full font-medium cursor-pointer ${ROLE_COLORS[u.role]}`}
+                    >
+                      {u.role} <ChevronDown size={10} />
+                    </button>
+                  ),
+              } satisfies Column<User>,
+              {
+                key: 'bookings',
+                header: 'Bookings',
+                width: 'w-[17%]',
+                render: (u) => (
+                  <span className="flex items-center gap-1.5 text-xs text-slate-400">
+                    <Bookmark size={12} />
+                    {u._count.bookings}
+                  </span>
+                ),
+              } satisfies Column<User>,
+              {
+                key: 'lastLogin',
+                header: 'Last Login',
+                width: 'w-[17%]',
+                render: (u) => (
+                  <span className="text-xs text-slate-400 flex items-center gap-1">
+                    <Calendar size={11} />
+                    {u.lastLoginAt ? new Date(u.lastLoginAt).toLocaleDateString('tr-TR') : 'Never'}
+                  </span>
+                ),
+              } satisfies Column<User>,
+              {
+                key: 'actions',
+                header: 'Actions',
+                width: 'w-[16%]',
+                render: (u) => (
                   <button
                     type="button"
-                    onClick={() => setEditingRole(u.id)}
-                    className={`flex items-center gap-1 text-xs px-2 py-0.5 rounded-full font-medium cursor-pointer ${ROLE_COLORS[u.role]}`}
+                    onClick={() => activeMutation.mutate({ id: u.id, isActive: !u.isActive })}
+                    disabled={activeMutation.isPending}
+                    className={`p-1.5 rounded-lg transition-colors ${
+                      u.isActive
+                        ? 'text-green-400 hover:bg-red-500/10 hover:text-red-400'
+                        : 'text-red-400 hover:bg-green-500/10 hover:text-green-400'
+                    }`}
+                    title={u.isActive ? 'Deactivate' : 'Activate'}
                   >
-                    {u.role} <ChevronDown size={10} />
+                    {u.isActive ? <Shield size={14} /> : <ShieldOff size={14} />}
                   </button>
-                )}
-              </div>
-
-              <div className="col-span-2 flex items-center gap-1.5 text-xs text-slate-400">
-                <Bookmark size={12} />
-                {u._count.bookings}
-              </div>
-
-              <div className="col-span-2 text-xs text-slate-400 flex items-center gap-1">
-                <Calendar size={11} />
-                {u.lastLoginAt ? new Date(u.lastLoginAt).toLocaleDateString('tr-TR') : 'Never'}
-              </div>
-
-              <div className="col-span-2 flex justify-end">
-                <button
-                  type="button"
-                  onClick={() => activeMutation.mutate({ id: u.id, isActive: !u.isActive })}
-                  disabled={activeMutation.isPending}
-                  className={`p-1.5 rounded-lg transition-colors ${
-                    u.isActive
-                      ? 'text-green-400 hover:bg-red-500/10 hover:text-red-400'
-                      : 'text-red-400 hover:bg-green-500/10 hover:text-green-400'
-                  }`}
-                  title={u.isActive ? 'Deactivate' : 'Activate'}
-                >
-                  {u.isActive ? <Shield size={14} /> : <ShieldOff size={14} />}
-                </button>
-              </div>
-            </div>
-          ))}
+                ),
+              } satisfies Column<User>,
+            ]}
+          />
         </div>
-      </div>
+      )}
     </div>
   );
 };

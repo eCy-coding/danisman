@@ -4,7 +4,6 @@ import { toast } from 'sonner';
 import {
   Mail,
   MailOpen,
-  Search,
   Download,
   Building2,
   Phone,
@@ -13,6 +12,9 @@ import {
 } from 'lucide-react';
 import { apiClient } from '../../lib/api';
 import { useAdminEvents, type AdminEvent } from '../../hooks/useAdminEvents';
+import { FilterBuilder } from '../../components/admin/filters/FilterBuilder';
+import { TextFilter } from '../../components/admin/filters/TextFilter';
+import { SelectFilter } from '../../components/admin/filters/SelectFilter';
 
 interface ContactSubmission {
   id: string;
@@ -133,31 +135,31 @@ export const AdminContactsPage: React.FC = () => {
       </div>
 
       {/* Filters */}
-      <div className="flex items-center gap-4">
-        <div className="relative flex-1 max-w-md">
-          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-          <input
-            type="text"
-            placeholder="Search by name, email, company…"
+      <div data-testid="contacts-filter-builder">
+        <FilterBuilder
+          activeCount={(search ? 1 : 0) + (isReadFilter !== 'all' ? 1 : 0)}
+          onClearAll={() => {
+            setSearch('');
+            setIsReadFilter('all');
+          }}
+        >
+          <TextFilter
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-9 pr-4 py-2 bg-white/5 border border-white/10 rounded-lg text-white placeholder-slate-500 text-sm outline-none focus:border-secondary/50"
+            onChange={setSearch}
+            placeholder="Search by name, email, company…"
+            label="Search contacts"
           />
-        </div>
-        {(['all', 'unread', 'read'] as const).map((f) => (
-          <button
-            type="button"
-            key={f}
-            onClick={() => setIsReadFilter(f)}
-            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors capitalize ${
-              isReadFilter === f
-                ? 'bg-secondary text-white'
-                : 'text-slate-400 hover:text-white hover:bg-white/5'
-            }`}
-          >
-            {f}
-          </button>
-        ))}
+          <SelectFilter
+            value={isReadFilter}
+            onChange={(v) => setIsReadFilter(v as 'all' | 'unread' | 'read')}
+            label="Read status"
+            options={[
+              { value: 'unread', label: 'Unread' },
+              { value: 'read', label: 'Read' },
+            ]}
+            placeholder="All"
+          />
+        </FilterBuilder>
       </div>
 
       <div className="grid grid-cols-1 xl:grid-cols-5 gap-6">

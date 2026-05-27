@@ -1,8 +1,6 @@
 /**
  * P57.1 — Modal + ConfirmDialog primitives.
- *
- * Easy-to-use: ESC kapatır, backdrop click kapatır, focus trap manuel
- * (basit — react-focus-lock yok; tab cycle browser default).
+ * M4 upgrade: FocusTrap added (focus-trap-react), focus restores on close.
  *
  * - <Modal open onClose title>...</Modal>
  * - <ConfirmDialog open onConfirm onCancel title message />
@@ -10,6 +8,7 @@
 
 import React, { useEffect } from 'react';
 import { X, AlertTriangle } from 'lucide-react';
+import { FocusTrap } from '../../ui/FocusTrap';
 
 export interface ModalProps {
   open: boolean;
@@ -49,43 +48,54 @@ export const Modal: React.FC<ModalProps> = ({
   if (!open) return null;
 
   return (
-    <div
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby={title ? 'modal-title' : undefined}
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
-      onClick={onClose}
-    >
-      <div
-        className={`relative w-full ${SIZE_MAP[size]} bg-neutral border border-white/15 rounded-2xl shadow-2xl overflow-hidden`}
-        onClick={(e) => e.stopPropagation()}
-      >
-        {(title || description) && (
-          <header className="px-6 pt-5 pb-3 border-b border-white/5">
-            <div className="flex items-start justify-between gap-3">
-              <div>
-                {title && (
-                  <h2 id="modal-title" className="text-lg font-serif font-bold text-white">
-                    {title}
-                  </h2>
-                )}
-                {description && <p className="text-sm text-slate-400 mt-1">{description}</p>}
+    <FocusTrap active={open} onDeactivate={onClose}>
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+        {}
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 bg-black/60"
+          onClick={onClose}
+          onKeyDown={(e) => {
+            if (e.key === 'Escape') onClose();
+          }}
+        />
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby={title ? 'modal-title' : undefined}
+          className={`relative z-10 w-full ${SIZE_MAP[size]} bg-neutral border border-white/15 rounded-2xl shadow-2xl overflow-hidden`}
+        >
+          {(title || description) && (
+            <header className="px-6 pt-5 pb-3 border-b border-white/5">
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  {title && (
+                    <h2 id="modal-title" className="text-lg font-serif font-bold text-white">
+                      {title}
+                    </h2>
+                  )}
+                  {description && <p className="text-sm text-slate-400 mt-1">{description}</p>}
+                </div>
+                <button
+                  type="button"
+                  onClick={onClose}
+                  aria-label="Kapat"
+                  className="text-slate-400 hover:text-white p-1 rounded hover:bg-white/5"
+                >
+                  <X size={18} />
+                </button>
               </div>
-              <button
-                type="button"
-                onClick={onClose}
-                aria-label="Kapat"
-                className="text-slate-400 hover:text-white p-1 rounded hover:bg-white/5"
-              >
-                <X size={18} />
-              </button>
-            </div>
-          </header>
-        )}
-        <div className="p-6">{children}</div>
-        {footer && <footer className="px-6 py-4 border-t border-white/5 flex justify-end gap-2">{footer}</footer>}
+            </header>
+          )}
+          <div className="p-6">{children}</div>
+          {footer && (
+            <footer className="px-6 py-4 border-t border-white/5 flex justify-end gap-2">
+              {footer}
+            </footer>
+          )}
+        </div>
       </div>
-    </div>
+    </FocusTrap>
   );
 };
 
