@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
+import { startLenis, stopLenis } from '@/lib/motion/lenis-config';
 import { Navbar } from './Navbar';
 import { Footer } from './Footer';
 // P46 C2: SeoHead layout seviyesinden kaldırıldı — generic title flush per-page'i eziyordu.
@@ -22,6 +23,11 @@ import { SkipLinks } from '../common/SkipLinks';
 import { MobileStickyCTA } from '../common/MobileStickyCTA';
 
 export const MainLayout: React.FC = () => {
+  useEffect(() => {
+    startLenis();
+    return stopLenis;
+  }, []);
+
   return (
     <div className="flex flex-col min-h-screen bg-neutral text-slate-300 selection:bg-secondary selection:text-white">
       {/* P15 — i18n skip link (TR + EN, single source via SkipLinks). */}
