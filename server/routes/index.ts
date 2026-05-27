@@ -39,6 +39,7 @@ import publicServicesRoutes from './public-services';
 import streamRoutes from './stream';
 // P23 BE Track 2 / Aşama 2 — outbound webhook admin CRUD
 import adminWebhookRoutes from './admin-webhooks';
+import adminRbacRoutes from './admin-rbac';
 import { openApiSpec } from '../config/openapi';
 import { redis } from '../config/redis';
 import { prisma } from '../config/db';
@@ -472,6 +473,7 @@ router.use('/admin/revalidate', adminRevalidateRoutes);
 router.use('/public/services', publicServicesRoutes);
 // P23 BE Track 2 / Aşama 2 — partner-facing event push subscriptions.
 router.use('/admin/webhooks', adminWebhookRoutes);
+router.use('/admin/rbac', adminRbacRoutes);
 router.use('/webhooks', webhookRoutes);
 router.use('/manage', manageRoutes);
 router.use('/auth/2fa', totpRoutes);
