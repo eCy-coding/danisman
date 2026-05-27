@@ -254,6 +254,9 @@ const AdminDevAnalyticsPage = React.lazy(() =>
 const StatusPage = React.lazy(() =>
   import('./pages/StatusPage').then((module) => ({ default: module.StatusPage })),
 );
+const ServerErrorPage = React.lazy(() =>
+  import('./pages/ServerErrorPage').then((module) => ({ default: module.ServerErrorPage })),
+);
 import { ProtectedRoute } from './components/admin/auth/ProtectedRoute';
 import { AdminGuard } from './components/admin/auth/AdminGuard';
 import { Navigate } from 'react-router-dom';
@@ -600,6 +603,14 @@ const AnimatedRoutes = () => {
             "404" as a locale → LocaleRoute redirects to /404 → infinite loop →
             blank screen. Specific path matches before wildcard, breaking the loop. */}
         <Route path="/404" element={<NotFoundPage />} />
+        <Route
+          path="/500"
+          element={
+            <Suspense fallback={<div style={{ minHeight: '100vh', background: '#050810' }} />}>
+              <ServerErrorPage />
+            </Suspense>
+          }
+        />
 
         {/* P39-T02: Locale-prefixed routes — /tr/* and /en/* */}
         {/* These parallel the existing routes and set i18next language from URL */}
