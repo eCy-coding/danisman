@@ -127,9 +127,9 @@ export const Footer: React.FC = () => {
 
           {/* Column 2: Hizmetler */}
           <div>
-            <h4 className="text-xs font-bold mb-8 text-white uppercase tracking-widest border-b border-white/5 pb-2 inline-block">
+            <h3 className="text-xs font-bold mb-8 text-white uppercase tracking-widest border-b border-white/5 pb-2 inline-block">
               {FOOTER_COPY.servicesTitle[lang]}
-            </h4>
+            </h3>
             <ul className="space-y-3 text-sm text-slate-300">
               <li>
                 <Link
@@ -197,9 +197,9 @@ export const Footer: React.FC = () => {
 
           {/* Column 3: Hızlı Linkler */}
           <div>
-            <h4 className="text-xs font-bold mb-8 text-white uppercase tracking-widest border-b border-white/5 pb-2 inline-block">
+            <h3 className="text-xs font-bold mb-8 text-white uppercase tracking-widest border-b border-white/5 pb-2 inline-block">
               {FOOTER_COPY.corporateTitle[lang]}
-            </h4>
+            </h3>
             <ul className="space-y-3 text-sm text-slate-300">
               <li>
                 <Link
@@ -322,9 +322,9 @@ export const Footer: React.FC = () => {
 
           {/* Column 4: Newsletter */}
           <div>
-            <h4 className="text-xs font-bold mb-8 text-white uppercase tracking-widest border-b border-white/5 pb-2 inline-block">
+            <h3 className="text-xs font-bold mb-8 text-white uppercase tracking-widest border-b border-white/5 pb-2 inline-block">
               {FOOTER_COPY.newsletterTitle[lang]}
-            </h4>
+            </h3>
             <p className="text-slate-300 text-sm mb-6 font-light">
               {FOOTER_COPY.newsletterDesc[lang]}
             </p>

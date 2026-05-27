@@ -236,7 +236,7 @@ export const Contact: React.FC = () => {
                           disabled={status === 'submitting'}
                           className="w-full bg-white text-black font-medium py-4 rounded-xl transition-all disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-3 group overflow-hidden relative"
                         >
-                          <div className="absolute inset-0 bg-primary translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-in-out" />
+                          <div className="absolute inset-0 bg-blue-600 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-in-out" />
                           <span className="relative z-10 group-hover:text-white transition-colors duration-500">
                             {status === 'submitting' ? 'Gönderiliyor...' : 'Mesajı Gönder'}
                           </span>
