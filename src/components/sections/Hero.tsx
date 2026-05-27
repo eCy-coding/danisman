@@ -300,7 +300,7 @@ export const Hero: React.FC = () => {
             <button
               type="button"
               onClick={() => setPersona('executive')}
-              className={`px-6 py-2 rounded-full text-sm font-bold transition-all duration-300 ${persona === 'executive' ? 'bg-primary text-white shadow-[0_0_20px_rgba(37,99,235,0.4)]' : 'text-slate-400 hover:text-white'}`}
+              className={`px-6 py-2 rounded-full text-sm font-bold transition-all duration-300 ${persona === 'executive' ? 'bg-blue-600 text-white shadow-[0_0_20px_rgba(37,99,235,0.4)]' : 'text-slate-400 hover:text-white'}`}
             >
               Executive
             </button>
@@ -389,7 +389,7 @@ export const Hero: React.FC = () => {
                           ? () => trackEvent('Hero', 'Click', 'Hero Primary Discovery')
                           : (e) => handleCtaClick(e, '#contact', 'Hero Primary')
                       }
-                      className="group relative px-8 py-4 bg-primary hover:bg-blue-600 text-white font-bold uppercase tracking-widest rounded-xl shadow-[0_0_40px_rgba(37,99,235,0.3)] hover:shadow-[0_0_60px_rgba(37,99,235,0.5)] transition-all duration-300 flex items-center justify-center gap-3 min-w-50 w-full sm:w-auto overflow-hidden border border-white/10"
+                      className="group relative px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white font-bold uppercase tracking-widest rounded-xl shadow-[0_0_40px_rgba(37,99,235,0.3)] hover:shadow-[0_0_60px_rgba(37,99,235,0.5)] transition-all duration-300 flex items-center justify-center gap-3 min-w-50 w-full sm:w-auto overflow-hidden border border-white/10"
                     >
                       <div className="absolute inset-0 -translate-x-full group-hover:animate-[shimmer_1.5s_infinite] bg-linear-to-r from-transparent via-white/20 to-transparent skew-x-12" />
                       <span className="relative z-10">{primaryCtaLabel}</span>
