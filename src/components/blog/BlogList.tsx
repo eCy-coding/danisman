@@ -126,7 +126,11 @@ const BlogList: React.FC = () => {
 
       {/* Result grid */}
       {filtered.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" role="list">
+        <div
+          data-testid="insights-article-grid"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+          role="list"
+        >
           {filtered.map((post, index) => (
             <div role="listitem" key={post.slug}>
               <BlogCard post={post} index={index} />
