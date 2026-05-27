@@ -2,7 +2,17 @@ import React from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { ContactForm } from '../components/forms/ContactForm';
 import { useTranslation, getLang, MultiLang, Language } from '@/lib/i18n';
-import { Mail, MapPin, Phone, Sparkles } from 'lucide-react';
+import {
+  Mail,
+  MapPin,
+  Phone,
+  Sparkles,
+  MessageCircle,
+  Linkedin,
+  Calendar,
+  Clock,
+} from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { CONTACT_CONFIG } from '@/data/copy/common';
 import { Helmet } from 'react-helmet-async';
 import { JsonLd } from '../components/seo/JsonLd';
@@ -58,6 +68,21 @@ export const ContactPage: React.FC = () => {
 
       <div id="contact" className="bg-neutral min-h-screen pt-32 pb-24 font-sans text-slate-300">
         <div className="max-w-7xl mx-auto px-6 md:px-12">
+          {/* atom-6-1: Contact Hero + value prop */}
+          <section data-testid="contact-hero" className="text-center mb-16">
+            <p className="text-sm uppercase tracking-widest text-amber-400 mb-4 font-medium">
+              {lang.startsWith('tr') ? 'Doğrudan Founder Erişimi' : 'Direct Founder Access'}
+            </p>
+            <h1 className="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">
+              {lang.startsWith('tr') ? 'Projenizi Konuşalım' : "Let's Talk About Your Project"}
+            </h1>
+            <p className="text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed">
+              {lang.startsWith('tr')
+                ? '48 saat içinde yanıt, taahhütsüz 30 dakikalık strateji görüşmesi.'
+                : 'Response within 48 hours, complimentary 30-minute strategy session.'}
+            </p>
+          </section>
+
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
             {/* Contact Info */}
             <div className="space-y-12">
@@ -124,8 +149,11 @@ export const ContactPage: React.FC = () => {
               </div>
             </div>
 
-            {/* Form */}
-            <div className="glass-card p-8 md:p-12 rounded-3xl sticky top-32">
+            {/* atom-6-2: Form section */}
+            <section
+              data-testid="contact-form-section"
+              className="glass-card p-8 md:p-12 rounded-3xl sticky top-32"
+            >
               {planLabel && (
                 <div
                   role="status"
@@ -151,8 +179,113 @@ export const ContactPage: React.FC = () => {
                 {t('contact.form_title') || 'Mesaj Gönderin'}
               </h2>
               <ContactForm />
-            </div>
+            </section>
           </div>
+        </div>
+
+        {/* atom-6-3: Channels grid */}
+        <div className="max-w-7xl mx-auto px-6 md:px-12 mt-16">
+          <section data-testid="contact-channels">
+            <h2 className="text-2xl font-bold text-white mb-8">
+              {lang.startsWith('tr') ? 'Bize Ulaşın' : 'Get in Touch'}
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              <a
+                href="https://wa.me/905XXXXXXXXX"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-start gap-4 p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-green-500/40 hover:bg-green-500/5 transition-all group"
+              >
+                <div className="p-3 rounded-xl bg-green-500/10 text-green-400 flex-shrink-0">
+                  <MessageCircle size={22} />
+                </div>
+                <div>
+                  <h3 className="font-bold text-white group-hover:text-green-400 transition-colors">
+                    WhatsApp
+                  </h3>
+                  <p className="text-sm text-slate-400">
+                    {lang.startsWith('tr') ? 'Hızlı mesaj için' : 'Quick message'}
+                  </p>
+                </div>
+              </a>
+              <a
+                href={`mailto:${CONTACT_CONFIG.email}`}
+                className="flex items-start gap-4 p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-blue-500/40 hover:bg-blue-500/5 transition-all group"
+              >
+                <div className="p-3 rounded-xl bg-blue-500/10 text-blue-400 flex-shrink-0">
+                  <Mail size={22} />
+                </div>
+                <div>
+                  <h3 className="font-bold text-white group-hover:text-blue-400 transition-colors">
+                    E-posta
+                  </h3>
+                  <p className="text-sm text-slate-400">{CONTACT_CONFIG.email}</p>
+                </div>
+              </a>
+              <a
+                href="https://linkedin.com/company/ecypro"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-start gap-4 p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-sky-500/40 hover:bg-sky-500/5 transition-all group"
+              >
+                <div className="p-3 rounded-xl bg-sky-500/10 text-sky-400 flex-shrink-0">
+                  <Linkedin size={22} />
+                </div>
+                <div>
+                  <h3 className="font-bold text-white group-hover:text-sky-400 transition-colors">
+                    LinkedIn
+                  </h3>
+                  <p className="text-sm text-slate-400">
+                    {lang.startsWith('tr') ? 'Ağ iletişimi' : 'Professional network'}
+                  </p>
+                </div>
+              </a>
+              <Link
+                to="/discovery"
+                className="flex items-start gap-4 p-6 rounded-2xl bg-amber-500/10 border border-amber-500/20 hover:border-amber-500/50 hover:bg-amber-500/15 transition-all group"
+              >
+                <div className="p-3 rounded-xl bg-amber-500/20 text-amber-400 flex-shrink-0">
+                  <Calendar size={22} />
+                </div>
+                <div>
+                  <h3 className="font-bold text-white group-hover:text-amber-400 transition-colors">
+                    {lang.startsWith('tr') ? 'Discovery Call' : 'Discovery Call'}
+                  </h3>
+                  <p className="text-sm text-slate-400">
+                    {lang.startsWith('tr') ? '30 dk. ücretsiz' : '30 min. free'}
+                  </p>
+                </div>
+              </Link>
+            </div>
+          </section>
+        </div>
+
+        {/* atom-6-4: 48h promise + office location */}
+        <div className="max-w-7xl mx-auto px-6 md:px-12 mt-12 mb-16">
+          <section data-testid="contact-promise" className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="rounded-2xl bg-amber-500/10 border border-amber-500/20 p-8">
+              <div className="text-amber-400 mb-4">
+                <Clock size={32} />
+              </div>
+              <h2 className="text-xl font-bold text-white mb-3">
+                {lang.startsWith('tr') ? '48 Saat İçinde Yanıt' : 'Response Within 48 Hours'}
+              </h2>
+              <p className="text-slate-400 text-sm leading-relaxed">
+                {lang.startsWith('tr')
+                  ? 'Her soruyu dikkatle inceleyip 48 iş saati içinde yanıtlıyoruz. Önce anlıyoruz, sonra konuşuyoruz.'
+                  : 'We carefully review every inquiry and respond within 48 business hours. We listen first, then respond.'}
+              </p>
+            </div>
+            <div className="rounded-2xl bg-white/5 border border-white/10 p-8">
+              <div className="text-slate-400 mb-4">
+                <MapPin size={32} />
+              </div>
+              <h2 className="text-xl font-bold text-white mb-3">
+                {lang.startsWith('tr') ? 'Merkez Ofis' : 'Head Office'}
+              </h2>
+              <p className="text-slate-400 text-sm leading-relaxed">{getAddress()}</p>
+            </div>
+          </section>
         </div>
 
         {/* P77.B — Calendly alternative booking path */}
