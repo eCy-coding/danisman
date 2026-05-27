@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 /**
  * M4 — FocusTrap tests
  */
@@ -18,8 +19,7 @@ vi.mock('focus-trap-react', () => ({
       if (e.key === 'Escape') focusTrapOptions.onDeactivate?.();
     };
     return (
-      // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
-      <div role="dialog" data-testid="focus-trap" onKeyDown={handleKeyDown} tabIndex={-1}>
+      <div data-testid="focus-trap" onKeyDown={handleKeyDown} tabIndex={-1}>
         {children}
       </div>
     );
