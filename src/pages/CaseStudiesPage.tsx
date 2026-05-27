@@ -81,7 +81,7 @@ export const CaseStudiesPage: React.FC = () => {
                   aria-pressed={activeIndustry === ALL_INDUSTRY}
                   className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
                     activeIndustry === ALL_INDUSTRY
-                      ? 'bg-primary text-white'
+                      ? 'bg-secondary text-neutral'
                       : 'bg-white/5 text-slate-300 hover:bg-white/10'
                   }`}
                 >
@@ -99,7 +99,7 @@ export const CaseStudiesPage: React.FC = () => {
                       aria-pressed={active}
                       className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
                         active
-                          ? 'bg-primary text-white'
+                          ? 'bg-secondary text-neutral'
                           : 'bg-white/5 text-slate-300 hover:bg-white/10'
                       }`}
                     >

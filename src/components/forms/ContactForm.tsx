@@ -288,7 +288,7 @@ export const ContactForm: React.FC = () => {
         className={`w-full py-4 min-h-[52px] rounded-xl font-bold flex items-center justify-center gap-2 transition-all ${
           isSubmitting
             ? 'bg-white/5 text-slate-400 cursor-not-allowed'
-            : 'bg-primary text-white hover:bg-primary-dark shadow-lg hover:shadow-xl active:scale-95'
+            : 'bg-secondary text-neutral hover:bg-amber-400 shadow-lg hover:shadow-xl active:scale-95'
         }`}
       >
         {isSubmitting ? (

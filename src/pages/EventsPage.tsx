@@ -161,7 +161,7 @@ export const EventsPage: React.FC = () => {
                 data-testid={`event-filter-${f}`}
                 className={`px-4 py-1.5 rounded-lg text-xs font-bold uppercase tracking-widest transition-all duration-200 ${
                   filter === f
-                    ? 'bg-primary text-white shadow-[0_0_15px_rgba(37,99,235,0.4)]'
+                    ? 'bg-secondary text-neutral shadow-[0_0_15px_rgba(250,204,21,0.4)]'
                     : 'bg-white/5 text-slate-400 hover:text-white hover:bg-white/10 border border-white/10'
                 }`}
               >

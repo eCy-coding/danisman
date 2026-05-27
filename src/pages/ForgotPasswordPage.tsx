@@ -28,7 +28,7 @@ export const ForgotPasswordPage: React.FC = () => {
         />
         <button
           type="submit"
-          className="w-full bg-primary text-white py-3 rounded-lg font-bold hover:bg-slate-800 transition-colors uppercase tracking-wider text-sm shadow-md hover:shadow-lg transform active:scale-95"
+          className="w-full bg-secondary text-neutral py-3 rounded-lg font-bold hover:bg-amber-400 transition-colors uppercase tracking-wider text-sm shadow-md hover:shadow-lg transform active:scale-95"
         >
           {getLang(AUTH_COPY.resetBtn as MultiLang, lang)}
         </button>

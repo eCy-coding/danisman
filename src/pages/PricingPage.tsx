@@ -370,7 +370,7 @@ export const PricingPage: React.FC = () => {
                 }`}
               >
                 {tier.highlight && (
-                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-primary text-white text-xs font-bold uppercase tracking-wider">
+                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-secondary text-neutral text-xs font-bold uppercase tracking-wider">
                     {lang === 'tr' ? 'Önerilen' : 'Recommended'}
                   </div>
                 )}
