@@ -210,6 +210,18 @@ const AdminAuditLogPage = React.lazy(() =>
 const AdminCrmPage = React.lazy(() =>
   import('./pages/admin/AdminCrmPage').then((module) => ({ default: module.AdminCrmPage })),
 );
+// Phase 2 Revenue Core pages
+const AdminDealsPage = React.lazy(() => import('./pages/admin/AdminDealsPage'));
+const AdminRetainersPage = React.lazy(() =>
+  import('./pages/admin/AdminRetainersPage').then((module) => ({
+    default: module.AdminRetainersPage,
+  })),
+);
+const AdminOutreachPage = React.lazy(() =>
+  import('./pages/admin/AdminOutreachPage').then((module) => ({
+    default: module.AdminOutreachPage,
+  })),
+);
 const AdminDevAnalyticsPage = React.lazy(() =>
   import('./pages/admin/AdminDevAnalyticsPage').then((module) => ({
     default: module.AdminDevAnalyticsPage,
@@ -1089,6 +1101,30 @@ const AnimatedRoutes = () => {
                 element={
                   <Suspense fallback={<LoadingFallback />}>
                     <AdminCrmPage />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="deals"
+                element={
+                  <Suspense fallback={<LoadingFallback />}>
+                    <AdminDealsPage />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="retainers"
+                element={
+                  <Suspense fallback={<LoadingFallback />}>
+                    <AdminRetainersPage />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="outreach"
+                element={
+                  <Suspense fallback={<LoadingFallback />}>
+                    <AdminOutreachPage />
                   </Suspense>
                 }
               />
