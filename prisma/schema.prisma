@@ -637,3 +637,218 @@ model ViewAsSession {
   @@index([startedAt])
   @@map("view_as_sessions")
 }
+
+// ─── PHASE 6: ENTERPRISE POLISH ──────────────────────────────
+
+// Danışmanlık müşterisi — Succession/ESG/Fintech ilişkilerinde pivot
+model Client {
+  id            String   @id @default(cuid())
+  name          String
+  contactEmail  String?
+  sector        String?
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  successionRoadmaps SuccessionRoadmap[]
+  esgAssessments     ESGAssessment[]
+  fintechItems       FintechComplianceItem[]
+
+  @@index([isActive])
+  @@map("clients")
+}
+
+// M1-A: Founder Letter — Emre Can Yalçın aylık bülten yönetimi
+enum LetterStatus {
+  DRAFT
+  SCHEDULED
+  PUBLISHED
+  ARCHIVED
+}
+
+model FounderLetter {
+  id              String       @id @default(cuid())
+  slug            String       @unique
+  titleTr         String
+  titleEn         String?
+  contentMdTr     String       @db.Text
+  contentMdEn     String?      @db.Text
+  authorId        String
+  status          LetterStatus @default(DRAFT)
+  publishedAt     DateTime?
+  scheduledFor    DateTime?
+  emailSent       Boolean      @default(false)
+  emailSentAt     DateTime?
+  subscriberCount Int          @default(0)
+  openRate        Decimal?
+  clickRate       Decimal?
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+
+  @@index([status, publishedAt])
+  @@map("founder_letters")
+}
+
+// M1-B: Succession Roadmap — aile şirketi kuşak geçişi
+enum SuccessionStatus {
+  ASSESSMENT
+  PLANNING
+  EXECUTION
+  COMPLETED
+}
+
+enum MilestoneStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  DELAYED
+}
+
+model SuccessionRoadmap {
+  id             String           @id @default(cuid())
+  clientId       String
+  client         Client           @relation(fields: [clientId], references: [id])
+  generationFrom Int
+  generationTo   Int
+  estimatedYear  Int?
+  status         SuccessionStatus @default(ASSESSMENT)
+  notes          String?          @db.Text
+  ownerId        String
+
+  milestones SuccessionMilestone[]
+  kpis       SuccessionKPI[]
+
+  @@index([clientId])
+  @@index([status])
+  @@map("succession_roadmaps")
+}
+
+model SuccessionMilestone {
+  id           String           @id @default(cuid())
+  roadmapId    String
+  roadmap      SuccessionRoadmap @relation(fields: [roadmapId], references: [id])
+  name         String
+  expectedDate DateTime?
+  actualDate   DateTime?
+  status       MilestoneStatus  @default(PENDING)
+
+  @@index([roadmapId])
+  @@map("succession_milestones")
+}
+
+model SuccessionKPI {
+  id             String           @id @default(cuid())
+  roadmapId      String
+  roadmap        SuccessionRoadmap @relation(fields: [roadmapId], references: [id])
+  metric         String
+  baselineValue  String
+  targetValue    String
+  currentValue   String?
+  measuredAt     DateTime?
+
+  @@index([roadmapId])
+  @@map("succession_kpis")
+}
+
+// M1-C: ESG / ESRS Data Architecture
+enum ESGPillar {
+  ENVIRONMENTAL
+  SOCIAL
+  GOVERNANCE
+}
+
+enum ESGStatus {
+  GAP_ANALYSIS
+  DATA_COLLECTION
+  REVIEW
+  PUBLISHED
+}
+
+model ESGDatapoint {
+  id               String   @id @default(cuid())
+  esrsCode         String   @unique  // "E1-6-44", "S1-7-1", "G1-3-22"
+  pillar           ESGPillar
+  category         String
+  topic            String
+  metricName       String
+  unit             String?
+  isDoubleMaterial Boolean
+  isMandatory      Boolean
+
+  @@index([pillar])
+  @@index([isMandatory])
+  @@map("esg_datapoints")
+}
+
+model ESGAssessment {
+  id                      String    @id @default(cuid())
+  clientId                String
+  client                  Client    @relation(fields: [clientId], references: [id])
+  reportingYear           Int
+  status                  ESGStatus @default(GAP_ANALYSIS)
+  doubleMaterialityMatrix Json
+  datapointValues         Json      @default("{}")
+  completionPct           Decimal   @default(0)
+  startedAt               DateTime  @default(now())
+  publishedAt             DateTime?
+
+  @@index([clientId])
+  @@index([status])
+  @@map("esg_assessments")
+}
+
+// M1-D: Fintech Compliance — SPK + MASAK + KVKK + TCMB + BDDK
+enum Regulator {
+  SPK
+  MASAK
+  KVKK
+  TCMB
+  BDDK
+}
+
+enum ComplianceItemStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  UNDER_REVIEW
+  APPROVED
+  REJECTED
+}
+
+model FintechComplianceItem {
+  id             String               @id @default(cuid())
+  clientId       String
+  client         Client               @relation(fields: [clientId], references: [id])
+  regulator      Regulator
+  category       String
+  status         ComplianceItemStatus @default(NOT_STARTED)
+  riskScore      Int
+  dueDate        DateTime?
+  lastReviewedAt DateTime?
+  notes          String?
+
+  @@index([clientId])
+  @@index([regulator])
+  @@index([status])
+  @@map("fintech_compliance_items")
+}
+
+// M1-E: Local Data Residency — veri yerleşim rozeti
+enum ResidencyLocation {
+  TR_LOCAL
+  EU_GDPR
+  US_SCC
+  OTHER
+}
+
+model DataResidencyTag {
+  id                String            @id @default(cuid())
+  resourceType      String
+  resourceId        String
+  location          ResidencyLocation
+  transferMechanism String?
+  documentedAt      DateTime          @default(now())
+
+  @@index([resourceType, resourceId])
+  @@index([location])
+  @@map("data_residency_tags")
+}
