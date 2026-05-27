@@ -15,6 +15,7 @@ export default defineConfig({
       '**/dist/**',
       'e2e/**',
       '.claude/**',
+      '.claire/**',
       'crowler/**',
       'scripts/**',
       'server/**',

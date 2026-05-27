@@ -139,7 +139,7 @@ export class RouteErrorBoundary extends Component<Props, State> {
             <button
               type="button"
               onClick={this.handleRetry}
-              className="inline-flex items-center justify-center gap-fib-2 px-fib-5 py-fib-3 bg-primary text-white rounded-lg font-medium hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary/60 focus:ring-offset-2 focus:ring-offset-surface-2 active:scale-95 transition-all"
+              className="inline-flex items-center justify-center gap-fib-2 px-fib-5 py-fib-3 bg-secondary text-neutral rounded-lg font-medium hover:bg-amber-400 focus:outline-none focus:ring-2 focus:ring-secondary/60 focus:ring-offset-2 focus:ring-offset-surface-2 active:scale-95 transition-all"
               aria-label="Bu bölümü yeniden yükle"
             >
               <RefreshCw size={16} aria-hidden="true" />

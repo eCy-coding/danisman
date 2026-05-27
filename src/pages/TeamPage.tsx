@@ -270,7 +270,7 @@ export const TeamPage: React.FC = () => {
             </p>
             <Link
               to="/careers"
-              className="inline-flex items-center gap-3 px-8 py-4 bg-primary hover:bg-blue-600 text-white font-bold uppercase tracking-widest rounded-xl shadow-[0_0_30px_rgba(37,99,235,0.3)] hover:shadow-[0_0_50px_rgba(37,99,235,0.5)] transition-all duration-300"
+              className="inline-flex items-center gap-3 px-8 py-4 bg-secondary hover:bg-amber-400 text-neutral font-bold uppercase tracking-widest rounded-xl shadow-[0_0_30px_rgba(250,204,21,0.3)] hover:shadow-[0_0_50px_rgba(250,204,21,0.5)] transition-all duration-300"
             >
               {lang === 'tr' ? 'Açık Pozisyonlar' : 'Open Positions'} <ArrowRight size={16} />
             </Link>
