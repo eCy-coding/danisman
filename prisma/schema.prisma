@@ -797,3 +797,152 @@ model OutreachProspect {
   @@index([status])
   @@map("outreach_prospects")
 }
+
+// ─── PHASE 3: KVKK COMPLIANCE SHIELD ────────────────────
+
+enum DSARType {
+  ACCESS
+  RECTIFICATION
+  ERASURE
+  RESTRICTION
+  PORTABILITY
+  OBJECTION
+  AUTOMATED_DECISION
+}
+
+enum DSARStatus {
+  RECEIVED
+  UNDER_REVIEW
+  RESPONDED
+  CLOSED
+  REJECTED
+}
+
+enum BreachStatus {
+  DETECTED
+  INVESTIGATING
+  REPORTED
+  RESOLVED
+}
+
+enum ROPAStatus {
+  ACTIVE
+  DEPRECATED
+  UNDER_REVIEW
+}
+
+// KVKK m.11 + GDPR Art.15-22 — Data Subject Access Request
+// slaDeadline = receivedAt + 30d; extendable once (+30d) per KVKK m.13
+model DSARRequest {
+  id                        String         @id @default(cuid())
+  requesterEmail            String
+  requesterName             String
+  requesterIdentityVerified Boolean        @default(false)
+  requestType               DSARType
+  description               String?
+  receivedAt                DateTime       @default(now())
+  slaDeadline               DateTime
+  extendedOnce              Boolean        @default(false)
+  status                    DSARStatus     @default(RECEIVED)
+  assignedTo                String?
+  respondedAt               DateTime?
+  responseText              String?
+  closureReason             String?
+  auditLog                  DSARAuditEntry[]
+
+  @@index([status, slaDeadline])
+  @@index([requesterEmail])
+  @@map("dsar_requests")
+}
+
+// Immutable audit trail — DB-level: no UPDATE/DELETE allowed (enforced via row-level trigger)
+model DSARAuditEntry {
+  id        String      @id @default(cuid())
+  dsarId    String
+  dsar      DSARRequest @relation(fields: [dsarId], references: [id])
+  actorId   String
+  action    String
+  details   Json
+  createdAt DateTime    @default(now())
+
+  @@index([dsarId])
+  @@index([actorId, createdAt])
+  @@map("dsar_audit_entries")
+}
+
+// KVKK m.12/5 — 72-hour Kurul breach notification obligation
+model BreachIncident {
+  id                       String       @id @default(cuid())
+  detectedAt               DateTime
+  detectionSource          String
+  description              String
+  affectedDataCategories   String[]
+  affectedSubjectsCount    Int
+  notificationDeadline     DateTime
+  reportedToKurul          Boolean      @default(false)
+  reportedAt               DateTime?
+  kurulFormDraft           String?
+  affectedSubjectsNotified Boolean      @default(false)
+  status                   BreachStatus @default(DETECTED)
+  postMortemUrl            String?
+  createdAt                DateTime     @default(now())
+  updatedAt                DateTime     @updatedAt
+
+  @@index([status, notificationDeadline])
+  @@map("breach_incidents")
+}
+
+// GDPR Art.30 + KVKK — Records of Processing Activities
+// retentionPeriod is code-locked in src/constants/ropa-template.ts (01_NOTEBOOKLM_FINDINGS §2.7)
+model ROPAProcess {
+  id                   String     @id @default(cuid())
+  processId            String     @unique
+  name                 String
+  purpose              String
+  legalBasis           String
+  dataCategories       String[]
+  retentionPeriod      String
+  retentionPeriodDays  Int
+  retentionLegalSource String
+  transferLocation     String
+  transferMechanism    String?
+  dpoApproved          Boolean    @default(false)
+  lastReviewedAt       DateTime   @default(now())
+  nextReviewDue        DateTime
+  status               ROPAStatus @default(ACTIVE)
+  createdAt            DateTime   @default(now())
+  updatedAt            DateTime   @updatedAt
+
+  @@index([status])
+  @@index([processId])
+  @@map("ropa_processes")
+}
+
+// Retention enforcement — nightly cron destroys data older than retentionDays + issues certificate
+model RetentionPolicy {
+  id             String    @id @default(cuid())
+  resourceType   String    @unique
+  retentionDays  Int
+  legalBasis     String
+  lastEnforced   DateTime?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  @@map("retention_policies")
+}
+
+// eCyPro-specific: Big4 conflict screen + Bağımsızlık Beyanı (yıllık)
+model IndependenceCheck {
+  id                     String   @id @default(cuid())
+  clientId               String
+  checkedAt              DateTime @default(now())
+  auditFirmConflicts     String[]
+  pureAdvisoryConfirmed  Boolean
+  signatoryUserId        String
+  declarationDocUrl      String?
+  validUntil             DateTime
+
+  @@index([clientId])
+  @@index([validUntil])
+  @@map("independence_checks")
+}

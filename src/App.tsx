@@ -174,6 +174,27 @@ const AdminSettingsTabsPage = React.lazy(() => import('./pages/admin/AdminSettin
 const AdminSecurityPage = React.lazy(() => import('./pages/admin/AdminSecurityPage'));
 const AdminProfilePage = React.lazy(() => import('./pages/admin/AdminProfilePage'));
 const AdminHelpPage = React.lazy(() => import('./pages/admin/AdminHelpPage'));
+// Phase 3 — KVKK Compliance Shield
+const AdminDSARPage = React.lazy(() =>
+  import('./pages/admin/AdminDSARPage').then((m) => ({ default: m.AdminDSARPage })),
+);
+const AdminConsentLedgerPage = React.lazy(() =>
+  import('./pages/admin/AdminConsentLedgerPage').then((m) => ({
+    default: m.AdminConsentLedgerPage,
+  })),
+);
+const AdminROPAPage = React.lazy(() =>
+  import('./pages/admin/AdminROPAPage').then((m) => ({ default: m.AdminROPAPage })),
+);
+const AdminBreachPage = React.lazy(() =>
+  import('./pages/admin/AdminBreachPage').then((m) => ({ default: m.AdminBreachPage })),
+);
+const AdminVERBISPage = React.lazy(() =>
+  import('./pages/admin/AdminVERBISPage').then((m) => ({ default: m.AdminVERBISPage })),
+);
+const AdminRetentionPage = React.lazy(() =>
+  import('./pages/admin/AdminRetentionPage').then((m) => ({ default: m.AdminRetentionPage })),
+);
 const AdminPageEditPage = React.lazy(() => import('./pages/admin/AdminPageEditPage'));
 const AdminBlogPage = React.lazy(() =>
   import('./pages/admin/AdminBlogPage').then((module) => ({ default: module.AdminBlogPage })),
@@ -1001,6 +1022,55 @@ const AnimatedRoutes = () => {
                 element={
                   <Suspense fallback={<LoadingFallback />}>
                     <AdminHelpPage />
+                  </Suspense>
+                }
+              />
+              {/* Phase 3 — KVKK Compliance Shield */}
+              <Route
+                path="dsar"
+                element={
+                  <Suspense fallback={<LoadingFallback />}>
+                    <AdminDSARPage />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="consent"
+                element={
+                  <Suspense fallback={<LoadingFallback />}>
+                    <AdminConsentLedgerPage />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="ropa"
+                element={
+                  <Suspense fallback={<LoadingFallback />}>
+                    <AdminROPAPage />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="breach"
+                element={
+                  <Suspense fallback={<LoadingFallback />}>
+                    <AdminBreachPage />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="verbis"
+                element={
+                  <Suspense fallback={<LoadingFallback />}>
+                    <AdminVERBISPage />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="retention"
+                element={
+                  <Suspense fallback={<LoadingFallback />}>
+                    <AdminRetentionPage />
                   </Suspense>
                 }
               />
