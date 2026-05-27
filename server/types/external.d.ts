@@ -1,5 +1,2 @@
 // Type stubs for runtime deps lacking @types/* packages.
-// Properly typed as `any` is acceptable for production build unblock;
-// add proper @types/* in a post-launch sprint when network/registry allows.
-declare module 'jsonwebtoken';
-declare module 'ws';
+// jsonwebtoken and ws have @types/* — removed stale stubs that shadowed real types.
