@@ -1,6 +1,60 @@
 @import 'tailwindcss';
 @plugin "@tailwindcss/typography";
 
+/* ═══════════════════════════════════════════════════════
+   Tailwind v4 @theme — generates utility classes from tokens
+   bg-brand-*, text-accent-*, shadow-elevation-*, etc.
+   ═══════════════════════════════════════════════════════ */
+@theme {
+  /* Brand — warm slate */
+  --color-brand-50:  #f8fafc;
+  --color-brand-100: #f1f5f9;
+  --color-brand-200: #e2e8f0;
+  --color-brand-300: #cbd5e1;
+  --color-brand-400: #94a3b8;
+  --color-brand-500: #64748b;
+  --color-brand-600: #475569;
+  --color-brand-700: #334155;
+  --color-brand-800: #1e293b;
+  --color-brand-900: #0f172a;
+  --color-brand-950: #020617;
+
+  /* Accent — amber gold */
+  --color-accent-50:  #fffbeb;
+  --color-accent-100: #fef3c7;
+  --color-accent-200: #fde68a;
+  --color-accent-300: #fcd34d;
+  --color-accent-400: #fbbf24;
+  --color-accent-500: #f59e0b;
+  --color-accent-600: #d97706;
+  --color-accent-700: #b45309;
+  --color-accent-800: #92400e;
+  --color-accent-900: #78350f;
+
+  /* Fonts */
+  --font-sans:    "Inter Variable", Inter, system-ui, sans-serif;
+  --font-display: "Playfair Display", Georgia, serif;
+  --font-mono:    "JetBrains Mono", "Fira Code", monospace;
+
+  /* Motion durations */
+  --duration-instant:    50ms;
+  --duration-fast:      150ms;
+  --duration-base:      300ms;
+  --duration-slow:      500ms;
+  --duration-deliberate:800ms;
+
+  /* Elevations */
+  --shadow-elevation-0: none;
+  --shadow-elevation-1: 0 1px 2px 0 rgb(0 0 0 / 0.5);
+  --shadow-elevation-2: 0 1px 3px 0 rgb(0 0 0 / 0.5), 0 1px 2px -1px rgb(0 0 0 / 0.4);
+  --shadow-elevation-3: 0 4px 6px -1px rgb(0 0 0 / 0.45), 0 2px 4px -2px rgb(0 0 0 / 0.4);
+  --shadow-elevation-4: 0 10px 15px -3px rgb(0 0 0 / 0.45), 0 4px 6px -4px rgb(0 0 0 / 0.4);
+  --shadow-elevation-5: 0 20px 25px -5px rgb(0 0 0 / 0.45), 0 8px 10px -6px rgb(0 0 0 / 0.4);
+  --shadow-glow-sm:     0 0 15px rgb(245 158 11 / 0.2);
+  --shadow-glow-md:     0 0 30px rgb(245 158 11 / 0.3);
+  --shadow-glow-lg:     0 0 60px rgb(245 158 11 / 0.35);
+}
+
 /* P46 C7: WCAG 2.1 AAA touch target minimum — mobil cihazlarda buton + link
    tıklama alanları en az 44×44px olmalı. Tailwind utility yerine global CSS
    ile fallback uygula; bileşen-özel min-h-[44px] override edebilir. */
