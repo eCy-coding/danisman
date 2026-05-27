@@ -1,3 +1,4 @@
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppStore } from '@/store/useAppStore';
 import { authApi } from '@/lib/api';
@@ -9,6 +10,24 @@ interface LoginResult {
 export const useAdminAuth = () => {
   const { user, token, totpRequired, totpVerified, setAuth, logout: storeLogout } = useAppStore();
   const navigate = useNavigate();
+  const initialToken = useRef(token).current;
+  const [isLoading, setIsLoading] = useState(!!initialToken);
+
+  useEffect(() => {
+    if (!initialToken) {
+      setIsLoading(false);
+      return;
+    }
+    authApi
+      .getMe()
+      .then(() => setIsLoading(false))
+      .catch(() => {
+        storeLogout();
+        setIsLoading(false);
+      });
+    // storeLogout is stable (zustand action ref never changes)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const isAuthenticated =
     !!user && !!token && user.role === 'ADMIN' && (!totpRequired || totpVerified);
@@ -48,5 +67,5 @@ export const useAdminAuth = () => {
     navigate('/admin/login');
   };
 
-  return { isAuthenticated, isLoading: false, login, logout };
+  return { isAuthenticated, isLoading, login, logout };
 };

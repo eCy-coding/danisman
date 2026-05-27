@@ -165,6 +165,9 @@ const AdminServiceEditPage = React.lazy(() => import('./pages/admin/AdminService
 const AdminPagesListPage = React.lazy(() => import('./pages/admin/AdminPagesListPage'));
 const AdminCollectionPage = React.lazy(() => import('./pages/admin/AdminCollectionPage'));
 const AdminLeadDetailPage = React.lazy(() => import('./pages/admin/AdminLeadDetailPage'));
+const AdminLeadsPage = React.lazy(() =>
+  import('./pages/admin/AdminLeadsPage').then((m) => ({ default: m.AdminLeadsPage })),
+);
 const AdminCampaignWizardPage = React.lazy(() => import('./pages/admin/AdminCampaignWizardPage'));
 const AdminMediaLibraryPage = React.lazy(() => import('./pages/admin/AdminMediaLibraryPage'));
 const AdminSettingsTabsPage = React.lazy(() => import('./pages/admin/AdminSettingsTabsPage'));
@@ -1031,6 +1034,14 @@ const AnimatedRoutes = () => {
                 element={
                   <Suspense fallback={<LoadingFallback />}>
                     <AdminCollectionPage />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="leads"
+                element={
+                  <Suspense fallback={<LoadingFallback />}>
+                    <AdminLeadsPage />
                   </Suspense>
                 }
               />
