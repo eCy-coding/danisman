@@ -65,7 +65,7 @@ export function buildWebSiteSchema() {
     url: SITE_URL,
     name: 'eCyPro Premium Consulting',
     description:
-      'eCyverse premium consulting hub — strategic management, organizational transformation, culture engineering.',
+      "eCyPro Premium Consulting — strategic management, organizational transformation, culture engineering. Turkey's Big4-alternative boutique advisory.",
     publisher: { '@id': `${SITE_URL}/#organization` },
     inLanguage: ['tr-TR', 'en-US'],
     potentialAction: {

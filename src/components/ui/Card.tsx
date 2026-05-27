@@ -1,6 +1,12 @@
 import React from 'react';
 import { motion, HTMLMotionProps } from 'motion/react';
-import { surfaces } from '@/theme';
+
+const surfaces = {
+  base: 'bg-surface',
+  flat: 'bg-surface border border-white/5',
+  elevated: 'bg-surface-high border border-white/10 shadow-2xl',
+  overlay: 'bg-neutral-950/95 border border-white/15 shadow-2xl',
+} as const;
 
 export type CardVariant = 'flat' | 'elevated' | 'overlay';
 
