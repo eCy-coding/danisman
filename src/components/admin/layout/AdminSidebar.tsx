@@ -26,6 +26,8 @@ import { useAdminAuth } from '../../../hooks/useAdminAuth';
 import { CommandPalette } from '../CommandPalette';
 import { useCan } from '../../../hooks/useCan';
 import { openAdminHelpModal } from '../../../hooks/useAdminShortcuts';
+import { ThemeToggle } from '../ThemeToggle';
+import { LanguageToggle } from '../LanguageToggle';
 
 interface MenuItem {
   icon: React.ElementType;
@@ -98,6 +100,11 @@ export const AdminSidebar: React.FC = () => {
       </nav>
 
       <div className="p-4 border-t border-white/5 space-y-1">
+        {/* Phase 5.5: Theme + Language toggles */}
+        <div className="flex items-center gap-2 px-1 py-1.5">
+          <ThemeToggle />
+          <LanguageToggle />
+        </div>
         {/* P36-T09: Keyboard shortcuts hint — opens ? help modal */}
         <button
           type="button"

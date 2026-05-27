@@ -19,6 +19,7 @@ import { PromptTaskBoard } from '../../components/admin/PromptTaskBoard';
 import { SystemHealthWidget } from '../../components/dashboard/widgets/SystemHealthWidget';
 import { HotLeadsWidget } from '../../components/dashboard/widgets/HotLeadsWidget';
 import { PipelineWidget } from '../../components/dashboard/widgets/PipelineWidget';
+import { useT } from '../../hooks/useT';
 
 // ─── Default Data (before SSE connects) ──────────────────
 
@@ -110,6 +111,7 @@ const ConnectionBadge: React.FC<{ isConnected: boolean; onReconnect: () => void 
 // ─── Admin Dashboard ─────────────────────────────────────
 
 export const AdminDashboard: React.FC = () => {
+  const { t } = useT();
   const [metrics, setMetrics] = useState<DashboardMetrics | null>(null);
 
   const handleMetrics = useCallback((m: DashboardMetrics) => {
@@ -178,11 +180,14 @@ export const AdminDashboard: React.FC = () => {
       ];
 
   return (
-    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+    <div
+      data-testid="admin-dashboard"
+      className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700"
+    >
       {/* Header */}
       <div className="flex justify-between items-end">
         <div>
-          <h1 className="text-3xl font-serif text-white mb-2">Command Center</h1>
+          <h1 className="text-3xl font-serif text-white mb-2">{t('dashboard.title')}</h1>
           <p className="text-slate-400 font-light">Real-time system telemetry</p>
         </div>
         <ConnectionBadge isConnected={isConnected} onReconnect={reconnect} />

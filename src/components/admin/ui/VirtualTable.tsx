@@ -47,14 +47,6 @@ export function VirtualTable<T>({
 
   const useVirtual = data.length >= virtualThreshold;
 
-  if (data.length === 0) {
-    return (
-      <div className={`text-center py-12 text-slate-500 text-sm ${className}`}>
-        {emptyNode ?? 'Veri bulunamadı'}
-      </div>
-    );
-  }
-
   const headerRow = (
     <div className="flex border-b border-white/5 bg-surface-high sticky top-0 z-10" role="row">
       {columns.map((col) => (
@@ -68,6 +60,17 @@ export function VirtualTable<T>({
       ))}
     </div>
   );
+
+  if (data.length === 0) {
+    return (
+      <div role="table" aria-label="Data table" className={`overflow-auto ${className}`}>
+        <div role="rowgroup">{headerRow}</div>
+        <div className="text-center py-12 text-slate-500 text-sm">
+          {emptyNode ?? 'Veri bulunamadı'}
+        </div>
+      </div>
+    );
+  }
 
   if (!useVirtual) {
     return (
