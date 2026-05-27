@@ -31,6 +31,8 @@ import {
   Calendar,
   Sparkles,
   X,
+  TrendingUp,
+  Users,
 } from 'lucide-react';
 import type { ServiceContent } from '../../data/service-content';
 import { SERVICES } from '../../data/services';
@@ -310,6 +312,73 @@ export const ServiceDetailLayout: React.FC<ServiceDetailLayoutProps> = ({
           </div>
         </div>
       </section>
+
+      {/* ── atom-11-2: Bu hizmet kimin için? — 3 persona card ── */}
+      <FadeUpSection>
+        <section
+          aria-labelledby="personas-heading"
+          className="py-16 px-6 md:px-12 border-t border-white/5"
+          data-testid="service-personas"
+        >
+          <div className="max-w-6xl mx-auto">
+            <div className="mb-10">
+              <div className="text-xs font-bold uppercase tracking-[0.25em] text-secondary mb-3">
+                Hedef Kitle
+              </div>
+              <h2
+                id="personas-heading"
+                className="text-3xl md:text-4xl font-serif font-bold text-white"
+              >
+                Bu hizmet kimin için?
+              </h2>
+            </div>
+            <div className="grid md:grid-cols-3 gap-5">
+              {/* Persona 1: CEO / Founder */}
+              <article
+                className="bg-white/5 border border-white/10 rounded-2xl p-6 hover:border-secondary/30 transition-colors"
+                data-testid="persona-ceo"
+              >
+                <div className="w-11 h-11 rounded-xl bg-secondary/10 border border-secondary/20 flex items-center justify-center mb-4">
+                  <Target size={20} className="text-secondary" aria-hidden="true" />
+                </div>
+                <h3 className="text-lg font-bold text-white mb-2">CEO / Kurucu Ortak</h3>
+                <p className="text-sm text-slate-400 leading-relaxed">
+                  Stratejik dönüşüm kararlarını bizzat yöneten, bağımsız ve tarafsız üst-düzey
+                  uzmanlık arayan üst yönetim.
+                </p>
+              </article>
+              {/* Persona 2: CFO / COO */}
+              <article
+                className="bg-white/5 border border-white/10 rounded-2xl p-6 hover:border-secondary/30 transition-colors"
+                data-testid="persona-cfo"
+              >
+                <div className="w-11 h-11 rounded-xl bg-secondary/10 border border-secondary/20 flex items-center justify-center mb-4">
+                  <TrendingUp size={20} className="text-secondary" aria-hidden="true" />
+                </div>
+                <h3 className="text-lg font-bold text-white mb-2">CFO / COO</h3>
+                <p className="text-sm text-slate-400 leading-relaxed">
+                  Finansal model, operasyonel verimlilik veya regülasyon uyumu konularında
+                  ölçülebilir çıktı isteyen operasyonel liderler.
+                </p>
+              </article>
+              {/* Persona 3: Yönetim Kurulu / Aile Holdingi */}
+              <article
+                className="bg-white/5 border border-white/10 rounded-2xl p-6 hover:border-secondary/30 transition-colors"
+                data-testid="persona-board"
+              >
+                <div className="w-11 h-11 rounded-xl bg-secondary/10 border border-secondary/20 flex items-center justify-center mb-4">
+                  <Users size={20} className="text-secondary" aria-hidden="true" />
+                </div>
+                <h3 className="text-lg font-bold text-white mb-2">Yönetim Kurulu / Holdingler</h3>
+                <p className="text-sm text-slate-400 leading-relaxed">
+                  Kurumsal yönetişim, nesil geçişi veya yatırımcı ilişkileri konusunda bağımsız
+                  danışmanlık bekleyen kurumsal yapılar ve aile holdingleri.
+                </p>
+              </article>
+            </div>
+          </div>
+        </section>
+      </FadeUpSection>
 
       {/* ── Problem ── */}
       {content?.problem?.painPoints?.length ? (
