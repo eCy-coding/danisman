@@ -44,28 +44,28 @@ enum InteractionType {
 // ─── CORE MODELS ─────────────────────────────────────────
 
 model User {
-  id           String        @id @default(uuid())
-  email        String        @unique
-  passwordHash String?       // PBKDF2-SHA512 hash (format: salt:iterations:hash) — null for OAuth users
+  id           String    @id @default(uuid())
+  email        String    @unique
+  passwordHash String? // PBKDF2-SHA512 hash (format: salt:iterations:hash) — null for OAuth users
   name         String?
   avatarUrl    String?
-  role         UserRole      @default(USER)
-  isActive     Boolean       @default(true)
+  role         UserRole  @default(USER)
+  isActive     Boolean   @default(true)
   lastLoginAt  DateTime?
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
 
   // P35-T03: Email verification
-  emailVerified Boolean   @default(false)
+  emailVerified Boolean @default(false)
 
   // P35-T04: 2FA TOTP fields
-  totpSecret    String?   // encrypted TOTP secret (speakeasy base32)
-  totpEnabled   Boolean   @default(false)
-  backupCodes   String?   // JSON array of hashed backup codes
+  totpSecret  String? // encrypted TOTP secret (speakeasy base32)
+  totpEnabled Boolean @default(false)
+  backupCodes String? // JSON array of hashed backup codes
 
   // P14-BE: GDPR-aware soft-delete marker (hard-delete still available for
   // explicit Right-to-Erasure flow; default queries should filter this out).
-  deletedAt     DateTime?
+  deletedAt DateTime?
 
   // Relations
   bookings           Booking[]
@@ -73,7 +73,7 @@ model User {
   analytics          Analytics[]
   refreshTokens      RefreshToken[]
   emailVerifications EmailVerification[]
-  sessions           Session[]           // P35-T09
+  sessions           Session[] // P35-T09
 
   // NOTE: explicit @@index([email]) removed — `email` is already @unique
   // and Postgres auto-creates a btree index on UNIQUE columns. Keeping both
@@ -87,17 +87,17 @@ model User {
 // ─── BUSINESS MODELS ─────────────────────────────────────
 
 model Service {
-  id          String    @id @default(uuid())
-  slug        String    @unique
-  titleTr     String
-  titleEn     String
-  descTr      String
-  descEn      String
-  iconName    String    @default("Briefcase")
-  isActive    Boolean   @default(true)
-  sortOrder   Int       @default(0)
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  id        String   @id @default(uuid())
+  slug      String   @unique
+  titleTr   String
+  titleEn   String
+  descTr    String
+  descEn    String
+  iconName  String   @default("Briefcase")
+  isActive  Boolean  @default(true)
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   // P17 BE Track 2 / Aşama 3 — Postgres FTS support fields.
   //
@@ -115,7 +115,7 @@ model Service {
   searchVectorEn Unsupported("tsvector")?
 
   // Relations
-  bookings    Booking[]
+  bookings Booking[]
 
   // NOTE: explicit @@index([slug]) removed — `slug` is already @unique.
   @@index([isActive, sortOrder])
@@ -123,30 +123,30 @@ model Service {
 }
 
 model Booking {
-  id            String        @id @default(uuid())
-  userId        String
-  serviceId     String?
-  status        BookingStatus @default(PENDING)
-  scheduledAt   DateTime
-  durationMin   Int           @default(30)
-  notesTr       String?
-  notesEn       String?
-  meetingUrl    String?
+  id                 String        @id @default(uuid())
+  userId             String
+  serviceId          String?
+  status             BookingStatus @default(PENDING)
+  scheduledAt        DateTime
+  durationMin        Int           @default(30)
+  notesTr            String?
+  notesEn            String?
+  meetingUrl         String?
   cancellationReason String?
   // P37-T01: Cal.com external booking UID (for webhook sync)
-  calcomUid     String?   @unique
+  calcomUid          String?       @unique
   // P37-T04: Reminder email idempotency flags
-  reminder24hSent Boolean @default(false)
-  reminder1hSent  Boolean @default(false)
+  reminder24hSent    Boolean       @default(false)
+  reminder1hSent     Boolean       @default(false)
   // P37-T10: NPS feedback email sent flag
-  feedbackEmailSent Boolean @default(false)
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @updatedAt
+  feedbackEmailSent  Boolean       @default(false)
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @updatedAt
 
   // Relations
-  user          User            @relation(fields: [userId], references: [id], onDelete: Cascade)
-  service       Service?        @relation(fields: [serviceId], references: [id], onDelete: SetNull)
-  feedback      BookingFeedback?
+  user     User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  service  Service?         @relation(fields: [serviceId], references: [id], onDelete: SetNull)
+  feedback BookingFeedback?
 
   // P21-BE: explicit @@index([userId]) removed — leftmost-prefix of
   // @@index([userId, status, scheduledAt]) already covers it. See
@@ -168,20 +168,20 @@ model Booking {
 // ─── ANALYTICS & TRACKING ────────────────────────────────
 
 model Analytics {
-  id            String   @id @default(uuid())
-  userId        String?
-  sessionId     String
-  page          String
-  referrer      String?
-  userAgent     String?
-  country       String?
-  city          String?
-  deviceType    String?  // desktop | mobile | tablet
-  durationMs    Int?
-  createdAt     DateTime @default(now())
+  id         String   @id @default(uuid())
+  userId     String?
+  sessionId  String
+  page       String
+  referrer   String?
+  userAgent  String?
+  country    String?
+  city       String?
+  deviceType String? // desktop | mobile | tablet
+  durationMs Int?
+  createdAt  DateTime @default(now())
 
   // Relations
-  user          User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
 
   @@index([sessionId])
   @@index([page])
@@ -192,16 +192,16 @@ model Analytics {
 }
 
 model Interaction {
-  id            String          @id @default(uuid())
-  userId        String?
-  sessionId     String
-  type          InteractionType
-  target        String          // e.g. "hero-cta", "contact-form"
-  metadata      Json?           // flexible payload
-  createdAt     DateTime        @default(now())
+  id        String          @id @default(uuid())
+  userId    String?
+  sessionId String
+  type      InteractionType
+  target    String // e.g. "hero-cta", "contact-form"
+  metadata  Json? // flexible payload
+  createdAt DateTime        @default(now())
 
   // Relations
-  user          User?           @relation(fields: [userId], references: [id], onDelete: SetNull)
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
 
   @@index([sessionId])
   @@index([type])
@@ -214,22 +214,22 @@ model Interaction {
 // ─── CONTACT & LEADS ─────────────────────────────────────
 
 model ContactSubmission {
-  id          String   @id @default(uuid())
-  fullName    String
-  email       String
-  company     String?
-  phone       String?
-  service     String?
-  messageTr   String?
-  messageEn   String?
-  source      String?  // utm_source / referrer
-  isRead      Boolean  @default(false)
-  createdAt   DateTime @default(now())
+  id        String   @id @default(uuid())
+  fullName  String
+  email     String
+  company   String?
+  phone     String?
+  service   String?
+  messageTr String?
+  messageEn String?
+  source    String? // utm_source / referrer
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
 
   // P14-BE: GDPR soft-delete. Right-to-Erasure can either hard-delete the
   // row (legal default) or set deletedAt so an audit trail of "deletion"
   // remains for compliance proof. CRM list views filter on deletedAt IS NULL.
-  deletedAt   DateTime?
+  deletedAt DateTime?
 
   @@index([email])
   // P21-BE: explicit @@index([isRead]) removed — leftmost-prefix of
@@ -244,17 +244,17 @@ model ContactSubmission {
 // ─── AUTH SECURITY (Phase 35) ────────────────────────────
 
 model RefreshToken {
-  id          String    @id @default(uuid())
-  userId      String
-  tokenHash   String    @unique
-  family      String    // Rotation family — all revoked if reuse detected
-  expiresAt   DateTime
-  revokedAt   DateTime?
-  createdAt   DateTime  @default(now())
-  ip          String?
-  userAgent   String?
+  id        String    @id @default(uuid())
+  userId    String
+  tokenHash String    @unique
+  family    String // Rotation family — all revoked if reuse detected
+  expiresAt DateTime
+  revokedAt DateTime?
+  createdAt DateTime  @default(now())
+  ip        String?
+  userAgent String?
 
-  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@index([family])
@@ -263,14 +263,14 @@ model RefreshToken {
 }
 
 model EmailVerification {
-  id          String    @id @default(uuid())
-  userId      String
-  tokenHash   String    @unique
-  expiresAt   DateTime
-  usedAt      DateTime?
-  createdAt   DateTime  @default(now())
+  id        String    @id @default(uuid())
+  userId    String
+  tokenHash String    @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
 
-  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@map("email_verifications")
@@ -281,16 +281,16 @@ model EmailVerification {
 // ─── USER SESSION TRACKING (P35-T09) ─────────────────────
 
 model Session {
-  id          String    @id @default(uuid())
-  userId      String
-  jti         String    @unique
-  userAgent   String?
-  ip          String?
-  createdAt   DateTime  @default(now())
-  lastSeenAt  DateTime  @default(now())
-  revokedAt   DateTime?
+  id         String    @id @default(uuid())
+  userId     String
+  jti        String    @unique
+  userAgent  String?
+  ip         String?
+  createdAt  DateTime  @default(now())
+  lastSeenAt DateTime  @default(now())
+  revokedAt  DateTime?
 
-  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   // P21-BE: explicit @@index([jti]) removed — `jti` is already @unique
@@ -299,16 +299,16 @@ model Session {
 }
 
 model AuditLog {
-  id          String   @id @default(uuid())
-  adminId     String
-  action      String   // e.g. "USER_ROLE_CHANGE", "SETTING_UPDATE", "BOOKING_STATUS"
-  targetType  String?  // e.g. "User", "Booking", "Service"
-  targetId    String?
-  oldValue    Json?
-  newValue    Json?
-  ip          String?
-  userAgent   String?
-  createdAt   DateTime @default(now())
+  id         String   @id @default(uuid())
+  adminId    String
+  action     String // e.g. "USER_ROLE_CHANGE", "SETTING_UPDATE", "BOOKING_STATUS"
+  targetType String? // e.g. "User", "Booking", "Service"
+  targetId   String?
+  oldValue   Json?
+  newValue   Json?
+  ip         String?
+  userAgent  String?
+  createdAt  DateTime @default(now())
 
   // P21-BE: explicit @@index([adminId]) removed — leftmost-prefix of
   // @@index([adminId, createdAt]) already covers it.
@@ -343,14 +343,14 @@ model SiteConfig {
 // NPS = %Promoters - %Detractors (range -100 to +100)
 model BookingFeedback {
   id          String   @id @default(uuid())
-  bookingId   String   @unique   // one feedback per booking
-  score       Int                // 0-10 NPS score
-  comment     String?            // optional free-text
+  bookingId   String   @unique // one feedback per booking
+  score       Int // 0-10 NPS score
+  comment     String? // optional free-text
   submittedAt DateTime @default(now())
-  token       String   @unique   // HMAC token (single-use, 7d TTL)
+  token       String   @unique // HMAC token (single-use, 7d TTL)
   tokenUsed   Boolean  @default(false)
 
-  booking     Booking  @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  booking Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
 
   // P21-BE: explicit @@index([bookingId]) removed — `bookingId` is already @unique.
   @@index([submittedAt])
@@ -459,20 +459,20 @@ model WebhookDelivery {
 // Scopes are simple string tags ("read:bookings", "write:contacts", …).
 // The auth middleware reads them off the row and gates per-route.
 model ApiKey {
-  id          String    @id @default(uuid())
+  id         String    @id @default(uuid())
   // SHA-256 of the raw key. UNIQUE so a lookup is O(1) on the index.
-  hashedKey   String    @unique
+  hashedKey  String    @unique
   // Operator-friendly label ("Cal.com integration", "Partner X import").
-  name        String
+  name       String
   // Free-form scope tags. Convention: "<verb>:<resource>".
-  scopes      String[]
+  scopes     String[]
   // Optional owner — admins create keys; some flows let a user create
   // their own. NULL when the key belongs to "the platform".
-  userId      String?
-  lastUsedAt  DateTime?
-  expiresAt   DateTime?
-  createdAt   DateTime  @default(now())
-  revokedAt   DateTime?
+  userId     String?
+  lastUsedAt DateTime?
+  expiresAt  DateTime?
+  createdAt  DateTime  @default(now())
+  revokedAt  DateTime?
 
   @@index([userId])
   @@index([revokedAt])
@@ -523,14 +523,14 @@ model Image {
 // (storage key, row range, byte count) so an operator can grep + restore.
 // The hot `audit_logs` table is then DELETEd to keep its working set small.
 model ArchivedAuditLog {
-  id             String   @id @default(uuid())
+  id              String   @id @default(uuid())
   // Opaque storage adapter key, e.g. "audit-archive/2026/05/2026-05-01.json.gz".
-  coldKey        String   @unique
-  windowStart    DateTime
-  windowEnd      DateTime
-  rowsArchived   Int
+  coldKey         String   @unique
+  windowStart     DateTime
+  windowEnd       DateTime
+  rowsArchived    Int
   bytesCompressed Int
-  archivedAt     DateTime @default(now())
+  archivedAt      DateTime @default(now())
 
   @@index([windowStart])
   @@index([windowEnd])
@@ -539,14 +539,14 @@ model ArchivedAuditLog {
 }
 
 model NewsletterSubscriber {
-  id              String    @id @default(uuid())
-  email           String    @unique
-  consent         Boolean   @default(false)
-  source          String?   // utm_source / referrer / footer
-  ip              String?   // IPv4/v6 captured at signup (for abuse audit)
-  userAgent       String?
-  subscribedAt    DateTime  @default(now())
-  unsubscribedAt  DateTime?
+  id             String    @id @default(uuid())
+  email          String    @unique
+  consent        Boolean   @default(false)
+  source         String? // utm_source / referrer / footer
+  ip             String? // IPv4/v6 captured at signup (for abuse audit)
+  userAgent      String?
+  subscribedAt   DateTime  @default(now())
+  unsubscribedAt DateTime?
 
   // NOTE: explicit @@index([email]) removed — `email` is already @unique.
   @@index([subscribedAt])
@@ -587,10 +587,10 @@ model IntegrationOutbox {
 // withdrawnAt is the ONLY mutable field (right-to-withdrawal, KVKK m.11).
 model ConsentRecord {
   id          String    @id @default(cuid())
-  leadId      String?   // Notion page ID of the Aday
-  consentType String    // "KVKK_LEAD_FORM" | "KVKK_NEWSLETTER" | ...
+  leadId      String? // Notion page ID of the Aday
+  consentType String // "KVKK_LEAD_FORM" | "KVKK_NEWSLETTER" | ...
   givenAt     DateTime  @default(now())
-  ipAddress   String?   // hashed or truncated (KVKK m.5 minimality)
+  ipAddress   String? // hashed or truncated (KVKK m.5 minimality)
   userAgent   String?
   formVersion String    @default("1.0.0") // bump when consent text changes → re-consent required
   withdrawnAt DateTime?
@@ -666,24 +666,24 @@ enum ProspectStatus {
 // M&A deal / advisory process record.
 // "Süreç" in TR brand voice — never "Deal" in UI.
 model Deal {
-  id                  String      @id @default(cuid())
+  id                  String    @id @default(cuid())
   name                String
   type                DealType
-  stage               DealStage   @default(DISCOVERY)
+  stage               DealStage @default(DISCOVERY)
   clientId            String?
   transactionValueUsd Decimal?
-  successFeePct       Decimal     @default(0.02)
+  successFeePct       Decimal   @default(0.02)
   successFeeUsd       Decimal?
   expectedCloseDate   DateTime?
   actualCloseDate     DateTime?
   closedLostReason    String?
   notes               String?
   ownerId             String
-  createdAt           DateTime    @default(now())
-  updatedAt           DateTime    @updatedAt
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
 
-  milestones          Milestone[]
-  retainer            Retainer?
+  milestones Milestone[]
+  retainer   Retainer?
 
   @@index([stage])
   @@index([ownerId])
@@ -707,7 +707,7 @@ model Retainer {
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
 
-  invoices      Invoice[]
+  invoices Invoice[]
 
   @@index([status])
   @@map("retainers")
@@ -760,17 +760,17 @@ model Invoice {
 // Outreach wave — batch of prospects contacted in a campaign.
 // "Dalga" in TR brand voice.
 model OutreachWave {
-  id                  String     @id @default(cuid())
-  name                String
-  status              WaveStatus @default(DRAFT)
-  startDate           DateTime
-  endDate             DateTime?
-  targetRevenueUsd    Decimal?
-  realizedRevenueUsd  Decimal    @default(0)
-  createdAt           DateTime   @default(now())
-  updatedAt           DateTime   @updatedAt
+  id                 String     @id @default(cuid())
+  name               String
+  status             WaveStatus @default(DRAFT)
+  startDate          DateTime
+  endDate            DateTime?
+  targetRevenueUsd   Decimal?
+  realizedRevenueUsd Decimal    @default(0)
+  createdAt          DateTime   @default(now())
+  updatedAt          DateTime   @updatedAt
 
-  prospects           OutreachProspect[]
+  prospects OutreachProspect[]
 
   @@index([status])
   @@map("outreach_waves")
@@ -836,16 +836,16 @@ enum ROPAStatus {
 // KVKK m.11 + GDPR Art.15-22 — Data Subject Access Request
 // slaDeadline = receivedAt + 30d; extendable once (+30d) per KVKK m.13
 model DSARRequest {
-  id                        String         @id @default(cuid())
+  id                        String           @id @default(cuid())
   requesterEmail            String
   requesterName             String
-  requesterIdentityVerified Boolean        @default(false)
+  requesterIdentityVerified Boolean          @default(false)
   requestType               DSARType
   description               String?
-  receivedAt                DateTime       @default(now())
+  receivedAt                DateTime         @default(now())
   slaDeadline               DateTime
-  extendedOnce              Boolean        @default(false)
-  status                    DSARStatus     @default(RECEIVED)
+  extendedOnce              Boolean          @default(false)
+  status                    DSARStatus       @default(RECEIVED)
   assignedTo                String?
   respondedAt               DateTime?
   responseText              String?
@@ -922,27 +922,27 @@ model ROPAProcess {
 
 // Retention enforcement — nightly cron destroys data older than retentionDays + issues certificate
 model RetentionPolicy {
-  id             String    @id @default(cuid())
-  resourceType   String    @unique
-  retentionDays  Int
-  legalBasis     String
-  lastEnforced   DateTime?
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
+  id            String    @id @default(cuid())
+  resourceType  String    @unique
+  retentionDays Int
+  legalBasis    String
+  lastEnforced  DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
 
   @@map("retention_policies")
 }
 
 // eCyPro-specific: Big4 conflict screen + Bağımsızlık Beyanı (yıllık)
 model IndependenceCheck {
-  id                     String   @id @default(cuid())
-  clientId               String
-  checkedAt              DateTime @default(now())
-  auditFirmConflicts     String[]
-  pureAdvisoryConfirmed  Boolean
-  signatoryUserId        String
-  declarationDocUrl      String?
-  validUntil             DateTime
+  id                    String   @id @default(cuid())
+  clientId              String
+  checkedAt             DateTime @default(now())
+  auditFirmConflicts    String[]
+  pureAdvisoryConfirmed Boolean
+  signatoryUserId       String
+  declarationDocUrl     String?
+  validUntil            DateTime
 
   @@index([clientId])
   @@index([validUntil])
@@ -955,8 +955,8 @@ model IndependenceCheck {
 model Permission {
   id              String           @id @default(cuid())
   key             String           @unique // e.g. "blog.create"
-  resource        String           // e.g. "blog"
-  action          String           // e.g. "create"
+  resource        String // e.g. "blog"
+  action          String // e.g. "create"
   description     String
   isSystem        Boolean          @default(true)
   rolePermissions RolePermission[]
@@ -1011,13 +1011,13 @@ model ViewAsSession {
 
 // Danışmanlık müşterisi — Succession/ESG/Fintech ilişkilerinde pivot
 model Client {
-  id            String   @id @default(cuid())
-  name          String
-  contactEmail  String?
-  sector        String?
-  isActive      Boolean  @default(true)
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id           String   @id @default(cuid())
+  name         String
+  contactEmail String?
+  sector       String?
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
   successionRoadmaps SuccessionRoadmap[]
   esgAssessments     ESGAssessment[]
@@ -1066,7 +1066,7 @@ enum SuccessionStatus {
   COMPLETED
 }
 
-enum MilestoneStatus {
+enum SuccessionMilestoneStatus {
   PENDING
   IN_PROGRESS
   COMPLETED
@@ -1093,27 +1093,27 @@ model SuccessionRoadmap {
 }
 
 model SuccessionMilestone {
-  id           String           @id @default(cuid())
+  id           String                    @id @default(cuid())
   roadmapId    String
-  roadmap      SuccessionRoadmap @relation(fields: [roadmapId], references: [id])
+  roadmap      SuccessionRoadmap         @relation(fields: [roadmapId], references: [id])
   name         String
   expectedDate DateTime?
   actualDate   DateTime?
-  status       MilestoneStatus  @default(PENDING)
+  status       SuccessionMilestoneStatus @default(PENDING)
 
   @@index([roadmapId])
   @@map("succession_milestones")
 }
 
 model SuccessionKPI {
-  id             String           @id @default(cuid())
-  roadmapId      String
-  roadmap        SuccessionRoadmap @relation(fields: [roadmapId], references: [id])
-  metric         String
-  baselineValue  String
-  targetValue    String
-  currentValue   String?
-  measuredAt     DateTime?
+  id            String            @id @default(cuid())
+  roadmapId     String
+  roadmap       SuccessionRoadmap @relation(fields: [roadmapId], references: [id])
+  metric        String
+  baselineValue String
+  targetValue   String
+  currentValue  String?
+  measuredAt    DateTime?
 
   @@index([roadmapId])
   @@map("succession_kpis")
@@ -1134,8 +1134,8 @@ enum ESGStatus {
 }
 
 model ESGDatapoint {
-  id               String   @id @default(cuid())
-  esrsCode         String   @unique  // "E1-6-44", "S1-7-1", "G1-3-22"
+  id               String    @id @default(cuid())
+  esrsCode         String    @unique // "E1-6-44", "S1-7-1", "G1-3-22"
   pillar           ESGPillar
   category         String
   topic            String
