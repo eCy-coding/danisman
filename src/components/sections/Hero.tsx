@@ -36,15 +36,15 @@ import { useFeatureValue } from '@growthbook/growthbook-react';
 // Persona content
 const PERSONA_CONTENT = {
   executive: {
-    badge: { tr: 'Premium Consulting · eCyverse', en: 'Premium Consulting · eCyverse' },
+    badge: { tr: 'Premium Consulting · eCyPro', en: 'Premium Consulting · eCyPro' },
     title: {
       line1: { tr: 'Vizyon. Strateji.', en: 'Vision. Strategy.' },
       highlight: { tr: 'Sürdürülebilir', en: 'Sustainable' },
       line2: { tr: 'Sonuç.', en: 'Outcomes.' },
     },
     description: {
-      tr: 'eCyverse ekosisteminin premium danışmanlık kolu. Organizasyonel dönüşüm, stratejik danışmanlık ve kültür mühendisliği ile lider organizasyonların yanındayız.',
-      en: 'The premium consulting arm of the eCyverse ecosystem. We partner with leading organizations on organizational transformation, strategic advisory, and culture engineering.',
+      tr: "Türkiye'nin Big4-alternatif boutique danışmanlık firması. Organizasyonel dönüşüm, stratejik danışmanlık ve kültür mühendisliği ile lider organizasyonların yanındayız.",
+      en: "Turkey's Big4-alternative boutique advisory firm. We partner with leading organizations on organizational transformation, strategic advisory, and culture engineering.",
     },
     stats: [
       {
