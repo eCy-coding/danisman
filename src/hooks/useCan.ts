@@ -1,33 +1,21 @@
 /**
- * P36-T10: useCan — React hook for role-based permission checks
+ * P36-T10 / P0-3: useCan — React hook for role-based permission checks
  *
- * Reads the current user's role from AuthContext/localStorage
- * and returns a memoized `can(permission)` checker.
+ * Reads role from Zustand store (NOT localStorage) so client-side
+ * localStorage tampering cannot elevate permissions.
  *
  * Usage:
  *   const can = useCan();
  *   if (can('blog:publish')) { ... }
  *   if (can('user:role:change')) { ... }
- *
- * Returns a stable function reference (useCallback) — safe in dependency arrays.
  */
 
 import { useCallback } from 'react';
 import { can as checkPermission, type UserRole } from '../lib/rbac';
-
-function readRoleFromStorage(): UserRole | null {
-  try {
-    const raw = localStorage.getItem('ecypro_user');
-    if (!raw) return null;
-    const parsed = JSON.parse(raw) as { role?: string };
-    return (parsed.role as UserRole) ?? null;
-  } catch {
-    return null;
-  }
-}
+import { useAppStore } from '../store/useAppStore';
 
 export function useCan() {
-  const role = readRoleFromStorage();
+  const role = useAppStore((s) => s.user?.role as UserRole | undefined) ?? null;
 
   const canCheck = useCallback(
     (permission: string): boolean => checkPermission(role, permission),
@@ -38,5 +26,5 @@ export function useCan() {
 }
 
 export function useRole(): UserRole | null {
-  return readRoleFromStorage();
+  return useAppStore((s) => s.user?.role as UserRole | undefined) ?? null;
 }
