@@ -86,7 +86,7 @@ export const CaseStudyDetailPage: React.FC = () => {
               className="inline-flex items-center gap-2 text-sm text-slate-400 hover:text-white transition-colors mb-8"
             >
               <ArrowLeft className="w-4 h-4" />
-              <span>All case studies</span>
+              <span>Tüm Vaka Çalışmaları</span>
             </Link>
 
             <div className="flex items-center gap-2 text-sm text-primary font-medium mb-4">
@@ -162,28 +162,31 @@ export const CaseStudyDetailPage: React.FC = () => {
             dangerouslySetInnerHTML={{ __html: study.content }}
           />
 
-          {/* CTA */}
-          <div className="rounded-3xl p-8 md:p-10 bg-linear-to-br from-primary/20 via-white/5 to-secondary/10 border border-white/10 text-center">
+          {/* CTA — atom-10-3 */}
+          <div
+            className="rounded-3xl p-8 md:p-10 bg-linear-to-br from-primary/20 via-white/5 to-secondary/10 border border-white/10 text-center"
+            data-testid="case-study-cta"
+          >
             <h2 className="text-2xl md:text-3xl font-serif font-bold text-white mb-3">
-              Ready for similar results?
+              Benzer sonuçlar elde etmek ister misiniz?
             </h2>
             <p className="text-slate-300 mb-6 max-w-xl mx-auto">
-              Book a 15-minute strategy call to see how we can replicate this transformation for
-              your organization.
+              Bu dönüşümü organizasyonunuzda nasıl hayata geçirebileceğimizi keşif görüşmesinde
+              değerlendirelim. 30 dakika, taahhütsüz.
             </p>
             <Link
-              to="/contact"
-              className="inline-flex items-center gap-2 px-7 py-3 rounded-xl bg-white text-neutral font-semibold hover:bg-slate-100 transition-all"
+              to="/discovery"
+              className="inline-flex items-center gap-2 px-7 py-3 rounded-xl bg-secondary text-neutral font-semibold hover:bg-secondary/90 transition-all"
             >
-              Book a call
+              Keşif Görüşmesi Planla
             </Link>
           </div>
 
-          {/* Related */}
+          {/* Related — atom-10-4 */}
           {related.length > 0 && (
             <section className="mt-20" aria-labelledby="related-heading">
               <h2 id="related-heading" className="text-2xl font-serif font-bold text-white mb-6">
-                Related case studies
+                İlgili Vaka Çalışmaları
               </h2>
               <div className="grid sm:grid-cols-2 gap-6">
                 {related.map((r) => (

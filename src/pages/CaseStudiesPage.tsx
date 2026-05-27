@@ -1,7 +1,8 @@
 import React, { useMemo } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { motion } from 'motion/react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, Link } from 'react-router-dom';
+import { ArrowRight } from 'lucide-react';
 import { CaseStudyCard } from '../components/features/case-studies/CaseStudyCard';
 import { CASE_STUDIES } from '@/data/mockCaseStudies';
 import { FadeIn } from '../components/common/FadeIn';
@@ -131,6 +132,32 @@ export const CaseStudiesPage: React.FC = () => {
           </div>
         </div>
       </PageWrapper>
+
+      {/* atom-10-4: Final CTA + footer */}
+      <section
+        className="py-20 px-6 bg-neutral"
+        aria-labelledby="cases-cta-heading"
+        data-testid="case-studies-cta"
+      >
+        <div className="max-w-3xl mx-auto bg-gradient-to-r from-amber-600/90 to-amber-500 rounded-3xl px-8 py-12 text-center shadow-xl shadow-amber-900/20">
+          <h2
+            id="cases-cta-heading"
+            className="text-2xl md:text-3xl font-serif font-bold text-neutral-900 mb-3"
+          >
+            Projenizi Konuşalım
+          </h2>
+          <p className="text-neutral-800 mb-8 leading-relaxed max-w-lg mx-auto">
+            Sektörünüze özgü vaka deneyimlerimizi keşif görüşmesinde paylaşabiliriz. 30 dakika,
+            taahhütsüz, doğrudan founder erişimi.
+          </p>
+          <Link
+            to="/discovery"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-neutral-900 text-amber-400 font-semibold rounded-xl hover:bg-neutral-800 transition-colors text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900"
+          >
+            Keşif Görüşmesi Planla <ArrowRight size={14} aria-hidden="true" />
+          </Link>
+        </div>
+      </section>
     </React.Fragment>
   );
 };
