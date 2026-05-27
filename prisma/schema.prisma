@@ -20,6 +20,8 @@ enum UserRole {
   // P62.B — Blog yazarı + içerik editörü rolleri (DB enum Neon production'a apply edildi 2026-05-18)
   BLOG_AUTHOR
   EDITOR
+  // Phase 4 — RBAC Hardening: salt okunur rol
+  VIEWER
 }
 
 enum BookingStatus {
@@ -577,4 +579,61 @@ model IntegrationOutbox {
   @@index([service, status])
   @@index([createdAt])
   @@map("integration_outbox")
+}
+
+// Phase 4 — RBAC Hardening: runtime permission management
+
+model Permission {
+  id              String           @id @default(cuid())
+  key             String           @unique // e.g. "blog.create"
+  resource        String           // e.g. "blog"
+  action          String           // e.g. "create"
+  description     String
+  isSystem        Boolean          @default(true)
+  rolePermissions RolePermission[]
+
+  @@index([resource])
+  @@map("permissions")
+}
+
+model RolePermission {
+  id           String     @id @default(cuid())
+  role         UserRole
+  permissionId String
+  permission   Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+  granted      Boolean    @default(false)
+  grantedAt    DateTime   @default(now())
+  grantedBy    String?
+
+  @@unique([role, permissionId])
+  @@index([role])
+  @@map("role_permissions")
+}
+
+model RoleChangeAudit {
+  id                  String   @id @default(cuid())
+  actorId             String
+  targetRole          UserRole
+  targetPermissionKey String
+  previousValue       Boolean
+  newValue            Boolean
+  reason              String?
+  createdAt           DateTime @default(now())
+
+  // KVKK m.12 immutable — application layer enforces no UPDATE/DELETE
+  @@index([targetRole])
+  @@index([createdAt])
+  @@map("role_change_audit")
+}
+
+model ViewAsSession {
+  id            String    @id @default(cuid())
+  actorId       String
+  viewingAsRole UserRole
+  startedAt     DateTime  @default(now())
+  endedAt       DateTime?
+
+  @@index([actorId])
+  @@index([startedAt])
+  @@map("view_as_sessions")
 }

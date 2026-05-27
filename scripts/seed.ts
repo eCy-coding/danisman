@@ -8,10 +8,15 @@
  */
 
 import 'dotenv/config';
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, UserRole } from '@prisma/client';
 import { Pool } from 'pg';
 import { PrismaPg } from '@prisma/adapter-pg';
 import crypto from 'crypto';
+import {
+  PERMISSION_DEFS,
+  DEFAULT_MATRIX,
+  RBAC_MANAGED_ROLES,
+} from '../server/lib/rbac-permissions';
 
 const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 const adapter = new PrismaPg(pool);
@@ -139,6 +144,36 @@ async function main() {
     console.log(`✅ ${events.length} analytics events seeded`);
   } else {
     console.log(`⏭️  Analytics events already exist (${analyticsCount})`);
+  }
+
+  // Phase 4 — RBAC Permission Matrix seed
+  const permissionCount = await prisma.permission.count();
+  if (permissionCount === 0) {
+    for (const def of PERMISSION_DEFS) {
+      await prisma.permission.upsert({
+        where: { key: def.key },
+        create: def,
+        update: {},
+      });
+    }
+    console.log(`✅ ${PERMISSION_DEFS.length} permissions seeded`);
+
+    // Default role-permission matrix
+    for (const role of RBAC_MANAGED_ROLES) {
+      const grantedKeys = DEFAULT_MATRIX[role as UserRole] ?? [];
+      for (const key of grantedKeys) {
+        const permission = await prisma.permission.findUnique({ where: { key } });
+        if (!permission) continue;
+        await prisma.rolePermission.upsert({
+          where: { role_permissionId: { role: role as UserRole, permissionId: permission.id } },
+          create: { role: role as UserRole, permissionId: permission.id, granted: true },
+          update: {},
+        });
+      }
+    }
+    console.log(`✅ Default RBAC matrix seeded for ${RBAC_MANAGED_ROLES.length} roles`);
+  } else {
+    console.log(`⏭️  RBAC permissions already seeded (${permissionCount})`);
   }
 
   console.log('\n🎉 Seed completed successfully!');
