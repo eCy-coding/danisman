@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'motion/react';
+import { Award } from 'lucide-react';
 import { FadeIn } from '../common/FadeIn';
 import { TRUST_LOGOS } from '../../constants';
 import { useTranslation } from 'react-i18next';
@@ -18,6 +19,7 @@ export const TrustBar: React.FC = () => {
   return (
     <section
       id="trust-bar"
+      data-testid="trust-bar"
       className="bg-neutral border-b border-white/5 py-16 lg:py-20 relative overflow-hidden"
       aria-label="Client Logos"
     >
@@ -27,9 +29,22 @@ export const TrustBar: React.FC = () => {
       <div className="max-w-7xl mx-auto px-6 md:px-12">
         <FadeIn>
           <div className="flex flex-col md:flex-row items-center md:items-start gap-8 md:gap-16">
-            <p className="text-xs font-bold text-slate-400 uppercase tracking-[0.2em] whitespace-nowrap pt-2">
-              {TRUSTBAR_COPY.sectionTitle[lang]}
-            </p>
+            <div className="flex flex-col gap-3 shrink-0">
+              <p className="text-xs font-bold text-slate-400 uppercase tracking-[0.2em] whitespace-nowrap pt-2">
+                {TRUSTBAR_COPY.sectionTitle[lang]}
+              </p>
+              {/* Founder badge */}
+              <div
+                data-testid="trust-bar-founder-badge"
+                className="hidden sm:inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/5 border border-primary/20 text-xs text-blue-300 font-medium"
+              >
+                <Award size={12} className="text-primary" aria-hidden="true" />
+                <span>Emre Can Yalçın — Founder</span>
+              </div>
+              <p className="text-[10px] text-slate-500 font-medium tracking-wide">
+                KVKK & GDPR uyumlu
+              </p>
+            </div>
             <div className="w-full grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-12 items-center justify-items-center">
               {TRUST_LOGOS.map((logo, idx) => (
                 <motion.div
