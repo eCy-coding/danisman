@@ -15,7 +15,7 @@
     "sourceMap": true,
     "noEmit": false,
     "allowImportingTsExtensions": false,
-    "ignoreDeprecations": "6.0",
+    "ignoreDeprecations": "5.0",
     "types": [
       "node"
     ]
