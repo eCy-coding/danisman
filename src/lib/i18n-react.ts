@@ -58,6 +58,8 @@ export const NAMESPACES = [
   'legal',
   // P16 — Form validation + zod errorMap i18n keys.
   'forms',
+  // Phase 5 — Admin panel strings (lazy-loaded when admin routes mount).
+  'admin',
 ] as const;
 
 /**

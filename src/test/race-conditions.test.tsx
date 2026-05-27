@@ -60,9 +60,11 @@ describe('Race condition guard — ContactForm', () => {
     const errSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 
     const { unmount } = render(
-      <React.Suspense fallback={null}>
-        <ContactForm />
-      </React.Suspense>,
+      <MemoryRouter>
+        <React.Suspense fallback={null}>
+          <ContactForm />
+        </React.Suspense>
+      </MemoryRouter>,
     );
 
     const form = await screen.findByTestId('contact-form');

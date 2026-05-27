@@ -11,6 +11,8 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { ArrowLeft, MessageSquare, User, Mail, Phone, Globe } from 'lucide-react';
 import { apiClient } from '../../lib/api';
+import { DataResidencyBadge } from '../../components/admin/ui/DataResidencyBadge';
+import { getDefaultLocation } from '../../lib/data-residency';
 import {
   Breadcrumb,
   FormField,
@@ -135,7 +137,10 @@ export const AdminLeadDetailPage: React.FC = () => {
           {/* Overview */}
           <article className="lg:col-span-2 space-y-4">
             <section className="bg-white/[0.02] border border-white/10 rounded-xl p-5 space-y-3">
-              <h2 className="text-sm font-semibold text-white mb-2">İletişim Bilgileri</h2>
+              <div className="flex items-center justify-between mb-2">
+                <h2 className="text-sm font-semibold text-white">İletişim Bilgileri</h2>
+                <DataResidencyBadge location={getDefaultLocation('Lead')} compact={false} />
+              </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
                 <Field
                   icon={<Mail size={14} />}

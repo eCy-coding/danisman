@@ -11,6 +11,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Wifi, WifiOff, User, Clock, Building2 } from 'lucide-react';
 import { apiClient } from '../../lib/api';
+import { useAppStore } from '../../store/useAppStore';
 
 interface LiveLead {
   id: string;
@@ -59,18 +60,18 @@ export const LiveLeadFeed: React.FC = () => {
   const [error, setError] = useState(false);
   const esRef = useRef<EventSource | null>(null);
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const storeToken = useAppStore((s) => s.token);
 
   const fetchRecent = useCallback(async (): Promise<void> => {
     try {
-      const token = localStorage.getItem('ecypro_admin_token');
-      if (!token) return;
+      if (!storeToken) return;
       const res = await apiClient.get<ApiPage>('/admin/contacts?limit=10&sort=createdAt:desc');
       setLeads(res.data.data.items.slice(0, MAX_FEED));
       setError(false);
     } catch {
       setError(true);
     }
-  }, []);
+  }, [storeToken]);
 
   // Initial load
   useEffect(() => {
@@ -79,7 +80,7 @@ export const LiveLeadFeed: React.FC = () => {
 
   // SSE connection
   useEffect(() => {
-    const token = localStorage.getItem('ecypro_admin_token');
+    const token = storeToken;
     const baseUrl =
       (import.meta.env.VITE_API_URL as string | undefined) ?? 'http://localhost:3001/api';
     const url = `${baseUrl}/admin/analytics-stream?token=${token ?? ''}`;
@@ -126,7 +127,7 @@ export const LiveLeadFeed: React.FC = () => {
         pollRef.current = null;
       }
     };
-  }, [fetchRecent]);
+  }, [fetchRecent, storeToken]);
 
   return (
     <div

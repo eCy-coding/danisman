@@ -165,12 +165,36 @@ const AdminServiceEditPage = React.lazy(() => import('./pages/admin/AdminService
 const AdminPagesListPage = React.lazy(() => import('./pages/admin/AdminPagesListPage'));
 const AdminCollectionPage = React.lazy(() => import('./pages/admin/AdminCollectionPage'));
 const AdminLeadDetailPage = React.lazy(() => import('./pages/admin/AdminLeadDetailPage'));
+const AdminLeadsPage = React.lazy(() =>
+  import('./pages/admin/AdminLeadsPage').then((m) => ({ default: m.AdminLeadsPage })),
+);
 const AdminCampaignWizardPage = React.lazy(() => import('./pages/admin/AdminCampaignWizardPage'));
 const AdminMediaLibraryPage = React.lazy(() => import('./pages/admin/AdminMediaLibraryPage'));
 const AdminSettingsTabsPage = React.lazy(() => import('./pages/admin/AdminSettingsTabsPage'));
 const AdminSecurityPage = React.lazy(() => import('./pages/admin/AdminSecurityPage'));
 const AdminProfilePage = React.lazy(() => import('./pages/admin/AdminProfilePage'));
 const AdminHelpPage = React.lazy(() => import('./pages/admin/AdminHelpPage'));
+// Phase 3 — KVKK Compliance Shield
+const AdminDSARPage = React.lazy(() =>
+  import('./pages/admin/AdminDSARPage').then((m) => ({ default: m.AdminDSARPage })),
+);
+const AdminConsentLedgerPage = React.lazy(() =>
+  import('./pages/admin/AdminConsentLedgerPage').then((m) => ({
+    default: m.AdminConsentLedgerPage,
+  })),
+);
+const AdminROPAPage = React.lazy(() =>
+  import('./pages/admin/AdminROPAPage').then((m) => ({ default: m.AdminROPAPage })),
+);
+const AdminBreachPage = React.lazy(() =>
+  import('./pages/admin/AdminBreachPage').then((m) => ({ default: m.AdminBreachPage })),
+);
+const AdminVERBISPage = React.lazy(() =>
+  import('./pages/admin/AdminVERBISPage').then((m) => ({ default: m.AdminVERBISPage })),
+);
+const AdminRetentionPage = React.lazy(() =>
+  import('./pages/admin/AdminRetentionPage').then((m) => ({ default: m.AdminRetentionPage })),
+);
 const AdminPageEditPage = React.lazy(() => import('./pages/admin/AdminPageEditPage'));
 const AdminBlogPage = React.lazy(() =>
   import('./pages/admin/AdminBlogPage').then((module) => ({ default: module.AdminBlogPage })),
@@ -210,6 +234,18 @@ const AdminAuditLogPage = React.lazy(() =>
 const AdminCrmPage = React.lazy(() =>
   import('./pages/admin/AdminCrmPage').then((module) => ({ default: module.AdminCrmPage })),
 );
+// Phase 2 Revenue Core pages
+const AdminDealsPage = React.lazy(() => import('./pages/admin/AdminDealsPage'));
+const AdminRetainersPage = React.lazy(() =>
+  import('./pages/admin/AdminRetainersPage').then((module) => ({
+    default: module.AdminRetainersPage,
+  })),
+);
+const AdminOutreachPage = React.lazy(() =>
+  import('./pages/admin/AdminOutreachPage').then((module) => ({
+    default: module.AdminOutreachPage,
+  })),
+);
 const AdminDevAnalyticsPage = React.lazy(() =>
   import('./pages/admin/AdminDevAnalyticsPage').then((module) => ({
     default: module.AdminDevAnalyticsPage,
@@ -219,6 +255,7 @@ const StatusPage = React.lazy(() =>
   import('./pages/StatusPage').then((module) => ({ default: module.StatusPage })),
 );
 import { ProtectedRoute } from './components/admin/auth/ProtectedRoute';
+import { AdminGuard } from './components/admin/auth/AdminGuard';
 import { Navigate } from 'react-router-dom';
 import { LocaleRoute } from './components/routing/LocaleRoute';
 import { LocaleRedirect } from './components/routing/LocaleRedirect';
@@ -868,9 +905,11 @@ const AnimatedRoutes = () => {
             <Route
               path="/admin"
               element={
-                <Suspense fallback={<LoadingFallback />}>
-                  <AdminLayout />
-                </Suspense>
+                <AdminGuard requiredRole="ADMIN">
+                  <Suspense fallback={<LoadingFallback />}>
+                    <AdminLayout />
+                  </Suspense>
+                </AdminGuard>
               }
             >
               <Route index element={<Navigate to="/admin/overview" replace />} />
@@ -986,6 +1025,55 @@ const AnimatedRoutes = () => {
                   </Suspense>
                 }
               />
+              {/* Phase 3 — KVKK Compliance Shield */}
+              <Route
+                path="dsar"
+                element={
+                  <Suspense fallback={<LoadingFallback />}>
+                    <AdminDSARPage />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="consent"
+                element={
+                  <Suspense fallback={<LoadingFallback />}>
+                    <AdminConsentLedgerPage />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="ropa"
+                element={
+                  <Suspense fallback={<LoadingFallback />}>
+                    <AdminROPAPage />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="breach"
+                element={
+                  <Suspense fallback={<LoadingFallback />}>
+                    <AdminBreachPage />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="verbis"
+                element={
+                  <Suspense fallback={<LoadingFallback />}>
+                    <AdminVERBISPage />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="retention"
+                element={
+                  <Suspense fallback={<LoadingFallback />}>
+                    <AdminRetentionPage />
+                  </Suspense>
+                }
+              />
               <Route
                 path="blog"
                 element={
@@ -1031,6 +1119,14 @@ const AnimatedRoutes = () => {
                 element={
                   <Suspense fallback={<LoadingFallback />}>
                     <AdminCollectionPage />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="leads"
+                element={
+                  <Suspense fallback={<LoadingFallback />}>
+                    <AdminLeadsPage />
                   </Suspense>
                 }
               />
@@ -1089,6 +1185,30 @@ const AnimatedRoutes = () => {
                 element={
                   <Suspense fallback={<LoadingFallback />}>
                     <AdminCrmPage />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="deals"
+                element={
+                  <Suspense fallback={<LoadingFallback />}>
+                    <AdminDealsPage />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="retainers"
+                element={
+                  <Suspense fallback={<LoadingFallback />}>
+                    <AdminRetainersPage />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="outreach"
+                element={
+                  <Suspense fallback={<LoadingFallback />}>
+                    <AdminOutreachPage />
                   </Suspense>
                 }
               />

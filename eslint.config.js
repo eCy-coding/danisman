@@ -80,6 +80,7 @@ export default tseslint.config(
       // src/constants/brand.ts. Hardcoded "EcyPro" string literals slip
       // through copy reviews and ship to dist/. The rule bans the literal
       // in source strings, template chunks, JSX text, and comments-as-code.
+      'no-alert': 'error',
       'no-restricted-syntax': [
         'error',
         {
@@ -96,6 +97,18 @@ export default tseslint.config(
           selector: "JSXText[value=/EcyPro/]",
           message:
             'Use the canonical "eCyPro" form (or render {BRAND_NAME}) inside JSX text.',
+        },
+        {
+          selector:
+            "CallExpression[callee.object.name='localStorage'][callee.property.name='getItem'][arguments.0.value=/role|user|token/]",
+          message:
+            "Don't read auth state from localStorage. Use Zustand store (useAppStore) or JWT decode via useCan().",
+        },
+        {
+          selector:
+            "CallExpression[callee.object.name='localStorage'][callee.property.name='setItem'][arguments.0.value=/role|user|token/]",
+          message:
+            "Don't write auth state to localStorage directly. Use setAuth() from useAppStore.",
         },
       ],
     },

@@ -29,6 +29,7 @@ import adminCampaignsRoutes from './admin-campaigns';
 import adminDashboardRoutes from './admin-dashboard';
 import adminContentRoutes from './admin-content';
 import adminCollectionsRoutes from './admin-collections';
+import adminLeadsRoutes from './admin-leads';
 import adminLeadsNotesRoutes from './admin-leads-notes';
 import adminMediaRoutes from './admin-media';
 import adminSecurityRoutes from './admin-security';
@@ -39,6 +40,16 @@ import publicServicesRoutes from './public-services';
 import streamRoutes from './stream';
 // P23 BE Track 2 / Aşama 2 — outbound webhook admin CRUD
 import adminWebhookRoutes from './admin-webhooks';
+// Phase 3 — KVKK Compliance Shield
+import adminDsarRoutes from './admin-dsar';
+import adminConsentRoutes from './admin-consent';
+import adminRopaRoutes from './admin-ropa';
+import adminBreachRoutes from './admin-breach';
+import adminVerbisRoutes from './admin-verbis';
+import adminRetentionRoutes from './admin-retention';
+import adminIndependenceRoutes from './admin-independence';
+// Phase 4 — RBAC Hardening
+import adminRbacRoutes from './admin-rbac';
 import { openApiSpec } from '../config/openapi';
 import { redis } from '../config/redis';
 import { prisma } from '../config/db';
@@ -464,6 +475,7 @@ router.use('/admin/newsletter/campaigns', adminCampaignsRoutes);
 router.use('/admin/dashboard', adminDashboardRoutes);
 router.use('/admin/content', adminContentRoutes);
 router.use('/admin/collections', adminCollectionsRoutes);
+router.use('/admin/leads', adminLeadsRoutes);
 router.use('/admin/leads', adminLeadsNotesRoutes);
 router.use('/admin/media', adminMediaRoutes);
 router.use('/admin/security', adminSecurityRoutes);
@@ -472,6 +484,16 @@ router.use('/admin/revalidate', adminRevalidateRoutes);
 router.use('/public/services', publicServicesRoutes);
 // P23 BE Track 2 / Aşama 2 — partner-facing event push subscriptions.
 router.use('/admin/webhooks', adminWebhookRoutes);
+// Phase 3 — KVKK Compliance Shield
+router.use('/admin/dsar', adminDsarRoutes);
+router.use('/admin/consent', adminConsentRoutes);
+router.use('/admin/ropa', adminRopaRoutes);
+router.use('/admin/breach', adminBreachRoutes);
+router.use('/admin/verbis', adminVerbisRoutes);
+router.use('/admin/retention', adminRetentionRoutes);
+router.use('/admin/independence', adminIndependenceRoutes);
+// Phase 4 — RBAC Hardening
+router.use('/admin/rbac', adminRbacRoutes);
 router.use('/webhooks', webhookRoutes);
 router.use('/manage', manageRoutes);
 router.use('/auth/2fa', totpRoutes);

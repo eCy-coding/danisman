@@ -58,6 +58,11 @@ class ResizeObserverStub {
   unobserve(): void {}
   disconnect(): void {}
 }
+
+// cmdk uses scrollIntoView internally — jsdom doesn't implement it.
+if (!Element.prototype.scrollIntoView) {
+  Element.prototype.scrollIntoView = vi.fn();
+}
 Object.defineProperty(window, 'ResizeObserver', {
   writable: true,
   configurable: true,
