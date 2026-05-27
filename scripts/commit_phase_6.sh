@@ -53,6 +53,17 @@ git add \
   scripts/commit_phase_6.sh
 git commit -m "docs(phase6): ADR-007 enterprise data architecture + commit script"
 
+# 8. Phase 6.5 Verification — comprehensive tests
+git add \
+  src/test/admin/founder-letter-comprehensive.test.tsx \
+  src/test/admin/esg-taxonomy-fuzz.test.tsx \
+  src/test/admin/fintech-trifecta-integrity.test.tsx \
+  server/routes/admin-phase6-redteam.test.ts \
+  e2e/admin-phase6.spec.ts \
+  src/pages/admin/AdminLeadDetailPage.tsx \
+  scripts/commit_phase_6.sh
+git commit -m "test(phase6-verify): comprehensive — Founder Letter + ESG fuzz + Fintech integrity + residency integration + security + brand voice + E2E"
+
 echo ""
-echo "=== 7 commits created ==="
-git log --oneline -7
+echo "=== 8 commits created ==="
+git log --oneline -8
