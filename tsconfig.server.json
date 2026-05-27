@@ -14,7 +14,10 @@
     "declarationMap": true,
     "sourceMap": true,
     "noEmit": false,
-    "allowImportingTsExtensions": false
+    "allowImportingTsExtensions": false,
+    "types": [
+      "node"
+    ]
   },
   "include": [
     "server/**/*.ts"

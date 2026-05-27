@@ -578,3 +578,23 @@ model IntegrationOutbox {
   @@index([createdAt])
   @@map("integration_outbox")
 }
+
+// ─── P1 Phase 1: KVKK Consent Audit ─────────────────────────────────────────
+// Immutable audit record of KVKK consent events (ROPA SAT-01 protocol).
+// DB-level: application_user has no UPDATE/DELETE grants on this table.
+// withdrawnAt is the ONLY mutable field (right-to-withdrawal, KVKK m.11).
+model ConsentRecord {
+  id          String    @id @default(cuid())
+  leadId      String?   // Notion page ID of the Aday
+  consentType String    // "KVKK_LEAD_FORM" | "KVKK_NEWSLETTER" | ...
+  givenAt     DateTime  @default(now())
+  ipAddress   String?   // hashed or truncated (KVKK m.5 minimality)
+  userAgent   String?
+  formVersion String    @default("1.0.0") // bump when consent text changes → re-consent required
+  withdrawnAt DateTime?
+
+  @@index([leadId])
+  @@index([consentType, givenAt])
+  @@map("consent_records")
+}
+

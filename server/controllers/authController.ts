@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { prisma } from '../config/db';
-import jwt from 'jsonwebtoken';
+import jwt, { type SignOptions } from 'jsonwebtoken';
 import { z } from 'zod';
 import crypto from 'crypto';
 import { HttpError } from '../middleware/error';
@@ -92,7 +92,7 @@ function generateToken(userId: string, role: string): string {
   const jti = crypto.randomUUID();
   return jwt.sign({ id: userId, role, jti }, JWT_SECRET, {
     expiresIn: JWT_EXPIRES_IN,
-  } as jwt.SignOptions);
+  } as SignOptions);
 }
 
 function decodeTokenUnsafe(token: string): { jti?: string; exp?: number; id?: string } | null {
