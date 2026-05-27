@@ -15,6 +15,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { Mail, CheckCircle, ArrowRight, Sparkles } from 'lucide-react';
 import { useTranslation } from '../../lib/i18n';
 import { trackEvent } from '../../lib/analytics';
+import { KVKKBadge } from '../common/KVKKBadge';
 
 const RECENT_ISSUES = [
   {
@@ -264,6 +265,9 @@ export const NewsletterSection: React.FC = () => {
                         ? 'Spam yok. İstediğinizde iptal.'
                         : 'No spam. Cancel anytime.'}
                     </p>
+                    <div className="flex justify-center">
+                      <KVKKBadge variant="newsletter" />
+                    </div>
                   </motion.form>
                 )}
               </AnimatePresence>
