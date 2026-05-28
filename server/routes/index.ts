@@ -50,6 +50,9 @@ import adminRetentionRoutes from './admin-retention';
 import adminIndependenceRoutes from './admin-independence';
 // Phase 4 — RBAC Hardening
 import adminRbacRoutes from './admin-rbac';
+// Perspektif Blog — PB-2 admin API + PB-3 public search
+import { adminInsightsRouter } from './admin-insights';
+import { publicInsightsSearchRouter } from './public-insights-search';
 import { openApiSpec } from '../config/openapi';
 import { redis } from '../config/redis';
 import { prisma } from '../config/db';
@@ -494,6 +497,9 @@ router.use('/admin/retention', adminRetentionRoutes);
 router.use('/admin/independence', adminIndependenceRoutes);
 // Phase 4 — RBAC Hardening
 router.use('/admin/rbac', adminRbacRoutes);
+// Perspektif Blog — PB-2 admin API + PB-3 public search
+router.use('/admin/insights', adminInsightsRouter);
+router.use('/insights', publicInsightsSearchRouter);
 router.use('/webhooks', webhookRoutes);
 router.use('/manage', manageRoutes);
 router.use('/auth/2fa', totpRoutes);

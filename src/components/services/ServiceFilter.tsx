@@ -48,7 +48,7 @@ export const ServiceFilter: React.FC<ServiceFilterProps> = ({
                                 border flex items-center gap-2 whitespace-nowrap
                                 ${
                                   isActive
-                                    ? 'text-white bg-primary border-primary shadow-lg shadow-primary/20'
+                                    ? 'text-neutral bg-secondary border-secondary shadow-lg shadow-secondary/20'
                                     : 'text-slate-400 bg-white/5 border-white/10 hover:bg-white/10 hover:text-white'
                                 }
                             `}
