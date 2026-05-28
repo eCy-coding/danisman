@@ -95,13 +95,14 @@ describe('Quick-Check submission chain', () => {
     expect(h.upsertProspect).toHaveBeenCalledTimes(1);
     expect(h.upsertProspect).toHaveBeenCalledWith(
       expect.objectContaining({
-        email: 'ada@example.com',
-        source: 'Quick-Check inbound',
-        stage: 'Lead',
-        priority: 'Low', // mature → Low
-        score: 30,
-        tier: 'mature',
+        decisionMakerEmail: 'ada@example.com',
+        decisionMaker: 'Ada Lovelace',
+        company: 'Analytical Engines A.Ş.',
+        outreachStatus: 'Replied',
+        quickCheckScore: 30,
+        serviceSlug: 'quick-check',
         kvkkConsentAt: expect.stringMatching(/^\d{4}-\d{2}-\d{2}T/),
+        notes: expect.stringContaining('mature'),
       }),
     );
 
@@ -130,7 +131,12 @@ describe('Quick-Check submission chain', () => {
 
     await new Promise((r) => setImmediate(r));
     expect(h.upsertProspect).toHaveBeenCalledWith(
-      expect.objectContaining({ priority: 'High', tier: 'high-risk' }),
+      expect.objectContaining({
+        decisionMakerEmail: 'risk@example.com',
+        outreachStatus: 'Replied',
+        quickCheckScore: 0,
+        notes: expect.stringContaining('high-risk'),
+      }),
     );
   });
 

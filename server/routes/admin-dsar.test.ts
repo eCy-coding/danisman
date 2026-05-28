@@ -20,13 +20,13 @@ import express from 'express';
 
 const { prismaMock } = vi.hoisted(() => ({
   prismaMock: {
-    dsarRequest: {
+    dSARRequest: {
       findMany: vi.fn(),
       create: vi.fn(),
       findUnique: vi.fn(),
       update: vi.fn(),
     },
-    dsarAuditEntry: {
+    dSARAuditEntry: {
       create: vi.fn(),
     },
   },
@@ -113,7 +113,7 @@ describe('GET /api/admin/dsar', () => {
   });
 
   it('returns 200 with list of DSAR requests', async () => {
-    prismaMock.dsarRequest.findMany.mockResolvedValue([fakeDSAR]);
+    prismaMock.dSARRequest.findMany.mockResolvedValue([fakeDSAR]);
 
     const res = await request(app).get('/api/admin/dsar').set('Authorization', 'Bearer valid');
     expect(res.status).toBe(200);
@@ -134,8 +134,8 @@ describe('POST /api/admin/dsar', () => {
   });
 
   it('creates a DSAR request and audit entry, returns 201', async () => {
-    prismaMock.dsarRequest.create.mockResolvedValue(fakeDSAR);
-    prismaMock.dsarAuditEntry.create.mockResolvedValue({ id: 'audit-1' });
+    prismaMock.dSARRequest.create.mockResolvedValue(fakeDSAR);
+    prismaMock.dSARAuditEntry.create.mockResolvedValue({ id: 'audit-1' });
 
     const res = await request(app)
       .post('/api/admin/dsar')
@@ -150,7 +150,7 @@ describe('POST /api/admin/dsar', () => {
     expect(res.status).toBe(201);
     expect(res.body.status).toBe('ok');
     expect(res.body.dsar.id).toBe('dsar-id-1');
-    expect(prismaMock.dsarAuditEntry.create).toHaveBeenCalledOnce();
+    expect(prismaMock.dSARAuditEntry.create).toHaveBeenCalledOnce();
   });
 
   // ── 4. POST invalid → 400 ─────────────────────────────────────────────────
@@ -178,9 +178,9 @@ describe('PATCH /api/admin/dsar/:id', () => {
   });
 
   it('changes status and creates audit entry', async () => {
-    prismaMock.dsarRequest.findUnique.mockResolvedValue(fakeDSAR);
-    prismaMock.dsarRequest.update.mockResolvedValue({ ...fakeDSAR, status: 'UNDER_REVIEW' });
-    prismaMock.dsarAuditEntry.create.mockResolvedValue({ id: 'audit-2' });
+    prismaMock.dSARRequest.findUnique.mockResolvedValue(fakeDSAR);
+    prismaMock.dSARRequest.update.mockResolvedValue({ ...fakeDSAR, status: 'UNDER_REVIEW' });
+    prismaMock.dSARAuditEntry.create.mockResolvedValue({ id: 'audit-2' });
 
     const res = await request(app)
       .patch('/api/admin/dsar/dsar-id-1')
@@ -189,19 +189,19 @@ describe('PATCH /api/admin/dsar/:id', () => {
 
     expect(res.status).toBe(200);
     expect(res.body.dsar.status).toBe('UNDER_REVIEW');
-    expect(prismaMock.dsarAuditEntry.create).toHaveBeenCalledOnce();
+    expect(prismaMock.dSARAuditEntry.create).toHaveBeenCalledOnce();
   });
 
   // ── 6. PATCH extend SLA first time → 200 ────────────────────────────────────
 
   it('allows SLA extension first time', async () => {
-    prismaMock.dsarRequest.findUnique.mockResolvedValue({ ...fakeDSAR, extendedOnce: false });
-    prismaMock.dsarRequest.update.mockResolvedValue({
+    prismaMock.dSARRequest.findUnique.mockResolvedValue({ ...fakeDSAR, extendedOnce: false });
+    prismaMock.dSARRequest.update.mockResolvedValue({
       ...fakeDSAR,
       extendedOnce: true,
       slaDeadline: new Date(slaDeadline.getTime() + 30 * 24 * 60 * 60 * 1000),
     });
-    prismaMock.dsarAuditEntry.create.mockResolvedValue({ id: 'audit-3' });
+    prismaMock.dSARAuditEntry.create.mockResolvedValue({ id: 'audit-3' });
 
     const res = await request(app)
       .patch('/api/admin/dsar/dsar-id-1')
@@ -209,7 +209,7 @@ describe('PATCH /api/admin/dsar/:id', () => {
       .send({ extendSLA: true });
 
     expect(res.status).toBe(200);
-    expect(prismaMock.dsarRequest.update).toHaveBeenCalledWith(
+    expect(prismaMock.dSARRequest.update).toHaveBeenCalledWith(
       expect.objectContaining({
         data: expect.objectContaining({ extendedOnce: true }),
       }),
@@ -219,7 +219,7 @@ describe('PATCH /api/admin/dsar/:id', () => {
   // ── 7. PATCH extend SLA second time → 409 ───────────────────────────────────
 
   it('blocks SLA extension second time with 409', async () => {
-    prismaMock.dsarRequest.findUnique.mockResolvedValue({ ...fakeDSAR, extendedOnce: true });
+    prismaMock.dSARRequest.findUnique.mockResolvedValue({ ...fakeDSAR, extendedOnce: true });
 
     const res = await request(app)
       .patch('/api/admin/dsar/dsar-id-1')
@@ -228,7 +228,7 @@ describe('PATCH /api/admin/dsar/:id', () => {
 
     expect(res.status).toBe(409);
     expect(res.body.status).toBe('error');
-    expect(prismaMock.dsarRequest.update).not.toHaveBeenCalled();
+    expect(prismaMock.dSARRequest.update).not.toHaveBeenCalled();
   });
 });
 
@@ -243,14 +243,14 @@ describe('POST /api/admin/dsar/:id/respond', () => {
   });
 
   it('sets responseText, respondedAt, status=RESPONDED and creates audit entry', async () => {
-    prismaMock.dsarRequest.findUnique.mockResolvedValue(fakeDSAR);
-    prismaMock.dsarRequest.update.mockResolvedValue({
+    prismaMock.dSARRequest.findUnique.mockResolvedValue(fakeDSAR);
+    prismaMock.dSARRequest.update.mockResolvedValue({
       ...fakeDSAR,
       status: 'RESPONDED',
       responseText: 'Başvurunuz işleme alındı.',
       respondedAt: new Date(),
     });
-    prismaMock.dsarAuditEntry.create.mockResolvedValue({ id: 'audit-4' });
+    prismaMock.dSARAuditEntry.create.mockResolvedValue({ id: 'audit-4' });
 
     const res = await request(app)
       .post('/api/admin/dsar/dsar-id-1/respond')
@@ -259,7 +259,7 @@ describe('POST /api/admin/dsar/:id/respond', () => {
 
     expect(res.status).toBe(200);
     expect(res.body.dsar.status).toBe('RESPONDED');
-    expect(prismaMock.dsarRequest.update).toHaveBeenCalledWith(
+    expect(prismaMock.dSARRequest.update).toHaveBeenCalledWith(
       expect.objectContaining({
         data: expect.objectContaining({
           status: 'RESPONDED',
@@ -267,6 +267,6 @@ describe('POST /api/admin/dsar/:id/respond', () => {
         }),
       }),
     );
-    expect(prismaMock.dsarAuditEntry.create).toHaveBeenCalledOnce();
+    expect(prismaMock.dSARAuditEntry.create).toHaveBeenCalledOnce();
   });
 });

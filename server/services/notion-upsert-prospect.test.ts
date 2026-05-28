@@ -18,6 +18,10 @@ vi.mock('@sentry/node', () => ({
 vi.mock('../config/logger', () => ({
   logger: { warn: vi.fn(), info: vi.fn(), error: vi.fn() },
 }));
+// withOutboxRecord wraps Prisma; pass-through in unit tests
+vi.mock('../lib/outbox', () => ({
+  withOutboxRecord: async <T>(_ctx: unknown, fn: () => Promise<T>): Promise<T> => fn(),
+}));
 
 type NotionModule = typeof import('./notion');
 

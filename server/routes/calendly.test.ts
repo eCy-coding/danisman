@@ -92,7 +92,11 @@ describe('POST /calendly — HMAC verification', () => {
     // Notion sync is fire-and-forget; let the microtask queue drain.
     await new Promise((r) => setImmediate(r));
     expect(upsertProspect).toHaveBeenCalledWith(
-      expect.objectContaining({ email: 'ada@example.com', stage: 'Discovery Booked' }),
+      expect.objectContaining({
+        decisionMakerEmail: 'ada@example.com',
+        outreachStatus: 'Discovery Booked',
+        discoveryCallDate: '2026-06-01T10:00:00.000Z',
+      }),
     );
     expect(createInteraction).toHaveBeenCalledWith(
       expect.objectContaining({ type: 'Discovery Call', outcome: 'Booked' }),
@@ -171,7 +175,13 @@ describe('POST /calendly — event dispatch', () => {
 
     expect(res.status).toBe(200);
     await new Promise((r) => setImmediate(r));
-    expect(upsertProspect).toHaveBeenCalledWith(expect.objectContaining({ stage: 'Lead' }));
+    expect(upsertProspect).toHaveBeenCalledWith(
+      expect.objectContaining({
+        decisionMakerEmail: 'ada@example.com',
+        outreachStatus: 'Cold',
+        notes: 'Discovery call canceled by invitee',
+      }),
+    );
     expect(createInteraction).toHaveBeenCalledWith(
       expect.objectContaining({ outcome: 'Canceled' }),
     );
