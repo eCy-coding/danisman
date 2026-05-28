@@ -8,7 +8,9 @@
 
 import express, { type Request, type Response, type NextFunction } from 'express';
 import request from 'supertest';
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+// Force in-memory fallback so _tierTesting.reset() is effective (Redis stores cross-run state)
+vi.mock('../config/redis', () => ({ redis: { status: 'end' } }));
 import { classifyTier, tierRateLimit, _tierTesting } from './rate-limit-tier';
 
 interface AuthLikeRequest extends Request {
