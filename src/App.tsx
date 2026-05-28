@@ -112,6 +112,8 @@ const AnnualReportPage = React.lazy(() => import('./pages/AnnualReportPage'));
 const NewsletterStatusPage = React.lazy(() => import('./pages/NewsletterStatusPage'));
 // P77.B: Dedicated Discovery Call landing page (Calendly embed)
 const DiscoveryCallPage = React.lazy(() => import('./pages/DiscoveryCallPage'));
+// L1-3: Discovery form with lead capture
+const DiscoveryPage = React.lazy(() => import('./pages/Discovery'));
 // Track B: post-conversion landing
 const ThankYouPage = React.lazy(() => import('./pages/ThankYouPage'));
 // Track 4: KVKK Quick-Check + Pricing Calculator lead magnets
@@ -357,6 +359,14 @@ const AnimatedRoutes = () => {
             element={
               <RouteContainer name="ContactPage" fallback={<LoadingFallback />}>
                 <ContactPage />
+              </RouteContainer>
+            }
+          />
+          <Route
+            path="/discovery"
+            element={
+              <RouteContainer name="DiscoveryPage" fallback={<LoadingFallback />}>
+                <DiscoveryPage />
               </RouteContainer>
             }
           />
