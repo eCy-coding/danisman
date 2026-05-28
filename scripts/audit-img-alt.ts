@@ -56,7 +56,12 @@ function* walkDir(dir: string, exts: string[]): Generator<string> {
 // ─── Scan TSX/TSX files ────────────────────────────────────
 
 const IMG_TAG_REGEX = /<img\b([^>]*?)(?:\/>|>)/gi;
-const ALT_ATTR_REGEX = /\balt\s*=\s*(?:"([^"]*?)"|'([^']*?)'|{`([^`]*?)`}|{(['"])([^'"]*?)\4})/i;
+// Branches in priority order: "literal", 'literal', {`template`}, {'literal'},
+// then {dynamicExpr} — a non-empty JSX expression alt (e.g. alt={post.title},
+// alt={t('key')}) counts as present. Empty forms ({''}/{""}) match the earlier
+// quoted branches and are still flagged EMPTY_ALT.
+const ALT_ATTR_REGEX =
+  /\balt\s*=\s*(?:"([^"]*?)"|'([^']*?)'|{`([^`]*?)`}|{(['"])([^'"]*?)\4}|{([^}]+)})/i;
 const OPTIMIZED_IMAGE_REGEX = /<OptimizedImage\b([^>]*?)(?:\/>|>)/gi;
 
 function scanTsx(filePath: string): void {
@@ -83,7 +88,14 @@ function scanTsx(filePath: string): void {
         severity: 'error',
       });
     } else {
-      const altValue = (altMatch[1] ?? altMatch[2] ?? altMatch[3] ?? altMatch[5] ?? '').trim();
+      const altValue = (
+        altMatch[1] ??
+        altMatch[2] ??
+        altMatch[3] ??
+        altMatch[5] ??
+        altMatch[6] ??
+        ''
+      ).trim();
       if (altValue === '') {
         // Empty alt: warn (could be decorative)
         issues.push({
@@ -161,7 +173,13 @@ console.log('🔍 eCyPro Image Alt Text Audit\n');
 
 let scanned = 0;
 
+// Test files contain intentional alt-less / XSS <img> fixtures that assert the
+// app's own a11y guards — they are not production markup, so exclude them.
+const isTestFile = (f: string): boolean =>
+  /\.(test|spec)\.[jt]sx?$/.test(f) || /(^|\/)(__tests__|test)\//.test(f);
+
 for (const file of walkDir(SRC_DIR, ['.tsx', '.ts', '.jsx'])) {
+  if (isTestFile(path.relative(ROOT, file))) continue;
   scanTsx(file);
   scanned++;
 }
