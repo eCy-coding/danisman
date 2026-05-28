@@ -47,9 +47,6 @@ const TestimonialsCarousel = React.lazy(() =>
 const ProcessTimeline = React.lazy(() =>
   import('@/components/sections/ProcessTimeline').then((m) => ({ default: m.ProcessTimeline })),
 );
-const ROICalculator = React.lazy(() =>
-  import('@/components/features/roi/ROICalculator').then((m) => ({ default: m.ROICalculator })),
-);
 const Insights = React.lazy(() =>
   import('@/components/sections/Insights').then((m) => ({ default: m.Insights })),
 );
@@ -117,10 +114,6 @@ export const LandingContent: React.FC = () => {
 
       <SectionShell minHeight="600px">
         <ProcessTimeline />
-      </SectionShell>
-
-      <SectionShell minHeight="500px">
-        <ROICalculator />
       </SectionShell>
 
       <SectionShell minHeight="400px">
