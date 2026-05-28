@@ -107,7 +107,8 @@ try {
 } catch {
   console.warn('[sentry] set-commits --auto failed (no remote tracked?), continuing.');
 }
-sh(`${CLI} releases files "${RELEASE}" upload-sourcemaps "${DIST}/assets" --url-prefix "${URL_PREFIX}" --validate`);
+// sentry-cli 3.x: `releases files` replaced by `sourcemaps upload`
+sh(`${CLI} sourcemaps upload --release "${RELEASE}" --url-prefix "${URL_PREFIX}" "${DIST}/assets"`);
 sh(`${CLI} releases finalize "${RELEASE}"`);
 
 // Defense: remove *.map from dist after successful upload so they aren't served.
