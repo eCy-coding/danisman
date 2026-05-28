@@ -33,6 +33,12 @@ const ServiceDetailPage = React.lazy(() =>
 );
 const BlogPostPage = React.lazy(() => import('./pages/BlogPostPage'));
 const BlogPage = React.lazy(() => import('./pages/BlogPage'));
+const InsightsPage = React.lazy(() =>
+  import('./pages/InsightsPage').then((module) => ({ default: module.InsightsPage })),
+);
+const InsightArticle = React.lazy(() =>
+  import('./pages/InsightArticle').then((module) => ({ default: module.InsightArticle })),
+);
 const AboutPage = React.lazy(() =>
   import('./pages/AboutPage').then((module) => ({ default: module.AboutPage })),
 );
@@ -324,6 +330,22 @@ const AnimatedRoutes = () => {
             element={
               <Suspense fallback={<LoadingFallback />}>
                 <BlogPage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/insights/:slug"
+            element={
+              <Suspense fallback={<LoadingFallback />}>
+                <InsightArticle />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/insights"
+            element={
+              <Suspense fallback={<LoadingFallback />}>
+                <InsightsPage />
               </Suspense>
             }
           />
