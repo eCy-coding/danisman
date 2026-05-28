@@ -902,7 +902,7 @@ const SERVICE_CONTENT_LIST: ServiceContent[] = [
     },
     investment: {
       range: '₺150.000 – ₺850.000 (krizin ölçeğine göre)',
-      model: 'Sabit fiyat + opsiyonel retainer (preventive yıllık BCP audit için).',
+      model: 'Sabit fiyat + opsiyonel yıllık BCP ortaklığı (preventive audit + tatbikat).',
       paymentPlan: '%50 başlangıç (acil müdahale), %50 stabilizasyon + handoff sonrası.',
     },
     trust: {
@@ -921,7 +921,7 @@ const SERVICE_CONTENT_LIST: ServiceContent[] = [
         },
         {
           q: '7/24 ulaşılabilir misiniz?',
-          a: "Akut faz aktiveyse evet, kriz komuta odası kurulur. Preventive BCP retainer'ı ile yıllık tatbikat + on-call destek.",
+          a: 'Akut faz aktiveyse evet, kriz komuta odası kurulur. Preventive BCP ortaklığı ile yıllık tatbikat + on-call destek.',
         },
         ...SHARED_FAQ_END('crisis-management'),
       ],
@@ -1595,8 +1595,8 @@ const SERVICE_CONTENT_LIST: ServiceContent[] = [
     },
     investment: {
       range: '₺180.000 – ₺450.000 + aylık briefing ₺25.000-50.000',
-      model: 'İlk faz sabit fiyat. Aylık briefing retainer modeli.',
-      paymentPlan: '%50 başlangıç, %50 forecast model handoff. Retainer aylık.',
+      model: 'İlk faz sabit fiyat. Aylık briefing ortaklık modeli.',
+      paymentPlan: '%50 başlangıç, %50 forecast model handoff. Briefing ortaklığı aylık.',
     },
     trust: {
       anonymizedExample:
@@ -1956,7 +1956,7 @@ const SERVICE_CONTENT_LIST: ServiceContent[] = [
         },
         {
           q: 'Süreç sonrası destek var mı?',
-          a: 'Aylık teşvik checkup retainer (₺8-15k/ay) opsiyoneldir; mevzuat değişiminde otomatik notify.',
+          a: 'Aylık teşvik takip ortaklığı (₺8-15k/ay) opsiyoneldir; mevzuat değişiminde otomatik notify.',
         },
         ...SHARED_FAQ_END('payroll-audit'),
       ],
@@ -2272,7 +2272,7 @@ const SERVICE_CONTENT_LIST: ServiceContent[] = [
       ],
     },
     timeline: {
-      totalDuration: 'İlk faz 12-14 hafta · Çeyreklik briefing retainer 12+ ay',
+      totalDuration: 'İlk faz 12-14 hafta · Çeyreklik briefing ortaklığı 12+ ay',
       milestones: [
         { name: 'Exposure audit', week: 'Hafta 3' },
         { name: 'Sanctions compliance live', week: 'Hafta 6' },
@@ -2282,13 +2282,13 @@ const SERVICE_CONTENT_LIST: ServiceContent[] = [
       ],
     },
     investment: {
-      range: 'İlk faz ₺220.000 – ₺550.000 + retainer ₺35.000-65.000/çeyrek',
-      model: 'İlk faz sabit fiyat + çeyreklik briefing retainer.',
-      paymentPlan: '%50 başlangıç, %50 ilk faz handoff. Retainer çeyreklik.',
+      range: 'İlk faz ₺220.000 – ₺550.000 + çeyreklik briefing ₺35.000-65.000',
+      model: 'İlk faz sabit fiyat + çeyreklik briefing ortaklığı.',
+      paymentPlan: '%50 başlangıç, %50 ilk faz handoff. Briefing ortaklığı çeyreklik.',
     },
     trust: {
       anonymizedExample:
-        "Çelik üretici (450 çalışan, %70 ihracat) için 13 haftalık engagement + 4 çeyreklik retainer. Rusya hammadde bağımlılığı 2022 sonrası %48 idi, 18 ayda %12'ye indirildi (Türkiye + Ukrayna alternatifi). Sanctions screening süreç implementasyonu sayesinde 2 müşteri başvurusu compliance riski tespit edildi.",
+        "Çelik üretici (450 çalışan, %70 ihracat) için 13 haftalık engagement + 4 çeyreklik briefing ortaklığı. Rusya hammadde bağımlılığı 2022 sonrası %48 idi, 18 ayda %12'ye indirildi (Türkiye + Ukrayna alternatifi). Sanctions screening süreç implementasyonu sayesinde 2 müşteri başvurusu compliance riski tespit edildi.",
     },
     faq: {
       items: [
@@ -2501,7 +2501,7 @@ const SERVICE_CONTENT_LIST: ServiceContent[] = [
       ],
     },
     timeline: {
-      totalDuration: 'İlk faz 12-14 hafta · Aylık retainer 12+ ay',
+      totalDuration: 'İlk faz 12-14 hafta · Aylık ortaklık 12+ ay',
       milestones: [
         { name: 'Stakeholder map', week: 'Hafta 3' },
         { name: 'Regulatory radar live', week: 'Hafta 5' },
@@ -2512,12 +2512,12 @@ const SERVICE_CONTENT_LIST: ServiceContent[] = [
     },
     investment: {
       range: 'İlk faz ₺220.000 – ₺550.000 + aylık briefing ₺25.000-55.000',
-      model: 'İlk faz sabit fiyat + aylık retainer (briefing + ad-hoc destek).',
-      paymentPlan: '%50 başlangıç, %50 ilk faz handoff. Retainer aylık.',
+      model: 'İlk faz sabit fiyat + aylık ortaklık (briefing + ad-hoc destek).',
+      paymentPlan: '%50 başlangıç, %50 ilk faz handoff. Ortaklık aylık.',
     },
     trust: {
       anonymizedExample:
-        "İlaç sektörü orta-ölçek üretici (180 çalışan) için 13 haftalık + 9 aylık retainer engagement. SGK ödeme listesi revizyonu için position paper + sektör derneği koordinasyonu sonucu, şirket ürün gruplarının %85'i listede korundu. Ankara + Brüksel paydaşları ile düzenli erken sinyal akışı kuruldu.",
+        "İlaç sektörü orta-ölçek üretici (180 çalışan) için 13 haftalık + 9 aylık ortaklık engagement. SGK ödeme listesi revizyonu için position paper + sektör derneği koordinasyonu sonucu, şirket ürün gruplarının %85'i listede korundu. Ankara + Brüksel paydaşları ile düzenli erken sinyal akışı kuruldu.",
     },
     faq: {
       items: [
