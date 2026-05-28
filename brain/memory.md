@@ -36,6 +36,16 @@ This file is the single source of truth for the project's state. Any AI agent ta
 
 ## �🟢 Completed Phases
 
+### [Phase 40] Observability + DevOps ✅ RECONCILE (2026-05-29)
+
+- Premise-verify: kod/config/doc deliverable'ları hazır — Sentry sourcemaps CI (release.yml),
+  Lighthouse CI (lighthouse.yml + .lighthouserc.js), Better Stack log (@logtail/winston + logger.ts),
+  PM2 (ecosystem.config.cjs), DB backup (scripts/backup-db.sh), GHCR (docker.yml), incident
+  runbook (docs/INCIDENT_RUNBOOK.md). T09 blue-green = Vercel/Render managed atomic deploy.
+- Gerçek code-gap yok (P32 audit-bug / P34 dead-CTA / P39 dead-store tipinde değil). Saf reconcile.
+- Owner (Phase B): T04 UptimeRobot, T05 status.ecypro.com.
+- Ayrı task (flag): iki örtüşen Lighthouse kurulumu (.lighthouserc.js vs .cjs) — billing fix sonrası konsolide.
+
 ### [Phase 39] i18n + International SEO ✅ RECONCILE (2026-05-29)
 
 - Premise-verify: 9/10 todo kodda hazır (hreflang Hreflang.tsx, LocaleRoute.tsx, currency
