@@ -106,10 +106,10 @@ export const SpeakingPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-neutral text-slate-300">
       <Helmet>
-        <title>Speaking & Konuşma Talepleri | eCyPro</title>
+        <title>Konuşmacı Daveti & Etkinlik Danışmanlığı | eCyPro</title>
         <meta
           name="description"
-          content="Emre Can Yalçın konuşma konuları + speaking inquiry. AI, strateji, aile şirketi, ESG temaları."
+          content="Emre Can Yalçın konuşmacı daveti: AI stratejisi, aile şirketi yönetişimi, ESG ve M&A temaları. Kurumsal etkinlik, zirve ve panel moderasyon talepleri için iletişime geçin."
         />
         <link rel="canonical" href={buildCanonical('/speaking', language)} />
       </Helmet>
