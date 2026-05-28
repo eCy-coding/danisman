@@ -36,6 +36,16 @@ This file is the single source of truth for the project's state. Any AI agent ta
 
 ## �🟢 Completed Phases
 
+### [Phase 34] Conversion + Analytics ✅ RECONCILE (2026-05-29)
+
+- Premise-verify: 9/10 todo kodda hazır (GrowthBook A/B, Clarity, useFormAnalytics,
+  useScrollDepth, CRO_PLAYBOOK.md, lead-scoring). Checkbox'lar geriden takip ediyordu.
+- Gerçek delta T02: canlı `GrowthCalculator` (ServicesPage) hiç event atmıyordu +
+  "Get Detailed Blueprint" CTA ölüydü (onClick yok). `emit('roi_calc_step', ...)`
+  result_view (800ms debounce) + cta_click eklendi; CTA `/discovery-call` Link'e bağlandı.
+  3 unit test (GrowthCalculator.test.tsx). typecheck:web 0, lint 0, test 3/3.
+- T01 GA4 "mark as conversion" = owner dashboard aksiyonu (Phase B); kod event'leri hazır.
+
 ### [Phase 32] Keyword + Content ✅ RECONCILE (2026-05-29)
 
 - Premise-verify: 10/10 todo kodda hazır bulundu (checkbox'lar geriden takip ediyordu).
