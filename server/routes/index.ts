@@ -55,6 +55,11 @@ import { adminInsightsRouter } from './admin-insights';
 import { publicInsightsSearchRouter } from './public-insights-search';
 // Wave-3A — Insights SEO sitemap management
 import insightsSeoRoutes from './insights-seo';
+// Perspektif Blog — PB-11 KVKK Comments + PB-10 Admin Dashboard
+import commentsRoutes from './comments';
+import adminCommentsRoutes from './admin-comments';
+import dsarCommentsRoutes from './dsar-comments';
+import adminInsightsDashboardRoutes from './admin-insights-dashboard';
 import { openApiSpec } from '../config/openapi';
 import { redis } from '../config/redis';
 import { prisma } from '../config/db';
@@ -530,5 +535,11 @@ router.use('/uploads', uploadsGetRoutes);
 router.use('/', streamRoutes);
 // Wave-3A — Insights SEO sitemap management endpoints
 router.use('/insights-seo', insightsSeoRoutes);
+
+// Perspektif Blog — PB-11 KVKK Comments + PB-10 Admin Dashboard
+router.use('/insights/posts', commentsRoutes);
+router.use('/admin/insights/comments', adminCommentsRoutes);
+router.use('/dsar/comments', dsarCommentsRoutes);
+router.use('/admin/insights/dashboard', adminInsightsDashboardRoutes);
 
 export default router;
