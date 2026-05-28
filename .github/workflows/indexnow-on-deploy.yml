@@ -1,0 +1,69 @@
+name: IndexNow Submit
+
+# Push sitemap URLs to IndexNow (Bing + Yandex + Seznam, single endpoint).
+# Runs daily and on demand. Wraps the existing `npm run seo:indexnow`
+# (scripts/indexnow-push.ts), which parses public/sitemap.xml and POSTs to
+# https://api.indexnow.org/indexnow.
+#
+# Owner action (Tier 3): add repo secret INDEXNOW_KEY = the same 32-hex value
+# served at https://www.ecypro.com/21e19385b01de6c944799c92cce30cf5.txt
+# Settings → Secrets and variables → Actions → New repository secret.
+
+on:
+  schedule:
+    # Daily 03:00 UTC — re-ping engines with the current sitemap.
+    - cron: '0 3 * * *'
+  workflow_dispatch:
+    inputs:
+      urls:
+        description: 'Optional comma-separated URL list (overrides sitemap)'
+        required: false
+        default: ''
+  repository_dispatch:
+    # Fire after a deploy by sending event_type "vercel-deployment-ready".
+    types: [vercel-deployment-ready]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: indexnow
+  cancel-in-progress: false
+
+jobs:
+  submit:
+    name: Submit URLs to IndexNow
+    runs-on: ubuntu-latest
+    env:
+      INDEXNOW_KEY: ${{ secrets.INDEXNOW_KEY }}
+      VITE_PROD_URL: 'https://www.ecypro.com'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Guard — INDEXNOW_KEY present
+        run: |
+          if [ -z "$INDEXNOW_KEY" ]; then
+            echo "::warning::INDEXNOW_KEY secret not set — skipping submit. Add it under Settings → Secrets and variables → Actions."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          fi
+        id: guard
+
+      - name: Setup Node.js
+        if: steps.guard.outputs.skip != 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+          cache: 'npm'
+
+      - name: Install dependencies
+        if: steps.guard.outputs.skip != 'true'
+        run: npm ci
+
+      - name: Push to IndexNow
+        if: steps.guard.outputs.skip != 'true'
+        run: |
+          if [ -n "${{ github.event.inputs.urls }}" ]; then
+            npm run seo:indexnow -- --urls "${{ github.event.inputs.urls }}"
+          else
+            npm run seo:indexnow
+          fi
