@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import {
   AreaChart,
@@ -28,9 +28,13 @@ import {
   CheckCircle,
   XCircle,
   AlertCircle,
+  Wifi,
+  WifiOff,
+  Activity,
 } from 'lucide-react';
 import { motion } from 'motion/react';
 import { apiClient } from '../../lib/api';
+import { useSSE, type DashboardMetrics } from '../../hooks/useSSE';
 
 interface StatsData {
   unreadContacts: number;
@@ -276,11 +280,51 @@ const KPICard: React.FC<KPICardProps> = ({ label, value, icon: Icon, color, sub 
   </motion.div>
 );
 
+// ─── Live Badge ──────────────────────────────────────────
+
+const LiveBadge: React.FC<{ isConnected: boolean; onReconnect: () => void }> = ({
+  isConnected,
+  onReconnect,
+}) =>
+  isConnected ? (
+    <div className="flex gap-2 text-xs font-mono text-secondary bg-secondary/10 px-3 py-1 rounded border border-secondary/20 items-center">
+      <span className="relative flex h-2 w-2 items-center justify-center">
+        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75" />
+        <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-secondary" />
+      </span>
+      <Wifi size={12} />
+      LIVE
+    </div>
+  ) : (
+    <div className="flex gap-2 items-center">
+      <div className="flex gap-2 text-xs font-mono text-orange-400 bg-orange-900/10 px-3 py-1 rounded border border-orange-900/20 items-center">
+        <WifiOff size={12} />
+        OFFLINE
+      </div>
+      <button
+        type="button"
+        onClick={onReconnect}
+        className="p-1 text-slate-400 hover:text-white transition-colors"
+        title="SSE'ye yeniden bağlan"
+      >
+        <RefreshCw size={14} />
+      </button>
+    </div>
+  );
+
 export const AdminAnalyticsPage: React.FC = () => {
+  const [liveMetrics, setLiveMetrics] = useState<DashboardMetrics | null>(null);
+
+  const handleMetrics = useCallback((m: DashboardMetrics) => {
+    setLiveMetrics(m);
+  }, []);
+
+  const { isConnected, reconnect } = useSSE({ onMetrics: handleMetrics });
+
   const { data, isLoading, refetch, isFetching } = useQuery<ApiStatsResponse>({
     queryKey: ['admin-analytics-stats'],
     queryFn: () => apiClient.get<ApiStatsResponse>('/admin/stats').then((r) => r.data),
-    refetchInterval: 30_000,
+    refetchInterval: isConnected ? 60_000 : 30_000,
     staleTime: 15_000,
   });
 
@@ -295,19 +339,68 @@ export const AdminAnalyticsPage: React.FC = () => {
             Analytics Dashboard
           </h1>
           <p className="text-slate-400 text-sm mt-1">
-            Real-time platform metrics • Auto-refresh 30s
+            {isConnected ? 'SSE canlı bağlantı aktif' : 'Otomatik yenileme 30s'}
           </p>
         </div>
-        <button
-          type="button"
-          onClick={() => void refetch()}
-          disabled={isFetching}
-          className="flex items-center gap-2 px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-slate-400 hover:text-white text-sm transition-colors"
-        >
-          <RefreshCw size={14} className={isFetching ? 'animate-spin' : ''} />
-          Refresh
-        </button>
+        <div className="flex items-center gap-3">
+          <LiveBadge isConnected={isConnected} onReconnect={reconnect} />
+          {!isConnected && (
+            <button
+              type="button"
+              onClick={() => void refetch()}
+              disabled={isFetching}
+              className="flex items-center gap-2 px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-slate-400 hover:text-white text-sm transition-colors"
+            >
+              <RefreshCw size={14} className={isFetching ? 'animate-spin' : ''} />
+              Refresh
+            </button>
+          )}
+        </div>
       </div>
+
+      {/* P36-T02: SSE Live Traffic KPIs — shown when SSE connected */}
+      {liveMetrics && (
+        <motion.div
+          initial={{ opacity: 0, y: -8 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="grid grid-cols-2 lg:grid-cols-4 gap-4"
+        >
+          {[
+            {
+              label: 'Live Page Views',
+              value: liveMetrics.totalPageViews.toLocaleString(),
+              icon: Eye,
+              color: 'bg-purple-500/10 text-purple-400',
+            },
+            {
+              label: 'Unique Visitors',
+              value: liveMetrics.uniqueVisitors.toLocaleString(),
+              icon: Users,
+              color: 'bg-blue-500/10 text-blue-400',
+            },
+            {
+              label: 'Avg Session',
+              value: `${Math.round(liveMetrics.avgSessionDuration)}s`,
+              icon: Activity,
+              color: 'bg-green-500/10 text-green-400',
+            },
+            {
+              label: 'Conversion Rate',
+              value: `${liveMetrics.conversionRate.toFixed(1)}%`,
+              icon: TrendingUp,
+              color: 'bg-secondary/10 text-secondary',
+            },
+          ].map(({ label, value, icon: Icon, color }) => (
+            <div key={label} className={`bg-white/3 border border-white/5 rounded-2xl p-5`}>
+              <div className={`inline-flex p-2.5 rounded-lg ${color} mb-3`}>
+                <Icon size={16} />
+              </div>
+              <p className="text-2xl font-bold text-white">{value}</p>
+              <p className="text-xs text-slate-400 mt-1">{label}</p>
+            </div>
+          ))}
+        </motion.div>
+      )}
 
       {/* KPI Grid */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
