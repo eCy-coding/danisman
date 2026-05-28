@@ -4,6 +4,18 @@ import React from 'react';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import { InsightSeries } from '../../pages/InsightSeries';
 
+vi.mock('@/hooks/useInsightsFeed', () => ({
+  useInsightsFeed: vi.fn(() => ({
+    posts: [],
+    total: 0,
+    hasMore: false,
+    isLoading: false,
+    isFetchingNextPage: false,
+    fetchNextPage: vi.fn(),
+    refetch: vi.fn(),
+  })),
+}));
+
 vi.mock('react-i18next', () => ({
   useTranslation: vi.fn(() => ({
     t: (key: string, opts?: Record<string, unknown>) => {
