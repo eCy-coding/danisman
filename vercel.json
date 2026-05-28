@@ -8,6 +8,21 @@
       "source": "/locale-detect",
       "destination": "/tr",
       "permanent": false
+    },
+    {
+      "source": "/discovery",
+      "destination": "/discovery-call",
+      "permanent": true
+    },
+    {
+      "source": "/insights",
+      "destination": "/blog",
+      "permanent": true
+    },
+    {
+      "source": "/insights/:slug",
+      "destination": "/blog/:slug",
+      "permanent": true
     }
   ],
   "rewrites": [
@@ -127,7 +142,7 @@
         },
         {
           "key": "Content-Security-Policy",
-          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://www.googletagmanager.com https://www.google-analytics.com https://www.clarity.ms https://*.clarity.ms https://browser.sentry-cdn.com https://*.sentry.io https://*.ingest.us.sentry.io https://*.ingest.de.sentry.io https://cdn.growthbook.io; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: https: blob:; connect-src 'self' https://huggingface.co https://cdn-lfs.huggingface.co https://www.googletagmanager.com https://www.google-analytics.com https://*.google-analytics.com https://www.clarity.ms https://*.clarity.ms https://browser.sentry-cdn.com https://*.sentry.io https://*.ingest.sentry.io https://*.ingest.us.sentry.io https://*.ingest.de.sentry.io https://cdn.growthbook.io https://api.ecypro.com https://*.ecypro.com wss://api.ecypro.com; worker-src 'self' blob:; frame-src 'self' https://calendly.com https://*.calendly.com; object-src 'none'; base-uri 'self'; form-action 'self' https://api.ecypro.com; frame-ancestors 'none'"
+          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://www.googletagmanager.com https://www.google-analytics.com https://www.clarity.ms https://*.clarity.ms https://browser.sentry-cdn.com https://*.sentry.io https://*.ingest.us.sentry.io https://*.ingest.de.sentry.io https://cdn.growthbook.io https://eu-assets.i.posthog.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: https: blob:; connect-src 'self' https://huggingface.co https://cdn-lfs.huggingface.co https://www.googletagmanager.com https://www.google-analytics.com https://*.google-analytics.com https://www.clarity.ms https://*.clarity.ms https://browser.sentry-cdn.com https://*.sentry.io https://*.ingest.sentry.io https://*.ingest.us.sentry.io https://*.ingest.de.sentry.io https://cdn.growthbook.io https://api.ecypro.com https://*.ecypro.com wss://api.ecypro.com https://ecypro-api.onrender.com https://eu-assets.i.posthog.com https://eu.i.posthog.com https://eu.posthog.com; worker-src 'self' blob:; frame-src 'self' https://calendly.com https://*.calendly.com; object-src 'none'; base-uri 'self'; form-action 'self' https://api.ecypro.com; frame-ancestors 'none'"
         }
       ]
     }
