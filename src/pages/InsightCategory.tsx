@@ -24,8 +24,7 @@ export function InsightCategory() {
   );
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
 
-  const { data, isLoading } = useInsightsFeed({ domain: activeDomain, subDomain });
-  const posts = data?.posts ?? [];
+  const { posts, total, isLoading } = useInsightsFeed({ domain: activeDomain, subDomain });
   const visiblePosts = posts.slice(0, visibleCount);
 
   const domainMeta = activeDomain ? DOMAIN_META[activeDomain] : null;
@@ -83,7 +82,7 @@ export function InsightCategory() {
               )}
               <h1 className="text-4xl font-bold text-slate-100">{domainLabel}</h1>
               <p className="mt-[13px] text-slate-400 text-lg">
-                {data?.total ?? 0} {t('category.subtitle')}
+                {total} {t('category.subtitle')}
               </p>
             </div>
           </div>

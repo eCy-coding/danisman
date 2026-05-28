@@ -18,8 +18,7 @@ export function InsightArchive() {
   const selectedYear = yearParam ? parseInt(yearParam, 10) : undefined;
   const selectedMonth = monthParam ? parseInt(monthParam, 10) : undefined;
 
-  const { data, isLoading } = useInsightsFeed({ year: selectedYear, month: selectedMonth });
-  const posts = data?.posts ?? [];
+  const { posts, isLoading } = useInsightsFeed({ year: selectedYear, month: selectedMonth });
 
   const yearTitle = selectedYear ? ` — ${selectedYear}` : '';
   const pageTitle = `Arşiv${yearTitle} | Perspektif | eCyPro`;
@@ -30,7 +29,7 @@ export function InsightArchive() {
   const postsByMonth: Record<number, typeof posts> = {};
   if (selectedYear) {
     posts.forEach((p) => {
-      const m = new Date(p.publishedAt).getMonth() + 1;
+      const m = new Date(p.publishedAt ?? '').getMonth() + 1;
       if (!postsByMonth[m]) postsByMonth[m] = [];
       postsByMonth[m].push(p);
     });

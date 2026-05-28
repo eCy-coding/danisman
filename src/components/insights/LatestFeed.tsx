@@ -131,12 +131,8 @@ export function LatestFeed({ posts, hasMore, onLoadMore, isLoading }: LatestFeed
                   right ? 'grid-cols-1 md:grid-cols-2' : 'grid-cols-1',
                 )}
               >
-                {left && (
-                  <InsightCard post={left} variant="default" data-testid="latest-feed-card" />
-                )}
-                {right && (
-                  <InsightCard post={right} variant="default" data-testid="latest-feed-card" />
-                )}
+                {left && <InsightCard post={left} data-testid="latest-feed-card" />}
+                {right && <InsightCard post={right} data-testid="latest-feed-card" />}
               </div>
             );
           })}

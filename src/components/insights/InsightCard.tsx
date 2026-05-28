@@ -1,11 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import type { InsightPost } from '@/types/insights';
+import type { InsightPostCard } from '@/types/insights';
 import { DOMAIN_META } from '@/types/insights';
 
 interface InsightCardProps {
-  post: InsightPost;
+  post: InsightPostCard;
   size?: 'sm' | 'md' | 'lg';
   showExcerpt?: boolean;
   className?: string;
@@ -25,7 +25,7 @@ export function InsightCard({
   const cardPadding = size === 'sm' ? 'p-[13px]' : 'p-[21px]';
   const imgHeight = size === 'lg' ? 'h-48' : size === 'md' ? 'h-36' : 'h-28';
 
-  const publishedDate = new Date(post.publishedAt).toLocaleDateString('tr-TR', {
+  const publishedDate = new Date(post.publishedAt ?? '').toLocaleDateString('tr-TR', {
     day: 'numeric',
     month: 'long',
     year: 'numeric',

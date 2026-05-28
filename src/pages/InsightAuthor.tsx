@@ -11,8 +11,7 @@ export function InsightAuthor() {
   const { slug } = useParams<{ slug: string }>();
   const { t } = useTranslation('insights');
 
-  const { data, isLoading } = useInsightsFeed({ authorSlug: slug });
-  const posts = data?.posts ?? [];
+  const { posts, isLoading } = useInsightsFeed({ authorSlug: slug });
 
   // Derive author from first post (stub — Wave-1 will provide dedicated author endpoint)
   const author = posts[0]?.author ?? {

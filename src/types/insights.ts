@@ -147,6 +147,8 @@ export type InsightPostCard = Pick<
   | 'isEditorsPick'
   | 'author'
   | 'tags'
+  | 'seriesOrder'
+  | 'series'
 >;
 
 export interface InsightsFeedResponse {
