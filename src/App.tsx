@@ -302,6 +302,11 @@ const AdminInsightsPostEditPage = React.lazy(() =>
     default: module.AdminInsightsPostEditPage,
   })),
 );
+const AdminInsightsMetadataPage = React.lazy(() =>
+  import('./pages/admin/AdminInsightsMetadataPage').then((module) => ({
+    default: module.AdminInsightsMetadataPage,
+  })),
+);
 const StatusPage = React.lazy(() =>
   import('./pages/StatusPage').then((module) => ({ default: module.StatusPage })),
 );
@@ -1443,6 +1448,14 @@ const AnimatedRoutes = () => {
                 element={
                   <Suspense fallback={<LoadingFallback />}>
                     <AdminInsightsPostEditPage />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="insights/metadata"
+                element={
+                  <Suspense fallback={<LoadingFallback />}>
+                    <AdminInsightsMetadataPage />
                   </Suspense>
                 }
               />
