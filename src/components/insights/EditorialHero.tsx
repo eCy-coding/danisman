@@ -105,6 +105,7 @@ export function EditorialHero({ featuredPost }: EditorialHeroProps) {
                   <img
                     src={featuredPost.coverImageUrl}
                     alt={featuredPost.coverImageAlt}
+                    loading="eager"
                     className="w-full h-full object-cover"
                   />
                 </div>
@@ -138,6 +139,7 @@ export function EditorialHero({ featuredPost }: EditorialHeroProps) {
                   <img
                     src={featuredPost.author.avatarUrl}
                     alt={featuredPost.author.displayName}
+                    loading="lazy"
                     className="w-8 h-8 rounded-full object-cover"
                   />
                   <div>

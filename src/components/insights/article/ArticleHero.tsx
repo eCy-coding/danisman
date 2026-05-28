@@ -27,6 +27,7 @@ export function ArticleHero({ post }: ArticleHeroProps) {
         <img
           src={post.coverImageUrl}
           alt={post.coverImageAlt}
+          loading="eager"
           className="w-full max-h-[480px] object-cover"
           data-testid="hero-cover-image"
         />
@@ -110,6 +111,7 @@ export function ArticleHero({ post }: ArticleHeroProps) {
             <img
               src={post.author.avatarUrl}
               alt={post.author.displayName}
+              loading="lazy"
               className="h-10 w-10 rounded-full object-cover ring-2 ring-amber-200"
             />
             <div>

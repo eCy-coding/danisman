@@ -461,6 +461,7 @@ export const Hero: React.FC = () => {
                 alt="Emre Can Yalçın"
                 width={40}
                 height={40}
+                loading="lazy"
                 className="w-10 h-10 rounded-full object-cover border border-white/10 shrink-0"
                 onError={(e) => {
                   (e.currentTarget as HTMLImageElement).src = '/brand/founder-fallback.svg';

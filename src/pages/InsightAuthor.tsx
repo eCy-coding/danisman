@@ -57,6 +57,7 @@ export function InsightAuthor() {
               <img
                 src={author.avatarUrl}
                 alt={author.displayName}
+                loading="lazy"
                 className="w-24 h-24 md:w-32 md:h-32 rounded-full object-cover bg-slate-700 flex-shrink-0 border-2 border-amber-500/30"
               />
               <div>

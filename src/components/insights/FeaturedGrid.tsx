@@ -73,6 +73,7 @@ function FeaturedPostCard({ post, large = false }: { post: InsightPostCard; larg
           <img
             src={post.author.avatarUrl}
             alt={post.author.displayName}
+            loading="lazy"
             className="w-7 h-7 rounded-full object-cover flex-shrink-0"
           />
           <div className="flex-1 min-w-0">

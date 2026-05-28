@@ -39,6 +39,7 @@ function AuthorCard({
       <img
         src={author.avatarUrl}
         alt={author.displayName}
+        loading="lazy"
         className="h-16 w-16 rounded-full object-cover ring-2 ring-amber-100 shrink-0"
         data-testid="author-avatar"
       />
