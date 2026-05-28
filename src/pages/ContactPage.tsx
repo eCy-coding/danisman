@@ -30,16 +30,18 @@ export const ContactPage: React.FC = () => {
   return (
     <React.Fragment>
       <Helmet>
+        {/* P32-T12: keyword-optimised title (primary: "ücretsiz strateji görüşmesi" / "free strategy consultation") */}
         <title>
-          {lang.startsWith('tr') ? 'Discovery Call & İletişim' : 'Discovery Call & Contact'} |
-          eCyPro
+          {lang.startsWith('tr')
+            ? 'Ücretsiz Strateji Görüşmesi — Danışmanlık İletişim | eCyPro'
+            : 'Free Strategy Consultation — Contact eCyPro Consulting'}
         </title>
         <meta
           name="description"
           content={
             lang.startsWith('tr')
-              ? 'Discovery Call rezervasyonu ve doğrudan iletişim — 45 dakikalık ücretsiz strateji görüşmesi. KVKK, EU regülasyon ve dijital dönüşüm pratiği.'
-              : 'Book a Discovery Call or contact us directly — a complimentary 45-minute strategy session. KVKK, EU regulatory, and digital transformation practice.'
+              ? '45 dakikalık ücretsiz strateji görüşmesi rezervasyonu. KVKK uyumu, dijital dönüşüm ve operasyonel verimlilik danışmanlığı için doğrudan iletişim.'
+              : 'Book a complimentary 45-minute strategy session. Direct contact for KVKK compliance, digital transformation and operational efficiency consulting.'
           }
         />
         <link rel="canonical" href={buildCanonical('/contact', lang)} />

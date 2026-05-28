@@ -56,10 +56,11 @@ export const PricingPage: React.FC = () => {
   return (
     <React.Fragment>
       <Helmet>
-        <title>Fiyatlandırma — Starter, Growth, Enterprise | eCyPro Premium Consulting</title>
+        {/* P32-T12: keyword-optimised title (primary: "danışmanlık fiyatlandırma" / "consulting pricing Turkey") */}
+        <title>Danışmanlık Fiyatlandırma — Starter, Growth, Enterprise | eCyPro</title>
         <meta
           name="description"
-          content="eCyPro şeffaf USD fiyatlandırma: Starter 15K-25K, Growth 25K-50K, Enterprise custom. Sonuç bazlı retainer model. Founder Emre Can Yalçın her tier'da doğrudan eşlik eder."
+          content="eCyPro stratejik danışmanlık fiyatlandırması: Starter $15K-25K, Growth $25K-50K, Enterprise özel teklif. Sonuç & milestone bazlı retainer. Founder doğrudan eşlik eder."
         />
         <link rel="canonical" href={buildCanonical('/pricing', 'tr')} />
         <meta property="og:title" content="Fiyatlandırma — Starter, Growth, Enterprise | eCyPro" />

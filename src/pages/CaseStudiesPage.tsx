@@ -45,10 +45,19 @@ export const CaseStudiesPage: React.FC = () => {
   return (
     <React.Fragment>
       <Helmet>
-        <title>Başarı Hikayeleri | eCyPro Premium Consulting</title>
+        {/* P32-T12: keyword-optimised title + TR/EN bilingual */}
+        <title>
+          {language === 'tr'
+            ? 'Vaka Çalışmaları & Başarı Hikayeleri | eCyPro Danışmanlık'
+            : 'Consulting Case Studies & Success Stories | eCyPro'}
+        </title>
         <meta
           name="description"
-          content="Müşterilerimizle birlikte yazdığımız başarı hikayeleri. Dönüşüm yolculuklarına tanıklık edin."
+          content={
+            language === 'tr'
+              ? 'Stratejik danışmanlık, operasyonel verimlilik ve dijital dönüşüm projelerinden vaka çalışmaları. Gerçek ölçülebilir sonuçlar, anonim müşteri hikayeleri.'
+              : 'Case studies from strategic consulting, operational efficiency and digital transformation projects. Measurable results, anonymized client success stories.'
+          }
         />
         <link rel="canonical" href={buildCanonical('/case-studies', language)} />
       </Helmet>
