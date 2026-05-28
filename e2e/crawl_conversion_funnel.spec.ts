@@ -109,42 +109,6 @@ test.describe('Crawler: Conversion Funnel — P34 (T31-T40)', () => {
     });
   }
 
-  // ── ROI CALCULATOR FUNNEL ─────────────────────────────────────────
-  test('P34-T32: ROI Calculator — funnel step 1 (açılıyor ve çalışıyor)', async ({ page }) => {
-    test.setTimeout(20000);
-    await setupMocks(page);
-    await page.goto(BASE_URL, { waitUntil: 'domcontentloaded' });
-    await page.waitForTimeout(600);
-
-    // ROI Calculator component'ini bul
-    const roiSelector =
-      '[data-testid="roi-calculator"], .roi-calculator, #roi-calculator, [class*="roi"], [class*="ROI"]';
-    const hasROI = await page
-      .locator(roiSelector)
-      .first()
-      .isVisible()
-      .catch(() => false);
-
-    if (!hasROI) {
-      // Belki başka sayfada
-      await page.goto(`${BASE_URL}/services`, { waitUntil: 'domcontentloaded' });
-      await page.waitForTimeout(400);
-      const hasROIServices = await page
-        .locator(roiSelector)
-        .first()
-        .isVisible()
-        .catch(() => false);
-      if (!hasROIServices) {
-        console.warn("⚠ P34-T32: ROI Calculator homepage/services'te bulunamadı");
-        return; // Soft skip
-      }
-    }
-
-    // ROI Calculator etkileşim testi
-    const roiEl = page.locator(roiSelector).first();
-    await expect(roiEl).toBeVisible();
-  });
-
   // ── GA4 DATALAYER: booking event ─────────────────────────────────
   test('P34-T31: GA4 dataLayer başlıyor (window.dataLayer init)', async ({ page }) => {
     await setupMocks(page);

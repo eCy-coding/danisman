@@ -4,7 +4,6 @@ import {
   trackCTA,
   trackScrollDepth,
   trackForm,
-  trackROICalc,
   trackPageView,
   trackBooking,
 } from './analytics';
@@ -102,26 +101,6 @@ describe('analytics', () => {
         'event',
         'form_abandon',
         expect.objectContaining({ form_id: 'booking', last_field: 'email' }),
-      );
-    });
-  });
-
-  describe('trackROICalc', () => {
-    it('fires roi_calculator with step', () => {
-      trackROICalc('start');
-      expect(gtagSpy).toHaveBeenCalledWith(
-        'event',
-        'roi_calculator',
-        expect.objectContaining({ roi_step: 'start' }),
-      );
-    });
-
-    it('includes values snapshot when provided', () => {
-      trackROICalc('result_view', { revenue: '5000000', roiResult: 340 });
-      expect(gtagSpy).toHaveBeenCalledWith(
-        'event',
-        'roi_calculator',
-        expect.objectContaining({ roi_step: 'result_view', revenue: '5000000', roiResult: 340 }),
       );
     });
   });

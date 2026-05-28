@@ -66,18 +66,6 @@ export const trackForm = (
 };
 
 /**
- * ROI Calculator funnel step tracking.
- * @param step  "start" | "input_revenue" | "input_efficiency" | "input_cost" | "result_view" | "cta_click"
- * @param values  Current calculator values snapshot (debounced, no PII)
- */
-export const trackROICalc = (
-  step: 'start' | 'input_revenue' | 'input_efficiency' | 'input_cost' | 'result_view' | 'cta_click',
-  values?: { revenue?: string; efficiencyGain?: string; cost?: string; roiResult?: number },
-): void => {
-  _push('roi_calculator', { roi_step: step, ...values });
-};
-
-/**
  * Page view with enhanced context (locale, persona, referrer).
  * Supplement GA4's automatic page_view with richer data.
  */
