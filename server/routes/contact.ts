@@ -21,6 +21,7 @@
 
 import { Router, Request, Response, NextFunction } from 'express';
 import { z } from 'zod';
+import * as Sentry from '@sentry/node';
 import { contactStrictLimiter } from '../middleware/rateLimiter';
 import { idempotency } from '../middleware/idempotency';
 import { HttpError } from '../middleware/error';
@@ -28,7 +29,11 @@ import { notify } from '../lib/telegram';
 import { logger } from '../config/logger';
 import { capture as posthogCapture } from '../lib/posthog-server';
 import { upsertProspect } from '../services/notion';
-import { sendContactAck, isResendConfigured } from '../services/contact-ack';
+import {
+  sendContactAck,
+  sendFounderNotification,
+  isResendConfigured,
+} from '../services/contact-ack';
 import { withOutboxRecord } from '../lib/outbox';
 
 const router = Router();
@@ -116,12 +121,38 @@ router.post(
         IP: req.ip ?? 'unknown',
       });
 
-      // Best-effort ack to the lead — never block on email delivery. Recorded
-      // through the integration Outbox / WAL so a Resend blip is retried by the
-      // process-outbox cron instead of silently dropping the autoresponder.
-      // payload carries only { to, name, kind } — no email body. Skip the WAL
-      // entirely when Resend is unconfigured (dev / CI) to avoid noise rows.
+      // Resend dual-send: founder notification + visitor confirmation.
+      // Both wrapped in outbox WAL so a Resend blip is retried by cron.
+      // Skip entirely when Resend is unconfigured (dev / CI).
       if (isResendConfigured()) {
+        void withOutboxRecord(
+          {
+            service: 'RESEND',
+            operation: 'sendFounderNotification',
+            payload: {
+              name: data.name,
+              email: data.email,
+              message: data.message.slice(0, 1200),
+              company: data.company || undefined,
+              phone: data.phone || undefined,
+              subject: data.serviceInterest || undefined,
+            },
+          },
+          () =>
+            sendFounderNotification({
+              name: data.name,
+              email: data.email,
+              message: data.message,
+              company: data.company || undefined,
+              phone: data.phone || undefined,
+              subject: data.serviceInterest || undefined,
+            }),
+        ).catch((err) =>
+          logger.warn('[contact] founder notification failed — recorded in outbox for retry', {
+            err: String(err),
+          }),
+        );
+
         void withOutboxRecord(
           {
             service: 'RESEND',
@@ -173,6 +204,7 @@ router.post(
 
       res.json({ ok: true });
     } catch (err) {
+      Sentry.captureException(err);
       next(err);
     }
   },

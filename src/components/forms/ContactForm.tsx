@@ -46,12 +46,14 @@ export const ContactForm: React.FC = () => {
   } = rhf;
 
   const isSubmitting = status === 'submitting';
-  const submitStatus: 'idle' | 'success' | 'error' =
+  const submitStatus: 'idle' | 'success' | 'error' | 'rate_limited' =
     status === 'success'
       ? 'success'
-      : status === 'error' || status === 'rate_limited'
-        ? 'error'
-        : 'idle';
+      : status === 'rate_limited'
+        ? 'rate_limited'
+        : status === 'error'
+          ? 'error'
+          : 'idle';
 
   // On success: brief inline confirmation, then route to /thank-you so the
   // post-conversion experience (case studies + Calendly direct + newsletter)
@@ -323,7 +325,40 @@ export const ContactForm: React.FC = () => {
           <div>
             <p className="font-bold">{t('contact.form.success_title') || 'Mesajınız İletildi!'}</p>
             <p className="text-sm">
-              {t('contact.form.success_desc') || 'En kısa sürede size dönüş yapacağız.'}
+              {t('contact.form.success_desc') ||
+                '48 saat içinde Founder Emre Can Yalçın size dönecek.'}
+            </p>
+          </div>
+        </div>
+      )}
+
+      {submitStatus === 'rate_limited' && (
+        <div
+          role="alert"
+          aria-live="assertive"
+          data-testid="contact-rate-limited"
+          className="p-4 bg-amber-500/10 text-amber-400 rounded-xl flex items-center gap-3 animate-fade-in"
+        >
+          <AlertCircle size={24} aria-hidden="true" />
+          <div>
+            <p className="font-bold">
+              {t('contact.form.rate_limited_title') || 'Çok fazla deneme'}
+            </p>
+            <p className="text-sm">
+              {t('contact.form.rate_limited_desc') || (
+                <>
+                  Bir süre sonra tekrar deneyin veya{' '}
+                  <a
+                    href="https://wa.me/905417143000"
+                    className="underline hover:text-amber-300"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    WhatsApp
+                  </a>{' '}
+                  ile yazın.
+                </>
+              )}
             </p>
           </div>
         </div>
@@ -338,9 +373,24 @@ export const ContactForm: React.FC = () => {
         >
           <AlertCircle size={24} aria-hidden="true" />
           <div>
-            <p className="font-bold">{t('contact.form.error_title') || 'Bir Hata Oluştu'}</p>
+            <p className="font-bold">
+              {t('contact.form.error_title') || 'Geçici bir sorun oluştu'}
+            </p>
             <p className="text-sm">
-              {t('contact.form.error_desc') || 'Lütfen tekrar deneyiniz veya telefon ile ulaşınız.'}
+              {t('contact.form.error_desc') || (
+                <>
+                  Lütfen tekrar deneyin veya{' '}
+                  <a
+                    href="https://wa.me/905417143000"
+                    className="underline hover:text-red-300"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    WhatsApp
+                  </a>{' '}
+                  ile Founder'a direkt yazın.
+                </>
+              )}
             </p>
           </div>
         </div>

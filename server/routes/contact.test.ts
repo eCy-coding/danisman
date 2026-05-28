@@ -1,5 +1,5 @@
 /**
- * P12/2 — contact route tests
+ * P12/2 + L1-4 — contact route tests
  *
  * Verifies:
  *   - valid payload → 200 ok:true and Telegram notify() called
@@ -7,6 +7,8 @@
  *   - honeypot triggered → 200 ok:true and notify() NOT called
  *   - missing TELEGRAM_BOT_TOKEN in prod → 503 NOTIFY_DISABLED
  *   - missing TELEGRAM_BOT_TOKEN in dev → 200 demo:true
+ *   - Resend dual-send (founder + user) when RESEND configured
+ *   - Sentry.captureException called on Telegram failure
  */
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import request from 'supertest';
@@ -16,10 +18,36 @@ import express from 'express';
 // `const` declarations, so referencing a top-level `notifyMock` inside
 // the factory used to crash with "Cannot access before initialization".
 // `vi.hoisted` lifts the mock fn into the same hoist phase as `vi.mock`.
-const { notifyMock } = vi.hoisted(() => ({
+const {
+  notifyMock,
+  sendContactAckMock,
+  sendFounderNotificationMock,
+  isResendConfiguredMock,
+  sentryCaptureExceptionMock,
+} = vi.hoisted(() => ({
   notifyMock: vi.fn(async () => undefined),
+  sendContactAckMock: vi.fn(async () => undefined),
+  sendFounderNotificationMock: vi.fn(async () => undefined),
+  isResendConfiguredMock: vi.fn(() => false),
+  sentryCaptureExceptionMock: vi.fn(),
 }));
+
 vi.mock('../lib/telegram', () => ({ notify: notifyMock }));
+
+vi.mock('../services/contact-ack', () => ({
+  sendContactAck: sendContactAckMock,
+  sendFounderNotification: sendFounderNotificationMock,
+  isResendConfigured: isResendConfiguredMock,
+}));
+
+// outbox calls prisma — mock to directly invoke the operation
+vi.mock('../lib/outbox', () => ({
+  withOutboxRecord: vi.fn((_ctx: unknown, fn: () => Promise<unknown>) => fn()),
+}));
+
+vi.mock('@sentry/node', () => ({
+  captureException: sentryCaptureExceptionMock,
+}));
 
 // In-memory rate limiter requires redis client; mock it
 vi.mock('../config/redis', () => ({
@@ -47,6 +75,11 @@ describe('POST /api/contact', () => {
 
   beforeEach(() => {
     notifyMock.mockClear();
+    sendContactAckMock.mockClear();
+    sendFounderNotificationMock.mockClear();
+    isResendConfiguredMock.mockClear();
+    isResendConfiguredMock.mockReturnValue(false);
+    sentryCaptureExceptionMock.mockClear();
     // P26-BE Aşama 3 — clear in-memory rate-limit fallback so each test
     // starts with a fresh 3/h budget for the shared contactLimiter.
     __resetFallbackStoreForTests();
@@ -138,5 +171,104 @@ describe('POST /api/contact', () => {
     expect(res.status).toBe(200);
     expect(res.body).toEqual({ ok: true, demo: true });
     expect(notifyMock).not.toHaveBeenCalled();
+  });
+});
+
+// L1-4 — Resend dual-send: founder notification + user ack
+describe('POST /api/contact — Resend dual-send', () => {
+  const originalEnv = { ...process.env };
+
+  beforeEach(() => {
+    notifyMock.mockClear();
+    sendContactAckMock.mockClear();
+    sendFounderNotificationMock.mockClear();
+    isResendConfiguredMock.mockClear();
+    sentryCaptureExceptionMock.mockClear();
+    __resetFallbackStoreForTests();
+    process.env = { ...originalEnv };
+    process.env.TELEGRAM_BOT_TOKEN = 'test-token';
+    process.env.TELEGRAM_CHAT_ID = '1234';
+    process.env.NODE_ENV = 'test';
+  });
+
+  afterEach(() => {
+    process.env = originalEnv;
+  });
+
+  it('calls sendFounderNotification when Resend is configured', async () => {
+    isResendConfiguredMock.mockReturnValue(true);
+
+    const res = await request(makeApp()).post('/api/contact').send({
+      name: 'Ada Lovelace',
+      email: 'ada@example.com',
+      message: 'I need consulting on the difference engine.',
+      kvkkConsent: true,
+    });
+
+    expect(res.status).toBe(200);
+    expect(sendFounderNotificationMock).toHaveBeenCalledTimes(1);
+    expect(sendFounderNotificationMock).toHaveBeenCalledWith(
+      expect.objectContaining({ name: 'Ada Lovelace', email: 'ada@example.com' }),
+    );
+  });
+
+  it('calls sendContactAck (user ack) when Resend is configured', async () => {
+    isResendConfiguredMock.mockReturnValue(true);
+
+    await request(makeApp()).post('/api/contact').send({
+      name: 'Ada Lovelace',
+      email: 'ada@example.com',
+      message: 'I need consulting on the difference engine.',
+      kvkkConsent: true,
+    });
+
+    expect(sendContactAckMock).toHaveBeenCalledWith(
+      expect.objectContaining({ to: 'ada@example.com', name: 'Ada Lovelace' }),
+    );
+  });
+
+  it('skips Resend calls when not configured', async () => {
+    isResendConfiguredMock.mockReturnValue(false);
+
+    await request(makeApp()).post('/api/contact').send({
+      name: 'Ada Lovelace',
+      email: 'ada@example.com',
+      message: 'I need consulting on the difference engine.',
+      kvkkConsent: true,
+    });
+
+    expect(sendFounderNotificationMock).not.toHaveBeenCalled();
+  });
+});
+
+// L1-4 — Sentry exception capture on route error
+describe('POST /api/contact — Sentry capture', () => {
+  const originalEnv = { ...process.env };
+
+  beforeEach(() => {
+    notifyMock.mockClear();
+    sentryCaptureExceptionMock.mockClear();
+    __resetFallbackStoreForTests();
+    process.env = { ...originalEnv };
+    process.env.TELEGRAM_BOT_TOKEN = 'test-token';
+    process.env.TELEGRAM_CHAT_ID = '1234';
+    process.env.NODE_ENV = 'test';
+  });
+
+  afterEach(() => {
+    process.env = originalEnv;
+  });
+
+  it('calls Sentry.captureException when Telegram notify throws', async () => {
+    notifyMock.mockRejectedValueOnce(new Error('Telegram 503'));
+
+    await request(makeApp()).post('/api/contact').send({
+      name: 'Ada Lovelace',
+      email: 'ada@example.com',
+      message: 'I need consulting on the difference engine.',
+      kvkkConsent: true,
+    });
+
+    expect(sentryCaptureExceptionMock).toHaveBeenCalledTimes(1);
   });
 });
