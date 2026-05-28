@@ -65,6 +65,9 @@ const IndustriesPage = React.lazy(() =>
 const MethodologyPage = React.lazy(() =>
   import('./pages/MethodologyPage').then((module) => ({ default: module.MethodologyPage })),
 );
+const FounderPage = React.lazy(() =>
+  import('./pages/FounderPage').then((module) => ({ default: module.FounderPage })),
+);
 const PartnersPage = React.lazy(() =>
   import('./pages/PartnersPage').then((module) => ({ default: module.PartnersPage })),
 );
@@ -1235,9 +1238,16 @@ const AnimatedRoutes = () => {
         )}
         {/* P39-T02: /locale-detect → redirects root domain to /tr or /en */}
         <Route path="/locale-detect" element={<LocaleRedirect />} />
-        {/* P45 C1: Bare /founder ve /data-rights URL'leri NotFoundPage'e değil
-            kanonik konumlarına yönlensin. Eski linkler ve harici referanslar için. */}
-        <Route path="/founder" element={<Navigate to="/about" replace />} />
+        {/* L1-6: /founder → real FounderPage (bio + Big4 vs Boutique + manifesto) */}
+        <Route
+          path="/founder"
+          element={
+            <Suspense fallback={<LoadingFallback />}>
+              <FounderPage />
+            </Suspense>
+          }
+        />
+        {/* P45 C1: /data-rights → kanonik konuma yönlensin */}
         <Route path="/data-rights" element={<Navigate to="/privacy/data-rights" replace />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>

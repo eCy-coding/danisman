@@ -27,7 +27,7 @@ export function buildFounderSchema() {
     description:
       'Founder of eCyPro Premium Consulting and the eCyverse ecosystem. Strategic management advisory, organizational transformation, and culture engineering practitioner.',
     worksFor: { '@id': 'https://www.ecypro.com/#organization' },
-    url: 'https://www.ecypro.com/about',
+    url: 'https://www.ecypro.com/founder',
     image: 'https://www.ecypro.com/founder.jpg',
     ...(sameAs.length ? { sameAs } : {}),
     knowsAbout: [
