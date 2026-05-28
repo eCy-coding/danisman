@@ -93,6 +93,6 @@
 - [x] HIBP password breach check
 - [x] Admin session management dashboard
 - [x] npm audit + Snyk CI entegre
-- [ ] Tag: `git tag phase-35-closed`
+- [x] Tag: `git tag phase-35-closed`
 
 **Bir Sonraki:** `roadmap_60.md` — Phase 36 Admin Panel + CMS.
