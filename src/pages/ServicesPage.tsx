@@ -12,6 +12,8 @@ import { useInterestTracker } from '@/hooks/useInterestTracker';
 import { usePersonalizationStore } from '@/lib/stores/personalizationStore';
 import { useTranslation } from 'react-i18next';
 import { PageWrapper } from '../components/layout/PageWrapper';
+import { ServicesClusterSection } from '../components/sections/ServicesClusterSection';
+import { ServicesDiscoveryCTA } from '../components/sections/ServicesDiscoveryCTA';
 
 // P6 — below-fold heavy components are lazy + intersection-gated so Lighthouse
 // can reach CPU idle on this route (previously PAGE_HUNG across 4 consecutive
@@ -320,6 +322,12 @@ export const ServicesPage: React.FC = () => {
           </div>
         </div>
       </PageWrapper>
+
+      {/* atom-2-2/3/4/5: 4 cluster grouped view */}
+      <ServicesClusterSection />
+
+      {/* atom-2-6: Discovery CTA with KVKKBadge */}
+      <ServicesDiscoveryCTA />
     </React.Fragment>
   );
 };
