@@ -39,6 +39,14 @@ const STATIC_ROUTES = [
   'webinars/esg-cbam-2026-readiness',
   'webinars/family-business-transition-2026',
   'industry-reports/turkey-premium-consulting-2026',
+  // Wave-3A: Perspektif (Insights) hub + domain routes
+  'insights',
+  'insights/archive',
+  'insights/search',
+  'insights/m-a',
+  'insights/esg',
+  'insights/fintech',
+  'insights/aile-sirketi',
 ];
 
 const BASE_URL = 'https://www.ecypro.com';
@@ -277,4 +285,75 @@ Sitemap: ${BASE_URL}/sitemap-en.xml
   console.log(`✅ Sitemap index: sitemap-index.xml → 3 child sitemaps.`);
 }
 
-generateSitemap().catch(console.error);
+// Wave-3A: Insights chunked sitemap generator.
+// Reads stub data today; replace with live Prisma query when Wave-1 merges.
+async function generateInsightsSitemap() {
+  console.log('🗺️  Generating Insights sitemap chunk...');
+
+  const __dirname = path.dirname(fileURLToPath(import.meta.url));
+  const stubPath = path.resolve(__dirname, '../src/data/insights-stub-posts.json');
+
+  if (!fs.existsSync(stubPath)) {
+    console.warn('⚠️  insights-stub-posts.json not found — skipping insights sitemap.');
+    return;
+  }
+
+  interface InsightStub {
+    slug: string;
+    publishedAt: string;
+    updatedAt: string;
+    primaryDomain: string;
+    subDomain: string;
+  }
+
+  const posts: InsightStub[] = JSON.parse(fs.readFileSync(stubPath, 'utf-8'));
+  const publicDir = path.resolve(__dirname, '../public');
+
+  if (!fs.existsSync(publicDir)) {
+    fs.mkdirSync(publicDir, { recursive: true });
+  }
+
+  // Chunk 1 — first 5000 posts (stub has 5)
+  const chunk = posts.slice(0, 5000);
+
+  const xmlHeader = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">`;
+
+  const urls = chunk
+    .map(
+      (p) => `
+  <url>
+    <loc>https://www.ecypro.com/insights/${p.slug}</loc>
+    <lastmod>${new Date(p.updatedAt).toISOString().split('T')[0]}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>`,
+    )
+    .join('');
+
+  const xml = `${xmlHeader}${urls}
+</urlset>`;
+
+  fs.writeFileSync(path.join(publicDir, 'sitemap-insights-1.xml'), xml);
+  console.log(`✅ sitemap-insights-1.xml written (${chunk.length} URLs).`);
+
+  // Update sitemap-index.xml to include the insights chunk
+  const indexPath = path.join(publicDir, 'sitemap-index.xml');
+  if (fs.existsSync(indexPath)) {
+    let indexContent = fs.readFileSync(indexPath, 'utf-8');
+    const insightsEntry = `  <sitemap>
+    <loc>https://www.ecypro.com/sitemap-insights-1.xml</loc>
+    <lastmod>${new Date().toISOString().split('T')[0]}</lastmod>
+  </sitemap>`;
+
+    if (!indexContent.includes('sitemap-insights-1.xml')) {
+      indexContent = indexContent.replace('</sitemapindex>', `${insightsEntry}\n</sitemapindex>`);
+      fs.writeFileSync(indexPath, indexContent);
+      console.log('✅ sitemap-index.xml updated with insights chunk entry.');
+    }
+  }
+}
+
+generateSitemap()
+  .then(() => generateInsightsSitemap())
+  .catch(console.error);

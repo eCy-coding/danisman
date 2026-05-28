@@ -1,116 +1,125 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { motion } from 'motion/react';
-import { Eye, Clock } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import type { InsightPostCard } from '@/types/insights';
-import { DOMAIN_LABELS, DOMAIN_COLORS, ARTICLE_TYPE_LABELS } from '@/types/insights';
+import { useTranslation } from 'react-i18next';
+import type { InsightPost } from '@/types/insights';
+import { DOMAIN_META } from '@/types/insights';
 
 interface InsightCardProps {
-  post: InsightPostCard;
-  variant?: 'default' | 'featured' | 'compact';
+  post: InsightPost;
+  size?: 'sm' | 'md' | 'lg';
+  showExcerpt?: boolean;
   className?: string;
 }
 
-function formatDate(iso: string | undefined): string {
-  if (!iso) return '';
-  return new Intl.DateTimeFormat('tr-TR', {
+export function InsightCard({
+  post,
+  size = 'md',
+  showExcerpt = false,
+  className = '',
+}: InsightCardProps) {
+  const { t } = useTranslation('insights');
+  const domainMeta = DOMAIN_META[post.primaryDomain];
+
+  const titleClamp =
+    size === 'sm' ? 'line-clamp-2' : size === 'lg' ? 'line-clamp-3' : 'line-clamp-2';
+  const cardPadding = size === 'sm' ? 'p-[13px]' : 'p-[21px]';
+  const imgHeight = size === 'lg' ? 'h-48' : size === 'md' ? 'h-36' : 'h-28';
+
+  const publishedDate = new Date(post.publishedAt).toLocaleDateString('tr-TR', {
     day: 'numeric',
     month: 'long',
     year: 'numeric',
-  }).format(new Date(iso));
-}
-
-export function InsightCard({ post, variant = 'default', className }: InsightCardProps) {
-  const domainColor = DOMAIN_COLORS[post.primaryDomain];
-  const domainLabel = DOMAIN_LABELS[post.primaryDomain].tr;
-  const typeLabel = ARTICLE_TYPE_LABELS[post.type].tr;
+  });
 
   return (
-    <motion.article
-      whileHover={{ y: -4 }}
-      transition={{ duration: 0.2, ease: 'easeOut' }}
-      className={cn(
-        'bg-white rounded-xl border border-slate-200 overflow-hidden group',
-        variant === 'compact' && 'flex gap-3 items-start p-3',
-        variant === 'featured' && 'shadow-md',
-        className,
-      )}
+    <Link
+      to={`/insights/${post.slug}`}
       data-testid="insight-card"
+      className={[
+        'group flex flex-col bg-slate-900 border border-slate-800 rounded-lg overflow-hidden',
+        'transition-all duration-200 hover:scale-[1.01] hover:shadow-lg hover:shadow-slate-900/50',
+        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500',
+        className,
+      ].join(' ')}
     >
-      {variant !== 'compact' && (
-        <Link to={`/insights/${post.slug}`} className="block relative overflow-hidden">
-          <div className="aspect-[16/9] bg-slate-100">
-            <img
-              src={post.coverImageUrl}
-              alt={post.coverImageAlt}
-              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-              loading="lazy"
-            />
-          </div>
-        </Link>
-      )}
-
-      <div className={cn('p-5', variant === 'compact' && 'p-0 flex-1')}>
-        <div className="flex flex-wrap gap-2 mb-3">
+      {/* Cover image */}
+      <div className={`relative ${imgHeight} overflow-hidden bg-slate-800`}>
+        <img
+          src={post.coverImageUrl}
+          alt={post.coverImageAlt}
+          loading="lazy"
+          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+        />
+        {post.isFeatured && (
           <span
-            className={cn(
-              'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium',
-              domainColor.text,
-            )}
-            style={{ backgroundColor: domainColor.bg }}
-            data-testid="domain-badge"
+            data-testid="featured-badge"
+            className="absolute top-2 left-2 bg-amber-500 text-slate-900 text-xs font-semibold px-2 py-0.5 rounded"
           >
-            {domainLabel}
+            {t('card.featured')}
           </span>
-          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600">
-            {typeLabel}
+        )}
+        {post.isEditorsPick && (
+          <span className="absolute top-2 right-2 bg-slate-900/80 text-amber-400 text-xs font-medium px-2 py-0.5 rounded border border-amber-500/30">
+            {t('card.editorsPick')}
           </span>
+        )}
+      </div>
+
+      {/* Content */}
+      <div className={`flex flex-col flex-1 ${cardPadding} gap-[13px]`}>
+        {/* Domain badge */}
+        <div className="flex items-center gap-2 flex-wrap">
+          <span
+            data-testid="domain-badge"
+            className="text-xs font-medium px-2 py-0.5 rounded"
+            style={{ backgroundColor: domainMeta.bgColor, color: domainMeta.color }}
+          >
+            {domainMeta.labelTr}
+          </span>
+          {post.seriesOrder !== undefined && post.series && (
+            <span
+              data-testid="series-badge"
+              className="text-xs font-medium px-2 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700"
+            >
+              {t('card.seriesPart', { part: post.seriesOrder })}
+            </span>
+          )}
         </div>
 
-        <Link to={`/insights/${post.slug}`}>
-          <h3
-            className={cn(
-              'font-semibold text-slate-900 line-clamp-2 hover:text-amber-700 transition-colors',
-              variant === 'featured' ? 'text-xl mb-3' : 'text-base mb-2',
-              variant === 'compact' && 'text-sm',
-            )}
-            data-testid="card-title"
-          >
-            {post.titleTr}
-          </h3>
-        </Link>
+        {/* Title */}
+        <h3
+          className={`font-semibold text-slate-100 leading-snug ${titleClamp} ${size === 'lg' ? 'text-xl' : 'text-base'}`}
+        >
+          {post.titleTr}
+        </h3>
 
-        {variant !== 'compact' && post.excerptTr && (
-          <p className="text-sm text-slate-600 line-clamp-2 mb-4">{post.excerptTr}</p>
+        {/* Excerpt */}
+        {showExcerpt && post.excerptTr && (
+          <p className="text-sm text-slate-400 line-clamp-2">{post.excerptTr}</p>
         )}
 
-        <div className="flex items-center gap-3 mt-auto">
+        {/* Footer: author + meta */}
+        <div className="flex items-center gap-[13px] mt-auto pt-[13px] border-t border-slate-800">
           <img
             src={post.author.avatarUrl}
             alt={post.author.displayName}
-            className="w-7 h-7 rounded-full object-cover flex-shrink-0"
+            className="w-7 h-7 rounded-full object-cover bg-slate-700 flex-shrink-0"
+            loading="lazy"
           />
-          <div className="min-w-0 flex-1">
-            <p className="text-xs font-medium text-slate-700 truncate">{post.author.displayName}</p>
-            <div className="flex items-center gap-2 text-xs text-slate-500">
-              {post.publishedAt && (
-                <time dateTime={post.publishedAt}>{formatDate(post.publishedAt)}</time>
-              )}
+          <div className="flex flex-col min-w-0">
+            <span className="text-xs font-medium text-slate-300 truncate">
+              {post.author.displayName}
+            </span>
+            <div className="flex items-center gap-[8px] text-xs text-slate-500">
+              <span>{publishedDate}</span>
+              <span aria-hidden="true">·</span>
+              <span>
+                {post.readingTimeMin} {t('card.minRead')}
+              </span>
             </div>
-          </div>
-          <div className="flex items-center gap-2 text-xs text-slate-500 flex-shrink-0">
-            <span className="flex items-center gap-1">
-              <Clock className="w-3 h-3" />
-              {post.readingTimeMin} dk
-            </span>
-            <span className="flex items-center gap-1">
-              <Eye className="w-3 h-3" />
-              {post.viewCount.toLocaleString('tr-TR')}
-            </span>
           </div>
         </div>
       </div>
-    </motion.article>
+    </Link>
   );
 }

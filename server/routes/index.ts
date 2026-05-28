@@ -53,6 +53,8 @@ import adminRbacRoutes from './admin-rbac';
 // Perspektif Blog — PB-2 admin API + PB-3 public search
 import { adminInsightsRouter } from './admin-insights';
 import { publicInsightsSearchRouter } from './public-insights-search';
+// Wave-3A — Insights SEO sitemap management
+import insightsSeoRoutes from './insights-seo';
 import { openApiSpec } from '../config/openapi';
 import { redis } from '../config/redis';
 import { prisma } from '../config/db';
@@ -526,5 +528,7 @@ router.use('/uploads', uploadsGetRoutes);
 
 // P23 BE Track 2 / Aşama 1 — `/api/stream`, `/api/stream/publish`, `/api/stream/_stats`.
 router.use('/', streamRoutes);
+// Wave-3A — Insights SEO sitemap management endpoints
+router.use('/insights-seo', insightsSeoRoutes);
 
 export default router;

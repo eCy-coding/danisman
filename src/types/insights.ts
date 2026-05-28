@@ -42,6 +42,7 @@ export interface InsightTag {
   labelTr: string;
   labelEn?: string;
   axis: TagAxis;
+  postCount?: number;
 }
 
 export interface InsightAuthor {
@@ -54,6 +55,7 @@ export interface InsightAuthor {
   linkedinUrl?: string;
   twitterUrl?: string;
   isFounder: boolean;
+  postCount?: number;
 }
 
 export interface InsightSeries {
@@ -65,6 +67,7 @@ export interface InsightSeries {
   descriptionEn?: string;
   coverImageUrl: string;
   totalParts: number;
+  publishedParts?: number;
   status: SeriesStatus;
 }
 
@@ -203,4 +206,49 @@ export const ARTICLE_TYPE_LABELS: Record<ArticleType, { tr: string }> = {
   REGULATORY_ALERT: { tr: 'Mevzuat' },
   BOOK_SUMMARY: { tr: 'Kitap Özeti' },
   EVENT_RECAP: { tr: 'Etkinlik' },
+};
+
+export const DOMAIN_META: Record<
+  Domain,
+  {
+    labelTr: string;
+    labelEn: string;
+    slug: string;
+    color: string;
+    accentColor: string;
+    bgColor: string;
+  }
+> = {
+  M_A: {
+    labelTr: 'M&A / Birleşme & Satın Alma',
+    labelEn: 'M&A / Mergers & Acquisitions',
+    slug: 'm-a',
+    color: '#1e40af',
+    accentColor: '#3b82f6',
+    bgColor: '#dbeafe',
+  },
+  ESG: {
+    labelTr: 'ESG / Sürdürülebilirlik',
+    labelEn: 'ESG / Sustainability',
+    slug: 'esg',
+    color: '#047857',
+    accentColor: '#10b981',
+    bgColor: '#d1fae5',
+  },
+  FINTECH: {
+    labelTr: 'Fintech / Finansal Teknoloji',
+    labelEn: 'Fintech / Financial Technology',
+    slug: 'fintech',
+    color: '#7c3aed',
+    accentColor: '#a78bfa',
+    bgColor: '#ede9fe',
+  },
+  AILE_SIRKETI: {
+    labelTr: 'Aile Şirketi / Family Business',
+    labelEn: 'Family Business',
+    slug: 'aile-sirketi',
+    color: '#b45309',
+    accentColor: '#f59e0b',
+    bgColor: '#fef3c7',
+  },
 };
