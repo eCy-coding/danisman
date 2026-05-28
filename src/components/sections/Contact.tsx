@@ -3,6 +3,7 @@ import { Send, CheckCircle, Mail, MapPin, Phone } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { MouseGlow } from '../ui/MouseGlow';
 import { MagneticButton } from '../ui/MagneticButton';
+import { CONTACT_CONFIG } from '../../constants';
 
 const ContactInfoItem: React.FC<{
   icon: React.ReactNode;
@@ -134,15 +135,16 @@ export const Contact: React.FC = () => {
             </motion.div>
 
             <div className="space-y-8">
-              <ContactInfoItem icon={<MapPin size={20} />} title="Merkez Ofis" delay={0.2}>
-                <p>
-                  Levent 199, Büyükdere Cd. No:199
-                  <br />
-                  34394 Şişli/İstanbul
-                </p>
+              <ContactInfoItem icon={<MapPin size={20} />} title="Ofis" delay={0.2}>
+                <p>İstanbul / Online görüşme — adres sahibe bağlı paylaşılır</p>
               </ContactInfoItem>
               <ContactInfoItem icon={<Phone size={20} />} title="Telefon" delay={0.3}>
-                <p>+90 (212) 555 01 23</p>
+                <a
+                  href={`tel:${CONTACT_CONFIG.phone}`}
+                  className="hover:text-secondary transition-colors"
+                >
+                  {CONTACT_CONFIG.phoneDisplay}
+                </a>
               </ContactInfoItem>
               <ContactInfoItem icon={<Mail size={20} />} title="E-posta" delay={0.4}>
                 <p>info@ecypro.com</p>

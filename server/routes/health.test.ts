@@ -157,10 +157,10 @@ describe('GET /api/health/preflight', () => {
     DATABASE_URL: 'postgresql://user:pass@localhost:5432/db',
     RESEND_API_KEY: 're_LIVE_SECRET_VALUE_ABC',
     NOTION_API_KEY: 'ntn_SECRET_VALUE_DEF',
-    NOTION_PROSPECTS_DB_ID: 'prospects-db-id',
-    NOTION_INTERACTIONS_DB_ID: 'interactions-db-id',
+    NOTION_DB_PROSPECTS: 'prospects-db-id',
   };
   const OPTIONAL: Record<string, string> = {
+    NOTION_DB_INTERACTIONS: 'interactions-db-id',
     CALENDLY_WEBHOOK_SIGNING_KEY: 'calendly-secret-key',
     SENTRY_DSN: 'https://sentry.example/123',
     TELEGRAM_BOT_TOKEN: 'telegram-bot-secret-token',

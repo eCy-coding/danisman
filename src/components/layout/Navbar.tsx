@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Menu, X, ChevronDown, ChevronUp } from 'lucide-react';
+import { Menu, X, ChevronDown, ChevronUp, MessageCircle } from 'lucide-react';
 import { NAV_ITEMS } from '@/data/copy/common';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { MegaMenu } from './MegaMenu';
@@ -11,6 +11,7 @@ import { useBodyLock } from '@/hooks/useBodyLock';
 import { useKeyPress } from '@/hooks/useKeyPress';
 import { type MultiLang } from '@/lib/i18n';
 import { EcyLogo } from '@/components/ui/EcyLogo';
+import { CONTACT_CONFIG } from '../../constants';
 
 interface NavItem {
   id: string;
@@ -227,6 +228,19 @@ export const Navbar: React.FC = () => {
           {/* Language Switcher (URL-aware) */}
           <LanguageSwitcher className="border border-white/10 rounded px-1 py-0.5" />
 
+          {/* WhatsApp CTA */}
+          <a
+            href={CONTACT_CONFIG.whatsapp}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => trackEvent('Navbar', 'Click', 'WhatsApp')}
+            aria-label="WhatsApp ile iletişime geç"
+            className="inline-flex items-center gap-2 text-[#25D366] hover:text-white border border-[#25D366]/30 hover:bg-[#25D366]/10 px-3 py-2 rounded-lg text-xs font-bold tracking-wide transition-all duration-300 outline-none focus-visible:ring-2 focus-visible:ring-secondary"
+          >
+            <MessageCircle size={15} aria-hidden="true" />
+            <span className="hidden xl:inline">WhatsApp</span>
+          </a>
+
           {/* Assessment CTA */}
           <a
             href="/maturity-assessment"
@@ -347,11 +361,22 @@ export const Navbar: React.FC = () => {
               <LanguageSwitcher className="text-base" />
             </div>
             <a
+              href={CONTACT_CONFIG.whatsapp}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => trackEvent('Navbar', 'Click', 'Mobile WhatsApp')}
+              aria-label="WhatsApp ile iletişime geç"
+              className="flex items-center justify-center gap-2 w-full py-3 border border-[#25D366]/40 text-[#25D366] font-bold rounded-lg hover:bg-[#25D366]/10 transition-colors"
+            >
+              <MessageCircle size={18} aria-hidden="true" />
+              WhatsApp
+            </a>
+            <a
               href="#contact"
               onClick={(e) => handleNavClick(e, '#contact', 'Mobile CTA')}
               className="block text-center w-full py-4 btn-premium-gold font-bold uppercase tracking-widest rounded-lg shadow-lg active:scale-95 transition-transform"
             >
-              {lang === 'tr' ? 'Hemen Başlayın' : 'Start Now'}
+              {lang === 'tr' ? 'Tanışma Toplantısı Planla' : 'Book Discovery Call'}
             </a>
           </div>
         </div>
