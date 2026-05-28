@@ -22,15 +22,6 @@ const CalendlyEmbed = React.lazy(() =>
   import('../components/booking/CalendlyEmbed').then((m) => ({ default: m.CalendlyEmbed })),
 );
 
-// P95 — ROI calculator: 3-input projection (Engagement Audit vs Quarterly
-// Retainer cost ↔ projected client return). Lazy because Recharts pulls
-// ~50 kB gzip; pricing page can paint before the widget hydrates.
-const ROICalculator = React.lazy(() =>
-  import('../components/features/roi/ROICalculator').then((m) => ({
-    default: m.ROICalculator,
-  })),
-);
-
 type Billing = 'monthly' | 'annual';
 
 interface Tier {
@@ -489,22 +480,6 @@ export const PricingPage: React.FC = () => {
                 </tbody>
               </table>
             </div>
-          </section>
-
-          {/* P95 — ROI projeksiyonu (Engagement Audit / Quarterly Retainer / Custom) */}
-          <section aria-labelledby="roi-heading" className="mb-20 max-w-4xl mx-auto">
-            <h2
-              id="roi-heading"
-              className="text-3xl font-serif font-bold text-white text-center mb-3"
-            >
-              ROI Projeksiyonu
-            </h2>
-            <p className="text-center text-slate-400 mb-8">
-              Engagement maliyetinizi 12 aylık beklenen geri dönüşle karşılaştırın.
-            </p>
-            <LazyMount placeholderHeight={192}>
-              <ROICalculator />
-            </LazyMount>
           </section>
 
           {/* FAQ */}
