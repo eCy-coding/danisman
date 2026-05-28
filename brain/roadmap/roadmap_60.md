@@ -15,7 +15,7 @@
 - **YÖNTEM:** `src/pages/admin/AdminBlogPage.tsx`: `src/content/blog/` MDX dosyalarını liste (Vite dynamic import). Her satır: title, date, status (draft/published), excerpt. "New Post" → MDX editor (`@uiw/react-md-editor` veya `@mdxeditor/editor` — MDX native). Save → backend `POST /api/admin/blog` → filesystem write + `gen:blog` trigger + `indexnow:push`. Draft/Publish toggle.
 - **TEST:** Admin → /admin/blog → 8 post listesi + "New Post" button. Yeni post yaz → save → 2 saniye içinde `/blog` sayfasında görünür (cache invalidate). GSC URL Inspection → yeni post discover edilir 1-2 gün içinde.
 
-## ⬜ P36-T02 (T52): AdminAnalyticsPage (SSE Real-Time Dashboard)
+## ✅ P36-T02 (T52): AdminAnalyticsPage (SSE Real-Time Dashboard)
 
 - **NEDEN:** Ana operasyonel pano. Gerçek zamanlı trafik, conversion, funnel görünümü. GA4'e dönmek yerine tek yerden.
 - **ÖNEM:** P1 — Operasyonel awareness.
@@ -84,7 +84,7 @@
 
 - [ ] 10/10 todo `✅`
 - [ ] AdminBlogPage inline MDX editor + publish flow
-- [ ] AdminAnalyticsPage SSE real-time 5 widget
+- [x] AdminAnalyticsPage SSE real-time 5 widget
 - [ ] AdminSettingsPage 5 tab (SEO/Analytics/Email/Flags/Integrations)
 - [ ] AdminUsersPage RBAC change + active toggle
 - [ ] AdminContactSubmissionsPage + export CSV
