@@ -20,7 +20,7 @@ export function Footnote({ id, children }: FootnoteProps) {
         onBlur={() => setShowTooltip(false)}
         aria-describedby={`footnote-tooltip-${id}`}
       >
-        [{id}]
+        <sup>[{id}]</sup>
       </button>
       {showTooltip && (
         <span
