@@ -52,6 +52,16 @@ import adminIndependenceRoutes from './admin-independence';
 import adminRbacRoutes from './admin-rbac';
 // L1-3 — Discovery form public endpoint
 import discoveryRoutes from './discovery';
+// Perspektif Blog — PB-2 admin API + PB-3 public search
+import { adminInsightsRouter } from './admin-insights';
+import { publicInsightsSearchRouter } from './public-insights-search';
+// Wave-3A — Insights SEO sitemap management
+import insightsSeoRoutes from './insights-seo';
+// Perspektif Blog — PB-11 KVKK Comments + PB-10 Admin Dashboard
+import commentsRoutes from './comments';
+import adminCommentsRoutes from './admin-comments';
+import dsarCommentsRoutes from './dsar-comments';
+import adminInsightsDashboardRoutes from './admin-insights-dashboard';
 import { openApiSpec } from '../config/openapi';
 import { redis } from '../config/redis';
 import { prisma } from '../config/db';
@@ -496,6 +506,9 @@ router.use('/admin/retention', adminRetentionRoutes);
 router.use('/admin/independence', adminIndependenceRoutes);
 // Phase 4 — RBAC Hardening
 router.use('/admin/rbac', adminRbacRoutes);
+// Perspektif Blog — PB-2 admin API + PB-3 public search
+router.use('/admin/insights', adminInsightsRouter);
+router.use('/insights', publicInsightsSearchRouter);
 router.use('/webhooks', webhookRoutes);
 router.use('/manage', manageRoutes);
 router.use('/auth/2fa', totpRoutes);
@@ -523,5 +536,13 @@ router.use('/uploads', uploadsGetRoutes);
 
 // P23 BE Track 2 / Aşama 1 — `/api/stream`, `/api/stream/publish`, `/api/stream/_stats`.
 router.use('/', streamRoutes);
+// Wave-3A — Insights SEO sitemap management endpoints
+router.use('/insights-seo', insightsSeoRoutes);
+
+// Perspektif Blog — PB-11 KVKK Comments + PB-10 Admin Dashboard
+router.use('/insights/posts', commentsRoutes);
+router.use('/admin/insights/comments', adminCommentsRoutes);
+router.use('/dsar/comments', dsarCommentsRoutes);
+router.use('/admin/insights/dashboard', adminInsightsDashboardRoutes);
 
 export default router;

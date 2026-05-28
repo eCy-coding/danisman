@@ -1221,3 +1221,284 @@ model DataResidencyTag {
   @@index([location])
   @@map("data_residency_tags")
 }
+
+// ─── PERSPEKTIF BLOG SYSTEM (PB-1 Wave-1) ────────────────────────────────────
+// 10K+ makale için: BlogPost · Tag · Series · Author · GuestAuthor
+// DraftRevision · EditorComment · Comment · ViewLog
+
+enum Domain {
+  M_A
+  ESG
+  FINTECH
+  AILE_SIRKETI
+}
+
+enum PostStatus {
+  DRAFT
+  IN_REVIEW
+  COPY_EDIT
+  SEO_REVIEW
+  LEGAL_REVIEW
+  SCHEDULED
+  PUBLISHED
+  ARCHIVED
+}
+
+enum Language {
+  TR_ONLY
+  EN_ONLY
+  BOTH
+}
+
+enum ArticleType {
+  ANALYSIS
+  OPINION
+  CASE_STUDY
+  FRAMEWORK
+  CHECKLIST
+  INTERVIEW
+  DATA_DEEP_DIVE
+  TUTORIAL
+  NEWSLETTER_RECAP
+  REGULATORY_ALERT
+  BOOK_SUMMARY
+  EVENT_RECAP
+}
+
+enum TagAxis {
+  FORMAT
+  AUDIENCE
+  GEO
+  SECTOR
+  REG
+  TREND
+}
+
+enum SeriesStatus {
+  ACTIVE
+  COMPLETED
+  ON_HIATUS
+}
+
+enum CommentStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  SPAM
+}
+
+model Author {
+  id          String     @id @default(cuid())
+  slug        String     @unique
+  displayName String
+  bioTr       String     @db.Text
+  bioEn       String?    @db.Text
+  avatarUrl   String
+  linkedinUrl String?
+  twitterUrl  String?
+  isFounder   Boolean    @default(false)
+  posts       BlogPost[]
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  @@map("authors")
+}
+
+model GuestAuthor {
+  id          String     @id @default(cuid())
+  name        String
+  affiliation String?
+  bio         String?    @db.Text
+  posts       BlogPost[]
+  createdAt   DateTime   @default(now())
+
+  @@map("guest_authors")
+}
+
+model Series {
+  id            String       @id @default(cuid())
+  slug          String       @unique
+  titleTr       String
+  titleEn       String?
+  descriptionTr String       @db.Text
+  descriptionEn String?      @db.Text
+  coverImageUrl String
+  totalParts    Int
+  status        SeriesStatus @default(ACTIVE)
+  posts         BlogPost[]
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+
+  @@map("series")
+}
+
+model BlogPost {
+  id       String      @id @default(cuid())
+  slug     String      @unique
+  slugEn   String?     @unique
+  type     ArticleType
+  status   PostStatus  @default(DRAFT)
+  language Language    @default(TR_ONLY)
+
+  // İçerik
+  titleTr   String
+  titleEn   String?
+  excerptTr String  @db.Text
+  excerptEn String? @db.Text
+  bodyTrMdx String  @db.Text
+  bodyEnMdx String? @db.Text
+
+  // Kategori hiyerarşisi L1-L4
+  primaryDomain Domain
+  subDomain     String
+  topic         String?
+  seriesId      String?
+  seriesOrder   Int?
+
+  // Tag M2M
+  tags Tag[] @relation("BlogPostTags")
+
+  // Yazar
+  authorId     String
+  author       Author        @relation(fields: [authorId], references: [id])
+  guestAuthors GuestAuthor[]
+
+  // Medya
+  coverImageUrl String
+  coverImageAlt String
+  ogImageUrl    String?
+  videoEmbedUrl String?
+
+  // SEO
+  metaTitleTr  String? @db.VarChar(60)
+  metaTitleEn  String? @db.VarChar(60)
+  metaDescTr   String? @db.VarChar(160)
+  metaDescEn   String? @db.VarChar(160)
+  canonicalUrl String?
+  noindex      Boolean @default(false)
+
+  // Etkileşim metrikleri
+  readingTimeMin            Int    @default(5)
+  viewCount                 Int    @default(0)
+  uniqueViewCount           Int    @default(0)
+  shareCount                Int    @default(0)
+  bookmarkCount             Int    @default(0)
+  commentCount              Int    @default(0)
+  avgScrollDepth            Float?
+  newsletterSignupsFromPost Int    @default(0)
+  discoveryClicksFromPost   Int    @default(0)
+
+  // Zamanlama
+  publishedAt DateTime?
+  scheduledAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  // Editoryal onay zinciri
+  copyEditedBy    String?
+  seoApprovedBy   String?
+  legalApprovedBy String?
+  publishedBy     String?
+
+  // Öne çıkarma bayrakları
+  isFeatured    Boolean @default(false)
+  isEditorsPick Boolean @default(false)
+  featureOrder  Int?
+  feedPinned    Boolean @default(false)
+
+  // İlişkiler
+  series         Series?         @relation(fields: [seriesId], references: [id])
+  draftHistory   DraftRevision[]
+  editorComments EditorComment[]
+  comments       Comment[]
+  viewLogs       ViewLog[]
+
+  // Manuel ilgili makaleler (self M2M)
+  manualRelated BlogPost[] @relation("ManualRelated")
+  relatedTo     BlogPost[] @relation("ManualRelated")
+
+  @@index([primaryDomain, subDomain, publishedAt(sort: Desc)])
+  @@index([authorId, publishedAt(sort: Desc)])
+  @@index([status, scheduledAt])
+  @@index([slug])
+  @@index([viewCount(sort: Desc)])
+  @@index([publishedAt(sort: Desc), isFeatured])
+  @@index([status, primaryDomain])
+  @@map("blog_posts")
+}
+
+model Tag {
+  id        String     @id @default(cuid())
+  slug      String     @unique
+  labelTr   String
+  labelEn   String?
+  axis      TagAxis
+  posts     BlogPost[] @relation("BlogPostTags")
+  createdAt DateTime   @default(now())
+
+  @@index([axis])
+  @@map("tags")
+}
+
+model DraftRevision {
+  id              String   @id @default(cuid())
+  postId          String
+  post            BlogPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  bodyMdxSnapshot String   @db.Text
+  authorId        String
+  message         String?
+  createdAt       DateTime @default(now())
+
+  @@index([postId, createdAt(sort: Desc)])
+  @@map("draft_revisions")
+}
+
+model EditorComment {
+  id        String   @id @default(cuid())
+  postId    String
+  post      BlogPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  authorId  String
+  contentMd String   @db.Text
+  resolved  Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([postId, resolved])
+  @@map("editor_comments")
+}
+
+model Comment {
+  id          String        @id @default(cuid())
+  postId      String
+  post        BlogPost      @relation(fields: [postId], references: [id], onDelete: Cascade)
+  authorName  String
+  // KVKK ROPA SAT-02: SHA-256 hash, 30 gün retention
+  authorEmail String
+  bodyMd      String        @db.Text
+  status      CommentStatus @default(PENDING)
+  parentId    String?
+  parent      Comment?      @relation("Nested", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  replies     Comment[]     @relation("Nested")
+  ipHash      String
+  createdAt   DateTime      @default(now())
+
+  @@index([postId, status, createdAt(sort: Desc)])
+  @@index([createdAt(sort: Desc)])
+  @@map("comments")
+}
+
+model ViewLog {
+  id          String   @id @default(cuid())
+  postId      String
+  post        BlogPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  userHash    String?
+  referrer    String?
+  duration    Int?
+  scrollDepth Float?
+  device      String?
+  geo         String?
+  createdAt   DateTime @default(now())
+
+  @@index([postId, createdAt(sort: Desc)])
+  @@index([createdAt(sort: Desc)])
+  @@map("view_logs")
+}

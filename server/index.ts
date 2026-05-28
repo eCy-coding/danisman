@@ -297,6 +297,7 @@ import { startLeadPipeline, stopLeadPipeline } from './services/lead-pipeline';
 // Integration Outbox / WAL — retries FAILED/PENDING third-party side effects
 // (Notion, Resend) so a partial failure can't silently lose a lead.
 import { startOutboxProcessor, stopOutboxProcessor } from './jobs/process-outbox';
+import { startFlushViewCountJob } from './jobs/flushViewCountJob';
 // P17 BE Track 2 / Aşama 1 — BullMQ queue workers.
 //   In single-process dev the API container also hosts the workers; in
 //   prod the worker dyno bootstraps via `server/workers/standalone.ts` and
@@ -310,6 +311,7 @@ if (process.env.NODE_ENV !== 'test') {
   startReminderJob();
   startLeadPipeline();
   startOutboxProcessor();
+  startFlushViewCountJob();
   if (process.env.DISABLE_INLINE_WORKERS !== '1') {
     startAllWorkers();
   }

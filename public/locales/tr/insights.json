@@ -1,0 +1,71 @@
+{
+  "nav": {
+    "insights": "Perspektif",
+    "all": "Tümü",
+    "archive": "Arşiv",
+    "search": "Ara"
+  },
+  "category": {
+    "subtitle": "makale",
+    "subDomainNav": "Alt Kategoriler",
+    "featuredTitle": "Öne Çıkan",
+    "latestTitle": "Son Yazılar",
+    "loadMore": "Daha Fazla Yükle"
+  },
+  "tag": {
+    "postsCount": "{{count}} makale",
+    "relatedTags": "İlgili Etiketler"
+  },
+  "series": {
+    "parts": "bölüm",
+    "published": "{{count}} bölüm yayınlandı",
+    "totalParts": "{{total}} bölüm",
+    "progressLabel": "Seri İlerlemesi",
+    "comingSoon": "Yakında",
+    "readingLog": "Okuma Geçmişi",
+    "loginPrompt": "Okuma geçmişi için giriş yapın"
+  },
+  "author": {
+    "totalPosts": "Toplam Makale",
+    "totalViews": "Toplam Görüntülenme",
+    "topDomain": "En Çok Alan",
+    "discoveryCta": "Emre ile Tanışın",
+    "founderBadge": "Kurucu Ortak"
+  },
+  "archive": {
+    "title": "Arşiv",
+    "yearSelector": "Yıl Seç",
+    "noPosts": "Bu dönemde makale yok",
+    "monthNames": ["Ocak","Şubat","Mart","Nisan","Mayıs","Haziran","Temmuz","Ağustos","Eylül","Ekim","Kasım","Aralık"]
+  },
+  "search": {
+    "placeholder": "Makale, konu veya yazar ara...",
+    "resultsCount": "{{count}} sonuç bulundu",
+    "noResults": "Sonuç bulunamadı",
+    "noResultsHint": "Farklı anahtar kelimeler deneyin veya kategori filtrelerini kullanın",
+    "fallbackCta": "Aradığınızı bulamadınız mı?",
+    "fallbackDesc": "Direkt olarak Emre ile görüşün"
+  },
+  "card": {
+    "readMore": "Devamını Oku",
+    "minRead": "dk okuma",
+    "featured": "Öne Çıkan",
+    "editorsPick": "Editör Seçimi",
+    "seriesPart": "Bölüm {{part}}"
+  },
+  "languageSwitcher": {
+    "trOnly": "Sadece TR mevcut",
+    "trOnlyTooltip": "Bu yazının İngilizcesi henüz hazır değil",
+    "availableIn": "Şu dilde mevcut:"
+  },
+  "breadcrumb": {
+    "home": "Anasayfa",
+    "insights": "Perspektif"
+  },
+  "newsletter": {
+    "title": "Founder Letter",
+    "desc": "Haftalık stratejik analiz ve piyasa görüşü",
+    "cta": "Abone Ol",
+    "kvkk": "KVKK opt-in · İstediğiniz zaman çıkın"
+  }
+}
