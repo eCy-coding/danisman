@@ -36,6 +36,15 @@ This file is the single source of truth for the project's state. Any AI agent ta
 
 ## �🟢 Completed Phases
 
+### [Phase 39] i18n + International SEO ✅ RECONCILE (2026-05-29)
+
+- Premise-verify: 9/10 todo kodda hazır (hreflang Hreflang.tsx, LocaleRoute.tsx, currency
+  store+switcher, organization-schema.ts areaServed, i18next-icu i18n-react.ts, TMS
+  memory.json+i18n-suggest.ts, rtl.ts, sitemap-tr/en/index). Checkbox'lar geriden takip ediyordu.
+- Gerçek delta: dead duplicate `src/lib/stores/currencyStore.ts` (0 importer; canlı store
+  `src/stores/currencyStore.ts`, 3 importer + test) silindi.
+- T06 GSC International Targeting = owner dashboard aksiyonu (Phase B).
+
 ### [Phase 34] Conversion + Analytics ✅ RECONCILE (2026-05-29)
 
 - Premise-verify: 9/10 todo kodda hazır (GrowthBook A/B, Clarity, useFormAnalytics,
