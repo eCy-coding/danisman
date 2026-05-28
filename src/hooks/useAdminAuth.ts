@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppStore } from '@/store/useAppStore';
 import { authApi } from '@/lib/api';
@@ -8,26 +8,51 @@ interface LoginResult {
 }
 
 export const useAdminAuth = () => {
-  const { user, token, totpRequired, totpVerified, setAuth, logout: storeLogout } = useAppStore();
+  const {
+    user,
+    token,
+    refreshToken,
+    totpRequired,
+    totpVerified,
+    setAuth,
+    logout: storeLogout,
+  } = useAppStore();
   const navigate = useNavigate();
-  const initialToken = useRef(token).current;
-  const [isLoading, setIsLoading] = useState(!!initialToken);
+  // MUST start as true: guard shows spinner until JWT verify completes, preventing flash-redirect on reload.
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    if (!initialToken) {
+    if (!token) {
       setIsLoading(false);
       return;
     }
     authApi
       .getMe()
-      .then(() => setIsLoading(false))
+      .then((res) => {
+        const { user: apiUser, token: freshToken } = res.data.data;
+        setAuth({
+          user: {
+            id: apiUser.id,
+            email: apiUser.email,
+            name: apiUser.name ?? '',
+            role: apiUser.role as 'ADMIN',
+            avatarUrl: apiUser.avatarUrl,
+            totpEnabled: apiUser.totpEnabled ?? false,
+          },
+          token: freshToken ?? token,
+          refreshToken: refreshToken ?? '',
+          totpRequired: apiUser.totpEnabled ?? false,
+        });
+      })
       .catch(() => {
+        // JWT invalid or expired — clear auth state so guard redirects to login
         storeLogout();
+      })
+      .finally(() => {
         setIsLoading(false);
       });
-    // storeLogout is stable (zustand action ref never changes)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [token]);
 
   const isAuthenticated =
     !!user && !!token && user.role === 'ADMIN' && (!totpRequired || totpVerified);
