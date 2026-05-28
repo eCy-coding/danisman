@@ -247,7 +247,7 @@ adminInsightsCategoriesRouter.patch(
   '/:id',
   requireWrite as RequestHandler,
   async (req: AuthRequest, res: Response): Promise<void> => {
-    const id = req.params['id'] as string;
+    const { id } = req.params;
 
     const existing = await prisma.insightCategory.findUnique({ where: { id } });
     if (!existing) {
@@ -292,9 +292,12 @@ adminInsightsCategoriesRouter.delete(
   '/:id',
   requireAdmin as RequestHandler,
   async (req: AuthRequest, res: Response): Promise<void> => {
-    const id = req.params['id'] as string;
+    const { id } = req.params;
 
-    const existing = await prisma.insightCategory.findUnique({ where: { id } });
+    const existing = await prisma.insightCategory.findUnique({
+      where: { id },
+      include: { _count: { select: { posts: true } } },
+    });
     if (!existing) {
       res.status(404).json({ error: 'Category not found' });
       return;
@@ -313,11 +316,11 @@ adminInsightsCategoriesRouter.delete(
           action: 'CATEGORY_ARCHIVE',
           targetType: 'InsightCategory',
           targetId: id,
-          newValue: { archived: true },
+          newValue: { postCount: existing._count.posts },
         },
       });
 
-      logger.info('category archived', { id });
+      logger.info('category archived', { id, postCount: existing._count.posts });
       res.json({ status: 'ok', data: archived });
     } catch (err) {
       logger.error('category archive error', { err });
