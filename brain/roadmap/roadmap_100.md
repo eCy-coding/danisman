@@ -8,21 +8,21 @@
 
 ---
 
-## ⬜ P40-T01 (T91): Sentry Source Maps CI (Tag-Based Release)
+## ✅ P40-T01 (T91): Sentry Source Maps CI (Tag-Based Release)
 
 - **NEDEN:** Sentry error'larda sourcemap olmadan minified stack trace = debug imkansız. Source maps upload her release'de olmalı.
 - **ÖNEM:** P0 — Production debugging sine qua non.
 - **YÖNTEM:** `.github/workflows/release.yml` (Phase 24α'da oluştu, ama `if: env.SENTRY_AUTH_TOKEN != ''` conditional). Production secret `SENTRY_AUTH_TOKEN` + `SENTRY_ORG` + `SENTRY_PROJECT` GitHub Secrets. Trigger: git tag `v*`. `@sentry/cli` releases create + upload sourcemaps + finalize.
 - **TEST:** Tag `v1.0.1` push → Actions run → Sentry project → Releases → v1.0.1 + source maps uploaded. Production error → Sentry issue → source mapped (original file + line).
 
-## ⬜ P40-T02 (T92): Lighthouse CI (Fail-on-Regression)
+## ✅ P40-T02 (T92): Lighthouse CI (Fail-on-Regression)
 
 - **NEDEN:** Performance regression'ı otomatik yakala. Bir PR'ın LCP'yi 3s+ yaptığı fark edilmeli.
 - **ÖNEM:** P1 — Performance guard.
 - **YÖNTEM:** `@lhci/cli` npm dev dep. `.lighthouserc.js` config: assert `performance: 0.85`, `accessibility: 0.98`, `seo: 1.0`. `.github/workflows/lighthouse.yml` → `lhci autorun --collect.url=...` staging URL. PR comment bot + fail on assertion violation.
 - **TEST:** PR that degrades Hero image → Lighthouse CI fail "performance score below 0.85". PR block until fix.
 
-## ⬜ P40-T03 (T93): Log Aggregation (Better Stack / Logflare)
+## ✅ P40-T03 (T93): Log Aggregation (Better Stack / Logflare)
 
 - **NEDEN:** Winston local log yetersiz. Multi-instance + search + alerting için centralized logging şart. Better Stack (Logtail) developer-friendly ücretsiz tier.
 - **ÖNEM:** P1 — Multi-instance ve arama için kritik.
@@ -50,14 +50,14 @@
 - **YÖNTEM:** Production deployment: Render (managed, auto-restart built-in) → kullanılacaksa gerek yok. Self-hosted VPS ise: PM2 `pm2 start ecosystem.config.js` (4 instance cluster mode) + `pm2 startup` systemd integration. Log rotation PM2 built-in.
 - **TEST:** Process kill `kill -9 {pid}` → PM2 auto-restart 1-2 sn. `pm2 status` → "online, restarts: 1".
 
-## ⬜ P40-T07 (T97): Database Backup Automation
+## ✅ P40-T07 (T97): Database Backup Automation
 
 - **NEDEN:** PostgreSQL data = 1 numaralı loss risk. Backup olmadan hata = tam veri kaybı.
 - **ÖNEM:** P0 — Disaster recovery.
 - **YÖNTEM:** Render PostgreSQL (managed) daily backup built-in (7 gün retention). Self-hosted için `pg_dump` cron job → AWS S3 / Backblaze B2 (ucuz). `scripts/backup-db.sh`: `pg_dump -Fc -f backup.dump $DATABASE_URL && aws s3 cp backup.dump s3://backups/...`. Encryption at rest (S3 SSE). Retention: 7 daily, 4 weekly, 12 monthly.
 - **TEST:** Cron tick → backup file S3'te mevcut. Restore test: empty DB + `pg_restore backup.dump` → data recovered.
 
-## ⬜ P40-T08 (T98): Docker Registry CI/CD (GHCR)
+## ✅ P40-T08 (T98): Docker Registry CI/CD (GHCR)
 
 - **NEDEN:** Self-hosted deployment için Docker image CI'da build + push. GitHub Container Registry (GHCR) ücretsiz.
 - **ÖNEM:** P2 — Deployment automation.
@@ -71,7 +71,7 @@
 - **YÖNTEM:** Vercel/Render built-in atomic deployment (instant swap). Self-hosted için: nginx upstream 2 backend instance (blue + green). Deploy → green'e yeni versiyon → health check pass → nginx traffic shift → blue eski versiyon.
 - **TEST:** Deploy during traffic → 0 failed request. `curl` in loop while deploy → 100% 200 OK.
 
-## ⬜ P40-T10 (T100): Incident Runbook + Postmortem Template
+## ✅ P40-T10 (T100): Incident Runbook + Postmortem Template
 
 - **NEDEN:** Incident olunca panik yerine checklist. "Step 1: Check status page. Step 2: Check Sentry. Step 3:..." hazır prosedür.
 - **ÖNEM:** P1 — Incident response efficiency + learning loop.
