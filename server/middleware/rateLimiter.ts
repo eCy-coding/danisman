@@ -270,6 +270,17 @@ export const slotsFetchLimiter = createRateLimiter({
   message: 'Too many calendar requests. Please wait before browsing more dates.',
 });
 
+/**
+ * Discovery form: 5 req / hour / IP.
+ * High-intent action — tighter than contact to prevent CRM spam.
+ */
+export const discoveryLimiter = createRateLimiter({
+  windowMs: 60 * 60 * 1000, // 1 hour
+  maxRequests: 5,
+  message:
+    'Çok fazla deneme yapıldı. Lütfen daha sonra tekrar deneyin veya WhatsApp ile iletişime geçin.',
+});
+
 // P26-BE Aşama 3 — test-only helper.
 // When Redis is mocked out (status !== 'ready'), the limiter falls back to
 // the module-level `fallbackStore` Map which leaks state across tests under

@@ -50,6 +50,8 @@ import adminRetentionRoutes from './admin-retention';
 import adminIndependenceRoutes from './admin-independence';
 // Phase 4 — RBAC Hardening
 import adminRbacRoutes from './admin-rbac';
+// L1-3 — Discovery form public endpoint
+import discoveryRoutes from './discovery';
 import { openApiSpec } from '../config/openapi';
 import { redis } from '../config/redis';
 import { prisma } from '../config/db';
@@ -504,6 +506,7 @@ router.use('/geo', geoRoutes);
 router.use('/crm', crmRoutes);
 router.use('/dev/analytics', devAnalyticsRoutes);
 router.use('/contact', contactRoutes);
+router.use('/discovery', discoveryRoutes);
 router.use('/calendly', calendlyRoutes);
 // Track 1 launch — inbound assessment + paket recommender endpoints. They
 // share the v1 mount so paths land at /api/v1/quick-check-submit and
