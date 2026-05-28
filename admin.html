@@ -48,7 +48,7 @@
     <meta property="twitter:image" content="https://www.ecypro.com/og-image.jpg" />
 
     <!-- CSP managed via Headers (vercel.json / netlify.toml) to reduce HTML bloat -->
-    <link rel="stylesheet" href="/index.css" />
+    <!-- CSS loaded via admin.tsx JS import — HTML link removed to prevent unprocessed @import 'tailwindcss' raw chunk in dist -->
   </head>
   <body class="bg-neutral text-slate-900 font-sans">
     <div id="root"></div>
