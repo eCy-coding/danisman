@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useInsightsFeed } from '@/hooks/useInsightsFeed';
 import { InsightCard } from '@/components/insights/InsightCard';
 import { BreadcrumbNav } from '@/components/insights/BreadcrumbNav';
+import { getPostHog } from '@/lib/posthog';
 
 const PAGE_SIZE = 12;
 
@@ -25,6 +26,15 @@ export function InsightTag() {
   // Stub tag label from slug
   const tagLabel = slug ? slug.replace(/-/g, ' ') : '';
   const postCount = total ?? 0;
+
+  // L2-5: track tag filter navigation
+  useEffect(() => {
+    if (slug) {
+      getPostHog()
+        .then((ph) => ph?.capture('insights_filter', { filter_type: 'tag', tag_slug: slug }))
+        .catch(() => {});
+    }
+  }, [slug]);
 
   const pageTitle = `#${tagLabel} | Perspektif | eCyPro`;
   const metaDesc = `${tagLabel} etiketiyle ilgili ${postCount} eCyPro analizi ve stratejik içerik.`;
