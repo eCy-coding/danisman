@@ -1,10 +1,18 @@
 import React, { useState } from 'react';
-import { Linkedin, Twitter, Instagram, CheckCircle2, AlertCircle } from 'lucide-react';
+import {
+  Linkedin,
+  Twitter,
+  Instagram,
+  CheckCircle2,
+  AlertCircle,
+  MessageCircle,
+  ShieldCheck,
+} from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { trackEvent } from '../../lib/analytics';
 import { useTranslation } from '../../lib/i18n';
 import { localizedHref, type Locale } from '../../i18n/helpers';
-import { FOOTER_COPY } from '../../constants';
+import { FOOTER_COPY, CONTACT_CONFIG } from '../../constants';
 import { CountrySelector } from '../common/CountrySelector';
 import { EcyLogo } from '@/components/ui/EcyLogo';
 
@@ -104,6 +112,16 @@ export const Footer: React.FC = () => {
               >
                 <Instagram size={18} aria-hidden="true" />
               </button>
+              <a
+                href={CONTACT_CONFIG.whatsapp}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => trackEvent('Social', 'Click', 'WhatsApp')}
+                aria-label="WhatsApp ile iletişime geç"
+                className="text-slate-300 hover:text-[#25D366] transition-colors border border-slate-700 p-3 min-w-11 min-h-11 inline-flex items-center justify-center rounded-full hover:bg-slate-800 hover:border-[#25D366]/40 outline-none focus-visible:ring-2 focus-visible:ring-secondary"
+              >
+                <MessageCircle size={18} aria-hidden="true" />
+              </a>
             </div>
           </div>
 
@@ -359,6 +377,18 @@ export const Footer: React.FC = () => {
               </div>
             </form>
           </div>
+        </div>
+
+        {/* Fix 6: KVKK compliance badge */}
+        <div className="flex justify-center mb-6">
+          <Link
+            to="/privacy"
+            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-800/80 border border-slate-700 text-slate-400 text-xs hover:text-slate-200 hover:border-slate-600 transition-colors"
+            aria-label="KVKK uyumluluk bilgisi"
+          >
+            <ShieldCheck size={13} aria-hidden="true" className="text-secondary shrink-0" />
+            <span>ROPA SAT-01 · 3 yıl saklama · KVKK uyumlu</span>
+          </Link>
         </div>
 
         <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-slate-300 border-t border-ecypro-gold/20 pt-10">

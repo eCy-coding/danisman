@@ -10,15 +10,15 @@ import {
 } from 'motion/react';
 import {
   ArrowRight,
-  Play,
   TrendingUp,
   Users,
-  Shield,
   BarChart3,
   Code2,
   Cpu,
-  Zap,
-  LayoutDashboard,
+  Clock3,
+  Handshake,
+  Clock,
+  Globe,
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useScrollToSection } from '../common/useScrollToSection';
@@ -30,7 +30,6 @@ import { MouseGlow } from '../ui/MouseGlow';
 import { MagneticButton } from '../ui/MagneticButton';
 import { Spotlight } from '../ui/spotlight';
 import { TextReveal } from '../ui/TextReveal';
-import { VideoModal } from '../common/VideoModal';
 import { useFeatureValue } from '@growthbook/growthbook-react';
 
 // Persona content
@@ -77,7 +76,11 @@ const PERSONA_CONTENT = {
     },
     stats: [
       { icon: <Code2 size={20} />, value: '12+', label: { tr: 'Sektör', en: 'Sectors' } },
-      { icon: <Zap size={20} />, value: '95%', label: { tr: 'Memnuniyet*', en: 'Satisfaction*' } },
+      {
+        icon: <Clock3 size={20} />,
+        value: '95%',
+        label: { tr: 'Memnuniyet*', en: 'Satisfaction*' },
+      },
       {
         icon: <Cpu size={20} />,
         value: '6 ay',
@@ -216,7 +219,6 @@ export const Hero: React.FC = () => {
   const lang = (i18n.language || 'en').startsWith('tr') ? 'tr' : 'en';
   const prefersReducedMotion = useReducedMotion();
   const [persona, setPersona] = useState<'executive' | 'developer'>('executive');
-  const [videoOpen, setVideoOpen] = useState(false);
 
   // Mobile LCP: the decorative background (MouseGlow pointer tracking, Spotlight,
   // and DataFlowBackground's infinite animated SVG with glow filters) ran at mount
@@ -238,8 +240,8 @@ export const Hero: React.FC = () => {
         ? 'Hizmetleri Keşfet'
         : 'Explore Services'
       : lang === 'tr'
-        ? 'Hemen Başlayın'
-        : 'Get Started';
+        ? 'Tanışma Toplantısı Planla'
+        : 'Book a Discovery Call';
 
   // For Scroll Triggered Feature Reveals
   const containerRef = useRef<HTMLDivElement>(null);
@@ -403,25 +405,19 @@ export const Hero: React.FC = () => {
               })()}
 
               <MagneticButton strength={20}>
-                <button
-                  type="button"
+                <Link
+                  to="/services"
                   data-testid="hero-cta-secondary"
-                  onClick={() => {
-                    setVideoOpen(true);
-                    trackEvent('Hero', 'Click', 'Hero Video Open');
-                  }}
+                  onClick={() => trackEvent('Hero', 'Click', 'Hero Services')}
                   className="group px-8 py-4 bg-white/5 hover:bg-white/10 border border-white/10 text-slate-200 text-sm font-bold uppercase tracking-widest rounded-xl transition-all duration-300 flex items-center justify-center gap-3 min-w-50 w-full sm:w-auto"
                 >
-                  <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center group-hover:scale-110 transition-transform">
-                    <Play
-                      size={14}
-                      fill="currentColor"
-                      className="opacity-90 ml-0.5"
-                      aria-hidden="true"
-                    />
-                  </div>
-                  {lang === 'tr' ? 'Demo Videosunu İzle' : 'Watch Demo Video'}
-                </button>
+                  {lang === 'tr' ? 'Hizmetlerimizi İncele' : 'Explore Our Services'}
+                  <ArrowRight
+                    size={16}
+                    className="group-hover:translate-x-1 transition-transform"
+                    aria-hidden="true"
+                  />
+                </Link>
               </MagneticButton>
             </motion.div>
             <motion.div
@@ -455,13 +451,51 @@ export const Hero: React.FC = () => {
                 <ArrowRight size={14} aria-hidden="true" />
               </Link>
             </motion.div>
-            <VideoModal
-              open={videoOpen}
-              onClose={() => setVideoOpen(false)}
-              videoId="dQw4w9WgXcQ"
-              provider="youtube"
-              title={{ tr: 'eCyPro Platform Demosu', en: 'eCyPro Platform Demo' }}
-            />
+            {/* Fix 4: Founder ribbon */}
+            <motion.div
+              variants={itemVariants}
+              className="mt-8 flex items-center gap-3 text-sm text-slate-400"
+            >
+              <img
+                src="/founder.jpg"
+                alt="Emre Can Yalçın"
+                width={40}
+                height={40}
+                className="w-10 h-10 rounded-full object-cover border border-white/10 shrink-0"
+                onError={(e) => {
+                  (e.currentTarget as HTMLImageElement).src = '/brand/founder-fallback.svg';
+                }}
+              />
+              <span className="leading-snug">
+                {lang === 'tr' ? (
+                  <>
+                    Founder{' '}
+                    <a
+                      href="https://linkedin.com/in/emrecanyalcin"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-secondary hover:text-white transition-colors font-semibold"
+                    >
+                      Emre Can Yalçın
+                    </a>{' '}
+                    doğrudan size eşlik eder — 48 saat içinde NDA, junior delegasyon yok.
+                  </>
+                ) : (
+                  <>
+                    Founder{' '}
+                    <a
+                      href="https://linkedin.com/in/emrecanyalcin"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-secondary hover:text-white transition-colors font-semibold"
+                    >
+                      Emre Can Yalçın
+                    </a>{' '}
+                    works directly with you — NDA within 48 hours, no junior delegation.
+                  </>
+                )}
+              </span>
+            </motion.div>
           </MotionOrDiv>
 
           {/* Right Content - Stats Widgets */}
@@ -505,27 +539,27 @@ export const Hero: React.FC = () => {
       >
         {[
           {
-            icon: <LayoutDashboard size={24} />,
-            title: { tr: 'Unified Dashboard', en: 'Unified Dashboard' },
+            icon: <Handshake size={24} />,
+            title: { tr: 'Partner-Led', en: 'Partner-Led' },
             desc: {
-              tr: 'Tüm metrikleri tek ekranda izleyin. Karar alma süreçlerinizi anında hızlandırın.',
-              en: 'Monitor all metrics in one screen. Accelerate your decision-making processes instantly.',
+              tr: 'Junior delegasyon yok. Founder Emre Can Yalçın size doğrudan eşlik eder.',
+              en: 'No junior delegation. Founder Emre Can Yalçın works directly with you.',
             },
           },
           {
-            icon: <Shield size={24} />,
-            title: { tr: 'Kurumsal Güvenlik', en: 'Enterprise Security' },
+            icon: <Clock size={24} />,
+            title: { tr: '48 Saat Hız', en: '48-Hour Speed' },
             desc: {
-              tr: 'Sıfır güvenlik açığı, tam uyumluluk. Verileriniz askeri düzeyde korunur.',
-              en: 'Zero vulnerabilities, full compliance. Your data is protected at military grade.',
+              tr: 'NDA imzasından sahaya inişe 48 saat. WhatsApp ile her an erişim.',
+              en: 'From NDA to deployment in 48 hours. WhatsApp access at any time.',
             },
           },
           {
-            icon: <Zap size={24} />,
-            title: { tr: 'Real-time Analitik', en: 'Real-time Analytics' },
+            icon: <Globe size={24} />,
+            title: { tr: 'Türkiye-AB Köprüsü', en: 'Turkey-EU Bridge' },
             desc: {
-              tr: 'Milisaniyeler içinde kararlar alın. Pazar değişimlerine anında tepki verin.',
-              en: 'Make decisions in milliseconds. React to market changes instantly.',
+              tr: 'İki regülasyon hemisferinde uzmanız: KVKK + GDPR + CSRD.',
+              en: 'Expertise across two regulatory hemispheres: KVKK + GDPR + CSRD.',
             },
           },
         ].map((feature, i) => (
