@@ -83,3 +83,25 @@ export const trackBooking = (
 ): void => {
   _push('booking_flow', { booking_step: step, ...extra });
 };
+
+/**
+ * P31-T05 / P34-T02 — ROI Calculator interaction tracking.
+ *
+ * Call on each meaningful interaction: field change (debounced 500ms),
+ * calculation complete, and CTA click from results view.
+ *
+ * @param step   "start" | "input_change" | "calculated" | "cta_click"
+ * @param values Partial calc inputs — company_size, revenue_band, scope, timeline, roi_result
+ */
+export const trackROICalc = (
+  step: 'start' | 'input_change' | 'calculated' | 'cta_click',
+  values?: {
+    company_size?: string;
+    revenue_band?: string;
+    scope?: string;
+    timeline?: string;
+    roi_result?: number;
+  },
+): void => {
+  _push('roi_calc_interaction', { roi_step: step, ...values });
+};
