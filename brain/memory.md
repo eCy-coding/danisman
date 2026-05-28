@@ -36,6 +36,15 @@ This file is the single source of truth for the project's state. Any AI agent ta
 
 ## �🟢 Completed Phases
 
+### [Phase 32] Keyword + Content ✅ RECONCILE (2026-05-29)
+
+- Premise-verify: 10/10 todo kodda hazır bulundu (checkbox'lar geriden takip ediyordu).
+  Kanıt: keyword matrisi + TR/EN map (`brain/seo/`), 44 blog post (5 hedef konu dahil),
+  `/pillar/:slug` + `pillars-content.ts`, FAQPage schema, `trailingSlash:false` (#95), 38 sayfa SEO/Helmet.
+- Gerçek delta: `scripts/audit-img-alt.ts` — dinamik `alt={expr}` JSX'i string-literal değil diye
+  MISSING_ALT sayıyordu (34 false-positive) + test fixture'larını tarıyordu. Regex'e `{expr}` branch +
+  test-file exclusion eklendi → 0 error (1 decorative warn). T08 audit artık güvenilir.
+
 ### [Phase 24α] Residual Closure ✅ (Tamamlandı)
 
 - A1-A2: CookieBanner a11y (useId, role=dialog, aria-modal, aria-labelledby, contrast slate-500→400).
