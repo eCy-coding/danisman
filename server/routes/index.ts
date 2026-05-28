@@ -50,6 +50,11 @@ import adminRetentionRoutes from './admin-retention';
 import adminIndependenceRoutes from './admin-independence';
 // Phase 4 — RBAC Hardening
 import adminRbacRoutes from './admin-rbac';
+// Perspektif Blog — PB-11 KVKK Comments + PB-10 Admin Dashboard
+import commentsRoutes from './comments';
+import adminCommentsRoutes from './admin-comments';
+import dsarCommentsRoutes from './dsar-comments';
+import adminInsightsDashboardRoutes from './admin-insights-dashboard';
 import { openApiSpec } from '../config/openapi';
 import { redis } from '../config/redis';
 import { prisma } from '../config/db';
@@ -520,5 +525,11 @@ router.use('/uploads', uploadsGetRoutes);
 
 // P23 BE Track 2 / Aşama 1 — `/api/stream`, `/api/stream/publish`, `/api/stream/_stats`.
 router.use('/', streamRoutes);
+
+// Perspektif Blog — PB-11 KVKK Comments + PB-10 Admin Dashboard
+router.use('/insights/posts', commentsRoutes);
+router.use('/admin/insights/comments', adminCommentsRoutes);
+router.use('/dsar/comments', dsarCommentsRoutes);
+router.use('/admin/insights/dashboard', adminInsightsDashboardRoutes);
 
 export default router;
