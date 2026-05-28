@@ -19,13 +19,12 @@ export function InsightTag() {
   const { t } = useTranslation('insights');
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
 
-  const { data, isLoading } = useInsightsFeed({ tagSlug: slug });
-  const posts = data?.posts ?? [];
+  const { posts, isLoading, total } = useInsightsFeed({ tagSlug: slug });
   const visiblePosts = posts.slice(0, visibleCount);
 
   // Stub tag label from slug
   const tagLabel = slug ? slug.replace(/-/g, ' ') : '';
-  const postCount = data?.total ?? 0;
+  const postCount = total ?? 0;
 
   const pageTitle = `#${tagLabel} | Perspektif | eCyPro`;
   const metaDesc = `${tagLabel} etiketiyle ilgili ${postCount} eCyPro analizi ve stratejik içerik.`;

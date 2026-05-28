@@ -26,8 +26,7 @@ export function InsightSearch() {
     return () => clearTimeout(timer);
   }, [inputValue, setSearchParams]);
 
-  const { data, isLoading } = useInsightsFeed({ q: debouncedQ || undefined });
-  const posts = data?.posts ?? [];
+  const { posts, isLoading } = useInsightsFeed({ q: debouncedQ || undefined });
 
   const pageTitle = `${t('nav.search')} | Perspektif | eCyPro`;
 

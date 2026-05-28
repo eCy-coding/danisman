@@ -167,6 +167,12 @@ export interface InsightsFilter {
   sort?: 'newest' | 'popular' | 'editors_pick' | 'trending';
   search?: string;
   cursor?: string;
+  q?: string;
+  tagSlug?: string;
+  seriesSlug?: string;
+  authorSlug?: string;
+  year?: number;
+  month?: number;
 }
 
 export interface DomainSpotlight {
