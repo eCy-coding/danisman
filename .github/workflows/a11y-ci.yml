@@ -10,6 +10,11 @@
 #
 # Daha derin denetim (`a11y.spec.ts` AAA + `crawl_a11y_wcag.spec.ts`) ana
 # E2E suite içinde nightly olarak koşar; bu hızlı PR gate'idir.
+#
+# `production-audit` job: günlük 04:00 UTC cron — `e2e/axe-production.spec.ts`
+# (5 yüksek-trafik rota × 2 locale = 10 test) build edilmiş bundle üzerinde
+# koşar. Launch sonrası a11y regresyonunu PR beklemeden yakalar; fail =
+# Actions varsayılan e-posta bildirimi.
 name: A11y CI (critical routes)
 
 on:
@@ -17,6 +22,10 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
+  workflow_dispatch:
+  schedule:
+    # Daily production parity audit — 04:00 UTC (07:00 TRT)
+    - cron: '0 4 * * *'
 
 permissions:
   contents: read
@@ -30,6 +39,8 @@ jobs:
     name: Axe-core WCAG 2.1 AA — critical-route gate
     runs-on: ubuntu-latest
     timeout-minutes: 12
+    # PR/push gate'i; günlük cron `production-audit` job'ına devreder.
+    if: github.event_name != 'schedule'
 
     steps:
       - name: Checkout
@@ -68,6 +79,56 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: a11y-ci-report-${{ github.sha }}
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 14
+          if-no-files-found: ignore
+
+  production-audit:
+    name: Axe-core WCAG 2.1 AA — daily production audit
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    # Sadece günlük cron + elle tetik; PR/push'ta `a11y` job zaten koşar.
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Install Playwright browsers (chromium only)
+        run: npx playwright install --with-deps chromium
+
+      - name: Provide minimal production env (placeholder values)
+        run: |
+          cp .env.production.example .env.production
+          sed -i 's/__FILL_ME__/ci-stub/g' .env.production
+
+      - name: Build production bundle
+        run: npm run build
+        env:
+          NODE_ENV: production
+
+      - name: Run production a11y audit (5 routes × 2 locales)
+        run: npx playwright test e2e/axe-production.spec.ts --project=chromium --reporter=list
+        env:
+          NODE_ENV: production
+          CI: 'true'
+
+      - name: Upload Playwright HTML report on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: a11y-production-report-${{ github.sha }}
           path: |
             playwright-report/
             test-results/
