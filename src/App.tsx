@@ -287,6 +287,11 @@ const AdminInsightsPage = React.lazy(() =>
     default: module.AdminInsightsPage,
   })),
 );
+const AdminInsightsCategoriesPage = React.lazy(() =>
+  import('./pages/admin/AdminInsightsCategoriesPage').then((module) => ({
+    default: module.AdminInsightsCategoriesPage,
+  })),
+);
 const StatusPage = React.lazy(() =>
   import('./pages/StatusPage').then((module) => ({ default: module.StatusPage })),
 );
@@ -1396,6 +1401,14 @@ const AnimatedRoutes = () => {
                 element={
                   <Suspense fallback={<LoadingFallback />}>
                     <AdminInsightsPage />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="insights/categories"
+                element={
+                  <Suspense fallback={<LoadingFallback />}>
+                    <AdminInsightsCategoriesPage />
                   </Suspense>
                 }
               />

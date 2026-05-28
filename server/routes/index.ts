@@ -54,6 +54,7 @@ import adminRbacRoutes from './admin-rbac';
 import discoveryRoutes from './discovery';
 // Perspektif Blog — PB-2 admin API + PB-3 public search
 import { adminInsightsRouter } from './admin-insights';
+import { adminInsightsCategoriesRouter } from './admin-insights-categories';
 import { publicInsightsSearchRouter } from './public-insights-search';
 // Wave-3A — Insights SEO sitemap management
 import insightsSeoRoutes from './insights-seo';
@@ -507,6 +508,7 @@ router.use('/admin/independence', adminIndependenceRoutes);
 // Phase 4 — RBAC Hardening
 router.use('/admin/rbac', adminRbacRoutes);
 // Perspektif Blog — PB-2 admin API + PB-3 public search
+router.use('/admin/insights/categories', adminInsightsCategoriesRouter);
 router.use('/admin/insights', adminInsightsRouter);
 router.use('/insights', publicInsightsSearchRouter);
 router.use('/webhooks', webhookRoutes);
