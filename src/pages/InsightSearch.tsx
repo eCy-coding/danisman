@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useInsightsFeed } from '@/hooks/useInsightsFeed';
 import { InsightCard } from '@/components/insights/InsightCard';
 import { BreadcrumbNav } from '@/components/insights/BreadcrumbNav';
+import { getPostHog } from '@/lib/posthog';
 
 export function InsightSearch() {
   const { t } = useTranslation('insights');
@@ -13,12 +14,21 @@ export function InsightSearch() {
   const [inputValue, setInputValue] = useState(initialQ);
   const [debouncedQ, setDebouncedQ] = useState(initialQ);
 
-  // 300ms debounce
+  // 300ms debounce + analytics
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedQ(inputValue);
       if (inputValue) {
         setSearchParams({ q: inputValue }, { replace: true });
+        // L2-5: track search intent — no PII (query text is structural signal)
+        getPostHog()
+          .then((ph) =>
+            ph?.capture('insights_filter', {
+              filter_type: 'search',
+              query_length: inputValue.length,
+            }),
+          )
+          .catch(() => {});
       } else {
         setSearchParams({}, { replace: true });
       }

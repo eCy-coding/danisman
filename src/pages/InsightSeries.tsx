@@ -131,6 +131,7 @@ export function InsightSeries() {
                 <img
                   src={series.coverImageUrl}
                   alt={series.titleTr}
+                  loading="lazy"
                   className="w-full h-full object-cover"
                 />
               </div>
@@ -148,6 +149,7 @@ export function InsightSeries() {
                 <img
                   src={series.author.avatarUrl}
                   alt={series.author.displayName}
+                  loading="lazy"
                   className="w-10 h-10 rounded-full object-cover bg-slate-700"
                 />
                 <div>

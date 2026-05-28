@@ -18,7 +18,12 @@ function EndCard({ post }: EndCardProps) {
       className="group flex flex-col rounded-xl border border-slate-200 bg-white overflow-hidden hover:border-amber-300 hover:shadow-lg transition-all"
       data-testid={`end-recommendation-${post.slug}`}
     >
-      <img src={post.coverImageUrl} alt={post.coverImageAlt} className="w-full h-40 object-cover" />
+      <img
+        src={post.coverImageUrl}
+        alt={post.coverImageAlt}
+        loading="lazy"
+        className="w-full h-40 object-cover"
+      />
       <div className="p-fib-5 flex flex-col flex-1">
         <span
           className="text-xs font-semibold px-2 py-0.5 rounded-full mb-fib-3 inline-block self-start"

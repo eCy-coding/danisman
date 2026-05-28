@@ -14,6 +14,7 @@ import { AlertCircle, ArrowRight, CheckCircle2, Clock, Lock } from 'lucide-react
 import { PageWrapper } from '../components/layout/PageWrapper';
 import { KvkkLayered } from '../components/legal/KvkkLayered';
 import { buildCanonical } from '@/i18n/canonical';
+import { getPostHog } from '@/lib/posthog';
 
 // API base — same pattern as ContactForm
 const DISCOVERY_ENDPOINT = ((import.meta.env.VITE_API_URL as string | undefined) ?? '/api').replace(
@@ -67,6 +68,19 @@ export const Discovery: React.FC = () => {
 
   const mutation = useMutation({
     mutationFn: submitDiscovery,
+    onSuccess: () => {
+      // L2-5: PostHog event — no PII, structural signals only
+      getPostHog()
+        .then((ph) =>
+          ph?.capture('discovery_submit', {
+            has_company: Boolean(company),
+            has_sector: Boolean(sector),
+            has_headcount: Boolean(headcount),
+            description_length: description.length,
+          }),
+        )
+        .catch(() => {});
+    },
   });
 
   const handleSubmit = (e: React.FormEvent) => {

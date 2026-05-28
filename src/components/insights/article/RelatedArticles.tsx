@@ -21,6 +21,7 @@ function ArticleCard({ post }: ArticleCardProps) {
       <img
         src={post.coverImageUrl}
         alt={post.coverImageAlt}
+        loading="lazy"
         className="h-16 w-16 rounded-lg object-cover shrink-0"
       />
       <div className="flex-1 min-w-0">

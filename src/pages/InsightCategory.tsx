@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import type { Domain } from '@/types/insights';
@@ -7,6 +7,7 @@ import { useInsightsFeed } from '@/hooks/useInsightsFeed';
 import { InsightCard } from '@/components/insights/InsightCard';
 import { FilterBar } from '@/components/insights/FilterBar';
 import { BreadcrumbNav } from '@/components/insights/BreadcrumbNav';
+import { getPostHog } from '@/lib/posthog';
 
 const PAGE_SIZE = 12;
 
@@ -29,6 +30,21 @@ export function InsightCategory() {
 
   const domainMeta = activeDomain ? DOMAIN_META[activeDomain] : null;
   const domainLabel = domainMeta?.labelTr ?? t('nav.insights');
+
+  // L2-5: track category filter navigation
+  useEffect(() => {
+    if (domainSlug) {
+      getPostHog()
+        .then((ph) =>
+          ph?.capture('insights_filter', {
+            filter_type: 'category',
+            domain: domainSlug,
+            sub_domain: subDomain ?? null,
+          }),
+        )
+        .catch(() => {});
+    }
+  }, [domainSlug, subDomain]);
 
   const pageTitle = `${domainLabel} | Perspektif | eCyPro`;
   const metaDesc = `${domainLabel} alanında eCyPro analizleri, çerçeveler ve stratejik içerikler.`;
