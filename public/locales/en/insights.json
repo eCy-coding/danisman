@@ -55,6 +55,7 @@
   },
   "languageSwitcher": {
     "trOnly": "Turkish only",
+    "trOnlyTooltip": "The English version of this article isn't ready yet",
     "availableIn": "Available in:"
   },
   "breadcrumb": {

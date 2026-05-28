@@ -115,14 +115,20 @@ const DOMAIN_SLUG: Record<string, string> = {
   AILE_SIRKETI: 'insights-aile-sirketi',
 };
 
-const buildInsightsChannel = (title: string, feedHref: string, items: InsightStub[]): string => {
+const buildInsightsChannel = (
+  title: string,
+  feedHref: string,
+  items: InsightStub[],
+  lang: 'tr' | 'en' = 'tr',
+): string => {
+  const baseUrl = lang === 'en' ? `${SITE_URL}/en` : SITE_URL;
   const itemsXml = items
     .map(
       (p) => `
     <item>
         <title>${escapeXml(p.slug.replace(/-/g, ' '))}</title>
-        <link>${SITE_URL}/insights/${p.slug}</link>
-        <guid>${SITE_URL}/insights/${p.slug}</guid>
+        <link>${baseUrl}/insights/${p.slug}</link>
+        <guid>${baseUrl}/insights/${p.slug}</guid>
         <pubDate>${new Date(p.publishedAt).toUTCString()}</pubDate>
         <description>${escapeXml(p.subDomain)}</description>
         <author>info@ecypro.com (eCyPro)</author>
@@ -135,9 +141,9 @@ const buildInsightsChannel = (title: string, feedHref: string, items: InsightStu
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 <channel>
     <title>${escapeXml(title)}</title>
-    <link>${SITE_URL}</link>
+    <link>${baseUrl}</link>
     <description>eCyPro Perspektif — ${escapeXml(title)}</description>
-    <language>tr</language>
+    <language>${lang}</language>
     <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
     <atom:link href="${SITE_URL}/${feedHref}" rel="self" type="application/rss+xml" />${itemsXml}
 </channel>
@@ -159,10 +165,17 @@ const generateInsightsRSS = () => {
     fs.mkdirSync(OUTPUT_DIR, { recursive: true });
   }
 
-  // Full insights feed
-  const fullFeed = buildInsightsChannel('eCyPro Perspektif', 'insights-rss.xml', posts);
-  fs.writeFileSync(path.join(OUTPUT_DIR, 'insights-rss.xml'), fullFeed);
-  console.log(`✅ insights-rss.xml (${posts.length} items)`);
+  // Full insights feed — TR
+  const fullFeedTr = buildInsightsChannel('eCyPro Perspektif', 'insights-rss.xml', posts, 'tr');
+  fs.writeFileSync(path.join(OUTPUT_DIR, 'insights-rss.xml'), fullFeedTr);
+  console.log(`✅ insights-rss.xml (${posts.length} items, TR)`);
+
+  // Full insights feed — EN (/en/insights/rss.xml)
+  const enDir = path.join(OUTPUT_DIR, 'en', 'insights');
+  fs.mkdirSync(enDir, { recursive: true });
+  const fullFeedEn = buildInsightsChannel('eCyPro Perspektif', 'en/insights/rss.xml', posts, 'en');
+  fs.writeFileSync(path.join(enDir, 'rss.xml'), fullFeedEn);
+  console.log(`✅ en/insights/rss.xml (${posts.length} items, EN)`);
 
   // Per-domain feeds
   const domains = ['M_A', 'ESG', 'FINTECH', 'AILE_SIRKETI'];
@@ -174,6 +187,7 @@ const generateInsightsRSS = () => {
       `eCyPro Perspektif — ${label}`,
       `${feedSlug}-rss.xml`,
       domainPosts,
+      'tr',
     );
     fs.writeFileSync(path.join(OUTPUT_DIR, `${feedSlug}-rss.xml`), feed);
     console.log(`✅ ${feedSlug}-rss.xml (${domainPosts.length} items)`);

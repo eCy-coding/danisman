@@ -21,7 +21,8 @@ export function LanguageSwitcher({
     return (
       <span
         data-testid="language-switcher"
-        className="inline-flex items-center gap-1.5 px-[13px] py-[5px] rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-medium"
+        title={t('languageSwitcher.trOnlyTooltip')}
+        className="inline-flex items-center gap-1.5 px-[13px] py-[5px] rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-medium cursor-help"
       >
         {t('languageSwitcher.trOnly')}
       </span>

@@ -55,6 +55,7 @@
   },
   "languageSwitcher": {
     "trOnly": "Sadece TR mevcut",
+    "trOnlyTooltip": "Bu yazının İngilizcesi henüz hazır değil",
     "availableIn": "Şu dilde mevcut:"
   },
   "breadcrumb": {
