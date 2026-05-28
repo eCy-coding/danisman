@@ -1,8 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion, Variants } from 'motion/react';
-import { ArrowRight } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
 import { Service } from '@/schemas/service';
+import { DOMAIN_ACCENT_MAP } from '@/lib/service-utils';
+
+export { DOMAIN_ACCENT_MAP } from '@/lib/service-utils';
 
 interface ServiceCardProps {
   service: Service;
@@ -11,6 +14,11 @@ interface ServiceCardProps {
 }
 
 export const ServiceCard: React.FC<ServiceCardProps> = ({ service, categoryLabel, variants }) => {
+  const accent = DOMAIN_ACCENT_MAP[service.category] ?? {
+    badge: 'text-slate-400 bg-white/5 border border-white/10',
+    glow: '',
+  };
+
   return (
     <motion.div
       variants={variants}
@@ -22,8 +30,10 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({ service, categoryLabel
                  hover:border-secondary/30 hover:shadow-2xl hover:shadow-secondary/5
                  transition-all duration-500 overflow-hidden flex flex-col"
     >
-      {/* Ambient glow — top-right */}
-      <div className="absolute -top-20 -right-20 w-40 h-40 bg-primary/10 rounded-full blur-3xl group-hover:bg-secondary/15 transition-colors duration-700 pointer-events-none" />
+      {/* Ambient glow */}
+      <div
+        className={`absolute -top-20 -right-20 w-40 h-40 bg-primary/10 rounded-full blur-3xl ${accent.glow} transition-colors duration-700 pointer-events-none`}
+      />
 
       {/* Bottom accent line */}
       <div className="absolute bottom-0 left-0 w-full h-0.5 bg-linear-to-r from-transparent via-secondary/60 to-transparent scale-x-0 group-hover:scale-x-100 transition-transform duration-700 ease-out" />
@@ -31,15 +41,18 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({ service, categoryLabel
       {/* Left accent bar */}
       <div className="absolute top-0 left-0 w-0.5 h-0 bg-linear-to-b from-primary to-secondary group-hover:h-full transition-all duration-500 ease-out" />
 
-      {/* Category tag */}
+      {/* Domain accent badge — top-left */}
       {categoryLabel && (
-        <div className="absolute top-6 right-6 text-[10px] font-bold tracking-[0.2em] text-slate-500 uppercase group-hover:text-secondary/80 transition-colors font-sans z-10">
+        <div
+          data-testid="service-domain-badge"
+          className={`absolute top-5 left-5 text-[9px] font-bold tracking-[0.18em] uppercase px-2 py-0.5 rounded-full ${accent.badge} z-10`}
+        >
           {categoryLabel}
         </div>
       )}
 
       {/* Icon */}
-      <div className="mb-6 relative z-10">
+      <div className="mb-6 relative z-10 mt-6">
         <div
           className="w-14 h-14 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center
                      text-slate-300 group-hover:text-secondary group-hover:scale-110 group-hover:border-secondary/30
@@ -63,15 +76,15 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({ service, categoryLabel
       <Link
         to={service.link}
         data-testid="service-card-cta"
-        className="inline-flex items-center gap-2 text-xs font-bold tracking-widest uppercase
+        className="inline-flex items-center gap-1.5 text-xs font-semibold tracking-wide
                    text-slate-500 group-hover:text-secondary transition-colors duration-300 mt-auto
                    focus:outline-none focus-visible:ring-2 focus-visible:ring-secondary rounded"
         aria-label={`${service.title} detaylarını görüntüle`}
       >
-        <span>Keşfet</span>
-        <ArrowRight
-          size={14}
-          className="group-hover:translate-x-1 transition-transform duration-300"
+        <span>Detay</span>
+        <ChevronRight
+          size={13}
+          className="group-hover:translate-x-0.5 transition-transform duration-300"
         />
       </Link>
     </motion.div>
