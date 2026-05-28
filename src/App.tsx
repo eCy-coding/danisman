@@ -292,6 +292,16 @@ const AdminInsightsCategoriesPage = React.lazy(() =>
     default: module.AdminInsightsCategoriesPage,
   })),
 );
+const AdminInsightsPostsPage = React.lazy(() =>
+  import('./pages/admin/AdminInsightsPostsPage').then((module) => ({
+    default: module.AdminInsightsPostsPage,
+  })),
+);
+const AdminInsightsPostEditPage = React.lazy(() =>
+  import('./pages/admin/AdminInsightsPostEditPage').then((module) => ({
+    default: module.AdminInsightsPostEditPage,
+  })),
+);
 const StatusPage = React.lazy(() =>
   import('./pages/StatusPage').then((module) => ({ default: module.StatusPage })),
 );
@@ -1409,6 +1419,30 @@ const AnimatedRoutes = () => {
                 element={
                   <Suspense fallback={<LoadingFallback />}>
                     <AdminInsightsCategoriesPage />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="insights/posts"
+                element={
+                  <Suspense fallback={<LoadingFallback />}>
+                    <AdminInsightsPostsPage />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="insights/posts/new"
+                element={
+                  <Suspense fallback={<LoadingFallback />}>
+                    <AdminInsightsPostEditPage />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="insights/posts/:id/edit"
+                element={
+                  <Suspense fallback={<LoadingFallback />}>
+                    <AdminInsightsPostEditPage />
                   </Suspense>
                 }
               />
