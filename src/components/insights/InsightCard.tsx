@@ -88,6 +88,7 @@ export function InsightCard({
 
         {/* Title */}
         <h3
+          data-testid="card-title"
           className={`font-semibold text-slate-100 leading-snug ${titleClamp} ${size === 'lg' ? 'text-xl' : 'text-base'}`}
         >
           {post.titleTr}

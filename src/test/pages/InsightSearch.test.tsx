@@ -4,6 +4,53 @@ import React from 'react';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import { InsightSearch } from '../../pages/InsightSearch';
 
+const STUB_POST = {
+  id: 'post-1',
+  slug: 'test-post',
+  titleTr: 'Test M&A Başlık',
+  titleEn: 'Test M&A Title',
+  excerptTr: 'Özet',
+  excerptEn: 'Excerpt',
+  coverImageUrl: '/img.jpg',
+  coverImageAlt: 'img',
+  primaryDomain: 'M_A',
+  subDomain: null,
+  type: 'ANALYSIS',
+  readingTimeMin: 5,
+  viewCount: 10,
+  publishedAt: '2026-05-01T00:00:00.000Z',
+  isFeatured: false,
+  isEditorsPick: false,
+  author: {
+    id: 'a1',
+    slug: 'emre-can-yalcin',
+    displayName: 'Emre Can Yalçın',
+    bioTr: '',
+    bioEn: '',
+    avatarUrl: '/av.jpg',
+    isFounder: true,
+  },
+  tags: [],
+  series: null,
+  seriesOrder: null,
+};
+
+vi.mock('@/hooks/useInsightsFeed', () => ({
+  useInsightsFeed: vi.fn((filter: { q?: string } = {}) => {
+    const q = filter?.q ?? '';
+    const posts = q && !q.toLowerCase().includes('m&a') ? [] : [STUB_POST];
+    return {
+      posts,
+      total: posts.length,
+      hasMore: false,
+      isLoading: false,
+      isFetchingNextPage: false,
+      fetchNextPage: vi.fn(),
+      refetch: vi.fn(),
+    };
+  }),
+}));
+
 vi.mock('react-i18next', () => ({
   useTranslation: vi.fn(() => ({
     t: (key: string, opts?: Record<string, unknown>) => {

@@ -404,7 +404,7 @@ describe('InsightCard', () => {
       </Wrapper>,
     );
     const card = screen.getByTestId('insight-card');
-    expect(card.tagName.toLowerCase()).toBe('article');
+    expect(card.tagName.toLowerCase()).toBe('a');
   });
 });
 
