@@ -84,6 +84,8 @@ export const ServicesPage: React.FC = () => {
   const scores = usePersonalizationStore((state) => state.scores);
 
   // Filter Logic
+  const showGrouped = selectedCategory === 'all' && !searchQuery.trim();
+
   const filteredServices = useMemo(() => {
     let filtered = SERVICES;
 
@@ -112,6 +114,9 @@ export const ServicesPage: React.FC = () => {
 
     return filtered;
   }, [selectedCategory, searchQuery, scores]);
+
+  // Fixed cluster display order for grouped view
+  const CLUSTER_ORDER = DEPARTMENTS.filter((d) => d.id !== 'all');
 
   const itemVariants = {
     hidden: { opacity: 0, y: 30 },
@@ -204,46 +209,78 @@ export const ServicesPage: React.FC = () => {
 
           {/* Services Grid — P6 — no motion wrapper to prevent Lighthouse PAGE_HUNG.
                         Cards still use motion internally with whileHover (event-driven). */}
-          <h2 className="sr-only">Hizmetlerimiz</h2>
-          <div
-            key={selectedCategory + searchQuery}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8"
-          >
-            {filteredServices.length > 0 ? (
-              filteredServices.map((service) => (
-                <ServiceCard
-                  key={service.id}
-                  service={service}
-                  categoryLabel={getCategoryLabel(service.category)}
-                  variants={itemVariants}
-                />
-              ))
-            ) : (
-              <div className="col-span-full py-24 text-center border border-dashed border-white/10 rounded-3xl bg-white/5">
-                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-white/5 mb-6">
-                  <Search className="w-6 h-6 text-slate-400" />
+          {showGrouped ? (
+            /* Grouped view: h1 (page) → h2 (cluster) → h3 (service title in ServiceCard) */
+            <div key="grouped" className="space-y-16">
+              {CLUSTER_ORDER.map((cluster) => {
+                const clusterLabel =
+                  typeof cluster.label === 'string' ? cluster.label : cluster.label[lang];
+                const clusterServices = SERVICES.filter((s) => s.category === cluster.id);
+                return (
+                  <section key={cluster.id} aria-labelledby={`cluster-${cluster.id}`}>
+                    <h2
+                      id={`cluster-${cluster.id}`}
+                      data-testid={`cluster-heading-${cluster.id}`}
+                      className="text-2xl font-serif font-medium text-white mb-8 pb-3 border-b border-white/10"
+                    >
+                      {clusterLabel}
+                    </h2>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+                      {clusterServices.map((service) => (
+                        <ServiceCard
+                          key={service.id}
+                          service={service}
+                          categoryLabel={clusterLabel}
+                          variants={itemVariants}
+                        />
+                      ))}
+                    </div>
+                  </section>
+                );
+              })}
+            </div>
+          ) : (
+            /* Filtered / search view: flat grid */
+            <div
+              key={selectedCategory + searchQuery}
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8"
+            >
+              {filteredServices.length > 0 ? (
+                filteredServices.map((service) => (
+                  <ServiceCard
+                    key={service.id}
+                    service={service}
+                    categoryLabel={getCategoryLabel(service.category)}
+                    variants={itemVariants}
+                  />
+                ))
+              ) : (
+                <div className="col-span-full py-24 text-center border border-dashed border-white/10 rounded-3xl bg-white/5">
+                  <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-white/5 mb-6">
+                    <Search className="w-6 h-6 text-slate-400" />
+                  </div>
+                  <h3
+                    data-testid="services-no-results"
+                    className="text-xl font-serif text-slate-300 mb-2"
+                  >
+                    {t('no_results') || 'Sonuç Bulunamadı'}
+                  </h3>
+                  <p className="text-slate-300 mb-6">"{searchQuery}"...</p>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSearchQuery('');
+                      setSelectedCategory('all');
+                    }}
+                    data-testid="services-filter-clear"
+                    className="px-6 py-2.5 bg-secondary text-neutral font-bold rounded-lg hover:bg-white transition-colors text-sm tracking-wide"
+                  >
+                    {t('filter_clear') || 'Filtreleri Temizle'}
+                  </button>
                 </div>
-                <h3
-                  data-testid="services-no-results"
-                  className="text-xl font-serif text-slate-300 mb-2"
-                >
-                  {t('no_results') || 'Sonuç Bulunamadı'}
-                </h3>
-                <p className="text-slate-300 mb-6">"{searchQuery}"...</p>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setSearchQuery('');
-                    setSelectedCategory('all');
-                  }}
-                  data-testid="services-filter-clear"
-                  className="px-6 py-2.5 bg-secondary text-neutral font-bold rounded-lg hover:bg-white transition-colors text-sm tracking-wide"
-                >
-                  {t('filter_clear') || 'Filtreleri Temizle'}
-                </button>
-              </div>
-            )}
-          </div>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Interactive Tools Section */}
