@@ -41,7 +41,6 @@ import { useServiceOverride } from '../../hooks/useServiceOverride';
 import { StrategicMaturityLadder } from './widgets/StrategicMaturityLadder';
 import { DealPipelineVisualizer } from './widgets/DealPipelineVisualizer';
 import { GenerationalTransitionTimeline } from './widgets/GenerationalTransitionTimeline';
-import { OperationsROICalculator } from './widgets/OperationsROICalculator';
 import { CustomerSegmentQuiz } from './widgets/CustomerSegmentQuiz';
 import { OrgDesignMaturity } from './widgets/OrgDesignMaturity';
 import { CrisisReadinessMatrix } from './widgets/CrisisReadinessMatrix';
@@ -369,7 +368,6 @@ export const ServiceDetailLayout: React.FC<ServiceDetailLayoutProps> = ({
       {content.slug === 'strategic-transformation' && <StrategicMaturityLadder />}
       {content.slug === 'mergers-acquisitions' && <DealPipelineVisualizer />}
       {content.slug === 'family-business' && <GenerationalTransitionTimeline />}
-      {content.slug === 'operational-excellence' && <OperationsROICalculator />}
       {content.slug === 'neuromarketing' && <CustomerSegmentQuiz />}
       {content.slug === 'hr-transformation' && <OrgDesignMaturity />}
       {content.slug === 'crisis-management' && <CrisisReadinessMatrix />}
