@@ -1,8 +1,10 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { motion } from 'motion/react';
+import { Link } from 'react-router-dom';
 import { ArrowRight, DollarSign, Users, Target } from 'lucide-react';
 import { useInteractionStore } from '../../../lib/stores/interactionStore';
+import { emit } from '../../../lib/analytics-events';
 import { SmartSlider } from '../../ui/smart-form/SmartSlider';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -96,6 +98,18 @@ export const GrowthCalculator: React.FC = () => {
       });
     }
   }, [values.revenue, values.teamSize, updateCalculator]);
+
+  // P34-T02: track ROI tool engagement as a conversion. Debounced so a slider
+  // drag fires one `result_view` after the value settles, not per frame.
+  useEffect(() => {
+    const id = setTimeout(() => {
+      emit('roi_calc_step', {
+        step: 'result_view',
+        values: { revenue: String(activeRevenue), roiResult: Math.round(projection) },
+      });
+    }, 800);
+    return () => clearTimeout(id);
+  }, [activeRevenue, activeTeam, projection]);
 
   return (
     <div className="w-full max-w-6xl mx-auto p-1 glass-card rounded-3xl bg-white/5 border border-white/10 overflow-hidden relative">
@@ -301,13 +315,19 @@ export const GrowthCalculator: React.FC = () => {
               <p className="text-sm text-slate-400 max-w-xs">
                 Numbers are estimates based on average client results in the first 12 months.
               </p>
-              <button
-                type="button"
+              <Link
+                to="/discovery-call"
+                onClick={() =>
+                  emit('roi_calc_step', {
+                    step: 'cta_click',
+                    values: { revenue: String(activeRevenue), roiResult: Math.round(projection) },
+                  })
+                }
                 className="group relative px-6 py-3 bg-white text-neutral font-medium rounded-xl hover:bg-slate-100 transition-colors overflow-hidden flex items-center gap-2"
               >
                 <span className="relative z-10">Get Detailed Blueprint</span>
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform relative z-10" />
-              </button>
+              </Link>
             </motion.div>
           </div>
         </div>
