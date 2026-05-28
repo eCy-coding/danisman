@@ -1,0 +1,67 @@
+// Register: app.use('/api/v1', dsarCommentsRouter)
+// KVKK Madde 11 — Veri sahibi hakları (SAR/DSAR)
+// GET    /api/v1/dsar/comments?email=...   (auth: self or admin)
+// DELETE /api/v1/dsar/comments?email=...   (auth: self or admin — right to erasure)
+
+import { Router, Response } from 'express';
+import { prisma } from '../config/db';
+import { logger } from '../config/logger';
+import { authenticate, AuthRequest } from '../middleware/auth';
+
+const router = Router();
+
+router.use(authenticate);
+
+router.get('/dsar/comments', async (req: AuthRequest, res: Response): Promise<void> => {
+  const { email } = req.query;
+
+  if (!email || typeof email !== 'string') {
+    res.status(400).json({ status: 'error', message: 'E-posta parametresi gereklidir' });
+    return;
+  }
+
+  const isAdmin = req.user?.role === 'ADMIN';
+  const isSelf = req.user?.id !== undefined;
+
+  if (!isAdmin && !isSelf) {
+    res.status(403).json({ status: 'error', message: 'Yetkisiz erişim' });
+    return;
+  }
+
+  const comments = await prisma.comment.findMany({
+    where: { authorEmail: email },
+    orderBy: { createdAt: 'desc' },
+    select: {
+      id: true,
+      bodyMd: true,
+      status: true,
+      createdAt: true,
+      post: { select: { slug: true, titleTr: true } },
+    },
+  });
+
+  res.json({ status: 'ok', data: { email, comments, count: comments.length } });
+});
+
+router.delete('/dsar/comments', async (req: AuthRequest, res: Response): Promise<void> => {
+  const { email } = req.query;
+
+  if (!email || typeof email !== 'string') {
+    res.status(400).json({ status: 'error', message: 'E-posta parametresi gereklidir' });
+    return;
+  }
+
+  const isAdmin = req.user?.role === 'ADMIN';
+  if (!isAdmin) {
+    res.status(403).json({ status: 'error', message: 'Sadece yöneticiler silme işlemi yapabilir' });
+    return;
+  }
+
+  const { count } = await prisma.comment.deleteMany({ where: { authorEmail: email } });
+
+  logger.info('[dsar-comments] Comments erased via DSAR', { email, count, by: req.user?.id });
+
+  res.json({ status: 'ok', data: { deleted: count } });
+});
+
+export default router;

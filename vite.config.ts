@@ -525,6 +525,15 @@ export default defineConfig(({ mode }) => {
             dnd: ['@dnd-kit/core', '@dnd-kit/sortable', '@dnd-kit/utilities'],
             // A/B testing & feature flags
             ab: ['@growthbook/growthbook-react'],
+            // PB-8: Perspektif heavy deps — lazy loaded, separate async boundary
+            // shiki: code syntax highlight (~200KB) — only on article pages with code blocks
+            'vendor-code': ['shiki'],
+            // katex: math rendering (~300KB) — only on articles with math notation
+            'vendor-math': ['katex'],
+            // mermaid: diagram rendering (~600KB) — only on articles with diagrams
+            'vendor-diagrams': ['mermaid'],
+            // lightbox: image zoom (~40KB) — only when user clicks image
+            'vendor-lightbox': ['yet-another-react-lightbox'],
           },
         },
       },

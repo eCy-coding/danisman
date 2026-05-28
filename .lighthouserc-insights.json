@@ -1,0 +1,42 @@
+{
+  "ci": {
+    "collect": {
+      "url": [
+        "http://localhost:4173/insights",
+        "http://localhost:4173/insights/test-article-slug",
+        "http://localhost:4173/insights/m-a",
+        "http://localhost:4173/insights/esg",
+        "http://localhost:4173/insights/tag/format-checklist",
+        "http://localhost:4173/insights/series/ma-master-class-2026",
+        "http://localhost:4173/insights/author/emre-can-yalcin",
+        "http://localhost:4173/insights/archive"
+      ],
+      "numberOfRuns": 1,
+      "settings": {
+        "preset": "desktop",
+        "throttling": {
+          "rttMs": 40,
+          "throughputKbps": 10240,
+          "cpuSlowdownMultiplier": 1
+        }
+      }
+    },
+    "assert": {
+      "assertions": {
+        "categories:performance": ["warn", { "minScore": 0.85 }],
+        "categories:accessibility": ["error", { "minScore": 0.95 }],
+        "categories:best-practices": ["warn", { "minScore": 0.9 }],
+        "categories:seo": ["warn", { "minScore": 0.9 }],
+        "first-contentful-paint": ["warn", { "maxNumericValue": 2000 }],
+        "largest-contentful-paint": ["error", { "maxNumericValue": 2500 }],
+        "cumulative-layout-shift": ["error", { "maxNumericValue": 0.1 }],
+        "total-blocking-time": ["warn", { "maxNumericValue": 300 }],
+        "speed-index": ["warn", { "maxNumericValue": 3000 }],
+        "interactive": ["warn", { "maxNumericValue": 3500 }]
+      }
+    },
+    "upload": {
+      "target": "temporary-public-storage"
+    }
+  }
+}
