@@ -60,6 +60,8 @@ export const NAMESPACES = [
   'forms',
   // Phase 5 — Admin panel strings (lazy-loaded when admin routes mount).
   'admin',
+  // Wave-3A — Perspektif / Insights pages (PB-6, PB-9).
+  'insights',
 ] as const;
 
 /**

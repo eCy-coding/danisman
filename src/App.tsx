@@ -33,6 +33,12 @@ const ServiceDetailPage = React.lazy(() =>
 );
 const BlogPostPage = React.lazy(() => import('./pages/BlogPostPage'));
 const BlogPage = React.lazy(() => import('./pages/BlogPage'));
+const InsightsPage = React.lazy(() =>
+  import('./pages/InsightsPage').then((module) => ({ default: module.InsightsPage })),
+);
+const InsightArticle = React.lazy(() =>
+  import('./pages/InsightArticle').then((module) => ({ default: module.InsightArticle })),
+);
 const AboutPage = React.lazy(() =>
   import('./pages/AboutPage').then((module) => ({ default: module.AboutPage })),
 );
@@ -98,6 +104,26 @@ const RegisterPage = React.lazy(() =>
 );
 const ForgotPasswordPage = React.lazy(() =>
   import('./pages/ForgotPasswordPage').then((module) => ({ default: module.ForgotPasswordPage })),
+);
+
+// Wave-3A PB-6: Perspektif secondary pages
+const InsightCategory = React.lazy(() =>
+  import('./pages/InsightCategory').then((m) => ({ default: m.InsightCategory })),
+);
+const InsightTag = React.lazy(() =>
+  import('./pages/InsightTag').then((m) => ({ default: m.InsightTag })),
+);
+const InsightSeries = React.lazy(() =>
+  import('./pages/InsightSeries').then((m) => ({ default: m.InsightSeries })),
+);
+const InsightAuthor = React.lazy(() =>
+  import('./pages/InsightAuthor').then((m) => ({ default: m.InsightAuthor })),
+);
+const InsightArchive = React.lazy(() =>
+  import('./pages/InsightArchive').then((m) => ({ default: m.InsightArchive })),
+);
+const InsightSearch = React.lazy(() =>
+  import('./pages/InsightSearch').then((m) => ({ default: m.InsightSearch })),
 );
 
 // const KeystaticPage = React.lazy(() => import('./src/app/keystatic/page')); // Moved to MPA
@@ -256,6 +282,11 @@ const AdminDevAnalyticsPage = React.lazy(() =>
     default: module.AdminDevAnalyticsPage,
   })),
 );
+const AdminInsightsPage = React.lazy(() =>
+  import('./pages/admin/AdminInsightsPage').then((module) => ({
+    default: module.AdminInsightsPage,
+  })),
+);
 const StatusPage = React.lazy(() =>
   import('./pages/StatusPage').then((module) => ({ default: module.StatusPage })),
 );
@@ -329,6 +360,72 @@ const AnimatedRoutes = () => {
             element={
               <Suspense fallback={<LoadingFallback />}>
                 <BlogPage />
+              </Suspense>
+            }
+          />
+          {/* --- Perspektif Wave-3A PB-6 routes --- */}
+          <Route
+            path="/insights/search"
+            element={
+              <Suspense fallback={<LoadingFallback />}>
+                <InsightSearch />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/insights/tag/:slug"
+            element={
+              <Suspense fallback={<LoadingFallback />}>
+                <InsightTag />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/insights/series/:slug/:part?"
+            element={
+              <Suspense fallback={<LoadingFallback />}>
+                <InsightSeries />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/insights/author/:slug"
+            element={
+              <Suspense fallback={<LoadingFallback />}>
+                <InsightAuthor />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/insights/archive/:year?/:month?"
+            element={
+              <Suspense fallback={<LoadingFallback />}>
+                <InsightArchive />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/insights/:domain/:subDomain?"
+            element={
+              <Suspense fallback={<LoadingFallback />}>
+                <InsightCategory />
+              </Suspense>
+            }
+          />
+          {/* --- end Perspektif --- */}
+          <Route
+            path="/insights/:slug"
+            element={
+              <Suspense fallback={<LoadingFallback />}>
+                <InsightArticle />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/insights"
+            element={
+              <Suspense fallback={<LoadingFallback />}>
+                <InsightsPage />
               </Suspense>
             }
           />
@@ -658,6 +755,56 @@ const AnimatedRoutes = () => {
                 </Suspense>
               }
             />
+            {/* --- Perspektif Wave-3A PB-6 locale routes --- */}
+            <Route
+              path="insights/search"
+              element={
+                <Suspense fallback={<LoadingFallback />}>
+                  <InsightSearch />
+                </Suspense>
+              }
+            />
+            <Route
+              path="insights/tag/:slug"
+              element={
+                <Suspense fallback={<LoadingFallback />}>
+                  <InsightTag />
+                </Suspense>
+              }
+            />
+            <Route
+              path="insights/series/:slug/:part?"
+              element={
+                <Suspense fallback={<LoadingFallback />}>
+                  <InsightSeries />
+                </Suspense>
+              }
+            />
+            <Route
+              path="insights/author/:slug"
+              element={
+                <Suspense fallback={<LoadingFallback />}>
+                  <InsightAuthor />
+                </Suspense>
+              }
+            />
+            <Route
+              path="insights/archive/:year?/:month?"
+              element={
+                <Suspense fallback={<LoadingFallback />}>
+                  <InsightArchive />
+                </Suspense>
+              }
+            />
+            <Route
+              path="insights/:domain/:subDomain?"
+              element={
+                <Suspense fallback={<LoadingFallback />}>
+                  <InsightCategory />
+                </Suspense>
+              }
+            />
+            {/* --- end Perspektif --- */}
             <Route
               path="about"
               element={
@@ -1230,6 +1377,14 @@ const AnimatedRoutes = () => {
                 element={
                   <Suspense fallback={<LoadingFallback />}>
                     <AdminDevAnalyticsPage />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="insights"
+                element={
+                  <Suspense fallback={<LoadingFallback />}>
+                    <AdminInsightsPage />
                   </Suspense>
                 }
               />
