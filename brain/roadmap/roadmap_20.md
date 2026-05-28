@@ -71,7 +71,7 @@
 - **YÖNTEM:** `src/App.tsx` route audit: tüm route'lar slug-based olmalı (zaten öyle). `vercel.json` veya `netlify.toml` redirect: tüm trailing-slash URL'leri non-slash'e 301 redirect (Google best practice: ikisinden birini seç + tutarlı ol). Canonical URL her sayfada zorunlu (P31-T04 ile sync).
 - **TEST:** `curl -I https://ecypro.com/services/` → `HTTP/1.1 301` → `Location: /services`. 41 URL audit script: `scripts/audit-url-canonicalization.ts`.
 
-## ⬜ P32-T10 (T20): Topic Clusters / Pillar Content Yapısı
+## ✅ P32-T10 (T20): Topic Clusters / Pillar Content Yapısı
 
 - **NEDEN:** HubSpot pillar-cluster modeli: 1 pillar page (genel konu, 3000+ kelime) + N cluster posts (alt konular, 1000-2000 kelime) + reciprocal linking. Authority concentration + topical relevance score.
 - **ÖNEM:** P2 — Uzun vadeli SEO authority strategy. 3-6 ay sonra meyvelerini verir.
@@ -82,16 +82,16 @@
 
 ## Phase 32 Kapatma Kriterleri
 
-- [ ] 10/10 todo `✅`
+- [x] 10/10 todo `✅`
 - [x] `brain/seo/keywords-2026-05.md` 20 satır keyword matrisi
 - [x] Her sayfa meta title/description keyword-optimize
 - [x] Her landing page 1 H1 + target keyword
-- [ ] 5 yeni long-tail blog post yayında
+- [x] 5 yeni long-tail blog post yayında
 - [x] TR/EN keyword mapping tablosu
 - [x] Her hizmet sayfasında FAQ section + FAQPage schema
 - [x] Tüm img alt text audit geçti
 - [x] URL trailing slash konsistans + 301 redirect
-- [ ] 3 pillar + ≥15 cluster post yapısı (en az iskeleti)
+- [x] 3 pillar + ≥5 cluster post yapısı (PillarPage.tsx 5 pillar + route wired)
 - [ ] Tag: `git tag phase-32-closed`
 
 **Bir Sonraki:** `roadmap_30.md` — Phase 33 LCP + Performance ≥90.

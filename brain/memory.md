@@ -559,6 +559,30 @@ Bu konsept Phase 25'te şu şekilde EcyPro'ya entegre edilebilir:
 - typecheck: 0/0 ✅ | lint: 0 ✅ | test: 29/29 ✅
 - build: 41 URL ✅ | E2E smoke: 2/2 ✅
 
+### 📍 Phase 31 (Roadmap): SEO + GSC/GA4 + Indexing Foundation ✅ (2026-05-29)
+
+- T04 ✅ scripts/audit-canonical.ts — SPA-aware canonical audit
+- T05 ✅ src/lib/analytics.ts — trackCTA / trackScrollDepth / trackForm / trackBooking / trackROICalc
+- T07 ✅ scripts/indexing-api-push.ts — Google Indexing API bulk push 41 URLs
+- T09 ✅ scripts/indexnow-push.ts — IndexNow Bing/Yandex push
+- T10 ✅ scripts/audit-jsonld.ts — JSON-LD schema audit 7/7 pass
+- PBVC: typecheck 0/0 ✅ · tests 753/753 ✅
+- Pending manual (user): T01 GSC DNS TXT · T02 GA4 VITE_GA_TRACKING_ID · T03 sitemap submit · T06 GSC baseline CSV · T08 Bing/Yandex Webmaster
+
+### 📍 Phase 32 (Roadmap): Keyword Strategy + Content Optimization ✅ (2026-05-29)
+
+- T11 ✅ brain/seo/keywords-2026-05.md — 20-row keyword matrix (TR + EN + long-tail)
+- T12 ✅ Meta title/description keyword-optimized: LandingPage · ServicesPage · AboutPage · ContactPage · PricingPage · CaseStudiesPage · IndustriesPage · FounderPage
+- T13 ✅ Services H1 keyword-optimized via public/locales/{tr,en}/services.json
+- T14 ✅ scripts/audit-internal-links.ts — existed, confirmed
+- T15 ✅ 5 new long-tail blog posts: dijital-donusum-kpi-ornekleri · danismanlik-ucretleri-nasil-belirlenir · kvkk-uyum-sureci-adim-adim · gdpr-kvkk-farklari · proje-yonetimi-best-practices
+- T16 ✅ TR/EN keyword mapping table — confirmed in keywords-2026-05.md
+- T17 ✅ FAQSection (FAQPage JSON-LD) integrated in ServicesPage
+- T18 ✅ scripts/audit-img-alt.ts — existed, confirmed
+- T19 ✅ scripts/audit-url-canonicalization.ts — new SPA-aware URL audit
+- T20 ✅ PillarPage.tsx — 5 pillars wired at /pillar/:slug, already complete
+- PBVC: typecheck 0/0 ✅ · build ✅ (49 blog posts) · tests 753/753 ✅
+
 ## 🎯 PUBLISH READY + Ollama Local AI Sistemi Aktif
 
 ### Required Actions for Go-Live:
