@@ -12,6 +12,7 @@ const STATIC_ROUTES = [
   'pricing',
   'blog',
   'contact',
+  'discovery',
   'careers',
   'team',
   'partners',
