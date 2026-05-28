@@ -43,7 +43,7 @@
 - **YÖNTEM:** **Instatus** (free tier 5 components) veya **Statuspage.io** (atlassian, paid). Alternatif: self-hosted UpTimeKuma (Docker). Subdomain `status.ecypro.com` → Vercel CNAME. UptimeRobot integration auto-update status.
 - **TEST:** `https://status.ecypro.com` → 3 component (Website, API, DB) all green. Downtime simulate → component red within 2min.
 
-## ⬜ P40-T06 (T96): Process Monitor (PM2 / systemd)
+## ✅ P40-T06 (T96): Process Monitor (PM2 / systemd)
 
 - **NEDEN:** Backend crash edince auto-restart şart. Render/Vercel managed ama self-hosted Docker için PM2 + systemd.
 - **ÖNEM:** P1 — Self-hosted deployment için kritik.
@@ -64,7 +64,7 @@
 - **YÖNTEM:** `.github/workflows/docker.yml` → `docker/build-push-action@v5` → GHCR `ghcr.io/{user}/ecypro:{tag}`. Multi-arch (amd64+arm64). Layer cache Actions cache.
 - **TEST:** Tag push → GHCR'da image görünür. `docker pull ghcr.io/.../ecypro:latest` → run success.
 
-## ⬜ P40-T09 (T99): Blue-Green Deployment
+## ✅ P40-T09 (T99): Blue-Green Deployment
 
 - **NEDEN:** Zero-downtime deployment. Production'da kullanıcı hiç "Sunucu bakımda" görmemeli.
 - **ÖNEM:** P2 — Enterprise deployment pattern.
@@ -83,16 +83,16 @@
 ## Phase 40 Kapatma Kriterleri
 
 - [ ] 10/10 todo `✅`
-- [ ] Sentry source maps CI release flow
-- [ ] Lighthouse CI fail-on-regression
-- [ ] Log aggregation (Better Stack / Axiom)
+- [x] Sentry source maps CI release flow
+- [x] Lighthouse CI fail-on-regression
+- [x] Log aggregation (Better Stack / Axiom)
 - [ ] UptimeRobot 4 monitor + alerts
 - [ ] Status page live (Instatus / UpTimeKuma)
-- [ ] PM2 / Render auto-restart
-- [ ] DB backup cron S3 + restore tested
-- [ ] Docker image GHCR automated
-- [ ] Blue-green deployment validated
-- [ ] Incident runbook + postmortem template
+- [x] PM2 / Render auto-restart
+- [x] DB backup cron S3 + restore tested
+- [x] Docker image GHCR automated
+- [x] Blue-green deployment validated
+- [x] Incident runbook + postmortem template
 - [ ] Tag: `git tag phase-40-closed`
 
 ---

@@ -36,7 +36,7 @@
 - **YÖNTEM:** Silo yapısı: `/services` (pillar) → `/services/{slug}` (cluster) → `/case-studies?service={slug}` + `/blog?category={service}`. Her hizmet sayfasında "İlgili Vaka Çalışmaları" (3) + "İlgili Blog" (3) component'leri (var, ama URL parameter integration eksik). Navbar'da breadcrumb aktif.
 - **TEST:** `scripts/audit-internal-links.ts` — her sayfa min 3 internal link + sayfa başına backlink sayısı raporu. Screaming Frog Free (500 URL limit) ile crawl → "Orphan Pages" 0.
 
-## ⬜ P32-T05 (T15): Long-Tail Keyword Blog İçerikleri (5 Yeni Post)
+## ✅ P32-T05 (T15): Long-Tail Keyword Blog İçerikleri (5 Yeni Post)
 
 - **NEDEN:** Long-tail (4+ kelime) keyword'ler düşük rekabet + yüksek intent. İstek3'te "organik trafik için dijital dönüşüm", "operasyonel verimlilik nasıl artırılır" örneklendi. Bunlar long-tail örnekleri.
 - **ÖNEM:** P1 — Hızlı sıralama kazancı (30-60 gün). Yeni domain için en gerçekçi trafik kaynağı.
@@ -83,14 +83,14 @@
 ## Phase 32 Kapatma Kriterleri
 
 - [ ] 10/10 todo `✅`
-- [ ] `brain/seo/keywords-2026-05.md` 20 satır keyword matrisi
-- [ ] Her sayfa meta title/description keyword-optimize
-- [ ] Her landing page 1 H1 + target keyword
+- [x] `brain/seo/keywords-2026-05.md` 20 satır keyword matrisi
+- [x] Her sayfa meta title/description keyword-optimize
+- [x] Her landing page 1 H1 + target keyword
 - [ ] 5 yeni long-tail blog post yayında
-- [ ] TR/EN keyword mapping tablosu
-- [ ] Her hizmet sayfasında FAQ section + FAQPage schema
-- [ ] Tüm img alt text audit geçti
-- [ ] URL trailing slash konsistans + 301 redirect
+- [x] TR/EN keyword mapping tablosu
+- [x] Her hizmet sayfasında FAQ section + FAQPage schema
+- [x] Tüm img alt text audit geçti
+- [x] URL trailing slash konsistans + 301 redirect
 - [ ] 3 pillar + ≥15 cluster post yapısı (en az iskeleti)
 - [ ] Tag: `git tag phase-32-closed`
 

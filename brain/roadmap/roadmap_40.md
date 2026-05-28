@@ -22,7 +22,7 @@
 - **YÖNTEM:** `src/components/features/interactive/ROICalculator.tsx` → her field onChange'de `trackROICalc({field, value, step})` event (500ms debounce). Adımlar: `company_size`, `annual_revenue`, `transformation_scope`, `timeline`, `calculated_result`. GA4 custom dimensions: `roi_company_size`, `roi_revenue_band`. Funnel steps: step_1_start → step_2_inputs → step_3_results → step_4_cta.
 - **TEST:** GA4 DebugView → 1 tam ROI calc completion → 4 funnel event + 1 conversion. Explorations → Funnel Analysis → drop-off rate görülür.
 
-## ⬜ P34-T03 (T33): Funnel Analysis Report + Weekly Dashboard
+## ✅ P34-T03 (T33): Funnel Analysis Report + Weekly Dashboard
 
 - **NEDEN:** Event tracking var ama funnel analysis yapılmadan darboğaz bilinmez. "Hangi adımda user abandon ediyor?" sorusunun cevabı CRO'nun temeli.
 - **ÖNEM:** P1 — Optimization priority order bu rapordan çıkar.
@@ -57,7 +57,7 @@
 - **YÖNTEM:** `src/hooks/useScrollDepth.ts` (zaten var veya yaz): 25%, 50%, 75%, 100% milestone'larda GA4 event `scroll_depth` + `page_path`. Blog post'lar için özel: reading time tracking (time visible × scroll %).
 - **TEST:** GA4 → Reports → Engagement → Pages → scroll depth metric sütunu. Blog post'un 75%+ scroll rate'i "okundu" kabul.
 
-## ⬜ P34-T08 (T38): Session Recordings (Privacy-Safe)
+## ✅ P34-T08 (T38): Session Recordings (Privacy-Safe)
 
 - **NEDEN:** Aggregate analytics'in gösteremediği individual user journey'leri session recording gösterir. UX bug tespit için kritik.
 - **ÖNEM:** P2 — Microsoft Clarity (T35) zaten içerir ama ek tool (opsiyonel) olabilir.
@@ -84,14 +84,14 @@
 
 - [ ] 10/10 todo `✅`
 - [ ] GA4 Conversions sekmesinde 5 event marked
-- [ ] ROI Calculator funnel tracking 4 step
-- [ ] Weekly funnel report script çalışıyor
-- [ ] GrowthBook (veya alternatif) A/B test infrastructure
-- [ ] Microsoft Clarity heatmap aktif + 1 hafta data
-- [ ] Form abandonment tracking 3 form'da aktif
-- [ ] Scroll depth milestone events
-- [ ] CRO playbook dokümanı + 3 hipotez
-- [ ] Lead scoring API + admin dashboard tier badge
+- [x] ROI Calculator funnel tracking 4 step
+- [x] Weekly funnel report script çalışıyor
+- [x] GrowthBook (veya alternatif) A/B test infrastructure
+- [x] Microsoft Clarity heatmap aktif + 1 hafta data
+- [x] Form abandonment tracking 3 form'da aktif
+- [x] Scroll depth milestone events
+- [x] CRO playbook dokümanı + 3 hipotez
+- [x] Lead scoring API + admin dashboard tier badge
 - [ ] Tag: `git tag phase-34-closed`
 
 **Bir Sonraki:** `roadmap_50.md` — Phase 35 Auth + Security Hardening.
