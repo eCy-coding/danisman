@@ -4,9 +4,9 @@ import { useNavigate } from 'react-router-dom';
 import { contactSchema, ContactFormData } from '../../schemas/contact';
 import { Send, CheckCircle, AlertCircle, Loader2, Lock } from 'lucide-react';
 import { useTranslation } from '@/lib/i18n';
-import { trackForm } from '../../lib/analytics';
 import { createForm } from '../../lib/forms/createForm';
 import { KvkkLayered } from '../legal/KvkkLayered';
+import { useFormAnalytics } from '../../hooks/useFormAnalytics';
 
 // P15 — Tek otorite: createForm factory.
 //   • zod resolver + submit-lock + AbortController + mountedRef
@@ -45,6 +45,9 @@ export const ContactForm: React.FC = () => {
     formState: { errors },
   } = rhf;
 
+  // P34-T06: Form abandonment + progress tracking
+  const { onFocus, onBlur, onSubmitSuccess, onSubmitError } = useFormAnalytics('contact');
+
   const isSubmitting = status === 'submitting';
   const submitStatus: 'idle' | 'success' | 'error' | 'rate_limited' =
     status === 'success'
@@ -60,6 +63,7 @@ export const ContactForm: React.FC = () => {
   // takes over instead of the user staring at an empty form.
   React.useEffect(() => {
     if (status === 'success') {
+      onSubmitSuccess();
       const r = setTimeout(() => reset(), 3000);
       const n = setTimeout(() => navigate('/thank-you'), 1200);
       return () => {
@@ -67,8 +71,9 @@ export const ContactForm: React.FC = () => {
         clearTimeout(n);
       };
     }
+    if (status === 'error') onSubmitError();
     return undefined;
-  }, [status, reset, navigate]);
+  }, [status, reset, navigate, onSubmitSuccess, onSubmitError]);
 
   const onSubmit = (data: ContactFormData) => {
     // P97 — PostHog capture is a no-op when the user hasn't opted in
@@ -87,10 +92,6 @@ export const ContactForm: React.FC = () => {
         // PostHog not initialised (no env key) — silently degrade
       });
     void submit(data);
-  };
-
-  const handleFirstFocus = (): void => {
-    trackForm('contact', 'start');
   };
 
   return (
@@ -132,7 +133,8 @@ export const ContactForm: React.FC = () => {
           id="name"
           type="text"
           data-testid="contact-name"
-          onFocus={handleFirstFocus}
+          onFocus={onFocus}
+          onBlur={() => onBlur('name')}
           aria-required="true"
           aria-invalid={!!errors.name}
           aria-describedby={errors.name ? 'name-error' : undefined}
@@ -163,6 +165,8 @@ export const ContactForm: React.FC = () => {
           id="email"
           type="email"
           data-testid="contact-email"
+          onFocus={onFocus}
+          onBlur={() => onBlur('email')}
           aria-required="true"
           aria-invalid={!!errors.email}
           aria-describedby={errors.email ? 'email-error' : undefined}
@@ -192,6 +196,8 @@ export const ContactForm: React.FC = () => {
           {...register('subject')}
           id="subject"
           data-testid="contact-subject"
+          onFocus={onFocus}
+          onBlur={() => onBlur('subject')}
           aria-required="true"
           className="w-full px-4 py-3 rounded-lg border border-white/10 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all bg-white/5 text-white"
         >
@@ -214,6 +220,8 @@ export const ContactForm: React.FC = () => {
           id="message"
           rows={5}
           data-testid="contact-message"
+          onFocus={onFocus}
+          onBlur={() => onBlur('message')}
           aria-required="true"
           aria-invalid={!!errors.message}
           aria-describedby={errors.message ? 'message-error' : undefined}
