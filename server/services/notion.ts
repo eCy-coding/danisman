@@ -256,7 +256,7 @@ export async function findProspect(input: {
   return res?.results?.[0] ?? null;
 }
 
-/** True when NOTION_API_KEY + NOTION_PROSPECTS_DB_ID are present. */
+/** True when NOTION_API_KEY + NOTION_DB_PROSPECTS are present. */
 export function isNotionConfigured(): boolean {
   return isConfigured();
 }
