@@ -135,7 +135,7 @@ export const SEO: React.FC<SEOProps> = ({
     if (noIndex) {
       upsertMeta('meta[name="robots"]', 'name', 'robots', 'noindex,nofollow');
     } else {
-      upsertMeta('meta[name="robots"]', 'name', 'robots', 'index,follow');
+      upsertMeta('meta[name="robots"]', 'name', 'robots', 'index, follow, max-image-preview:large');
     }
 
     // Canonical

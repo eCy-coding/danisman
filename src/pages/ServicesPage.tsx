@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect, useRef, Suspense } from 'react';
 import { Search } from 'lucide-react';
-import { Helmet } from 'react-helmet-async';
+import { Helmet } from '@/lib/seo-helmet';
 import { JsonLd } from '../components/seo/JsonLd';
 import { buildBreadcrumbSchema } from '../lib/structured-data';
 import { buildCanonical } from '@/i18n/canonical';
@@ -147,12 +147,72 @@ export const ServicesPage: React.FC = () => {
         />
         <meta name="theme-color" content="#0d1b2a" />
         <link rel="canonical" href={buildCanonical('/services', lang)} />
+        <meta
+          property="og:title"
+          content={
+            lang === 'tr'
+              ? 'Stratejik Danışmanlık Hizmetleri — KVKK, Dijital Dönüşüm | eCyPro'
+              : 'Management Consulting Services — KVKK, Digital Transformation | eCyPro'
+          }
+        />
+        <meta
+          property="og:description"
+          content={
+            lang === 'tr'
+              ? 'KVKK uyumu, EU regülasyonu, stratejik yönetim ve dijital dönüşüm hizmetleri.'
+              : 'KVKK compliance, EU regulatory advisory, strategic management, and digital transformation services.'
+          }
+        />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={buildCanonical('/services', lang)} />
+        <meta property="og:image" content="https://www.ecypro.com/og/services.png" />
+        <meta name="robots" content="index, follow, max-image-preview:large" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta
+          name="twitter:title"
+          content={
+            lang === 'tr'
+              ? 'Stratejik Danışmanlık Hizmetleri | eCyPro'
+              : 'Management Consulting Services | eCyPro'
+          }
+        />
+        <meta
+          name="twitter:description"
+          content={
+            lang === 'tr'
+              ? 'KVKK, EU regülasyonu, stratejik yönetim, dijital dönüşüm.'
+              : 'KVKK compliance, EU regulatory, strategic management, digital transformation.'
+          }
+        />
+        <meta name="twitter:image" content="https://www.ecypro.com/og/services.png" />
       </Helmet>
       <JsonLd
         data={buildBreadcrumbSchema([
-          { name: lang === 'tr' ? 'Anasayfa' : 'Home', url: 'https://ecypro.com/' },
-          { name: lang === 'tr' ? 'Hizmetler' : 'Services', url: 'https://ecypro.com/services' },
+          { name: lang === 'tr' ? 'Anasayfa' : 'Home', url: 'https://www.ecypro.com/' },
+          {
+            name: lang === 'tr' ? 'Hizmetler' : 'Services',
+            url: 'https://www.ecypro.com/services',
+          },
         ])}
+      />
+      <JsonLd
+        data={{
+          '@context': 'https://schema.org',
+          '@type': 'ItemList',
+          name: lang === 'tr' ? 'Danışmanlık Hizmetleri' : 'Consulting Services',
+          description:
+            lang === 'tr'
+              ? 'M&A, ESG, Fintech ve Aile Şirketi kümeleri'
+              : 'M&A, ESG, Fintech, and Family Business clusters',
+          url: 'https://www.ecypro.com/services',
+          itemListElement: SERVICES.map((s, idx) => ({
+            '@type': 'ListItem',
+            position: idx + 1,
+            name: s.title,
+            description: s.description,
+            url: `https://www.ecypro.com${s.link}`,
+          })),
+        }}
       />
 
       <PageWrapper className="bg-neutral pt-32 pb-24 relative overflow-hidden">

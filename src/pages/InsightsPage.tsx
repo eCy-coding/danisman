@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { Helmet } from 'react-helmet-async';
+import { Helmet } from '@/lib/seo-helmet';
+import { JsonLd } from '@/components/seo/JsonLd';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { PageWrapper } from '@/components/layout/PageWrapper';
 import { EditorialHero } from '@/components/insights/EditorialHero';
@@ -98,10 +99,34 @@ function InsightsPageInner() {
           content="Türkiye'nin Sermaye, Sürdürülebilirlik ve Aile Şirketi Düşüncesi"
         />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://ecypro.com/insights" />
-        <link rel="canonical" href="https://ecypro.com/insights" />
-        <script type="application/ld+json">{JSON.stringify(itemListSchema)}</script>
+        <meta property="og:url" content="https://www.ecypro.com/insights" />
+        <meta property="og:image" content="https://www.ecypro.com/og/perspektifler.png" />
+        <link rel="canonical" href="https://www.ecypro.com/insights" />
+        <meta name="robots" content="index, follow, max-image-preview:large" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Perspektif | eCyPro" />
+        <meta
+          name="twitter:description"
+          content="Türkiye'nin Sermaye, Sürdürülebilirlik ve Aile Şirketi Düşüncesi"
+        />
+        <meta name="twitter:image" content="https://www.ecypro.com/og/perspektifler.png" />
       </Helmet>
+      <JsonLd data={itemListSchema} />
+      <JsonLd
+        data={{
+          '@context': 'https://schema.org',
+          '@type': 'BreadcrumbList',
+          itemListElement: [
+            { '@type': 'ListItem', position: 1, name: 'Anasayfa', item: 'https://www.ecypro.com/' },
+            {
+              '@type': 'ListItem',
+              position: 2,
+              name: 'Perspektif',
+              item: 'https://www.ecypro.com/insights',
+            },
+          ],
+        }}
+      />
 
       <PageWrapper>
         <main data-testid="insights-page">

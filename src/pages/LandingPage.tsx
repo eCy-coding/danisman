@@ -1,6 +1,7 @@
 import React, { Suspense } from 'react';
 import { Hero } from '../components/sections/Hero';
 import { SEO } from '../components/common/SEO';
+import { JsonLd } from '../components/seo/JsonLd';
 import { useTranslation } from '../lib/i18n';
 import { ShieldCheck, Clock, Target, Globe } from 'lucide-react';
 
@@ -60,7 +61,48 @@ export const LandingPage: React.FC = () => {
 
   return (
     <>
-      <SEO title={title} description={description} canonical="/" />
+      <SEO
+        title={title}
+        description={description}
+        canonical="/"
+        image="https://www.ecypro.com/og/home.png"
+      />
+      <JsonLd
+        data={{
+          '@context': 'https://schema.org',
+          '@type': 'WebSite',
+          '@id': 'https://www.ecypro.com/#website',
+          name: 'eCyPro Premium Consulting',
+          url: 'https://www.ecypro.com',
+          description:
+            lang === 'tr'
+              ? 'Stratejik danışmanlık, KVKK ve AB regülasyon uyumu, operasyonel verimlilik.'
+              : 'Strategic management consulting, KVKK compliance, and EU regulatory advisory.',
+          potentialAction: {
+            '@type': 'SearchAction',
+            target: {
+              '@type': 'EntryPoint',
+              urlTemplate: 'https://www.ecypro.com/insights?q={search_term_string}',
+            },
+            'query-input': 'required name=search_term_string',
+          },
+          publisher: { '@id': 'https://www.ecypro.com/#organization' },
+        }}
+      />
+      <JsonLd
+        data={{
+          '@context': 'https://schema.org',
+          '@type': 'BreadcrumbList',
+          itemListElement: [
+            {
+              '@type': 'ListItem',
+              position: 1,
+              name: lang === 'tr' ? 'Anasayfa' : 'Home',
+              item: 'https://www.ecypro.com/',
+            },
+          ],
+        }}
+      />
       <Hero />
       <TrustBar />
       <Suspense fallback={<div className="min-h-screen" />}>
