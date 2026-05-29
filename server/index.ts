@@ -178,6 +178,21 @@ let isShuttingDown = false;
 // ─── Playwright webServer probe (mock-server compat) ─────
 app.get('/__health', (_req, res) => res.json({ ok: true }));
 
+// ─── Standard health probes (BetterStack / k8s / uptime monitors) ──
+app.get('/healthz', (_req, res) => {
+  res.setHeader('Cache-Control', 'no-store');
+  res.json({ status: 'ok', service: 'ecypro-api' });
+});
+app.get('/readyz', (_req, res) => {
+  res.setHeader('Cache-Control', 'no-store');
+  if (isShuttingDown) {
+    res.setHeader('Retry-After', '15');
+    res.status(503).json({ status: 'not_ready', reason: 'draining' });
+    return;
+  }
+  res.json({ status: 'ready', service: 'ecypro-api' });
+});
+
 // ─── Health Check Endpoint ───────────────────────────────
 app.get('/api/health', (_req, res) => {
   // P99 follow-up — no CDN/edge caching of liveness payloads.
