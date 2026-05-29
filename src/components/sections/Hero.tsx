@@ -458,7 +458,7 @@ export const Hero: React.FC = () => {
             >
               <img
                 src="/founder.jpg"
-                alt="Emre Can Yalçın"
+                alt="Emre Can Yalçın — eCyPro Kurucu Ortak, Stratejik Danışman"
                 width={40}
                 height={40}
                 loading="lazy"

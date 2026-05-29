@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { useTranslation, getLang, MultiLang } from '../lib/i18n';
 import { ABOUT_COPY, TEAM_COPY, LOCATIONS_COPY } from '@/data/copy/pages';
@@ -154,11 +155,12 @@ export const AboutPage: React.FC = () => {
               <span className="inline-block text-xs font-bold tracking-[0.2em] text-secondary uppercase mb-6 border border-secondary/30 px-4 py-1.5 rounded-full bg-secondary/5">
                 {lang === 'tr' ? 'Hakkımızda' : 'About eCyPro'}
               </span>
+              {/* P32-T03: H1 keyword-optimized — "Stratejik Danışmanlık" targets TR SEO primary keyword. */}
               {/* P45: Sahte iddialı "Dünyanın En İyi" başlığı → eCyverse vizyonu copy. */}
               <h1 className="text-5xl md:text-7xl font-serif font-bold text-white leading-[1.05] mb-8">
                 {lang === 'tr' ? (
                   <>
-                    <span className="text-slate-300">Premium Consulting</span>
+                    <span className="text-slate-300">Stratejik Danışmanlık</span>
                     <br />
                     <span className="text-secondary">eCyverse</span>
                     <br />
@@ -166,18 +168,34 @@ export const AboutPage: React.FC = () => {
                   </>
                 ) : (
                   <>
-                    <span className="text-slate-300">Premium Consulting</span>
+                    <span className="text-slate-300">Strategic Management</span>
                     <br />
-                    <span className="text-secondary">eCyverse</span>
+                    <span className="text-secondary">Consulting</span>
                     <br />
                     Ecosystem
                   </>
                 )}
               </h1>
               <p className="text-xl text-slate-400 leading-relaxed max-w-2xl">
-                {lang === 'tr'
-                  ? 'eCyverse ekosisteminin premium danışmanlık kolu. Organizasyonel dönüşüm, stratejik danışmanlık ve kültür mühendisliği ile Türkiye merkezli, AB pazarlarında engagement deneyimi.'
-                  : 'The premium consulting arm of the eCyverse ecosystem. Organizational transformation, strategic advisory, and culture engineering — Türkiye-based with engagement experience across EU markets.'}
+                {lang === 'tr' ? (
+                  <>
+                    eCyverse ekosisteminin premium yönetim danışmanlığı kolu. Organizasyonel
+                    dönüşüm, stratejik danışmanlık ve kültür mühendisliği ile Türkiye merkezli, AB
+                    pazarlarında engagement deneyimi.{' '}
+                    <Link to="/services" className="text-secondary hover:underline font-medium">
+                      Hizmetlerimizi keşfedin →
+                    </Link>
+                  </>
+                ) : (
+                  <>
+                    The premium management consulting arm of the eCyverse ecosystem. Organizational
+                    transformation, strategic advisory, and culture engineering — Türkiye-based with
+                    engagement experience across EU markets.{' '}
+                    <Link to="/services" className="text-secondary hover:underline font-medium">
+                      Explore our services →
+                    </Link>
+                  </>
+                )}
               </p>
             </div>
           </FadeIn>

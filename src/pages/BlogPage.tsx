@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import BlogList from '../components/blog/BlogList';
 import { Navbar } from '@/components/layout/Navbar';
@@ -25,12 +26,15 @@ const BlogPage: React.FC = () => {
           <div className="text-center max-w-3xl mx-auto mb-20">
             <h1 className="text-4xl md:text-5xl font-serif text-white mb-6">
               <span className="bg-clip-text text-transparent bg-linear-to-r from-blue-200 to-white">
-                İçgörüler ve Perspektifler
+                Strateji & AI Danışmanlığı İçgörüleri
               </span>
             </h1>
             <p className="text-lg text-slate-400 leading-relaxed">
               Geleceği şekillendiren teknolojiler ve yönetim stratejileri üzerine uzman
-              analizlerimiz.
+              analizlerimiz.{' '}
+              <Link to="/services" className="text-secondary hover:underline">
+                Danışmanlık hizmetlerimiz →
+              </Link>
             </p>
           </div>
 
