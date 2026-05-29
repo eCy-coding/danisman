@@ -31,7 +31,7 @@ import { contactLimiter } from '../middleware/rateLimiter';
 import { idempotency } from '../middleware/idempotency';
 import { HttpError } from '../middleware/error';
 import { logger } from '../config/logger';
-import { capture as posthogCapture } from '../lib/posthog-server';
+import { captureWithConsent } from '../lib/posthog-server';
 import { upsertProspect } from '../services/notion';
 
 const router = Router();
@@ -53,6 +53,7 @@ const PricingSchema = z.object({
     budgetBand: BudgetBand,
   }),
   kvkkConsent: z.boolean().optional().default(false),
+  analyticsConsent: z.boolean().optional().default(false),
   hp_field: z.string().max(0).optional().default(''),
 });
 
@@ -196,9 +197,10 @@ router.post(
           .catch((err) => logger.warn('[pricing-calc] result email failed', { err: String(err) }));
       }
 
-      void posthogCapture({
+      void captureWithConsent({
         event: 'pricing_calculator_completed',
-        distinctId: data.email,
+        email: data.email,
+        consent: { kvkk: data.kvkkConsent, analytics: data.analyticsConsent },
         properties: {
           paket,
           teamSize: data.answers.teamSize,

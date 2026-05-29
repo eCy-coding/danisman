@@ -21,7 +21,7 @@ import { idempotency } from '../middleware/idempotency';
 import { HttpError } from '../middleware/error';
 import { prisma } from '../config/db';
 import { logger } from '../config/logger';
-import { capture as posthogCapture } from '../lib/posthog-server';
+import { captureWithConsent } from '../lib/posthog-server';
 import { upsertProspect } from '../services/notion';
 import { sendContactAck, isResendConfigured } from '../services/contact-ack';
 import { withOutboxRecord } from '../lib/outbox';
@@ -37,6 +37,7 @@ const DiscoverySchema = z.object({
   headcount: z.string().trim().max(20).optional().default(''),
   description: z.string().trim().max(1000).optional().default(''),
   kvkkConsent: z.boolean(),
+  analyticsConsent: z.boolean().optional().default(false),
   hp_field: z.string().max(0).optional().default(''),
 });
 
@@ -116,10 +117,11 @@ router.post(
         ).catch((err) => logger.warn('[discovery] ack email failed', { err: String(err) }));
       }
 
-      // PostHog: discovery_submitted
-      void posthogCapture({
+      // PostHog: discovery_submitted — gated by analytics consent + KVKK
+      void captureWithConsent({
         event: 'discovery_submitted',
-        distinctId: data.email,
+        email: data.email,
+        consent: { kvkk: data.kvkkConsent, analytics: data.analyticsConsent },
         properties: {
           company: data.company,
           sector: data.sector || null,

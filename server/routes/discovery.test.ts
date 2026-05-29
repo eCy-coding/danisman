@@ -45,7 +45,7 @@ vi.mock('../services/contact-ack', () => ({
 }));
 
 vi.mock('../lib/posthog-server', () => ({
-  capture: vi.fn(async () => undefined),
+  captureWithConsent: vi.fn(async () => ({ captured: false, reason: 'analytics_opt_out' })),
 }));
 
 vi.mock('../lib/outbox', () => ({
