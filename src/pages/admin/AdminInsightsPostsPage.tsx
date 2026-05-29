@@ -29,7 +29,7 @@ interface PostSummary {
   status: PostStatus;
   primaryDomain: Domain;
   subDomain: string;
-  author: { nameTr: string; slug: string } | null;
+  author: { displayName: string; slug: string } | null;
   viewCount: number;
   publishedAt: string | null;
   createdAt: string;
@@ -108,7 +108,7 @@ const ArchiveConfirmModal: React.FC<ArchiveModalProps> = ({
   >
     <div
       data-testid="post-archive-confirm-modal"
-      className="bg-[#1a1f2e] border border-white/10 rounded-2xl p-8 max-w-md w-full mx-4 shadow-2xl"
+      className="bg-slate-900 border border-white/10 rounded-2xl p-8 max-w-md w-full mx-4 shadow-2xl"
       role="dialog"
       aria-modal="true"
       aria-labelledby="archive-modal-title"
@@ -171,7 +171,21 @@ export const AdminInsightsPostsPage: React.FC = () => {
     queryKey: ['admin-insights-posts', domainFilter, statusFilter, search],
     queryFn: async () => {
       const res = await apiClient.get(`/admin/insights/posts?${params.toString()}`);
-      return (res as { data: { data: PostsListData } }).data.data;
+      const body = (
+        res as {
+          data: {
+            data: PostSummary[];
+            meta: { total: number; page: number; limit: number; pages: number };
+          };
+        }
+      ).data;
+      return {
+        items: body.data,
+        total: body.meta.total,
+        page: body.meta.page,
+        limit: body.meta.limit,
+        pages: body.meta.pages,
+      } satisfies PostsListData;
     },
   });
 
@@ -294,7 +308,7 @@ export const AdminInsightsPostsPage: React.FC = () => {
         ) : (
           <div
             data-testid="posts-table"
-            className="bg-[#0d1117] border border-white/10 rounded-2xl overflow-hidden"
+            className="bg-zinc-950 border border-white/10 rounded-2xl overflow-hidden"
           >
             {/* Table header */}
             <div className="grid grid-cols-[1fr_120px_120px_160px_80px_100px] gap-4 px-6 py-3 bg-white/5 border-b border-white/10 text-xs font-medium text-slate-400 uppercase tracking-wider">
@@ -385,7 +399,7 @@ const PostRow: React.FC<PostRowProps> = ({ post, onEdit, onArchive }) => (
       {STATUS_LABELS[post.status]}
     </span>
 
-    <span className="text-slate-400 text-xs truncate">{post.author?.nameTr ?? '—'}</span>
+    <span className="text-slate-400 text-xs truncate">{post.author?.displayName ?? '—'}</span>
 
     <span className="text-slate-400 text-xs">{post.viewCount.toLocaleString('tr-TR')}</span>
 
