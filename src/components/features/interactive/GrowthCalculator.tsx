@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { motion } from 'motion/react';
 import { Link } from 'react-router-dom';
@@ -9,6 +9,7 @@ import { SmartSlider } from '../../ui/smart-form/SmartSlider';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { AreaChart, Area, XAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
+import { emit } from '../../../lib/analytics-events';
 
 const calculatorSchema = z.object({
   revenue: z.number().min(100000).max(100000000),
@@ -51,9 +52,16 @@ const AnimatedNumber = ({ value }: { value: number }) => {
 export const GrowthCalculator: React.FC = () => {
   const { calculator, updateCalculator } = useInteractionStore();
   const [isMounted, setIsMounted] = useState(false);
+  const startedRef = useRef(false);
+  const revenueTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const teamTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     setIsMounted(true);
+    return () => {
+      if (revenueTimerRef.current) clearTimeout(revenueTimerRef.current);
+      if (teamTimerRef.current) clearTimeout(teamTimerRef.current);
+    };
   }, []);
 
   const methods = useForm<CalculatorForm>({
@@ -92,10 +100,28 @@ export const GrowthCalculator: React.FC = () => {
 
   useEffect(() => {
     if (values.revenue && values.teamSize) {
-      updateCalculator({
-        revenue: values.revenue,
-        teamSize: values.teamSize,
-      });
+      updateCalculator({ revenue: values.revenue, teamSize: values.teamSize });
+
+      if (!startedRef.current) {
+        startedRef.current = true;
+        emit('roi_calc_step', { step: 'start', values: { revenue: String(values.revenue) } });
+      }
+
+      if (revenueTimerRef.current) clearTimeout(revenueTimerRef.current);
+      revenueTimerRef.current = setTimeout(() => {
+        emit('roi_calc_step', {
+          step: 'input_revenue',
+          values: { revenue: String(values.revenue) },
+        });
+      }, 500);
+
+      if (teamTimerRef.current) clearTimeout(teamTimerRef.current);
+      teamTimerRef.current = setTimeout(() => {
+        emit('roi_calc_step', {
+          step: 'input_efficiency',
+          values: { efficiencyGain: String(values.teamSize) },
+        });
+      }, 500);
     }
   }, [values.revenue, values.teamSize, updateCalculator]);
 
@@ -324,6 +350,15 @@ export const GrowthCalculator: React.FC = () => {
                   })
                 }
                 className="group relative px-6 py-3 bg-white text-neutral font-medium rounded-xl hover:bg-slate-100 transition-colors overflow-hidden flex items-center gap-2"
+                onClick={() =>
+                  emit('roi_calc_step', {
+                    step: 'cta_click',
+                    values: {
+                      revenue: String(activeRevenue),
+                      roiResult: Math.round(projection),
+                    },
+                  })
+                }
               >
                 <span className="relative z-10">Get Detailed Blueprint</span>
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform relative z-10" />
