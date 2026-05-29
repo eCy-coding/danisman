@@ -32,6 +32,39 @@ export const NAV_ITEMS = {
       },
     ],
   },
+  sektorler: {
+    id: 'sektorler',
+    href: '/sektorler',
+    label: { tr: 'Sektörler', en: 'Industries' },
+    hasMegaMenu: true,
+    children: [
+      {
+        id: 'imalat',
+        label: { tr: 'İmalat Sanayi', en: 'Manufacturing' },
+        href: '/sektorler/imalat-sanayi',
+      },
+      {
+        id: 'finansal',
+        label: { tr: 'Finansal Hizmetler', en: 'Financial Services' },
+        href: '/sektorler/finansal-hizmetler',
+      },
+      {
+        id: 'ilac',
+        label: { tr: 'İlaç & Sağlık', en: 'Pharma & Healthcare' },
+        href: '/sektorler/ilac-saglik',
+      },
+      {
+        id: 'perakende',
+        label: { tr: 'Perakende & E-Ticaret', en: 'Retail & E-Commerce' },
+        href: '/sektorler/perakende-e-ticaret',
+      },
+      {
+        id: 'teknoloji',
+        label: { tr: 'Teknoloji & SaaS', en: 'Tech & SaaS' },
+        href: '/sektorler/teknoloji-saas',
+      },
+    ],
+  },
   insights: {
     id: 'insights',
     href: '#insights',
@@ -43,6 +76,11 @@ export const NAV_ITEMS = {
         id: 'case-studies',
         label: { tr: 'Vaka Analizleri', en: 'Case Studies' },
         href: '/case-studies',
+      },
+      {
+        id: 'calismalar',
+        label: { tr: 'Çalışmalar', en: 'Works' },
+        href: '/calismalar',
       },
     ],
   },

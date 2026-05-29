@@ -50,6 +50,19 @@ const STATIC_ROUTES = [
   'insights/aile-sirketi',
 ];
 
+// Competitor gap routes with custom priority per spec
+const COMPETITOR_GAP_ROUTES: Array<{ path: string; changefreq: string; priority: string }> = [
+  { path: 'sektorler', changefreq: 'weekly', priority: '0.9' },
+  { path: 'sektorler/imalat-sanayi', changefreq: 'weekly', priority: '0.8' },
+  { path: 'sektorler/finansal-hizmetler', changefreq: 'weekly', priority: '0.8' },
+  { path: 'sektorler/ilac-saglik', changefreq: 'weekly', priority: '0.8' },
+  { path: 'sektorler/perakende-e-ticaret', changefreq: 'weekly', priority: '0.8' },
+  { path: 'sektorler/teknoloji-saas', changefreq: 'weekly', priority: '0.8' },
+  { path: 'guvence', changefreq: 'monthly', priority: '0.8' },
+  { path: 'araclar/denetim-hazirlik-skoru', changefreq: 'monthly', priority: '0.7' },
+  { path: 'calismalar', changefreq: 'weekly', priority: '0.7' },
+];
+
 const BASE_URL = 'https://www.ecypro.com';
 
 async function generateSitemap() {
@@ -172,6 +185,11 @@ async function generateSitemap() {
     xml += buildUrl(`services/${slug}`, 'weekly', '0.9');
   });
 
+  // Add competitor gap routes
+  COMPETITOR_GAP_ROUTES.forEach(({ path, changefreq, priority }) => {
+    xml += buildUrl(path, changefreq, priority);
+  });
+
   xml += `
 </urlset>`;
 
@@ -209,6 +227,7 @@ async function generateSitemap() {
         changefreq: 'weekly',
         priority: '0.9',
       })),
+      ...COMPETITOR_GAP_ROUTES,
     ];
 
     const urls = allPaths
@@ -236,7 +255,11 @@ async function generateSitemap() {
   const trSitemap = buildLocaleSitemap('tr');
   const enSitemap = buildLocaleSitemap('en');
   const totalUrls =
-    STATIC_ROUTES.length + blogSlugs.length + caseSlugs.length + serviceSlugs.length;
+    STATIC_ROUTES.length +
+    blogSlugs.length +
+    caseSlugs.length +
+    serviceSlugs.length +
+    COMPETITOR_GAP_ROUTES.length;
   const now = new Date().toISOString().split('T')[0];
 
   // Sitemap index — points to all 3 sitemaps

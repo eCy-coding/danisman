@@ -141,10 +141,39 @@ export const Footer: React.FC = () => {
               </li>
               <li>
                 <Link
-                  to="/industries"
+                  to="/sektorler"
                   className="hover:text-secondary transition-colors block min-h-11 py-2 outline-none focus-visible:text-secondary"
                 >
                   {lang === 'tr' ? 'Sektör Çözümleri' : 'Industry Solutions'}
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/calismalar"
+                  className="hover:text-secondary transition-colors block min-h-11 py-2 outline-none focus-visible:text-secondary"
+                >
+                  {lang === 'tr' ? 'Çalışmalar' : 'Case Works'}
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/guvence"
+                  className="hover:text-secondary transition-colors block min-h-11 py-2 outline-none focus-visible:text-secondary"
+                >
+                  {lang === 'tr' ? 'Güvence & Bağımsızlık' : 'Trust & Independence'}
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/araclar/denetim-hazirlik-skoru"
+                  className="hover:text-secondary transition-colors block min-h-11 py-2 outline-none focus-visible:text-secondary"
+                  data-cta-source="footer"
+                  data-cta="denetim-skoru"
+                  data-track="cta-click"
+                >
+                  {lang === 'tr'
+                    ? 'Denetim Hazırlık Skoru (Ücretsiz)'
+                    : 'Audit Readiness Score (Free)'}
                 </Link>
               </li>
               <li>
