@@ -7,7 +7,7 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Helmet } from 'react-helmet-async';
+import { Helmet } from '@/lib/seo-helmet';
 import { ArrowRight, CheckCircle2, Clock, Target, ExternalLink, Award } from 'lucide-react';
 import { JsonLd } from '../components/seo/JsonLd';
 import { buildFounderSchema } from '../lib/seo/founder-schema';
@@ -100,9 +100,32 @@ export const FounderPage: React.FC = () => {
         />
         <meta property="og:type" content="profile" />
         <meta property="og:url" content={buildCanonical('/founder', 'tr')} />
-        <meta property="og:image" content="https://www.ecypro.com/founder.jpg" />
+        <meta property="og:image" content="https://www.ecypro.com/og/founder.png" />
+        <meta name="robots" content="index, follow, max-image-preview:large" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Emre Can Yalçın — Kurucu & Baş Stratejist | eCyPro" />
+        <meta
+          name="twitter:description"
+          content="10+ yıl danışmanlık, 120+ stratejik karar. Big4 metodolojisi boutique çevikliğiyle."
+        />
+        <meta name="twitter:image" content="https://www.ecypro.com/og/founder.png" />
       </Helmet>
       <JsonLd data={founderSchema} />
+      <JsonLd
+        data={{
+          '@context': 'https://schema.org',
+          '@type': 'BreadcrumbList',
+          itemListElement: [
+            { '@type': 'ListItem', position: 1, name: 'Anasayfa', item: 'https://www.ecypro.com/' },
+            {
+              '@type': 'ListItem',
+              position: 2,
+              name: 'Kurucu',
+              item: 'https://www.ecypro.com/founder',
+            },
+          ],
+        }}
+      />
 
       <PageWrapper className="bg-neutral">
         {/* ── Hero ── */}

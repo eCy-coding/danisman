@@ -7,7 +7,8 @@
  */
 
 import React, { useState } from 'react';
-import { Helmet } from 'react-helmet-async';
+import { Helmet } from '@/lib/seo-helmet';
+import { JsonLd } from '@/components/seo/JsonLd';
 import { useMutation } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
 import { AlertCircle, ArrowRight, CheckCircle2, Clock, Lock } from 'lucide-react';
@@ -101,7 +102,53 @@ export const Discovery: React.FC = () => {
           content="30 dakika ücretsiz keşif görüşmesi. M&A, ESG, stratejik dönüşüm veya Aile Şirketi yönetişimi konularında ilk değerlendirme."
         />
         <link rel="canonical" href={buildCanonical('/discovery', 'tr')} />
+        <meta property="og:title" content="Tanışma Toplantısı Talebi — eCyPro Premium Consulting" />
+        <meta
+          property="og:description"
+          content="30 dakika ücretsiz keşif görüşmesi. M&A, ESG, stratejik dönüşüm veya Aile Şirketi yönetişimi için taahhütsüz ilk değerlendirme."
+        />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={buildCanonical('/discovery', 'tr')} />
+        <meta property="og:image" content="https://www.ecypro.com/og/discovery.png" />
+        <meta name="robots" content="index, follow, max-image-preview:large" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Tanışma Toplantısı Talebi | eCyPro" />
+        <meta
+          name="twitter:description"
+          content="30 dakika ücretsiz keşif görüşmesi. Taahhütsüz stratejik değerlendirme."
+        />
+        <meta name="twitter:image" content="https://www.ecypro.com/og/discovery.png" />
       </Helmet>
+      <JsonLd
+        data={{
+          '@context': 'https://schema.org',
+          '@type': 'ContactPage',
+          name: 'Tanışma Toplantısı Talebi',
+          description:
+            '30 dakika ücretsiz keşif görüşmesi. M&A, ESG, stratejik dönüşüm veya Aile Şirketi yönetişimi.',
+          url: 'https://www.ecypro.com/discovery',
+          provider: {
+            '@type': 'ProfessionalService',
+            name: 'eCyPro Premium Consulting',
+            url: 'https://www.ecypro.com',
+          },
+        }}
+      />
+      <JsonLd
+        data={{
+          '@context': 'https://schema.org',
+          '@type': 'BreadcrumbList',
+          itemListElement: [
+            { '@type': 'ListItem', position: 1, name: 'Anasayfa', item: 'https://www.ecypro.com/' },
+            {
+              '@type': 'ListItem',
+              position: 2,
+              name: 'Tanışma Toplantısı',
+              item: 'https://www.ecypro.com/discovery',
+            },
+          ],
+        }}
+      />
 
       <PageWrapper>
         <div className="container mx-auto px-4 py-16 max-w-2xl">

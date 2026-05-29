@@ -7,7 +7,7 @@
  */
 
 import React, { useState, useRef, useCallback } from 'react';
-import { Helmet } from 'react-helmet-async';
+import { Helmet } from '@/lib/seo-helmet';
 import { motion } from 'motion/react';
 import { Check, X, ArrowRight, Sparkles, Zap, Crown, ChevronDown } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -68,6 +68,17 @@ export const PricingPage: React.FC = () => {
           property="og:description"
           content="Saat satmıyoruz — sonuç ve milestone bazlı retainer modeli."
         />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://www.ecypro.com/pricing" />
+        <meta property="og:image" content="https://www.ecypro.com/og/pricing.png" />
+        <meta name="robots" content="index, follow, max-image-preview:large" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Fiyatlandırma — Starter, Growth, Enterprise | eCyPro" />
+        <meta
+          name="twitter:description"
+          content="Şeffaf USD fiyatlandırma: Starter, Growth, Enterprise. Sonuç bazlı retainer."
+        />
+        <meta name="twitter:image" content="https://www.ecypro.com/og/pricing.png" />
       </Helmet>
 
       <JsonLd
@@ -77,9 +88,36 @@ export const PricingPage: React.FC = () => {
       />
       <JsonLd
         data={buildBreadcrumbSchema([
-          { name: 'Anasayfa', url: 'https://ecypro.com/' },
-          { name: 'Fiyatlandırma', url: 'https://ecypro.com/pricing' },
+          { name: 'Anasayfa', url: 'https://www.ecypro.com/' },
+          { name: 'Fiyatlandırma', url: 'https://www.ecypro.com/pricing' },
         ])}
+      />
+      <JsonLd
+        data={{
+          '@context': 'https://schema.org',
+          '@type': 'Service',
+          name: 'eCyPro Stratejik Danışmanlık',
+          provider: {
+            '@type': 'ProfessionalService',
+            name: 'eCyPro Premium Consulting',
+            url: 'https://www.ecypro.com',
+          },
+          hasOfferCatalog: {
+            '@type': 'OfferCatalog',
+            name: 'Danışmanlık Paketleri',
+            itemListElement: PRICING_TIERS.map((tier) => ({
+              '@type': 'Offer',
+              name: tier.name,
+              description: tier.tagline,
+              priceSpecification: {
+                '@type': 'PriceSpecification',
+                price: tier.priceLabel,
+                priceCurrency: 'USD',
+              },
+              url: `https://www.ecypro.com/pricing`,
+            })),
+          },
+        }}
       />
 
       <PageWrapper className="bg-neutral pt-32 pb-24">
