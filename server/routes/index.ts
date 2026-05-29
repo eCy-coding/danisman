@@ -54,6 +54,7 @@ import adminRbacRoutes from './admin-rbac';
 import discoveryRoutes from './discovery';
 // Perspektif Blog — PB-2 admin API + PB-3 public search
 import { adminInsightsRouter } from './admin-insights';
+import { adminInsightsCategoriesRouter } from './admin-insights-categories';
 import { publicInsightsSearchRouter } from './public-insights-search';
 // Wave-3A — Insights SEO sitemap management
 import insightsSeoRoutes from './insights-seo';
@@ -74,6 +75,25 @@ const router = Router();
 // BE-7: SERVICE_VERSION pulled from npm_package_version (set by node when run
 // via `npm`/`pnpm`) → falls back to RELEASE_VERSION env (set by Render) → "1.0.0".
 const SERVICE_VERSION = process.env.npm_package_version || process.env.RELEASE_VERSION || '1.0.0';
+
+// ─── Sentry release echo (L2-3) ─────────────────────────
+// Lightweight endpoint to verify the active Sentry release tag matches
+// the uploaded sourcemaps after each deploy. No auth required.
+router.get('/sentry/health', (_req, res) => {
+  res.setHeader('Cache-Control', 'no-store');
+  const raw =
+    process.env.SENTRY_RELEASE ||
+    process.env.RENDER_GIT_COMMIT ||
+    process.env.npm_package_version ||
+    '';
+  const release = raw ? (raw.startsWith('ecypro@') ? raw : `ecypro@${raw.slice(0, 7)}`) : 'unset';
+  res.json({
+    status: 'ok',
+    release,
+    sentryConfigured: Boolean(process.env.SENTRY_DSN),
+    environment: process.env.SENTRY_ENVIRONMENT || process.env.NODE_ENV || 'development',
+  });
+});
 
 // ─── Basic health check ──────────────────────────────────
 // Fast path — NO DB/Redis calls. For platform liveness probes.
@@ -507,6 +527,7 @@ router.use('/admin/independence', adminIndependenceRoutes);
 // Phase 4 — RBAC Hardening
 router.use('/admin/rbac', adminRbacRoutes);
 // Perspektif Blog — PB-2 admin API + PB-3 public search
+router.use('/admin/insights/categories', adminInsightsCategoriesRouter);
 router.use('/admin/insights', adminInsightsRouter);
 router.use('/insights', publicInsightsSearchRouter);
 router.use('/webhooks', webhookRoutes);

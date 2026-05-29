@@ -22,6 +22,22 @@ const HAS_SVGO = (() => {
 import { VitePWA } from 'vite-plugin-pwa';
 import { sentryVitePlugin } from '@sentry/vite-plugin';
 import { IncomingMessage, ServerResponse } from 'http';
+import { execSync } from 'node:child_process';
+
+// L2-3 — Canonical Sentry release name shared by BOTH the runtime tag
+// (injected into VITE_APP_VERSION below) and the sourcemap upload
+// (sentryVitePlugin.release.name). They MUST be identical or Sentry cannot
+// symbolicate. Format: `ecypro@<short-sha>`. Vercel exposes VERCEL_GIT_COMMIT_SHA.
+const GIT_SHA =
+  process.env.VERCEL_GIT_COMMIT_SHA?.slice(0, 7) ??
+  (() => {
+    try {
+      return execSync('git rev-parse --short HEAD').toString().trim();
+    } catch {
+      return 'dev';
+    }
+  })();
+const SENTRY_RELEASE = process.env.SENTRY_RELEASE ?? `ecypro@${GIT_SHA}`;
 
 // P5-3 — vite-plugin-pwa and the SPA-fallback rule in vite preview have a
 // known interaction where requests for /manifest.webmanifest and certain
@@ -396,21 +412,24 @@ export default defineConfig(({ mode }) => {
         },
       }),
       wasmContentTypePlugin,
-      // P40-T91: Sentry Source Maps CI
-      // sentryVitePlugin activates only when SENTRY_AUTH_TOKEN is set in CI.
+      // L2-3 (was P40-T91): Sentry Source Maps CI
+      // sentryVitePlugin activates only when SENTRY_AUTH_TOKEN is set (Vercel build env).
       // In local dev / preview without token → plugin is silently skipped (no-op).
       ...(process.env.SENTRY_AUTH_TOKEN
         ? [
             sentryVitePlugin({
               org: process.env.SENTRY_ORG ?? 'ecypro',
-              project: process.env.SENTRY_PROJECT ?? 'ecypro-frontend',
+              project:
+                process.env.SENTRY_PROJECT_FRONTEND ??
+                process.env.SENTRY_PROJECT ??
+                'ecypro-frontend',
               authToken: process.env.SENTRY_AUTH_TOKEN,
               sourcemaps: {
                 assets: './dist/**',
                 ignore: ['node_modules'],
               },
               release: {
-                name: process.env.npm_package_version ?? 'latest',
+                name: SENTRY_RELEASE,
                 deploy: {
                   env: process.env.NODE_ENV ?? 'production',
                 },
@@ -431,6 +450,12 @@ export default defineConfig(({ mode }) => {
         // that exposes the same Helmet + HelmetProvider API.
         'react-helmet-async': path.resolve(__dirname, './src/lib/seo-helmet.tsx'),
       },
+    },
+    // L2-3 — Inject the build SHA so src/lib/sentry.ts emits `ecypro@<sha>` as
+    // its runtime release, matching the uploaded sourcemaps. VITE_APP_VERSION
+    // env overrides (e.g. semver tag releases); fallback to GIT_SHA.
+    define: {
+      'import.meta.env.VITE_APP_VERSION': JSON.stringify(process.env.VITE_APP_VERSION ?? GIT_SHA),
     },
     // P7 Round C — strip console.* and debugger statements from production
     // bundles via esbuild. Drops ~2-3KB pre-gzip from main + scattered chunks,

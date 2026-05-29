@@ -287,6 +287,26 @@ const AdminInsightsPage = React.lazy(() =>
     default: module.AdminInsightsPage,
   })),
 );
+const AdminInsightsCategoriesPage = React.lazy(() =>
+  import('./pages/admin/AdminInsightsCategoriesPage').then((module) => ({
+    default: module.AdminInsightsCategoriesPage,
+  })),
+);
+const AdminInsightsPostsPage = React.lazy(() =>
+  import('./pages/admin/AdminInsightsPostsPage').then((module) => ({
+    default: module.AdminInsightsPostsPage,
+  })),
+);
+const AdminInsightsPostEditPage = React.lazy(() =>
+  import('./pages/admin/AdminInsightsPostEditPage').then((module) => ({
+    default: module.AdminInsightsPostEditPage,
+  })),
+);
+const AdminInsightsMetadataPage = React.lazy(() =>
+  import('./pages/admin/AdminInsightsMetadataPage').then((module) => ({
+    default: module.AdminInsightsMetadataPage,
+  })),
+);
 const StatusPage = React.lazy(() =>
   import('./pages/StatusPage').then((module) => ({ default: module.StatusPage })),
 );
@@ -1396,6 +1416,46 @@ const AnimatedRoutes = () => {
                 element={
                   <Suspense fallback={<LoadingFallback />}>
                     <AdminInsightsPage />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="insights/categories"
+                element={
+                  <Suspense fallback={<LoadingFallback />}>
+                    <AdminInsightsCategoriesPage />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="insights/posts"
+                element={
+                  <Suspense fallback={<LoadingFallback />}>
+                    <AdminInsightsPostsPage />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="insights/posts/new"
+                element={
+                  <Suspense fallback={<LoadingFallback />}>
+                    <AdminInsightsPostEditPage />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="insights/posts/:id/edit"
+                element={
+                  <Suspense fallback={<LoadingFallback />}>
+                    <AdminInsightsPostEditPage />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="insights/metadata"
+                element={
+                  <Suspense fallback={<LoadingFallback />}>
+                    <AdminInsightsMetadataPage />
                   </Suspense>
                 }
               />

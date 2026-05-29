@@ -36,6 +36,44 @@ This file is the single source of truth for the project's state. Any AI agent ta
 
 ## �🟢 Completed Phases
 
+### [Phase 40] Observability + DevOps ✅ RECONCILE (2026-05-29)
+
+- Premise-verify: kod/config/doc deliverable'ları hazır — Sentry sourcemaps CI (release.yml),
+  Lighthouse CI (lighthouse.yml + .lighthouserc.js), Better Stack log (@logtail/winston + logger.ts),
+  PM2 (ecosystem.config.cjs), DB backup (scripts/backup-db.sh), GHCR (docker.yml), incident
+  runbook (docs/INCIDENT_RUNBOOK.md). T09 blue-green = Vercel/Render managed atomic deploy.
+- Gerçek code-gap yok (P32 audit-bug / P34 dead-CTA / P39 dead-store tipinde değil). Saf reconcile.
+- Owner (Phase B): T04 UptimeRobot, T05 status.ecypro.com.
+- Ayrı task (flag): iki örtüşen Lighthouse kurulumu (.lighthouserc.js vs .cjs) — billing fix sonrası konsolide.
+
+### [Phase 39] i18n + International SEO ✅ RECONCILE (2026-05-29)
+
+- Premise-verify: 9/10 todo kodda hazır (hreflang Hreflang.tsx, LocaleRoute.tsx, currency
+  store+switcher, organization-schema.ts areaServed, i18next-icu i18n-react.ts, TMS
+  memory.json+i18n-suggest.ts, rtl.ts, sitemap-tr/en/index). Checkbox'lar geriden takip ediyordu.
+- Gerçek delta: dead duplicate `src/lib/stores/currencyStore.ts` (0 importer; canlı store
+  `src/stores/currencyStore.ts`, 3 importer + test) silindi.
+- T06 GSC International Targeting = owner dashboard aksiyonu (Phase B).
+
+### [Phase 34] Conversion + Analytics ✅ RECONCILE (2026-05-29)
+
+- Premise-verify: 9/10 todo kodda hazır (GrowthBook A/B, Clarity, useFormAnalytics,
+  useScrollDepth, CRO_PLAYBOOK.md, lead-scoring). Checkbox'lar geriden takip ediyordu.
+- Gerçek delta T02: canlı `GrowthCalculator` (ServicesPage) hiç event atmıyordu +
+  "Get Detailed Blueprint" CTA ölüydü (onClick yok). `emit('roi_calc_step', ...)`
+  result_view (800ms debounce) + cta_click eklendi; CTA `/discovery-call` Link'e bağlandı.
+  3 unit test (GrowthCalculator.test.tsx). typecheck:web 0, lint 0, test 3/3.
+- T01 GA4 "mark as conversion" = owner dashboard aksiyonu (Phase B); kod event'leri hazır.
+
+### [Phase 32] Keyword + Content ✅ RECONCILE (2026-05-29)
+
+- Premise-verify: 10/10 todo kodda hazır bulundu (checkbox'lar geriden takip ediyordu).
+  Kanıt: keyword matrisi + TR/EN map (`brain/seo/`), 44 blog post (5 hedef konu dahil),
+  `/pillar/:slug` + `pillars-content.ts`, FAQPage schema, `trailingSlash:false` (#95), 38 sayfa SEO/Helmet.
+- Gerçek delta: `scripts/audit-img-alt.ts` — dinamik `alt={expr}` JSX'i string-literal değil diye
+  MISSING_ALT sayıyordu (34 false-positive) + test fixture'larını tarıyordu. Regex'e `{expr}` branch +
+  test-file exclusion eklendi → 0 error (1 decorative warn). T08 audit artık güvenilir.
+
 ### [Phase 24α] Residual Closure ✅ (Tamamlandı)
 
 - A1-A2: CookieBanner a11y (useId, role=dialog, aria-modal, aria-labelledby, contrast slate-500→400).
