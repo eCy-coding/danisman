@@ -41,6 +41,21 @@ function flattenChildren(children: HelmetProps['children']): React.ReactElement[
   return result;
 }
 
+// Flattens React children to a plain string. Handles the cases where JSX
+// compiles multiple children into an array, e.g.
+// <title>{post.title} | eCyPro Blog</title>
+// → props.children = [post.title, ' | eCyPro Blog']
+function extractText(children: unknown): string | undefined {
+  if (children == null) return undefined;
+  if (typeof children === 'string') return children;
+  if (typeof children === 'number') return String(children);
+  if (Array.isArray(children)) {
+    const parts = children.map(extractText).filter((s): s is string => s !== undefined);
+    return parts.length > 0 ? parts.join('') : undefined;
+  }
+  return undefined;
+}
+
 function parseTag(el: React.ReactElement): ParsedTag | null {
   const tag = typeof el.type === 'string' ? el.type : null;
   if (!tag) return null;
@@ -51,8 +66,7 @@ function parseTag(el: React.ReactElement): ParsedTag | null {
 
   for (const [key, value] of Object.entries(props)) {
     if (key === 'children') {
-      if (typeof value === 'string') text = value;
-      else if (typeof value === 'number') text = String(value);
+      text = extractText(value);
       continue;
     }
     if (value == null || typeof value === 'boolean') continue;
