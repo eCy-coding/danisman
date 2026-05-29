@@ -74,6 +74,16 @@ This file is the single source of truth for the project's state. Any AI agent ta
   MISSING_ALT sayıyordu (34 false-positive) + test fixture'larını tarıyordu. Regex'e `{expr}` branch +
   test-file exclusion eklendi → 0 error (1 decorative warn). T08 audit artık güvenilir.
 
+### [Phase 31] SEO + GSC/GA4 + Indexing Foundation ✅ (2026-05-29)
+
+- **T04** ✅ `scripts/audit-canonical.ts` — SPA-aware canonical audit; robots.txt check; skips shell files.
+- **T05** ✅ `src/lib/analytics.ts` — trackCTA/trackScrollDepth/trackForm/trackBooking/trackROICalc GA4 helpers live.
+- **T07** ✅ `scripts/indexing-api-push.ts` — Google Indexing API bulk push 41 URLs; `npm run indexing:push`.
+- **T09** ✅ `scripts/indexnow-push.ts` — IndexNow Bing/Yandex push.
+- **T10** ✅ `scripts/audit-jsonld.ts` — JSON-LD schema audit 7/7 pass; report: `audits/jsonld-audit.json`.
+- **PBVC:** typecheck 0/0 ✅ · tests 753/753 ✅
+- **Pending manual (user):** T01 GSC DNS TXT, T02 GA4 VITE_GA_TRACKING_ID, T03 sitemap submit, T06 GSC baseline CSV, T08 Bing/Yandex Webmaster.
+
 ### [Phase 24α] Residual Closure ✅ (Tamamlandı)
 
 - A1-A2: CookieBanner a11y (useId, role=dialog, aria-modal, aria-labelledby, contrast slate-500→400).

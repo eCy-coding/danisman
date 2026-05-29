@@ -60,6 +60,21 @@ function auditRobots(): { ok: boolean; issues: string[] } {
   return { ok: issues.length === 0, issues };
 }
 
+// SPA non-SEO files — skip canonical check (admin panel, offline, tooling)
+// Canonical tags for these are either irrelevant or set at runtime by React Helmet.
+// index.html = SPA entry shell (canonical set at runtime by React Helmet/SEO component)
+const SPA_SKIP_PATTERNS = [
+  /dist\/index\.html$/,
+  /dist\/admin\.html$/,
+  /dist\/offline\.html$/,
+  /dist\/tools\//,
+];
+
+function isSpaShell(file: string): boolean {
+  const normalized = file.replace(/\\/g, '/');
+  return SPA_SKIP_PATTERNS.some((p) => p.test(normalized));
+}
+
 // ── Main ─────────────────────────────────────────────────────────────────────
 function main(): void {
   console.log('\n🔍 eCyPro Canonical URL Audit\n');
@@ -73,10 +88,22 @@ function main(): void {
 
   let htmlFiles: string[];
   try {
-    htmlFiles = collectHtmlFiles(DIST_DIR);
+    htmlFiles = collectHtmlFiles(DIST_DIR).filter((f) => !isSpaShell(f));
   } catch {
     console.error('\n  ⚠️  dist/ not found — run `npm run build` first.\n');
     process.exit(1);
+  }
+
+  if (htmlFiles.length === 0) {
+    console.log(
+      '\n  ℹ️  No SEO HTML files in dist/ — SPA build without prerendering.\n' +
+        '     Canonical tags are injected at runtime via React Helmet.\n' +
+        '     robots.txt check above is the relevant static gate.\n',
+    );
+    console.log(`${'─'.repeat(60)}`);
+    console.log(`  robots  : ${robotsAudit.ok ? '✅ OK' : '❌ FAIL'}`);
+    console.log(`${'─'.repeat(60)}\n`);
+    process.exit(robotsAudit.ok ? 0 : 1);
   }
 
   console.log(`\n  Scanning ${htmlFiles.length} HTML files in dist/…\n`);

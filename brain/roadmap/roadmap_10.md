@@ -29,14 +29,14 @@
 - **YÖNTEM:** GSC → Sitemaps → `https://ecypro.com/sitemap.xml` submit → Success bekle → "URL Inspection" tool ile en önemli 5 URL için manuel "Request Indexing": `/`, `/services`, `/case-studies`, `/about`, `/contact`. GSC günlük 10 URL kotası var, stratejik seç.
 - **TEST:** GSC → Sitemaps → "Success" status + "Discovered URLs: 41". 7 gün sonra GSC Coverage → "Indexed: ≥10". 30 gün sonra → 41/41.
 
-## ⬜ P31-T04: robots.txt + Canonical URL Production Audit
+## ✅ P31-T04: robots.txt + Canonical URL Production Audit
 
 - **NEDEN:** robots.txt'deki tek yanlış satır (`Disallow: /`) Google'ın site'ı taramasını tamamen engelleyebilir. Canonical URL eksikse duplicate content cezası (TR/EN veya trailing slash varyantları). Phase 20.5 H2/H3'te eklendi ama production doğrulaması yapılmadı.
 - **ÖNEM:** P0 — Tek bir hata SEO'yu sıfırlar. En düşük çaba / en yüksek koruma oranı.
 - **YÖNTEM:** `public/robots.txt` review → `Allow: /` + `Sitemap: https://ecypro.com/sitemap.xml` satırları doğrula. Production deploy sonrası `curl https://ecypro.com/robots.txt`. Her sayfa `<link rel="canonical" href="https://ecypro.com/...">` içermeli — `scripts/audit-canonical.ts` yaz: `dist/` içindeki her HTML'i parse et, canonical tag eksik olanları listele.
 - **TEST:** `curl -s https://ecypro.com/robots.txt | grep -E "^Allow|^Sitemap"` → 2 satır döner. `npm run build && npx tsx scripts/audit-canonical.ts` → "All 41 pages have canonical: ✅".
 
-## ⬜ P31-T05: GA4 Custom Event Tracking (CTA, Form, Scroll, ROI Tool)
+## ✅ P31-T05: GA4 Custom Event Tracking (CTA, Form, Scroll, ROI Tool)
 
 - **NEDEN:** Default page_view yetersiz. Hangi CTA tıklandığı, ROI Calculator'da hangi alan dolduruldu, contact form abandon oranı bilinmeden conversion optimization yapılamaz. İstek3'te "ROI aracı GA4 ile izlemek organik ziyaretçinin davranışını anlamak için" özellikle vurgulandı.
 - **ÖNEM:** P1 — Conversion funnel measurement temel taşı. Phase 34 A/B testing'in önkoşulu.
@@ -50,7 +50,7 @@
 - **YÖNTEM:** GSC → Performance → 7 gün filter → "Export" → CSV indir → `brain/seo/baseline_2026-05-05.csv` olarak kaydet. Metrikler: Total clicks, impressions, CTR, average position, top queries (1-10), top pages (1-10), top countries. Haftalık delta için script: `scripts/seo-weekly-diff.ts`.
 - **TEST:** `brain/seo/baseline_2026-05-05.csv` mevcut + 6 sütun × ≥5 satır (yeni site için sıfıra yakın olsa bile satır yapısı doğru olmalı). `npx tsx scripts/seo-weekly-diff.ts` → "Compared to last week: +X% impressions".
 
-## ⬜ P31-T07: Google Indexing API Entegrasyonu (Dynamic Page Push)
+## ✅ P31-T07: Google Indexing API Entegrasyonu (Dynamic Page Push)
 
 - **NEDEN:** Manuel "Request Indexing" günlük 10 URL kotalı. Indexing API (resmi JobPosting/BroadcastEvent için ama diğer URL'ler için de çalışıyor) bulk push imkânı verir. Yeni blog post/case study eklendiğinde otomatik Google bildirimi.
 - **ÖNEM:** P1 — İndekslenme hızını 3-5× artırır. CI/CD pipeline'a entegre edilince sıfır manuel adım.
@@ -64,14 +64,14 @@
 - **YÖNTEM:** `bing.com/webmasters` → "Add Site" → GSC'den import seçeneği (auto-verify). `webmaster.yandex.com` → property add → DNS TXT (aynı domain TXT'i reuse). Her iki dashboard'da sitemap submit.
 - **TEST:** Bing Webmaster → Configure → "Verified ✓" + sitemap "Success (41)". Yandex aynı.
 
-## ⬜ P31-T09: IndexNow Protokolü (Bing/Yandex Bulk Push)
+## ✅ P31-T09: IndexNow Protokolü (Bing/Yandex Bulk Push)
 
 - **NEDEN:** IndexNow = Microsoft + Yandex + Seznam ortak protokolü. Tek API çağrısıyla 3+ arama motoruna URL bildirimi. Kurulumu 5 dakika, kotası yok.
 - **ÖNEM:** P2 — Düşük çaba, orta etki. Özellikle blog post otomasyonu için ideal.
 - **YÖNTEM:** Random 32-char key üret → `public/{key}.txt` içeriği = key'in kendisi → `scripts/indexnow-push.ts`: POST `https://api.indexnow.org/indexnow` `{host, key, keyLocation, urlList}`. `postbuild` step + `gen:blog` sonrası tetikle.
 - **TEST:** `curl -X POST https://api.indexnow.org/indexnow -H 'Content-Type: application/json' -d '{"host":"ecypro.com","key":"...","urlList":["https://ecypro.com/"]}'` → 200 OK. Bing Webmaster → IndexNow → "Submitted URLs: 41".
 
-## ⬜ P31-T10: Schema.org Rich Results Test (Her Önemli Sayfa)
+## ✅ P31-T10: Schema.org Rich Results Test (Her Önemli Sayfa)
 
 - **NEDEN:** JSON-LD eklenmiş (Phase 20.5+24α, 12 sayfa × çoklu schema) ama Google Rich Results Test'te valid mi doğrulanmadı. Geçersiz schema = rich snippet yok = SERP'de %30 daha az CTR.
 - **ÖNEM:** P1 — SERP CTR'a direkt etki (rich snippet ile +30%). Ayrıca GSC Enhancements'ta hata ortaya çıkarabilir.
