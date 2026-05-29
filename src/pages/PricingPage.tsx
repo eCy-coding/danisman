@@ -8,6 +8,7 @@
 
 import React, { useState, useRef, useCallback } from 'react';
 import { Helmet } from '@/lib/seo-helmet';
+import { useTranslation } from 'react-i18next';
 import { motion } from 'motion/react';
 import { Check, X, ArrowRight, Sparkles, Zap, Crown, ChevronDown } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -32,13 +33,20 @@ const TIER_ICONS: Record<TierId, React.ReactNode> = {
   enterprise: <Crown className="w-5 h-5" />,
 };
 
-const CellValue: React.FC<{ v: boolean | string }> = ({ v }) => {
-  if (v === true) return <Check className="w-5 h-5 text-emerald-400 mx-auto" aria-label="dahil" />;
-  if (v === false) return <X className="w-5 h-5 text-slate-600 mx-auto" aria-label="dahil değil" />;
+const CellValue: React.FC<{
+  v: boolean | string;
+  includedLabel: string;
+  excludedLabel: string;
+}> = ({ v, includedLabel, excludedLabel }) => {
+  if (v === true)
+    return <Check className="w-5 h-5 text-emerald-400 mx-auto" aria-label={includedLabel} />;
+  if (v === false)
+    return <X className="w-5 h-5 text-slate-600 mx-auto" aria-label={excludedLabel} />;
   return <span className="text-slate-200 text-sm font-medium">{v}</span>;
 };
 
 export const PricingPage: React.FC = () => {
+  const { t } = useTranslation('pricing');
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const tierRefs = useRef<Record<TierId, HTMLElement | null>>({
     starter: null,
@@ -57,27 +65,18 @@ export const PricingPage: React.FC = () => {
     <React.Fragment>
       <Helmet>
         {/* P32-T12: keyword-optimised title (primary: "danışmanlık fiyatlandırma" / "consulting pricing Turkey") */}
-        <title>Danışmanlık Fiyatlandırma — Starter, Growth, Enterprise | eCyPro</title>
-        <meta
-          name="description"
-          content="eCyPro stratejik danışmanlık fiyatlandırması: Starter $15K-25K, Growth $25K-50K, Enterprise özel teklif. Sonuç & milestone bazlı retainer. Founder doğrudan eşlik eder."
-        />
+        <title>{t('meta.title')}</title>
+        <meta name="description" content={t('meta.description')} />
         <link rel="canonical" href={buildCanonical('/pricing', 'tr')} />
-        <meta property="og:title" content="Fiyatlandırma — Starter, Growth, Enterprise | eCyPro" />
-        <meta
-          property="og:description"
-          content="Saat satmıyoruz — sonuç ve milestone bazlı retainer modeli."
-        />
+        <meta property="og:title" content={t('meta.title')} />
+        <meta property="og:description" content={t('hero.subtitle')} />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://www.ecypro.com/pricing" />
         <meta property="og:image" content="https://www.ecypro.com/og/pricing.png" />
         <meta name="robots" content="index, follow, max-image-preview:large" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Fiyatlandırma — Starter, Growth, Enterprise | eCyPro" />
-        <meta
-          name="twitter:description"
-          content="Şeffaf USD fiyatlandırma: Starter, Growth, Enterprise. Sonuç bazlı retainer."
-        />
+        <meta name="twitter:title" content={t('meta.title')} />
+        <meta property="twitter:description" content={t('hero.subtitle')} />
         <meta name="twitter:image" content="https://www.ecypro.com/og/pricing.png" />
       </Helmet>
 
@@ -126,17 +125,17 @@ export const PricingPage: React.FC = () => {
           <section aria-labelledby="pricing-hero-heading" className="text-center mb-24">
             <FadeIn immediate>
               <p className="text-sm font-semibold uppercase tracking-widest text-amber-400 mb-4">
-                FİYATLANDIRMA
+                {t('hero.badge')}
               </p>
               <h1
                 id="pricing-hero-heading"
+                data-testid="pricing-hero-title"
                 className="text-4xl md:text-6xl font-serif font-bold text-white mb-6 tracking-tight"
               >
-                Şeffaf Fiyatlama, Sahaya Hızla İniş
+                {t('hero.title')}
               </h1>
               <p className="text-xl text-slate-400 max-w-2xl mx-auto font-light leading-relaxed">
-                Saat satmıyoruz. Sonuç ve milestone bazlı retainer modeli. Founder Emre Can Yalçın
-                her tier&apos;da doğrudan eşlik eder.
+                {t('hero.subtitle')}
               </p>
               <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
                 <Link
@@ -144,7 +143,7 @@ export const PricingPage: React.FC = () => {
                   onClick={() => trackEvent('Pricing', 'HeroCta', 'discovery')}
                   className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-amber-500 text-neutral font-bold hover:bg-amber-400 transition-colors"
                 >
-                  Ücretsiz Tanışma Toplantısı
+                  {t('hero.cta_discovery')}
                   <ArrowRight className="w-4 h-4" />
                 </Link>
                 <button
@@ -154,7 +153,7 @@ export const PricingPage: React.FC = () => {
                   }}
                   className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border border-white/20 text-slate-300 hover:text-white hover:border-white/40 transition-colors text-sm font-medium"
                 >
-                  Hangisi bana uygun?
+                  {t('hero.cta_quiz')}
                   <ChevronDown className="w-4 h-4" />
                 </button>
               </div>
@@ -164,12 +163,12 @@ export const PricingPage: React.FC = () => {
           {/* ── Section 2: 3 Tier cards ──────────────────────────────────── */}
           <section aria-labelledby="tier-grid-heading" className="mb-24">
             <h2 id="tier-grid-heading" className="sr-only">
-              Fiyatlandırma Paketleri
+              {t('tiers.heading_sr')}
             </h2>
             <div
               className="grid md:grid-cols-3 gap-6 lg:gap-8"
               role="list"
-              aria-label="Fiyatlandırma paketleri"
+              aria-label={t('tiers.aria_label')}
             >
               {PRICING_TIERS.map((tier, idx) => {
                 const sharedCardClass = `relative rounded-3xl border p-8 flex flex-col ${
@@ -206,7 +205,7 @@ export const PricingPage: React.FC = () => {
                         className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-amber-500 text-neutral text-xs font-bold uppercase tracking-wider"
                         data-testid="most-popular-badge"
                       >
-                        En Popüler
+                        {t('tiers.popular_badge')}
                       </div>
                     )}
                     <div className="flex items-center gap-2 text-amber-400 mb-3">
@@ -220,7 +219,10 @@ export const PricingPage: React.FC = () => {
                       </span>
                     </div>
                     <p className="text-xs text-slate-500 mb-8">{tier.minTerm}</p>
-                    <ul className="space-y-3 mb-8 grow" aria-label={`${tier.name} özellikleri`}>
+                    <ul
+                      className="space-y-3 mb-8 grow"
+                      aria-label={t('tiers.features_aria', { tierName: tier.name })}
+                    >
                       {tier.features.map((feature, i) => (
                         <li key={i} className="flex items-start gap-3 text-sm text-slate-200">
                           <Check
@@ -267,14 +269,14 @@ export const PricingPage: React.FC = () => {
               id="matrix-heading"
               className="text-3xl font-serif font-bold text-white text-center mb-10"
             >
-              Detaylı Karşılaştırma
+              {t('comparison.title')}
             </h2>
             <div className="overflow-x-auto rounded-2xl border border-white/10 bg-white/5">
               <table className="w-full text-sm border-separate border-spacing-0">
                 <thead className="sticky top-20 z-30 bg-neutral shadow-[0_1px_0_0_rgba(255,255,255,0.08)]">
                   <tr>
                     <th scope="col" className="text-left p-4 text-slate-400 font-semibold">
-                      Özellik
+                      {t('comparison.feature_col')}
                     </th>
                     {PRICING_TIERS.map((tier) => (
                       <th key={tier.id} scope="col" className="p-4 text-white font-semibold">
@@ -288,13 +290,25 @@ export const PricingPage: React.FC = () => {
                     <tr key={i} className="border-b border-white/5 last:border-0">
                       <td className="p-4 text-slate-300">{row.feature}</td>
                       <td className="p-4 text-center">
-                        <CellValue v={row.starter} />
+                        <CellValue
+                          v={row.starter}
+                          includedLabel={t('comparison.included_aria')}
+                          excludedLabel={t('comparison.excluded_aria')}
+                        />
                       </td>
                       <td className="p-4 text-center">
-                        <CellValue v={row.growth} />
+                        <CellValue
+                          v={row.growth}
+                          includedLabel={t('comparison.included_aria')}
+                          excludedLabel={t('comparison.excluded_aria')}
+                        />
                       </td>
                       <td className="p-4 text-center">
-                        <CellValue v={row.enterprise} />
+                        <CellValue
+                          v={row.enterprise}
+                          includedLabel={t('comparison.included_aria')}
+                          excludedLabel={t('comparison.excluded_aria')}
+                        />
                       </td>
                     </tr>
                   ))}
@@ -313,11 +327,9 @@ export const PricingPage: React.FC = () => {
               id="quiz-heading"
               className="text-3xl font-serif font-bold text-white text-center mb-4"
             >
-              Hangisi Size Uygun?
+              {t('quiz.title')}
             </h2>
-            <p className="text-slate-400 text-center mb-10">
-              5 soruda ideal tier&apos;ınızı keşfedin.
-            </p>
+            <p className="text-slate-400 text-center mb-10">{t('quiz.subtitle')}</p>
             <PricingQuiz onResult={handleQuizResult} />
           </section>
 
@@ -327,7 +339,7 @@ export const PricingPage: React.FC = () => {
               id="faq-heading"
               className="text-3xl font-serif font-bold text-white text-center mb-10"
             >
-              Sıkça Sorulan Sorular
+              {t('faq.title')}
             </h2>
             <div className="space-y-3">
               {PRICING_FAQS.map((faq, i) => {
@@ -377,9 +389,9 @@ export const PricingPage: React.FC = () => {
           {/* ── CTA strip ────────────────────────────────────────────────── */}
           <section className="rounded-3xl p-10 md:p-14 text-center bg-linear-to-br from-amber-500/15 via-white/5 to-amber-500/5 border border-white/10 mb-12">
             <h2 className="text-3xl md:text-4xl font-serif font-bold text-white mb-3">
-              Hazır mısınız?
+              {t('cta.title')}
             </h2>
-            <p className="text-slate-300 mb-8">30 dakika ücretsiz keşif görüşmesi.</p>
+            <p className="text-slate-300 mb-8">{t('cta.subtitle')}</p>
             {(() => {
               const cta = getCalendlyCta('pricing-final');
               const cls =
@@ -393,7 +405,7 @@ export const PricingPage: React.FC = () => {
                   onClick={() => trackEvent('Pricing', 'FinalCtaClick')}
                   className={cls}
                 >
-                  Görüşme Ayarlayın
+                  {t('cta.button')}
                   <ArrowRight className="w-4 h-4" />
                 </a>
               ) : (
@@ -403,7 +415,7 @@ export const PricingPage: React.FC = () => {
                   onClick={() => trackEvent('Pricing', 'FinalCtaClick')}
                   className={cls}
                 >
-                  Görüşme Ayarlayın
+                  {t('cta.button')}
                   <ArrowRight className="w-4 h-4" />
                 </Link>
               );
@@ -414,11 +426,9 @@ export const PricingPage: React.FC = () => {
           <section className="rounded-3xl p-6 md:p-8 bg-white/5 border border-white/10">
             <header className="text-center mb-6">
               <h2 className="text-2xl md:text-3xl font-serif font-bold text-white mb-2">
-                Hemen Görüşme Planlayın
+                {t('calendly.title')}
               </h2>
-              <p className="text-slate-300">
-                30 dakika ücretsiz keşif görüşmesi — uygun zamanı siz seçin.
-              </p>
+              <p className="text-slate-300">{t('calendly.subtitle')}</p>
             </header>
             <LazyMount placeholderHeight={680}>
               <CalendlyEmbed source="pricing-page-bottom" heightPx={680} />

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Helmet } from '@/lib/seo-helmet';
 import { JsonLd } from '@/components/seo/JsonLd';
+import { useTranslation } from 'react-i18next';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { PageWrapper } from '@/components/layout/PageWrapper';
 import { EditorialHero } from '@/components/insights/EditorialHero';
@@ -38,6 +39,7 @@ function parseFilterFromSearch(params: URLSearchParams): InsightsFilter {
 }
 
 function InsightsPageInner() {
+  const { t } = useTranslation('insights');
   const [searchParams, setSearchParams] = useSearchParams();
   const [filter, setFilter] = useState<InsightsFilter>(() => parseFilterFromSearch(searchParams));
 
@@ -73,8 +75,8 @@ function InsightsPageInner() {
   const itemListSchema = {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
-    name: "Perspektif — Türkiye'nin Sermaye ve Sürdürülebilirlik Düşüncesi",
-    description: 'M&A, ESG, Fintech ve Aile Şirketi alanlarında Big4 derinliğinde bağımsız analiz.',
+    name: t('meta.schema_name'),
+    description: t('meta.schema_description'),
     url: 'https://ecypro.com/insights',
     numberOfItems: articleCounts.ALL,
     itemListElement: posts.slice(0, 10).map((post, idx) => ({
@@ -88,16 +90,10 @@ function InsightsPageInner() {
   return (
     <>
       <Helmet>
-        <title>Perspektif — Türkiye M&A, ESG ve Aile Şirketi Analizi | eCyPro</title>
-        <meta
-          name="description"
-          content="M&A, ESG, Fintech ve Aile Şirketi alanlarında Big4 derinliğinde bağımsız analiz. Türkiye'nin önde gelen yönetim danışmanlığı platformu."
-        />
-        <meta property="og:title" content="Perspektif | eCyPro" />
-        <meta
-          property="og:description"
-          content="Türkiye'nin Sermaye, Sürdürülebilirlik ve Aile Şirketi Düşüncesi"
-        />
+        <title>{t('meta.title')}</title>
+        <meta name="description" content={t('meta.description')} />
+        <meta property="og:title" content={t('meta.og_title')} />
+        <meta property="og:description" content={t('meta.og_description')} />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://www.ecypro.com/insights" />
         <meta property="og:image" content="https://www.ecypro.com/og/perspektifler.png" />

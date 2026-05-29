@@ -1,4 +1,12 @@
 {
+  "meta": {
+    "title": "Perspectives — Turkey M&A, ESG & Family Business Analysis | eCyPro",
+    "description": "Independent Big4-depth analysis on M&A, ESG, Fintech, and family business. Turkey's leading management consulting thought leadership platform.",
+    "og_title": "Perspectives | eCyPro",
+    "og_description": "Turkey's Capital Markets, Sustainability & Family Business Thinking",
+    "schema_name": "Perspectives — Turkey Capital & Sustainability Thinking",
+    "schema_description": "Independent Big4-depth analysis on M&A, ESG, Fintech, and family business governance."
+  },
   "nav": {
     "insights": "Insights",
     "all": "All",
