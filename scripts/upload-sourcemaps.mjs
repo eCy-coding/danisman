@@ -24,13 +24,17 @@
  */
 
 import { execSync } from 'node:child_process';
-import { readFileSync, existsSync, readdirSync, unlinkSync, statSync } from 'node:fs';
+import { existsSync, readdirSync, unlinkSync, statSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const __filename = fileURLToPath(import.meta.url);
 const ROOT = path.resolve(path.dirname(__filename), '..');
 const DIST = path.join(ROOT, 'dist');
+
+// FE upload defaults to the frontend project; falls back to legacy SENTRY_PROJECT.
+process.env.SENTRY_PROJECT =
+  process.env.SENTRY_PROJECT_FRONTEND || process.env.SENTRY_PROJECT;
 
 const required = ['SENTRY_AUTH_TOKEN', 'SENTRY_ORG', 'SENTRY_PROJECT'];
 const missing = required.filter((k) => !process.env[k]);
@@ -47,17 +51,17 @@ function shOut(cmd) {
   return execSync(cmd, { cwd: ROOT, encoding: 'utf8' }).trim();
 }
 
-// Build a release name.
+// Build a release name — MUST match vite.config.ts SENTRY_RELEASE (ecypro@<short-sha>)
+// and src/lib/sentry.ts runtime tag.
 function deriveReleaseName() {
   if (process.env.SENTRY_RELEASE) return process.env.SENTRY_RELEASE;
-  const pkg = JSON.parse(readFileSync(path.join(ROOT, 'package.json'), 'utf8'));
-  let sha = 'nogit';
+  let sha = 'dev';
   try {
     sha = shOut('git rev-parse --short HEAD');
   } catch {
     /* not a git repo */
   }
-  return `${pkg.name || 'ecypro'}@${pkg.version || '0.0.0'}+${sha}`;
+  return `ecypro@${sha}`;
 }
 
 const RELEASE = deriveReleaseName();
