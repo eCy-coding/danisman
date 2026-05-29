@@ -380,4 +380,28 @@ async function generateInsightsSitemap() {
 
 generateSitemap()
   .then(() => generateInsightsSitemap())
+  .then(() => {
+    // Sync public/ sitemaps → dist/ so prerender reads fresh routes.
+    // Vite copies public/ to dist/ before postbuild, so dist/ is stale
+    // until we mirror here.
+    const __dirname = path.dirname(fileURLToPath(import.meta.url));
+    const distDir = path.resolve(__dirname, '../dist');
+    const publicDir = path.resolve(__dirname, '../public');
+    if (fs.existsSync(distDir)) {
+      const files = [
+        'sitemap.xml',
+        'sitemap-tr.xml',
+        'sitemap-en.xml',
+        'sitemap-index.xml',
+        'sitemap-insights-1.xml',
+        'robots.txt',
+      ];
+      for (const f of files) {
+        const src = path.join(publicDir, f);
+        const dst = path.join(distDir, f);
+        if (fs.existsSync(src)) fs.copyFileSync(src, dst);
+      }
+      console.log('✅ Sitemaps synced to dist/ for prerender.');
+    }
+  })
   .catch(console.error);
