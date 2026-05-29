@@ -149,6 +149,35 @@ const ThankYouPage = React.lazy(() => import('./pages/ThankYouPage'));
 const QuickCheckPage = React.lazy(() => import('./pages/QuickCheckPage'));
 const PricingCalculatorPage = React.lazy(() => import('./pages/PricingCalculatorPage'));
 
+// Competitor gap routes: sektörler hub, sektör mikro-sayfalar, güvence, araçlar, çalışmalar
+const SektorlerPage = React.lazy(() =>
+  import('./pages/SektorlerPage').then((m) => ({ default: m.SektorlerPage })),
+);
+const SektorlerImalatPage = React.lazy(() =>
+  import('./pages/SektorlerImalatPage').then((m) => ({ default: m.SektorlerImalatPage })),
+);
+const SektorlerFinansalPage = React.lazy(() =>
+  import('./pages/SektorlerFinansalPage').then((m) => ({ default: m.SektorlerFinansalPage })),
+);
+const SektorlerIlacPage = React.lazy(() =>
+  import('./pages/SektorlerIlacPage').then((m) => ({ default: m.SektorlerIlacPage })),
+);
+const SektorlerPerakendePage = React.lazy(() =>
+  import('./pages/SektorlerPerakendePage').then((m) => ({ default: m.SektorlerPerakendePage })),
+);
+const SektorlerTeknolojPage = React.lazy(() =>
+  import('./pages/SektorlerTeknolojPage').then((m) => ({ default: m.SektorlerTeknolojPage })),
+);
+const GuvencePage = React.lazy(() =>
+  import('./pages/GuvencePage').then((m) => ({ default: m.GuvencePage })),
+);
+const DenetimHazirlikPage = React.lazy(() =>
+  import('./pages/DenetimHazirlikPage').then((m) => ({ default: m.DenetimHazirlikPage })),
+);
+const CalismalarPage = React.lazy(() =>
+  import('./pages/CalismalarPage').then((m) => ({ default: m.CalismalarPage })),
+);
+
 const TerminalPage = React.lazy(() =>
   import('./pages/TerminalPage').then((module) => ({ default: module.TerminalPage })),
 );
@@ -530,6 +559,82 @@ const AnimatedRoutes = () => {
             element={
               <Suspense fallback={<LoadingFallback />}>
                 <IndustriesPage />
+              </Suspense>
+            }
+          />
+          {/* Competitor gap routes: /sektorler hub + 5 micro-pages */}
+          <Route
+            path="/sektorler"
+            element={
+              <Suspense fallback={<LoadingFallback />}>
+                <SektorlerPage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/sektorler/imalat-sanayi"
+            element={
+              <Suspense fallback={<LoadingFallback />}>
+                <SektorlerImalatPage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/sektorler/finansal-hizmetler"
+            element={
+              <Suspense fallback={<LoadingFallback />}>
+                <SektorlerFinansalPage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/sektorler/ilac-saglik"
+            element={
+              <Suspense fallback={<LoadingFallback />}>
+                <SektorlerIlacPage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/sektorler/perakende-e-ticaret"
+            element={
+              <Suspense fallback={<LoadingFallback />}>
+                <SektorlerPerakendePage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/sektorler/teknoloji-saas"
+            element={
+              <Suspense fallback={<LoadingFallback />}>
+                <SektorlerTeknolojPage />
+              </Suspense>
+            }
+          />
+          {/* /guvence — KVKK + bağımsızlık trust page */}
+          <Route
+            path="/guvence"
+            element={
+              <Suspense fallback={<LoadingFallback />}>
+                <GuvencePage />
+              </Suspense>
+            }
+          />
+          {/* /araclar/denetim-hazirlik-skoru — audit readiness calculator */}
+          <Route
+            path="/araclar/denetim-hazirlik-skoru"
+            element={
+              <Suspense fallback={<LoadingFallback />}>
+                <DenetimHazirlikPage />
+              </Suspense>
+            }
+          />
+          {/* /calismalar — TR-canonical case studies hub */}
+          <Route
+            path="/calismalar"
+            element={
+              <Suspense fallback={<LoadingFallback />}>
+                <CalismalarPage />
               </Suspense>
             }
           />
