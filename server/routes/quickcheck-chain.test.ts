@@ -22,7 +22,7 @@ const h = vi.hoisted(() => ({
 }));
 
 vi.mock('../services/notion', () => ({ upsertProspect: h.upsertProspect }));
-vi.mock('../lib/posthog-server', () => ({ capture: h.posthogCapture }));
+vi.mock('../lib/posthog-server', () => ({ captureWithConsent: h.posthogCapture }));
 vi.mock('resend', () => ({
   // Regular function (not arrow) so `new Resend()` can construct it.
   Resend: vi.fn(function () {
@@ -113,7 +113,8 @@ describe('Quick-Check submission chain', () => {
     expect(h.posthogCapture).toHaveBeenCalledWith(
       expect.objectContaining({
         event: 'quick_check_completed',
-        distinctId: 'ada@example.com',
+        email: 'ada@example.com',
+        consent: expect.objectContaining({ kvkk: true, analytics: false }),
         properties: expect.objectContaining({ score: 30, tier: 'mature', redFlag: false }),
       }),
     );

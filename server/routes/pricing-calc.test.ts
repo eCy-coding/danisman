@@ -10,7 +10,9 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import request from 'supertest';
 import express from 'express';
 
-vi.mock('../lib/posthog-server', () => ({ capture: vi.fn(async () => undefined) }));
+vi.mock('../lib/posthog-server', () => ({
+  captureWithConsent: vi.fn(async () => ({ captured: false, reason: 'analytics_opt_out' })),
+}));
 vi.mock('../services/notion', () => ({
   upsertProspect: vi.fn(async () => 'mock-prospect-id'),
 }));

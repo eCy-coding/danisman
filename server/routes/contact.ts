@@ -28,7 +28,7 @@ import { idempotency } from '../middleware/idempotency';
 import { HttpError } from '../middleware/error';
 import { notify } from '../lib/telegram';
 import { logger } from '../config/logger';
-import { capture as posthogCapture } from '../lib/posthog-server';
+import { captureWithConsent } from '../lib/posthog-server';
 import { prisma } from '../config/db';
 import { upsertProspect } from '../services/notion';
 import {
@@ -58,6 +58,7 @@ const ContactSchema = z.object({
   subject: z.string().trim().max(120).optional().default(''),
   // KVKK explicit opt-in — legal basis for processing the inbound lead.
   kvkkConsent: z.boolean().optional().default(false),
+  analyticsConsent: z.boolean().optional().default(false),
   // Honeypot — bots fill this; real users never see it.
   hp_field: z.string().max(0).optional().default(''),
 });
@@ -228,9 +229,10 @@ router.post(
           .join('\n'),
       }).catch((err) => logger.warn('[contact] notion upsert failed', { err: String(err) }));
 
-      void posthogCapture({
+      void captureWithConsent({
         event: 'contact_submit',
-        distinctId: data.email,
+        email: data.email,
+        consent: { kvkk: data.kvkkConsent, analytics: data.analyticsConsent },
         properties: {
           kind: data.kind,
           company: data.company || null,

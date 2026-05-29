@@ -4,13 +4,14 @@ import { Prisma } from '@prisma/client';
 import { prisma } from '../config/db';
 import { contactLimiter } from '../middleware/rateLimiter';
 import { logger } from '../config/logger';
-import { capture as posthogCapture } from '../lib/posthog-server';
+import { captureWithConsent } from '../lib/posthog-server';
 
 const router = Router();
 
 const subscribeSchema = z.object({
   email: z.string().email().max(254),
   consent: z.boolean().refine((v) => v === true, { message: 'Consent is required' }),
+  analyticsConsent: z.boolean().optional().default(false),
   source: z.string().max(64).optional(),
 });
 
@@ -30,7 +31,7 @@ router.post(
   contactLimiter,
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { email, consent, source } = subscribeSchema.parse(req.body);
+      const { email, consent, analyticsConsent, source } = subscribeSchema.parse(req.body);
       const key = email.toLowerCase();
       const ip = req.ip ?? null;
       const userAgent = (req.headers['user-agent'] ?? null) as string | null;
@@ -63,9 +64,10 @@ router.post(
       });
       logger.info('[newsletter] new subscriber', { email: key, source });
 
-      void posthogCapture({
+      void captureWithConsent({
         event: 'email_subscribed',
-        distinctId: key,
+        email: key,
+        consent: { kvkk: consent, analytics: analyticsConsent },
         properties: { source: source ?? null },
       });
 

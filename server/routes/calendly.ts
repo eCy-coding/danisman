@@ -27,7 +27,7 @@ import { Router, Request, Response } from 'express';
 import express from 'express';
 import { logger } from '../config/logger';
 import { notify } from '../lib/telegram';
-import { capture as posthogCapture } from '../lib/posthog-server';
+import { captureWithConsent } from '../lib/posthog-server';
 import { upsertProspect, createInteraction } from '../services/notion';
 
 const router = Router();
@@ -114,14 +114,14 @@ router.post(
     const event = body.event ?? '';
     const invitee = body.payload?.invitee ?? {};
     const scheduled = body.payload?.scheduled_event ?? body.payload?.event ?? {};
-    const distinctId = (invitee.email ?? 'unknown').toLowerCase();
-
     if (event === 'invitee.created') {
-      void posthogCapture({
+      // Calendly webhook has no analytics consent moment — skip PostHog capture per KVKK.
+      // Owner decision D1 required before enabling: add consent lookup by email.
+      void captureWithConsent({
         event: 'calendly_booked',
-        distinctId,
+        email: invitee.email ?? 'unknown',
+        consent: { kvkk: true, analytics: false },
         properties: {
-          name: invitee.name ?? null,
           timezone: invitee.timezone ?? null,
           startTime: scheduled.start_time ?? null,
           source: body.payload?.tracking?.utm_source ?? null,
@@ -175,9 +175,10 @@ router.post(
         Timezone: invitee.timezone ?? '-',
       }).catch((err) => logger.warn('[calendly] telegram notify failed', { err: String(err) }));
     } else if (event === 'invitee.canceled') {
-      void posthogCapture({
+      void captureWithConsent({
         event: 'discovery_canceled',
-        distinctId,
+        email: invitee.email ?? 'unknown',
+        consent: { kvkk: true, analytics: false },
         properties: { startTime: scheduled.start_time ?? null },
       });
       (async () => {

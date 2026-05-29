@@ -36,7 +36,7 @@ import { quickCheckLimiter } from '../middleware/rateLimiter';
 import { idempotency } from '../middleware/idempotency';
 import { HttpError } from '../middleware/error';
 import { logger } from '../config/logger';
-import { capture as posthogCapture } from '../lib/posthog-server';
+import { captureWithConsent } from '../lib/posthog-server';
 import { upsertProspect } from '../services/notion';
 
 const router = Router();
@@ -50,6 +50,7 @@ const QuickCheckSchema = z.object({
   sector: z.string().trim().max(120).optional().default(''),
   answers: z.array(AnswerLetter).length(10, 'Exactly 10 answers required'),
   kvkkConsent: z.boolean().optional().default(false),
+  analyticsConsent: z.boolean().optional().default(false),
   hp_field: z.string().max(0).optional().default(''),
 });
 
@@ -206,9 +207,10 @@ router.post(
           .catch((err) => logger.warn('[quick-check] result email failed', { err: String(err) }));
       }
 
-      void posthogCapture({
+      void captureWithConsent({
         event: 'quick_check_completed',
-        distinctId: data.email,
+        email: data.email,
+        consent: { kvkk: data.kvkkConsent, analytics: data.analyticsConsent },
         properties: {
           score,
           tier,

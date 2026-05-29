@@ -14,7 +14,7 @@ const posthogCapture = vi.fn();
 
 vi.mock('../services/notion', () => ({ upsertProspect, createInteraction }));
 vi.mock('../lib/telegram', () => ({ notify }));
-vi.mock('../lib/posthog-server', () => ({ capture: posthogCapture }));
+vi.mock('../lib/posthog-server', () => ({ captureWithConsent: posthogCapture }));
 vi.mock('../config/logger', () => ({
   logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn() },
 }));
@@ -98,7 +98,11 @@ describe('POST /calendly — HMAC verification', () => {
       expect.objectContaining({ type: 'Discovery Call', outcome: 'Booked' }),
     );
     expect(posthogCapture).toHaveBeenCalledWith(
-      expect.objectContaining({ event: 'calendly_booked', distinctId: 'ada@example.com' }),
+      expect.objectContaining({
+        event: 'calendly_booked',
+        email: 'ada@example.com',
+        consent: { kvkk: true, analytics: false },
+      }),
     );
   });
 
@@ -172,7 +176,11 @@ describe('POST /calendly — event dispatch', () => {
       expect.objectContaining({ outcome: 'Canceled' }),
     );
     expect(posthogCapture).toHaveBeenCalledWith(
-      expect.objectContaining({ event: 'discovery_canceled' }),
+      expect.objectContaining({
+        event: 'discovery_canceled',
+        email: 'ada@example.com',
+        consent: { kvkk: true, analytics: false },
+      }),
     );
   });
 
