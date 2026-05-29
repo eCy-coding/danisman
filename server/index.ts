@@ -129,7 +129,7 @@ app.use(corsProd());
 // Webhooks + health probes carry no Origin → bypass via prefix list.
 app.use(
   originGuard({
-    ignore: ['/api/webhooks', '/api/health', '/api/sse', '/__health'],
+    ignore: ['/api/webhooks', '/api/health', '/api/sse', '/__health', '/healthz', '/readyz'],
   }),
 );
 
