@@ -24,12 +24,14 @@ const {
   sendFounderNotificationMock,
   isResendConfiguredMock,
   sentryCaptureExceptionMock,
+  consentCreateMock,
 } = vi.hoisted(() => ({
   notifyMock: vi.fn(async () => undefined),
   sendContactAckMock: vi.fn(async () => undefined),
   sendFounderNotificationMock: vi.fn(async () => undefined),
   isResendConfiguredMock: vi.fn(() => false),
   sentryCaptureExceptionMock: vi.fn(),
+  consentCreateMock: vi.fn(async () => ({ id: 'cr_test' })),
 }));
 
 vi.mock('../lib/telegram', () => ({ notify: notifyMock }));
@@ -47,6 +49,10 @@ vi.mock('../lib/outbox', () => ({
 
 vi.mock('@sentry/node', () => ({
   captureException: sentryCaptureExceptionMock,
+}));
+
+vi.mock('../config/db', () => ({
+  prisma: { consentRecord: { create: consentCreateMock } },
 }));
 
 // In-memory rate limiter requires redis client; mock it
@@ -270,5 +276,100 @@ describe('POST /api/contact — Sentry capture', () => {
     });
 
     expect(sentryCaptureExceptionMock).toHaveBeenCalledTimes(1);
+  });
+});
+
+// L1-4 Task A — KVKK ConsentRecord persistence
+describe('POST /api/contact — KVKK ConsentRecord', () => {
+  const originalEnv = { ...process.env };
+
+  beforeEach(() => {
+    consentCreateMock.mockClear();
+    notifyMock.mockClear();
+    __resetFallbackStoreForTests();
+    process.env = { ...originalEnv };
+    process.env.TELEGRAM_BOT_TOKEN = 'test-token';
+    process.env.TELEGRAM_CHAT_ID = '1234';
+    process.env.NODE_ENV = 'test';
+  });
+
+  afterEach(() => {
+    process.env = originalEnv;
+  });
+
+  it('writes a ConsentRecord with KVKK_CONTACT_FORM on valid submit', async () => {
+    await request(makeApp()).post('/api/contact').send({
+      name: 'Ada Lovelace',
+      email: 'ada@example.com',
+      message: 'I need consulting on the difference engine.',
+      kvkkConsent: true,
+    });
+    expect(consentCreateMock).toHaveBeenCalledTimes(1);
+    expect(consentCreateMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining({ consentType: 'KVKK_CONTACT_FORM', formVersion: '1.0.0' }),
+      }),
+    );
+  });
+
+  it('does NOT write a ConsentRecord when KVKK consent missing', async () => {
+    const res = await request(makeApp()).post('/api/contact').send({
+      name: 'Ada Lovelace',
+      email: 'ada@example.com',
+      message: 'I need consulting on the difference engine.',
+      kvkkConsent: false,
+    });
+    expect(res.status).toBe(400);
+    expect(res.body.code).toBe('KVKK_REQUIRED');
+    expect(consentCreateMock).not.toHaveBeenCalled();
+  });
+});
+
+// L1-4 Task B — subject field threading
+describe('POST /api/contact — subject field', () => {
+  const originalEnv = { ...process.env };
+
+  beforeEach(() => {
+    notifyMock.mockClear();
+    sendFounderNotificationMock.mockClear();
+    isResendConfiguredMock.mockClear();
+    consentCreateMock.mockClear();
+    __resetFallbackStoreForTests();
+    process.env = { ...originalEnv };
+    process.env.TELEGRAM_BOT_TOKEN = 'test-token';
+    process.env.TELEGRAM_CHAT_ID = '1234';
+    process.env.NODE_ENV = 'test';
+  });
+
+  afterEach(() => {
+    process.env = originalEnv;
+  });
+
+  it('threads subject into the founder notification payload', async () => {
+    isResendConfiguredMock.mockReturnValue(true);
+    await request(makeApp()).post('/api/contact').send({
+      name: 'Ada Lovelace',
+      email: 'ada@example.com',
+      subject: 'project',
+      message: 'I need consulting on the difference engine.',
+      kvkkConsent: true,
+    });
+    expect(sendFounderNotificationMock).toHaveBeenCalledWith(
+      expect.objectContaining({ subject: 'Proje Teklifi' }),
+    );
+  });
+
+  it('passes free-text subject (e.g. chat widget) unchanged', async () => {
+    isResendConfiguredMock.mockReturnValue(true);
+    await request(makeApp()).post('/api/contact').send({
+      name: 'Ada Lovelace',
+      email: 'ada@example.com',
+      subject: 'Web chat widget mesajı',
+      message: 'I need consulting on the difference engine.',
+      kvkkConsent: true,
+    });
+    expect(sendFounderNotificationMock).toHaveBeenCalledWith(
+      expect.objectContaining({ subject: 'Web chat widget mesajı' }),
+    );
   });
 });
