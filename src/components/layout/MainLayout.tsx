@@ -2,7 +2,6 @@ import React from 'react';
 import { Outlet } from 'react-router-dom';
 import { Navbar } from './Navbar';
 import { Footer } from './Footer';
-import { CookieBanner } from './CookieBanner';
 // P46 C2: SeoHead layout seviyesinden kaldırıldı — generic title flush per-page'i eziyordu.
 // import { SeoHead } from '../seo/SeoHead';
 import { BackToTop } from '../common/BackToTop';
@@ -38,7 +37,6 @@ export const MainLayout: React.FC = () => {
       </main>
       <Footer />
       <aside aria-label="Utilities">
-        <CookieBanner />
         <BackToTop />
         <SmartCTA />
         <SocialProofToast />

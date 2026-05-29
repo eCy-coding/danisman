@@ -1,10 +1,10 @@
 /**
  * Lazy PostHog wrapper — dynamic import defers the ~100KB posthog-js chunk
  * until first use (idle callback), keeping it off the critical rendering path.
- * Consent-v1 integration preserved: analytics opt-in/out reacts to
- * ecypro:consent-changed events from CookieBanner.
+ * Single consent source: reads consent.ts v2 (ecypro_cookie_consent_v2) which
+ * auto-migrates from v1 (ecypro_consent_v1) on first read.
  */
-import { readConsent, type ConsentRecord } from './consent-v1';
+import { getConsent } from './consent';
 
 type PostHogModule = typeof import('posthog-js');
 
@@ -14,9 +14,10 @@ const POSTHOG_HOST = (import.meta.env.VITE_POSTHOG_HOST ?? '').trim() || 'https:
 let _instance: PostHogModule['default'] | null = null;
 let _initPromise: Promise<PostHogModule['default'] | null> | null = null;
 
-function applyConsent(ph: PostHogModule['default'], record: ConsentRecord | null): void {
+function applyConsent(ph: PostHogModule['default']): void {
   try {
-    if (record?.analytics) {
+    const record = getConsent();
+    if (record?.preferences?.analytics) {
       ph.opt_in_capturing();
     } else {
       ph.opt_out_capturing();
@@ -50,13 +51,12 @@ export function initPostHog(): void {
       });
       _instance = posthog;
 
-      // Restore consent from storage on init.
-      applyConsent(posthog, readConsent());
+      // Restore consent from storage on init (v2 auto-migrates from v1).
+      applyConsent(posthog);
 
-      // React to consent changes from CookieBanner.
-      window.addEventListener('ecypro:consent-changed', (e: Event) => {
-        const detail = (e as CustomEvent<ConsentRecord | null>).detail;
-        applyConsent(posthog, detail ?? readConsent());
+      // React to consent changes from either CookieBanner or /cookies panel.
+      window.addEventListener('ecypro:consent-changed', () => {
+        applyConsent(posthog);
       });
 
       return posthog;

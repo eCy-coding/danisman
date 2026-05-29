@@ -111,7 +111,9 @@
       "error_desc": "Please try again or contact us by phone.",
       "kvkk_label": "I consent to eCyPro processing my data for the sole purpose of replying to this request.",
       "kvkk_link": "Privacy Policy",
-      "kvkk_required": "GDPR / KVKK consent is required to continue."
+      "kvkk_required": "GDPR / KVKK consent is required to continue.",
+      "name_min": "Name must be at least 2 characters.",
+      "message_min": "Message must be at least 10 characters."
     }
   },
   "cookies": {

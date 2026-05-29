@@ -111,7 +111,9 @@
       "error_desc": "Lütfen tekrar deneyiniz veya telefon ile ulaşınız.",
       "kvkk_label": "Verilerimin eCyPro tarafından bu talebi yanıtlamak amacıyla işlenmesini kabul ediyorum.",
       "kvkk_link": "Gizlilik Politikası",
-      "kvkk_required": "Devam etmek için KVKK onayı gerekli."
+      "kvkk_required": "Devam etmek için KVKK onayı gerekli.",
+      "name_min": "Ad en az 2 karakter olmalı.",
+      "message_min": "Mesaj en az 10 karakter olmalı."
     }
   },
   "cookies": {

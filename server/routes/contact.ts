@@ -19,6 +19,7 @@
  *   503 NOTIFY_DISABLED     — TELEGRAM_BOT_TOKEN missing in env
  */
 
+import crypto from 'node:crypto';
 import { Router, Request, Response, NextFunction } from 'express';
 import { z } from 'zod';
 import * as Sentry from '@sentry/node';
@@ -28,6 +29,7 @@ import { HttpError } from '../middleware/error';
 import { notify } from '../lib/telegram';
 import { logger } from '../config/logger';
 import { capture as posthogCapture } from '../lib/posthog-server';
+import { prisma } from '../config/db';
 import { upsertProspect } from '../services/notion';
 import {
   sendContactAck,
@@ -50,6 +52,10 @@ const ContactSchema = z.object({
   kind: z.enum(['contact', 'booking']).optional().default('contact'),
   serviceInterest: z.string().trim().max(200).optional().default(''),
   budget: z.string().trim().max(60).optional().default(''),
+  // Free-string subject — contact form <select> keys (general/project/…) or
+  // chat widget free text (SimpleChatWidget sends 'Web chat widget mesajı').
+  // Never an enum: chat widget sends arbitrary strings.
+  subject: z.string().trim().max(120).optional().default(''),
   // KVKK explicit opt-in — legal basis for processing the inbound lead.
   kvkkConsent: z.boolean().optional().default(false),
   // Honeypot — bots fill this; real users never see it.
@@ -57,6 +63,15 @@ const ContactSchema = z.object({
 });
 
 export type ContactPayload = z.infer<typeof ContactSchema>;
+
+// Maps contact form <select> subject keys to TR labels for founder email + CRM.
+// Free-text subjects (e.g. chat widget) pass through unchanged.
+const SUBJECT_LABELS: Record<string, string> = {
+  general: 'Genel Bilgi',
+  project: 'Proje Teklifi',
+  partnership: 'İş Ortaklığı',
+  career: 'Kariyer',
+};
 
 // ── Route ─────────────────────────────────────────────────────────────────────
 
@@ -95,6 +110,28 @@ router.post(
           'KVKK / GDPR consent is required to process this request',
         );
       }
+
+      // SAT-01: immutable consent provenance — 3yr retention (KVKK_CONTACT_FORM).
+      // IP sha256-hashed for data minimality (m.5). Best-effort: DB blip
+      // must NOT fail the user submission.
+      const ipHash = req.ip
+        ? crypto.createHash('sha256').update(req.ip).digest('hex').slice(0, 16)
+        : null;
+      void prisma.consentRecord
+        .create({
+          data: {
+            consentType: 'KVKK_CONTACT_FORM',
+            ipAddress: ipHash,
+            userAgent: (req.headers['user-agent'] ?? '').slice(0, 500) || null,
+            formVersion: '1.0.0',
+          },
+        })
+        .catch((err) => logger.warn('[contact] consentRecord create failed', { err: String(err) }));
+
+      // Resolve subject key → TR label for founder email + CRM.
+      const subjectLabel = data.subject
+        ? (SUBJECT_LABELS[data.subject] ?? data.subject)
+        : undefined;
 
       if (!process.env.TELEGRAM_BOT_TOKEN || !process.env.TELEGRAM_CHAT_ID) {
         logger.warn('[contact] TELEGRAM_BOT_TOKEN missing — refusing in prod');
@@ -135,7 +172,7 @@ router.post(
               message: data.message.slice(0, 1200),
               company: data.company || undefined,
               phone: data.phone || undefined,
-              subject: data.serviceInterest || undefined,
+              subject: data.serviceInterest || subjectLabel,
             },
           },
           () =>
@@ -145,7 +182,7 @@ router.post(
               message: data.message,
               company: data.company || undefined,
               phone: data.phone || undefined,
-              subject: data.serviceInterest || undefined,
+              subject: data.serviceInterest || subjectLabel,
             }),
         ).catch((err) =>
           logger.warn('[contact] founder notification failed — recorded in outbox for retry', {
@@ -181,6 +218,7 @@ router.post(
         kvkkConsentAt: new Date().toISOString(),
         notes: [
           data.kind === 'booking' ? 'Source: Booking form' : 'Source: Contact form',
+          subjectLabel && `Subject: ${subjectLabel}`,
           data.serviceInterest && `Service: ${data.serviceInterest}`,
           data.budget && `Budget: ${data.budget}`,
           data.phone && `Phone: ${data.phone}`,
@@ -198,6 +236,7 @@ router.post(
           company: data.company || null,
           sector: data.sector || null,
           serviceInterest: data.serviceInterest || null,
+          subject: data.subject || null,
           budget: data.budget || null,
         },
       });
