@@ -21,6 +21,10 @@ import {
   ClipboardList,
   TrendingUp,
   Terminal,
+  Newspaper,
+  FolderOpen,
+  PenSquare,
+  Tags,
 } from 'lucide-react';
 import { useAdminAuth } from '../../../hooks/useAdminAuth';
 import { CommandPalette } from '../CommandPalette';
@@ -30,10 +34,12 @@ import { ThemeToggle } from '../ThemeToggle';
 import { LanguageToggle } from '../LanguageToggle';
 
 interface MenuItem {
-  icon: React.ElementType;
+  type?: 'link' | 'section';
+  icon?: React.ElementType;
   label: string;
-  path: string;
-  permission?: string; // if set, only show when useCan(permission) is true
+  path?: string;
+  permission?: string;
+  indent?: boolean;
 }
 
 const MENU_ITEMS: MenuItem[] = [
@@ -41,7 +47,38 @@ const MENU_ITEMS: MenuItem[] = [
   { icon: Mail, label: 'Contacts', path: '/admin/contacts', permission: 'contact:view' },
   { icon: Calendar, label: 'Bookings', path: '/admin/bookings', permission: 'booking:view:all' },
   { icon: Briefcase, label: 'Services', path: '/admin/services', permission: 'service:view' },
-  { icon: FileText, label: 'Content', path: '/admin/blog', permission: 'blog:view' },
+  { icon: FileText, label: 'Blog', path: '/admin/blog', permission: 'blog:view' },
+  // ── Perspektifler editorial CMS ──────────────────────────────────────────
+  { type: 'section', label: 'Perspektifler', permission: 'blog:view' },
+  {
+    icon: Newspaper,
+    label: 'Editoryal',
+    path: '/admin/insights',
+    permission: 'blog:view',
+    indent: true,
+  },
+  {
+    icon: FolderOpen,
+    label: 'Kategoriler',
+    path: '/admin/insights/categories',
+    permission: 'blog:view',
+    indent: true,
+  },
+  {
+    icon: PenSquare,
+    label: 'Makaleler',
+    path: '/admin/insights/posts',
+    permission: 'blog:view',
+    indent: true,
+  },
+  {
+    icon: Tags,
+    label: 'Yazarlar & Etiketler',
+    path: '/admin/insights/metadata',
+    permission: 'blog:view',
+    indent: true,
+  },
+  // ────────────────────────────────────────────────────────────────────────
   { icon: Users, label: 'Newsletter', path: '/admin/newsletter', permission: 'newsletter:view' },
   { icon: Bot, label: 'AI Creator', path: '/admin/ai' },
   { icon: BarChart3, label: 'Analytics', path: '/admin/analytics', permission: 'analytics:view' },
@@ -62,7 +99,6 @@ export const AdminSidebar: React.FC = () => {
   const { logout } = useAdminAuth();
   const can = useCan();
 
-  // Filter menu items by role permission (P36-T10)
   const visibleItems = MENU_ITEMS.filter((item) => !item.permission || can(item.permission));
 
   return (
@@ -80,23 +116,44 @@ export const AdminSidebar: React.FC = () => {
         <CommandPalette />
       </div>
       <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
-        {visibleItems.map((item) => (
-          <NavLink
-            key={item.path}
-            to={item.path}
-            className={({ isActive }) => `
-              flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-300 group
-              ${
-                isActive
-                  ? 'bg-white/5 text-secondary border-l-2 border-secondary pl-3.5'
-                  : 'text-slate-400 hover:text-white hover:bg-white/5'
-              }
-            `}
-          >
-            <item.icon size={18} className="group-hover:scale-110 transition-transform" />
-            <span className="text-sm font-medium">{item.label}</span>
-          </NavLink>
-        ))}
+        {visibleItems.map((item, idx) => {
+          if (item.type === 'section') {
+            return (
+              <div
+                key={`section-${idx}`}
+                className="px-4 pt-4 pb-1 text-[10px] font-mono uppercase tracking-widest text-slate-600"
+              >
+                {item.label}
+              </div>
+            );
+          }
+          if (!item.path || !item.icon) return null;
+          const Icon = item.icon;
+          return (
+            <NavLink
+              key={item.path}
+              to={item.path}
+              className={({ isActive }) => `
+                flex items-center gap-3 rounded-lg transition-all duration-300 group
+                ${item.indent ? 'px-3 py-2 ml-2' : 'px-4 py-3'}
+                ${
+                  isActive
+                    ? 'bg-white/5 text-secondary border-l-2 border-secondary'
+                    : 'text-slate-400 hover:text-white hover:bg-white/5'
+                }
+                ${item.indent && !isActive ? 'text-slate-500' : ''}
+              `}
+            >
+              <Icon
+                size={item.indent ? 15 : 18}
+                className="group-hover:scale-110 transition-transform shrink-0"
+              />
+              <span className={`font-medium ${item.indent ? 'text-xs' : 'text-sm'}`}>
+                {item.label}
+              </span>
+            </NavLink>
+          );
+        })}
       </nav>
 
       <div className="p-4 border-t border-white/5 space-y-1">

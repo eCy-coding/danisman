@@ -8,6 +8,7 @@
 import {
   PrismaClient,
   ArticleType,
+  CategoryStatus,
   Domain,
   Language,
   PostStatus,
@@ -646,11 +647,116 @@ async function main() {
   }
 
   console.log(`✓ ${created} blog post oluşturuldu`);
+
+  // ─── InsightCategory (dynamic editorial categories) ───────────────────────
+  const INSIGHT_CATEGORIES = [
+    {
+      slug: 'bagimsiz-denetim',
+      nameTr: 'Bağımsız Denetim',
+      nameEn: 'Independent Audit',
+      descTr:
+        'Denetim kalitesi, bağımsızlık ilkeleri ve etik uyum konularında derinlemesine analizler.',
+      descEn:
+        'Deep-dive analyses on audit quality, independence principles and ethical compliance.',
+      domain: Domain.M_A,
+      iconName: 'shield-check',
+      colorAccent: '#2563EB',
+      displayOrder: 1,
+    },
+    {
+      slug: 'risk-danismanligi',
+      nameTr: 'Risk Danışmanlığı',
+      nameEn: 'Risk Advisory',
+      descTr: 'Kurumsal risk yönetimi, iç kontrol sistemleri ve risk değerlendirme metodolojileri.',
+      descEn:
+        'Enterprise risk management, internal control systems and risk assessment methodologies.',
+      domain: Domain.M_A,
+      iconName: 'alert-triangle',
+      colorAccent: '#DC2626',
+      displayOrder: 2,
+    },
+    {
+      slug: 'kvkk-veri-koruma',
+      nameTr: 'KVKK & Veri Koruma',
+      nameEn: 'KVKK & Data Protection',
+      descTr:
+        'KVKK uyum süreci, kişisel veri işleme, GDPR karşılaştırması ve veri güvenliği rehberleri.',
+      descEn:
+        'KVKK compliance, personal data processing, GDPR comparison and data security guides.',
+      domain: Domain.ESG,
+      iconName: 'lock',
+      colorAccent: '#7C3AED',
+      displayOrder: 3,
+    },
+    {
+      slug: 'ic-kontrol',
+      nameTr: 'İç Kontrol',
+      nameEn: 'Internal Control',
+      descTr:
+        'İç kontrol çerçeveleri, denetim komitesi etkinliği ve kurumsal yönetim standartları.',
+      descEn:
+        'Internal control frameworks, audit committee effectiveness and corporate governance standards.',
+      domain: Domain.M_A,
+      iconName: 'check-circle',
+      colorAccent: '#059669',
+      displayOrder: 4,
+    },
+    {
+      slug: 'vergi-mevzuat',
+      nameTr: 'Vergi & Mevzuat',
+      nameEn: 'Tax & Regulation',
+      descTr:
+        'Türk vergi mevzuatı, transfer fiyatlandırması, vergi planlaması ve düzenleyici uyum analizi.',
+      descEn: 'Turkish tax law, transfer pricing, tax planning and regulatory compliance analysis.',
+      domain: Domain.M_A,
+      iconName: 'file-text',
+      colorAccent: '#D97706',
+      displayOrder: 5,
+    },
+    {
+      slug: 'surdurulebilirlik-esg',
+      nameTr: 'Sürdürülebilirlik (ESG)',
+      nameEn: 'Sustainability (ESG)',
+      descTr:
+        'ESG entegrasyonu, iklim riski yönetimi, sürdürülebilirlik raporlaması ve etki ölçümü.',
+      descEn:
+        'ESG integration, climate risk management, sustainability reporting and impact measurement.',
+      domain: Domain.ESG,
+      iconName: 'leaf',
+      colorAccent: '#16A34A',
+      displayOrder: 6,
+    },
+  ];
+
+  let catCreated = 0;
+  for (const cat of INSIGHT_CATEGORIES) {
+    await prisma.insightCategory.upsert({
+      where: { slug: cat.slug },
+      update: {
+        nameTr: cat.nameTr,
+        nameEn: cat.nameEn,
+        descTr: cat.descTr,
+        descEn: cat.descEn,
+        iconName: cat.iconName,
+        colorAccent: cat.colorAccent,
+        displayOrder: cat.displayOrder,
+      },
+      create: {
+        ...cat,
+        status: CategoryStatus.ACTIVE,
+      },
+    });
+    catCreated++;
+  }
+
+  console.log(`✓ ${catCreated} InsightCategory oluşturuldu`);
+
   console.log('\n🎉 Perspektif seed tamamlandı!');
   console.log(`   Authors: 1 (Founder)`);
   console.log(`   Series: 2`);
   console.log(`   Tags: ${tags.length}`);
   console.log(`   Posts: ${created}`);
+  console.log(`   InsightCategories: ${catCreated}`);
 }
 
 main()
