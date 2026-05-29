@@ -2,13 +2,18 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'motion/react';
 import { Globe } from 'lucide-react';
+import { hasConsent } from '@/lib/consent';
 
 export const LanguageToggle: React.FC = () => {
   const { i18n } = useTranslation();
 
   const toggleLanguage = () => {
     const newLang = (i18n.language || 'en').startsWith('tr') ? 'en' : 'tr';
-    i18n.changeLanguage(newLang);
+    void i18n.changeLanguage(newLang);
+    // KVKK: persist only after analytics consent; i18n caches:[] prevents auto-write
+    if (hasConsent('analytics')) {
+      localStorage.setItem('i18nextLng', newLang);
+    }
   };
 
   return (

@@ -9,6 +9,7 @@
 import React, { useState } from 'react';
 import { Helmet } from '@/lib/seo-helmet';
 import { JsonLd } from '@/components/seo/JsonLd';
+import { useTranslation } from 'react-i18next';
 import { useMutation } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
 import { AlertCircle, ArrowRight, CheckCircle2, Clock, Lock } from 'lucide-react';
@@ -23,16 +24,6 @@ const DISCOVERY_ENDPOINT = ((import.meta.env.VITE_API_URL as string | undefined)
   '',
 );
 
-const SECTORS = [
-  'Sanayi & Üretim',
-  'Finans & Bankacılık',
-  'Teknoloji',
-  'Perakende & Tüketim',
-  'Enerji',
-  'Sağlık',
-  'İnşaat & Gayrimenkul',
-  'Diğer',
-];
 const HEADCOUNTS = ['1–50', '51–250', '251–1.000', '1.000+'];
 
 interface DiscoveryPayload {
@@ -59,6 +50,9 @@ async function submitDiscovery(payload: DiscoveryPayload): Promise<{ ok: boolean
 }
 
 export const Discovery: React.FC = () => {
+  const { t } = useTranslation('contact');
+  const sectors = t('discovery.sectors', { returnObjects: true }) as string[];
+
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [company, setCompany] = useState('');
@@ -96,11 +90,8 @@ export const Discovery: React.FC = () => {
   return (
     <React.Fragment>
       <Helmet>
-        <title>Tanışma Toplantısı Talebi — eCyPro Premium Consulting</title>
-        <meta
-          name="description"
-          content="30 dakika ücretsiz keşif görüşmesi. M&A, ESG, stratejik dönüşüm veya Aile Şirketi yönetişimi konularında ilk değerlendirme."
-        />
+        <title>{t('discovery.meta_title')}</title>
+        <meta name="description" content={t('discovery.meta_description')} />
         <link rel="canonical" href={buildCanonical('/discovery', 'tr')} />
         <meta property="og:title" content="Tanışma Toplantısı Talebi — eCyPro Premium Consulting" />
         <meta
@@ -154,11 +145,10 @@ export const Discovery: React.FC = () => {
         <div className="container mx-auto px-4 py-16 max-w-2xl">
           <header className="text-center mb-10">
             <h1 className="text-3xl md:text-4xl font-bold text-white mb-3 leading-tight">
-              Tanışma Toplantısı Talebi
+              {t('discovery.page_title')}
             </h1>
             <p className="text-slate-400 text-base leading-relaxed max-w-lg mx-auto">
-              Formu doldurun — 48 saat içinde dönüş yapılır. Taahhütsüz, 30 dakikalık stratejik
-              değerlendirme görüşmesi.
+              {t('discovery.page_subtitle')}
             </p>
           </header>
 
@@ -172,10 +162,10 @@ export const Discovery: React.FC = () => {
                 className="w-12 h-12 text-emerald-400 mx-auto mb-4"
                 aria-hidden="true"
               />
-              <h2 className="text-xl font-semibold text-white mb-2">Talebiniz alındı</h2>
-              <p className="text-slate-400 text-sm mb-6">
-                48 saat içinde size dönüş yapılacak. Acil ise WhatsApp ile ulaşabilirsiniz.
-              </p>
+              <h2 className="text-xl font-semibold text-white mb-2">
+                {t('discovery.success_title')}
+              </h2>
+              <p className="text-slate-400 text-sm mb-6">{t('discovery.success_body')}</p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
                 <a
                   href="https://wa.me/905417143000"
@@ -183,14 +173,14 @@ export const Discovery: React.FC = () => {
                   rel="noopener noreferrer"
                   className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-semibold transition-colors"
                 >
-                  WhatsApp ile hızlı randevu
+                  {t('discovery.cta_whatsapp')}
                   <ArrowRight className="w-4 h-4" aria-hidden="true" />
                 </a>
                 <Link
                   to="/"
                   className="inline-flex items-center justify-center px-5 py-2.5 rounded-xl border border-slate-600 text-slate-300 hover:text-white text-sm transition-colors"
                 >
-                  Ana sayfaya dön
+                  {t('discovery.cta_home')}
                 </Link>
               </div>
             </div>
@@ -203,8 +193,8 @@ export const Discovery: React.FC = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 <div>
                   <label htmlFor="disc-name" className={labelClass}>
-                    Ad Soyad{' '}
-                    <span className="text-red-400" aria-label="zorunlu">
+                    {t('discovery.label_name')}{' '}
+                    <span className="text-red-400" aria-label={t('discovery.required_aria')}>
                       *
                     </span>
                   </label>
@@ -216,13 +206,13 @@ export const Discovery: React.FC = () => {
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     className={fieldClass}
-                    placeholder="Emre Yalçın"
+                    placeholder={t('discovery.placeholder_name')}
                   />
                 </div>
                 <div>
                   <label htmlFor="disc-email" className={labelClass}>
-                    E-posta{' '}
-                    <span className="text-red-400" aria-label="zorunlu">
+                    {t('discovery.label_email')}{' '}
+                    <span className="text-red-400" aria-label={t('discovery.required_aria')}>
                       *
                     </span>
                   </label>
@@ -234,15 +224,15 @@ export const Discovery: React.FC = () => {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     className={fieldClass}
-                    placeholder="isim@sirket.com"
+                    placeholder={t('discovery.placeholder_email')}
                   />
                 </div>
               </div>
 
               <div>
                 <label htmlFor="disc-company" className={labelClass}>
-                  Şirket{' '}
-                  <span className="text-red-400" aria-label="zorunlu">
+                  {t('discovery.label_company')}{' '}
+                  <span className="text-red-400" aria-label={t('discovery.required_aria')}>
                     *
                   </span>
                 </label>
@@ -254,14 +244,14 @@ export const Discovery: React.FC = () => {
                   value={company}
                   onChange={(e) => setCompany(e.target.value)}
                   className={fieldClass}
-                  placeholder="Şirket adı"
+                  placeholder={t('discovery.placeholder_company')}
                 />
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 <div>
                   <label htmlFor="disc-sector" className={labelClass}>
-                    Sektör
+                    {t('discovery.label_sector')}
                   </label>
                   <select
                     id="disc-sector"
@@ -269,8 +259,8 @@ export const Discovery: React.FC = () => {
                     onChange={(e) => setSector(e.target.value)}
                     className={fieldClass}
                   >
-                    <option value="">Seçiniz (isteğe bağlı)</option>
-                    {SECTORS.map((s) => (
+                    <option value="">{t('discovery.placeholder_select')}</option>
+                    {sectors.map((s) => (
                       <option key={s} value={s}>
                         {s}
                       </option>
@@ -279,7 +269,7 @@ export const Discovery: React.FC = () => {
                 </div>
                 <div>
                   <label htmlFor="disc-headcount" className={labelClass}>
-                    Çalışan Sayısı
+                    {t('discovery.label_headcount')}
                   </label>
                   <select
                     id="disc-headcount"
@@ -287,7 +277,7 @@ export const Discovery: React.FC = () => {
                     onChange={(e) => setHeadcount(e.target.value)}
                     className={fieldClass}
                   >
-                    <option value="">Seçiniz (isteğe bağlı)</option>
+                    <option value="">{t('discovery.placeholder_select')}</option>
                     {HEADCOUNTS.map((h) => (
                       <option key={h} value={h}>
                         {h}
@@ -299,7 +289,7 @@ export const Discovery: React.FC = () => {
 
               <div>
                 <label htmlFor="disc-description" className={labelClass}>
-                  Güncel Önceliğiniz
+                  {t('discovery.label_description')}
                 </label>
                 <textarea
                   id="disc-description"
@@ -308,7 +298,7 @@ export const Discovery: React.FC = () => {
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   className={`${fieldClass} resize-none`}
-                  placeholder="Şu anda ne üzerinde çalışıyorsunuz? M&A, ESG, dijital dönüşüm veya stratejik önceliklerinizi paylaşın."
+                  placeholder={t('discovery.placeholder_description')}
                 />
               </div>
 
@@ -325,12 +315,10 @@ export const Discovery: React.FC = () => {
                 />
                 <label htmlFor="disc-kvkk" className="text-xs text-slate-400 leading-relaxed">
                   <Link to="/privacy" className="text-amber-400 hover:underline">
-                    KVKK Aydınlatma Metni
+                    {t('discovery.kvkk_link_text')}
                   </Link>
-                  'ni okudum, kişisel verilerimin işlenmesine onay veriyorum. Verilerim yalnızca
-                  tanışma görüşmesi organizasyonu amacıyla kullanılacak ve ROPA SAT-01 kapsamında 3
-                  yıl saklanacaktır.{' '}
-                  <span className="text-red-400" aria-label="zorunlu">
+                  {t('discovery.kvkk_consent_text')}{' '}
+                  <span className="text-red-400" aria-label={t('discovery.required_aria')}>
                     *
                   </span>
                 </label>
@@ -345,14 +333,14 @@ export const Discovery: React.FC = () => {
                 >
                   <AlertCircle className="w-4 h-4 mt-0.5 shrink-0" aria-hidden="true" />
                   <span>
-                    Geçici bir sorun oluştu. 48 saat içinde döneceğiz. Acil ise:{' '}
+                    {t('discovery.error_text')}{' '}
                     <a
                       href="https://wa.me/905417143000"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="underline text-red-300 hover:text-white"
                     >
-                      WhatsApp ile iletişime geçin
+                      {t('discovery.error_whatsapp')}
                     </a>
                     .
                   </span>
@@ -368,11 +356,11 @@ export const Discovery: React.FC = () => {
                 {mutation.isPending ? (
                   <>
                     <Clock className="w-4 h-4 animate-spin" aria-hidden="true" />
-                    Gönderiliyor...
+                    {t('discovery.submit_loading')}
                   </>
                 ) : (
                   <>
-                    Görüşme Talebini Gönder
+                    {t('discovery.submit_idle')}
                     <ArrowRight className="w-4 h-4" aria-hidden="true" />
                   </>
                 )}
@@ -383,10 +371,9 @@ export const Discovery: React.FC = () => {
           <footer className="mt-8 flex items-start gap-2 text-xs text-slate-500">
             <Lock className="w-3.5 h-3.5 mt-0.5 shrink-0" aria-hidden="true" />
             <p>
-              Kişisel verileriniz 6698 sayılı KVKK kapsamında işlenir. Yalnızca tanışma görüşmesi
-              organizasyonu amacıyla kullanılır, üçüncü taraflarla paylaşılmaz.{' '}
+              {t('discovery.footer_kvkk')}{' '}
               <Link to="/privacy" className="text-amber-400/70 hover:text-amber-400 underline">
-                Gizlilik politikası →
+                {t('discovery.footer_privacy_link')}
               </Link>
             </p>
           </footer>

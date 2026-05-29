@@ -1,62 +1,41 @@
 {
   "meta": {
-    "title": "Fiyatlandırma · eCyPro",
-    "description": "Şeffaf, ölçeklenebilir paketler. İhtiyacınıza göre seçin, büyürken yükseltin."
+    "title": "Danışmanlık Fiyatlandırma — Starter, Growth, Enterprise | eCyPro",
+    "description": "eCyPro stratejik danışmanlık fiyatlandırması: Starter $15K-25K, Growth $25K-50K, Enterprise özel teklif. Sonuç & milestone bazlı retainer. Founder doğrudan eşlik eder."
   },
   "hero": {
-    "badge": "Esnek Paketler",
-    "title": "İşinize uygun paketi seçin",
-    "subtitle": "Aylık ya da yıllık. Tüm paketler 14 gün ücretsiz strateji oturumu içerir.",
-    "billingMonthly": "Aylık",
-    "billingYearly": "Yıllık",
-    "yearlyDiscount": "%20 tasarruf"
+    "badge": "FİYATLANDIRMA",
+    "title": "Şeffaf Fiyatlama, Sahaya Hızla İniş",
+    "subtitle": "Saat satmıyoruz. Sonuç ve milestone bazlı retainer modeli. Founder Emre Can Yalçın her tier'da doğrudan eşlik eder.",
+    "cta_discovery": "Ücretsiz Tanışma Toplantısı",
+    "cta_quiz": "Hangisi bana uygun?"
   },
   "tiers": {
-    "starter": {
-      "name": "Starter",
-      "tagline": "Yeni başlayan ekipler için",
-      "ctaLabel": "Başla"
-    },
-    "growth": {
-      "name": "Growth",
-      "tagline": "Ölçeklenen organizasyonlar için",
-      "ctaLabel": "Demo Talep Et",
-      "badge": "En çok tercih edilen"
-    },
-    "enterprise": {
-      "name": "Enterprise",
-      "tagline": "Kurumsal entegrasyon için",
-      "ctaLabel": "Bize Ulaşın"
-    }
+    "heading_sr": "Fiyatlandırma Paketleri",
+    "aria_label": "Fiyatlandırma paketleri",
+    "popular_badge": "En Popüler",
+    "features_aria": "{{tierName}} özellikleri"
   },
   "comparison": {
-    "title": "Detaylı karşılaştırma",
-    "subtitle": "Tüm paketlerin tam yetenek listesi.",
-    "featureColumn": "Özellik",
-    "included": "Dahil",
-    "notIncluded": "—"
+    "title": "Detaylı Karşılaştırma",
+    "feature_col": "Özellik",
+    "included_aria": "dahil",
+    "excluded_aria": "dahil değil"
+  },
+  "quiz": {
+    "title": "Hangisi Size Uygun?",
+    "subtitle": "5 soruda ideal tier'ınızı keşfedin."
   },
   "faq": {
-    "title": "Sıkça sorulan sorular",
-    "subtitle": "Aklınızdaki soruların cevapları.",
-    "items": [
-      {
-        "q": "Plan değişikliği yapılabilir mi?",
-        "a": "Evet. İstediğiniz an yükseltebilir ya da bir alt plana geçebilirsiniz; faturalandırma orantılı olarak yapılır."
-      },
-      {
-        "q": "Yıllık ödemede iade var mı?",
-        "a": "İlk 30 gün içinde koşulsuz iade sunuyoruz."
-      },
-      {
-        "q": "Vergi dahil mi?",
-        "a": "Listelenen fiyatlar vergi hariçtir. Faturada KDV ayrıca gösterilir."
-      }
-    ]
+    "title": "Sıkça Sorulan Sorular"
   },
   "cta": {
-    "title": "Hangi paketin size uygun olduğundan emin değil misiniz?",
-    "subtitle": "20 dakikalık ücretsiz keşif görüşmesi planlayalım.",
-    "button": "Görüşme Planla"
+    "title": "Hazır mısınız?",
+    "subtitle": "30 dakika ücretsiz keşif görüşmesi.",
+    "button": "Görüşme Ayarlayın"
+  },
+  "calendly": {
+    "title": "Hemen Görüşme Planlayın",
+    "subtitle": "30 dakika ücretsiz keşif görüşmesi — uygun zamanı siz seçin."
   }
 }

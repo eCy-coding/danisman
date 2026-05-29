@@ -1,0 +1,75 @@
+{
+  "meta": {
+    "title": "Emre Can Yalçın — Kurucu Stratejik Danışman | eCyPro Consulting",
+    "description": "Emre Can Yalçın — eCyPro kurucusu, Türkiye-AB köprüsünde stratejik danışman. 10+ yıl deneyim, 120+ karar, Big4 metodolojisi boutique çevikliğiyle. Her projede doğrudan eşlik eder."
+  },
+  "breadcrumb": {
+    "home": "Anasayfa",
+    "current": "Kurucu"
+  },
+  "hero": {
+    "badge": "Kurucu & Baş Stratejist",
+    "subtitle": "Kurucu & Yönetim Danışmanı",
+    "credentialsAriaLabel": "Uzmanlık alanları",
+    "cta_discovery": "Keşif Görüşmesi Al",
+    "cta_linkedin": "LinkedIn",
+    "stat_experience": "10+ yıl pratik",
+    "stat_decisions": "120+ stratejik karar",
+    "stat_sectors": "12+ sektör"
+  },
+  "credentials": ["MBA · Stratejik Yönetim", "10+ Yıl Danışmanlık", "İstanbul · Londra · AB"],
+  "comparison": {
+    "title": "Big4 Danışmanlığı mı, Boutique mi?",
+    "titleAccent": "Boutique mi?",
+    "subtitle": "Mid-market şirketler için doğru seçim neden eCyPro gibi boutique firmalardan geçiyor.",
+    "ariaLabel": "Big4 vs eCyPro Boutique karşılaştırması",
+    "col_criterion": "Kriter",
+    "col_big4": "Big4 Danışmanlığı",
+    "col_boutique": "eCyPro Boutique",
+    "footnote": "Big4 metodolojisi + boutique çevikliği. Üst yönetim seviyesinde stratejik karar destek ve sahada uygulama disiplini birlikte.",
+    "rows": [
+      { "criterion": "Ekip", "big4": "15-40 kişi (çoğu junior analist)", "boutique": "Founder direkt katılım" },
+      { "criterion": "Fiyatlandırma", "big4": "Saatlik 3.000-8.000 USD/gün", "boutique": "Sabit fiyat (fixed-scope)" },
+      { "criterion": "Süre", "big4": "6-18 ay ortalama", "boutique": "12 hafta ortalama" },
+      { "criterion": "Esneklik", "big4": "Standart playbook", "boutique": "Şirkete özel metodoloji" },
+      { "criterion": "Taahhüt", "big4": "Sürece taahhüt", "boutique": "Sonuca taahhüt" },
+      { "criterion": "Minimum bütçe", "big4": "1.000.000 USD+", "boutique": "₺150.000'dan başlayan" }
+    ]
+  },
+  "philosophy": {
+    "title": "Danışmanlık Felsefesi",
+    "cards": [
+      {
+        "title": "Boutique Hız, Big4 Derinliği",
+        "desc": "Bürokratik süreçleri ortadan kaldırarak kurumsal düzeyde analitik kaliteyi gerçek zamanlı sunuyoruz. Kararlar hızlı alınır; uygulama hızlı başlar."
+      },
+      {
+        "title": "Türkiye-AB Köprüsü",
+        "desc": "İstanbul'dan Londra'ya çift pazardaki yerel bağlam ve küresel standartları tek çatıda birleştiriyoruz. Bu köprü, müşterilerimizin rekabet avantajıdır."
+      },
+      {
+        "title": "Sonuca Taahhüt",
+        "desc": "Her engagement sabit fiyat ve ölçülebilir KPI ile başlar. Founder seviyesinde taahhüt — junior analist değil, stratejist sahada."
+      }
+    ]
+  },
+  "timeline": {
+    "title": "Kariyer Yolculuğu",
+    "ariaLabel": "Kariyer zaman çizelgesi",
+    "items": [
+      { "year": "2015", "event": "Danışmanlık kariyerinin başlangıcı — Kurumsal strateji" },
+      { "year": "2017", "event": "İlk M&A projesi: Türk sanayi holdingi çıkış stratejisi" },
+      { "year": "2019", "event": "Londra ofisi — Türkiye-AB yatırım köprüsü çalışmaları" },
+      { "year": "2021", "event": "eCyPro Premium Consulting'in kuruluşu" },
+      { "year": "2023", "event": "ESG & Sürdürülebilirlik pratiğinin genişletilmesi" },
+      { "year": "2025", "event": "40+ tamamlanan proje; 5 sektör, 2 kıta" }
+    ]
+  },
+  "letters": {
+    "badge": "Kurucu Mektupları",
+    "title": "Düşünceler, Analizler, Sektörel Gözlemler",
+    "desc": "Strateji, yönetişim ve Türkiye-AB iş dünyasına dair çeyreklik bakış açıları. LinkedIn'de 2.000+ profesyonele ulaşan içerikler.",
+    "cta_insights": "İçgörüleri İncele",
+    "cta_discovery": "Discovery Call · 45dk Ücretsiz"
+  }
+}

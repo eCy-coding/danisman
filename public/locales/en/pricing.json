@@ -1,62 +1,41 @@
 {
   "meta": {
-    "title": "Pricing · eCyPro",
-    "description": "Transparent, scalable plans. Pick what fits today, upgrade as you grow."
+    "title": "Consulting Pricing — Starter, Growth, Enterprise | eCyPro",
+    "description": "eCyPro strategic consulting pricing: Starter $15K–25K, Growth $25K–50K, Enterprise custom. Outcome & milestone-based retainer. Founder direct involvement on every engagement."
   },
   "hero": {
-    "badge": "Flexible plans",
-    "title": "Choose the plan that fits your business",
-    "subtitle": "Monthly or yearly. All plans include a 14-day free strategy session.",
-    "billingMonthly": "Monthly",
-    "billingYearly": "Yearly",
-    "yearlyDiscount": "Save 20%"
+    "badge": "PRICING",
+    "title": "Transparent Pricing, Rapid Deployment",
+    "subtitle": "We don't sell hours. Outcome and milestone-based retainer model. Founder Emre Can Yalçın is directly involved at every tier.",
+    "cta_discovery": "Free Discovery Meeting",
+    "cta_quiz": "Which plan fits me?"
   },
   "tiers": {
-    "starter": {
-      "name": "Starter",
-      "tagline": "For small, growing teams",
-      "ctaLabel": "Start"
-    },
-    "growth": {
-      "name": "Growth",
-      "tagline": "For scaling organizations",
-      "ctaLabel": "Request a demo",
-      "badge": "Most popular"
-    },
-    "enterprise": {
-      "name": "Enterprise",
-      "tagline": "For deep enterprise integration",
-      "ctaLabel": "Contact us"
-    }
+    "heading_sr": "Pricing Packages",
+    "aria_label": "Pricing packages",
+    "popular_badge": "Most Popular",
+    "features_aria": "{{tierName}} features"
   },
   "comparison": {
-    "title": "Detailed comparison",
-    "subtitle": "Full capability matrix across all plans.",
-    "featureColumn": "Feature",
-    "included": "Included",
-    "notIncluded": "—"
+    "title": "Detailed Comparison",
+    "feature_col": "Feature",
+    "included_aria": "included",
+    "excluded_aria": "not included"
+  },
+  "quiz": {
+    "title": "Which Plan Fits You?",
+    "subtitle": "Discover your ideal tier in 5 questions."
   },
   "faq": {
-    "title": "Frequently asked questions",
-    "subtitle": "Answers to common questions.",
-    "items": [
-      {
-        "q": "Can I change my plan later?",
-        "a": "Yes. You can upgrade or downgrade at any time; charges are prorated."
-      },
-      {
-        "q": "Do you offer refunds on yearly billing?",
-        "a": "We offer a no-questions-asked refund within the first 30 days."
-      },
-      {
-        "q": "Is tax included?",
-        "a": "Listed prices are exclusive of tax. VAT is shown separately on invoices."
-      }
-    ]
+    "title": "Frequently Asked Questions"
   },
   "cta": {
-    "title": "Not sure which plan is right for you?",
-    "subtitle": "Let's schedule a 20-minute free discovery call.",
-    "button": "Book a Call"
+    "title": "Ready to Get Started?",
+    "subtitle": "Free 30-minute discovery call.",
+    "button": "Schedule a Call"
+  },
+  "calendly": {
+    "title": "Schedule a Call Now",
+    "subtitle": "Free 30-minute discovery call — pick a time that works for you."
   }
 }

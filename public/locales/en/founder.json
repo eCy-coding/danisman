@@ -1,0 +1,75 @@
+{
+  "meta": {
+    "title": "Emre Can Yalçın — Founder Strategy Consultant | eCyPro Consulting",
+    "description": "Emre Can Yalçın — eCyPro founder, strategy consultant bridging Turkey and the EU. 10+ years of experience, 120+ strategic decisions, Big4 methodology with boutique agility. Direct founder involvement on every engagement."
+  },
+  "breadcrumb": {
+    "home": "Home",
+    "current": "Founder"
+  },
+  "hero": {
+    "badge": "Founder & Chief Strategist",
+    "subtitle": "Founder & Managing Consultant",
+    "credentialsAriaLabel": "Areas of expertise",
+    "cta_discovery": "Schedule a Discovery Engagement",
+    "cta_linkedin": "LinkedIn",
+    "stat_experience": "10+ years in practice",
+    "stat_decisions": "120+ strategic decisions",
+    "stat_sectors": "12+ sectors"
+  },
+  "credentials": ["MBA · Strategic Management", "10+ Years Consulting", "Istanbul · London · EU"],
+  "comparison": {
+    "title": "Big4 Consulting or Boutique?",
+    "titleAccent": "Boutique?",
+    "subtitle": "Why mid-market companies find the right partner in boutique firms like eCyPro.",
+    "ariaLabel": "Big4 vs eCyPro Boutique comparison",
+    "col_criterion": "Criterion",
+    "col_big4": "Big4 Consulting",
+    "col_boutique": "eCyPro Boutique",
+    "footnote": "Big4 methodology + boutique agility. Senior-level strategic decision support combined with on-the-ground execution discipline.",
+    "rows": [
+      { "criterion": "Team", "big4": "15–40 people (mostly junior analysts)", "boutique": "Direct Founder involvement" },
+      { "criterion": "Pricing", "big4": "Hourly $3,000–$8,000/day", "boutique": "Fixed price (fixed-scope)" },
+      { "criterion": "Duration", "big4": "6–18 months average", "boutique": "12 weeks average" },
+      { "criterion": "Flexibility", "big4": "Standard playbook", "boutique": "Company-specific methodology" },
+      { "criterion": "Commitment", "big4": "Process commitment", "boutique": "Outcome commitment" },
+      { "criterion": "Min. budget", "big4": "$1,000,000+", "boutique": "Starting from ₺150,000" }
+    ]
+  },
+  "philosophy": {
+    "title": "Consulting Philosophy",
+    "cards": [
+      {
+        "title": "Boutique Speed, Big4 Depth",
+        "desc": "We eliminate bureaucratic processes to deliver institutional-grade analytical quality in real time. Decisions are made quickly; implementation starts immediately."
+      },
+      {
+        "title": "Turkey–EU Bridge",
+        "desc": "From Istanbul to London, we combine local market context and global standards under one roof. This bridge is the competitive advantage we deliver to every client."
+      },
+      {
+        "title": "Commitment to Outcomes",
+        "desc": "Every engagement begins with a fixed price and measurable KPIs. Founder-level commitment on every project — a strategist in the field, not a junior analyst."
+      }
+    ]
+  },
+  "timeline": {
+    "title": "Career Journey",
+    "ariaLabel": "Career timeline",
+    "items": [
+      { "year": "2015", "event": "Consulting career begins — Corporate strategy" },
+      { "year": "2017", "event": "First M&A project: Turkish industrial holding exit strategy" },
+      { "year": "2019", "event": "London office — Turkey–EU investment bridge initiatives" },
+      { "year": "2021", "event": "eCyPro Premium Consulting founded" },
+      { "year": "2023", "event": "Expansion of ESG & Sustainability practice" },
+      { "year": "2025", "event": "40+ completed engagements; 5 sectors, 2 continents" }
+    ]
+  },
+  "letters": {
+    "badge": "Founder Letters",
+    "title": "Thoughts, Analyses, Industry Observations",
+    "desc": "Quarterly perspectives on strategy, governance, and the Turkey–EU business landscape. Content reaching 2,000+ professionals on LinkedIn.",
+    "cta_insights": "Browse Insights",
+    "cta_discovery": "Discovery Call · 45 min Free"
+  }
+}

@@ -62,6 +62,8 @@ export const NAMESPACES = [
   'admin',
   // Wave-3A — Perspektif / Insights pages (PB-6, PB-9).
   'insights',
+  // i18n-EN track — /founder page bilingual namespace.
+  'founder',
 ] as const;
 
 /**
@@ -110,7 +112,7 @@ i18n
     },
     detection: {
       order: ['localStorage', 'navigator', 'htmlTag'],
-      caches: ['localStorage'],
+      caches: [], // KVKK: no auto-write; manual write only after analytics consent (see LanguageToggle)
       lookupLocalStorage: 'i18nextLng',
     },
     react: {

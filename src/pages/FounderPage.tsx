@@ -8,98 +8,49 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from '@/lib/seo-helmet';
+import { useTranslation } from 'react-i18next';
 import { ArrowRight, CheckCircle2, Clock, Target, ExternalLink, Award } from 'lucide-react';
 import { JsonLd } from '../components/seo/JsonLd';
 import { buildFounderSchema } from '../lib/seo/founder-schema';
 import { buildCanonical } from '@/i18n/canonical';
-import { FOUNDER_BIOS } from '@/data/founder-bios';
+import { FOUNDER_BIOS, type SupportedLang } from '@/data/founder-bios';
 import { FounderPortrait } from '@/components/common/FounderPortrait';
 import { PageWrapper } from '../components/layout/PageWrapper';
 import { FadeIn } from '../components/common/FadeIn';
 
-const PHILOSOPHY = [
-  {
-    title: 'Boutique Hız, Big4 Derinliği',
-    desc: 'Bürokratik süreçleri ortadan kaldırarak kurumsal düzeyde analitik kaliteyi gerçek zamanlı sunuyoruz. Kararlar hızlı alınır; uygulama hızlı başlar.',
-    icon: '⚡',
-  },
-  {
-    title: 'Türkiye-AB Köprüsü',
-    desc: "İstanbul'dan Londra'ya çift pazardaki yerel bağlam ve küresel standartları tek çatıda birleştiriyoruz. Bu köprü, müşterilerimizin rekabet avantajıdır.",
-    icon: '🌉',
-  },
-  {
-    title: 'Sonuca Taahhüt',
-    desc: 'Her engagement sabit fiyat ve ölçülebilir KPI ile başlar. Founder seviyesinde taahhüt — junior analist değil, stratejist sahada.',
-    icon: '🎯',
-  },
-];
-
-const BIG4_COMPARISON = [
-  {
-    criterion: 'Ekip',
-    big4: '15-40 kişi (çoğu junior analist)',
-    boutique: 'Founder direkt katılım',
-  },
-  {
-    criterion: 'Fiyatlandırma',
-    big4: 'Saatlik 3.000-8.000 USD/gün',
-    boutique: 'Sabit fiyat (fixed-scope)',
-  },
-  {
-    criterion: 'Süre',
-    big4: '6-18 ay ortalama',
-    boutique: '12 hafta ortalama',
-  },
-  {
-    criterion: 'Esneklik',
-    big4: 'Standart playbook',
-    boutique: 'Şirkete özel metodoloji',
-  },
-  {
-    criterion: 'Taahhüt',
-    big4: 'Sürece taahhüt',
-    boutique: 'Sonuca taahhüt',
-  },
-  {
-    criterion: 'Minimum bütçe',
-    big4: '1.000.000 USD+',
-    boutique: "₺150.000'dan başlayan",
-  },
-];
-
-const TIMELINE = [
-  { year: '2015', event: 'Danışmanlık kariyerinin başlangıcı — Kurumsal strateji' },
-  { year: '2017', event: 'İlk M&A projesi: Türk sanayi holdingi çıkış stratejisi' },
-  { year: '2019', event: 'Londra ofisi — Türkiye-AB yatırım köprüsü çalışmaları' },
-  { year: '2021', event: "eCyPro Premium Consulting'in kuruluşu" },
-  { year: '2023', event: 'ESG & Sürdürülebilirlik pratiğinin genişletilmesi' },
-  { year: '2025', event: '40+ tamamlanan proje; 5 sektör, 2 kıta' },
-];
-
-const CREDENTIALS = ['MBA · Stratejik Yönetim', '10+ Yıl Danışmanlık', 'İstanbul · Londra · AB'];
+const PHILOSOPHY_ICONS = ['⚡', '🌉', '🎯'];
 
 export const FounderPage: React.FC = () => {
-  const bio300 = FOUNDER_BIOS.tr['300w'].text;
+  const { t, i18n } = useTranslation('founder');
+  const lang: SupportedLang = i18n.language.startsWith('tr') ? 'tr' : 'en';
+  const bio300 = FOUNDER_BIOS[lang]?.['300w']?.text ?? FOUNDER_BIOS.tr['300w'].text;
   const founderSchema = buildFounderSchema();
+
+  const philosophyCards = t('philosophy.cards', { returnObjects: true }) as Array<{
+    title: string;
+    desc: string;
+  }>;
+  const comparisonRows = t('comparison.rows', { returnObjects: true }) as Array<{
+    criterion: string;
+    big4: string;
+    boutique: string;
+  }>;
+  const timelineItems = t('timeline.items', { returnObjects: true }) as Array<{
+    year: string;
+    event: string;
+  }>;
+  const credentials = t('credentials', { returnObjects: true }) as string[];
 
   return (
     <>
       <Helmet>
-        {/* P32-T12: keyword-optimised title (primary: "stratejik danışman" / "strategy consultant Turkey") */}
-        <title>Emre Can Yalçın — Kurucu Stratejik Danışman | eCyPro Consulting</title>
-        <meta
-          name="description"
-          content="Emre Can Yalçın — eCyPro kurucusu, Türkiye-AB köprüsünde stratejik danışman. 10+ yıl deneyim, 120+ karar, Big4 metodolojisi boutique çevikliğiyle. Her projede doğrudan eşlik eder."
-        />
-        <link rel="canonical" href={buildCanonical('/founder', 'tr')} />
-        <meta property="og:title" content="Emre Can Yalçın — Kurucu Stratejik Danışman | eCyPro" />
-        <meta
-          property="og:description"
-          content="10+ yıl danışmanlık, 120+ stratejik karar. Türkiye-AB köprüsünde Big4-alternatif boutique lider."
-        />
+        <title>{t('meta.title')}</title>
+        <meta name="description" content={t('meta.description')} />
+        <link rel="canonical" href={buildCanonical('/founder', lang)} />
+        <meta property="og:title" content={t('meta.title')} />
+        <meta property="og:description" content={t('meta.description')} />
         <meta property="og:type" content="profile" />
-        <meta property="og:url" content={buildCanonical('/founder', 'tr')} />
+        <meta property="og:url" content={buildCanonical('/founder', lang)} />
         <meta property="og:image" content="https://www.ecypro.com/og/founder.png" />
         <meta name="robots" content="index, follow, max-image-preview:large" />
         <meta name="twitter:card" content="summary_large_image" />
@@ -136,10 +87,10 @@ export const FounderPage: React.FC = () => {
             <FadeIn>
               <nav className="text-sm text-slate-500 mb-10" aria-label="Breadcrumb">
                 <Link to="/" className="hover:text-secondary transition-colors">
-                  Anasayfa
+                  {t('breadcrumb.home')}
                 </Link>
                 <span className="mx-2 text-slate-700">/</span>
-                <span className="text-slate-300">Kurucu</span>
+                <span className="text-slate-300">{t('breadcrumb.current')}</span>
               </nav>
             </FadeIn>
 
@@ -147,16 +98,19 @@ export const FounderPage: React.FC = () => {
               <FadeIn>
                 <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-secondary/10 border border-secondary/30 text-[10px] font-bold tracking-[0.25em] text-secondary uppercase mb-6">
                   <Award size={11} aria-hidden="true" />
-                  Kurucu & Baş Stratejist
+                  {t('hero.badge')}
                 </span>
 
                 <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold text-white mb-3 leading-tight">
                   Emre Can Yalçın
                 </h1>
-                <p className="text-xl text-slate-400 mb-6">Kurucu & Yönetim Danışmanı</p>
+                <p className="text-xl text-slate-400 mb-6">{t('hero.subtitle')}</p>
 
-                <ul className="flex flex-wrap gap-2 mb-8" aria-label="Uzmanlık alanları">
-                  {CREDENTIALS.map((c) => (
+                <ul
+                  className="flex flex-wrap gap-2 mb-8"
+                  aria-label={t('hero.credentialsAriaLabel')}
+                >
+                  {credentials.map((c) => (
                     <li
                       key={c}
                       className="text-xs bg-white/5 border border-white/10 px-3 py-1 rounded-full text-slate-300"
@@ -175,7 +129,7 @@ export const FounderPage: React.FC = () => {
                     data-cta="founder-contact"
                     data-track="cta-click"
                   >
-                    Keşif Görüşmesi Al <ArrowRight size={18} />
+                    {t('hero.cta_discovery')} <ArrowRight size={18} />
                   </Link>
                   <a
                     href="https://linkedin.com/in/emrecnyalcin"
@@ -185,22 +139,22 @@ export const FounderPage: React.FC = () => {
                     data-cta="founder-linkedin"
                     data-track="cta-click"
                   >
-                    LinkedIn <ExternalLink size={16} />
+                    {t('hero.cta_linkedin')} <ExternalLink size={16} />
                   </a>
                 </div>
 
                 <ul className="flex flex-wrap gap-x-6 gap-y-3 text-xs text-slate-400">
                   <li className="inline-flex items-center gap-2">
                     <Clock size={14} className="text-secondary" aria-hidden="true" />
-                    10+ yıl pratik
+                    {t('hero.stat_experience')}
                   </li>
                   <li className="inline-flex items-center gap-2">
                     <Target size={14} className="text-secondary" aria-hidden="true" />
-                    120+ stratejik karar
+                    {t('hero.stat_decisions')}
                   </li>
                   <li className="inline-flex items-center gap-2">
                     <CheckCircle2 size={14} className="text-secondary" aria-hidden="true" />
-                    12+ sektör
+                    {t('hero.stat_sectors')}
                   </li>
                 </ul>
               </FadeIn>
@@ -224,44 +178,39 @@ export const FounderPage: React.FC = () => {
                   id="comparison-title"
                   className="text-3xl md:text-4xl font-serif font-bold text-white mb-4"
                 >
-                  Big4 Danışmanlığı mı, <span className="text-secondary">Boutique mi?</span>
+                  {t('comparison.title').replace(t('comparison.titleAccent'), '')}{' '}
+                  <span className="text-secondary">{t('comparison.titleAccent')}</span>
                 </h2>
-                <p className="text-slate-400 max-w-2xl mx-auto">
-                  Mid-market şirketler için doğru seçim neden eCyPro gibi boutique firmalardan
-                  geçiyor.
-                </p>
+                <p className="text-slate-400 max-w-2xl mx-auto">{t('comparison.subtitle')}</p>
               </div>
             </FadeIn>
 
             <div className="overflow-x-auto rounded-2xl border border-white/10">
-              <table
-                className="w-full text-sm"
-                aria-label="Big4 vs eCyPro Boutique karşılaştırması"
-              >
+              <table className="w-full text-sm" aria-label={t('comparison.ariaLabel')}>
                 <thead>
                   <tr className="border-b border-white/10">
                     <th
                       scope="col"
                       className="px-6 py-4 text-left text-xs font-bold uppercase tracking-widest text-slate-500 w-32"
                     >
-                      Kriter
+                      {t('comparison.col_criterion')}
                     </th>
                     <th
                       scope="col"
                       className="px-6 py-4 text-left text-xs font-bold uppercase tracking-widest text-slate-500"
                     >
-                      Big4 Danışmanlığı
+                      {t('comparison.col_big4')}
                     </th>
                     <th
                       scope="col"
                       className="px-6 py-4 text-left text-xs font-bold uppercase tracking-widest text-secondary"
                     >
-                      eCyPro Boutique
+                      {t('comparison.col_boutique')}
                     </th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-white/5">
-                  {BIG4_COMPARISON.map(({ criterion, big4, boutique }, i) => (
+                  {comparisonRows.map(({ criterion, big4, boutique }, i) => (
                     <tr
                       key={criterion}
                       className={i % 2 === 0 ? 'bg-white/[0.02]' : 'bg-transparent'}
@@ -277,10 +226,7 @@ export const FounderPage: React.FC = () => {
               </table>
             </div>
 
-            <p className="mt-6 text-center text-sm text-slate-500">
-              Big4 metodolojisi + boutique çevikliği. Üst yönetim seviyesinde stratejik karar destek
-              ve sahada uygulama disiplini birlikte.
-            </p>
+            <p className="mt-6 text-center text-sm text-slate-500">{t('comparison.footnote')}</p>
           </div>
         </section>
 
@@ -295,16 +241,16 @@ export const FounderPage: React.FC = () => {
                 id="philosophy-title"
                 className="text-3xl md:text-4xl font-serif font-bold text-white mb-12 text-center"
               >
-                Danışmanlık Felsefesi
+                {t('philosophy.title')}
               </h2>
             </FadeIn>
 
             <div className="grid md:grid-cols-3 gap-6">
-              {PHILOSOPHY.map(({ title, desc, icon }) => (
+              {philosophyCards.map(({ title, desc }, idx) => (
                 <FadeIn key={title}>
                   <div className="h-full bg-white/5 border border-white/10 rounded-2xl p-8 hover:border-secondary/30 transition-colors">
                     <div className="text-3xl mb-4" aria-hidden="true">
-                      {icon}
+                      {PHILOSOPHY_ICONS[idx]}
                     </div>
                     <h3 className="font-bold text-white mb-3">{title}</h3>
                     <p className="text-sm text-slate-400 leading-relaxed">{desc}</p>
@@ -326,16 +272,18 @@ export const FounderPage: React.FC = () => {
                 id="timeline-title"
                 className="text-3xl md:text-4xl font-serif font-bold text-white mb-12"
               >
-                Kariyer Yolculuğu
+                {t('timeline.title')}
               </h2>
             </FadeIn>
 
-            <ol aria-label="Kariyer zaman çizelgesi" className="space-y-0">
-              {TIMELINE.map(({ year, event }, i) => (
+            <ol aria-label={t('timeline.ariaLabel')} className="space-y-0">
+              {timelineItems.map(({ year, event }, i) => (
                 <li key={year} className="relative flex gap-6 pb-8 last:pb-0">
                   <div className="flex flex-col items-center" aria-hidden="true">
                     <div className="w-3 h-3 rounded-full bg-secondary z-10 mt-1 shrink-0" />
-                    {i < TIMELINE.length - 1 && <div className="w-px flex-1 bg-white/10 mt-1" />}
+                    {i < timelineItems.length - 1 && (
+                      <div className="w-px flex-1 bg-white/10 mt-1" />
+                    )}
                   </div>
                   <div className="pb-2">
                     <time dateTime={year} className="text-xs font-bold text-secondary">
@@ -354,15 +302,12 @@ export const FounderPage: React.FC = () => {
           <div className="max-w-3xl mx-auto text-center">
             <FadeIn>
               <span className="inline-block text-xs font-bold tracking-widest text-secondary uppercase mb-4">
-                Kurucu Mektupları
+                {t('letters.badge')}
               </span>
               <h2 className="text-3xl font-serif font-bold text-white mb-4">
-                Düşünceler, Analizler, Sektörel Gözlemler
+                {t('letters.title')}
               </h2>
-              <p className="text-slate-400 mb-8 max-w-xl mx-auto">
-                Strateji, yönetişim ve Türkiye-AB iş dünyasına dair çeyreklik bakış açıları.
-                LinkedIn'de 2.000+ profesyonele ulaşan içerikler.
-              </p>
+              <p className="text-slate-400 mb-8 max-w-xl mx-auto">{t('letters.desc')}</p>
               <div className="flex flex-wrap gap-4 justify-center">
                 <Link
                   to="/insights"
@@ -370,7 +315,7 @@ export const FounderPage: React.FC = () => {
                   data-cta="founder-insights"
                   data-track="cta-click"
                 >
-                  İçgörüleri İncele <ArrowRight size={18} />
+                  {t('letters.cta_insights')} <ArrowRight size={18} />
                 </Link>
                 <Link
                   to="/contact"
@@ -378,7 +323,7 @@ export const FounderPage: React.FC = () => {
                   data-cta="founder-discovery"
                   data-track="cta-click"
                 >
-                  Discovery Call · 45dk Ücretsiz
+                  {t('letters.cta_discovery')}
                 </Link>
               </div>
             </FadeIn>

@@ -1,4 +1,12 @@
 {
+  "meta": {
+    "title": "Perspektif — Türkiye M&A, ESG ve Aile Şirketi Analizi | eCyPro",
+    "description": "M&A, ESG, Fintech ve Aile Şirketi alanlarında Big4 derinliğinde bağımsız analiz. Türkiye'nin önde gelen yönetim danışmanlığı platformu.",
+    "og_title": "Perspektif | eCyPro",
+    "og_description": "Türkiye'nin Sermaye, Sürdürülebilirlik ve Aile Şirketi Düşüncesi",
+    "schema_name": "Perspektif — Türkiye'nin Sermaye ve Sürdürülebilirlik Düşüncesi",
+    "schema_description": "M&A, ESG, Fintech ve Aile Şirketi alanlarında Big4 derinliğinde bağımsız analiz."
+  },
   "nav": {
     "insights": "Perspektif",
     "all": "Tümü",
