@@ -311,7 +311,7 @@ function CategoryModal({
         onClick={onClose}
         onKeyDown={(e) => e.key === 'Escape' && onClose()}
       />
-      <div className="relative w-full max-w-lg bg-[#1E1F20] border border-white/10 rounded-xl shadow-2xl">
+      <div className="relative w-full max-w-lg bg-zinc-900 border border-white/10 rounded-xl shadow-2xl">
         <div className="flex items-center justify-between px-fib-6 py-4 border-b border-white/10">
           <h2 className="text-sm font-semibold text-slate-200">
             {isEdit ? 'Kategori Düzenle' : 'Yeni Kategori Ekle'}
@@ -390,7 +390,7 @@ function CategoryModal({
               className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-amber-500/50"
             >
               {DOMAIN_OPTIONS.map((o) => (
-                <option key={o.value} value={o.value} className="bg-[#1E1F20]">
+                <option key={o.value} value={o.value} className="bg-zinc-900">
                   {o.label}
                 </option>
               ))}
@@ -407,11 +407,11 @@ function CategoryModal({
               {...register('parentId')}
               className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-amber-500/50"
             >
-              <option value="" className="bg-[#1E1F20]">
+              <option value="" className="bg-zinc-900">
                 — Yok (L1 kategori) —
               </option>
               {parentOptions.map((p) => (
-                <option key={p.id} value={p.id} className="bg-[#1E1F20]">
+                <option key={p.id} value={p.id} className="bg-zinc-900">
                   {p.nameTr}
                 </option>
               ))}
@@ -494,7 +494,7 @@ function ArchiveConfirmModal({
         onClick={onClose}
         onKeyDown={(e) => e.key === 'Escape' && onClose()}
       />
-      <div className="relative w-full max-w-sm bg-[#1E1F20] border border-white/10 rounded-xl shadow-2xl p-fib-6">
+      <div className="relative w-full max-w-sm bg-zinc-900 border border-white/10 rounded-xl shadow-2xl p-fib-6">
         <h2 className="text-sm font-semibold text-slate-200 mb-3">Kategoriyi Arşivle?</h2>
         <p className="text-sm text-slate-400 mb-2">
           <span className="text-slate-200 font-medium">{category.nameTr}</span> kategorisi
