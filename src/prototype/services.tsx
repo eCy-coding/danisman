@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, useReducedMotion } from 'motion/react';
+import { useScrollReveal } from '../lib/motion/useScrollReveal';
+import { cardHoverVariants, getCardTransition } from '../lib/motion/get-card-context';
 import { ArrowRight, Menu, X, Building2, Leaf, Cpu, Home as HomeIcon } from 'lucide-react';
 
 type Cluster = 'all' | 'ma' | 'esg' | 'fintech' | 'aile';
@@ -360,6 +362,10 @@ function NavBar() {
 
 export default function ServicesPrototype() {
   const shouldReduce = useReducedMotion();
+  const { ref: gridRef } = useScrollReveal<HTMLDivElement>({
+    stagger: 0.06,
+    selector: 'a, article',
+  });
   const [active, setActive] = useState<Cluster>('all');
 
   const filtered = active === 'all' ? SERVICES : SERVICES.filter((s) => s.cluster === active);
@@ -435,12 +441,21 @@ export default function ServicesPrototype() {
         {/* SERVICES GRID */}
         <section aria-label="Hizmet listesi" className="px-4 sm:px-6 lg:px-8 py-16">
           <div className="max-w-7xl mx-auto">
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div ref={gridRef} className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {filtered.map(({ name, desc, slug, icon: Icon, color, cluster }) => {
                 const clusterLabel = CLUSTERS.find((c) => c.id === cluster)?.label.tr ?? '';
                 return (
-                  <article
+                  <motion.article
                     key={slug}
+                    {...(!shouldReduce
+                      ? {
+                          variants: cardHoverVariants,
+                          initial: 'rest',
+                          whileHover: 'hover',
+                          whileTap: 'tap',
+                          transition: getCardTransition(),
+                        }
+                      : {})}
                     className="bg-neutral-800 border border-slate-700/50 rounded-2xl p-6 hover:border-amber-500/40 transition-colors"
                   >
                     <div className="flex items-start justify-between mb-4">
@@ -457,7 +472,7 @@ export default function ServicesPrototype() {
                     >
                       Detay <ArrowRight size={12} />
                     </Link>
-                  </article>
+                  </motion.article>
                 );
               })}
             </div>

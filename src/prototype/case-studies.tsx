@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-// B4: import { motion, useReducedMotion } from 'motion/react';
+import { motion, useReducedMotion } from 'motion/react';
+import { useScrollReveal } from '../lib/motion/useScrollReveal';
 import { ArrowRight, Menu, X, Building2, Leaf, Home as HomeIcon } from 'lucide-react';
 
 type CaseCluster = 'all' | 'ma' | 'esg' | 'fintech' | 'aile';
@@ -128,6 +129,8 @@ function NavBar() {
 }
 
 export default function CaseStudiesPrototype() {
+  const shouldReduce = useReducedMotion();
+  const { ref: casesRef } = useScrollReveal<HTMLDivElement>({ stagger: 0.15, selector: 'article' });
   const [active, setActive] = useState<CaseCluster>('all');
   const filtered = active === 'all' ? CASES : CASES.filter((c) => c.cluster === active);
 
@@ -141,7 +144,16 @@ export default function CaseStudiesPrototype() {
           aria-labelledby="cases-title"
           className="px-4 sm:px-6 lg:px-8 pt-16 pb-12 border-b border-slate-800"
         >
-          <div className="max-w-7xl mx-auto">
+          <motion.div
+            className="max-w-7xl mx-auto"
+            {...(shouldReduce
+              ? {}
+              : {
+                  initial: { opacity: 0, y: 20 },
+                  animate: { opacity: 1, y: 0 },
+                  transition: { duration: 0.45 },
+                })}
+          >
             <h1 id="cases-title" className="text-3xl sm:text-4xl font-bold mb-3">
               Vaka Çalışmaları
             </h1>
@@ -149,7 +161,7 @@ export default function CaseStudiesPrototype() {
               Müşteri gizliliği nedeniyle tüm vakalar anonimleştirilmiştir. Sayısal sonuçlar gerçek
               proje çıktılarına dayanmaktadır.
             </p>
-          </div>
+          </motion.div>
         </section>
 
         {/* FILTERS */}
@@ -175,7 +187,7 @@ export default function CaseStudiesPrototype() {
 
         {/* CASES */}
         <section aria-label="Vaka çalışmaları listesi" className="px-4 sm:px-6 lg:px-8 py-12">
-          <div className="max-w-7xl mx-auto space-y-6">
+          <div ref={casesRef} className="max-w-7xl mx-auto space-y-6">
             {filtered.map(
               ({
                 slug,

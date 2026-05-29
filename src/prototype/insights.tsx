@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-// B4: import { motion, useReducedMotion } from 'motion/react';
+import { motion, useReducedMotion } from 'motion/react';
+import { useScrollReveal } from '../lib/motion/useScrollReveal';
 import { ArrowRight, BookOpen, Clock, Menu, X, Search } from 'lucide-react';
 
 type Tag = 'all' | 'ma' | 'esg' | 'fintech' | 'aile' | 'liderlik';
@@ -138,7 +139,8 @@ function NavBar() {
 }
 
 export default function InsightsPrototype() {
-  // B4: const shouldReduce = useReducedMotion();
+  const shouldReduce = useReducedMotion();
+  const { ref: gridRef } = useScrollReveal<HTMLDivElement>({ stagger: 0.06, selector: 'article' });
   const [activeTag, setActiveTag] = useState<Tag>('all');
   const [search, setSearch] = useState('');
 
@@ -159,12 +161,20 @@ export default function InsightsPrototype() {
           className="px-4 sm:px-6 lg:px-8 pt-16 pb-12 border-b border-slate-800"
         >
           <div className="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center justify-between gap-6">
-            <div>
+            <motion.div
+              {...(shouldReduce
+                ? {}
+                : {
+                    initial: { opacity: 0, y: 20 },
+                    animate: { opacity: 1, y: 0 },
+                    transition: { duration: 0.45 },
+                  })}
+            >
               <h1 id="insights-title" className="text-3xl sm:text-4xl font-bold mb-2">
                 İçgörüler
               </h1>
               <p className="text-slate-400">Strateji, dönüşüm ve sektör analizleri.</p>
-            </div>
+            </motion.div>
             {/* Search */}
             <div className="relative w-full sm:w-64">
               <Search
@@ -216,7 +226,7 @@ export default function InsightsPrototype() {
                 <p>Bu kriterlere uygun içgörü bulunamadı.</p>
               </div>
             ) : (
-              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+              <div ref={gridRef} className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
                 {filtered.map(({ slug, tag, date, readTime, title, excerpt }) => {
                   const tagLabel = TAGS.find((t) => t.id === tag)?.label ?? tag;
                   return (

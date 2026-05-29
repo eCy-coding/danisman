@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, useReducedMotion } from 'motion/react';
+import { useScrollReveal } from '../lib/motion/useScrollReveal';
+import { cardHoverVariants, getCardTransition } from '../lib/motion/get-card-context';
 import {
   ArrowRight,
   Menu,
@@ -306,6 +308,10 @@ function NavBar() {
 export default function HomePrototype() {
   const shouldReduce = useReducedMotion();
   const motionProps = shouldReduce ? {} : fadeUp;
+  const { ref: servicesGridRef } = useScrollReveal<HTMLDivElement>({
+    stagger: 0.08,
+    selector: 'a, article',
+  });
 
   return (
     <div className="min-h-screen bg-neutral-900 text-slate-50 font-sans">
@@ -410,27 +416,39 @@ export default function HomePrototype() {
                 Tümü <ArrowRight size={14} />
               </Link>
             </div>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div ref={servicesGridRef} className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {COPY.services.clusters.map(({ icon: Icon, cluster, items, slug, color }) => (
-                <Link
+                <motion.div
                   key={slug}
-                  to={`/services/${slug}`}
-                  className="group bg-neutral-800 border border-slate-700/50 rounded-2xl p-6 hover:border-amber-500/40 transition-colors block"
+                  {...(!shouldReduce
+                    ? {
+                        variants: cardHoverVariants,
+                        initial: 'rest',
+                        whileHover: 'hover',
+                        whileTap: 'tap',
+                        transition: getCardTransition('subtle'),
+                      }
+                    : {})}
                 >
-                  <Icon size={24} className={`${color} mb-4`} aria-hidden="true" />
-                  <h3 className="text-sm font-semibold mb-3">{cluster.tr}</h3>
-                  <ul className="space-y-1">
-                    {items.map((item) => (
-                      <li key={item} className="text-xs text-slate-400 flex items-center gap-1.5">
-                        <span className="w-1 h-1 rounded-full bg-slate-500" aria-hidden="true" />
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                  <span className="mt-4 inline-flex items-center gap-1 text-xs text-amber-400 group-hover:gap-2 transition-all">
-                    Detay <ArrowRight size={12} />
-                  </span>
-                </Link>
+                  <Link
+                    to={`/services/${slug}`}
+                    className="group bg-neutral-800 border border-slate-700/50 rounded-2xl p-6 hover:border-amber-500/40 transition-colors block"
+                  >
+                    <Icon size={24} className={`${color} mb-4`} aria-hidden="true" />
+                    <h3 className="text-sm font-semibold mb-3">{cluster.tr}</h3>
+                    <ul className="space-y-1">
+                      {items.map((item) => (
+                        <li key={item} className="text-xs text-slate-400 flex items-center gap-1.5">
+                          <span className="w-1 h-1 rounded-full bg-slate-500" aria-hidden="true" />
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                    <span className="mt-4 inline-flex items-center gap-1 text-xs text-amber-400 group-hover:gap-2 transition-all">
+                      Detay <ArrowRight size={12} />
+                    </span>
+                  </Link>
+                </motion.div>
               ))}
             </div>
           </div>

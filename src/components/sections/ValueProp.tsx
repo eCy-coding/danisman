@@ -3,6 +3,8 @@ import { VALUE_PROPS } from '../../constants';
 import { motion, useScroll, useTransform } from 'motion/react';
 import { FadeIn } from '../common/FadeIn';
 import { useTranslation } from 'react-i18next';
+import { cardHoverVariants, getCardTransition } from '@/lib/motion/get-card-context';
+import { useScrollReveal } from '@/lib/motion/useScrollReveal';
 
 const VALUE_PROP_COPY = {
   badge: { tr: 'Değer Önerimiz', en: 'Our Value Proposition' },
@@ -13,16 +15,15 @@ const VALUE_PROP_COPY = {
   },
 };
 
-const cardHoverVariants = {
-  rest: { scale: 1, y: 0 },
-  hover: { scale: 1.02, y: -4, transition: { duration: 0.3, ease: 'easeOut' as const } },
-};
-
 export const ValueProp: React.FC = () => {
   const { i18n } = useTranslation();
   const lang = (i18n.language || 'en').startsWith('tr') ? 'tr' : 'en';
 
   const sectionRef = useRef<HTMLElement>(null);
+  const { ref: gridRef } = useScrollReveal<HTMLDivElement>({
+    stagger: 0.1,
+    selector: '.value-card',
+  });
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ['start end', 'end start'],
@@ -65,14 +66,17 @@ export const ValueProp: React.FC = () => {
           </FadeIn>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8" ref={gridRef}>
           {VALUE_PROPS.map((item, idx) => (
             <FadeIn key={item.id} delay={idx * 100} className="h-full">
               <motion.div
                 initial="rest"
                 whileHover="hover"
+                whileTap="tap"
+                animate="rest"
                 variants={cardHoverVariants}
-                className="flex flex-col items-start group p-8 rounded-2xl border border-white/5 bg-white/[0.02] hover:bg-white/5 hover:border-white/10 hover:shadow-xl hover:shadow-primary/5 transition-all duration-500 h-full cursor-default"
+                transition={getCardTransition('subtle')}
+                className="value-card flex flex-col items-start group p-8 rounded-2xl border border-white/5 bg-white/[0.02] hover:bg-white/5 hover:border-white/10 hover:shadow-xl hover:shadow-primary/5 transition-all duration-500 h-full cursor-default"
               >
                 <div className="mb-6 p-4 rounded-xl bg-white/5 text-slate-300 group-hover:bg-primary/20 group-hover:text-secondary transition-all duration-300 border border-white/5 group-hover:border-secondary/20 group-hover:shadow-[0_0_20px_rgba(217,119,6,0.1)]">
                   <item.icon size={24} strokeWidth={1.5} aria-hidden="true" />

@@ -9,7 +9,6 @@ import { SmartSlider } from '../../ui/smart-form/SmartSlider';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { AreaChart, Area, XAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
-import { emit } from '../../../lib/analytics-events';
 
 const calculatorSchema = z.object({
   revenue: z.number().min(100000).max(100000000),
@@ -350,15 +349,6 @@ export const GrowthCalculator: React.FC = () => {
                   })
                 }
                 className="group relative px-6 py-3 bg-white text-neutral font-medium rounded-xl hover:bg-slate-100 transition-colors overflow-hidden flex items-center gap-2"
-                onClick={() =>
-                  emit('roi_calc_step', {
-                    step: 'cta_click',
-                    values: {
-                      revenue: String(activeRevenue),
-                      roiResult: Math.round(projection),
-                    },
-                  })
-                }
               >
                 <span className="relative z-10">Get Detailed Blueprint</span>
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform relative z-10" />
