@@ -29,6 +29,7 @@ const BlogCard: React.FC<BlogCardProps> = ({ post, index }) => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.1, duration: 0.5 }}
+      data-testid="article-card"
       className="group relative flex flex-col h-full"
     >
       <div className="absolute -inset-0.5 bg-linear-to-r from-blue-600 to-yellow-500 rounded-2xl opacity-20 group-hover:opacity-100 blur transition duration-500"></div>
