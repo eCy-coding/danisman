@@ -160,7 +160,7 @@ export const ExitIntentModal: React.FC = () => {
     if (!email || status === 'loading') return;
 
     setStatus('loading');
-    trackEvent('ExitIntent', 'Submit', email);
+    trackEvent('ExitIntent', 'Submit');
 
     try {
       const baseUrl =
