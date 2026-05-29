@@ -158,7 +158,7 @@ const AuthorModal: React.FC<AuthorModalProps> = ({ author, onClose, onSaved }) =
       <div className="absolute inset-0 bg-black/60" role="presentation" onClick={onClose} />
       <div
         data-testid="author-modal"
-        className="relative bg-[#1E1F20] border border-white/10 rounded-xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto"
+        className="relative bg-zinc-900 border border-white/10 rounded-xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto"
       >
         <div className="flex items-center justify-between px-6 py-4 border-b border-white/10">
           <h2 id="author-modal-title" className="text-sm font-semibold text-slate-200">
@@ -379,7 +379,7 @@ const TagModal: React.FC<TagModalProps> = ({ tag, onClose, onSaved }) => {
       <div className="absolute inset-0 bg-black/60" role="presentation" onClick={onClose} />
       <div
         data-testid="tag-modal"
-        className="relative bg-[#1E1F20] border border-white/10 rounded-xl shadow-2xl w-full max-w-md"
+        className="relative bg-zinc-900 border border-white/10 rounded-xl shadow-2xl w-full max-w-md"
       >
         <div className="flex items-center justify-between px-6 py-4 border-b border-white/10">
           <h2 id="tag-modal-title" className="text-sm font-semibold text-slate-200">
@@ -404,7 +404,7 @@ const TagModal: React.FC<TagModalProps> = ({ tag, onClose, onSaved }) => {
               data-testid="tag-axis"
               value={axis}
               onChange={(e) => setAxis(e.target.value as TagAxis)}
-              className="w-full bg-[#2a2d3e] border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-amber-500/50"
+              className="w-full bg-slate-800 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-amber-500/50"
             >
               {(Object.keys(TAG_AXIS_LABELS) as TagAxis[]).map((a) => (
                 <option key={a} value={a}>
@@ -550,7 +550,7 @@ const SeriesModal: React.FC<SeriesModalProps> = ({ series, onClose, onSaved }) =
       <div className="absolute inset-0 bg-black/60" role="presentation" onClick={onClose} />
       <div
         data-testid="series-modal"
-        className="relative bg-[#1E1F20] border border-white/10 rounded-xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto"
+        className="relative bg-zinc-900 border border-white/10 rounded-xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto"
       >
         <div className="flex items-center justify-between px-6 py-4 border-b border-white/10">
           <h2 id="series-modal-title" className="text-sm font-semibold text-slate-200">
@@ -701,7 +701,7 @@ const SeriesModal: React.FC<SeriesModalProps> = ({ series, onClose, onSaved }) =
                 data-testid="series-status"
                 value={status}
                 onChange={(e) => setStatus(e.target.value as SeriesStatus)}
-                className="w-full bg-[#2a2d3e] border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-amber-500/50"
+                className="w-full bg-slate-800 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-amber-500/50"
               >
                 {(Object.keys(SERIES_STATUS_LABELS) as SeriesStatus[]).map((s) => (
                   <option key={s} value={s}>
