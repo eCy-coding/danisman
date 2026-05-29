@@ -5,19 +5,17 @@ on:
     branches: [main]
   push:
     branches: [main]
+  schedule:
+    - cron: '0 5 * * *'
   workflow_dispatch:
 
 jobs:
-  lighthouse:
-    name: Lighthouse (desktop + mobile)
+  lhci:
+    name: Lighthouse CI (6 URLs, production)
     runs-on: ubuntu-latest
     permissions:
       contents: read
       pull-requests: write
-    strategy:
-      fail-fast: false
-      matrix:
-        preset: [desktop, mobile]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -31,23 +29,15 @@ jobs:
       - name: Install LHCI
         run: npm install -g @lhci/cli@0.13.x
 
-      - name: Run Lighthouse — ${{ matrix.preset }}
-        run: |
-          if [ "${{ matrix.preset }}" = "mobile" ]; then
-            lhci collect --config=./.lighthouserc.cjs \
-              --collect.settings.preset=mobile \
-              --collect.settings.formFactor=mobile \
-              --collect.settings.screenEmulation.mobile=true
-          else
-            lhci collect --config=./.lighthouserc.cjs
-          fi
-          lhci assert --config=./.lighthouserc.cjs
-        continue-on-error: false
+      - name: Run Lighthouse CI
+        run: lhci autorun --config lighthouserc.json
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
 
       - name: Upload report
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: lighthouse-${{ matrix.preset }}
+          name: lhci-report-${{ github.sha }}
           path: .lighthouseci/
           retention-days: 7
