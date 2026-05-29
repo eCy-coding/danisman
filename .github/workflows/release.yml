@@ -12,7 +12,10 @@ jobs:
     env:
       SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
       SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
-      SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
+      SENTRY_PROJECT_FRONTEND: ${{ secrets.SENTRY_PROJECT_FRONTEND }}
+      # Tagged releases use the tag name as SENTRY_RELEASE override.
+      # Push-to-main uses the SHA-based release from Vercel sentryVitePlugin.
+      SENTRY_RELEASE: ${{ github.ref_name }}
 
     steps:
       - uses: actions/checkout@v4
@@ -29,16 +32,9 @@ jobs:
         run: npm run build
         env:
           VITE_SENTRY_DSN: ${{ secrets.VITE_SENTRY_DSN }}
+          VITE_APP_VERSION: ${{ github.ref_name }}
 
-      - name: Upload source maps to Sentry
+      - name: Upload source maps to Sentry (frontend)
         if: ${{ env.SENTRY_AUTH_TOKEN != '' }}
         continue-on-error: true
-        run: |
-          npx sentry-cli releases new "${{ github.ref_name }}"
-          npx sentry-cli releases files "${{ github.ref_name }}" \
-            upload-sourcemaps ./dist/assets \
-            --url-prefix "~/assets" \
-            --rewrite
-          npx sentry-cli releases finalize "${{ github.ref_name }}"
-          npx sentry-cli releases deploys "${{ github.ref_name }}" new \
-            --env production
+        run: npm run release:sentry

@@ -76,6 +76,25 @@ const router = Router();
 // via `npm`/`pnpm`) → falls back to RELEASE_VERSION env (set by Render) → "1.0.0".
 const SERVICE_VERSION = process.env.npm_package_version || process.env.RELEASE_VERSION || '1.0.0';
 
+// ─── Sentry release echo (L2-3) ─────────────────────────
+// Lightweight endpoint to verify the active Sentry release tag matches
+// the uploaded sourcemaps after each deploy. No auth required.
+router.get('/sentry/health', (_req, res) => {
+  res.setHeader('Cache-Control', 'no-store');
+  const raw =
+    process.env.SENTRY_RELEASE ||
+    process.env.RENDER_GIT_COMMIT ||
+    process.env.npm_package_version ||
+    '';
+  const release = raw ? (raw.startsWith('ecypro@') ? raw : `ecypro@${raw.slice(0, 7)}`) : 'unset';
+  res.json({
+    status: 'ok',
+    release,
+    sentryConfigured: Boolean(process.env.SENTRY_DSN),
+    environment: process.env.SENTRY_ENVIRONMENT || process.env.NODE_ENV || 'development',
+  });
+});
+
 // ─── Basic health check ──────────────────────────────────
 // Fast path — NO DB/Redis calls. For platform liveness probes.
 // P99 follow-up — `no-store` so no CDN ever serves a stale "ok" past
