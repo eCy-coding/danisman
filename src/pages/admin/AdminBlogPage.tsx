@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FileText, PlusCircle, ExternalLink, Clock, Tag, Loader2 } from 'lucide-react';
+import { FileText, PlusCircle, ExternalLink, Clock, Tag, Loader2, Pencil } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useReducedMotion } from 'motion/react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -242,15 +242,26 @@ export const AdminBlogPage: React.FC = () => {
                   <span className="text-xs text-slate-500">{post.date}</span>
                 </div>
               </div>
-              <a
-                href={`/blog/${post.slug}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="shrink-0 p-2 rounded-lg text-slate-500 hover:text-secondary hover:bg-secondary/10 transition-colors"
-                title="View post"
-              >
-                <ExternalLink size={14} />
-              </a>
+              <div className="flex items-center gap-1 shrink-0">
+                <a
+                  href={`/keystatic/collection/posts/item/${post.slug}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-2 rounded-lg text-slate-500 hover:text-amber-400 hover:bg-amber-400/10 transition-colors"
+                  title="Edit in Keystatic"
+                >
+                  <Pencil size={14} />
+                </a>
+                <a
+                  href={`/blog/${post.slug}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-2 rounded-lg text-slate-500 hover:text-secondary hover:bg-secondary/10 transition-colors"
+                  title="View post"
+                >
+                  <ExternalLink size={14} />
+                </a>
+              </div>
             </div>
           </MotionDiv>
         ))}
@@ -259,10 +270,18 @@ export const AdminBlogPage: React.FC = () => {
       {/* Info block */}
       {loaded && posts.length > 0 && (
         <div className="bg-slate-800/30 border border-white/5 rounded-xl p-4 text-xs text-slate-400">
-          <strong className="text-slate-300">MDX Workflow:</strong> Add/edit files in{' '}
+          <strong className="text-slate-300">MDX Workflow:</strong>{' '}
+          <a
+            href="/keystatic"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-secondary hover:underline font-medium"
+          >
+            Keystatic CMS
+          </a>{' '}
+          → edit in browser → auto-saves to{' '}
           <code className="bg-white/10 px-1 rounded font-mono">src/content/blog/</code> → run{' '}
           <code className="bg-white/10 px-1 rounded font-mono">npm run gen:blog</code> → commit.
-          Full CMS editor available in Phase 36 extended scope.
         </div>
       )}
     </div>
