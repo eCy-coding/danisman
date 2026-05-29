@@ -24,21 +24,24 @@ import { sendTelegramAlert } from './lib/telegram-alert';
 // are missing). Runs after `import './env'` has loaded .env/.env.local.
 validateEnv();
 
-// BE-8: Sentry — environment + release tracking + tunable sampling.
-//   - `release` reads from RELEASE_VERSION (set by Render/Railway build) or
-//     npm_package_version when launched via npm scripts; this lets Sentry
-//     tag every event with a deployable artifact ID so source-map upload
-//     and "first seen in" queries work end-to-end.
+// BE-8 / L2-3: Sentry — environment + release tracking + tunable sampling.
+//   - `release` = `ecypro@<short-sha>` to match uploaded backend sourcemaps.
+//     Render exposes RENDER_GIT_COMMIT; SENTRY_RELEASE overrides (tagged releases).
 //   - `environment` defaults to NODE_ENV so prod / staging / preview each
 //     get their own Sentry environment filter.
 //   - tracesSampleRate dropped to 0.1 (10%) to control quota at scale;
 //     SENTRY_TRACES_SAMPLE_RATE env can override per environment.
 if (process.env.SENTRY_DSN) {
-  const release =
+  const rawRelease =
     process.env.SENTRY_RELEASE ||
+    process.env.RENDER_GIT_COMMIT ||
     process.env.RELEASE_VERSION ||
-    process.env.npm_package_version ||
-    undefined;
+    process.env.npm_package_version;
+  const release = rawRelease
+    ? rawRelease.startsWith('ecypro@')
+      ? rawRelease
+      : `ecypro@${rawRelease.slice(0, 7)}`
+    : undefined;
 
   Sentry.init({
     dsn: process.env.SENTRY_DSN,
