@@ -1,0 +1,55 @@
+{
+  "monitors": [
+    {
+      "name": "eCyPro Frontend",
+      "monitor_type": "status",
+      "url": "https://www.ecypro.com",
+      "check_frequency": 60,
+      "expected_status_codes": [200],
+      "regions": ["eu"],
+      "ssl_expiration_check": true,
+      "follow_redirects": true,
+      "recovery_period": 180,
+      "confirmation_period": 60
+    },
+    {
+      "name": "eCyPro API",
+      "monitor_type": "status",
+      "url": "https://api.ecypro.com/health",
+      "check_frequency": 30,
+      "expected_status_codes": [200],
+      "regions": ["eu"],
+      "follow_redirects": false,
+      "recovery_period": 120,
+      "confirmation_period": 30
+    },
+    {
+      "name": "eCyPro Status Page",
+      "monitor_type": "status",
+      "url": "https://status.ecypro.com",
+      "check_frequency": 300,
+      "expected_status_codes": [200],
+      "regions": ["eu"],
+      "follow_redirects": true,
+      "recovery_period": 300,
+      "confirmation_period": 120
+    },
+    {
+      "name": "eCyPro Heartbeat",
+      "monitor_type": "heartbeat",
+      "expected_period": 600,
+      "grace_period": 300
+    },
+    {
+      "name": "eCyPro Database via API",
+      "monitor_type": "status",
+      "url": "https://api.ecypro.com/health/db",
+      "check_frequency": 60,
+      "expected_status_codes": [200],
+      "regions": ["eu"],
+      "follow_redirects": false,
+      "recovery_period": 120,
+      "confirmation_period": 60
+    }
+  ]
+}
