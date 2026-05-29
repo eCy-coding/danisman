@@ -2539,6 +2539,1664 @@ const SERVICE_CONTENT_LIST: ServiceContent[] = [
     related: ['competition-economics', 'global-intelligence', 'smart-cities'],
     assessment: STANDARD_ASSESSMENT('government-relations', 'Kurumsal İlişkiler & GR'),
   },
+
+  // ─────────────────────────────────────────────────────────────
+  // M&A CLUSTER — 4 yeni giriş
+  // ─────────────────────────────────────────────────────────────
+  {
+    slug: 'due-diligence-suite',
+    hero: {
+      title: 'Due Diligence Suite',
+      subtitle:
+        'Mali, hukuki, vergi, teknoloji ve KVKK katmanlarını 90 günde tek elden — Kurucu her süreçte masa başında.',
+      valueProp:
+        'Big4 DD raporları genellikle 200+ sayfalık checklist. Biz karar verdiren 30 sayfalık icra özeti üretiriz.',
+      primaryCtaText: 'Keşif Görüşmesi Al',
+    },
+    problem: {
+      title: 'Klasik DD sürecinin tuzakları',
+      painPoints: [
+        'Çok sayıda danışman firması koordinasyon kopukluğu yaratır; bulgular birbirini teyit etmez.',
+        'KVKK ve veri koruma riskleri genellikle son gün "ek madde" olarak eklenir — kapanışta sürpriz yükümlülük.',
+        "Teknik DD (yazılım, altyapı) insan kaynağı DD'dan ayrı yürütülür; entegrasyon riskleri görünmez kalır.",
+        'Raporlar karar için değil, sorumluluktan korunmak için yazılır.',
+      ],
+    },
+    outcomes: {
+      title: 'Teslim edilen değer',
+      results: [
+        'Tek entegre DD raporu: 5 katman (mali/hukuki/vergi/tekno/KVKK) tek dokümanda, çelişki yok.',
+        'İcra özeti: 30 sayfada "kapan mı, devam mı, bu koşulda devam" kararı.',
+        'Risk matrisi: bulgular fiyat düzeltme, garanti maddesi veya kapanış koşuluna dönüştürülmüş.',
+        'Müzakere brifingi: karşı taraf argümanlarına karşı hazır yanıt seti.',
+      ],
+    },
+    methodology: {
+      title: 'DD metodolojisi',
+      phases: [
+        {
+          name: 'Kapsam ve VDR kurulumu',
+          duration: 'Hafta 1',
+          description:
+            'Çalışma kapsamı netleştirilir, sanal veri odası (VDR) erişimi sağlanır, bilgi talep listesi gönderilir.',
+        },
+        {
+          name: 'Paralel katman analizi',
+          duration: 'Hafta 2–8',
+          description:
+            'Mali, vergi, hukuki, KVKK ve teknik katmanlar eş zamanlı yürütülür; haftalık konsolidasyon toplantısı.',
+        },
+        {
+          name: 'Bulgu sentezi',
+          duration: 'Hafta 9–11',
+          description:
+            'Bulgular çapraz kontrol edilir, fiyat etkisi hesaplanır, garanti talepleri hazırlanır.',
+        },
+        {
+          name: 'İcra brifingi',
+          duration: 'Hafta 12',
+          description:
+            'Yönetim kuruluna sunum, müzakere stratejisi rehberi, kapanış kontrol listesi teslimi.',
+        },
+      ],
+    },
+    deliverables: {
+      title: 'Teslim edilenler',
+      artifacts: [
+        'Entegre DD raporu (5 katman)',
+        'Yönetici özeti (karar belgesi)',
+        'Risk matrisi ve fiyat düzeltme önerisi',
+        'KVKK uyum değerlendirmesi',
+        'Müzakere brifingi ve soru seti',
+      ],
+    },
+    timeline: {
+      totalDuration: '10–12 hafta',
+      milestones: [
+        { name: 'VDR erişimi ve kapsam onayı', week: 'Hafta 1' },
+        { name: 'Ara bulgu özeti', week: 'Hafta 6' },
+        { name: 'Taslak rapor', week: 'Hafta 10' },
+        { name: 'Final + sunum', week: 'Hafta 12' },
+      ],
+    },
+    investment: {
+      range: '₺180.000 – ₺380.000',
+      model: 'Sabit fiyat (kapsam bazlı)',
+      paymentPlan: '%30 başlangıç, %40 ara rapor, %30 teslim',
+    },
+    trust: {
+      anonymizedExample:
+        'Orta Anadolu gıda üreticisi; hedef şirkette bilinmeyen ₺4,2 M vergi yükümlülüğü ve 3 KVKK ihlali tespit edildi. Kapanış fiyatı ₺6,5 M aşağı revize edildi.',
+    },
+    faq: {
+      items: [
+        {
+          q: 'Satıcı DD (vendor DD) yapıyor musunuz?',
+          a: 'Evet — alıcı pozisyonundaki müşterilere ek olarak, satış öncesi kendi şirketini hazırlamak isteyen kurucular için de yürütürüz.',
+        },
+        {
+          q: 'Bir avukat firmasıyla birlikte çalışabilir misiniz?',
+          a: 'Evet. Hukuki katmanı müşterinin tercih ettiği avukatlık bürosuyla koordineli yürütürüz; diğer katmanları biz üstleniriz.',
+        },
+        ...SHARED_FAQ_END('due-diligence-suite'),
+      ],
+    },
+    related: ['mergers-acquisitions', 'deal-structuring', 'negotiation-loi'],
+    assessment: STANDARD_ASSESSMENT('due-diligence-suite', 'Due Diligence'),
+  },
+
+  {
+    slug: 'deal-structuring',
+    hero: {
+      title: 'İşlem Yapılandırma',
+      subtitle:
+        'Hisse devri mi, varlık satışı mı, karma yapı mı? Vergi avantajı, sorumluluk sınırı ve kapanış hızını optimize eden yapı seçimi.',
+      valueProp:
+        'Yanlış yapı seçimi kapanış sonrası %15–25 vergi fazlası veya beklenmedik sorumluluk demektir.',
+      primaryCtaText: 'İşlem Yapısını Konuşalım',
+    },
+    problem: {
+      title: 'İşlem yapılandırmasında sık yapılan hatalar',
+      painPoints: [
+        'Hisse devri ile varlık satışı arasındaki vergi farkı analizden önce yapı kararı verilir.',
+        'Satıcı taahhütleri (rep & warranty) Türk hukuku çerçevesinde yeterince korunmaz.',
+        'Çoklu sınıflı hisse yapıları (oy/kar ayrımı) kuruluş aşamasında değil kapanış gününde sorulur.',
+        'Çapraz sınır işlemlerde çifte vergilendirme anlaşmaları göz ardı edilir.',
+      ],
+    },
+    outcomes: {
+      title: 'Yapılandırma çıktıları',
+      results: [
+        'Vergi-optimize yapı: hisse vs varlık kararı sayısal modelle desteklenmiş.',
+        'Sorumluluk kalkanı: rep & warranty kapsamı ve escrow mekanizması tanımlanmış.',
+        'Term sheet taslağı: kapanış öncesi tüm tarafların üzerinde mutabık kaldığı belge.',
+        'Kapanış koşulları listesi (CPs): takvim ve sorumluluk netleştirilmiş.',
+      ],
+    },
+    methodology: {
+      title: 'Süreç',
+      phases: [
+        {
+          name: 'Yapı alternatifleri analizi',
+          duration: 'Hafta 1–2',
+          description:
+            'Hisse / varlık / hibrit seçenekleri vergi ve sorumluluk boyutunda karşılaştırmalı modellenir.',
+        },
+        {
+          name: 'Term sheet hazırlığı',
+          duration: 'Hafta 3–4',
+          description:
+            "Temel koşullar (fiyat, ödeme yapısı, earn-out, escrow) taslak term sheet'e işlenir.",
+        },
+        {
+          name: 'Müzakere desteği',
+          duration: 'Hafta 5–6',
+          description: 'Karşı tarafla müzakere oturumlarında teknik danışman olarak yer alınır.',
+        },
+        {
+          name: 'Kapanış hazırlığı',
+          duration: 'Hafta 7',
+          description: 'CP listesi tamamlanır, kapanış takvimi ve belgeler kontrol edilir.',
+        },
+      ],
+    },
+    deliverables: {
+      title: 'Teslim edilenler',
+      artifacts: [
+        'Yapı karşılaştırma modeli (vergi + sorumluluk)',
+        'Term sheet taslağı',
+        'Rep & warranty özeti',
+        'Kapanış koşulları (CPs) listesi',
+        'Müzakere notları ve önerilen yanıt seti',
+      ],
+    },
+    timeline: {
+      totalDuration: '6–8 hafta',
+      milestones: [
+        { name: 'Yapı kararı', week: 'Hafta 2' },
+        { name: 'Term sheet imzası', week: 'Hafta 4' },
+        { name: 'Müzakere tamamlandı', week: 'Hafta 6' },
+        { name: 'Kapanış hazır', week: 'Hafta 8' },
+      ],
+    },
+    investment: {
+      range: '₺90.000 – ₺180.000',
+      model: 'Sabit fiyat',
+      paymentPlan: '%40 başlangıç, %60 term sheet imzasında',
+    },
+    trust: {
+      anonymizedExample:
+        'İstanbul merkezli lojistik grubu; varlık satışı yerine önerilen kısmi hisse devri yapısı ₺2,8 M vergi tasarrufu sağladı, kapanış 3 ay öne alındı.',
+    },
+    faq: {
+      items: [
+        {
+          q: "Earn-out yapıları Türkiye'de uygulanabilir mi?",
+          a: 'Evet, ancak Türk hukukunda sözleşme tasarımı kritik. Başarı metriklerini, ölçüm dönemini ve itiraz mekanizmasını net tanımlarız.',
+        },
+        ...SHARED_FAQ_END('deal-structuring'),
+      ],
+    },
+    related: ['due-diligence-suite', 'negotiation-loi', 'mergers-acquisitions'],
+    assessment: STANDARD_ASSESSMENT('deal-structuring', 'İşlem Yapılandırma'),
+  },
+
+  {
+    slug: 'negotiation-loi',
+    hero: {
+      title: 'Müzakere & LOI',
+      subtitle:
+        'Niyet mektubu yazımı, müzakere stratejisi ve karşı taraf konumlandırması — masada teknik üstünlük.',
+      valueProp:
+        'İyi yazılmış bir LOI hem takvimi hızlandırır hem de DD sürecinde pazarlık gücünü korur.',
+      primaryCtaText: 'Müzakere Stratejisi Konuşalım',
+    },
+    problem: {
+      title: 'Müzakerede kaybedilen değer',
+      painPoints: [
+        'LOI çok geniş yazılır; satıcı sonraki aşamada koşulları yeniden açar.',
+        'Müzakere stratejisi olmadan "adil" görünen teklife evet denilir, değer masada kalır.',
+        'Exclusivity süresi yanlış belirlenir; rakip teklifler kapıdan girer.',
+        'Teknik konular (IP devri, istihdam hakları) LOI aşamasında netleştirilmediğinden DD bulgularına eklenir.',
+      ],
+    },
+    outcomes: {
+      title: 'Müzakere çıktıları',
+      results: [
+        'Stratejik LOI: temel koşullar, exclusivity, break-up fee ve bilgi paylaşım çerçevesi tanımlanmış.',
+        'Müzakere rehberi: öncelikli pozisyonlar, geri çekilme sınırları ve alternatif paketler hazır.',
+        'Karşı taraf analizi: motivasyon ve zaman baskısı modellenmiş.',
+        "Kapanış sonrası taahhütler (post-closing covenants) LOI'a işlenmiş.",
+      ],
+    },
+    methodology: {
+      title: 'Müzakere süreci',
+      phases: [
+        {
+          name: 'Pozisyon analizi',
+          duration: 'Gün 1–5',
+          description:
+            "Her iki tarafın BATNA'sı, zaman baskısı ve öncelikli koşulları haritalanır.",
+        },
+        {
+          name: 'Strateji tasarımı',
+          duration: 'Gün 6–10',
+          description: 'Açılış teklifi, taviz dizisi ve kırılma noktaları belirlenir.',
+        },
+        {
+          name: 'LOI yazımı ve müzakere',
+          duration: 'Gün 11–20',
+          description:
+            'Taslak LOI hazırlanır, karşı tarafla müzakere oturumlarına danışman olarak katılım.',
+        },
+        {
+          name: 'İmza ve geçiş',
+          duration: 'Gün 21–25',
+          description: 'LOI imzalandıktan sonra DD sürecine geçiş planlaması yapılır.',
+        },
+      ],
+    },
+    deliverables: {
+      title: 'Teslim edilenler',
+      artifacts: [
+        'Müzakere stratejisi belgesi',
+        'LOI taslağı (Türk hukuku uyumlu)',
+        'Karşı taraf profili ve BATNA analizi',
+        'Müzakere günlüğü ve revizyon notları',
+      ],
+    },
+    timeline: {
+      totalDuration: '3–5 hafta',
+      milestones: [
+        { name: 'Strateji onayı', week: 'Hafta 1' },
+        { name: 'LOI taslağı', week: 'Hafta 2' },
+        { name: 'Müzakere tamamlandı', week: 'Hafta 3–4' },
+        { name: 'LOI imzası', week: 'Hafta 5' },
+      ],
+    },
+    investment: {
+      range: '₺55.000 – ₺110.000',
+      model: 'Sabit fiyat',
+      paymentPlan: '%50 başlangıç, %50 LOI imzasında',
+    },
+    trust: {
+      anonymizedExample:
+        'Teknoloji girişimi alıcısı; exclusivity şartı ve bilgi kilidinin önerilen versiyonuyla satıcı fiyatı ₺4 M düşürüldü, kapanış 6 hafta hızlandı.',
+    },
+    faq: {
+      items: [
+        {
+          q: 'LOI bağlayıcı mı?',
+          a: 'Türk hukukunda LOI genellikle bağlayıcı değil, ancak exclusivity ve gizlilik maddeleri bağlayıcı yapılır. Bunu sözleşme tasarımıyla güvence altına alırız.',
+        },
+        ...SHARED_FAQ_END('negotiation-loi'),
+      ],
+    },
+    related: ['due-diligence-suite', 'deal-structuring', 'mergers-acquisitions'],
+    assessment: STANDARD_ASSESSMENT('negotiation-loi', 'Müzakere & LOI'),
+  },
+
+  {
+    slug: 'post-merger-integration',
+    hero: {
+      title: 'Birleşme Sonrası Entegrasyon',
+      subtitle: "Day 1'den 100. güne: kültür, süreç ve sistem entegrasyonu — değer kaybı olmadan.",
+      valueProp:
+        "Araştırmalar M&A değer yıkımının %70'inin entegrasyon başarısızlığından kaynaklandığını gösterir. PMI, kapanış kadar kritiktir.",
+      primaryCtaText: 'PMI Planını Konuşalım',
+    },
+    problem: {
+      title: 'Entegrasyon neden başarısız olur',
+      painPoints: [
+        'Day 1 planlaması ihmal edilir; çalışanlar kim raporlayacağını kapanış günü öğrenir.',
+        'IT sistemleri ve ERP entegrasyonu süre ve bütçe aşımının ana nedeni haline gelir.',
+        'Kültür çatışması sessizce yetenek kaybına dönüşür; kilit kişiler 6. ayda ayrılır.',
+        'Müşteri tabanı "yönetim değişiyor" kaygısıyla hedeflenen rakibe geçer.',
+      ],
+    },
+    outcomes: {
+      title: '100 günlük entegrasyon çıktıları',
+      results: [
+        'Day 1 hazırlık: çalışanlar, tedarikçiler ve müşteriler için iletişim planı hazır.',
+        'Organizasyon şeması: hangi rollerin birleşeceği, kimlerin nereye raporlayacağı netleştirilmiş.',
+        'Sistem entegrasyon takvimi: IT, finans ve HR sistemleri için öncelik ve süre belirlenmiş.',
+        'Değer yakalama planı: sinerji hedefleri somut girişimlere bağlanmış, sahip ve tarihiyle.',
+      ],
+    },
+    methodology: {
+      title: 'PMI metodolojisi',
+      phases: [
+        {
+          name: 'Day 1 planlaması',
+          duration: 'Kapanış öncesi 4 hafta',
+          description:
+            'İletişim planları, organizasyon kararları ve acil operasyonel önlemler hazırlanır.',
+        },
+        {
+          name: 'İlk 30 gün',
+          description:
+            'Kilit çalışanlar belirlenir, müşteri iletişimi yapılır, acil IT sorunları çözülür.',
+          duration: 'Gün 1–30',
+        },
+        {
+          name: '31–60. günler',
+          duration: 'Gün 31–60',
+          description:
+            'Süreç eşleştirme, sistem entegrasyon takvimi ve sinerji takip mekanizması kurulur.',
+        },
+        {
+          name: '61–100. günler',
+          duration: 'Gün 61–100',
+          description:
+            'Sinerji gerçekleşme takibi, kültür köprü çalışmaları ve 100. gün değerlendirme raporu.',
+        },
+      ],
+    },
+    deliverables: {
+      title: 'Teslim edilenler',
+      artifacts: [
+        'Day 1 iletişim planı (çalışan / müşteri / tedarikçi)',
+        'Organizasyon tasarımı belgesi',
+        'IT/sistem entegrasyon takvimi',
+        'Sinerji takip tablosu (haftalık)',
+        '100. gün değerlendirme raporu',
+      ],
+    },
+    timeline: {
+      totalDuration: '100 gün (kapanış öncesi + sonrası)',
+      milestones: [
+        { name: 'Day 1 planı hazır', week: 'Kapanış günü' },
+        { name: '30. gün ara rapor', week: 'Gün 30' },
+        { name: 'Sinerji takip başlangıcı', week: 'Gün 45' },
+        { name: '100. gün kapsamlı değerlendirme', week: 'Gün 100' },
+      ],
+    },
+    investment: {
+      range: '₺120.000 – ₺250.000',
+      model: 'Faz bazlı sabit fiyat',
+      paymentPlan: 'Aylık 3 eşit taksit',
+    },
+    trust: {
+      anonymizedExample:
+        "İki bölgesel perakende firmasının birleşmesinde 100. gün sinerji gerçekleşme oranı hedefin %94'üne ulaştı; kilit yönetici kaybı sıfır.",
+    },
+    faq: {
+      items: [
+        {
+          q: 'Kapanış sonrası mı başlıyorsunuz?',
+          a: 'Hayır — en değerli çalışma kapanış öncesi 4 haftadır. Day 1 planı olmadan kapanış büyük risk taşır.',
+        },
+        ...SHARED_FAQ_END('post-merger-integration'),
+      ],
+    },
+    related: ['mergers-acquisitions', 'due-diligence-suite', 'deal-structuring'],
+    assessment: STANDARD_ASSESSMENT('post-merger-integration', 'Birleşme Sonrası Entegrasyon'),
+  },
+
+  // ─────────────────────────────────────────────────────────────
+  // ESG CLUSTER — 4 yeni giriş
+  // ─────────────────────────────────────────────────────────────
+  {
+    slug: 'esrs-roadmap',
+    hero: {
+      title: 'ESRS Yol Haritası',
+      subtitle:
+        'Avrupa Sürdürülebilirlik Raporlama Standartları (ESRS) uyum takvimi ve ilk raporlama dönemine hazırlık.',
+      valueProp:
+        'ESRS zorunluluğu Türk tedarikçilerini de kapsıyor — AB müşterisi olan her firma etkileniyor.',
+      primaryCtaText: 'ESRS Hazırlığınızı Değerlendirelim',
+    },
+    problem: {
+      title: 'ESRS hazırlıkta gecikme nedenleri',
+      painPoints: [
+        '12 ESRS standardı ve 1.000+ açıklama noktası; nereden başlayacağını bilmeme.',
+        'Çift önemlilik analizi yapılmadan hangi standartların uygulanacağı belirlenemiyor.',
+        'Veri toplama altyapısı yok; sürdürülebilirlik verileri birden fazla sistemde dağınık.',
+        'AB müşterisi tedarik zinciri anketi gönderiyor; "henüz hazır değiliz" cevabı iş kaybı riski.',
+      ],
+    },
+    outcomes: {
+      title: 'ESRS yol haritası çıktıları',
+      results: [
+        'Uygulanabilir ESRS standartları belirlendi; çift önemlilik sonuçlarına dayanıyor.',
+        'Veri boşluğu analizi: mevcut veri vs. ESRS gereksinimleri karşılaştırması.',
+        'Raporlama takvimi: ilk raporlama dönemine kadar ne zaman ne yapılacağı netleştirilmiş.',
+        'Tedarik zinciri soruları için hazır yanıt çerçevesi.',
+      ],
+    },
+    methodology: {
+      title: 'ESRS yol haritası süreci',
+      phases: [
+        {
+          name: 'Kapsam belirleme',
+          duration: 'Hafta 1–2',
+          description:
+            'Şirket büyüklüğü, sektör ve AB bağlantısına göre yükümlülük takvimi netleştirilir.',
+        },
+        {
+          name: 'Çift önemlilik analizi',
+          duration: 'Hafta 3–5',
+          description:
+            'Etki ve finansal önemlilik iki eksenli matriste değerlendirilir; hangi ESRS standartlarının zorunlu olduğu belirlenir.',
+        },
+        {
+          name: 'Veri boşluğu analizi',
+          duration: 'Hafta 6–7',
+          description:
+            'Mevcut raporlama altyapısı ESRS veri noktalarıyla karşılaştırılır, eksikler önceliklendirilir.',
+        },
+        {
+          name: 'Yol haritası teslimi',
+          duration: 'Hafta 8',
+          description:
+            '18–36 aylık uygulama planı, veri toplama rehberi ve ilk raporlama takvimi teslim edilir.',
+        },
+      ],
+    },
+    deliverables: {
+      title: 'Teslim edilenler',
+      artifacts: [
+        'ESRS uygulanabilirlik matrisi',
+        'Çift önemlilik analiz raporu',
+        'Veri boşluğu ve öncelik listesi',
+        '18–36 aylık ESRS yol haritası',
+        'Tedarik zinciri yanıt şablonu',
+      ],
+    },
+    timeline: {
+      totalDuration: '8 hafta',
+      milestones: [
+        { name: 'Yükümlülük takvimi netleşti', week: 'Hafta 2' },
+        { name: 'Önemlilik analizi tamamlandı', week: 'Hafta 5' },
+        { name: 'Veri boşluğu raporu', week: 'Hafta 7' },
+        { name: 'Yol haritası teslimi', week: 'Hafta 8' },
+      ],
+    },
+    investment: {
+      range: '₺75.000 – ₺140.000',
+      model: 'Sabit fiyat',
+      paymentPlan: '%50 başlangıç, %50 teslimde',
+    },
+    trust: {
+      anonymizedExample:
+        'Orta ölçekli Türk tekstil ihracatçısı; ESRS yol haritası sonrası AB müşterisi tedarik anketi %100 yanıtlandı, 2 yeni müşteri adayından olumlu geri dönüş.',
+    },
+    faq: {
+      items: [
+        {
+          q: 'ESRS Türk şirketleri için zorunlu mu?',
+          a: 'Henüz doğrudan zorunlu değil, ancak AB müşterisi veya ihracatçısı olan firmalar tedarik zinciri zorunlulukları kapsamında etkiliyor. CSRD kapsamındaki AB şirketleri tedarikçilerinden veri talep ediyor.',
+        },
+        ...SHARED_FAQ_END('esrs-roadmap'),
+      ],
+    },
+    related: ['esg-strategy', 'double-materiality', 'csrd-compliance'],
+    assessment: STANDARD_ASSESSMENT('esrs-roadmap', 'ESRS Yol Haritası'),
+  },
+
+  {
+    slug: 'double-materiality',
+    hero: {
+      title: 'Çift Önemlilik Analizi',
+      subtitle:
+        'Etki önemliliği + finansal önemlilik: ESRS, CSRD ve SFDR uyumu için zorunlu temel analiz.',
+      valueProp:
+        'Çift önemlilik analizi olmadan hangi ESG konularını raporlayacağınızı bilemezsiniz — ve yanlış konuları raporlarsanız güvenilirlik kaybı yaşarsınız.',
+      primaryCtaText: 'Önemlilik Analizini Başlatalım',
+    },
+    problem: {
+      title: 'Önemlilik analizinde sık yapılan hatalar',
+      painPoints: [
+        'Sektörel karşılaştırma yapılmadan "herkese önemli" konular seçilir; özgünlük yok.',
+        'Paydaş görüşmesi sadece iç yöneticilerle sınırlı tutulur; dış paydaşlar göz ardı edilir.',
+        'Etki zinciri (value chain) analizi yapılmaz; tedarikçi ve müşteri etkileri hesaba katılmaz.',
+        'Finansal önemlilik ve etki önemliliği ayrıştırılmadan tek bir önemlilik tablosu üretilir.',
+      ],
+    },
+    outcomes: {
+      title: 'Analiz çıktıları',
+      results: [
+        'İki eksenli önemlilik matrisi: etki ve finansal önemlilik ayrı değerlendirilmiş.',
+        'Paydaş anketi ve görüşme özeti: iç + dış paydaş perspektifi dahil.',
+        'Değer zinciri risk haritası: tedarikçi ve müşteri kaynaklı etkiler görünür kılınmış.',
+        'ESRS uygulanabilirlik kararı: hangi standartların zorunlu, hangilerin isteğe bağlı olduğu netleştirilmiş.',
+      ],
+    },
+    methodology: {
+      title: 'Önemlilik metodolojisi',
+      phases: [
+        {
+          name: 'Evren belirleme',
+          duration: 'Hafta 1',
+          description:
+            'Sektörel benchmark ve ESRS konu listesinden başlangıç konu evreni oluşturulur.',
+        },
+        {
+          name: 'Paydaş anketi',
+          duration: 'Hafta 2–3',
+          description:
+            'İç yöneticiler, çalışanlar, müşteriler ve tedarikçilerle yapılandırılmış anket ve görüşmeler.',
+        },
+        {
+          name: 'Matris ve skorlama',
+          duration: 'Hafta 4',
+          description: 'Etki ve finansal boyutlar ayrı skorlanır; önemlilik eşiği belirlenir.',
+        },
+        {
+          name: 'Onay ve dokümantasyon',
+          duration: 'Hafta 5',
+          description: 'Yönetim kurulu onayı için sunum ve denetçi hazırlık dosyası.',
+        },
+      ],
+    },
+    deliverables: {
+      title: 'Teslim edilenler',
+      artifacts: [
+        'Çift önemlilik matrisi (görsel + veri)',
+        'Paydaş anketi raporu',
+        'Değer zinciri etki analizi',
+        'ESRS konuları uygulanabilirlik kararı',
+        'Yönetim kurulu onay sunumu',
+      ],
+    },
+    timeline: {
+      totalDuration: '5 hafta',
+      milestones: [
+        { name: 'Konu evreni tamamlandı', week: 'Hafta 1' },
+        { name: 'Paydaş görüşmeleri bitti', week: 'Hafta 3' },
+        { name: 'Matris ve skor tablosu', week: 'Hafta 4' },
+        { name: 'YK sunumu ve onayı', week: 'Hafta 5' },
+      ],
+    },
+    investment: {
+      range: '₺55.000 – ₺95.000',
+      model: 'Sabit fiyat',
+      paymentPlan: '%50 başlangıç, %50 teslimde',
+    },
+    trust: {
+      anonymizedExample:
+        'İstanbul merkezli kimya şirketi; önemlilik analizi "su tüketimi" ve "kimyasal atık" konularını öncelik 1\'e taşıdı. Bu bulgular ESRS raporu yatırımcı versiyonunda ana bölüm haline geldi.',
+    },
+    faq: {
+      items: [
+        {
+          q: 'GRI ile DMA arasındaki fark nedir?',
+          a: "GRI'de materyalite tek boyutlu (organizasyon etkisi). ESRS çift önemlilik iki boyutlu: (1) etki önemliliği (şirketin dünyaya etkisi) + (2) finansal önemlilik (dünyadan şirkete etki). İkisi birbirini tamamlar.",
+        },
+        ...SHARED_FAQ_END('double-materiality'),
+      ],
+    },
+    related: ['esrs-roadmap', 'esg-strategy', 'csrd-compliance'],
+    assessment: STANDARD_ASSESSMENT('double-materiality', 'Çift Önemlilik Analizi'),
+  },
+
+  {
+    slug: 'carbon-accounting',
+    hero: {
+      title: 'Karbon Muhasebesi',
+      subtitle:
+        'Scope 1, 2 ve 3 emisyon envanteri, karbon ayak izi raporu ve azaltım yol haritası.',
+      valueProp:
+        'AB Sınır Karbon Düzenlemesi (CBAM) ve tedarik zinciri talepleri Türk üreticiler için karbon muhasebesini zorunlu hale getiriyor.',
+      primaryCtaText: 'Karbon Envanteri Başlatalım',
+    },
+    problem: {
+      title: 'Karbon muhasebesi zorlukları',
+      painPoints: [
+        "Scope 3 (tedarik zinciri ve kullanım) emisyonları toplam ayak izinin %70–80'ini oluşturuyor; çoğu şirket yalnızca Scope 1-2 ölçüyor.",
+        'CBAM kapsamındaki sektörlerde (çelik, çimento, gübre, alüminyum, elektrik) karbon maliyeti ihracat fiyatına eklenmeye başlandı.',
+        'Emisyon faktörleri ve sınır belirleme metodolojisi standartlar (GHG Protocol vs. ISO 14064) arasında farklılaşıyor.',
+        'Karbon verisi doğrulanabilir değil; auditor ve yatırımcı tarafından sorgulanıyor.',
+      ],
+    },
+    outcomes: {
+      title: 'Karbon muhasebesi çıktıları',
+      results: [
+        'GHG Protocol uyumlu Scope 1+2+3 emisyon envanteri.',
+        'CBAM risk hesaplaması: mevcut durumda ne kadar karbon vergisi ödeneceği modellenmiş.',
+        'Azaltım öncelikleri: en büyük emisyon kaynaklarında hedeflenen ve ölçülebilir azaltım adımları.',
+        'Raporlama hazırlığı: ESRS E1, CDP veya kurumsal sürdürülebilirlik raporuna hazır format.',
+      ],
+    },
+    methodology: {
+      title: 'Envanter metodolojisi',
+      phases: [
+        {
+          name: 'Sınır ve metodoloji belirleme',
+          duration: 'Hafta 1',
+          description:
+            'Organizasyonel ve operasyonel sınır, seçilen standart (GHG Protocol) ve baz yıl belirlenir.',
+        },
+        {
+          name: 'Veri toplama',
+          duration: 'Hafta 2–5',
+          description:
+            'Enerji, yakıt, seyahat, satın alma ve lojistik verileri toplanır; Scope 3 kategori öncelikleri belirlenir.',
+        },
+        {
+          name: 'Hesaplama ve doğrulama',
+          duration: 'Hafta 6–7',
+          description:
+            'Emisyon faktörleri uygulanır, hesaplamalar çapraz kontrol edilir, belirsizlik analizi yapılır.',
+        },
+        {
+          name: 'Rapor ve azaltım planı',
+          duration: 'Hafta 8',
+          description: 'Envanter raporu ve azaltım öncelikleri yönetim sunumuna hazırlanır.',
+        },
+      ],
+    },
+    deliverables: {
+      title: 'Teslim edilenler',
+      artifacts: [
+        'GHG Protocol uyumlu emisyon envanteri',
+        'Scope 1+2+3 karbon ayak izi raporu',
+        'CBAM risk ve maliyet modeli',
+        'Azaltım öncelik listesi (kısa/orta/uzun vadeli)',
+        'Raporlama formatı (ESRS E1 / CDP uyumlu)',
+      ],
+    },
+    timeline: {
+      totalDuration: '8 hafta',
+      milestones: [
+        { name: 'Metodoloji ve sınır onayı', week: 'Hafta 1' },
+        { name: 'Veri toplama tamamlandı', week: 'Hafta 5' },
+        { name: 'Envanter hesaplamaları', week: 'Hafta 7' },
+        { name: 'Final rapor teslimi', week: 'Hafta 8' },
+      ],
+    },
+    investment: {
+      range: '₺65.000 – ₺130.000',
+      model: 'Sabit fiyat',
+      paymentPlan: '%40 başlangıç, %30 envanter tamamlandığında, %30 teslimde',
+    },
+    trust: {
+      anonymizedExample:
+        "Marmara bölgesinde çelik üreticisi; CBAM karbon maliyeti ihracat fiyatına yansıtıldı, AB alıcısı fiyat değişikliğini kabul etti. Azaltım planı 3 yılda Scope 1'i %22 düşürmeyi hedefliyor.",
+    },
+    faq: {
+      items: [
+        {
+          q: 'CBAM bizi ne zaman etkiliyor?',
+          a: "Geçiş dönemi 2023'te başladı (raporlama yükümlülüğü). Tam uygulama (ödeme) 2026'dan itibaren. Çelik, çimento, alüminyum, gübre, elektrik ve hidrojen sektörleri öncelikli kapsam.",
+        },
+        ...SHARED_FAQ_END('carbon-accounting'),
+      ],
+    },
+    related: ['esg-strategy', 'esrs-roadmap', 'csrd-compliance'],
+    assessment: STANDARD_ASSESSMENT('carbon-accounting', 'Karbon Muhasebesi'),
+  },
+
+  {
+    slug: 'csrd-compliance',
+    hero: {
+      title: 'CSRD Uyumu',
+      subtitle:
+        'AB Kurumsal Sürdürülebilirlik Raporlama Direktifi uyum planlaması ve ilk raporlama dönemine hazırlık.',
+      valueProp:
+        "CSRD, GRI ve TCFD'yi geride bırakıyor — zorunlu denetim, zorunlu çift önemlilik, zorunlu taksonomi uyum açıklaması.",
+      primaryCtaText: 'CSRD Hazırlığınızı Başlatalım',
+    },
+    problem: {
+      title: 'CSRD karşısındaki hazırlıksızlık',
+      painPoints: [
+        'Direktif büyük AB şirketlerinden başlıyor ama Türk tedarikçiler değer zinciri raporlaması kapsamında dolaylı zorunlulukla karşılaşıyor.',
+        'ESRS standartları, AB Taksonomisi ve SFDR birbiriyle örtüşen gereksinimler içeriyor; koordinasyon yok.',
+        'Denetlenebilir sürdürülebilirlik verisi üretmek için kurumsal sistemler hazır değil.',
+        'Mevzuat uygulama takvimi değişiyor; şirketler hangi yıldan itibaren etkilendiklerini bilmiyor.',
+      ],
+    },
+    outcomes: {
+      title: 'CSRD uyum çıktıları',
+      results: [
+        'Uyum takvimi: şirketin hangi raporlama döneminden itibaren etkileneceği netleştirilmiş.',
+        'Boşluk analizi: mevcut raporlama vs. CSRD/ESRS gereksinimleri karşılaştırması.',
+        'Yönetişim çerçevesi: sürdürülebilirlik kurulu, sorumluluk ve denetim mekanizmaları.',
+        'İlk yıl raporlama planı: hangi ESRS standartlarının hangi verilerle karşılanacağı planlanmış.',
+      ],
+    },
+    methodology: {
+      title: 'CSRD uyum süreci',
+      phases: [
+        {
+          name: 'Yükümlülük tespiti',
+          duration: 'Hafta 1–2',
+          description:
+            'Şirket büyüklüğü ve AB bağlantısına göre CSRD yükümlülük tarihi netleştirilir.',
+        },
+        {
+          name: 'Boşluk analizi',
+          duration: 'Hafta 3–5',
+          description:
+            'ESRS standartları + AB Taksonomisi + SFDR gereksinimleri mevcut raporlama pratiğiyle karşılaştırılır.',
+        },
+        {
+          name: 'Yönetişim ve veri yapısı',
+          duration: 'Hafta 6–8',
+          description:
+            'Sürdürülebilirlik komitesi yapısı, veri toplama prosedürü ve denetim hazırlığı kurulur.',
+        },
+        {
+          name: 'Uygulama yol haritası',
+          duration: 'Hafta 9–10',
+          description:
+            'Öncelikli ESRS standartları için uygulama takvimi ve kaynak planlaması hazırlanır.',
+        },
+      ],
+    },
+    deliverables: {
+      title: 'Teslim edilenler',
+      artifacts: [
+        'CSRD yükümlülük analizi ve takvim',
+        'ESRS + Taksonomi boşluk analizi',
+        'Yönetişim çerçevesi belgesi',
+        'Sürdürülebilirlik komitesi yetki yönergesi',
+        '2–3 yıllık CSRD uygulama yol haritası',
+      ],
+    },
+    timeline: {
+      totalDuration: '10 hafta',
+      milestones: [
+        { name: 'Yükümlülük tarihi netleşti', week: 'Hafta 2' },
+        { name: 'Boşluk analizi tamamlandı', week: 'Hafta 5' },
+        { name: 'Yönetişim çerçevesi onayı', week: 'Hafta 8' },
+        { name: 'Yol haritası teslimi', week: 'Hafta 10' },
+      ],
+    },
+    investment: {
+      range: '₺80.000 – ₺155.000',
+      model: 'Sabit fiyat',
+      paymentPlan: '%40 başlangıç, %35 boşluk analizi tamamlandığında, %25 teslimde',
+    },
+    trust: {
+      anonymizedExample:
+        'Alman ortaklı Türk üretici; CSRD boşluk analizi 3 öncelikli ESRS standardı belirledi. Mevcut ISO 14001 sertifikası temel oluşturdu, ek veri toplama süresi %40 azaldı.',
+    },
+    faq: {
+      items: [
+        {
+          q: "KOBİ'ler CSRD kapsamında mı?",
+          a: "Büyük AB şirketleri için 2024–2025 yükümlülükleri başladı; listeli KOBİ'ler 2026'dan itibaren kapsama giriyor. Türk KOBİ'ler şu an doğrudan zorunlu değil ama AB müşterisi olanlar tedarik zinciri kapsamında dolaylı etkiliyor.",
+        },
+        ...SHARED_FAQ_END('csrd-compliance'),
+      ],
+    },
+    related: ['esrs-roadmap', 'double-materiality', 'esg-strategy'],
+    assessment: STANDARD_ASSESSMENT('csrd-compliance', 'CSRD Uyumu'),
+  },
+
+  // ─────────────────────────────────────────────────────────────
+  // FİNTECH & MEVZUAT CLUSTER — 4 yeni giriş
+  // ─────────────────────────────────────────────────────────────
+  {
+    slug: 'spk-casp',
+    hero: {
+      title: 'SPK & CASP Lisansı',
+      subtitle:
+        'Sermaye Piyasası Kurulu lisans başvurusu ve Kripto Varlık Hizmet Sağlayıcısı (CASP) mevzuat uyum danışmanlığı.',
+      valueProp:
+        'SPK ve BDDK lisans süreçleri ortalama 18–24 ay alıyor; doğru dosyayla ilk başvuruda başarı oranı %3 kat yüksek.',
+      primaryCtaText: 'Lisans Stratejinizi Planlayalım',
+    },
+    problem: {
+      title: 'Lisans sürecinde kritik engeller',
+      painPoints: [
+        'Kurul beklentilerini karşılamayan ilk başvurular reddediliyor, süreç 2+ yıla uzuyor.',
+        'Uyum programı (AML/KYC/KVKK) yeterli derinlikte kurulmadan dosya hazırlanıyor.',
+        'Teknik altyapı ve güvenlik standartları mevzuat gereksinimlerinden geride kalıyor.',
+        'Kripto varlık mevzuatı (SPK Tebliğ 2024) hızlı değişiyor; güncel takip eksikliği.',
+      ],
+    },
+    outcomes: {
+      title: 'Lisans danışmanlığı çıktıları',
+      results: [
+        'Başvuru hazırlık skoru: mevcut durumun kurul beklentileriyle karşılaştırması.',
+        'Uyum programı: AML/KYC politikaları, iç kontrol sistemi ve raporlama çerçevesi.',
+        'Teknik uyum belgesi: güvenlik, altyapı ve operasyonel standartlar için kontrol listesi.',
+        'Dosya yönetimi: başvuru belgelerinin hazırlanması ve kurul yazışmalarının yönetimi.',
+      ],
+    },
+    methodology: {
+      title: 'Lisans süreci metodolojisi',
+      phases: [
+        {
+          name: 'Hazırlık değerlendirmesi',
+          duration: 'Hafta 1–3',
+          description:
+            'Mevcut yapı kurul gereksinimleriyle karşılaştırılır, boşluklar önceliklendirilir.',
+        },
+        {
+          name: 'Uyum programı kurulumu',
+          duration: 'Hafta 4–10',
+          description:
+            'AML/KYC prosedürleri, KVKK veri işleme kaydı ve iç denetim çerçevesi hazırlanır.',
+        },
+        {
+          name: 'Teknik uyum',
+          duration: 'Hafta 11–14',
+          description: 'Bilgi güvenliği ve operasyonel süreklilik standartları için eylem planı.',
+        },
+        {
+          name: 'Başvuru ve takip',
+          duration: 'Hafta 15–20',
+          description: 'Dosya hazırlanır, başvuru yapılır, kurul soru-cevap süreçleri yönetilir.',
+        },
+      ],
+    },
+    deliverables: {
+      title: 'Teslim edilenler',
+      artifacts: [
+        'Hazırlık değerlendirme raporu',
+        'AML/KYC politika paketi',
+        'Uyum programı el kitabı',
+        'Teknik uyum kontrol listesi',
+        'Başvuru dosyası ve kurul sunum paketi',
+      ],
+    },
+    timeline: {
+      totalDuration: '18–24 ay (kurul süreci dahil)',
+      milestones: [
+        { name: 'Hazırlık raporu', week: 'Hafta 3' },
+        { name: 'Uyum programı hazır', week: 'Hafta 10' },
+        { name: 'Başvuru dosyası teslimi', week: 'Hafta 20' },
+        { name: 'Kurul kararı (tahmini)', week: 'Ay 18–24' },
+      ],
+    },
+    investment: {
+      range: '₺150.000 – ₺320.000',
+      model: 'Faz bazlı sabit fiyat',
+      paymentPlan: 'Faz tamamlandığında ödeme',
+    },
+    trust: {
+      anonymizedExample:
+        'Kripto varlık platformu; ilk başvuru öncesi tamamlanan 12 haftalık uyum programıyla kurul ek bilgi talebini minimumda tuttu; standart sürece göre 6 ay kazandırdı.',
+    },
+    faq: {
+      items: [
+        {
+          q: 'BDDK ile SPK başvurusu aynı anda yürütülebilir mi?',
+          a: 'Teknik olarak evet; ancak kaynak sınırlı ise SPK CASP öncelikli önerilir. Paralel süreç fizibilite analizi yapıp tavsiye edebiliriz.',
+        },
+        ...SHARED_FAQ_END('spk-casp'),
+      ],
+    },
+    related: ['masak-aml', 'open-banking', 'crypto-web3'],
+    assessment: STANDARD_ASSESSMENT('spk-casp', 'SPK & CASP Lisansı'),
+  },
+
+  {
+    slug: 'masak-aml',
+    hero: {
+      title: 'MASAK AML/KYC',
+      subtitle:
+        'Mali Suçları Araştırma Kurulu (MASAK) yükümlülükleri: risk tabanlı yaklaşım, müşteri durum tespiti ve uyum programı.',
+      valueProp:
+        'MASAK denetimi, yükümlülükleri karşılamayan firmalar için 2024 yılında ortalama ₺2–8 M idari para cezasıyla sonuçlandı.',
+      primaryCtaText: 'AML Uyum Durumunuzu Değerlendirelim',
+    },
+    problem: {
+      title: 'AML/KYC uyumunda zayıf noktalar',
+      painPoints: [
+        'Risk değerlendirme dokümantasyonu yüzeysel; "düşük risk" kategorisi gerekçesiz kullanılıyor.',
+        'Müşteri durum tespiti (KYC) dijital kanalda eksik; kimlik doğrulama prosedürü güncel değil.',
+        'Şüpheli işlem bildirimi (STR) eşikleri tanımsız veya çok geniş; anlamlı bildirim yapılamıyor.',
+        'Çalışan eğitim kayıtları denetim sırasında sunulamıyor.',
+      ],
+    },
+    outcomes: {
+      title: 'AML/KYC uyum çıktıları',
+      results: [
+        'Risk değerlendirme matrisi: müşteri/ürün/coğrafya eksenlerinde belgelenmiş risk kategorileri.',
+        'KYC prosedür paketi: onboarding, PEP tarama ve süregelen izleme adımları.',
+        'STR bildirim süreci: eşikler tanımlanmış, örnek karar ağacı ile.',
+        'Uyum programı el kitabı: MASAK denetimine hazır formatta.',
+      ],
+    },
+    methodology: {
+      title: 'AML uyum metodolojisi',
+      phases: [
+        {
+          name: 'Mevcut durum denetimi',
+          duration: 'Hafta 1–2',
+          description:
+            'Mevcut politikalar, prosedürler ve eğitim kayıtları MASAK gereksinimleriyle karşılaştırılır.',
+        },
+        {
+          name: 'Risk değerlendirme çerçevesi',
+          duration: 'Hafta 3–4',
+          description:
+            'Kuruma özgü risk matrisi hazırlanır, müşteri ve ürün risk kategorileri tanımlanır.',
+        },
+        {
+          name: 'Politika ve prosedür yazımı',
+          duration: 'Hafta 5–8',
+          description: 'KYC, PEP tarama, STR ve iç denetim prosedürleri yazılır ve onaylanır.',
+        },
+        {
+          name: 'Eğitim ve uygulama',
+          duration: 'Hafta 9–10',
+          description: 'Çalışan eğitimi yapılır, kayıtlar tutulur, uyum komitesi kurulur.',
+        },
+      ],
+    },
+    deliverables: {
+      title: 'Teslim edilenler',
+      artifacts: [
+        'Mevcut durum denetim raporu',
+        'Risk değerlendirme matrisi',
+        'KYC ve müşteri kabul prosedürü',
+        'STR karar ağacı ve bildirim prosedürü',
+        'Uyum programı el kitabı',
+        'Çalışan eğitim materyali',
+      ],
+    },
+    timeline: {
+      totalDuration: '10 hafta',
+      milestones: [
+        { name: 'Mevcut durum raporu', week: 'Hafta 2' },
+        { name: 'Risk matrisi onayı', week: 'Hafta 4' },
+        { name: 'Politika paketi tamamlandı', week: 'Hafta 8' },
+        { name: 'Eğitim tamamlandı + denetim hazır', week: 'Hafta 10' },
+      ],
+    },
+    investment: {
+      range: '₺70.000 – ₺140.000',
+      model: 'Sabit fiyat',
+      paymentPlan: '%40 başlangıç, %35 politika paketi tesliminde, %25 eğitimde',
+    },
+    trust: {
+      anonymizedExample:
+        'Ödeme sistemi şirketi; MASAK ön denetimi öncesi tamamlanan uyum programı. Denetim bulgusuz kapandı, 2 hafta içinde. Önceki denetimde uyarı almıştı.',
+    },
+    faq: {
+      items: [
+        {
+          q: 'Hangi firmalar MASAK yükümlüsü?',
+          a: 'Bankalar, ödeme kuruluşları, kripto varlık hizmet sağlayıcıları, faktoring/finansal kiralama şirketleri, muhasebe ve hukuk bürolarının bir kısmı MASAK kapsamında. Kapsam teyidi için ilk görüşmede netleştiririz.',
+        },
+        ...SHARED_FAQ_END('masak-aml'),
+      ],
+    },
+    related: ['spk-casp', 'open-banking', 'data-governance'],
+    assessment: STANDARD_ASSESSMENT('masak-aml', 'MASAK AML/KYC'),
+  },
+
+  {
+    slug: 'open-banking',
+    hero: {
+      title: 'Açık Bankacılık Uyumu',
+      subtitle: 'BKM Açık Bankacılık, BDDK API standartları ve PSD2 referanslı uyum programı.',
+      valueProp:
+        'Açık bankacılık lisansı veya API entegrasyonu hazırlığı olmadan fintech ortaklıkları kurulmuyor; banka API erişimi gecikiyor.',
+      primaryCtaText: 'Açık Bankacılık Hazırlığınızı Değerlendirelim',
+    },
+    problem: {
+      title: 'Açık bankacılık uyum engellleri',
+      painPoints: [
+        'BDDK teknik standartları ve BKM OB platformu gereksinimleri farklı belgelerden takip edilmek zorunda.',
+        'Güçlü kimlik doğrulama (SCA) gereksinimleri API tasarımına entegre edilmeden geliştirme başlıyor.',
+        'Müşteri rızası yönetimi (consent management) KVKK ile açık bankacılık mevzuatının kesişiminde; boşluklar var.',
+        'Üçüncü taraf sağlayıcı (TPP) sertifikasyonu için gereken teknik belgeler hazırlanmıyor.',
+      ],
+    },
+    outcomes: {
+      title: 'Açık bankacılık uyum çıktıları',
+      results: [
+        'BKM OB standartları uyum haritası: mevcut API ile standart arasındaki boşluklar.',
+        'SCA ve consent management mimarisi: mevzuat uyumlu tasarım önerisi.',
+        'KVKK-açık bankacılık entegrasyon kılavuzu: çakışan gereksinimler için ortak çerçeve.',
+        'TPP sertifikasyon hazırlık dosyası.',
+      ],
+    },
+    methodology: {
+      title: 'Uyum metodolojisi',
+      phases: [
+        {
+          name: 'Mevzuat ve standart haritalaması',
+          duration: 'Hafta 1–2',
+          description: 'BDDK, BKM ve PSD2 gereksinimleri çapraz tablo halinde derlenir.',
+        },
+        {
+          name: 'Teknik boşluk analizi',
+          duration: 'Hafta 3–5',
+          description:
+            'Mevcut API, kimlik doğrulama ve veri yönetimi mimarisi standartlarla karşılaştırılır.',
+        },
+        {
+          name: 'Uyum mimarisi tasarımı',
+          duration: 'Hafta 6–8',
+          description: 'SCA, consent ve veri güvenliği için uyum iyileştirme planı hazırlanır.',
+        },
+        {
+          name: 'Belgelendirme',
+          duration: 'Hafta 9–10',
+          description: 'TPP başvuru dosyası ve teknik uyum belgesi teslim edilir.',
+        },
+      ],
+    },
+    deliverables: {
+      title: 'Teslim edilenler',
+      artifacts: [
+        'Mevzuat çapraz tablosu (BDDK/BKM/PSD2)',
+        'Teknik boşluk analizi raporu',
+        'SCA ve consent management mimarisi önerisi',
+        'KVKK-açık bankacılık entegrasyon kılavuzu',
+        'TPP sertifikasyon hazırlık dosyası',
+      ],
+    },
+    timeline: {
+      totalDuration: '10 hafta',
+      milestones: [
+        { name: 'Mevzuat haritası', week: 'Hafta 2' },
+        { name: 'Teknik boşluk raporu', week: 'Hafta 5' },
+        { name: 'Mimari önerisi onayı', week: 'Hafta 8' },
+        { name: 'Tam belge paketi teslimi', week: 'Hafta 10' },
+      ],
+    },
+    investment: {
+      range: '₺80.000 – ₺160.000',
+      model: 'Sabit fiyat',
+      paymentPlan: '%40 başlangıç, %35 boşluk analizinde, %25 teslimde',
+    },
+    trust: {
+      anonymizedExample:
+        'Ödeme kuruluşu; SCA boşluğu giderilerek BKM OB sertifikasyon süreci 4 ay kısaldı. API entegrasyon maliyeti %30 azaldı.',
+    },
+    faq: {
+      items: [
+        {
+          q: "PSD2 Türkiye'de zorunlu mu?",
+          a: "PSD2 AB direktifi; Türkiye'de doğrudan bağlayıcı değil. Ancak BKM Açık Bankacılık standartları PSD2 referanslı hazırlandığından Türk uygulama çerçevesiyle uyumlu çalışıyoruz.",
+        },
+        ...SHARED_FAQ_END('open-banking'),
+      ],
+    },
+    related: ['spk-casp', 'masak-aml', 'data-governance'],
+    assessment: STANDARD_ASSESSMENT('open-banking', 'Açık Bankacılık Uyumu'),
+  },
+
+  {
+    slug: 'crypto-web3',
+    hero: {
+      title: 'Kripto & Web3 Hukuku',
+      subtitle:
+        'Kripto varlık projeleri için Türk mevzuatı uyum planlaması, token yapısı analizi ve CASP hukuki çerçevesi.',
+      valueProp:
+        'SPK Tebliğ 2024 sonrası lisanssız kripto varlık hizmeti sunanlar için 3 yıla kadar hapis cezası öngörülüyor.',
+      primaryCtaText: 'Hukuki Durumunuzu Değerlendirelim',
+    },
+    problem: {
+      title: 'Kripto projelerinin hukuki riskleri',
+      painPoints: [
+        'Token sınıflandırması (menkul kıymet mi, ödeme aracı mı?) belirsiz; yanlış sınıf ciddi yaptırım riski.',
+        'Akıllı sözleşme kodu hukuki sözleşmenin yerini tutmuyor; Türk hukukunda geçerlilik koşulları net değil.',
+        'Yatırımcı koruma zorunlulukları (beyaz kağıt şeffaflığı) mevzuatta tanımlanıyor; gecikmeli uyum.',
+        'Web3 iş modellerinde KDV ve kurumlar vergisi muamelesi belirsizliğini koruyor.',
+      ],
+    },
+    outcomes: {
+      title: 'Kripto mevzuat uyum çıktıları',
+      results: [
+        'Token sınıflandırma raporu: menkul kıymet / ödeme / yardımcı token analizi.',
+        'CASP yükümlülük haritası: proje yapısına göre hangi lisans gerekliliklerinin uygulandığı.',
+        'Vergi analizi: kripto varlık işlemlerinin Türk vergi mevzuatı kapsamındaki muamelesi.',
+        'Uyum aksiyon planı: öncelikli yasal düzenlemeler ve zaman çizelgesi.',
+      ],
+    },
+    methodology: {
+      title: 'Hukuki uyum metodolojisi',
+      phases: [
+        {
+          name: 'İş modeli ve token analizi',
+          duration: 'Hafta 1–2',
+          description:
+            'Proje ticari modeli ve token ekonomisi Türk mevzuatı çerçevesinde değerlendirilir.',
+        },
+        {
+          name: 'Yükümlülük haritalaması',
+          duration: 'Hafta 3–4',
+          description:
+            'SPK, MASAK, KVKK ve vergi boyutları için uygulanabilir yükümlülükler listelenir.',
+        },
+        {
+          name: 'Boşluk analizi ve risk derecelendirmesi',
+          duration: 'Hafta 5–6',
+          description:
+            'Mevcut yapı ile yasal gereksinimler arasındaki farklar risk düzeyiyle önceliklendirilir.',
+        },
+        {
+          name: 'Aksiyon planı',
+          duration: 'Hafta 7',
+          description:
+            'Öncelikli hukuki adımlar, sorumlu taraflar ve zaman çizelgesiyle birlikte teslim edilir.',
+        },
+      ],
+    },
+    deliverables: {
+      title: 'Teslim edilenler',
+      artifacts: [
+        'Token sınıflandırma ve hukuki yapı raporu',
+        'CASP ve SPK yükümlülük haritası',
+        'MASAK ve AML yükümlülük özeti',
+        'Kripto vergi muamele raporu',
+        'Uyum aksiyon planı (öncelikli)',
+      ],
+    },
+    timeline: {
+      totalDuration: '7 hafta',
+      milestones: [
+        { name: 'Token analizi tamamlandı', week: 'Hafta 2' },
+        { name: 'Yükümlülük haritası', week: 'Hafta 4' },
+        { name: 'Risk değerlendirmesi', week: 'Hafta 6' },
+        { name: 'Aksiyon planı teslimi', week: 'Hafta 7' },
+      ],
+    },
+    investment: {
+      range: '₺65.000 – ₺125.000',
+      model: 'Sabit fiyat',
+      paymentPlan: '%50 başlangıç, %50 teslimde',
+    },
+    trust: {
+      anonymizedExample:
+        "NFT platformu; token yapısı analizi SPK'nın menkul kıymet saymayacağı nitelikleri ortaya koydu. Platform lisans başvurusu yapmadan CASP kapsamı dışında kalmayı başardı.",
+    },
+    faq: {
+      items: [
+        {
+          q: 'DeFi projeleri Türk mevzuatı kapsamında mı?',
+          a: 'SPK Tebliğ 2024 merkezi kripto hizmet sağlayıcılarını hedefliyor; saf DeFi protokolleri şu an kapsam dışı sayılıyor. Ancak Türk kullanıcılara yönelik bir arayüz varsa durum değişebilir.',
+        },
+        ...SHARED_FAQ_END('crypto-web3'),
+      ],
+    },
+    related: ['spk-casp', 'masak-aml', 'data-governance'],
+    assessment: STANDARD_ASSESSMENT('crypto-web3', 'Kripto & Web3 Hukuku'),
+  },
+
+  // ─────────────────────────────────────────────────────────────
+  // AİLE ŞİRKETİ CLUSTER — 5 yeni giriş
+  // ─────────────────────────────────────────────────────────────
+  {
+    slug: 'succession-planning',
+    hero: {
+      title: 'Kuşak Devri Planlaması',
+      subtitle:
+        'Kurucudan 2. nesile: 5 yıllık devir planı, liderlik gelişimi ve yönetişim köprüsü.',
+      valueProp:
+        "Türk aile şirketlerinin %30'u 2. nesle geçemiyor. Yapılandırılmış devir planı bu riski yarıya indiriyor.",
+      primaryCtaText: 'Devir Planınızı Konuşalım',
+    },
+    problem: {
+      title: 'Kuşak devrinin kritik zorlukları',
+      painPoints: [
+        'Kurucu kontrolü bırakmakta zorlanıyor; 2. nesil "yeterince hazır değil" algısı kırılmıyor.',
+        'Liderlik gelişimi planlanmıyor; devir günü geldiğinde 2. nesil kritik kararlar için deneyimsiz.',
+        'Hisse devri ile yönetim devri ayrıştırılmıyor; mülkiyet planlaması ile operasyonel liderlik karışıyor.',
+        'Aktif olmayan aile üyelerinin beklentileri yönetilmiyor; çatışma tohumlanıyor.',
+      ],
+    },
+    outcomes: {
+      title: 'Devir planı çıktıları',
+      results: [
+        '5 yıllık devir takvimi: sorumluluk ve karar yetkilerinin adım adım aktarım planı.',
+        'Liderlik gelişim programı: 2. nesil için mentor, eğitim ve kritik proje atamaları.',
+        'Yönetişim köprüsü: devir sürecinde kurucu ve 2. nesil sorumluluklarının geçici dengesi.',
+        'Aile üyesi beklenti yönetimi: aktif olmayan hissedarlar için yapılandırılmış iletişim çerçevesi.',
+      ],
+    },
+    methodology: {
+      title: 'Devir planlama metodolojisi',
+      phases: [
+        {
+          name: 'Aile ve iş değerlendirmesi',
+          duration: 'Ay 1',
+          description:
+            'Aile dinamikleri, 2. neslin hazırlık seviyesi ve şirketin kurumsal olgunluğu değerlendirilir.',
+        },
+        {
+          name: 'Devir takvimi tasarımı',
+          duration: 'Ay 2–3',
+          description:
+            'Sorumluluk aktarım takvimi, ara yönetişim yapısı ve milestonelar belirlenir.',
+        },
+        {
+          name: 'Liderlik geliştirme programı',
+          duration: 'Ay 4–18',
+          description: 'Koçluk, mentorluk ve kritik proje atamaları ile 2. nesil sahaya çıkarılır.',
+        },
+        {
+          name: 'Devir tamamlama',
+          duration: 'Ay 19–24',
+          description:
+            'Tam liderlik devri, kurucunun danışmanlık rolüne geçişi ve yeni yönetim kurulu yapısı.',
+        },
+      ],
+    },
+    deliverables: {
+      title: 'Teslim edilenler',
+      artifacts: [
+        '5 yıllık kuşak devri takvimi',
+        'Liderlik gelişim programı tasarımı',
+        'Yönetim yetkisi devir planı',
+        'Aile iletişim protokolü',
+        'Kurul ve danışma kurulu yapısı önerisi',
+      ],
+    },
+    timeline: {
+      totalDuration: '24–36 ay (tam devir)',
+      milestones: [
+        { name: 'Değerlendirme raporu', week: 'Ay 1' },
+        { name: 'Devir planı onayı', week: 'Ay 3' },
+        { name: 'Ara dönem liderlik teslimi', week: 'Ay 12' },
+        { name: 'Tam devir', week: 'Ay 24–36' },
+      ],
+    },
+    investment: {
+      range: '₺95.000 – ₺200.000/yıl',
+      model: 'Yıllık aylık ortaklık (süregelen danışmanlık)',
+      paymentPlan: 'Aylık eşit taksit',
+    },
+    trust: {
+      anonymizedExample:
+        "3. nesle geçiş planlayan Ege'li tekstil ailesi; 2 yıllık program sonunda 2. ve 3. nesil ortak liderlik yapısı kurdu. Kurucu icra kurulu başkanı olarak görevini sürdürüyor.",
+    },
+    faq: {
+      items: [
+        {
+          q: 'Kurucu sürece dahil olmak istemiyor, sadece 2. nesil katılabilir mi?',
+          a: 'Kurucunun katılımı devir planının kritik unsurudur; ancak katılım biçimi esnektir. İlk 2 seansta kurucuyu sürece kazandırmak için özel bir yaklaşım kullanıyoruz.',
+        },
+        ...SHARED_FAQ_END('succession-planning'),
+      ],
+    },
+    related: ['family-business', 'family-business-governance', 'family-office'],
+    assessment: STANDARD_ASSESSMENT('succession-planning', 'Kuşak Devri Planlaması'),
+  },
+
+  {
+    slug: 'family-office',
+    hero: {
+      title: 'Family Office Kurulumu',
+      subtitle:
+        'Aile servetini kurumsal yapıyla yönetmek: single-family office kuruluş danışmanlığı.',
+      valueProp:
+        'Düzensiz varlık yönetimi aile servetini 20 yılda %40 eritiyor. Kurumsal yapı bu kaybı önleyen sistemdir.',
+      primaryCtaText: 'Family Office Fizibilite Görüşmesi',
+    },
+    problem: {
+      title: 'Aile servetini yönetimde boşluklar',
+      painPoints: [
+        'Yatırımlar birden fazla bankada, birden fazla danışmanda dağınık; konsolide tablo yok.',
+        'Vergi planlaması reaktif; yılsonu optimizasyon fırsatları kaçırılıyor.',
+        'Nesiller arası servet aktarımında hukuki yapı (vakıf, holding, tröst) belirsiz.',
+        'Aile üyeleri nakit çekimleri ve varlık kullanımında mutabık bir çerçeve yok.',
+      ],
+    },
+    outcomes: {
+      title: 'Family office kurulum çıktıları',
+      results: [
+        'Varlık envanteri ve konsolidasyonu: tüm yatırımlar tek raporlama yapısında.',
+        'Hukuki ve vergi yapısı tasarımı: holding, vakıf veya tröst seçeneği modellendi.',
+        'Yatırım politikası beyanı (IPS): risk toleransı, likidite ve getiri hedefleri yazılı.',
+        'Aile yönetişim protokolü: varlık kullanım kuralları ve karar alma süreci.',
+      ],
+    },
+    methodology: {
+      title: 'Family office kurulum süreci',
+      phases: [
+        {
+          name: 'Varlık envanteri',
+          duration: 'Ay 1',
+          description:
+            'Tüm finansal ve gayri-menkul varlıklar, borçlar ve yükümlülükler haritalanır.',
+        },
+        {
+          name: 'Yapı tasarımı',
+          duration: 'Ay 2–3',
+          description:
+            'Holding/vakıf/tröst alternatifleri vergi ve sürdürülebilirlik boyutunda modellenir.',
+        },
+        {
+          name: 'Yönetişim ve IPS',
+          duration: 'Ay 4',
+          description:
+            'Yatırım politikası beyanı, aile çekilim politikası ve yönetim kurulu yapısı tasarlanır.',
+        },
+        {
+          name: 'Kuruluş ve geçiş',
+          duration: 'Ay 5–6',
+          description:
+            'Seçilen yapı kurulur, varlık transferleri planlanır, ilk raporlama sistemi devreye alınır.',
+        },
+      ],
+    },
+    deliverables: {
+      title: 'Teslim edilenler',
+      artifacts: [
+        'Konsolide varlık envanteri',
+        'Hukuki yapı fizibilite raporu',
+        'Yatırım politikası beyanı (IPS)',
+        'Aile çekilim ve kullanım politikası',
+        'Family office kuruluş takvimi ve kontrol listesi',
+      ],
+    },
+    timeline: {
+      totalDuration: '6 ay (kuruluş)',
+      milestones: [
+        { name: 'Varlık envanteri tamamlandı', week: 'Ay 1' },
+        { name: 'Yapı kararı alındı', week: 'Ay 3' },
+        { name: 'IPS onaylandı', week: 'Ay 4' },
+        { name: 'Family office aktif', week: 'Ay 6' },
+      ],
+    },
+    investment: {
+      range: '₺130.000 – ₺280.000',
+      model: 'Sabit fiyat (kurulum) + isteğe bağlı yıllık danışmanlık',
+      paymentPlan: '3 aylık taksitler',
+    },
+    trust: {
+      anonymizedExample:
+        "İstanbul'da 3 nesilli tekstil ailesi; 6 bankada dağınık portföy konsolide edildi. Vergi optimizasyonu ile ilk yıl ₺1,8 M tasarruf sağlandı.",
+    },
+    faq: {
+      items: [
+        {
+          q: 'Family office için minimum varlık büyüklüğü nedir?',
+          a: 'Single-family office için genellikle ₺50 M+ yönetim altındaki varlık mantıklı. Daha küçük aileler için multi-family office alternatiflerini değerlendiririz.',
+        },
+        ...SHARED_FAQ_END('family-office'),
+      ],
+    },
+    related: ['family-business', 'succession-planning', 'wealth-transfer'],
+    assessment: STANDARD_ASSESSMENT('family-office', 'Family Office Kurulumu'),
+  },
+
+  {
+    slug: 'wealth-transfer',
+    hero: {
+      title: 'Servet Transferi Planlaması',
+      subtitle: 'Nesiller arası servet aktarımı: vergi etkin yapı, zamanlama ve hukuki araçlar.',
+      valueProp:
+        'Plansız servet transferi Türk mirasçılık hukuku altında vergi ve ortak mirasçı riski yaratıyor.',
+      primaryCtaText: 'Servet Transferi Planını Başlatalım',
+    },
+    problem: {
+      title: 'Servet transferinde sık görülen sorunlar',
+      painPoints: [
+        'Veraset ve intikal vergisi optimizasyonu için zaman kaybediliyor; erken planlamayla azaltılabilecek vergi ödeniyor.',
+        'Zorunlu miras payları (saklı paylar) dikkate alınmadan yapılan planlar geçersiz sayılıyor.',
+        'Gayrimenkul ağırlıklı servetlerde likidite planlaması yapılmıyor; mirasçılar varlığı satmak zorunda kalıyor.',
+        'Birden fazla ülkede varlık varken çifte vergilendirme anlaşmaları değerlendirilmiyor.',
+      ],
+    },
+    outcomes: {
+      title: 'Servet transferi çıktıları',
+      results: [
+        'Vergi etkin aktarım planı: veraset vergisi yükünü minimize eden yapı ve zamanlama.',
+        'Hukuki araç seçimi: vakıf, ölüme bağlı tasarruf, aile anayasası bütünleşik değerlendirilmiş.',
+        'Likidite planı: gayrimenkul ağırlıklı servetlerde mirasçılar için nakit erişim yolu.',
+        'Uluslararası varlık entegrasyonu: yurt dışı hesap ve gayrimenkul için uyumlu aktarım planı.',
+      ],
+    },
+    methodology: {
+      title: 'Servet transferi süreci',
+      phases: [
+        {
+          name: 'Varlık ve aile değerlendirmesi',
+          duration: 'Hafta 1–3',
+          description: 'Servet bileşimi, mirasçı yapısı ve aktarım hedefleri haritalanır.',
+        },
+        {
+          name: 'Senaryolar ve modelleme',
+          duration: 'Hafta 4–6',
+          description: 'Farklı aktarım senaryolarında vergi yükü ve miras payı simüle edilir.',
+        },
+        {
+          name: 'Yapı tasarımı',
+          duration: 'Hafta 7–8',
+          description:
+            'Seçilen senaryo için hukuki belgeler ve vakıf/vasiyetname yapısı tasarlanır.',
+        },
+        {
+          name: 'Uygulama rehberi',
+          duration: 'Hafta 9–10',
+          description: 'Taslak belgeler, uygulama takvimi ve notere hazırlık paketi teslim edilir.',
+        },
+      ],
+    },
+    deliverables: {
+      title: 'Teslim edilenler',
+      artifacts: [
+        'Varlık ve mirasçı haritası',
+        'Vergi senaryo modellemesi',
+        'Önerilen aktarım yapısı belgesi',
+        'Uygulama takvimi ve notere hazırlık paketi',
+        'Likidite planı (gayrimenkul ağırlıklı portföyler için)',
+      ],
+    },
+    timeline: {
+      totalDuration: '10 hafta',
+      milestones: [
+        { name: 'Değerlendirme tamamlandı', week: 'Hafta 3' },
+        { name: 'Senaryo modellemesi', week: 'Hafta 6' },
+        { name: 'Yapı tasarımı onayı', week: 'Hafta 8' },
+        { name: 'Tam paket teslimi', week: 'Hafta 10' },
+      ],
+    },
+    investment: {
+      range: '₺85.000 – ₺175.000',
+      model: 'Sabit fiyat',
+      paymentPlan: '%40 başlangıç, %35 senaryo modellemesinde, %25 teslimde',
+    },
+    trust: {
+      anonymizedExample:
+        'Üç kardeşin ortaklaştığı sanayi holdinginde; 5 yıllık kademeli aktarım planı veraset vergisi yükünü %60 azalttı ve bir kardeşin şirketten çıkış sürecini anlaşmazlık olmadan kapattı.',
+    },
+    faq: {
+      items: [
+        {
+          q: 'Vakıf kurmanın maliyeti ve süresi nedir?',
+          a: 'Vakıf tescili 2–4 ay, başlangıç malvarlığı yasal minimum ₺1 M. Vakıfın avantajı ve maliyetlerini diğer hukuki araçlarla karşılaştırmalı olarak sunarız.',
+        },
+        ...SHARED_FAQ_END('wealth-transfer'),
+      ],
+    },
+    related: ['family-business', 'family-office', 'succession-planning'],
+    assessment: STANDARD_ASSESSMENT('wealth-transfer', 'Servet Transferi Planlaması'),
+  },
+
+  {
+    slug: 'conflict-resolution',
+    hero: {
+      title: 'Aile Arabuluculuğu',
+      subtitle:
+        'Aile şirketlerinde ortak anlaşmazlıklarını, kurucu-2.nesil gerilimlerini ve hisse uyuşmazlıklarını yapılandırılmış süreçle çözme.',
+      valueProp:
+        'Çözümsüz aile çatışmaları şirket değerini 3 yılda ortalama %25 eritiyor. Arabuluculuk dava sürecinin %90 maliyetiyle aynı sonucu üretiyor.',
+      primaryCtaText: 'Çatışma Sürecini Değerlendirelim',
+    },
+    problem: {
+      title: 'Aile çatışmalarının şirkete etkileri',
+      painPoints: [
+        'Yönetim kararları çatışma taraflarının vetosuna takılıyor; stratejik inisiyatifler ilerleyemiyor.',
+        'Kilit yöneticiler aile çatışmasının ortasında kalıyor; yetenekli ekip ayrılıyor.',
+        'Hisse değerlemesi anlaşmazlığı çözülmeden her müzakere tıkanıyor.',
+        'Avukat yolu denendiğinde çatışma derinleşiyor, maliyetler katlanıyor.',
+      ],
+    },
+    outcomes: {
+      title: 'Arabuluculuk çıktıları',
+      results: [
+        'Mutabakat belgesi: tartışmalı konularda tüm tarafların imzaladığı yazılı uzlaşı.',
+        'Karar alma çerçevesi: gelecek anlaşmazlıkları önleyen yönetişim mekanizması.',
+        'Hisse değerleme mutabakatı (varsa): bağımsız değerleme metodolojisi üzerinde uzlaşı.',
+        'İletişim protokolü: aile-şirket ayrışmasını güçlendiren yapılandırılmış iletişim kuralları.',
+      ],
+    },
+    methodology: {
+      title: 'Arabuluculuk süreci',
+      phases: [
+        {
+          name: 'Bireysel ön görüşmeler',
+          duration: 'Hafta 1–2',
+          description: 'Her tarafla ayrı, gizli görüşmede gerçek pozisyon ve çıkarlar dinlenir.',
+        },
+        {
+          name: 'Ortak oturum',
+          duration: 'Hafta 3–4',
+          description:
+            'Arabulucu moderasyonunda taraflar ortak çıkarlar etrafında yapılandırılmış diyalog kurar.',
+        },
+        {
+          name: 'Uzlaşı belgesi tasarımı',
+          duration: 'Hafta 5',
+          description: 'Mutabık kalınan maddeleri kapsayan taslak mutabakat belgesi hazırlanır.',
+        },
+        {
+          name: 'Onay ve kapanış',
+          duration: 'Hafta 6',
+          description: 'Belgeler gözden geçirilir, imzalanır; uygulama takvimi belirlenir.',
+        },
+      ],
+    },
+    deliverables: {
+      title: 'Teslim edilenler',
+      artifacts: [
+        'Mutabakat belgesi (tüm taraflarca imzalı)',
+        'Karar alma ve veto çerçevesi',
+        'İletişim protokolü',
+        'Anlaşmazlık önleme mekanizmaları (kısaca)',
+      ],
+    },
+    timeline: {
+      totalDuration: '6 hafta (akut çatışma için)',
+      milestones: [
+        { name: 'Ön görüşmeler tamamlandı', week: 'Hafta 2' },
+        { name: 'İlk ortak oturum', week: 'Hafta 3' },
+        { name: 'Taslak mutabakat', week: 'Hafta 5' },
+        { name: 'İmza ve kapanış', week: 'Hafta 6' },
+      ],
+    },
+    investment: {
+      range: '₺60.000 – ₺130.000',
+      model: 'Sabit fiyat (kapsam + süreye bağlı)',
+      paymentPlan: '%50 başlangıç, %50 mutabakat imzasında',
+    },
+    trust: {
+      anonymizedExample:
+        '2. nesil 3 kardeş arasındaki yönetim anlaşmazlığı 6 haftada çözüme kavuştu; şirket yönetim kurulu yeniden devreye girdi, avukat sürecini önledi.',
+    },
+    faq: {
+      items: [
+        {
+          q: 'Bir taraf katılmak istemiyorsa ne olur?',
+          a: 'Arabuluculuk gönüllülük esası gerektirir. İlk görüşmede katılmayan tarafla bağımsız diyalog oturumu planlıyoruz; bu genellikle sürece dahil etmeyi sağlıyor.',
+        },
+        ...SHARED_FAQ_END('conflict-resolution'),
+      ],
+    },
+    related: ['family-business', 'family-business-governance', 'succession-planning'],
+    assessment: STANDARD_ASSESSMENT('conflict-resolution', 'Aile Arabuluculuğu'),
+  },
+
+  {
+    slug: 'family-business-governance',
+    hero: {
+      title: 'Kurumsallaşma & Bağımsız Yönetim',
+      subtitle:
+        'Aile şirketini kurumsal kimliğe taşımak: yönetim kurulu, bağımsız üye seçimi ve aile-şirket ayrışması.',
+      valueProp:
+        'Kurumsal yönetişim olmayan aile şirketlerinde kredi maliyeti %2–4 puan yüksek; satış değerlemesi %20–35 düşük.',
+      primaryCtaText: 'Kurumsallaşma Yol Haritası Alın',
+    },
+    problem: {
+      title: 'Kurumsallaşmayı geciktiren engeller',
+      painPoints: [
+        'Aile-şirket sınırı yok; şirket kasası aile harcamaları için kullanılıyor.',
+        'Yönetim kurulu var ama yalnızca aile üyelerinden oluşuyor; bağımsız bakış açısı yok.',
+        'İcra yetkisi ve kurumsal kontrol net ayrışmamış; kurucunun her karara müdahalesi süreci yavaşlatıyor.',
+        'Bağımsız denetim ve iç kontrol sistemi yok; bankalar ve yatırımcılar güvence isteyemiyor.',
+      ],
+    },
+    outcomes: {
+      title: 'Kurumsallaşma çıktıları',
+      results: [
+        'Yönetim kurulu tasarımı: bağımsız üye profili, yetki matriksi ve kurul komiteleri.',
+        'Aile-şirket protokolü: nakit çekim, istihdam ve çıkar çatışması kuralları yazılı.',
+        'İcra yönetimi çerçevesi: genel müdüre devredilen yetkiler ve raporlama mekanizması.',
+        'Kurumsal yönetişim değerlendirme skoru: başlangıç vs. hedef olgunluk karşılaştırması.',
+      ],
+    },
+    methodology: {
+      title: 'Kurumsallaşma metodolojisi',
+      phases: [
+        {
+          name: 'Yönetişim olgunluk değerlendirmesi',
+          duration: 'Hafta 1–2',
+          description:
+            'Mevcut yapı, karar alma pratikleri ve aile-şirket ayrışması 5 boyutlu çerçevede ölçülür.',
+        },
+        {
+          name: 'Yönetim kurulu tasarımı',
+          duration: 'Hafta 3–5',
+          description: 'Kurul kompozisyonu, bağımsız üye profili ve komite yapısı tasarlanır.',
+        },
+        {
+          name: 'Protokoller ve yetki devri',
+          duration: 'Hafta 6–8',
+          description: 'Aile protokolü, icra yetki matriksi ve raporlama takvimi yazılır.',
+        },
+        {
+          name: 'Uygulama desteği',
+          duration: 'Hafta 9–12',
+          description:
+            'Bağımsız üye aday sürecine destek, ilk kurul toplantısına hazırlık ve 12. ay değerlendirmesi.',
+        },
+      ],
+    },
+    deliverables: {
+      title: 'Teslim edilenler',
+      artifacts: [
+        'Yönetişim olgunluk raporu',
+        'Yönetim kurulu charter ve yetki matriksi',
+        'Aile protokolü (nakit / istihdam / çıkar çatışması)',
+        'Bağımsız üye aday profili ve süreç rehberi',
+        'İcra yönetimi yetki devri belgesi',
+      ],
+    },
+    timeline: {
+      totalDuration: '12 hafta',
+      milestones: [
+        { name: 'Olgunluk değerlendirmesi', week: 'Hafta 2' },
+        { name: 'Kurul tasarımı onayı', week: 'Hafta 5' },
+        { name: 'Protokoller imzalandı', week: 'Hafta 8' },
+        { name: 'İlk resmi kurul toplantısı', week: 'Hafta 12' },
+      ],
+    },
+    investment: {
+      range: '₺100.000 – ₺210.000',
+      model: 'Sabit fiyat',
+      paymentPlan: '%30 başlangıç, %40 protokoller tesliminde, %30 ilk kurul toplantısında',
+    },
+    trust: {
+      anonymizedExample:
+        'İkinci nesil tarafından devir alınan inşaat grubu; 12 haftada bağımsız YK üyesi atandı, aile protokolü imzalandı. Kredibilitesi sayesinde 6 ay sonra banka kredi maliyeti 1,5 puan düştü.',
+    },
+    faq: {
+      items: [
+        {
+          q: 'Bağımsız yönetim kurulu üyesi adayları nasıl bulunuyor?',
+          a: 'Sektör ve yetkinlik profili birlikte belirleniyor, ardından ağımızdan uygun adaylar ön elemeye alınıyor. Şirket kendi kanallarıyla da yürütmek istiyorsa aday değerlendirme çerçevesi sağlıyoruz.',
+        },
+        ...SHARED_FAQ_END('family-business-governance'),
+      ],
+    },
+    related: ['family-business', 'succession-planning', 'conflict-resolution'],
+    assessment: STANDARD_ASSESSMENT(
+      'family-business-governance',
+      'Kurumsallaşma & Bağımsız Yönetim',
+    ),
+  },
 ];
 
 export const SERVICE_CONTENT: Record<string, ServiceContent> = Object.fromEntries(

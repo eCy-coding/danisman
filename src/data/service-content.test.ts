@@ -46,8 +46,9 @@ describe('service-content — boutique tone compliance', () => {
     }
   });
 
-  it('all 21 services covered in SERVICE_CONTENT', () => {
-    const expectedSlugs = [
+  it('all catalog services covered in SERVICE_CONTENT', () => {
+    // Original 21 broad-domain entries (regression guard — must not disappear)
+    const originalSlugs = [
       'strategic-transformation',
       'mergers-acquisitions',
       'family-business',
@@ -70,9 +71,30 @@ describe('service-content — boutique tone compliance', () => {
       'smart-cities',
       'government-relations',
     ];
-    for (const slug of expectedSlugs) {
+    // 17 new entries matching services.ts catalog link slugs (M1 fix)
+    const catalogSlugs = [
+      'due-diligence-suite',
+      'deal-structuring',
+      'negotiation-loi',
+      'post-merger-integration',
+      'esrs-roadmap',
+      'double-materiality',
+      'carbon-accounting',
+      'csrd-compliance',
+      'spk-casp',
+      'masak-aml',
+      'open-banking',
+      'crypto-web3',
+      'succession-planning',
+      'family-office',
+      'wealth-transfer',
+      'conflict-resolution',
+      'family-business-governance',
+    ];
+    for (const slug of [...originalSlugs, ...catalogSlugs]) {
       expect(SERVICE_CONTENT[slug], `${slug}: missing from SERVICE_CONTENT`).toBeDefined();
     }
-    expect(Object.keys(SERVICE_CONTENT)).toHaveLength(21);
+    // 21 original + 17 new = 38 total entries
+    expect(Object.keys(SERVICE_CONTENT)).toHaveLength(38);
   });
 });
