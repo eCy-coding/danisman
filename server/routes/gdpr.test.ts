@@ -22,6 +22,8 @@ const { notifyMock } = vi.hoisted(() => ({
   notifyMock: vi.fn(async () => undefined),
 }));
 vi.mock('../lib/telegram', () => ({ notify: notifyMock }));
+// Bypass Redis so the idempotency store uses in-memory only (avoids cross-run cache pollution)
+vi.mock('../config/redis', () => ({ redis: { status: 'end' } }));
 
 import gdprRoutes, { _testing as gdprTest } from './gdpr';
 import { errorHandler } from '../middleware/error';

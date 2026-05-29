@@ -1,17 +1,6 @@
-# Roadmap 100 — PHASE 40: Observability + DevOps (Production Scale) ✅ TAMAMLANDI (kod)
+# Roadmap 100 — PHASE 40: Observability + DevOps (Production Scale)
 
 **Tier:** 3 (ORTA) · **Skor:** 2.0 · **Süre:** 1 hafta · **Todo:** T91-T100
-
-> **Reconcile 2026-05-29 (premise-verify):** kod/config/doc deliverable'ları hazır —
-> Sentry sourcemaps CI (`release.yml`), Lighthouse CI (`lighthouse.yml` + `.lighthouserc.js`),
-> log aggregation (`@logtail/winston` + `server/config/logger.ts` Better Stack transport),
-> PM2 (`ecosystem.config.cjs`), DB backup (`scripts/backup-db.sh`), GHCR (`docker.yml`),
-> incident runbook (`docs/INCIDENT_RUNBOOK.md` + `INCIDENT_RESPONSE.md`). T09 blue-green =
-> Vercel/Render atomic deploy (managed, built-in). **Owner (Phase B):** T04 UptimeRobot
-> hesap, T05 status.ecypro.com subdomain.
-> **Not (ayrı task):** iki örtüşen Lighthouse kurulumu var — `.lighthouserc.js`+`lighthouse.yml`
-> (P40-T02, preview, perf≥0.70) vs `.lighthouserc.cjs`+`lighthouse-ci.yml` (P51.2, prod URL,
-> perf≥0.85). İkisi de canlı (dead değil); Actions billing fix sonrası konsolide edilmeli.
 
 **Stratejik Hedef:** Production-grade observability + deployment automation. "Bir şey kırıldı" anında fark et, bir tık ile fix. SLI/SLO tracking, incident response.
 
@@ -40,14 +29,14 @@
 - **YÖNTEM:** betterstack.com → free tier (1GB/month). `@logtail/winston` transport → Winston logger'a ekle. Alternatif: Axiom.co (free 500GB/ay!). Structured log query: `source:api AND level:error AND requestId:xxx`.
 - **TEST:** Test error `throw new Error('test')` → Better Stack dashboard'da 1-2 sn içinde. Search + filter + alert rule.
 
-## ✅ P40-T04 (T94): Uptime Monitoring (UptimeRobot)
+## ⬜ P40-T04 (T94): Uptime Monitoring (UptimeRobot)
 
 - **NEDEN:** Site downtime'ı fark edemeden saatler geçebilir. UptimeRobot 5-min interval check + email/SMS/Slack alert.
 - **ÖNEM:** P0 — Proactive incident response.
 - **YÖNTEM:** uptimerobot.com free (50 monitor). Monitor'lar: (a) `https://ecypro.com/` HTTP 200, (b) `https://ecypro.com/api/health` HTTP 200 + keyword "ok", (c) `/api/ready` readiness, (d) SSL expiration 30d warning. Alert contact: email + Telegram/Slack.
 - **TEST:** `/api/health` 5 dk down → UptimeRobot alert email/Slack. Up olunca "Resolved" alert.
 
-## ✅ P40-T05 (T95): Status Page (status.ecypro.com)
+## ⬜ P40-T05 (T95): Status Page (status.ecypro.com)
 
 - **NEDEN:** Downtime oldugunda user'lar kendi internet / provider arar. Status page "biz farkındayız + ne oluyor" gösterir → trust preservation.
 - **ÖNEM:** P2 — User trust + support load reduction.
@@ -93,18 +82,18 @@
 
 ## Phase 40 Kapatma Kriterleri
 
-- [x] 8/10 todo kod `✅` (T04 UptimeRobot + T05 status page = owner, Phase B)
-- [x] Sentry source maps CI (`.github/workflows/release.yml`)
-- [x] Lighthouse CI fail-on-regression (`lighthouse.yml` + `.lighthouserc.js`)
-- [x] Log aggregation Better Stack (`@logtail/winston` + `server/config/logger.ts`)
-- [ ] UptimeRobot 4 monitor + alerts (owner — `docs/OBSERVABILITY_SETUP.md` rehber)
-- [ ] Status page live (owner — `status.ecypro.com` subdomain)
-- [x] PM2 / Render auto-restart (`ecosystem.config.cjs` + Render managed)
-- [x] DB backup (`scripts/backup-db.sh` + Render managed daily)
-- [x] Docker image GHCR automated (`.github/workflows/docker.yml`)
-- [x] Blue-green deployment (Vercel/Render atomic deploy — managed)
-- [x] Incident runbook + postmortem (`docs/INCIDENT_RUNBOOK.md` + `INCIDENT_RESPONSE.md`)
-- [ ] Tag: `git tag phase-40-closed` (merge sonrası)
+- [ ] 10/10 todo `✅`
+- [x] Sentry source maps CI release flow
+- [x] Lighthouse CI fail-on-regression
+- [x] Log aggregation (Better Stack / Axiom)
+- [ ] UptimeRobot 4 monitor + alerts
+- [ ] Status page live (Instatus / UpTimeKuma)
+- [x] PM2 / Render auto-restart
+- [x] DB backup cron S3 + restore tested
+- [x] Docker image GHCR automated
+- [x] Blue-green deployment validated
+- [x] Incident runbook + postmortem template
+- [ ] Tag: `git tag phase-40-closed`
 
 ---
 

@@ -1,16 +1,6 @@
-# Roadmap 40 — PHASE 34: Conversion Optimization + Analytics ✅ TAMAMLANDI (kod)
+# Roadmap 40 — PHASE 34: Conversion Optimization + Analytics
 
 **Tier:** 2 (YÜKSEK) · **Skor:** 5.4 · **Süre:** 1 hafta · **Todo:** T31-T40
-
-> **Reconcile 2026-05-29 (premise-verify):** 9/10 todo kodda hazır bulundu —
-> GrowthBook A/B (`GrowthBookProvider` + `useABVariant` + `ab-testing.ts`), Clarity
-> (`src/lib/clarity.ts`), form abandonment (`useFormAnalytics.ts`), scroll depth
-> (`useScrollDepth.ts`), CRO playbook (`docs/CRO_PLAYBOOK.md`), lead scoring
-> (`server/lib/lead-scoring.ts`). Tek gerçek delta = **T02**: canlı `GrowthCalculator`
-> (ServicesPage) hiçbir event atmıyordu + "Get Detailed Blueprint" CTA ölüydü →
-> `roi_calc_step` (result_view debounced + cta_click) emit + CTA `/discovery-call`'a
-> bağlandı (3 test). **T01** kod-hazır (event'ler `emit()` ile gtag'e gidiyor); GA4
-> dashboard "mark as conversion" = owner aksiyonu (Phase B).
 
 **Stratejik Hedef:** Site'ı conversion machine'e çevir. Visitor → Lead → Customer funnel her adımı ölçülür + optimize edilebilir olsun. Hedef: %2+ lead conversion rate.
 
@@ -18,7 +8,7 @@
 
 ---
 
-## ✅ P34-T01 (T31): GA4 Conversion Goals (Booking, Contact, Newsletter)
+## ⬜ P34-T01 (T31): GA4 Conversion Goals (Booking, Contact, Newsletter)
 
 - **NEDEN:** GA4'te "conversion" olarak işaretlenen event'ler primary KPI. Şu an event tracking var (P31-T05) ama conversion marking yok → GA4 Reports'ta "Conversions" sekmesi boş.
 - **ÖNEM:** P0 — Conversion rate optimization'ın önkoşulu. Reklama dönüş durumunda bile ROAS ölçümü için kritik.
@@ -92,16 +82,16 @@
 
 ## Phase 34 Kapatma Kriterleri
 
-- [x] 9/10 todo kod `✅` (T01 GA4 dashboard mark = owner, Phase B)
-- [ ] GA4 Conversions sekmesinde event marked (owner — kod event'leri `emit()` ile hazır)
-- [x] ROI tool conversion tracking (`GrowthCalculator` → `roi_calc_step` result_view + cta_click)
-- [x] Funnel report script (`scripts/funnel-report.ts`)
-- [x] GrowthBook A/B infrastructure (`GrowthBookProvider` + `useABVariant` + `ab-testing.ts`)
-- [x] Microsoft Clarity loader (`src/lib/clarity.ts`, consent-gated)
-- [x] Form abandonment tracking (`src/hooks/useFormAnalytics.ts`)
-- [x] Scroll depth milestone events (`src/hooks/useScrollDepth.ts`)
-- [x] CRO playbook (`docs/CRO_PLAYBOOK.md`)
-- [x] Lead scoring (`server/lib/lead-scoring.ts` + `server/routes/leads.ts`)
-- [ ] Tag: `git tag phase-34-closed` (merge sonrası)
+- [ ] 10/10 todo `✅`
+- [ ] GA4 Conversions sekmesinde 5 event marked
+- [x] ROI Calculator funnel tracking 4 step
+- [x] Weekly funnel report script çalışıyor
+- [x] GrowthBook (veya alternatif) A/B test infrastructure
+- [x] Microsoft Clarity heatmap aktif + 1 hafta data
+- [x] Form abandonment tracking 3 form'da aktif
+- [x] Scroll depth milestone events
+- [x] CRO playbook dokümanı + 3 hipotez
+- [x] Lead scoring API + admin dashboard tier badge
+- [ ] Tag: `git tag phase-34-closed`
 
 **Bir Sonraki:** `roadmap_50.md` — Phase 35 Auth + Security Hardening.

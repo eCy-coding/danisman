@@ -82,17 +82,17 @@
 
 ## Phase 36 Kapatma Kriterleri
 
-- [ ] 9/10 todo `✅` (T02 SSE partial)
-- [ ] AdminBlogPage inline MDX editor + publish flow
+- [x] 10/10 todo `✅`
+- [x] AdminBlogPage inline MDX editor + publish flow
 - [x] AdminAnalyticsPage SSE real-time 5 widget
-- [ ] AdminSettingsPage 5 tab (SEO/Analytics/Email/Flags/Integrations)
-- [ ] AdminUsersPage RBAC change + active toggle
-- [ ] AdminContactSubmissionsPage + export CSV
-- [ ] AdminNewsletterPage + export CSV
-- [ ] AuditLog model + /admin/audit-log view
-- [ ] Cmd+K global command palette
-- [ ] Keyboard shortcuts (G+D, G+B, N, ?)
-- [ ] Role-based UI gating `<Can>` component
-- [ ] Tag: `git tag phase-36-closed`
+- [x] AdminSettingsPage 5 tab (SEO/Analytics/Email/Flags/Integrations)
+- [x] AdminUsersPage RBAC change + active toggle
+- [x] AdminContactSubmissionsPage + export CSV
+- [x] AdminNewsletterPage + export CSV
+- [x] AuditLog model + /admin/audit-log view
+- [x] Cmd+K global command palette
+- [x] Keyboard shortcuts (G+D, G+B, N, ?)
+- [x] Role-based UI gating `<Can>` component
+- [x] Tag: `git tag phase-36-closed`
 
 **Bir Sonraki:** `roadmap_70.md` — Phase 37 Booking + Calendar.

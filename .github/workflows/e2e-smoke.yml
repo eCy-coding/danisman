@@ -1,0 +1,60 @@
+name: E2E Smoke (Production)
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    # Nightly 05:30 UTC
+    - cron: '30 5 * * *'
+  workflow_dispatch:
+    inputs:
+      base_url:
+        description: 'Target URL (default: https://www.ecypro.com)'
+        required: false
+        default: 'https://www.ecypro.com'
+
+jobs:
+  smoke:
+    name: Playwright Smoke — ${{ matrix.browser }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    continue-on-error: true
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox, webkit]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps ${{ matrix.browser }}
+
+      - name: Run smoke tests (${{ matrix.browser }})
+        run: >
+          npx playwright test
+          --config=playwright.smoke.config.ts
+          --project=${{ matrix.browser }}
+        env:
+          E2E_BASE_URL: ${{ inputs.base_url || secrets.E2E_BASE_URL || 'https://www.ecypro.com' }}
+          CI: true
+
+      - name: Upload Playwright report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: smoke-report-${{ matrix.browser }}-${{ github.run_id }}
+          path: |
+            playwright-report-smoke/
+            test-results/smoke-results.json
+          retention-days: 14

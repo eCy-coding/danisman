@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import BlogList from '../components/blog/BlogList';
+import { NewsletterSidebar } from '../components/blog/NewsletterSidebar';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 
@@ -23,7 +24,10 @@ const BlogPage: React.FC = () => {
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[500px] bg-blue-900/10 blur-[120px] rounded-full pointer-events-none" />
 
         <div className="container mx-auto px-4 relative z-10">
-          <div className="text-center max-w-3xl mx-auto mb-20">
+          <section data-testid="insights-hero" className="text-center max-w-3xl mx-auto mb-20">
+            <p className="text-sm uppercase tracking-widest text-amber-400 mb-4 font-medium">
+              Perspektifler & Analiz
+            </p>
             <h1 className="text-4xl md:text-5xl font-serif text-white mb-6">
               <span className="bg-clip-text text-transparent bg-linear-to-r from-blue-200 to-white">
                 Strateji & AI Danışmanlığı İçgörüleri
@@ -36,9 +40,16 @@ const BlogPage: React.FC = () => {
                 Danışmanlık hizmetlerimiz →
               </Link>
             </p>
-          </div>
+          </section>
 
-          <BlogList />
+          <div className="flex gap-12 items-start">
+            <div className="flex-1 min-w-0">
+              <BlogList />
+            </div>
+            <aside className="hidden lg:block w-80 shrink-0">
+              <NewsletterSidebar />
+            </aside>
+          </div>
         </div>
       </div>
 

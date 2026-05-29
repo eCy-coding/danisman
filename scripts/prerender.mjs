@@ -16,7 +16,9 @@
  * Cost: ~30-60 s build-time overhead (depends on route count).
  * Trade-off: hydrated HTML is larger (~+50 KB per route). Acceptable.
  *
- * Opt-in: only runs when PRERENDER=1 set. Default build path unchanged.
+ * Chromium strategy:
+ *   VERCEL=1 → @sparticuz/chromium (pre-built, Lambda-compatible binary)
+ *   local    → playwright bundled chromium (full Playwright install)
  *
  * Usage:
  *   npm run build                       # default vite build (no prerender)
@@ -24,7 +26,6 @@
  *   PRERENDER=1 PRERENDER_ROUTES=/,/services npm run build  # subset
  */
 import { spawn } from 'node:child_process';
-import { chromium } from 'playwright';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -34,6 +35,9 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const distDir = path.resolve(__dirname, '..', 'dist');
 const port = Number(process.env.PRERENDER_PORT ?? 4179);
 const baseUrl = `http://127.0.0.1:${port}`;
+
+// Vercel sets VERCEL=1 in its build environment.
+const ON_VERCEL = process.env.VERCEL === '1';
 
 function getRoutes() {
   // Override via env (comma-separated).
@@ -84,6 +88,22 @@ function startPreviewServer() {
   });
 }
 
+async function launchBrowser() {
+  if (ON_VERCEL) {
+    // @sparticuz/chromium provides a Lambda/Vercel-compatible pre-built binary.
+    const { chromium } = await import('playwright-core');
+    const sparticuz = (await import('@sparticuz/chromium')).default;
+    return chromium.launch({
+      args: sparticuz.args,
+      executablePath: await sparticuz.executablePath(),
+      headless: true,
+    });
+  }
+  // Local: use full Playwright (bundled chromium, no extra deps).
+  const { chromium } = await import('playwright');
+  return chromium.launch();
+}
+
 async function prerenderRoute(browser, route) {
   const ctx = await browser.newContext({ ignoreHTTPSErrors: true, userAgent: 'eCyPro-Prerender/1.0' });
   const page = await ctx.newPage();
@@ -110,7 +130,7 @@ async function prerenderRoute(browser, route) {
 
 async function main() {
   // Opt-out instead of opt-in for production. Skip only when explicitly disabled
-  // (local dev, CI without browser binary, fast iteration).
+  // (local dev, fast iteration).
   if (process.env.PRERENDER === '0' || process.env.SKIP_PRERENDER === '1') {
     console.log('[prerender] skipped — PRERENDER=0 or SKIP_PRERENDER=1 set');
     return;
@@ -121,12 +141,13 @@ async function main() {
   }
 
   console.log('[prerender] starting preview server on', baseUrl);
+  console.log(`[prerender] chromium source: ${ON_VERCEL ? '@sparticuz/chromium' : 'playwright (local)'}`);
   const server = await startPreviewServer();
   await wait(500);
 
   const routes = getRoutes();
   console.log(`[prerender] prerendering ${routes.length} routes`);
-  const browser = await chromium.launch();
+  const browser = await launchBrowser();
   const results = [];
   for (const r of routes) {
     const res = await prerenderRoute(browser, r);
@@ -155,12 +176,17 @@ async function main() {
 
 main().catch((err) => {
   const msg = err?.message ?? String(err);
-  // Graceful skip on environments without Playwright browser binary
-  // (Vercel, Render, CI without `playwright install chromium`).
-  // Build continues; local dev/CI with chromium still runs full prerender.
+
+  // On Vercel: NEVER silently skip. A failed prerender = broken SEO shipped to prod.
+  if (ON_VERCEL) {
+    console.error('[prerender] FATAL on Vercel build — browser launch failed; refusing to ship SEO-broken build:', msg);
+    process.exit(1);
+  }
+
+  // Local only: graceful skip when no browser binary (fast iteration, stripped envs).
   const transient = [
     'browserType.launch',
-    'Executable doesn\'t exist',
+    "Executable doesn't exist",
     "Cannot find module 'playwright'",
     'Failed to launch',
     'spawn ENOENT',

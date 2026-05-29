@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { MDXProvider } from '@mdx-js/react';
-import { Calendar, Clock, ArrowLeft, Share2 } from 'lucide-react';
+import { Calendar, Clock, ArrowLeft } from 'lucide-react';
 import { motion } from 'motion/react';
 
 // P46 C5: MDX content'in ilk satırı `# Başlık` formatında olduğu için her blog
@@ -18,6 +18,9 @@ import { VoicePlayer } from '../components/ui/VoicePlayer';
 import { ScrollProgressBar } from '../components/ui/ScrollProgressBar';
 import { StickyTableOfContents } from '../components/ui/StickyTableOfContents';
 import { JsonLd } from '../components/seo/JsonLd';
+import { AuthorBio } from '../components/blog/AuthorBio';
+import { RelatedArticles } from '../components/blog/RelatedArticles';
+import { ShareButtons } from '../components/blog/ShareButtons';
 import { getBlogPosts } from '../lib/data';
 import { BlogPost } from '../schemas/blog';
 import { buildArticleSchema, buildBreadcrumbSchema } from '../lib/structured-data';
@@ -123,7 +126,7 @@ const BlogPostPage: React.FC = () => {
                 data-testid="blog-article"
               >
                 {/* Header */}
-                <header className="mb-12 text-center">
+                <header data-testid="article-hero" className="mb-12 text-center">
                   <div className="flex items-center justify-center gap-4 text-sm text-slate-400 mb-6">
                     <span className="bg-blue-500/10 text-blue-400 border border-blue-500/20 px-3 py-1 rounded-full uppercase tracking-wider text-xs font-bold">
                       {post.tags[0]}
@@ -163,7 +166,10 @@ const BlogPostPage: React.FC = () => {
                 {/* MDX Content — P46 C5: MDXProvider components mapping ile MDX'in
                     ilk H1'i (markdown # Title) H2'ye demote ediliyor. Önce 2 H1
                     vardı (BlogPostPage h1 + MDX h1 = SEO ihlali); şimdi 1 H1. */}
-                <div className="prose prose-lg prose-invert mx-auto prose-headings:font-serif prose-headings:text-white prose-a:text-blue-400 prose-img:rounded-xl prose-img:border prose-img:border-white/10 prose-blockquote:border-l-blue-500 prose-blockquote:bg-white/5 prose-blockquote:p-4 prose-blockquote:rounded-r-lg">
+                <div
+                  data-testid="article-body"
+                  className="prose prose-lg prose-invert mx-auto prose-headings:font-serif prose-headings:text-white prose-a:text-blue-400 prose-img:rounded-xl prose-img:border prose-img:border-white/10 prose-blockquote:border-l-blue-500 prose-blockquote:bg-white/5 prose-blockquote:p-4 prose-blockquote:rounded-r-lg"
+                >
                   {Content ? (
                     <MDXProvider components={MDX_COMPONENTS}>
                       <Content />
@@ -173,24 +179,18 @@ const BlogPostPage: React.FC = () => {
                   )}
                 </div>
 
-                {/* Author & Share */}
-                <div className="mt-16 pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-6">
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center text-white font-serif text-xl border-2 border-white/10">
-                      {post.author.charAt(0)}
-                    </div>
-                    <div>
-                      <div className="text-white font-semibold">{post.author}</div>
-                      <div className="text-xs text-slate-400">Yazar & Stratejist</div>
-                    </div>
+                <div className="mt-16 pt-8 border-t border-white/10 space-y-8">
+                  <div className="flex justify-between items-center">
+                    <ShareButtons url={`https://ecypro.com/blog/${post.slug}`} title={post.title} />
                   </div>
-                  <button
-                    type="button"
-                    className="flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 rounded-lg text-slate-300 transition-colors border border-white/10"
-                  >
-                    <Share2 className="w-4 h-4" />
-                    Paylaş
-                  </button>
+                  <AuthorBio author={post.author} />
+                  <RelatedArticles
+                    posts={(blogPosts as BlogPost[]).filter(
+                      (p) =>
+                        p.slug !== post.slug &&
+                        (p.tags.some((t) => post.tags.includes(t)) || p.category === post.category),
+                    )}
+                  />
                 </div>
               </motion.article>
               {post && <VoicePlayer content={`${post.title}. ${post.excerpt}`} />}

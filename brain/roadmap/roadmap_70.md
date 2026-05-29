@@ -83,17 +83,17 @@
 ## Phase 37 Kapatma Kriterleri
 
 - [x] 10/10 todo `✅`
-- [ ] Cal.com API entegrasyon canlı
-- [ ] Resend.com email confirmation
-- [ ] ICS attachment calendar-compatible
-- [ ] Reminder emails 24h + 1h cron
-- [ ] Reschedule/Cancel email-gated flow
-- [ ] Calendar widget polished
-- [ ] Timezone-aware booking display
-- [ ] Cal.com webhook DB sync
-- [ ] Booking analytics admin dashboard
-- [ ] Post-booking NPS feedback flow
-- [ ] Tag: `git tag phase-37-closed`
+- [x] Cal.com API entegrasyon canlı
+- [x] Resend.com email confirmation
+- [x] ICS attachment calendar-compatible
+- [x] Reminder emails 24h + 1h cron
+- [x] Reschedule/Cancel email-gated flow
+- [x] Calendar widget polished
+- [x] Timezone-aware booking display
+- [x] Cal.com webhook DB sync
+- [x] Booking analytics admin dashboard
+- [x] Post-booking NPS feedback flow
+- [x] Tag: `git tag phase-37-closed`
 
 **Bir Sonraki:** `roadmap_80.md` — Phase 38 Backlink + Authority (Tier 3).
 

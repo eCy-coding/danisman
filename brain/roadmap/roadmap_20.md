@@ -1,12 +1,6 @@
-# Roadmap 20 — PHASE 32: Keyword Strategy + Content Optimization ✅ TAMAMLANDI
+# Roadmap 20 — PHASE 32: Keyword Strategy + Content Optimization
 
 **Tier:** 1 (KRİTİK) · **Skor:** 9.0 · **Süre:** 1-2 hafta · **Todo:** T11-T20
-
-> **Reconcile 2026-05-29 (premise-verify):** 10/10 todo kodda hazır bulundu —
-> checkbox'lar geriden takip ediyordu. Kanıt her todo'da. Tek gerçek delta:
-> `scripts/audit-img-alt.ts` dinamik `alt={expr}` JSX'i tanımıyordu (34 false-positive)
-> + test fixture'larını sayıyordu → düzeltildi, artık 0 error. T03 H1 audit prerender
-> setinde (7 HTML) 2 fail gösterir; bu prerender-kapsam artefaktı, component H1'leri mevcut.
 
 **Stratejik Hedef:** 10 ana anahtar kelime için Google top-50 sıralama, 5 long-tail için top-20. Her landing page'in bir target keyword'ü olmalı.
 
@@ -90,14 +84,14 @@
 
 - [x] 10/10 todo `✅`
 - [x] `brain/seo/keywords-2026-05.md` 20 satır keyword matrisi
-- [x] Her sayfa meta title/description keyword-optimize (38 sayfa `Helmet`/SEO)
-- [x] Her landing page 1 H1 + target keyword (`scripts/audit-h1-keywords.ts`)
-- [x] 5 yeni long-tail blog post yayında (`src/content/blog/` 44 post, 5 hedef konu dahil)
-- [x] TR/EN keyword mapping tablosu (`brain/seo/keyword-tr-en-map.md`)
-- [x] Her hizmet sayfasında FAQ section + FAQPage schema (`FAQSection.tsx` + `structured-data.ts` + `ServiceDetailLayout.tsx`)
-- [x] Tüm img alt text audit geçti (`scripts/audit-img-alt.ts` → 0 error, fix sonrası)
-- [x] URL trailing slash konsistans + 301 redirect (`vercel.json trailingSlash:false`, #95)
-- [x] 3 pillar + cluster post yapısı (`/pillar/:slug` + `src/data/pillars-content.ts`)
-- [ ] Tag: `git tag phase-32-closed` (merge sonrası)
+- [x] Her sayfa meta title/description keyword-optimize
+- [x] Her landing page 1 H1 + target keyword
+- [x] 5 yeni long-tail blog post yayında
+- [x] TR/EN keyword mapping tablosu
+- [x] Her hizmet sayfasında FAQ section + FAQPage schema
+- [x] Tüm img alt text audit geçti
+- [x] URL trailing slash konsistans + 301 redirect
+- [x] 3 pillar + ≥5 cluster post yapısı (PillarPage.tsx 5 pillar + route wired)
+- [ ] Tag: `git tag phase-32-closed`
 
 **Bir Sonraki:** `roadmap_30.md` — Phase 33 LCP + Performance ≥90.
