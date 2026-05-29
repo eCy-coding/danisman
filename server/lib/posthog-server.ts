@@ -14,9 +14,18 @@
 
 import { createHash } from 'node:crypto';
 import { logger } from '../config/logger';
+import crypto from 'node:crypto';
 
 const KEY = process.env.POSTHOG_API_KEY ?? '';
 const HOST = (process.env.POSTHOG_HOST ?? 'https://eu.i.posthog.com').replace(/\/$/, '');
+
+/**
+ * One-way pseudonymisation: sha256(lower-cased email).
+ * distinctId arrives at PostHog as an opaque hex — no raw email at rest in PostHog.
+ */
+export function hashId(email: string): string {
+  return crypto.createHash('sha256').update(email.trim().toLowerCase()).digest('hex');
+}
 
 export interface CaptureInput {
   event: string;
