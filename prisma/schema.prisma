@@ -1406,6 +1406,10 @@ model BlogPost {
   featureOrder  Int?
   feedPinned    Boolean @default(false)
 
+  // InsightCategory FK (nullable — migrate to NOT NULL after backfill)
+  categoryId String?
+  category   InsightCategory? @relation(fields: [categoryId], references: [id])
+
   // İlişkiler
   series         Series?         @relation(fields: [seriesId], references: [id])
   draftHistory   DraftRevision[]
@@ -1424,6 +1428,7 @@ model BlogPost {
   @@index([viewCount(sort: Desc)])
   @@index([publishedAt(sort: Desc), isFeatured])
   @@index([status, primaryDomain])
+  @@index([categoryId, publishedAt(sort: Desc)])
   @@map("blog_posts")
 }
 
@@ -1501,4 +1506,38 @@ model ViewLog {
   @@index([postId, createdAt(sort: Desc)])
   @@index([createdAt(sort: Desc)])
   @@map("view_logs")
+}
+
+// ─── Perspektif Category Management ──────────────────────────────────────────
+
+enum CategoryStatus {
+  ACTIVE
+  ARCHIVED
+}
+
+model InsightCategory {
+  id           String            @id @default(cuid())
+  slug         String            @unique
+  slugEn       String?           @unique
+  nameTr       String
+  nameEn       String?
+  descTr       String?           @db.Text
+  descEn       String?           @db.Text
+  domain       Domain
+  parentId     String?
+  parent       InsightCategory?  @relation("CategoryHierarchy", fields: [parentId], references: [id])
+  children     InsightCategory[] @relation("CategoryHierarchy")
+  iconName     String?
+  colorAccent  String?
+  displayOrder Int               @default(0)
+  status       CategoryStatus    @default(ACTIVE)
+  createdBy    String?
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+  posts        BlogPost[]
+
+  @@index([domain, status, displayOrder])
+  @@index([parentId])
+  @@index([slug])
+  @@map("insight_categories")
 }
