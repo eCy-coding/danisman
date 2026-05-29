@@ -86,19 +86,17 @@ export const FounderPage: React.FC = () => {
   return (
     <>
       <Helmet>
-        <title>Emre Can Yalçın — Kurucu & Baş Stratejist | eCyPro Premium Consulting</title>
+        {/* P32-T12: keyword-optimised title (primary: "stratejik danışman" / "strategy consultant Turkey") */}
+        <title>Emre Can Yalçın — Kurucu Stratejik Danışman | eCyPro Consulting</title>
         <meta
           name="description"
-          content="Emre Can Yalçın, eCyPro Premium Consulting kurucusu. 10+ yıl danışmanlık, 120+ stratejik karar, Big4 metodolojisi boutique çevikliğiyle. Türkiye-AB köprüsünde stratejik yönetim."
+          content="Emre Can Yalçın — eCyPro kurucusu, Türkiye-AB köprüsünde stratejik danışman. 10+ yıl deneyim, 120+ karar, Big4 metodolojisi boutique çevikliğiyle. Her projede doğrudan eşlik eder."
         />
         <link rel="canonical" href={buildCanonical('/founder', 'tr')} />
-        <meta
-          property="og:title"
-          content="Emre Can Yalçın — Kurucu & Baş Stratejist | eCyPro Premium Consulting"
-        />
+        <meta property="og:title" content="Emre Can Yalçın — Kurucu Stratejik Danışman | eCyPro" />
         <meta
           property="og:description"
-          content="10+ yıl danışmanlık, 120+ stratejik karar. Big4 metodolojisi boutique çevikliğiyle."
+          content="10+ yıl danışmanlık, 120+ stratejik karar. Türkiye-AB köprüsünde Big4-alternatif boutique lider."
         />
         <meta property="og:type" content="profile" />
         <meta property="og:url" content={buildCanonical('/founder', 'tr')} />

@@ -11,9 +11,19 @@ export const IndustriesPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-neutral">
+      {/* P32-T12: keyword-optimised title (primary: "sektörel danışmanlık hizmetleri" / "industry consulting Turkey") */}
       <SEO
-        title={getLang(INDUSTRIES_COPY.title as MultiLang, lang)}
-        description={getLang(INDUSTRIES_COPY.subtitle as MultiLang, lang)}
+        title={
+          lang === 'tr'
+            ? 'Sektörel Danışmanlık Hizmetleri — Finans, Teknoloji, Kamu | eCyPro'
+            : 'Industry-Specific Consulting — Finance, Tech, Public Sector | eCyPro'
+        }
+        description={
+          lang === 'tr'
+            ? 'eCyPro sektörel danışmanlık: FinTech, HealthTech, enerji, perakende ve kamu sektörü için özelleştirilmiş stratejik yönetim ve dijital dönüşüm hizmetleri.'
+            : 'eCyPro industry consulting: tailored strategic management and digital transformation for FinTech, HealthTech, energy, retail and public sector organizations.'
+        }
+        canonical="/industries"
       />
       <JsonLd
         data={buildBreadcrumbSchema([

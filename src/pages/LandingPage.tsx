@@ -48,15 +48,16 @@ export const LandingPage: React.FC = () => {
   // P46 C2: Homepage SEO — was relying on SeoManager defaults; now sets per-page
   // title/description/canonical so SeoManager fallback isn't needed.
   const { language: lang } = useTranslation();
-  // Track C #6 — anasayfa unique title + description (140-160 char body).
+  // P32-T12: keyword-optimised title/description per keyword matrix (brain/seo/keywords-2026-05.md).
+  // TR primary: "stratejik danışmanlık" + "KVKK danışmanlık" | EN primary: "KVKK compliance consulting".
   const title =
     lang === 'tr'
-      ? 'eCyPro — KVKK + EU Regulatory Consulting'
-      : 'eCyPro — KVKK + EU Regulatory Consulting';
+      ? 'Stratejik Danışmanlık & KVKK Uyumu | eCyPro Premium Consulting'
+      : 'KVKK Compliance & Strategic Consulting | eCyPro';
   const description =
     lang === 'tr'
-      ? 'eCyPro Premium Consulting: KVKK, GDPR ve AB regülasyon uyumu için stratejik danışmanlık. Veri yönetişimi, dijital dönüşüm ve kurumsal risk programları.'
-      : 'eCyPro Premium Consulting: KVKK, GDPR, and EU regulatory compliance advisory. Data governance, digital transformation, and enterprise risk programs.';
+      ? 'eCyPro: Stratejik danışmanlık, KVKK ve AB regülasyon uyumu, operasyonel verimlilik. Boutique Big4-alternatif — founder Emre Can Yalçın doğrudan eşlik eder.'
+      : 'eCyPro: KVKK compliance consulting, GDPR advisory, strategic management & digital transformation. Turkey–EU boutique firm — founder-led every engagement.';
 
   return (
     <>

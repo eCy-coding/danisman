@@ -14,6 +14,8 @@ import { useTranslation } from 'react-i18next';
 import { PageWrapper } from '../components/layout/PageWrapper';
 import { ServicesClusterSection } from '../components/sections/ServicesClusterSection';
 import { ServicesDiscoveryCTA } from '../components/sections/ServicesDiscoveryCTA';
+// P32-T17: FAQSection with FAQPage JSON-LD for "People Also Ask" rich snippets
+import { FAQSection } from '../components/blog/FAQSection';
 
 // P6 — below-fold heavy components are lazy + intersection-gated so Lighthouse
 // can reach CPU idle on this route (previously PAGE_HUNG across 4 consecutive
@@ -136,13 +138,18 @@ export const ServicesPage: React.FC = () => {
   return (
     <React.Fragment>
       <Helmet>
-        <title>{lang === 'tr' ? 'Hizmetlerimiz' : 'Our Services'} | eCyPro</title>
+        {/* P32-T12: keyword-optimised title (primary: "stratejik danışmanlık hizmetleri" / "management consulting Turkey") */}
+        <title>
+          {lang === 'tr'
+            ? 'Stratejik Danışmanlık Hizmetleri — KVKK, Dijital Dönüşüm | eCyPro'
+            : 'Management Consulting Services — KVKK, Digital Transformation | eCyPro'}
+        </title>
         <meta
           name="description"
           content={
             lang === 'tr'
-              ? 'KVKK uyumu, EU regülasyonu, stratejik yönetim ve dijital dönüşüm hizmetleri. Premium consulting metodolojisi, sektörel benchmark.'
-              : 'KVKK compliance, EU regulatory advisory, strategic management, and digital transformation services. Premium consulting methodology with sector benchmarks.'
+              ? 'Stratejik yönetim danışmanlığı, KVKK & AB regülasyon uyumu, operasyonel verimlilik ve dijital dönüşüm. Big4-alternatif boutique metodoloji, sektörel benchmark.'
+              : 'Strategic management consulting, KVKK & EU regulatory compliance, operational efficiency and digital transformation. Big4-alternative boutique methodology, sector benchmarks.'
           }
         />
         <meta name="theme-color" content="#0d1b2a" />
@@ -325,6 +332,70 @@ export const ServicesPage: React.FC = () => {
 
       {/* atom-2-2/3/4/5: 4 cluster grouped view */}
       <ServicesClusterSection />
+
+      {/* P32-T17: FAQ section — FAQPage JSON-LD rich snippet */}
+      <div className="max-w-4xl mx-auto px-6 md:px-12 pb-8">
+        <FAQSection
+          title={lang === 'tr' ? 'Sık Sorulan Sorular' : 'Frequently Asked Questions'}
+          items={
+            lang === 'tr'
+              ? [
+                  {
+                    question: 'Danışmanlık hizmeti ne kadar sürer?',
+                    answer:
+                      'Kapsama bağlı olarak 4 haftadan 12 aya kadar değişir. Stratejik yol haritası projeleri genellikle 8-12 hafta, KVKK uyum projeleri 4-8 hafta, kapsamlı dönüşüm programları 6-12 ay sürer. İlk keşif görüşmesinde projeye özgü takvim netleştirilir.',
+                  },
+                  {
+                    question: 'Hangi büyüklükteki şirketlere hizmet veriyorsunuz?',
+                    answer:
+                      "Temel olarak 50-500 çalışan aralığındaki orta ölçekli kurumlara ve aile şirketlerine hizmet veriyoruz. KOBİ'lere yönelik Starter paketi ve kurumsal müşteriler için Enterprise özel kapsamı da sunuyoruz.",
+                  },
+                  {
+                    question: 'KVKK ve GDPR aynı anda çözülebilir mi?',
+                    answer:
+                      "Evet. AB ile iş yapan Türk firmalar için GDPR-first yaklaşımı benimseyerek KVKK'yı üstüne inşa ediyoruz. Bu yaklaşım hem iki ayrı projeye gerek olmadan uyumu sağlar, hem de gelecek AB yeterlilik kararına hazırlar.",
+                  },
+                  {
+                    question: 'Uzaktan hizmet veriyor musunuz?',
+                    answer:
+                      "Evet. Hizmetlerimizin %80'i online olarak yürütülebilir. Özellikle strateji workshop'ları, KVKK uyum süreçleri ve dijital dönüşüm yol haritası çalışmaları tam uzaktan gerçekleştirilir. Gerektiğinde yerinde çalışma da yapıyoruz.",
+                  },
+                  {
+                    question: 'Projeyi kim yürütecek?',
+                    answer:
+                      'Founder Emre Can Yalçın her projede bizzat yer alır — sadece satış sürecinde değil, teslim aşamasında da. Junior delegasyon yok; boutique modelin temel farkı bu.',
+                  },
+                ]
+              : [
+                  {
+                    question: 'How long does a consulting engagement take?',
+                    answer:
+                      'Timelines vary from 4 weeks to 12 months depending on scope. Strategic roadmap projects typically take 8-12 weeks, KVKK compliance 4-8 weeks, and comprehensive transformation programs 6-12 months. The exact timeline is clarified in the initial discovery call.',
+                  },
+                  {
+                    question: 'What size companies do you work with?',
+                    answer:
+                      'We primarily serve mid-market organizations with 50-500 employees and family businesses. We also offer a Starter package for SMEs and custom Enterprise scope for larger institutions.',
+                  },
+                  {
+                    question: 'Can KVKK and GDPR compliance be handled together?',
+                    answer:
+                      'Yes. For Turkish firms doing business in the EU, we use a GDPR-first approach and layer KVKK compliance on top. This avoids two separate projects and prepares you for the upcoming EU adequacy decision for Turkey.',
+                  },
+                  {
+                    question: 'Do you work remotely?',
+                    answer:
+                      'Yes. 80% of our services can be delivered entirely online. Strategy workshops, compliance projects, and digital transformation roadmaps are commonly done remotely. On-site work is available when needed.',
+                  },
+                  {
+                    question: 'Who will actually work on my project?',
+                    answer:
+                      'Founder Emre Can Yalçın is personally involved in every engagement — not just the sales process, but delivery as well. No junior delegation; that is the core differentiator of the boutique model.',
+                  },
+                ]
+          }
+        />
+      </div>
 
       {/* atom-2-6: Discovery CTA with KVKKBadge */}
       <ServicesDiscoveryCTA />

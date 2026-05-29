@@ -1,0 +1,134 @@
+---
+title: "GDPR ve KVKK Farkları: Türk Şirketleri için Karşılaştırmalı Analiz"
+date: "2026-05-29"
+category: "KVKK & Regülasyon"
+readTime: "8 dk"
+excerpt: "GDPR ile KVKK arasındaki temel farklar: ceza hesaplama, kapsam, ilgili kişi hakları ve veri transferi. AB ile iş yapan Türk şirketleri için pratik rehber."
+author: "eCyPro Consulting"
+lang: "tr"
+tags: ["GDPR", "KVKK", "AB regülasyon", "veri koruma", "Türkiye-AB"]
+---
+
+import { FAQSection } from '../../components/blog/FAQSection';
+
+# GDPR ve KVKK Farkları
+
+AB ile iş yapan Türk şirketleri iki farklı veri koruma rejimiyle çalışmak zorunda: KVKK ve GDPR. İkisi benzer ama kritik farklılıkları var. Bu rehber operasyonel karar vermenize yardımcı olacak pratik bir karşılaştırma sunuyor.
+
+## Temel Karşılaştırma Tablosu
+
+| Konu | KVKK (TR) | GDPR (AB) |
+|------|-----------|-----------|
+| Yürürlük tarihi | 2016 | 2018 |
+| Denetim otoritesi | Kişisel Verileri Koruma Kurumu (KVKK) | Ülkeye göre değişen (Almanya: BfDI, Fransa: CNIL) |
+| Kapsam | Türkiye merkezli veri sorumluları | AB'deki kişilerin verilerini işleyen tüm kuruluşlar |
+| Ceza (azami) | 1.000.000 TL | Global cironun %4'ü veya 20M EUR |
+| DPO zorunluluğu | Hayır (önerilen) | Belirli koşullarda evet |
+| İhlal bildirimi | 72 saat | 72 saat |
+| Veri taşınabilirliği | Sınırlı | Kapsamlı |
+
+## Kapsam: Hangi Şirketler İkisine De Uymak Zorunda?
+
+### Sadece KVKK
+Türkiye'de faaliyet gösterip AB vatandaşlarının verisini işlemeyen firmalar.
+
+### Sadece GDPR
+AB merkezli, Türkiye'de temsilcisi olmayan şirketler.
+
+### Her İkisi
+- AB şirketleriyle ortaklık/tedarikçi ilişkisi olan Türk firmalar
+- Türkiye'de ofisi olan çok uluslu şirketler
+- AB vatandaşlarına ürün/hizmet sunan Türk e-ticaret platformları
+- Türkiye'li çalışanı olan AB şirketlerinin Türk bağlı ortaklıkları
+
+## Kritik Farklılıklar: Detaylı Analiz
+
+### 1. Ceza Hesaplama
+
+**KVKK:** Sabit tutar cezalar
+- Her ihlal türü için kendi ceza bandı
+- 2026 yılında bandlar önemli ölçüde artırıldı
+- Birden fazla ihlal birikimli uygulanabilir
+
+**GDPR:** Ciro bazlı ceza (iki katmanlı)
+- Hafif ihlaller: Yıllık global cironun %2'si veya 10M EUR
+- Ağır ihlaller: Yıllık global cironun %4'ü veya 20M EUR
+
+**Pratik etki:** Küçük Türk şirketi için KVKK cezası görece düşük ama AB'de AB pazarına satış yapıyorsa GDPR cezası çok daha ağır olabilir.
+
+### 2. Meşru Menfaat Hukuki Dayanağı
+
+**KVKK:** Meşru menfaat alanı daha dar yorumlanıyor, kişisel veri işlemede öncelikli tercih rıza ve sözleşme.
+
+**GDPR:** Meşru menfaat daha geniş — direkt pazarlama, fraud önleme, çalışan verilerinin yönetimi gibi alanlarda yaygın kullanım.
+
+**Etki:** KVKK kapsamındaki işlemlerde daha fazla açık rıza toplamanız gerekebilir.
+
+### 3. Veri Taşınabilirliği
+
+**KVKK:** Md. 11'de "verilerin aktarılmasını talep etme" hakkı var ama makine-okunabilir formatta yapılandırılmış veri transferi zorunluluğu yok.
+
+**GDPR:** Makine-okunabilir, yaygın kullanılan formatta veri teslimi zorunlu (JSON, CSV gibi). Alternatif platforma doğrudan transfer hakkı.
+
+### 4. Çocuk Verilerinin İşlenmesi
+
+**KVKK:** Özel kural belirsiz — 18 yaş altı için veli rızası ilke olarak gerekli ama standart düzenleme yok.
+
+**GDPR:** 16 yaşın altı için ebeveyn/vasi rızası zorunlu (üye devletler 13'e indirebilir). Dijital hizmetlerde özellikle önemli.
+
+### 5. Yurt Dışına Veri Transferi
+
+**KVKK:**
+- Yeterli koruma düzeyi bulunan ülkelere serbest (liste yok)
+- Diğer ülkelere: Kurul onayı veya tarafların taahhütnamesi
+
+**GDPR:**
+- Yeterlilik kararı olan ülkelere serbest (liste var)
+- SCCs (Standart Sözleşme Maddeleri) en yaygın yöntem
+- BCRs (Bağlayıcı Şirket Kuralları) çok uluslu şirketler için
+
+> **Önemli:** Türkiye henüz AB tarafından yeterli koruma düzeyine sahip ülke olarak tanınmıyor. Türkiye'den AB'ye veri gönderirken SCCs kullanılmalı.
+
+## İkisine Birlikte Nasıl Uyum Sağlanır?
+
+İyi haber: GDPR'ı karşılayan bir sistem büyük ölçüde KVKK'yı da karşılar.
+
+**GDPR-first stratejisi:**
+1. GDPR uyumunu kur (daha kapsamlı standart)
+2. KVKK'ya özgü gereklilikleri üstte ekle:
+   - VERBİS kaydı (Türkiye'ye özgü)
+   - KVKK aydınlatma metni formatı
+   - Türkçe başvuru formu
+
+**Dikkat:** GDPR'ı karşılamak KVKK'yı otomatik karşılamaz. VERBİS, Türkçe belgeler ve yerel kurul denetimleri GDPR'da yok.
+
+## Türkiye'nin GDPR Yeterlilik Süreci
+
+Türkiye, AB tarafından yeterlilik kararı için değerlendiriliyor. 2026 itibarıyla süreç devam ediyor. Yeterlilik kararı gelirse:
+- Türkiye'den AB'ye veri transferinde SCCs zorunluluğu kalkar
+- AB şirketleriyle veri paylaşımı kolaylaşır
+- Türk teknoloji şirketlerinin AB pazarına erişimi hızlanır
+
+---
+
+<FAQSection
+  title="Sık Sorulan Sorular"
+  items={[
+    {
+      question: "AB'deki bir müşteriye hizmet satıyorsam GDPR'a uymak zorunda mıyım?",
+      answer: "Evet. GDPR'ın ekstra-territorial kapsamı gereği, AB'deki kişilere ürün/hizmet sunan veya AB'deki kişilerin davranışını izleyen tüm kuruluşlar, merkezi nerede olursa olsun GDPR'a tabidir."
+    },
+    {
+      question: "KVKK ile GDPR aynı anda ihlal edilirse ne olur?",
+      answer: "Her yetki alanı kendi cezasını uygular. Türk Kurul KVKK kapsamında, AB denetim otoritesi GDPR kapsamında ayrı işlem yapabilir. Pratikte çok uluslu ihlaller her iki otoritenin de gündemine girebilir."
+    },
+    {
+      question: "SCC (Standart Sözleşme Maddeleri) nedir?",
+      answer: "Avrupa Komisyonu'nun hazırladığı standart sözleşme şablonları. Türkiye'den AB'ye veri transferinde kullanılır. Güncel versiyon: 2021 SCCs (SCC 2021). İki modül: veri sorumlusu→veri sorumlusu ve veri sorumlusu→veri işleyen."
+    },
+    {
+      question: "Türk şirketi olarak DPO atamam gerekiyor mu?",
+      answer: "KVKK kapsamında zorunlu değil ama büyük ölçekli, yoğun veri işleyen kurumlara önerilen. GDPR kapsamındaysa: kamu kurumu, büyük ölçekli profilleme veya özel kategori veri işleme yapıyorsanız zorunlu."
+    }
+  ]}
+/>

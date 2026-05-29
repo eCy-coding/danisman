@@ -123,9 +123,18 @@ export const AboutPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-neutral text-white">
+      {/* P32-T12: keyword-optimised title (primary: "boutique yönetim danışmanlığı" / "boutique management consulting Turkey") */}
       <SEO
-        title={getLang(ABOUT_COPY.title as MultiLang, lang)}
-        description={getLang(ABOUT_COPY.missionDesc as MultiLang, lang)}
+        title={
+          lang === 'tr'
+            ? 'eCyPro Hakkında — Boutique Yönetim Danışmanlığı | İstanbul'
+            : 'About eCyPro — Boutique Management Consulting | Istanbul'
+        }
+        description={
+          lang === 'tr'
+            ? 'eCyPro, İstanbul merkezli Big4-alternatif boutique danışmanlık firması. Stratejik danışmanlık, KVKK uyumu ve operasyonel dönüşüm. Founder Emre Can Yalçın liderliğinde.'
+            : 'eCyPro is Istanbul-based Big4-alternative boutique consulting. Strategic advisory, KVKK compliance and operational transformation. Led by founder Emre Can Yalçın.'
+        }
         canonical="/about"
       />
       <JsonLd
