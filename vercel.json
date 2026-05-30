@@ -19,7 +19,13 @@
       "source": "/insights/:slug",
       "destination": "/blog/:slug",
       "permanent": true
-    }
+    },
+        {
+                "source": "/perspektifler",
+                "destination": "/blog",
+                "permanent": true,
+                "statusCode": 308
+        }
   ],
   "rewrites": [
     {
