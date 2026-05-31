@@ -1,7 +1,7 @@
 import React from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 import { useAdminAuth } from '../../../hooks/useAdminAuth';
-import { useAppStore } from '../../../store/useAppStore';
+import { useAppStore } from '../../../stores/useAppStore';
 
 export const ProtectedRoute: React.FC = () => {
   const { isAuthenticated, isLoading } = useAdminAuth();

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ShieldCheck, Lock, Mail, KeyRound, Loader2 } from 'lucide-react';
 import { useAdminAuth } from '../../hooks/useAdminAuth';
-import { useAppStore } from '../../store/useAppStore';
+import { useAppStore } from '../../stores/useAppStore';
 import { apiClient } from '../../lib/api';
 
 type Step = 'password' | 'totp';

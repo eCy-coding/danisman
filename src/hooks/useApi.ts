@@ -9,7 +9,7 @@ import {
   type BookingPayload,
   type ContactPayload,
 } from '@/lib/api';
-import { useAppStore } from '@/store/useAppStore';
+import { useAppStore } from '@/stores/useAppStore';
 import { QueryKeys } from '@/lib/query-client';
 
 // ─── Auth Hooks ──────────────────────────────────────────

@@ -12,7 +12,7 @@
 
 import { useCallback } from 'react';
 import { can as checkPermission, type UserRole } from '../lib/rbac';
-import { useAppStore } from '../store/useAppStore';
+import { useAppStore } from '../stores/useAppStore';
 
 export function useCan() {
   const role = useAppStore((s) => s.user?.role as UserRole | undefined) ?? null;

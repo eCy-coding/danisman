@@ -14,7 +14,7 @@ import {
   sortableKeyboardCoordinates,
   rectSortingStrategy,
 } from '@dnd-kit/sortable';
-import { useDashboardStore, Widget } from '../../store/useDashboardStore';
+import { useDashboardStore, Widget } from '../../stores/useDashboardStore';
 import { SortableWidget } from './SortableWidget';
 import { AIExecutiveSummary } from './widgets/AIExecutiveSummary';
 import { LiveTeamActivity } from './widgets/LiveTeamActivity';
