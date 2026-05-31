@@ -1,3 +1,4 @@
+import crypto from 'node:crypto';
 import { Router, Request, Response, NextFunction } from 'express';
 import { z } from 'zod';
 import { Prisma } from '@prisma/client';
@@ -33,7 +34,9 @@ router.post(
     try {
       const { email, consent, analyticsConsent, source } = subscribeSchema.parse(req.body);
       const key = email.toLowerCase();
-      const ip = req.ip ?? null;
+      const ip = req.ip
+        ? crypto.createHash('sha256').update(req.ip).digest('hex').slice(0, 16)
+        : null;
       const userAgent = (req.headers['user-agent'] ?? null) as string | null;
 
       const existing = await prisma.newsletterSubscriber.findUnique({ where: { email: key } });
