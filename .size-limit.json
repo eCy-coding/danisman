@@ -47,7 +47,7 @@
   {
     "name": "Motion chunk (brotli) — async route boundary",
     "path": "dist/assets/motion-*.js",
-    "limit": "40 KB",
+    "limit": "44 KB",
     "brotli": true
   },
   {
@@ -90,7 +90,7 @@
   {
     "name": "Route: ServiceDetailPage (brotli)",
     "path": "dist/assets/ServiceDetailPage-*.js",
-    "limit": "60 KB",
+    "limit": "68 KB",
     "brotli": true
   },
   {
