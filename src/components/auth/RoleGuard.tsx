@@ -1,5 +1,5 @@
 import React from 'react';
-import { useAppStore, type AppState } from '../../store/useAppStore';
+import { useAppStore, type AppState } from '../../stores/useAppStore';
 
 type UserRole = 'USER' | 'CLIENT' | 'CONSULTANT' | 'ADMIN' | 'PREMIUM';
 

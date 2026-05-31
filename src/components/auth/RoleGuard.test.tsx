@@ -2,11 +2,11 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { RoleGuard, AdminOnly } from './RoleGuard';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
-import * as AppStoreModule from '../../store/useAppStore';
-import { type AppState } from '../../store/useAppStore';
+import * as AppStoreModule from '../../stores/useAppStore';
+import { type AppState } from '../../stores/useAppStore';
 
 // Mock the module
-vi.mock('../../store/useAppStore', () => ({
+vi.mock('../../stores/useAppStore', () => ({
   useAppStore: vi.fn(),
 }));
 

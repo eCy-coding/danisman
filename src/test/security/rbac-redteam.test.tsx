@@ -10,7 +10,7 @@ import { render, screen } from '@testing-library/react';
 import { renderHook } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import React from 'react';
-import { useAppStore } from '../../store/useAppStore';
+import { useAppStore } from '../../stores/useAppStore';
 import { useCan } from '../../hooks/useCan';
 
 // Mock useAdminAuth to control auth state deterministically

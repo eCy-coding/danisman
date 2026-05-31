@@ -10,7 +10,7 @@ import {
 } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { Button } from '../ui/Button';
-import { useAppStore } from '../../store/useAppStore';
+import { useAppStore } from '../../stores/useAppStore';
 
 interface DashboardLayoutProps {
   children: React.ReactNode;

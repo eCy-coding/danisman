@@ -126,7 +126,7 @@ apiClient.interceptors.response.use(
 
     try {
       // Dynamically import store to avoid circular reference at module init
-      const { useAppStore } = await import('@/store/useAppStore');
+      const { useAppStore } = await import('@/stores/useAppStore');
       const { refreshToken, setAuth, logout } = useAppStore.getState();
 
       if (!refreshToken) {
@@ -161,7 +161,7 @@ apiClient.interceptors.response.use(
       return apiClient(original);
     } catch (refreshErr) {
       processQueue(refreshErr);
-      const { useAppStore } = await import('@/store/useAppStore');
+      const { useAppStore } = await import('@/stores/useAppStore');
       useAppStore.getState().logout();
       window.location.href = '/admin/login';
       return Promise.reject(refreshErr);

@@ -7,7 +7,7 @@ import { renderHook, waitFor, act } from '@testing-library/react';
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { useAdminAuth } from '../../hooks/useAdminAuth';
-import { useAppStore } from '../../store/useAppStore';
+import { useAppStore } from '../../stores/useAppStore';
 
 // Controlled promise — lets tests observe isLoading=true while getMe is in-flight
 let resolveGetMe: (v: unknown) => void;
