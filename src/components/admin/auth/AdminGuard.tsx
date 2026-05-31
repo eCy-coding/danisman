@@ -18,7 +18,7 @@
 import React from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 import { useAdminAuth } from '../../../hooks/useAdminAuth';
-import { useAppStore } from '../../../store/useAppStore';
+import { useAppStore } from '../../../stores/useAppStore';
 
 export type AdminRole = 'ADMIN' | 'EDITOR' | 'VIEWER';
 

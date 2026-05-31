@@ -105,9 +105,12 @@ async function launchBrowser() {
 }
 
 async function prerenderRoute(browser, route) {
-  const ctx = await browser.newContext({ ignoreHTTPSErrors: true, userAgent: 'eCyPro-Prerender/1.0' });
-  const page = await ctx.newPage();
+  let ctx;
   try {
+    // newContext/newPage inside the try: a dead-browser error becomes a failure
+    // result (handled + retried by main) instead of throwing out → FATAL.
+    ctx = await browser.newContext({ ignoreHTTPSErrors: true, userAgent: 'eCyPro-Prerender/1.0' });
+    const page = await ctx.newPage();
     await page.goto(`${baseUrl}${route}`, { waitUntil: 'domcontentloaded', timeout: 30_000 });
     await page.waitForLoadState('networkidle', { timeout: 15_000 }).catch(() => {});
     // Give Helmet a tick to flush head changes
@@ -124,7 +127,7 @@ async function prerenderRoute(browser, route) {
   } catch (err) {
     return { route, ok: false, error: err?.message ?? String(err) };
   } finally {
-    await ctx.close();
+    if (ctx) { try { await ctx.close(); } catch { /* ctx already gone */ } }
   }
 }
 
@@ -147,18 +150,39 @@ async function main() {
 
   const routes = getRoutes();
   console.log(`[prerender] prerendering ${routes.length} routes`);
-  const browser = await launchBrowser();
+  // On Vercel @sparticuz/chromium can crash mid-crawl (build-container memory).
+  // Relaunch + retry the affected route once (reactive) and relaunch every
+  // RELAUNCH_EVERY routes (proactive) to cap memory growth. Local never dies, so
+  // it just runs straight through.
+  let browser = await launchBrowser();
+  const RELAUNCH_EVERY = ON_VERCEL ? 20 : Infinity;
+  const isBrowserDead = (e) =>
+    /closed|crashed|disconnected|Target (page|closed)|Session closed|Protocol error/i.test(e || '');
   const results = [];
+  let sinceRelaunch = 0;
   for (const r of routes) {
-    const res = await prerenderRoute(browser, r);
+    let res = await prerenderRoute(browser, r);
+    if (!res.ok && isBrowserDead(res.error)) {
+      console.warn(`[prerender] ↻ ${r}: browser died — relaunch + retry`);
+      try { await browser.close(); } catch { /* already gone */ }
+      browser = await launchBrowser();
+      sinceRelaunch = 0;
+      res = await prerenderRoute(browser, r);
+    }
     results.push(res);
     if (res.ok) {
+      sinceRelaunch++;
       console.log(`  ✓ ${r}  (${(res.size / 1024).toFixed(1)} kB)  "${res.title}"`);
     } else {
       console.log(`  ✗ ${r}  ${res.error}`);
     }
+    if (sinceRelaunch >= RELAUNCH_EVERY) {
+      try { await browser.close(); } catch { /* already gone */ }
+      browser = await launchBrowser();
+      sinceRelaunch = 0;
+    }
   }
-  await browser.close();
+  try { await browser.close(); } catch { /* already gone */ }
   server.kill('SIGTERM');
 
   const ok = results.filter((r) => r.ok).length;

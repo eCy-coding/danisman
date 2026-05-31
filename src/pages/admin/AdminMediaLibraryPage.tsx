@@ -106,12 +106,20 @@ export const AdminMediaLibraryPage: React.FC = () => {
       </header>
 
       <div
+        role="button"
+        tabIndex={0}
         onDragOver={(e) => e.preventDefault()}
         onDrop={onDrop}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') fileInput.current?.click();
+        }}
+        aria-label="Dosya yükle: sürükle-bırak veya Enter/Boşluk ile seç"
         className="border-2 border-dashed border-white/15 rounded-xl p-8 text-center hover:border-secondary/40 transition-colors"
       >
         <UploadCloud size={28} className="text-slate-400 mx-auto mb-2" aria-hidden="true" />
-        <p className="text-sm text-slate-300">Dosyayı buraya sürükleyin veya "Yükle" düğmesini kullanın</p>
+        <p className="text-sm text-slate-300">
+          Dosyayı buraya sürükleyin veya "Yükle" düğmesini kullanın
+        </p>
         <p className="text-xs text-slate-500 mt-1">JPG/PNG/WebP/AVIF · max 10MB</p>
       </div>
 
@@ -126,9 +134,12 @@ export const AdminMediaLibraryPage: React.FC = () => {
       ) : (
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
           {items.map((m) => (
-            <article key={m.id} className="bg-white/[0.02] border border-white/10 rounded-xl overflow-hidden group">
+            <article
+              key={m.id}
+              className="bg-white/[0.02] border border-white/10 rounded-xl overflow-hidden group"
+            >
               <div className="aspect-video bg-white/5 overflow-hidden">
-                { }
+                {}
                 <img src={m.url} alt={m.alt ?? m.filename} className="w-full h-full object-cover" />
               </div>
               <div className="p-3">

@@ -127,7 +127,10 @@ router.get(
     const q = String(req.query.q ?? '').trim();
     const langRaw = String(req.query.lang ?? 'tr').toLowerCase();
     const lang: 'tr' | 'en' = langRaw === 'en' ? 'en' : 'tr';
-    const limit = Math.max(1, Math.min(50, Number.parseInt(String(req.query.limit ?? '20'), 10) || 20));
+    const limit = Math.max(
+      1,
+      Math.min(50, Number.parseInt(String(req.query.limit ?? '20'), 10) || 20),
+    );
     const cursor = decodeCursor(req.query.cursor as string | undefined);
 
     if (q.length === 0) {
@@ -194,14 +197,16 @@ router.get(
       const hasMore = rows.length > limit;
       const page = rows.slice(0, limit);
 
-      const results: SearchResult[] = page.map((r: any) => ({
-        type: 'service',
-        id: r.id,
-        slug: r.slug,
-        title: r.title,
-        snippet: stripTsHeadline(r.snippet),
-        rank: r.rank,
-      }));
+      const results: SearchResult[] = page.map(
+        (r: { id: string; slug: string; title: string; snippet: string; rank: number }) => ({
+          type: 'service',
+          id: r.id,
+          slug: r.slug,
+          title: r.title,
+          snippet: stripTsHeadline(r.snippet),
+          rank: r.rank,
+        }),
+      );
 
       const last = page[page.length - 1];
       const nextCursor = hasMore && last ? encodeCursor({ rank: last.rank, id: last.id }) : null;

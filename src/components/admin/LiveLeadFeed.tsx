@@ -11,7 +11,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Wifi, WifiOff, User, Clock, Building2 } from 'lucide-react';
 import { apiClient } from '../../lib/api';
-import { useAppStore } from '../../store/useAppStore';
+import { useAppStore } from '../../stores/useAppStore';
 
 interface LiveLead {
   id: string;

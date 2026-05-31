@@ -36,16 +36,24 @@ export const FormField: React.FC<FormFieldProps> = ({
       <div className="flex items-center gap-1.5">
         <label htmlFor={htmlFor} className="text-sm font-semibold text-slate-200">
           {label}
-          {required && <span className="text-red-400 ml-0.5" aria-hidden="true">*</span>}
+          {required && (
+            <span className="text-red-400 ml-0.5" aria-hidden="true">
+              *
+            </span>
+          )}
         </label>
         {tooltip && (
           <span
             className="group relative inline-flex"
             tabIndex={0}
-            role="tooltip"
+            role="button"
             aria-label={tooltip}
           >
-            <HelpCircle size={13} className="text-slate-500 hover:text-slate-300 cursor-help" aria-hidden="true" />
+            <HelpCircle
+              size={13}
+              className="text-slate-500 hover:text-slate-300 cursor-help"
+              aria-hidden="true"
+            />
             <span className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 hidden group-hover:block group-focus:block pointer-events-none bg-neutral border border-white/15 rounded-lg px-3 py-2 text-xs text-slate-300 w-64 z-10 shadow-2xl">
               {tooltip}
             </span>

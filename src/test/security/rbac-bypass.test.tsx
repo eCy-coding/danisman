@@ -8,7 +8,7 @@ import { renderHook } from '@testing-library/react';
 import { useCan } from '../../hooks/useCan';
 
 // Reset store between tests
-import { useAppStore } from '../../store/useAppStore';
+import { useAppStore } from '../../stores/useAppStore';
 
 // Mock router
 vi.mock('react-router-dom', async (importOriginal) => {

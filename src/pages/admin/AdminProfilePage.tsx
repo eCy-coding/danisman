@@ -13,7 +13,7 @@ import { useMutation } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { Save, Moon, Sun, KeyRound } from 'lucide-react';
 import { apiClient } from '../../lib/api';
-import { useAppStore } from '../../store/useAppStore';
+import { useAppStore } from '../../stores/useAppStore';
 import { Breadcrumb, Tabs, FormField, fieldClassName } from '../../components/admin/ui';
 import { TwoFactorSettings } from '../../components/admin/TwoFactorSettings';
 

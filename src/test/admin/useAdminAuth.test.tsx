@@ -41,7 +41,7 @@ let mockStoreState = {
   logout: mockStoreLogout,
 };
 
-vi.mock('@/store/useAppStore', () => ({
+vi.mock('@/stores/useAppStore', () => ({
   useAppStore: () => mockStoreState,
 }));
 

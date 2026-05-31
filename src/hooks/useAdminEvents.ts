@@ -8,7 +8,7 @@
 
 import { useEffect, useRef } from 'react';
 import { EventSourcePolyfill } from 'event-source-polyfill';
-import { useAppStore } from '../store/useAppStore';
+import { useAppStore } from '../stores/useAppStore';
 
 export type AdminEventType =
   | 'lead.created'
