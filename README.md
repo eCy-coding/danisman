@@ -173,7 +173,7 @@ npx tsx server/scripts/seed-admin.ts
 Script idempotent — aynı email ile tekrar çalıştırılırsa mevcut kullanıcıyı
 ADMIN rolüne yükseltir ve şifreyi günceller.
 
-Detaylı operasyon rehberi: [`RUNBOOK.md`](RUNBOOK.md).
+Detaylı operasyon rehberi: [`docs/guides/operations/RUNBOOK.md`](docs/guides/operations/RUNBOOK.md).
 
 ---
 
