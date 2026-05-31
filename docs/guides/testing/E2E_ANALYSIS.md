@@ -92,7 +92,7 @@ Date: 2025-01-07
 - [playwright.config.ts](playwright.config.ts) — Add webServer for mock API.
 - Create [server/api-mock.ts](server/api-mock.ts) — Mock endpoints.
 - [package.json](package.json) — Update e2e:local to start both mock servers.
-- [docs/E2E_LOCAL.md](docs/E2E_LOCAL.md) — Update with backend mock setup.
+- [docs/guides/testing/E2E_LOCAL.md](docs/guides/testing/E2E_LOCAL.md) — Update with backend mock setup.
 - Various e2e test files — Replace hardcoded localhost:3001 references with baseURL.
 
 ## Severity Summary

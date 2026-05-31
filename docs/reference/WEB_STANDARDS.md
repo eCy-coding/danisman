@@ -31,7 +31,7 @@
 
 ### 1.1 What this document is
 
-This is the **eCyPro Web Page Standard** — the single normative charter that defines what "done" means for any page or UI surface shipped in this repository. It is the **Definition of Done (DoD)** gate referenced by [`.github/pull_request_template.md`](../.github/pull_request_template.md).
+This is the **eCyPro Web Page Standard** — the single normative charter that defines what "done" means for any page or UI surface shipped in this repository. It is the **Definition of Done (DoD)** gate referenced by [`.github/pull_request_template.md`](../../.github/pull_request_template.md).
 
 ### 1.2 Normative force
 
@@ -45,7 +45,7 @@ When guidance conflicts, the following order applies (highest wins):
 
 1. Legal / KVKK compliance (see [§12](#12-security--privacy-kvkk)).
 2. This document.
-3. [`CLAUDE.md`](../CLAUDE.md) project conventions.
+3. [`CLAUDE.md`](../../CLAUDE.md) project conventions.
 4. Team convention / reviewer preference.
 
 ### 1.4 Override path
@@ -436,7 +436,7 @@ Budgets are enforced against **mobile** unless stated otherwise. Lighthouse runs
 
 - Styling **MUST** use Tailwind utilities. Custom CSS is permitted only when a utility cannot express the rule.
 - Class composition **MUST** use the `cn()` helper (`clsx` + `tailwind-merge`).
-- Magic numbers **MUST NOT** be used for spacing/typography — use the Fibonacci/φ scale (e.g. `gap-fib-7`, `text-golden-lg`). See [`CLAUDE.md`](../CLAUDE.md).
+- Magic numbers **MUST NOT** be used for spacing/typography — use the Fibonacci/φ scale (e.g. `gap-fib-7`, `text-golden-lg`). See [`CLAUDE.md`](../../CLAUDE.md).
 - `backdrop-blur` / glassmorphism is **MUST NOT** (design doctrine).
 
 ---
@@ -468,7 +468,7 @@ Coverage runs via `npm run test:coverage`.
 ### 9.4 No regressions
 
 - A PR **MUST NOT** leave any existing test broken.
-- Deleting a test is **MUST NOT** unless the user explicitly authorizes it (see [`CLAUDE.md`](../CLAUDE.md) test discipline).
+- Deleting a test is **MUST NOT** unless the user explicitly authorizes it (see [`CLAUDE.md`](../../CLAUDE.md) test discipline).
 - New features **MUST** ship with tests (test-first preferred).
 
 ### 9.5 Commands
@@ -512,7 +512,7 @@ Branches **MUST** use a conventional prefix:
 ### 10.3 Pull requests
 
 - PR title **MUST** start with an action verb + scope.
-- PR body **MUST** fill every section of [`.github/pull_request_template.md`](../.github/pull_request_template.md): **Why**, **What**, **How verified**, **Risk**.
+- PR body **MUST** fill every section of [`.github/pull_request_template.md`](../../.github/pull_request_template.md): **Why**, **What**, **How verified**, **Risk**.
 - The Definition-of-Done checklist (see [§13](#13-verification-checklist)) **MUST** be completed before requesting review.
 
 ### 10.4 Merge policy
@@ -598,7 +598,7 @@ Run via `npm run format`.
 
 ## 13. Verification Checklist
 
-Every PR that touches a page or shared UI surface **MUST** complete this 25-item Definition-of-Done checklist before review is requested. This list is mirrored in [`.github/pull_request_template.md`](../.github/pull_request_template.md).
+Every PR that touches a page or shared UI surface **MUST** complete this 25-item Definition-of-Done checklist before review is requested. This list is mirrored in [`.github/pull_request_template.md`](../../.github/pull_request_template.md).
 
 - [ ] **TR + EN parity** — `npm run i18n:parity` passes (no drift, no empty values)
 - [ ] **hreflang validator** — `tr-TR`, `en`, `x-default` present and correct
