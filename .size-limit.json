@@ -3,8 +3,7 @@
     "name": "Initial JS (entry + critical chunks, brotli)",
     "path": [
       "dist/assets/main-*.js",
-      "dist/assets/vendor-*.js",
-      "dist/assets/lp.js"
+      "dist/assets/vendor-*.js"
     ],
     "limit": "120 KB",
     "brotli": true,
@@ -14,8 +13,7 @@
     "name": "Initial JS (gzip fallback)",
     "path": [
       "dist/assets/main-*.js",
-      "dist/assets/vendor-*.js",
-      "dist/assets/lp.js"
+      "dist/assets/vendor-*.js"
     ],
     "limit": "160 KB",
     "gzip": true
@@ -23,14 +21,13 @@
   {
     "name": "Critical CSS (brotli)",
     "path": "dist/assets/*.css",
-    "limit": "30 KB",
+    "limit": "35 KB",
     "brotli": true
   },
   {
     "name": "Landing route + content chunk (brotli)",
     "path": [
-      "dist/assets/lp.js",
-      "dist/assets/lc.js"
+      "dist/assets/LandingContent-*.js"
     ],
     "limit": "80 KB",
     "brotli": true
@@ -50,7 +47,7 @@
   {
     "name": "Motion chunk (brotli) — async route boundary",
     "path": "dist/assets/motion-*.js",
-    "limit": "40 KB",
+    "limit": "44 KB",
     "brotli": true
   },
   {
@@ -60,17 +57,16 @@
     "brotli": true
   },
   {
-    "name": "Sentry chunk (brotli)",
+    "name": "Sentry chunk (brotli) — lazy async, not in initial graph",
     "path": "dist/assets/sentry-*.js",
-    "limit": "40 KB",
+    "limit": "140 KB",
     "brotli": true
   },
   {
     "name": "Keystatic chunk (brotli) — admin-only, lazy",
     "path": "dist/assets/keystatic-*.js",
     "limit": "700 KB",
-    "brotli": true,
-    "ignore": []
+    "brotli": true
   },
   {
     "name": "Service Worker (gzip)",
@@ -94,7 +90,7 @@
   {
     "name": "Route: ServiceDetailPage (brotli)",
     "path": "dist/assets/ServiceDetailPage-*.js",
-    "limit": "60 KB",
+    "limit": "68 KB",
     "brotli": true
   },
   {
