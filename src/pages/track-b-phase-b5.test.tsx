@@ -29,10 +29,13 @@ vi.mock('motion/react', () => ({
       React.createElement('section', props, children),
     ol: ({ children, ...props }: React.HTMLAttributes<HTMLOListElement>) =>
       React.createElement('ol', props, children),
+    article: ({ children, ...props }: React.HTMLAttributes<HTMLElement>) =>
+      React.createElement('article', props, children),
   },
   AnimatePresence: ({ children }: { children: React.ReactNode }) =>
     React.createElement(React.Fragment, null, children),
   useReducedMotion: () => false,
+  useInView: () => true,
 }));
 
 vi.mock('@/lib/i18n', () => ({
@@ -40,6 +43,43 @@ vi.mock('@/lib/i18n', () => ({
   getLang: (obj: { tr: string; en: string }, _lang: string) => obj.tr,
   MultiLang: {},
   Language: {},
+}));
+
+const FOUNDER_TR: Record<string, unknown> = {
+  'hero.badge': 'Kurucu & Baş Stratejist',
+  'hero.cta_linkedin': 'LinkedIn',
+  'hero.stat_experience': '10+ yıl pratik',
+  'hero.stat_decisions': '120+ stratejik karar',
+  'hero.stat_sectors': '12+ sektör',
+  'philosophy.title': 'Danışmanlık Felsefesi',
+  'philosophy.cards': [
+    { title: 'Boutique Hız, Big4 Derinliği', desc: '' },
+    { title: 'Türkiye-AB Köprüsü', desc: '' },
+    { title: 'Sonuca Taahhüt', desc: '' },
+  ],
+  'letters.badge': 'Kurucu Mektupları',
+  'letters.title': 'Düşünceler, Analizler, Sektörel Gözlemler',
+  'timeline.title': 'Kariyer Yolculuğu',
+  'timeline.items': [
+    { year: '2015', event: 'Big4 kariyer başlangıcı' },
+    { year: '2017', event: 'Kıdemli danışman' },
+    { year: '2019', event: 'Yönetim ortağı' },
+    { year: '2021', event: "eCyPro Premium Consulting'in kuruluşu" },
+    { year: '2023', event: 'ESG & CSRD uyum pratiği' },
+    { year: '2025', event: 'eCyverse ekosistem genişlemesi' },
+  ],
+  'comparison.rows': [],
+  credentials: [],
+};
+vi.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (k: string, opts?: Record<string, unknown>) => {
+      if (opts?.returnObjects) return FOUNDER_TR[k] ?? [];
+      return (FOUNDER_TR[k] as string) ?? k;
+    },
+    i18n: { language: 'tr' },
+  }),
+  initReactI18next: { type: '3rdParty', init: () => {} },
 }));
 
 vi.mock('@/i18n/canonical', () => ({
@@ -112,7 +152,7 @@ describe('FounderPage', () => {
   it('renders founder badge label', async () => {
     const { FounderPage } = await import('./FounderPage');
     render(<FounderPage />, { wrapper: Wrapper });
-    expect(screen.getByText('Kurucu', { exact: true })).toBeTruthy();
+    expect(screen.getByText(/Kurucu & Baş Stratejist/i)).toBeTruthy();
   });
 
   it('renders philosophy section', async () => {
@@ -125,8 +165,8 @@ describe('FounderPage', () => {
     const { FounderPage } = await import('./FounderPage');
     render(<FounderPage />, { wrapper: Wrapper });
     expect(screen.getByText(/Boutique Hız, Big4 Derinliği/i)).toBeTruthy();
-    expect(screen.getByText('Türkiye-AB Köprüsü', { exact: true })).toBeTruthy();
-    expect(screen.getByText(/Kültür Önce, Strateji Sonra/i)).toBeTruthy();
+    expect(screen.getByText(/Türkiye-AB Köprüsü/i)).toBeTruthy();
+    expect(screen.getByText(/Sonuca Taahhüt/i)).toBeTruthy();
   });
 
   it('renders founder letters section', async () => {
@@ -145,14 +185,13 @@ describe('FounderPage', () => {
     const { FounderPage } = await import('./FounderPage');
     render(<FounderPage />, { wrapper: Wrapper });
     expect(screen.getByText('2021')).toBeTruthy();
-    expect(screen.getByText(/eCyPro'nun kuruluşu/i)).toBeTruthy();
+    expect(screen.getByText(/eCyPro.*kuruluşu/i)).toBeTruthy();
   });
 
   it('renders LinkedIn CTA', async () => {
     const { FounderPage } = await import('./FounderPage');
     render(<FounderPage />, { wrapper: Wrapper });
-    expect(screen.getByText(/LinkedIn'de Bağlanalım/i)).toBeTruthy();
-    const link = screen.getByRole('link', { name: /Bağlantı Kur/i });
+    const link = screen.getByTestId('contact-linkedin');
     expect(link.getAttribute('href')).toBe('https://linkedin.com/in/emrecnyalcin');
     expect(link.getAttribute('target')).toBe('_blank');
     expect(link.getAttribute('rel')).toBe('noopener noreferrer');
@@ -161,7 +200,7 @@ describe('FounderPage', () => {
   it('LinkedIn link has noopener noreferrer for security', async () => {
     const { FounderPage } = await import('./FounderPage');
     render(<FounderPage />, { wrapper: Wrapper });
-    const link = screen.getByRole('link', { name: /Bağlantı Kur/i });
+    const link = screen.getByTestId('contact-linkedin');
     expect(link.getAttribute('rel')).toBe('noopener noreferrer');
   });
 });

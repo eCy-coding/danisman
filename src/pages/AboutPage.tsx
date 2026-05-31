@@ -146,7 +146,7 @@ export const AboutPage: React.FC = () => {
       />
 
       {/* ── Hero ── */}
-      <section className="relative overflow-hidden pt-32 pb-24">
+      <section data-testid="about-hero" className="relative overflow-hidden pt-32 pb-24">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-20%,rgba(var(--color-primary-rgb),0.15),transparent)]" />
         <div className="absolute top-1/3 left-1/4 w-150 h-150 bg-secondary/5 rounded-full blur-[120px] pointer-events-none" />
         <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
@@ -286,7 +286,7 @@ export const AboutPage: React.FC = () => {
       </section>
 
       {/* ── Values ── */}
-      <section className="py-24 bg-white/1.5">
+      <section data-testid="about-values" className="py-24 bg-white/1.5">
         <div className="max-w-7xl mx-auto px-6 md:px-12">
           <FadeIn>
             <div className="text-center mb-16">

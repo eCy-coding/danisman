@@ -80,7 +80,10 @@ export const FounderPage: React.FC = () => {
 
       <PageWrapper className="bg-neutral">
         {/* ── Hero ── */}
-        <section className="relative pt-32 pb-16 px-6 md:px-12 overflow-hidden">
+        <section
+          data-testid="founder-hero"
+          className="relative pt-32 pb-16 px-6 md:px-12 overflow-hidden"
+        >
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_40%_at_30%_0%,rgba(37,99,235,0.08),transparent)] pointer-events-none" />
 
           <div className="relative max-w-7xl mx-auto">
@@ -120,7 +123,12 @@ export const FounderPage: React.FC = () => {
                   ))}
                 </ul>
 
-                <p className="text-slate-300 leading-relaxed mb-8 text-lg">{bio300}</p>
+                <p
+                  data-testid="founder-bio"
+                  className="text-slate-300 leading-relaxed mb-8 text-lg"
+                >
+                  {bio300}
+                </p>
 
                 <div className="flex flex-wrap gap-4 mb-10">
                   <Link
@@ -137,6 +145,7 @@ export const FounderPage: React.FC = () => {
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 px-8 py-4 min-h-[52px] rounded-xl border border-white/15 text-white font-semibold hover:bg-white/5 hover:border-white/30 transition-colors"
                     data-cta="founder-linkedin"
+                    data-testid="contact-linkedin"
                     data-track="cta-click"
                   >
                     {t('hero.cta_linkedin')} <ExternalLink size={16} />
@@ -168,6 +177,7 @@ export const FounderPage: React.FC = () => {
 
         {/* ── Big4 vs Boutique Comparison ── */}
         <section
+          data-testid="founder-comparison-matrix"
           aria-labelledby="comparison-title"
           className="px-6 md:px-12 py-20 border-t border-white/10"
         >
@@ -298,7 +308,10 @@ export const FounderPage: React.FC = () => {
         </section>
 
         {/* ── Founder Letters CTA ── */}
-        <section className="px-6 md:px-12 py-20 border-t border-white/10">
+        <section
+          data-testid="founder-letters"
+          className="px-6 md:px-12 py-20 border-t border-white/10"
+        >
           <div className="max-w-3xl mx-auto text-center">
             <FadeIn>
               <span className="inline-block text-xs font-bold tracking-widest text-secondary uppercase mb-4">

@@ -43,7 +43,18 @@ vi.mock('motion/react', () => ({
   motion: {
     div: ({ children, ...rest }: React.HTMLAttributes<HTMLDivElement>) =>
       React.createElement('div', rest, children),
+    article: ({ children, ...rest }: React.HTMLAttributes<HTMLElement>) =>
+      React.createElement('article', rest, children),
   },
+  AnimatePresence: ({ children }: { children: React.ReactNode }) =>
+    React.createElement(React.Fragment, null, children),
+}));
+vi.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (k: string) => k,
+    i18n: { language: 'tr' },
+  }),
+  initReactI18next: { type: '3rdParty', init: () => {} },
 }));
 
 import PricingPage from '../../pages/PricingPage';

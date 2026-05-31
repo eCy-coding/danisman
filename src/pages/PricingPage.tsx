@@ -122,7 +122,11 @@ export const PricingPage: React.FC = () => {
       <PageWrapper className="bg-neutral pt-32 pb-24">
         <div className="max-w-7xl mx-auto px-6">
           {/* ── Section 1: Hero ─────────────────────────────────────────── */}
-          <section aria-labelledby="pricing-hero-heading" className="text-center mb-24">
+          <section
+            data-testid="pricing-hero"
+            aria-labelledby="pricing-hero-heading"
+            className="text-center mb-24"
+          >
             <FadeIn immediate>
               <p className="text-sm font-semibold uppercase tracking-widest text-amber-400 mb-4">
                 {t('hero.badge')}
@@ -161,7 +165,11 @@ export const PricingPage: React.FC = () => {
           </section>
 
           {/* ── Section 2: 3 Tier cards ──────────────────────────────────── */}
-          <section aria-labelledby="tier-grid-heading" className="mb-24">
+          <section
+            data-testid="pricing-tiers"
+            aria-labelledby="tier-grid-heading"
+            className="mb-24"
+          >
             <h2 id="tier-grid-heading" className="sr-only">
               {t('tiers.heading_sr')}
             </h2>
@@ -264,7 +272,11 @@ export const PricingPage: React.FC = () => {
           </section>
 
           {/* ── Section 3: Feature matrix ─────────────────────────────────── */}
-          <section aria-labelledby="matrix-heading" className="mb-24">
+          <section
+            data-testid="pricing-feature-matrix"
+            aria-labelledby="matrix-heading"
+            className="mb-24"
+          >
             <h2
               id="matrix-heading"
               className="text-3xl font-serif font-bold text-white text-center mb-10"
@@ -334,7 +346,11 @@ export const PricingPage: React.FC = () => {
           </section>
 
           {/* ── Section 5: FAQ ────────────────────────────────────────────── */}
-          <section aria-labelledby="faq-heading" className="mb-20 max-w-3xl mx-auto">
+          <section
+            data-testid="pricing-faq"
+            aria-labelledby="faq-heading"
+            className="mb-20 max-w-3xl mx-auto"
+          >
             <h2
               id="faq-heading"
               className="text-3xl font-serif font-bold text-white text-center mb-10"
