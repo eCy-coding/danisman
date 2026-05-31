@@ -1509,49 +1509,49 @@ model ViewLog {
 // ─── CRM MODELS (Week 2) ─────────────────────────────────
 
 model Lead {
-  id String @id @default(cuid())
-  email String @unique
-  firstName String
-  lastName String
-  phone String?
-  company String
-  title String
-  industry String?
+  id          String  @id @default(cuid())
+  email       String  @unique
+  firstName   String
+  lastName    String
+  phone       String?
+  company     String
+  title       String
+  industry    String?
   companySize String? // Startup, SMB, Mid-Market, Enterprise
-  budget BigInt?
-  timeline String? // ASAP, This Month, Next Month, Next Quarter, Next Year
-  source String // Organic, Paid Ads, Referral, Direct, Event
+  budget      BigInt?
+  timeline    String? // ASAP, This Month, Next Month, Next Quarter, Next Year
+  source      String // Organic, Paid Ads, Referral, Direct, Event
 
   // Engagement metrics
-  emailsOpened Int @default(0)
-  emailsClicked Int @default(0)
+  emailsOpened    Int @default(0)
+  emailsClicked   Int @default(0)
   formSubmissions Int @default(0)
-  websiteVisits Int @default(0)
-  pageViewsCount Int @default(0)
+  websiteVisits   Int @default(0)
+  pageViewsCount  Int @default(0)
 
   // Purchase history
-  previousPurchases Int @default(0)
-  totalSpent BigInt @default(0)
+  previousPurchases Int    @default(0)
+  totalSpent        BigInt @default(0)
 
   // Status
   status String @default("New") // New, Contacted, Qualified, Proposal, Negotiation, Won, Lost
-  score Int @default(0) // 0-100
-  grade String @default("D") // A, B, C, D
+  score  Int    @default(0) // 0-100
+  grade  String @default("D") // A, B, C, D
 
   // Flags
   demoRequested Boolean @default(false)
-  trialSignup Boolean @default(false)
+  trialSignup   Boolean @default(false)
   needsFollowUp Boolean @default(false)
 
   // Relations
   activities LeadActivity[]
-  deals Deal[]
+  deals      Deal[]
 
   // Timestamps
-  createdAt DateTime @default(now())
-  lastContact DateTime @default(now())
+  createdAt    DateTime  @default(now())
+  lastContact  DateTime  @default(now())
   nextFollowUp DateTime?
-  updatedAt DateTime @updatedAt
+  updatedAt    DateTime  @updatedAt
 
   @@index([email])
   @@index([score])
@@ -1561,15 +1561,15 @@ model Lead {
 }
 
 model LeadActivity {
-  id String @id @default(cuid())
+  id     String @id @default(cuid())
   leadId String
-  lead Lead @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  lead   Lead   @relation(fields: [leadId], references: [id], onDelete: Cascade)
 
-  type String // email_open, email_click, form_submission, page_view, call, meeting, note
+  type        String // email_open, email_click, form_submission, page_view, call, meeting, note
   description String
-  metadata Json?
-  timestamp DateTime @default(now())
-  user String?
+  metadata    Json?
+  timestamp   DateTime @default(now())
+  user        String?
 
   @@index([leadId])
   @@index([timestamp])
@@ -1577,7 +1577,7 @@ model LeadActivity {
 }
 
 model EmailSequence {
-  id String @id @default(cuid())
+  id   String @id @default(cuid())
   name String
 
   active Boolean @default(true)
@@ -1589,13 +1589,13 @@ model EmailSequence {
 }
 
 model CRMReport {
-  id String @id @default(cuid())
-  name String
-  type String // leads, deals, revenue, performance
+  id             String   @id @default(cuid())
+  name           String
+  type           String // leads, deals, revenue, performance
   dateRangeStart DateTime
-  dateRangeEnd DateTime
-  metrics Json // ReportMetric[]
-  filters Json?
+  dateRangeEnd   DateTime
+  metrics        Json // ReportMetric[]
+  filters        Json?
 
   generatedAt DateTime @default(now())
   generatedBy String
