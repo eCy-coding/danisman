@@ -15,5 +15,5 @@ roadmap_50.md P35 T41-T50 güvenlik denetimi.
 6. CSP header: `curl -I http://localhost:4173 | grep -i "content-security"`
 7. Rate limit: `ls server/middleware/ | grep -i "rate\|limit"`
 
-Referans: prompts2/06-security-hardening.md
+Referans: docs/prompts/06-security-hardening.md
 Hedef: 0 HIGH severity, CSP nonce-based production

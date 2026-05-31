@@ -1,11 +1,11 @@
 ---
-description: Kod inceleme — prompts2/04-code-review-checklist.md tam denetim
+description: Kod inceleme — docs/prompts/04-code-review-checklist.md tam denetim
 allowed-tools: Read, Bash, Glob
 ---
 
 # /review $ARGUMENTS
 
-prompts2/04-code-review-checklist.md standartlarına göre $ARGUMENTS dosyasını incele.
+docs/prompts/04-code-review-checklist.md standartlarına göre $ARGUMENTS dosyasını incele.
 
 Kontrol sırası:
 1. `npm run typecheck && npm run lint` — statik analiz

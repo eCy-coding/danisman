@@ -23,7 +23,7 @@ This document defines the absolute final steps required to transition EcyPro fro
 *   **Goal:** Finalize the deployment scripts and output the handoff document.
 *   **Tasks:**
     *   [ ] Validate Terraform and Vercel/Render scripts.
-    *   [ ] Write the `ECYPRO_PUBLISH_READY_HANDOFF.md` containing final DNS, Env Var, and Admin instructions.
+    *   [ ] Write the `archive/phase-reports/ECYPRO_PUBLISH_READY_HANDOFF.md` containing final DNS, Env Var, and Admin instructions.
     *   [ ] Terminate AI session with the project in a 100% finished state.
 
 ---

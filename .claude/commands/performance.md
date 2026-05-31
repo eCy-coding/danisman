@@ -19,4 +19,4 @@ Hedef:
 - LCP ≤ 2.0s (production), CLS ≤ 0.05, INP ≤ 150ms
 - Lighthouse ≥ 90 production CDN
 
-Referans: prompts2/05-performance-audit.md
+Referans: docs/prompts/05-performance-audit.md

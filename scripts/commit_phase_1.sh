@@ -84,8 +84,8 @@ do_commit "test(e2e): admin leads E2E spec — capture + list + SSE (M6)"
 # M7: Docs + script
 git add \
   "docs/brand/VOICE_GUIDELINES.md" \
-  "docs/decisions/ADR-001-notion-proxy-pattern.md" \
-  "docs/decisions/LINT_TRIAGE_2026-05-26.md" \
+  "docs/adr/ADR-001-notion-proxy-pattern.md" \
+  "archive/phase-reports/LINT_TRIAGE_2026-05-26.md" \
   scripts/commit_phase_1.sh 2>/dev/null || true
 do_commit "docs(phase1): ADR-001 Notion proxy pattern + brand voice + lint triage"
 

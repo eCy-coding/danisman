@@ -54,4 +54,4 @@ roadmap_100.md başarı kriterleri:
 
 ## Notlar
 - brain/memory.md ile senkron tut
-- Referans: prompts2/10-ai-agent-orchestration.md
+- Referans: docs/prompts/10-ai-agent-orchestration.md

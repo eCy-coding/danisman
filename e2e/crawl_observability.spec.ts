@@ -89,12 +89,10 @@ test.describe('P40-T92: Lighthouse CI Fail-on-Regression', () => {
     ];
     const found = candidates.some((c) => fileExists(c));
     if (!found) {
-      test
-        .info()
-        .annotations.push({
-          type: 'note',
-          description: '.lighthouserc: config yok — Lighthouse CI assert eksik (P40-T92 pending)',
-        });
+      test.info().annotations.push({
+        type: 'note',
+        description: '.lighthouserc: config yok — Lighthouse CI assert eksik (P40-T92 pending)',
+      });
     }
   });
 
@@ -118,12 +116,10 @@ test.describe('P40-T92: Lighthouse CI Fail-on-Regression', () => {
   test('T92-c: .github/workflows/lighthouse.yml CI dosyası var', () => {
     const ciPath = path.join(ROOT, '.github', 'workflows', 'lighthouse.yml');
     if (!fs.existsSync(ciPath)) {
-      test
-        .info()
-        .annotations.push({
-          type: 'note',
-          description: 'lighthouse.yml CI workflow yok — P40-T92 pending',
-        });
+      test.info().annotations.push({
+        type: 'note',
+        description: 'lighthouse.yml CI workflow yok — P40-T92 pending',
+      });
     } else {
       const content = readFile('.github/workflows/lighthouse.yml');
       expect(content.length, 'lighthouse.yml boş').toBeGreaterThan(50);
@@ -152,12 +148,10 @@ test.describe('P40-T93: Log Aggregation (Better Stack / Axiom)', () => {
     const hasCloud =
       '@logtail/winston' in deps || 'axiom-node' in deps || '@axiomhq/winston' in deps;
     if (!hasCloud) {
-      test
-        .info()
-        .annotations.push({
-          type: 'note',
-          description: 'Cloud logging (Logtail/Axiom) yok — P40-T93 pending (local Winston var)',
-        });
+      test.info().annotations.push({
+        type: 'note',
+        description: 'Cloud logging (Logtail/Axiom) yok — P40-T93 pending (local Winston var)',
+      });
     }
   });
 
@@ -172,12 +166,10 @@ test.describe('P40-T93: Log Aggregation (Better Stack / Axiom)', () => {
         content.includes('rotating') ||
         content.includes('DailyRotate');
       if (!hasRotate) {
-        test
-          .info()
-          .annotations.push({
-            type: 'note',
-            description: `${c}: RotatingFileHandler eksik — P40-T93 best practice`,
-          });
+        test.info().annotations.push({
+          type: 'note',
+          description: `${c}: RotatingFileHandler eksik — P40-T93 best practice`,
+        });
       }
       return;
     }
@@ -256,21 +248,17 @@ test.describe('P40-T95: Status Page (Instatus / UpTimeKuma)', () => {
     for (const ep of candidates) {
       const res = await request.get(ep).catch(() => null);
       if (res && res.status() !== 404) {
-        test
-          .info()
-          .annotations.push({
-            type: 'note',
-            description: `Status endpoint: ${ep} (${res.status()})`,
-          });
+        test.info().annotations.push({
+          type: 'note',
+          description: `Status endpoint: ${ep} (${res.status()})`,
+        });
         return;
       }
     }
-    test
-      .info()
-      .annotations.push({
-        type: 'note',
-        description: 'Status endpoint yok — P40-T95 pending (Instatus/UpTimeKuma gerekiyor)',
-      });
+    test.info().annotations.push({
+      type: 'note',
+      description: 'Status endpoint yok — P40-T95 pending (Instatus/UpTimeKuma gerekiyor)',
+    });
   });
 
   test("T95-b: UptimeRobot veya Instatus env var .env.example'da (soft)", () => {
@@ -280,12 +268,10 @@ test.describe('P40-T95: Status Page (Instatus / UpTimeKuma)', () => {
     const hasUptime =
       content.includes('UPTIMEROBOT') || content.includes('INSTATUS') || content.includes('STATUS');
     if (!hasUptime) {
-      test
-        .info()
-        .annotations.push({
-          type: 'note',
-          description: '.env.example: uptime monitoring key yok — P40-T95 pending',
-        });
+      test.info().annotations.push({
+        type: 'note',
+        description: '.env.example: uptime monitoring key yok — P40-T95 pending',
+      });
     }
   });
 });
@@ -329,12 +315,10 @@ test.describe('P40-T97: Database Backup Automation', () => {
     ];
     const found = candidates.some((c) => fileExists(c));
     if (!found) {
-      test
-        .info()
-        .annotations.push({
-          type: 'note',
-          description: 'backup-db script yok — P40-T97 pending (Render managed backup var)',
-        });
+      test.info().annotations.push({
+        type: 'note',
+        description: 'backup-db script yok — P40-T97 pending (Render managed backup var)',
+      });
     }
   });
 
@@ -355,13 +339,10 @@ test.describe('P40-T98: Docker Registry CI/CD (GHCR)', () => {
   test('T98-a: Dockerfile mevcut', () => {
     const hasDf = fileExists('Dockerfile') || fileExists('docker/Dockerfile');
     if (!hasDf) {
-      test
-        .info()
-        .annotations.push({
-          type: 'note',
-          description:
-            'Dockerfile yok — P40-T98 pending (Vercel/Render managed deploy kullanılıyor)',
-        });
+      test.info().annotations.push({
+        type: 'note',
+        description: 'Dockerfile yok — P40-T98 pending (Vercel/Render managed deploy kullanılıyor)',
+      });
     }
   });
 
@@ -381,12 +362,10 @@ test.describe('P40-T98: Docker Registry CI/CD (GHCR)', () => {
     ];
     const found = ciWorkflows.find((c) => fileExists(c));
     if (!found) {
-      test
-        .info()
-        .annotations.push({
-          type: 'note',
-          description: 'GitHub Actions CI workflow yok — P40-T98 pending',
-        });
+      test.info().annotations.push({
+        type: 'note',
+        description: 'GitHub Actions CI workflow yok — P40-T98 pending',
+      });
     } else {
       const content = readFile(found);
       expect(content.length, `${found} boş`).toBeGreaterThan(50);
@@ -421,12 +400,10 @@ test.describe('P40-T99: Blue-Green Deployment', () => {
     if (found) {
       test.info().annotations.push({ type: 'note', description: `Deployment config: ${found}` });
     } else {
-      test
-        .info()
-        .annotations.push({
-          type: 'note',
-          description: 'Deployment config yok — soft pass (inline Vercel detection)',
-        });
+      test.info().annotations.push({
+        type: 'note',
+        description: 'Deployment config yok — soft pass (inline Vercel detection)',
+      });
     }
   });
 });
@@ -435,6 +412,7 @@ test.describe('P40-T99: Blue-Green Deployment', () => {
 test.describe('P40-T100: Incident Runbook + Postmortem Template', () => {
   test('T100-a: docs/INCIDENT_RUNBOOK.md veya RUNBOOK.md mevcut', () => {
     const candidates = [
+      'docs/guides/operations/INCIDENT_RUNBOOK.md',
       'docs/INCIDENT_RUNBOOK.md',
       'INCIDENT_RUNBOOK.md',
       'docs/RUNBOOK.md',
@@ -442,12 +420,10 @@ test.describe('P40-T100: Incident Runbook + Postmortem Template', () => {
     ];
     const found = candidates.some((c) => fileExists(c));
     if (!found) {
-      test
-        .info()
-        .annotations.push({
-          type: 'note',
-          description: 'INCIDENT_RUNBOOK.md yok — P40-T100 pending',
-        });
+      test.info().annotations.push({
+        type: 'note',
+        description: 'INCIDENT_RUNBOOK.md yok — P40-T100 pending',
+      });
     }
   });
 

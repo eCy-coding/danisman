@@ -5,7 +5,7 @@ allowed-tools: Read, Edit, Bash, Glob, Write
 
 # /test-gen $ARGUMENTS
 
-prompts2/07-testing-strategy.md tabanlı. $ARGUMENTS için test yaz.
+docs/prompts/07-testing-strategy.md tabanlı. $ARGUMENTS için test yaz.
 
 1. Mevcut test durumu: `npm run test -- --run 2>&1 | tail -5`
 2. $ARGUMENTS'ı oku — component/hook/API route/feature?
@@ -35,4 +35,4 @@ test('[user story]', async ({ page }) => {
 5. `npm run test -- --run 2>&1 | tail -5` doğrula
 6. Coverage: `npm run test -- --coverage 2>&1 | grep Lines | tail -2`
 
-Kural: Test silme/zayıflatma yasak. Referans: prompts2/07-testing-strategy.md
+Kural: Test silme/zayıflatma yasak. Referans: docs/prompts/07-testing-strategy.md

@@ -230,7 +230,7 @@ oluyor. Phase brief'inde aksi belirtilmedikçe direct ops.
 ## 9. Phase Sistemi (publish hazırlığı)
 
 Proje 17 fazlı publish hazırlık sürecinde. Aktif faz:
-[`outputs/P27_EXEC_FINAL.md`](outputs/P27_EXEC_FINAL.md). Master plan:
+[`brain/PUBLISH_MASTER_PLAN.md`](brain/PUBLISH_MASTER_PLAN.md). Master plan:
 [`brain/PUBLISH_MASTER_PLAN.md`](brain/PUBLISH_MASTER_PLAN.md).
 
 Phase brief'i her zaman:

@@ -90,7 +90,7 @@
 - `src/test/admin-retention-independence-ui.test.tsx` (5 tests)
 
 ### Docs / Scripts
-- `docs/decisions/ADR-003-kvkk-compliance-architecture.md`
+- `docs/adr/ADR-003-kvkk-compliance-architecture.md`
 - `docs/brand/VOICE_GUIDELINES.md`
 - `scripts/commit_phase_3.sh`
 

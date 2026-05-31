@@ -33,7 +33,7 @@ git add src/tokens/index.ts
 git commit -m "chore(tokens): barrel export src/tokens/index.ts"
 
 # Commit 7 — ADRs
-git add docs/decisions/ADR-008-design-token-system.md docs/decisions/ADR-009-motion-architecture.md
+git add docs/adr/ADR-008-design-token-system.md docs/adr/ADR-009-motion-architecture.md
 git commit -m "docs(adr): ADR-008 design token system + ADR-009 motion architecture (Phase B4 stub)"
 
 echo "=== 7 commits done. Pushing feat/track-b-ui-redesign ==="

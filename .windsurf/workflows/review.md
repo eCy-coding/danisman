@@ -1,5 +1,5 @@
 ---
-description: Kod inceleme — prompts2/04-code-review-checklist.md tam denetim
+description: Kod inceleme — docs/prompts/04-code-review-checklist.md tam denetim
 ---
 
 # /review [dosya_veya_diff]
@@ -22,7 +22,7 @@ git diff HEAD~1 --stat
 git log --oneline -5
 ```
 
-## Adım 3: Kod kalitesi kontrol listesi (prompts2/04)
+## Adım 3: Kod kalitesi kontrol listesi (docs/prompts/04)
 
 Şu sorular sırayla:
 1. TypeScript strict mode: `any` var mı? `as X` cast zorunlu mu?
@@ -51,5 +51,5 @@ Format:
 ```
 
 ## Notlar
-- Referans: prompts2/04-code-review-checklist.md
+- Referans: docs/prompts/04-code-review-checklist.md
 - Blokör varsa /fix workflow'una geç

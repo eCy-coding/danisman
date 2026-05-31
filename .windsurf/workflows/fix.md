@@ -62,6 +62,6 @@ Fix: [ne yapıldı]"
 ```
 
 ## Notlar
-- Referans: prompts2/04-code-review-checklist.md
+- Referans: docs/prompts/04-code-review-checklist.md
 - Sentry error ise: error.message + stack trace bak
 - Type error ise: `tsc --noEmit --strict`

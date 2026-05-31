@@ -37,7 +37,7 @@ res.setHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
 
 ## Adım 5: CSP (P35-T45)
 
-Production'da nonce-based CSP ekle — prompts2/06-security-hardening.md'yi oku.
+Production'da nonce-based CSP ekle — docs/prompts/06-security-hardening.md'yi oku.
 
 ## Adım 6: Rate limiting kontrol (P35-T47)
 
@@ -55,6 +55,6 @@ ls server/lib/hibp.ts 2>/dev/null && echo "MEVCUT" || echo "EKSİK — P35-T48 y
 ```
 
 ## Notlar
-- Referans: prompts2/06-security-hardening.md
+- Referans: docs/prompts/06-security-hardening.md
 - Hedef: 0 HIGH severity, CSP nonce-based
 - roadmap_50.md T41-T50 checklist'i kontrol et

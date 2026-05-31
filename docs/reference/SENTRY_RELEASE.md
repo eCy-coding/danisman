@@ -5,7 +5,7 @@
 
 ## Pipeline Overview
 
-The Vite build pipeline ([`vite.config.ts`](../vite.config.ts) line ~199) runs
+The Vite build pipeline ([`vite.config.ts`](../../vite.config.ts) line ~199) runs
 `@sentry/vite-plugin` only when `SENTRY_AUTH_TOKEN` is present in the
 environment. The plugin:
 
@@ -14,7 +14,7 @@ environment. The plugin:
 - Uploads minified bundles + hidden source-maps from `./dist/**`.
 - Tags the release with the deploy environment (defaults to `production`).
 
-The CI workflow ([`.github/workflows/ci.yml`](../.github/workflows/ci.yml))
+The CI workflow ([`.github/workflows/ci.yml`](../../.github/workflows/ci.yml))
 build job propagates the secrets only when the repository owner has configured
 them, so external forks and PRs without secret access still build successfully.
 
@@ -50,7 +50,7 @@ npm run build
 ## Server-Side (Next: P110b)
 
 `@sentry/node` already initializes when `SENTRY_DSN` is set in the server
-environment ([`server/index.ts`](../server/index.ts) line ~12). The next sub-phase
+environment ([`server/index.ts`](../../server/index.ts) line ~12). The next sub-phase
 will:
 
 - Add `pino` structured logger with request-id correlation.

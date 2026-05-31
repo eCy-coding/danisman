@@ -4,7 +4,7 @@ description: Test generation — Vitest unit + Playwright E2E piramit stratejisi
 
 # /test-gen [component_veya_feature]
 
-prompts2/07-testing-strategy.md tabanlı. Test önce, sonra kod.
+docs/prompts/07-testing-strategy.md tabanlı. Test önce, sonra kod.
 
 ## Adım 1: Mevcut test durumu
 
@@ -16,7 +16,7 @@ npx playwright test --list 2>&1 | wc -l
 
 ## Adım 2: Hangi test türü gerekli?
 
-Test piramidi (prompts2/07):
+Test piramidi (docs/prompts/07):
 ```
      /\  E2E (Playwright) — en az, en maliyetli
     /  \ Integration test — API + DB
@@ -73,5 +73,5 @@ npm run test -- --coverage 2>&1 | grep -E "Lines|Stmts" | tail -3
 
 ## Notlar
 - Test silme/zayıflatma yasak (istek1.txt)
-- Referans: prompts2/07-testing-strategy.md
+- Referans: docs/prompts/07-testing-strategy.md
 - E2E crawl'lar: npm run test:crawl

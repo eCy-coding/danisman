@@ -64,7 +64,7 @@ async function queryNotebookLM(brief) {
 }
 
 async function generateMDX(brief, research) {
-  const projectPrompt = fs.readFileSync(path.join(ROOT, 'docs/CLAUDE_PROJECT_PROMPT.md'), 'utf-8');
+  const projectPrompt = fs.readFileSync(path.join(ROOT, 'docs/prompts/CLAUDE_PROJECT_PROMPT.md'), 'utf-8');
   const systemPrompt = projectPrompt.split('## System Prompt')[1]?.trim() ?? '';
 
   const userPrompt = `

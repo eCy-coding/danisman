@@ -366,7 +366,7 @@ Phase 15 (Tailwind v4 cosmetic harmoni baseline) → Phase 17 (G1 Pricing, G2 Ne
 
 #### Yeni dosya
 
-- `ECYPRO_PUBLISH_READY_HANDOFF.md` — DevOps handoff: pipeline, Lighthouse, E2E, ENV, DNS, deploy steps, known issues, Phase 24 backlog.
+- `archive/phase-reports/ECYPRO_PUBLISH_READY_HANDOFF.md` — DevOps handoff: pipeline, Lighthouse, E2E, ENV, DNS, deploy steps, known issues, Phase 24 backlog.
 
 ---
 
@@ -583,7 +583,7 @@ Bu konsept Phase 25'te şu şekilde EcyPro'ya entegre edilebilir:
 5. **`prompts1/`** — 10 talep dosyası (talep1-10 + README)
    - Projenin tüm geliştirme aşamaları yapılandırıldı
 
-6. **`prompts2/`** — 10 ileri düzey prompt engineering doc
+6. **`docs/prompts/`** — 10 ileri düzey prompt engineering doc
    - system-master, feature-impl, ollama-guide, code-review,
    - performance-audit, security, testing, deployment, ADR, AI orchestration
 

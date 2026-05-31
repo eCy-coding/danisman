@@ -252,7 +252,7 @@ export function broadcastSSE(event: string, data: unknown): void {
 //
 // New canonical prefix: `/api/v1/*` — every contracted v1 surface.
 // Legacy alias: `/api/*` — same router, kept live until 2026-12-01 sunset
-// per docs/API_VERSIONING.md. The alias attaches a `Deprecation` and
+// per docs/reference/API_VERSIONING.md. The alias attaches a `Deprecation` and
 // `Sunset` header so SDK consumers see the migration window in logs.
 //
 // Frontend (VITE_API_URL) is intentionally NOT changed in this sprint
@@ -272,7 +272,7 @@ app.use(
     res.setHeader('Sunset', DEPRECATION_SUNSET_DATE);
     res.setHeader(
       'Link',
-      '</api/v1>; rel="successor-version", </docs/API_VERSIONING.md>; rel="deprecation"',
+      '</api/v1>; rel="successor-version", </docs/reference/API_VERSIONING.md>; rel="deprecation"',
     );
     return next();
   },

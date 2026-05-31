@@ -1,6 +1,6 @@
 <!--
   eCyPro Pull Request
-  This template enforces the Definition of Done from docs/WEB_STANDARDS.md.
+  This template enforces the Definition of Done from docs/reference/WEB_STANDARDS.md.
   Fill every section. Do not delete headings — write "N/A" if not applicable.
 -->
 
@@ -24,7 +24,7 @@
 
 ## Definition of Done
 
-> Normative gate — see [docs/WEB_STANDARDS.md](../docs/WEB_STANDARDS.md). Every box must be checked (or marked N/A with reason) before requesting review.
+> Normative gate — see [docs/reference/WEB_STANDARDS.md](../docs/reference/WEB_STANDARDS.md). Every box must be checked (or marked N/A with reason) before requesting review.
 
 - [ ] **TR + EN parity** — `npm run i18n:parity` passes (no drift, no empty values)
 - [ ] **hreflang validator** — `tr-TR`, `en`, `x-default` present and correct

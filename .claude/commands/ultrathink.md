@@ -17,8 +17,8 @@ $ARGUMENTS görevini şu boyutlardan analiz et:
 
 Şu dosyaları oku:
 - `brain/roadmap/roadmap_10.md` (P31 durumu)
-- `prompts2/01-system-master.md` (sistem kuralları)
-- `prompts2/09-architecture-decisions.md` (ADR)
+- `docs/prompts/01-system-master.md` (sistem kuralları)
+- `docs/prompts/09-architecture-decisions.md` (ADR)
 
 Çıktı formatı:
 ```

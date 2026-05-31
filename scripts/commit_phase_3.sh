@@ -48,7 +48,7 @@ FILES=(
   "src/pages/admin/AdminBreachPage.tsx"
   "src/pages/admin/AdminVERBISPage.tsx"
   "src/pages/admin/AdminRetentionPage.tsx"
-  "docs/decisions/ADR-003-kvkk-compliance-architecture.md"
+  "docs/adr/ADR-003-kvkk-compliance-architecture.md"
   "docs/brand/VOICE_GUIDELINES.md"
   "scripts/commit_phase_3.sh"
 )

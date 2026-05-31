@@ -23,8 +23,7 @@
         {
                 "source": "/perspektifler",
                 "destination": "/blog",
-                "permanent": true,
-                "statusCode": 308
+                "permanent": true
         }
   ],
   "rewrites": [

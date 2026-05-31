@@ -1,6 +1,6 @@
 /**
  * e2e/spider.spec.ts
- * Omni-Protocol V9: The Spider Crawler — prompts2/07-testing-strategy.md
+ * Omni-Protocol V9: The Spider Crawler — docs/prompts/07-testing-strategy.md
  *
  * Goal: Tüm sitemap URL'lerini ziyaret et, HTTP 200 + nav/footer doğrula.
  * Strategy:
@@ -42,7 +42,7 @@ const isAuthPage = (u: string) => /\/(login|register|forgot-password|reset-passw
 const isAdminPage = (u: string) => u.startsWith('/admin');
 const isDashboard = (u: string) => u.includes('/dashboard');
 
-test.describe('The Spider Crawler (Protocol V9) — prompts2/07', () => {
+test.describe('The Spider Crawler (Protocol V9) — docs/prompts/07', () => {
   test('Spider: Sitemap URL keşfi', () => {
     expect(URLS.length, "Sitemap'de URL yok — sitemap.xml oluşturulmamış").toBeGreaterThanOrEqual(
       1,
