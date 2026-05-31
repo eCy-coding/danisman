@@ -1,0 +1,101 @@
+# =============================================================
+# Vercel upload exclusions — sadece build için GEREKLİ dosyaları
+# bırak. node_modules + dist + e2e + brain + prompts* + infra
+# hepsi build edilecek source değil (vercel kendi build eder).
+# =============================================================
+
+# Build artifacts (vercel kendi build edecek)
+node_modules
+dist
+build
+.next
+.cache
+.parcel-cache
+.turbo
+out
+
+# Test artifacts
+coverage
+test-results
+playwright-report
+.early.coverage
+e2e
+__tests__
+**/__tests__
+
+# E2E build outputs
+e2e/**/dist
+e2e/node_modules
+
+# Lighthouse + perf reports
+lh-*
+lighthouse-reports
+*.lh.json
+
+# Logs + backup
+*.log
+*.bak
+*.bak-*
+*.tmp
+*.tsbuildinfo
+prisma/schema.prisma.bak-*
+package-lock.json.bak.*
+.env.production.bak-*
+
+# Dev tools (vercel build kullanmaz)
+.husky
+.storybook
+.ruff_cache
+.playwright-mcp
+.zap
+.windsurf
+.claire
+.sync
+.early
+.vscode
+.idea
+
+# Generated (build sırasında oluşacak)
+src/generated
+
+# Test + prototype source (build output'a girmez)
+src/test
+src/prototype
+**/*.test.ts
+**/*.test.tsx
+**/*.spec.ts
+**/*.spec.tsx
+
+# Project documentation (Vercel build için gereksiz)
+brain
+prompts
+prompts1
+prompts2
+docs
+DEPLOYMENT_DOCS
+VERCEL_DOCS
+CI
+infrastructure
+crowler
+audits
+dumps
+secrets
+outputs
+data
+
+# Phase reports (Layer C'ye taşındı)
+P[0-9]*_*.md
+
+# Mac
+.DS_Store
+._*
+
+# Old reports
+vercel-e2e-reports
+
+# Cleanup scripts (not deployed)
+scripts/cleanup
+scripts/__tests__
+
+# Old Vercel state
+.vercel
