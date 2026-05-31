@@ -130,6 +130,12 @@ npm run claude:update    # CLI güncelleme
 
 Proje 17 fazlı publish hazırlık sürecinde. Detay: `brain/PUBLISH_MASTER_PLAN.md`, `brain/FINAL_PUBLISH_ROADMAP.md`. Slash komut: `/phase-status`.
 
+## Dokümantasyon
+
+- **Tek giriş**: [`docs/README.md`](docs/README.md) — tüm `docs/` ağacının index'i (reference · guides · adr · prompts).
+- **Çalışma akışı**: [`docs/WORKFLOW.md`](docs/WORKFLOW.md) — Opus-planla → Sonnet-uygula → Opus-doğrula döngüsü + PBVC gate.
+- **Arşiv**: `archive/` — superseded/historical, source-of-truth değil ([archive/README.md](archive/README.md)).
+
 ## Slash Komutları (.claude/commands/)
 
 | Slash            | Açıklama                                   |
