@@ -223,3 +223,11 @@ PUSH_TO_REMOTE.command
 # Cron internal state (autonomous-development task)
 .claude/scheduled_tasks.lock
 cron_state.json
+
+# Gitleaks 2026-05-31 cleanup
+P39_*.command
+stats.html
+
+# Gitleaks 2026-05-31 cleanup
+P39_*.command
+stats.html
