@@ -415,6 +415,8 @@ const AnimatedRoutes = () => {
               </Suspense>
             }
           />
+          {/* /perspektifler canonical alias → /blog */}
+          <Route path="/perspektifler" element={<Navigate to="/blog" replace />} />
           {/* --- Perspektif Wave-3A PB-6 routes --- */}
           <Route
             path="/insights/search"
