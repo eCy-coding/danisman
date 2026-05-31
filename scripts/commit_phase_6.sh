@@ -49,7 +49,7 @@ git commit -m "feat(admin): Local Data Residency Badges + brand polish (M6)"
 
 # 7. Docs: ADR-007 + commit script
 git add \
-  docs/decisions/ADR-007-enterprise-data-architecture.md \
+  docs/adr/ADR-007-enterprise-data-architecture.md \
   scripts/commit_phase_6.sh
 git commit -m "docs(phase6): ADR-007 enterprise data architecture + commit script"
 

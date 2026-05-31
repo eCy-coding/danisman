@@ -29,7 +29,7 @@ Phase B4 built the complete motion infrastructure for eCyPro's premium UI. Three
 | `useMagneticCursor.ts` | L2 | ✅ Written |
 | `index.ts` | Barrel | ✅ Written |
 
-### 2. ADR-009 — `docs/decisions/ADR-009-motion-architecture.md`
+### 2. ADR-009 — `docs/adr/ADR-009-motion-architecture.md`
 
 Stub → complete. Sections: three-layer diagram, implementation files, reduced motion policy (3 patterns), bundle budget table (+40KB gz lazy), hook architecture table, card variant spec, alternatives considered, post-MVP improvements.
 
@@ -79,7 +79,7 @@ Both explicitly required in Phase B4 spec.
 
 ## Architecture Decisions
 
-See **ADR-009** (`docs/decisions/ADR-009-motion-architecture.md`) for full rationale. Key choices:
+See **ADR-009** (`docs/adr/ADR-009-motion-architecture.md`) for full rationale. Key choices:
 
 - **GSAP standard license** (free tier) — Club-only features (SplitText, CustomEase) deferred to post-MVP
 - **Hybrid GSAP + Motion v12** — GSAP owns scroll, Motion owns gesture. No mixing per component.

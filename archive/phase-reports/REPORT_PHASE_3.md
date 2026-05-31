@@ -72,7 +72,7 @@
 ### M8: Cross-cutting ✓
 - `requirePermission.ts` middleware: 4 permission keys
 - All 7 Phase 3 routes use `requirePermission(key)` (not `requireRole`)
-- `docs/decisions/ADR-003-kvkk-compliance-architecture.md`
+- `docs/adr/ADR-003-kvkk-compliance-architecture.md`
 - `docs/brand/VOICE_GUIDELINES.md`
 - `scripts/commit_phase_3.sh` — 30/30 --check PASS
 

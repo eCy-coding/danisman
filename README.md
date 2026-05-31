@@ -16,7 +16,7 @@
   <img alt="Tests" src="https://img.shields.io/badge/tests-passing-2ea44f" />
 </p>
 
-**Live:** https://www.ecypro.com (cutover sonrası — bkz. `docs/DEPLOY_RUNBOOK.md`)
+**Live:** https://www.ecypro.com (cutover sonrası — bkz. `docs/guides/deployment/DEPLOY_RUNBOOK.md`)
 **API:** https://api.ecypro.com (Render)
 
 ---
@@ -60,7 +60,7 @@ npm run dev:up      # Postgres + Redis + Mailpit + 15-pane orchestrator
 npm run dev:down    # her şeyi kapat
 ```
 
-Detay: [`docs/ORCHESTRATOR.md`](docs/ORCHESTRATOR.md).
+Detay: [`docs/guides/ORCHESTRATOR.md`](docs/guides/ORCHESTRATOR.md).
 
 ---
 
@@ -94,12 +94,12 @@ Tek kalite kapısı: [`/publish-check`](.claude/commands/publish-check.md) →
 | Background jobs             | Render Worker (BullMQ email/gdpr/cron)       | aynı blueprint               |
 | CDN + SSL                   | Cloudflare proxy (opsiyonel) + Let's Encrypt | Hostinger panel              |
 
-Tek master rehber: **[`docs/DEPLOY_RUNBOOK.md`](docs/DEPLOY_RUNBOOK.md)** —
+Tek master rehber: **[`docs/guides/deployment/DEPLOY_RUNBOOK.md`](docs/guides/deployment/DEPLOY_RUNBOOK.md)** —
 6 phase (pre-flight, BE, FE, DNS/SSL, validation, monitoring).
 
-Alternatifler: [`docs/DEPLOYMENT_RENDER.md`](docs/DEPLOYMENT_RENDER.md) ·
-[`docs/DEPLOYMENT_HOSTINGER_VPS.md`](docs/DEPLOYMENT_HOSTINGER_VPS.md) ·
-[`docs/DEPLOYMENT_RAILWAY.md`](docs/DEPLOYMENT_RAILWAY.md).
+Alternatifler: [`docs/guides/deployment/DEPLOYMENT_RENDER.md`](docs/guides/deployment/DEPLOYMENT_RENDER.md) ·
+[`docs/guides/deployment/DEPLOYMENT_HOSTINGER_VPS.md`](docs/guides/deployment/DEPLOYMENT_HOSTINGER_VPS.md) ·
+[`docs/guides/deployment/DEPLOYMENT_RAILWAY.md`](docs/guides/deployment/DEPLOYMENT_RAILWAY.md).
 
 ### Vercel ENV Checklist (frontend)
 
@@ -226,15 +226,15 @@ outputs/                # phase reports (P10–P28) + recipes
 
 ## Documentation
 
-- **Deploy:** [`docs/DEPLOY_RUNBOOK.md`](docs/DEPLOY_RUNBOOK.md) (master)
+- **Deploy:** [`docs/guides/deployment/DEPLOY_RUNBOOK.md`](docs/guides/deployment/DEPLOY_RUNBOOK.md) (master)
 - **Contributing:** [`CONTRIBUTING.md`](CONTRIBUTING.md)
-- **Incident response:** [`docs/INCIDENT_RUNBOOK.md`](docs/INCIDENT_RUNBOOK.md)
-- **Observability:** [`docs/OBSERVABILITY_SETUP.md`](docs/OBSERVABILITY_SETUP.md)
-- **Disaster recovery:** [`docs/DISASTER_RECOVERY.md`](docs/DISASTER_RECOVERY.md)
-- **CMS manual:** [`docs/CMS_MANUAL.md`](docs/CMS_MANUAL.md)
-- **CRO playbook:** [`docs/CRO_PLAYBOOK.md`](docs/CRO_PLAYBOOK.md)
-- **AB testing:** [`docs/AB_TESTING.md`](docs/AB_TESTING.md)
-- **API versioning:** [`docs/API_VERSIONING.md`](docs/API_VERSIONING.md)
+- **Incident response:** [`docs/guides/operations/INCIDENT_RUNBOOK.md`](docs/guides/operations/INCIDENT_RUNBOOK.md)
+- **Observability:** [`docs/reference/OBSERVABILITY_SETUP.md`](docs/reference/OBSERVABILITY_SETUP.md)
+- **Disaster recovery:** [`docs/guides/operations/DISASTER_RECOVERY.md`](docs/guides/operations/DISASTER_RECOVERY.md)
+- **CMS manual:** [`docs/guides/CMS_MANUAL.md`](docs/guides/CMS_MANUAL.md)
+- **CRO playbook:** [`docs/guides/CRO_PLAYBOOK.md`](docs/guides/CRO_PLAYBOOK.md)
+- **AB testing:** [`docs/reference/AB_TESTING.md`](docs/reference/AB_TESTING.md)
+- **API versioning:** [`docs/reference/API_VERSIONING.md`](docs/reference/API_VERSIONING.md)
 - **Phase log:** [`outputs/`](outputs/) (P10–P28, BE + FE recipes)
 
 ---
@@ -272,7 +272,7 @@ npm run claude:setup        # idempotent install + sağlık kontrolü
 Slash komutları: `/lint-fix` · `/typecheck` · `/e2e` · `/e2e-fast` ·
 `/publish-check` · `/phase-status` · `/secret-scan`.
 
-Detay: [`docs/CLAUDE_CODE.md`](docs/CLAUDE_CODE.md).
+Detay: [`docs/reference/CLAUDE_CODE.md`](docs/reference/CLAUDE_CODE.md).
 
 ---
 

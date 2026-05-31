@@ -53,10 +53,32 @@ for future readers.
 
 ## Index
 
-| #                                    | Title                                        | Status   |
-| ------------------------------------ | -------------------------------------------- | -------- |
-| [001](./ADR-001-hosting-strategy.md) | Hosting strategy — Render + Hostinger split  | accepted |
-| [002](./ADR-002-state-management.md) | Client state management — Zustand over Redux | accepted |
-| [003](./ADR-003-i18n-strategy.md)    | i18n — i18next namespaces over JSON-per-page | accepted |
-| [004](./ADR-004-database-orm.md)     | Database / ORM — Postgres + Prisma           | accepted |
-| [005](./ADR-005-monitoring.md)       | Monitoring — Sentry RUM + Web Vitals         | accepted |
+This folder consolidates two previously separate ADR logs:
+
+- **`ADR-001`–`ADR-005`** — original infrastructure/stack decisions (hosting, state, i18n, ORM, monitoring)
+- **`0001-integration-outbox-wal`** — outbox/WAL pattern (MADR filename convention)
+- **`ADR-001-notion-proxy-pattern`** through **`ADR-009-motion-architecture`** — domain/feature decisions (migrated from the legacy decisions log)
+
+> **Note on duplicate numbers:** ADR-001, ADR-003, and ADR-004 each appear twice because the merged set (notion-proxy, kvkk, rbac) came from a separate domain-decision log and used the same numbering sequence independently. Numbers are preserved for immutability. Renumbering is a future cleanup task.
+
+### Infrastructure / Stack (original series)
+
+| File                                           | Title                                        | Status   |
+| ---------------------------------------------- | -------------------------------------------- | -------- |
+| [ADR-001](./ADR-001-hosting-strategy.md)       | Hosting strategy — Render + Hostinger split  | accepted |
+| [ADR-002](./ADR-002-state-management.md)       | Client state management — Zustand over Redux | accepted |
+| [ADR-003](./ADR-003-i18n-strategy.md)          | i18n — i18next namespaces over JSON-per-page | accepted |
+| [ADR-004](./ADR-004-database-orm.md)           | Database / ORM — Postgres + Prisma           | accepted |
+| [ADR-005](./ADR-005-monitoring.md)             | Monitoring — Sentry RUM + Web Vitals         | accepted |
+| [0001](./0001-integration-outbox-wal.md)       | Integration Outbox / Write-Ahead Log Pattern | accepted |
+
+### Domain / Feature (migrated from legacy decisions log)
+
+| File                                                             | Title                                            | Status   |
+| ---------------------------------------------------------------- | ------------------------------------------------ | -------- |
+| [ADR-001](./ADR-001-notion-proxy-pattern.md)                     | Notion as Admin Lead CRM — Server-Side Proxy     | accepted |
+| [ADR-003](./ADR-003-kvkk-compliance-architecture.md)             | KVKK Compliance Shield Architecture             | accepted |
+| [ADR-004](./ADR-004-rbac-permission-model.md)                    | RBAC Permission Model — Runtime Yetki Yönetimi  | accepted |
+| [ADR-007](./ADR-007-enterprise-data-architecture.md)             | Enterprise Data Architecture — Phase 6          | accepted |
+| [ADR-008](./ADR-008-design-token-system.md)                      | Unified Design Token System                     | accepted |
+| [ADR-009](./ADR-009-motion-architecture.md)                      | Motion Architecture                             | accepted |

@@ -46,7 +46,7 @@ echo ""
 # ── BATCH 2: tests + ADR-009 ───────────────────────────────────────────────────
 echo "--- Batch 2: tests + ADR-009 ---"
 git add src/lib/motion/motion.test.ts
-git add docs/decisions/ADR-009-motion-architecture.md
+git add docs/adr/ADR-009-motion-architecture.md
 
 git commit -m "test(motion): 18 unit tests for motion library
 
