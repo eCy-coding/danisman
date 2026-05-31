@@ -105,14 +105,14 @@ echo "--- Batch 4: script + report ---"
 git add scripts/commit_track_b_phase_4.sh
 
 # Report will be added if it exists
-if [ -f "REPORT_TRACK_B_PHASE_B4.md" ]; then
-  git add REPORT_TRACK_B_PHASE_B4.md
+if [ -f "archive/phase-reports/REPORT_TRACK_B_PHASE_B4.md" ]; then
+  git add archive/phase-reports/REPORT_TRACK_B_PHASE_B4.md
 fi
 
 git commit -m "chore(track-b): Phase B4 commit script + completion report
 
 scripts/commit_track_b_phase_4.sh: 4-batch commit sequence
-REPORT_TRACK_B_PHASE_B4.md: Layer C summary, test matrix, ADR-009 link"
+archive/phase-reports/REPORT_TRACK_B_PHASE_B4.md: Layer C summary, test matrix, ADR-009 link"
 
 echo "Batch 4 done."
 echo ""

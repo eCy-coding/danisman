@@ -19,7 +19,7 @@
 
 4.  **The Zero Waste Law:**
     - _Directive:_ "Do not fill my storage. Check why it is full."
-    - _Action:_ Continuously monitor `node_modules` and Docker. Use `pnpm` exclusively. Apply `docs/MAC_OPTIMIZATION_PROTOCOL.md` system-wide.
+    - _Action:_ Continuously monitor `node_modules` and Docker. Use `pnpm` exclusively. Apply `archive/mac/MAC_OPTIMIZATION_PROTOCOL.md` system-wide.
 
 5.  **The Permanent Solution Law:**
     - _Directive:_ "No temporary patches. Permanent E2E solutions only."

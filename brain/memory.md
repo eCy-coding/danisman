@@ -366,7 +366,7 @@ Phase 15 (Tailwind v4 cosmetic harmoni baseline) → Phase 17 (G1 Pricing, G2 Ne
 
 #### Yeni dosya
 
-- `ECYPRO_PUBLISH_READY_HANDOFF.md` — DevOps handoff: pipeline, Lighthouse, E2E, ENV, DNS, deploy steps, known issues, Phase 24 backlog.
+- `archive/phase-reports/ECYPRO_PUBLISH_READY_HANDOFF.md` — DevOps handoff: pipeline, Lighthouse, E2E, ENV, DNS, deploy steps, known issues, Phase 24 backlog.
 
 ---
 

@@ -345,7 +345,7 @@ Phase 19 sonrası kalan 18 madde cerrahi hassasiyetle kapatıldı. **Phase 1-17 
 
 ### 📍 Phase 23: Publish & Handoff ✅ (TAMAMLANDI — bu oturum)
 
-- [x] `ECYPRO_PUBLISH_READY_HANDOFF.md` üretildi: pipeline durumu, Lighthouse skorları, E2E özeti, ENV (backend + frontend), DNS, deploy steps (Vercel + Render + Docker), known issues, Phase 24 backlog.
+- [x] `archive/phase-reports/ECYPRO_PUBLISH_READY_HANDOFF.md` üretildi: pipeline durumu, Lighthouse skorları, E2E özeti, ENV (backend + frontend), DNS, deploy steps (Vercel + Render + Docker), known issues, Phase 24 backlog.
 - [x] `brain/memory.md` → Phase 21 + Phase 22 closure bloğu eklendi.
 - [x] `brain/PUBLISH_MASTER_PLAN.md` → Phase 22/23 kutucuklar [x].
 - [ ] `npm run deploy` smoke-test (dry-run) — kullanıcı onayı ile uygulanacak.
@@ -442,5 +442,5 @@ npx playwright test          # full
 npx lighthouse http://localhost:4173 --output json --output-path lighthouse-report.json
 ```
 
-**Son güncelleme:** Phase 22 + Phase 23 closure (3 Mayıs 2026). Plan A publish-ready scope tamamlandı. Critical E2E yeşil (`sanity 6/6`, `lead-gen 2/2`, `conversion-elements 2/2`), Lighthouse SEO 100, A11y 85, BP 92, Performance 62. Repo bloat 178 MB silindi. `ECYPRO_PUBLISH_READY_HANDOFF.md` üretildi.
+**Son güncelleme:** Phase 22 + Phase 23 closure (3 Mayıs 2026). Plan A publish-ready scope tamamlandı. Critical E2E yeşil (`sanity 6/6`, `lead-gen 2/2`, `conversion-elements 2/2`), Lighthouse SEO 100, A11y 85, BP 92, Performance 62. Repo bloat 178 MB silindi. `archive/phase-reports/ECYPRO_PUBLISH_READY_HANDOFF.md` üretildi.
 **Sıradaki adım:** Kullanıcı onayı ile final commit + tag `v1.0.0`, sonra Phase 24 backlog (production optimization — Performance ≥90, A11y ≥95, full E2E green).

@@ -27,7 +27,7 @@ Konuşma dili: **Türkçe**. Kod, log, commit mesajı: **İngilizce**.
 
 **Durum (15 Mayıs 2026):**
 - Branch: `main`, son commit `55a8fca chore: regenerate sitemap + rss + blog-posts after build`.
-- Phase 22 "PUBLISH-READY (Plan A)" — handoff dokümanı: `ECYPRO_PUBLISH_READY_HANDOFF.md`.
+- Phase 22 "PUBLISH-READY (Plan A)" — handoff dokümanı: `archive/phase-reports/ECYPRO_PUBLISH_READY_HANDOFF.md`.
 - Pipeline yeşil: `typecheck` 0 hata, `lint` 0 hata, `vitest` 23/23, `build` 68 PWA precache + 32 sitemap URL + 3 RSS, `test:e2e:fast` 6/6 (3 browser).
 - Lighthouse local: **Perf 62 / A11y 85 / BP 92 / SEO 100** — CDN+prod sonrası ≥85 perf beklenir.
 - E2E genel: 136/297 yeşil (149 fail publish-blocker DEĞİL — selector brittleness + Recharts firefox quirk + i18n).
@@ -504,7 +504,7 @@ Build/deploy/SSL kırılırsa:
 
 Bu prompt eCyPro publish için tek başına yeterlidir. Bir sonraki ajan oturumu bu dosyayı okuyup `P0-Step-1`'den başlayabilir.
 
-> **Not:** Bu master prompt, `CLAUDE.md` ve `ECYPRO_PUBLISH_READY_HANDOFF.md` ile birlikte okunmalıdır. Çelişki olursa **CLAUDE.md > Master Prompt > Handoff** sırasında öncelik verilir.
+> **Not:** Bu master prompt, `CLAUDE.md` ve `archive/phase-reports/ECYPRO_PUBLISH_READY_HANDOFF.md` ile birlikte okunmalıdır. Çelişki olursa **CLAUDE.md > Master Prompt > Handoff** sırasında öncelik verilir.
 
 </closing>
 

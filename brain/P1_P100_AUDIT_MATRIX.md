@@ -113,9 +113,9 @@ P58,P60,P61,P62,P63,P64,P65,P66,P67,P68,P71,P72,P73,P74,P75,P76,P77,P99
 |---|---|---|---|
 | P41 | Prisma bootstrap fresh Neon | ✅ | `npx prisma db push` resolved |
 | P42 | Mock data audit + replace | ✅ | 6 anonymized cases, ₺ pricing |
-| P43 | Lighthouse summary + changelog | ✅ | `P43_LIGHTHOUSE_SUMMARY.md` |
+| P43 | Lighthouse summary + changelog | ✅ | `archive/phase-reports/P43_LIGHTHOUSE_SUMMARY.md` |
 | P44 | SW kill switch (removed) | ✅ | removed in d4a30ca |
-| P45 | URL audit | ✅ | `P45_URL_AUDIT.md` |
+| P45 | URL audit | ✅ | `archive/phase-reports/P45_URL_AUDIT.md` |
 | P46 | (sprint) | ✅ | commit ref |
 | P47 | (sprint) | ✅ | commit ref |
 | P48 | (sprint) | ✅ | commit ref |
@@ -265,7 +265,7 @@ Pre-conditions (ALL must pass):
 - ✅ security.txt RFC 9116
 - ✅ Backup strategy documented
 
-Certificate doc location: `docs/SHIP_CERTIFICATE.md` (created when all gates green).
+Certificate doc location: `archive/phase-reports/SHIP_CERTIFICATE.md` (created when all gates green).
 
 ---
 
@@ -294,7 +294,7 @@ Certificate doc location: `docs/SHIP_CERTIFICATE.md` (created when all gates gre
 7. Generate `scripts/content-pipeline.mjs` (P82 implementation)
 8. Run social validators via curl (P87)
 9. Verify security headers (P89)
-10. Write `docs/SHIP_CERTIFICATE.md` (P100) when gates green
+10. Write `archive/phase-reports/SHIP_CERTIFICATE.md` (P100) when gates green
 
 T0 dashboard list (after autonomous completion):
 - Sentry alert rules (P84) — 10 min
