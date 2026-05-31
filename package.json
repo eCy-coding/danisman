@@ -311,6 +311,7 @@
   },
   "overrides": {
     "estree-walker": "2.0.2",
-    "brace-expansion": "^2.0.3"
+    "brace-expansion": "^2.0.3",
+    "tmp": "^0.2.7"
   }
 }
