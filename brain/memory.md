@@ -583,7 +583,7 @@ Bu konsept Phase 25'te şu şekilde EcyPro'ya entegre edilebilir:
 5. **`prompts1/`** — 10 talep dosyası (talep1-10 + README)
    - Projenin tüm geliştirme aşamaları yapılandırıldı
 
-6. **`prompts2/`** — 10 ileri düzey prompt engineering doc
+6. **`docs/prompts/`** — 10 ileri düzey prompt engineering doc
    - system-master, feature-impl, ollama-guide, code-review,
    - performance-audit, security, testing, deployment, ADR, AI orchestration
 

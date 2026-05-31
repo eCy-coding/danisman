@@ -5,7 +5,7 @@ description: /model — Görev tipine göre AI model seçim matrisi
 # /model [görev_tipi]
 
 **istek4.txt:** "Planlamayı opus → Kodlamayı sonnet"
-prompts2/03-ollama-model-guide.md + prompts2/10-ai-agent-orchestration.md tabanlı.
+docs/prompts/03-ollama-model-guide.md + docs/prompts/10-ai-agent-orchestration.md tabanlı.
 
 ## Model Seçim Matrisi
 
@@ -45,5 +45,5 @@ Her işlemde:
 
 ## Notlar
 - TOKEN ZERO kuralı: smart_router.py üzerinden git
-- Referans: prompts2/03-ollama-model-guide.md
+- Referans: docs/prompts/03-ollama-model-guide.md
 - Referans: scripts/ollama-launch.sh

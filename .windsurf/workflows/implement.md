@@ -65,6 +65,6 @@ typecheck ✅ lint ✅"
 ```
 
 ## Notlar
-- Referans: prompts2/02-feature-implementation.md
+- Referans: docs/prompts/02-feature-implementation.md
 - Hata durumunda /fix workflow'una geç
 - Phase tamamlandıysa: /phase-close ile kapat

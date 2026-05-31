@@ -63,5 +63,5 @@ grep -n "script.*src\|src.*script" index.html | grep -v "async\|defer\|module" |
 - Lighthouse Performance local ≥ 85, production ≥ 90
 
 ## Notlar
-- Referans: prompts2/05-performance-audit.md
+- Referans: docs/prompts/05-performance-audit.md
 - crawl_performance_vitals: CDP PerformanceObserver ile gerçek ölçüm

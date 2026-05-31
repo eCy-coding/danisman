@@ -1,6 +1,6 @@
 /**
  * e2e/crawl_deployment_flow.spec.ts
- * prompts2/08-deployment-flow.md — Post-Deploy Verification E2E
+ * docs/prompts/08-deployment-flow.md — Post-Deploy Verification E2E
  *
  * Kapsar:
  *   - Adım 1: Ön kontrol (typecheck/lint/test/build ürünleri)
@@ -98,12 +98,10 @@ test.describe('Deployment: Adım 2 — Environment Variables', () => {
     const viteVars = ['VITE_API_URL', 'VITE_SENTRY_DSN'];
     for (const key of viteVars) {
       if (!env.includes(key)) {
-        test
-          .info()
-          .annotations.push({
-            type: 'note',
-            description: `.env.example: ${key} eksik — Vercel deployment eksik olabilir`,
-          });
+        test.info().annotations.push({
+          type: 'note',
+          description: `.env.example: ${key} eksik — Vercel deployment eksik olabilir`,
+        });
       }
     }
   });
@@ -165,12 +163,10 @@ test.describe('Deployment: Adım 3 — Deploy Sırası Önkoşulları', () => {
     const deployConfigs = ['vercel.json', 'render.yaml', '.render.yaml'];
     const found = deployConfigs.find((c) => exists(c));
     if (!found) {
-      test
-        .info()
-        .annotations.push({
-          type: 'note',
-          description: 'Deploy config yok — Vercel auto-detect veya Render dashboard kullanılıyor',
-        });
+      test.info().annotations.push({
+        type: 'note',
+        description: 'Deploy config yok — Vercel auto-detect veya Render dashboard kullanılıyor',
+      });
     } else {
       test.info().annotations.push({ type: 'note', description: `Deploy config: ${found}` });
     }
@@ -266,12 +262,10 @@ test.describe('Deployment: Adım 4 — Post-Deploy Verification', () => {
       const allowsLocal = corsHeader.includes('localhost') || corsHeader === '*';
       expect(allowsLocal, `CORS: localhost reddediliyor (${corsHeader})`).toBeTruthy();
     } else {
-      test
-        .info()
-        .annotations.push({
-          type: 'note',
-          description: "CORS header yok — Production'da CORS_ORIGIN env gerekiyor",
-        });
+      test.info().annotations.push({
+        type: 'note',
+        description: "CORS header yok — Production'da CORS_ORIGIN env gerekiyor",
+      });
     }
   });
 });
@@ -301,12 +295,10 @@ test.describe('Deployment: CI/CD Pipeline (.github/workflows/)', () => {
     const ci = content('.github/workflows/ci.yml');
     const hasE2E = ci.includes('playwright') || ci.includes('e2e');
     if (!hasE2E) {
-      test
-        .info()
-        .annotations.push({
-          type: 'note',
-          description: 'ci.yml: E2E adımı yok — P40-T92 gerekiyor',
-        });
+      test.info().annotations.push({
+        type: 'note',
+        description: 'ci.yml: E2E adımı yok — P40-T92 gerekiyor',
+      });
     }
   });
 
@@ -321,12 +313,10 @@ test.describe('Deployment: CI/CD Pipeline (.github/workflows/)', () => {
       }
     }
     if (!sentryFound) {
-      test
-        .info()
-        .annotations.push({
-          type: 'note',
-          description: 'CI: Sentry source maps upload yok — P40-T91 pending',
-        });
+      test.info().annotations.push({
+        type: 'note',
+        description: 'CI: Sentry source maps upload yok — P40-T91 pending',
+      });
     }
   });
 
@@ -381,7 +371,7 @@ test.describe('Deployment: Monitoring & Alertler', () => {
     if (elapsed > 200) {
       test.info().annotations.push({
         type: 'note',
-        description: `/api/health: ${elapsed}ms — SLO ≤200ms ihlali (prompts2/08 hedef)`,
+        description: `/api/health: ${elapsed}ms — SLO ≤200ms ihlali (docs/prompts/08 hedef)`,
       });
     }
     expect(elapsed, `/api/health: ${elapsed}ms > 500ms SLO ihlali`).toBeLessThan(500);
@@ -410,13 +400,11 @@ test.describe('Deployment: Disaster Recovery', () => {
     const backupScripts = ['scripts/backup-db.sh', 'scripts/backup-db.ts'];
     const hasBackup = backupScripts.some((s) => exists(s));
     if (!hasBackup) {
-      test
-        .info()
-        .annotations.push({
-          type: 'note',
-          description:
-            'DR: backup script yok — Render managed backup (7 gün) kullanılıyor (prompts2/08)',
-        });
+      test.info().annotations.push({
+        type: 'note',
+        description:
+          'DR: backup script yok — Render managed backup (7 gün) kullanılıyor (docs/prompts/08)',
+      });
     }
     // Render managed backup = production DR, kabul edilebilir
   });
@@ -458,12 +446,10 @@ test.describe('Deployment: Maliyet & Performans Optimizasyonu', () => {
     const html = content('dist/index.html');
     const hasPreload = html.includes('rel="preload"') || html.includes('rel="modulepreload"');
     if (!hasPreload) {
-      test
-        .info()
-        .annotations.push({
-          type: 'note',
-          description: 'dist/index.html: preload hint yok — LCP etkilenebilir',
-        });
+      test.info().annotations.push({
+        type: 'note',
+        description: 'dist/index.html: preload hint yok — LCP etkilenebilir',
+      });
     }
   });
 });

@@ -14,7 +14,7 @@
 |--------|--------|------|----------------|
 | **L0 Vizyon** | `prompts/` (5 dosya: `istek.txt`, `istek1.txt`, `istek2.txt`, `istek3.txt`, `publish.txt`) | Ham talepler (kanon) | **HAYIR** |
 | **L1 Yapılandırılmış** | `prompts1/` (10) | `talep1-10.txt` kapatılmış aşamalar | Evet (durum) |
-| **L2 Operasyonel** | `prompts2/` (10) | Prompt-engineering standartları | Evet |
+| **L2 Operasyonel** | `docs/prompts/` (10) | Prompt-engineering standartları | Evet |
 | **L3 Hafıza** | `brain/` (6) | Kalıcı bağlam + audit | Evet (sync zorunlu) |
 | **L4 Bu Seri** | `brain/roadmap/roadmap_*.md` (10 + README) | 100 önceliklendirilmiş aksiyon | Evet (canlı) |
 
@@ -76,7 +76,7 @@ P{faz}-T{##}: {Başlık}
 ```bash
 # 1. Bağlam yükle
 cat brain/roadmap/README.md
-cat prompts2/01-system-master.md
+cat docs/prompts/01-system-master.md
 cat brain/memory.md
 
 # 2. Aktif phase belirle
@@ -130,7 +130,7 @@ Her todo tamamlandığında:
 - `brain/PUBLISH_MASTER_PLAN.md` — Ana yayın planı (Phase 1-30 tamamlandı)
 - `brain/COMPETITIVE_AUDIT.md` — 10 rakip matrisi
 - `prompts1/README.md` — Talep 1-10 kapatma özeti
-- `prompts2/01-system-master.md` — Sistem promptu
+- `docs/prompts/01-system-master.md` — Sistem promptu
 - `CLAUDE.md` — Claude Code özel talimatları
 
 ---

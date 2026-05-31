@@ -57,4 +57,4 @@ BAŞLA → /implement [görev_adı]
 ## Notlar
 - Tier 1 bitmeden Tier 2 başlama → roadmap_100.md "matematiksel hata"
 - Brain/memory.md ile senkron tut
-- Referans: prompts2/02-feature-implementation.md
+- Referans: docs/prompts/02-feature-implementation.md

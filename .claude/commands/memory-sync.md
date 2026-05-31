@@ -21,7 +21,7 @@ Format:
 ```
 
 5. brain/skills.md güncel mi? `cat brain/skills.md | head -20`
-6. prompts2/ ile sync: yeni pattern var mı?
+6. docs/prompts/ ile sync: yeni pattern var mı?
 
 Kural: Her phase closure sonrası 1 memory güncellemesi zorunlu (istek1.txt Kural 7).
-Referans: prompts2/01-system-master.md, prompts2/10-ai-agent-orchestration.md
+Referans: docs/prompts/01-system-master.md, docs/prompts/10-ai-agent-orchestration.md

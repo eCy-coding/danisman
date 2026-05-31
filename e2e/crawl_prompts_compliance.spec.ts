@@ -1,18 +1,18 @@
 /**
  * e2e/crawl_prompts_compliance.spec.ts
- * prompts2/ Mimari Uyum Denetimi — Tüm ADR + Golden Rules + Tech Stack E2E doğrulaması
+ * docs/prompts/ Mimari Uyum Denetimi — Tüm ADR + Golden Rules + Tech Stack E2E doğrulaması
  *
  * Kapsar:
- *   prompts2/01-system-master.md  — Altın Kurallar + Karar Hiyerarşisi
- *   prompts2/02-feature-impl.md   — Feature şablonu + TypeScript strict
- *   prompts2/03-ollama-model.md   — Model seçim matrisi
- *   prompts2/04-code-review.md    — Kod review checklist
- *   prompts2/05-performance.md    — Core Web Vitals + bundle
- *   prompts2/06-security.md       — OWASP + JWT + CORS
- *   prompts2/07-testing.md        — Test piramidi + coverage
- *   prompts2/08-deployment.md     — Deploy flow + health
- *   prompts2/09-architecture.md   — ADR-001..010
- *   prompts2/10-ai-orchestration.md — AI agent entegrasyon
+ *   docs/prompts/01-system-master.md  — Altın Kurallar + Karar Hiyerarşisi
+ *   docs/prompts/02-feature-impl.md   — Feature şablonu + TypeScript strict
+ *   docs/prompts/03-ollama-model.md   — Model seçim matrisi
+ *   docs/prompts/04-code-review.md    — Kod review checklist
+ *   docs/prompts/05-performance.md    — Core Web Vitals + bundle
+ *   docs/prompts/06-security.md       — OWASP + JWT + CORS
+ *   docs/prompts/07-testing.md        — Test piramidi + coverage
+ *   docs/prompts/08-deployment.md     — Deploy flow + health
+ *   docs/prompts/09-architecture.md   — ADR-001..010
+ *   docs/prompts/10-ai-orchestration.md — AI agent entegrasyon
  *
  * Çalıştır:
  *   npx playwright test e2e/crawl_prompts_compliance.spec.ts --project=chromium
@@ -30,8 +30,8 @@ const mockSentry = async (page: Page) => {
   await page.route('**/ingest.sentry.io/**', (r) => r.fulfill({ status: 200 }));
 };
 
-// ─── prompts2/01: Altın Kurallar ─────────────────────────────────
-test.describe('prompts2/01: System Master — Altın Kurallar', () => {
+// ─── docs/prompts/01: Altın Kurallar ─────────────────────────────────
+test.describe('docs/prompts/01: System Master — Altın Kurallar', () => {
   test('AR1: TypeScript strict — tsconfig.json strict: true', () => {
     const tsconfig = path.join(ROOT, 'tsconfig.json');
     expect(fs.existsSync(tsconfig), 'tsconfig.json yok').toBeTruthy();
@@ -62,11 +62,11 @@ test.describe('prompts2/01: System Master — Altın Kurallar', () => {
       'brain/COMPETITIVE_AUDIT.md',
     ];
     for (const f of required) {
-      expect(exists(f), `${f} yok — prompts2/01 karar hiyerarşisi bozuk`).toBeTruthy();
+      expect(exists(f), `${f} yok — docs/prompts/01 karar hiyerarşisi bozuk`).toBeTruthy();
     }
   });
 
-  test('AR4: Console.log production kodunda yok (prompts2/01 Yasak Eylemler)', () => {
+  test('AR4: Console.log production kodunda yok (docs/prompts/01 Yasak Eylemler)', () => {
     const srcFiles = [
       'src/main.tsx',
       'src/App.tsx',
@@ -80,7 +80,7 @@ test.describe('prompts2/01: System Master — Altın Kurallar', () => {
       for (let i = 0; i < lines.length; i++) {
         const line = lines[i];
         if (/console\.log\(/.test(line) && !line.trim().startsWith('//')) {
-          expect.soft(false, `${f}:${i + 1} console.log var — prompts2/01 ihlali`).toBeTruthy();
+          expect.soft(false, `${f}:${i + 1} console.log var — docs/prompts/01 ihlali`).toBeTruthy();
         }
       }
     }
@@ -93,19 +93,17 @@ test.describe('prompts2/01: System Master — Altın Kurallar', () => {
       const code = read(f);
       const hasAny = /: any[;),\s]/.test(code);
       if (hasAny) {
-        test
-          .info()
-          .annotations.push({
-            type: 'note',
-            description: `${f}: TypeScript any tipi var — prompts2/01 soft violation`,
-          });
+        test.info().annotations.push({
+          type: 'note',
+          description: `${f}: TypeScript any tipi var — docs/prompts/01 soft violation`,
+        });
       }
     }
   });
 });
 
-// ─── prompts2/02: Feature Implementation ─────────────────────────
-test.describe('prompts2/02: Feature Implementation — Tech Stack', () => {
+// ─── docs/prompts/02: Feature Implementation ─────────────────────────
+test.describe('docs/prompts/02: Feature Implementation — Tech Stack', () => {
   test('FI1: React 19 + Vite stack (package.json)', () => {
     const pkg = JSON.parse(read('package.json')) as {
       dependencies?: Record<string, string>;
@@ -166,10 +164,10 @@ test.describe('prompts2/02: Feature Implementation — Tech Stack', () => {
   });
 });
 
-// ─── prompts2/03: Ollama Model Guide ─────────────────────────────
-test.describe('prompts2/03: Ollama Model Guide — AI Orchestration', () => {
-  test('OL1: prompts2/03-ollama-model-guide.md mevcut ve yeterince uzun', () => {
-    const guide = 'prompts2/03-ollama-model-guide.md';
+// ─── docs/prompts/03: Ollama Model Guide ─────────────────────────────
+test.describe('docs/prompts/03: Ollama Model Guide — AI Orchestration', () => {
+  test('OL1: docs/prompts/03-ollama-model-guide.md mevcut ve yeterince uzun', () => {
+    const guide = 'docs/prompts/03-ollama-model-guide.md';
     expect(exists(guide), `${guide} yok`).toBeTruthy();
     const c = read(guide);
     expect(c.length, `${guide} çok kısa`).toBeGreaterThan(200);
@@ -187,21 +185,21 @@ test.describe('prompts2/03: Ollama Model Guide — AI Orchestration', () => {
   });
 });
 
-// ─── prompts2/04: Code Review Checklist ──────────────────────────
-test.describe('prompts2/04: Code Review Checklist — Kod Kalitesi', () => {
-  test('CR1: prompts2/04-code-review-checklist.md mevcut', () => {
-    const cr = 'prompts2/04-code-review-checklist.md';
+// ─── docs/prompts/04: Code Review Checklist ──────────────────────────
+test.describe('docs/prompts/04: Code Review Checklist — Kod Kalitesi', () => {
+  test('CR1: docs/prompts/04-code-review-checklist.md mevcut', () => {
+    const cr = 'docs/prompts/04-code-review-checklist.md';
     expect(exists(cr), `${cr} yok`).toBeTruthy();
     const c = read(cr);
     expect(c, 'Code review: TypeScript referansı yok').toContain('TypeScript');
     expect(c.toLowerCase(), 'Code review: test referansı yok').toContain('test');
   });
 
-  test("CR2: /review Windsurf workflow prompts2/04'e referans veriyor", () => {
+  test("CR2: /review Windsurf workflow docs/prompts/04'e referans veriyor", () => {
     const review = '.windsurf/workflows/review.md';
     expect(exists(review), '/review workflow yok').toBeTruthy();
     const wf = read(review);
-    expect(wf, '/review: prompts2/04 referansı yok').toContain('prompts2/04');
+    expect(wf, '/review: docs/prompts/04 referansı yok').toContain('docs/prompts/04');
   });
 
   test('CR3: src/ dosyaları import top-level kullanıyor (orta kontrol)', () => {
@@ -222,20 +220,18 @@ test.describe('prompts2/04: Code Review Checklist — Kod Kalitesi', () => {
       .findIndex((l) => l.startsWith('import ') && !l.includes('// dynamic'));
 
     if (lateImport !== -1) {
-      test
-        .info()
-        .annotations.push({
-          type: 'note',
-          description: `App.tsx: satır ${firstNonImport + lateImport} late import var — prompts2/04 uyarısı`,
-        });
+      test.info().annotations.push({
+        type: 'note',
+        description: `App.tsx: satır ${firstNonImport + lateImport} late import var — docs/prompts/04 uyarısı`,
+      });
     }
   });
 });
 
-// ─── prompts2/05: Performance Audit ──────────────────────────────
-test.describe('prompts2/05: Performance Audit — Core Web Vitals', () => {
-  test('PA1: prompts2/05-performance-audit.md LCP/CLS hedefleri var', () => {
-    const pa = 'prompts2/05-performance-audit.md';
+// ─── docs/prompts/05: Performance Audit ──────────────────────────────
+test.describe('docs/prompts/05: Performance Audit — Core Web Vitals', () => {
+  test('PA1: docs/prompts/05-performance-audit.md LCP/CLS hedefleri var', () => {
+    const pa = 'docs/prompts/05-performance-audit.md';
     expect(exists(pa), `${pa} yok`).toBeTruthy();
     const c = read(pa);
     expect(c, 'Performance doc: LCP yok').toContain('LCP');
@@ -255,12 +251,10 @@ test.describe('prompts2/05: Performance Audit — Core Web Vitals', () => {
       html.includes('fetchpriority') ||
       html.includes('rel="modulepreload"');
     if (!hasPreload) {
-      test
-        .info()
-        .annotations.push({
-          type: 'note',
-          description: 'dist/index.html: preload hint yok — LCP optimize edilmemiş (P33)',
-        });
+      test.info().annotations.push({
+        type: 'note',
+        description: 'dist/index.html: preload hint yok — LCP optimize edilmemiş (P33)',
+      });
     }
   });
 
@@ -286,10 +280,10 @@ test.describe('prompts2/05: Performance Audit — Core Web Vitals', () => {
   });
 });
 
-// ─── prompts2/06: Security Hardening ─────────────────────────────
-test.describe('prompts2/06: Security Hardening — OWASP', () => {
-  test('SH1: prompts2/06-security-hardening.md OWASP referansı', () => {
-    const sh = 'prompts2/06-security-hardening.md';
+// ─── docs/prompts/06: Security Hardening ─────────────────────────────
+test.describe('docs/prompts/06: Security Hardening — OWASP', () => {
+  test('SH1: docs/prompts/06-security-hardening.md OWASP referansı', () => {
+    const sh = 'docs/prompts/06-security-hardening.md';
     expect(exists(sh), `${sh} yok`).toBeTruthy();
     const c = read(sh);
     expect(c, 'Security doc: OWASP referansı yok').toContain('OWASP');
@@ -332,8 +326,8 @@ test.describe('prompts2/06: Security Hardening — OWASP', () => {
   });
 });
 
-// ─── prompts2/07: Testing Strategy ───────────────────────────────
-test.describe('prompts2/07: Testing Strategy — Test Piramidi', () => {
+// ─── docs/prompts/07: Testing Strategy ───────────────────────────────
+test.describe('docs/prompts/07: Testing Strategy — Test Piramidi', () => {
   test('TS1: Vitest config mevcut', () => {
     const configs = ['vitest.config.ts', 'vite.config.ts'];
     const found = configs.find((c) => {
@@ -378,18 +372,16 @@ test.describe('prompts2/07: Testing Strategy — Test Piramidi', () => {
 
     const missingFromScript = crawlSpecs.filter((s) => !crawlScript.includes(s));
     if (missingFromScript.length > 0) {
-      test
-        .info()
-        .annotations.push({
-          type: 'note',
-          description: `test:crawl'da eksik: ${missingFromScript.join(', ')}`,
-        });
+      test.info().annotations.push({
+        type: 'note',
+        description: `test:crawl'da eksik: ${missingFromScript.join(', ')}`,
+      });
     }
   });
 });
 
-// ─── prompts2/09: Architecture Decisions (ADR) ────────────────────
-test.describe('prompts2/09: Architecture Decisions (ADR-001..010)', () => {
+// ─── docs/prompts/09: Architecture Decisions (ADR) ────────────────────
+test.describe('docs/prompts/09: Architecture Decisions (ADR-001..010)', () => {
   test('ADR1: ADR-001 React 19 + Vite (Next.js yok)', () => {
     const pkg = JSON.parse(read('package.json')) as {
       dependencies?: Record<string, string>;
@@ -409,23 +401,19 @@ test.describe('prompts2/09: Architecture Decisions (ADR-001..010)', () => {
       if (!exists(f)) continue;
       const c = read(f);
       if (c.includes('bg-gradient-to-')) {
-        test
-          .info()
-          .annotations.push({
-            type: 'note',
-            description: `ADR-002: ${f} eski gradient syntax — codemod gerekiyor`,
-          });
+        test.info().annotations.push({
+          type: 'note',
+          description: `ADR-002: ${f} eski gradient syntax — codemod gerekiyor`,
+        });
       }
       checked = true;
     }
 
     if (!checked) {
-      test
-        .info()
-        .annotations.push({
-          type: 'note',
-          description: 'ADR-002: CSS dosyası yok — Tailwind inline kullanıyor',
-        });
+      test.info().annotations.push({
+        type: 'note',
+        description: 'ADR-002: CSS dosyası yok — Tailwind inline kullanıyor',
+      });
     }
     void tsxFiles;
   });
@@ -446,12 +434,10 @@ test.describe('prompts2/09: Architecture Decisions (ADR-001..010)', () => {
       const main = read(mainTsx);
       const hasEB = main.includes('ErrorBoundary') || main.includes('SovereignBoundary');
       if (!hasEB) {
-        test
-          .info()
-          .annotations.push({
-            type: 'note',
-            description: 'ADR-007: main.tsx GlobalErrorBoundary yok',
-          });
+        test.info().annotations.push({
+          type: 'note',
+          description: 'ADR-007: main.tsx GlobalErrorBoundary yok',
+        });
       }
     }
 
@@ -468,12 +454,10 @@ test.describe('prompts2/09: Architecture Decisions (ADR-001..010)', () => {
     const c = read(vite);
     const hasBrotli = c.includes('compression') || c.includes('Brotli') || c.includes('brotli');
     if (!hasBrotli) {
-      test
-        .info()
-        .annotations.push({
-          type: 'note',
-          description: 'ADR-008: Brotli plugin yok — Lighthouse BP miss',
-        });
+      test.info().annotations.push({
+        type: 'note',
+        description: 'ADR-008: Brotli plugin yok — Lighthouse BP miss',
+      });
     }
   });
 
@@ -487,10 +471,10 @@ test.describe('prompts2/09: Architecture Decisions (ADR-001..010)', () => {
   });
 });
 
-// ─── prompts2/10: AI Agent Orchestration ─────────────────────────
-test.describe('prompts2/10: AI Agent Orchestration', () => {
-  test('AI1: prompts2/10-ai-agent-orchestration.md SwarmBus referansı', () => {
-    const ai = 'prompts2/10-ai-agent-orchestration.md';
+// ─── docs/prompts/10: AI Agent Orchestration ─────────────────────────
+test.describe('docs/prompts/10: AI Agent Orchestration', () => {
+  test('AI1: docs/prompts/10-ai-agent-orchestration.md SwarmBus referansı', () => {
+    const ai = 'docs/prompts/10-ai-agent-orchestration.md';
     expect(exists(ai), `${ai} yok`).toBeTruthy();
     const c = read(ai);
     expect(c, 'AI doc: Orchestrator referansı yok').toMatch(/orchestrat|swarm|agent/i);
@@ -522,26 +506,26 @@ test.describe('prompts2/10: AI Agent Orchestration', () => {
 });
 
 // ─── GENEL UYUM SKORU ─────────────────────────────────────────────
-test.describe('prompts2/: Genel Uyum Skoru Özeti', () => {
-  test('COMPLIANCE: prompts2/ 10 dosyanın tamamı mevcut', () => {
+test.describe('docs/prompts/: Genel Uyum Skoru Özeti', () => {
+  test('COMPLIANCE: docs/prompts/ 10 dosyanın tamamı mevcut', () => {
     const docs = [
-      'prompts2/01-system-master.md',
-      'prompts2/02-feature-implementation.md',
-      'prompts2/03-ollama-model-guide.md',
-      'prompts2/04-code-review-checklist.md',
-      'prompts2/05-performance-audit.md',
-      'prompts2/06-security-hardening.md',
-      'prompts2/07-testing-strategy.md',
-      'prompts2/08-deployment-flow.md',
-      'prompts2/09-architecture-decisions.md',
-      'prompts2/10-ai-agent-orchestration.md',
+      'docs/prompts/01-system-master.md',
+      'docs/prompts/02-feature-implementation.md',
+      'docs/prompts/03-ollama-model-guide.md',
+      'docs/prompts/04-code-review-checklist.md',
+      'docs/prompts/05-performance-audit.md',
+      'docs/prompts/06-security-hardening.md',
+      'docs/prompts/07-testing-strategy.md',
+      'docs/prompts/08-deployment-flow.md',
+      'docs/prompts/09-architecture-decisions.md',
+      'docs/prompts/10-ai-agent-orchestration.md',
     ];
 
     const missing = docs.filter((d) => !exists(d));
-    expect(missing, `prompts2/ eksik doc: ${missing.join(', ')}`).toHaveLength(0);
+    expect(missing, `docs/prompts/ eksik doc: ${missing.join(', ')}`).toHaveLength(0);
   });
 
-  test('COMPLIANCE: Tech stack versiyonları prompts2/01 ile uyumlu', async ({ page }) => {
+  test('COMPLIANCE: Tech stack versiyonları docs/prompts/01 ile uyumlu', async ({ page }) => {
     test.setTimeout(15000);
     await mockSentry(page);
     await page.goto(BASE_URL, { waitUntil: 'domcontentloaded' });
@@ -576,11 +560,11 @@ test.describe('prompts2/: Genel Uyum Skoru Özeti', () => {
     const score = Math.round((done.length / Object.keys(checks).length) * 100);
 
     console.warn(
-      `\nprompts2/ Uyum Skoru: ${score}% (${done.length}/${Object.keys(checks).length})\n` +
+      `\ndocs/prompts/ Uyum Skoru: ${score}% (${done.length}/${Object.keys(checks).length})\n` +
         done.map((k) => `  ✅ ${k}`).join('\n') +
         (missing.length ? '\n' + missing.map((k) => `  ⬜ ${k}`).join('\n') : ''),
     );
 
-    expect(done.length, `prompts2/ uyum yetersiz: ${done.length}/6`).toBeGreaterThanOrEqual(5);
+    expect(done.length, `docs/prompts/ uyum yetersiz: ${done.length}/6`).toBeGreaterThanOrEqual(5);
   });
 });

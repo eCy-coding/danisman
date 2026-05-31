@@ -52,4 +52,4 @@ git tag phase-[no]-closed
 ## Notlar
 - roadmap_100.md Tier sırası zorunlu
 - Her phase: 10 todo × ortalama 2-4 saat = 20-40 saat
-- Referans: prompts2/10-ai-agent-orchestration.md
+- Referans: docs/prompts/10-ai-agent-orchestration.md

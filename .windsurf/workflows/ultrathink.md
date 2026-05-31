@@ -15,7 +15,7 @@ Aktif görevi belirle — roadmap + prompts + memory oku:
 cat brain/roadmap/roadmap_10.md | head -20
 cat brain/roadmap/roadmap_20.md | head -20
 cat prompts/istek3.txt | head -20
-cat prompts2/01-system-master.md | head -30
+cat docs/prompts/01-system-master.md | head -30
 ```
 
 ## Adım 2: Çapraz analiz matrisi
@@ -30,7 +30,7 @@ Görev için şu boyutları değerlendir:
 ## Adım 3: En iyi yaklaşımı seç
 
 ```
-Seçim kriterleri (prompts2/09-architecture-decisions.md):
+Seçim kriterleri (docs/prompts/09-architecture-decisions.md):
 - Reversibility: geri alınabilir mi?
 - Consistency: mevcut pattern ile tutarlı mı?
 - Minimal değişiklik: cerrahi hassasiyet
@@ -52,4 +52,4 @@ BAŞLA → /implement
 ## Notlar
 - Bu workflow kod yazmaz — planlar
 - Sonraki adım: /implement ile uygulamaya geç
-- Referans: prompts2/10-ai-agent-orchestration.md
+- Referans: docs/prompts/10-ai-agent-orchestration.md

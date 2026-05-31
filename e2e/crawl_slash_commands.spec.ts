@@ -9,7 +9,7 @@
  *   3. İçerik dolmuş (min uzunluk)
  *   4. Roadmap fazlarıyla eşleşiyor (P31-P40 referansı)
  *   5. Turbo annotation doğru kullanılıyor
- *   6. prompts2/ referansı var (prompt engineering docs)
+ *   6. docs/prompts/ referansı var (prompt engineering docs)
  *
  * Çalıştır:
  *   npx playwright test e2e/crawl_slash_commands.spec.ts --project=chromium
@@ -32,11 +32,15 @@ const EXPECTED_WORKFLOWS: Array<{ slug: string; mustContain?: string[]; roadmapR
   { slug: 'security-hardening', mustContain: ['P35', 'OWASP', 'CSP'], roadmapRef: 'roadmap_50' },
   { slug: 'performance-vitals', mustContain: ['LCP', 'P33', 'CLS'], roadmapRef: 'roadmap_30' },
   { slug: 'roadmap-status', mustContain: ['Tier', '⬜', 'roadmap'], roadmapRef: 'roadmap_100' },
-  { slug: 'review', mustContain: ['prompts2/04', 'typecheck'], roadmapRef: 'prompts2' },
+  { slug: 'review', mustContain: ['docs/prompts/04', 'typecheck'], roadmapRef: 'prompts2' },
   { slug: 'phase-start', mustContain: ['⬜', 'Tier', 'roadmap'], roadmapRef: 'roadmap' },
   { slug: 'commit-smart', mustContain: ['typecheck', 'lint', 'Conventional'] },
-  { slug: 'model', mustContain: ['opus', 'sonnet', 'Ollama'], roadmapRef: 'prompts2/03' },
-  { slug: 'test-gen', mustContain: ['Vitest', 'Playwright', 'piramit'], roadmapRef: 'prompts2/07' },
+  { slug: 'model', mustContain: ['opus', 'sonnet', 'Ollama'], roadmapRef: 'docs/prompts/03' },
+  {
+    slug: 'test-gen',
+    mustContain: ['Vitest', 'Playwright', 'piramit'],
+    roadmapRef: 'docs/prompts/07',
+  },
   { slug: 'claude-doctor', mustContain: ['claude'] },
   { slug: 'claude-install', mustContain: ['claude'] },
   { slug: 'claude-publish-check', mustContain: ['lint', 'typecheck'] },
@@ -50,7 +54,7 @@ const EXPECTED_COMMANDS: Array<{ slug: string; mustContain?: string[] }> = [
   { slug: 'implement', mustContain: ['typecheck', 'lint', 'Sonnet'] },
   { slug: 'fix', mustContain: ['root cause', 'git'] },
   { slug: 'crawl', mustContain: ['test:crawl', 'playwright'] },
-  { slug: 'review', mustContain: ['prompts2/04', 'typecheck'] },
+  { slug: 'review', mustContain: ['docs/prompts/04', 'typecheck'] },
   { slug: 'security', mustContain: ['P35', 'OWASP'] },
   { slug: 'performance', mustContain: ['LCP', 'P33'] },
   { slug: 'test-gen', mustContain: ['Vitest', 'Playwright'] },
@@ -266,7 +270,7 @@ test.describe('Slash Commands: Komut Matrix Bütünlüğü', () => {
     }
   });
 
-  test('prompts2/ entegrasyonu: en az 5 workflow prompts2 referans içeriyor', () => {
+  test('docs/prompts/ entegrasyonu: en az 5 workflow prompts2 referans içeriyor', () => {
     const files = fs.readdirSync(WORKFLOWS_DIR).filter((f) => f.endsWith('.md'));
     const withRef = files.filter((f) => {
       const content = fs.readFileSync(path.join(WORKFLOWS_DIR, f), 'utf-8');
@@ -376,9 +380,9 @@ test.describe('Slash Commands: CLAUDE.md Entegrasyonu', () => {
     expect(hasClaudeEdit, 'settings.json: .claude/** edit izni yok').toBeTruthy();
   });
 
-  test('prompts2/README.md AI OS yapısı tanımlı', () => {
+  test('docs/prompts/README.md AI OS yapısı tanımlı', () => {
     const readmePath = path.join(PROJECT_ROOT, 'prompts2', 'README.md');
-    expect(fs.existsSync(readmePath), 'prompts2/README.md yok').toBeTruthy();
+    expect(fs.existsSync(readmePath), 'docs/prompts/README.md yok').toBeTruthy();
     const content = fs.readFileSync(readmePath, 'utf-8');
     expect(content).toContain('Cascade');
     expect(content).toContain('Claude Code');
