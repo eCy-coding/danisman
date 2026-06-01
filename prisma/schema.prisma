@@ -1312,6 +1312,7 @@ model InsightCategory {
   colorAccent  String?
   displayOrder Int               @default(0)
   status       CategoryStatus    @default(ACTIVE)
+  createdBy    String?
   parentId     String?
   parent       InsightCategory?  @relation("CategoryHierarchy", fields: [parentId], references: [id])
   children     InsightCategory[] @relation("CategoryHierarchy")

@@ -194,7 +194,14 @@ router.get(
       const hasMore = rows.length > limit;
       const page = rows.slice(0, limit);
 
-      const results: SearchResult[] = page.map((r: Record<string, unknown>) => ({
+      interface ServiceRow {
+        id: string;
+        slug: string;
+        title: string;
+        snippet: string;
+        rank: number;
+      }
+      const results: SearchResult[] = page.map((r: ServiceRow) => ({
         type: 'service',
         id: r.id,
         slug: r.slug,
