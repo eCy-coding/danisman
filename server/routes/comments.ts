@@ -2,7 +2,6 @@
 // Public: POST /api/v1/insights/posts/:postId/comments
 //         GET  /api/v1/insights/posts/:postId/comments
 
-import crypto from 'crypto';
 import { Router, Request, Response } from 'express';
 import { prisma } from '../config/db';
 import { logger } from '../config/logger';
@@ -10,14 +9,11 @@ import { rateLimitComments } from '../middleware/rateLimitComments';
 import { createCommentSchema } from '../schemas/comments.zod';
 import { isSpam } from '../services/spamFilter';
 import { CommentStatus } from '@prisma/client';
+import { hashIp } from '../lib/crypto/hashIp';
 
 const router = Router();
 
 const COMMENTS_PAGE_SIZE = 20;
-
-function hashIp(ip: string): string {
-  return crypto.createHash('sha256').update(ip).digest('hex');
-}
 
 // ─── POST — submit comment ────────────────────────────────────────────────────
 
@@ -66,7 +62,11 @@ router.post(
     }
 
     const rawIp = req.ip ?? req.socket.remoteAddress ?? 'unknown';
-    const ipHash = hashIp(rawIp);
+    // KVKK m.4 + m.12 — canonical 32-char SHA-256 hex pseudonymization
+    // (server/lib/crypto/hashIp.ts). Comment.ipHash schema is NOT NULL, so we
+    // coalesce to the literal 'unknown' fallback (rawIp itself already falls
+    // back to 'unknown', so this branch is purely a TS narrowing aid).
+    const ipHash = hashIp(rawIp) ?? 'unknown';
     const spamDetected = isSpam(bodyMd);
     const status: CommentStatus = spamDetected ? 'SPAM' : 'PENDING';
 
