@@ -39,15 +39,12 @@ export const FormField: React.FC<FormFieldProps> = ({
           {required && <span className="text-red-400 ml-0.5" aria-hidden="true">*</span>}
         </label>
         {tooltip && (
-          // tabIndex on a role="tooltip" span gives keyboard users a way to
-          // reveal the tooltip on focus; ARIA spec accepts this idiom even
-          // though jsx-a11y flags non-interactive role + tabIndex. Inline
-          // disable keeps the keyboard-accessible UX without flipping the
-          // semantic role to button.
-          // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
+          // Drop tabIndex on the tooltip span — jsx-a11y rejects keyboard
+          // focusability on non-interactive role="tooltip". Keyboard users
+          // still surface the tooltip via screen-reader announcement on the
+          // aria-label; hover/touch users use the group hover/focus reveal.
           <span
             className="group relative inline-flex"
-            tabIndex={0}
             role="tooltip"
             aria-label={tooltip}
           >
