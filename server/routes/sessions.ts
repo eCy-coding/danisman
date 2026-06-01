@@ -60,7 +60,7 @@ router.get(
       });
 
       const currentJti = req.user?.jti;
-      const enriched = sessions.map((s: any) => ({
+      const enriched = sessions.map((s: { jti: string; [k: string]: unknown }) => ({
         ...s,
         isCurrent: s.jti === currentJti,
       }));
@@ -127,7 +127,7 @@ router.delete(
           where: { userId, revokedAt: null, jti: { not: currentJti } },
           data: { revokedAt: new Date() },
         }),
-        ...others.map((s: any) => blacklistToken(s.jti, expiresAtMs)),
+        ...others.map((s: { jti: string }) => blacklistToken(s.jti, expiresAtMs)),
       ]);
 
       res.json({ status: 'success', data: { revoked: others.length } });

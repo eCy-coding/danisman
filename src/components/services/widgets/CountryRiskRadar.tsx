@@ -47,8 +47,8 @@ export const CountryRiskRadar: React.FC = () => {
         </div>
         <div className="grid md:grid-cols-2 gap-8">
           <div className="bg-white/5 border border-white/10 rounded-2xl p-6 md:p-8">
-            <label className="block text-sm font-semibold text-white mb-2">Ülke</label>
-            <select value={selected} onChange={(e) => setSelected(e.target.value)} className="w-full px-4 py-3 min-h-[44px] rounded-lg bg-white/5 border border-white/10 text-white mb-6">
+            <label htmlFor="country-risk-radar-country" className="block text-sm font-semibold text-white mb-2">Ülke</label>
+            <select id="country-risk-radar-country" value={selected} onChange={(e) => setSelected(e.target.value)} className="w-full px-4 py-3 min-h-[44px] rounded-lg bg-white/5 border border-white/10 text-white mb-6">
               {Object.entries(COUNTRIES).map(([code, c]) => <option key={code} value={code}>{c.name}</option>)}
             </select>
             <div className="space-y-3">

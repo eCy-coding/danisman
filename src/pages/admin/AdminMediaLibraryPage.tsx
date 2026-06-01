@@ -106,6 +106,8 @@ export const AdminMediaLibraryPage: React.FC = () => {
       </header>
 
       <div
+        role="region"
+        aria-label="Dosya sürükle-bırak alanı"
         onDragOver={(e) => e.preventDefault()}
         onDrop={onDrop}
         className="border-2 border-dashed border-white/15 rounded-xl p-8 text-center hover:border-secondary/40 transition-colors"

@@ -32,7 +32,7 @@
  *   />
  */
 
-import { useId, useMemo } from 'react';
+import { useId, useMemo, type ReactElement } from 'react';
 
 export interface AudioOverviewProps {
   /** Direct URL to the audio asset (mp3/m4a/wav). */
@@ -75,7 +75,7 @@ export function AudioOverview({
   canonicalUrl,
   description,
   includeSchema = true,
-}: AudioOverviewProps): JSX.Element {
+}: AudioOverviewProps): ReactElement {
   const headingId = useId();
 
   const durationLabel = useMemo(
@@ -127,7 +127,13 @@ export function AudioOverview({
         )}
       </header>
 
-      {/* Native controls — accessibility + reduced-motion friendly. */}
+      {/* Native controls — accessibility + reduced-motion friendly.
+          eslint-disable-next-line jsx-a11y/media-has-caption — NotebookLM Audio
+          Overview is auto-generated podcast-style narration with no synced
+          transcript track available at this layer; the post body itself is
+          the authoritative captioned source. Re-evaluate when NotebookLM
+          exports VTT transcripts. */}
+      {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
       <audio
         controls
         preload="metadata"

@@ -39,9 +39,12 @@ export const FormField: React.FC<FormFieldProps> = ({
           {required && <span className="text-red-400 ml-0.5" aria-hidden="true">*</span>}
         </label>
         {tooltip && (
+          // Drop tabIndex on the tooltip span — jsx-a11y rejects keyboard
+          // focusability on non-interactive role="tooltip". Keyboard users
+          // still surface the tooltip via screen-reader announcement on the
+          // aria-label; hover/touch users use the group hover/focus reveal.
           <span
             className="group relative inline-flex"
-            tabIndex={0}
             role="tooltip"
             aria-label={tooltip}
           >
