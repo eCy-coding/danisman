@@ -14,7 +14,7 @@
 # ── Stage 1: Production Dependencies ───────────────────────
 FROM node:22-alpine AS deps
 WORKDIR /app
-COPY package.json package-lock.json ./
+COPY package.json package-lock.json .npmrc ./
 # Prisma engines need these when `prisma generate` runs in stage 4
 RUN apk add --no-cache openssl \
     && npm ci --omit=dev --ignore-scripts \
@@ -25,7 +25,7 @@ FROM node:22-alpine AS builder
 WORKDIR /app
 ENV NODE_OPTIONS="--max-old-space-size=4096"
 
-COPY package.json package-lock.json ./
+COPY package.json package-lock.json .npmrc ./
 RUN apk add --no-cache openssl && npm ci
 
 COPY . .
