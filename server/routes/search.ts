@@ -197,16 +197,21 @@ router.get(
       const hasMore = rows.length > limit;
       const page = rows.slice(0, limit);
 
-      const results: SearchResult[] = page.map(
-        (r: { id: string; slug: string; title: string; snippet: string; rank: number }) => ({
-          type: 'service',
-          id: r.id,
-          slug: r.slug,
-          title: r.title,
-          snippet: stripTsHeadline(r.snippet),
-          rank: r.rank,
-        }),
-      );
+      interface ServiceRow {
+        id: string;
+        slug: string;
+        title: string;
+        snippet: string;
+        rank: number;
+      }
+      const results: SearchResult[] = page.map((r: ServiceRow) => ({
+        type: 'service',
+        id: r.id,
+        slug: r.slug,
+        title: r.title,
+        snippet: stripTsHeadline(r.snippet),
+        rank: r.rank,
+      }));
 
       const last = page[page.length - 1];
       const nextCursor = hasMore && last ? encodeCursor({ rank: last.rank, id: last.id }) : null;

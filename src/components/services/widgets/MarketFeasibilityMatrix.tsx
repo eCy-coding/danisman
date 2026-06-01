@@ -91,13 +91,13 @@ export const MarketFeasibilityMatrix: React.FC = () => {
           <div className="bg-white/5 border border-white/10 rounded-2xl p-6 md:p-8 space-y-5">
             <div>
               <label
-                htmlFor="market-country-select"
+                htmlFor="mfm-target-country"
                 className="block text-sm font-semibold text-white mb-2"
               >
                 Hedef Ülke
               </label>
               <select
-                id="market-country-select"
+                id="mfm-target-country"
                 value={country.code}
                 onChange={(e) => onCountryChange(e.target.value)}
                 className="w-full px-4 py-3 min-h-[44px] rounded-lg bg-white/5 border border-white/10 text-white"

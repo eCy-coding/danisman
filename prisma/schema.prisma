@@ -671,6 +671,7 @@ model Deal {
   type                DealType
   stage               DealStage @default(DISCOVERY)
   clientId            String?
+  leadId              String?
   transactionValueUsd Decimal?
   successFeePct       Decimal   @default(0.02)
   successFeeUsd       Decimal?
@@ -682,12 +683,14 @@ model Deal {
   createdAt           DateTime  @default(now())
   updatedAt           DateTime  @updatedAt
 
+  lead       Lead?       @relation(fields: [leadId], references: [id])
   milestones Milestone[]
   retainer   Retainer?
 
   @@index([stage])
   @@index([ownerId])
   @@index([expectedCloseDate])
+  @@index([leadId])
   @@map("deals")
 }
 
@@ -1287,6 +1290,41 @@ enum CommentStatus {
   SPAM
 }
 
+// Insights/Perspektifler taxonomy (Sprint 4 — restores admin-insights-categories
+// route + tests). L1-L4 domain hierarchy lives under `BlogPost.primaryDomain`
+// (enum) + `subDomain`; this model represents user-managed display categories
+// (slug-based) layered on top, with self-relation for nested hierarchies.
+enum CategoryStatus {
+  ACTIVE
+  ARCHIVED
+}
+
+model InsightCategory {
+  id           String            @id @default(cuid())
+  slug         String            @unique
+  slugEn       String?           @unique
+  nameTr       String
+  nameEn       String?
+  descTr       String?           @db.Text
+  descEn       String?           @db.Text
+  domain       Domain
+  iconName     String?
+  colorAccent  String?
+  displayOrder Int               @default(0)
+  status       CategoryStatus    @default(ACTIVE)
+  createdBy    String?
+  parentId     String?
+  parent       InsightCategory?  @relation("CategoryHierarchy", fields: [parentId], references: [id])
+  children     InsightCategory[] @relation("CategoryHierarchy")
+  posts        BlogPost[]
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+
+  @@index([domain, status])
+  @@index([parentId])
+  @@map("insight_categories")
+}
+
 model Author {
   id          String     @id @default(cuid())
   slug        String     @unique
@@ -1355,6 +1393,12 @@ model BlogPost {
   seriesId      String?
   seriesOrder   Int?
 
+  // Sprint 4 — user-managed category overlay (admin CMS) on top of the
+  // L1-L4 domain hierarchy. Optional: pre-existing posts remain null until
+  // explicitly assigned via /api/admin/insights/categories.
+  categoryId String?
+  category   InsightCategory? @relation(fields: [categoryId], references: [id])
+
   // Tag M2M
   tags Tag[] @relation("BlogPostTags")
 
@@ -1406,10 +1450,6 @@ model BlogPost {
   featureOrder  Int?
   feedPinned    Boolean @default(false)
 
-  // InsightCategory FK (nullable — migrate to NOT NULL after backfill)
-  categoryId String?
-  category   InsightCategory? @relation(fields: [categoryId], references: [id])
-
   // İlişkiler
   series         Series?         @relation(fields: [seriesId], references: [id])
   draftHistory   DraftRevision[]
@@ -1428,7 +1468,6 @@ model BlogPost {
   @@index([viewCount(sort: Desc)])
   @@index([publishedAt(sort: Desc), isFeatured])
   @@index([status, primaryDomain])
-  @@index([categoryId, publishedAt(sort: Desc)])
   @@map("blog_posts")
 }
 
@@ -1508,36 +1547,101 @@ model ViewLog {
   @@map("view_logs")
 }
 
-// ─── Perspektif Category Management ──────────────────────────────────────────
+// ─── CRM MODELS (Week 2) ─────────────────────────────────
 
-enum CategoryStatus {
-  ACTIVE
-  ARCHIVED
+model Lead {
+  id          String  @id @default(cuid())
+  email       String  @unique
+  firstName   String
+  lastName    String
+  phone       String?
+  company     String
+  title       String
+  industry    String?
+  companySize String? // Startup, SMB, Mid-Market, Enterprise
+  budget      BigInt?
+  timeline    String? // ASAP, This Month, Next Month, Next Quarter, Next Year
+  source      String // Organic, Paid Ads, Referral, Direct, Event
+
+  // Engagement metrics
+  emailsOpened    Int @default(0)
+  emailsClicked   Int @default(0)
+  formSubmissions Int @default(0)
+  websiteVisits   Int @default(0)
+  pageViewsCount  Int @default(0)
+
+  // Purchase history
+  previousPurchases Int    @default(0)
+  totalSpent        BigInt @default(0)
+
+  // Status
+  status String @default("New") // New, Contacted, Qualified, Proposal, Negotiation, Won, Lost
+  score  Int    @default(0) // 0-100
+  grade  String @default("D") // A, B, C, D
+
+  // Flags
+  demoRequested Boolean @default(false)
+  trialSignup   Boolean @default(false)
+  needsFollowUp Boolean @default(false)
+
+  // Relations
+  activities LeadActivity[]
+  deals      Deal[]
+
+  // Timestamps
+  createdAt    DateTime  @default(now())
+  lastContact  DateTime  @default(now())
+  nextFollowUp DateTime?
+  updatedAt    DateTime  @updatedAt
+
+  @@index([email])
+  @@index([score])
+  @@index([grade])
+  @@index([status])
+  @@map("leads")
 }
 
-model InsightCategory {
-  id           String            @id @default(cuid())
-  slug         String            @unique
-  slugEn       String?           @unique
-  nameTr       String
-  nameEn       String?
-  descTr       String?           @db.Text
-  descEn       String?           @db.Text
-  domain       Domain
-  parentId     String?
-  parent       InsightCategory?  @relation("CategoryHierarchy", fields: [parentId], references: [id])
-  children     InsightCategory[] @relation("CategoryHierarchy")
-  iconName     String?
-  colorAccent  String?
-  displayOrder Int               @default(0)
-  status       CategoryStatus    @default(ACTIVE)
-  createdBy    String?
-  createdAt    DateTime          @default(now())
-  updatedAt    DateTime          @updatedAt
-  posts        BlogPost[]
+model LeadActivity {
+  id     String @id @default(cuid())
+  leadId String
+  lead   Lead   @relation(fields: [leadId], references: [id], onDelete: Cascade)
 
-  @@index([domain, status, displayOrder])
-  @@index([parentId])
-  @@index([slug])
-  @@map("insight_categories")
+  type        String // email_open, email_click, form_submission, page_view, call, meeting, note
+  description String
+  metadata    Json?
+  timestamp   DateTime @default(now())
+  user        String?
+
+  @@index([leadId])
+  @@index([timestamp])
+  @@map("lead_activities")
+}
+
+model EmailSequence {
+  id   String @id @default(cuid())
+  name String
+
+  active Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("email_sequences")
+}
+
+model CRMReport {
+  id             String   @id @default(cuid())
+  name           String
+  type           String // leads, deals, revenue, performance
+  dateRangeStart DateTime
+  dateRangeEnd   DateTime
+  metrics        Json // ReportMetric[]
+  filters        Json?
+
+  generatedAt DateTime @default(now())
+  generatedBy String
+
+  @@index([type])
+  @@index([generatedAt])
+  @@map("crm_reports")
 }

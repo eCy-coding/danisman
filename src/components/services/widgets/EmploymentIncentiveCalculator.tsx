@@ -65,14 +65,11 @@ export const EmploymentIncentiveCalculator: React.FC = () => {
         <div className="grid md:grid-cols-2 gap-8">
           <div className="bg-white/5 border border-white/10 rounded-2xl p-6 md:p-8 space-y-5">
             <div>
-              <label
-                htmlFor="incentive-sector-select"
-                className="block text-sm font-semibold text-white mb-2"
-              >
+              <label htmlFor="eic-sector" className="block text-sm font-semibold text-white mb-2">
                 Sektör
               </label>
               <select
-                id="incentive-sector-select"
+                id="eic-sector"
                 value={sector}
                 onChange={(e) => setSector(e.target.value)}
                 className="w-full px-4 py-3 min-h-[44px] rounded-lg bg-white/5 border border-white/10 text-white"
@@ -83,14 +80,11 @@ export const EmploymentIncentiveCalculator: React.FC = () => {
               </select>
             </div>
             <div>
-              <label
-                htmlFor="incentive-region-select"
-                className="block text-sm font-semibold text-white mb-2"
-              >
+              <label htmlFor="eic-region" className="block text-sm font-semibold text-white mb-2">
                 Bölge
               </label>
               <select
-                id="incentive-region-select"
+                id="eic-region"
                 value={region}
                 onChange={(e) => setRegion(e.target.value)}
                 className="w-full px-4 py-3 min-h-[44px] rounded-lg bg-white/5 border border-white/10 text-white"

@@ -65,13 +65,13 @@ export const UrbanReadinessScore: React.FC = () => {
           <div className="bg-white/5 border border-white/10 rounded-2xl p-6 md:p-8 space-y-5">
             <div>
               <label
-                htmlFor="urban-size-select"
+                htmlFor="urs-city-size"
                 className="block text-sm font-semibold text-white mb-2"
               >
                 Şehir Boyutu
               </label>
               <select
-                id="urban-size-select"
+                id="urs-city-size"
                 value={size}
                 onChange={(e) => setSize(e.target.value)}
                 className="w-full px-4 py-3 min-h-[44px] rounded-lg bg-white/5 border border-white/10 text-white"

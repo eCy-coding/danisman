@@ -19,6 +19,7 @@ import { ScrollProgressBar } from '../components/ui/ScrollProgressBar';
 import { StickyTableOfContents } from '../components/ui/StickyTableOfContents';
 import { JsonLd } from '../components/seo/JsonLd';
 import { AuthorBio } from '../components/blog/AuthorBio';
+import { AudioOverview } from '../components/blog/AudioOverview';
 import { RelatedArticles } from '../components/blog/RelatedArticles';
 import { ShareButtons } from '../components/blog/ShareButtons';
 import { getBlogPosts } from '../lib/data';
@@ -162,6 +163,24 @@ const BlogPostPage: React.FC = () => {
                     <div className="absolute inset-0 bg-linear-to-t from-[#050810] via-transparent to-transparent opacity-60" />
                   </div>
                 </header>
+
+                {/* Sprint 4 — NotebookLM Audio Overview (frontmatter-driven).
+                    Renders only when post.audioUrl is set; brand-aligned native
+                    audio + JSON-LD AudioObject. JsonLd schema for the article
+                    itself already lives elsewhere; AudioObject is rendered
+                    inline by the component when canonicalUrl is supplied. */}
+                {post.audioUrl && (
+                  <div className="max-w-3xl mx-auto mt-8 mb-12">
+                    <AudioOverview
+                      audioUrl={post.audioUrl}
+                      title={post.title}
+                      durationSec={post.audioDurationSec}
+                      description={post.audioDescription}
+                      publishedAt={post.date}
+                      canonicalUrl={`https://ecypro.com/blog/${post.slug}`}
+                    />
+                  </div>
+                )}
 
                 {/* MDX Content — P46 C5: MDXProvider components mapping ile MDX'in
                     ilk H1'i (markdown # Title) H2'ye demote ediliyor. Önce 2 H1

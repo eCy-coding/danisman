@@ -13,8 +13,16 @@ declare global {
 function _push(eventName: string, params: Record<string, unknown>): void {
   const payload = { ...params, timestamp: new Date().toISOString() };
 
+  // GA4 direct (gtag.js)
   if (typeof window !== 'undefined' && window.gtag) {
     window.gtag('event', eventName, payload);
+  }
+
+  // GTM dataLayer parallel push (P34-T01) — keeps GTM containers in sync
+  // when both gtag.js and GTM are loaded; harmless when only one is present.
+  if (typeof window !== 'undefined') {
+    if (!Array.isArray(window.dataLayer)) window.dataLayer = [];
+    window.dataLayer.push({ event: eventName, ...payload });
   }
 
   if (import.meta.env.DEV || (typeof window !== 'undefined' && window.TEST_MODE)) {
@@ -104,4 +112,93 @@ export const trackROICalc = (
   },
 ): void => {
   _push('roi_calc_interaction', { roi_step: step, ...values });
+};
+
+// ─── P34-T01: GA4 Conversion Goals ────────────────────────────────────────
+//
+// GA4 conversion events follow Google's recommended naming so they map
+// 1:1 to "Conversions" in GA4 Admin → Events panel without renaming.
+//
+// Mark these as Conversions in GA4 UI:
+//   - generate_lead     (booking submit_success + contact form submit)
+//   - sign_up           (newsletter subscribe)
+//   - quote_request     (quick-check chain submit)
+//
+// Each helper emits BOTH the canonical event AND the legacy event for
+// backwards-compatible dashboards (transition period). When all dashboards
+// migrate, the legacy event can be removed.
+
+/**
+ * Contact form successful submission (P34-T01 conversion).
+ * @param formId  Form identifier — "contact" | "discovery" | "callback" | "rfq"
+ * @param extra   Optional extras: source page, lead score, etc.
+ */
+export const trackContactConversion = (
+  formId: 'contact' | 'discovery' | 'callback' | 'rfq',
+  extra?: Record<string, unknown>,
+): void => {
+  _push('generate_lead', {
+    form_id: formId,
+    method: 'contact_form',
+    value: 1,
+    currency: 'TRY',
+    ...extra,
+  });
+  // Legacy parallel (P34-T01 transition window)
+  trackForm(formId, 'submit_success', extra);
+};
+
+/**
+ * Newsletter subscription success (P34-T01 conversion).
+ * @param source  Origin of the signup — "footer" | "popup" | "inline" | "blog"
+ * @param locale  "tr" | "en"
+ */
+export const trackNewsletterConversion = (
+  source: 'footer' | 'popup' | 'inline' | 'blog' | 'pillar',
+  locale: 'tr' | 'en',
+  extra?: Record<string, unknown>,
+): void => {
+  _push('sign_up', {
+    method: 'newsletter',
+    source,
+    locale,
+    value: 1,
+    currency: 'TRY',
+    ...extra,
+  });
+  // Legacy parallel
+  _push('newsletter_signup', { source, locale, ...extra });
+};
+
+/**
+ * Booking confirmation success (P34-T01 conversion).
+ * Routed via trackBooking('success', ...) helper too; this fires the
+ * GA4-canonical `generate_lead` event with booking-scoped params.
+ * @param bookingType  e.g. "intro_call" | "strategy_session" | "audit"
+ * @param value        Optional booking value (TRY) for revenue attribution
+ */
+export const trackBookingConversion = (
+  bookingType: string,
+  value?: number,
+  extra?: Record<string, unknown>,
+): void => {
+  _push('generate_lead', {
+    form_id: 'booking',
+    method: 'booking_flow',
+    booking_type: bookingType,
+    value: value ?? 1,
+    currency: 'TRY',
+    ...extra,
+  });
+  // Legacy parallel (booking_flow event is preserved through trackBooking)
+};
+
+/**
+ * Quick-Check / Quote request submission (P34-T01 conversion).
+ */
+export const trackQuoteRequest = (
+  source: 'quick_check' | 'pricing_calculator' | 'rfq',
+  extra?: Record<string, unknown>,
+): void => {
+  _push('quote_request', { source, value: 1, currency: 'TRY', ...extra });
 };

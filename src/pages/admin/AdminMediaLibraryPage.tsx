@@ -106,14 +106,10 @@ export const AdminMediaLibraryPage: React.FC = () => {
       </header>
 
       <div
-        role="button"
-        tabIndex={0}
+        role="region"
+        aria-label="Dosya sürükle-bırak alanı"
         onDragOver={(e) => e.preventDefault()}
         onDrop={onDrop}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter' || e.key === ' ') fileInput.current?.click();
-        }}
-        aria-label="Dosya yükle: sürükle-bırak veya Enter/Boşluk ile seç"
         className="border-2 border-dashed border-white/15 rounded-xl p-8 text-center hover:border-secondary/40 transition-colors"
       >
         <UploadCloud size={28} className="text-slate-400 mx-auto mb-2" aria-hidden="true" />

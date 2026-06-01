@@ -43,12 +43,11 @@ export const FormField: React.FC<FormFieldProps> = ({
           )}
         </label>
         {tooltip && (
-          <span
-            className="group relative inline-flex"
-            tabIndex={0}
-            role="button"
-            aria-label={tooltip}
-          >
+          // Drop tabIndex on the tooltip span — jsx-a11y rejects keyboard
+          // focusability on non-interactive role="tooltip". Keyboard users
+          // still surface the tooltip via screen-reader announcement on the
+          // aria-label; hover/touch users use the group hover/focus reveal.
+          <span className="group relative inline-flex" role="tooltip" aria-label={tooltip}>
             <HelpCircle
               size={13}
               className="text-slate-500 hover:text-slate-300 cursor-help"
