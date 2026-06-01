@@ -510,8 +510,11 @@ export default defineConfig(({ mode }) => {
             // here; the chunk-name change (`tslib.es6-*.js` → `tslib-*.js`)
             // coincided with a Lighthouse regression on /services (P=0).
             // Reverted to let rollup auto-name the tslib chunk as in P4.
-            // Motion (large ~80KB brotli) — separated for route-level lazy benefit
-            motion: ['motion'],
+            // Motion (large ~80KB brotli) — separated for route-level lazy benefit.
+            // Both specifiers map here: 5 components still import the legacy
+            // `framer-motion` alias while the rest use `motion`. Without both,
+            // framer-motion code leaked into route chunks (ServiceDetailPage +4KB).
+            motion: ['motion', 'framer-motion'],
             // P17 — Lucide icons isolated from `ui` chunk. lucide-react is
             // ~80KB raw of the previous 129KB `ui` chunk and rarely changes,
             // so its own chunk gives much better long-term cache hit rates.
