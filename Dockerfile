@@ -26,7 +26,10 @@ WORKDIR /app
 ENV NODE_OPTIONS="--max-old-space-size=4096"
 
 COPY package.json package-lock.json .npmrc ./
-RUN apk add --no-cache openssl && npm ci
+# node-pty (terminal server) is a native addon — node-gyp needs python3 + a C++
+# toolchain to compile it on alpine. Build-stage only; runtime stages copy the
+# compiled artifact, so the final images stay slim.
+RUN apk add --no-cache openssl python3 make g++ && npm ci
 
 COPY . .
 
