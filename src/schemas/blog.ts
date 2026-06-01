@@ -21,6 +21,13 @@ export const BlogPostSchema = z.object({
   serviceCategories: z.array(z.string()).optional(),
   readingTime: z.string(),
   featured: z.boolean().optional(),
+  // Sprint 4 — NotebookLM Audio Overview embed (markdown frontmatter pattern,
+  // vault konsensüsü: BE schema dondurulduğu için content layer'ında tutulur).
+  // When `audioUrl` is set, the blog post page renders <AudioOverview /> between
+  // header and MDX body. Duration + description are optional UX/SEO hints.
+  audioUrl: z.string().url().optional(),
+  audioDurationSec: z.number().int().positive().optional(),
+  audioDescription: z.string().max(400).optional(),
 });
 
 export type BlogPost = z.infer<typeof BlogPostSchema>;
