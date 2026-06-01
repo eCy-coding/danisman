@@ -42,5 +42,8 @@
     "daysAgo": "{count, plural, one {# day ago} other {# days ago}}",
     "items": "{count, plural, one {# item} other {# items}}",
     "results": "{count, plural, one {# result} other {# results}}"
+  },
+  "notify": {
+    "partial_failure": "Your request was received but sync with {{services}} is delayed. It will complete shortly."
   }
 }

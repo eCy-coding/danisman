@@ -42,5 +42,8 @@
     "daysAgo": "{count, plural, one {# gün önce} other {# gün önce}}",
     "items": "{count, plural, one {# öğe} other {# öğe}}",
     "results": "{count, plural, one {# sonuç} other {# sonuç}}"
+  },
+  "notify": {
+    "partial_failure": "Talebiniz alındı, ancak {{services}} ile senkronizasyon gecikmeli. Birazdan tamamlanacak."
   }
 }
