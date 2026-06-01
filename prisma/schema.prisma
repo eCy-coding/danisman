@@ -1290,6 +1290,40 @@ enum CommentStatus {
   SPAM
 }
 
+// Insights/Perspektifler taxonomy (Sprint 4 — restores admin-insights-categories
+// route + tests). L1-L4 domain hierarchy lives under `BlogPost.primaryDomain`
+// (enum) + `subDomain`; this model represents user-managed display categories
+// (slug-based) layered on top, with self-relation for nested hierarchies.
+enum CategoryStatus {
+  ACTIVE
+  ARCHIVED
+}
+
+model InsightCategory {
+  id           String         @id @default(cuid())
+  slug         String         @unique
+  slugEn       String?        @unique
+  nameTr       String
+  nameEn       String?
+  descTr       String?        @db.Text
+  descEn       String?        @db.Text
+  domain       Domain
+  iconName     String?
+  colorAccent  String?
+  displayOrder Int            @default(0)
+  status       CategoryStatus @default(ACTIVE)
+  parentId     String?
+  parent       InsightCategory?  @relation("CategoryHierarchy", fields: [parentId], references: [id])
+  children     InsightCategory[] @relation("CategoryHierarchy")
+  posts        BlogPost[]
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+
+  @@index([domain, status])
+  @@index([parentId])
+  @@map("insight_categories")
+}
+
 model Author {
   id          String     @id @default(cuid())
   slug        String     @unique
@@ -1357,6 +1391,12 @@ model BlogPost {
   topic         String?
   seriesId      String?
   seriesOrder   Int?
+
+  // Sprint 4 — user-managed category overlay (admin CMS) on top of the
+  // L1-L4 domain hierarchy. Optional: pre-existing posts remain null until
+  // explicitly assigned via /api/admin/insights/categories.
+  categoryId String?
+  category   InsightCategory? @relation(fields: [categoryId], references: [id])
 
   // Tag M2M
   tags Tag[] @relation("BlogPostTags")
