@@ -13,9 +13,13 @@ export default defineConfig({
     exclude: [
       '**/node_modules/**',
       '**/dist/**',
+      // Recursive matchers — nested .backups / .claude / .claire copies
+      // (orphan worktrees + phase snapshots) were leaking into the run and
+      // produced 78 transform failures from stale react-helmet-async imports.
+      '**/.backups/**',
+      '**/.claude/**',
+      '**/.claire/**',
       'e2e/**',
-      '.claude/**',
-      '.claire/**',
       'crowler/**',
       'scripts/**',
       'server/**',
