@@ -1,5 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 
+import { Skeleton } from './Skeleton';
+
 interface OptimizedImageProps {
   src: string;
   alt: string;
@@ -75,9 +77,9 @@ export const OptimizedImage: React.FC<OptimizedImageProps> = ({
         ...style,
       }}
     >
-      {/* Blur placeholder skeleton */}
+      {/* Blur placeholder skeleton — canonical primitive (Sprint 7 P42). */}
       {!loaded && (
-        <div aria-hidden="true" className="absolute inset-0 bg-slate-800/60 animate-pulse" />
+        <Skeleton variant="rect" className="absolute inset-0 rounded-none" aria-hidden="true" />
       )}
 
       {inView && (

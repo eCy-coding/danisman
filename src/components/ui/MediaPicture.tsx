@@ -26,6 +26,8 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 
+import { Skeleton } from './Skeleton';
+
 interface MediaPictureProps {
   src: string;
   alt: string;
@@ -99,9 +101,9 @@ export const MediaPicture: React.FC<MediaPictureProps> = ({
         ...style,
       }}
     >
-      {/* Blur skeleton */}
+      {/* Blur skeleton — canonical primitive (Sprint 7 P42 ad-hoc cleanup). */}
       {!loaded && (
-        <div className="absolute inset-0 bg-slate-800/60 animate-pulse" aria-hidden="true" />
+        <Skeleton variant="rect" className="absolute inset-0 rounded-none" aria-hidden="true" />
       )}
 
       {inView && (

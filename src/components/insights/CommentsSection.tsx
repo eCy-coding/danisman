@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { CommentItem, CommentData } from './CommentItem';
 import { CommentForm } from './CommentForm';
+import { Skeleton } from '@/components/ui/Skeleton';
 
 interface CommentsSectionProps {
   postId: string;
@@ -99,14 +100,14 @@ export function CommentsSection({ postId, initialCount = 0 }: CommentsSectionPro
       {visible && loading && (
         <div aria-live="polite" aria-label="Yorumlar yükleniyor">
           {[1, 2, 3].map((i) => (
-            <div key={i} className="mt-6 animate-pulse">
+            <div key={i} className="mt-6">
               <div className="flex items-center gap-2 mb-2">
-                <div className="w-8 h-8 rounded-full bg-neutral-700" />
-                <div className="h-3 bg-neutral-700 rounded w-32" />
+                <Skeleton variant="circle" width={32} height={32} />
+                <Skeleton variant="text" width={128} height={12} />
               </div>
               <div className="space-y-2">
-                <div className="h-3 bg-neutral-700 rounded w-full" />
-                <div className="h-3 bg-neutral-700 rounded w-4/5" />
+                <Skeleton variant="text" width="100%" height={12} />
+                <Skeleton variant="text" width="80%" height={12} />
               </div>
             </div>
           ))}
