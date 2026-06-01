@@ -1300,24 +1300,24 @@ enum CategoryStatus {
 }
 
 model InsightCategory {
-  id           String         @id @default(cuid())
-  slug         String         @unique
-  slugEn       String?        @unique
+  id           String            @id @default(cuid())
+  slug         String            @unique
+  slugEn       String?           @unique
   nameTr       String
   nameEn       String?
-  descTr       String?        @db.Text
-  descEn       String?        @db.Text
+  descTr       String?           @db.Text
+  descEn       String?           @db.Text
   domain       Domain
   iconName     String?
   colorAccent  String?
-  displayOrder Int            @default(0)
-  status       CategoryStatus @default(ACTIVE)
+  displayOrder Int               @default(0)
+  status       CategoryStatus    @default(ACTIVE)
   parentId     String?
   parent       InsightCategory?  @relation("CategoryHierarchy", fields: [parentId], references: [id])
   children     InsightCategory[] @relation("CategoryHierarchy")
   posts        BlogPost[]
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
 
   @@index([domain, status])
   @@index([parentId])
