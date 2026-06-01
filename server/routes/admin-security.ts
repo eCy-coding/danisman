@@ -52,7 +52,7 @@ router.get('/ip-whitelist', ...adminOnly, async (_req: Request, res: Response, n
 router.post('/ip-whitelist', ...adminOnly, async (req: Request, res: Response, next: NextFunction) => {
   try {
     const ip = String((req.body as { ip?: string }).ip ?? '').trim();
-    if (!ip || !/^[0-9a-fA-F.:\/]+$/.test(ip)) return res.status(400).json({ status: 'error', message: 'invalid ip' });
+    if (!ip || !/^[0-9a-fA-F.:/]+$/.test(ip)) return res.status(400).json({ status: 'error', message: 'invalid ip' });
     await redis.sadd(IP_KEY, ip);
     res.status(201).json({ status: 'ok', data: { ip } });
   } catch (err) {

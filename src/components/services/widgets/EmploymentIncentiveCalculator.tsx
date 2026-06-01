@@ -43,12 +43,12 @@ export const EmploymentIncentiveCalculator: React.FC = () => {
         </div>
         <div className="grid md:grid-cols-2 gap-8">
           <div className="bg-white/5 border border-white/10 rounded-2xl p-6 md:p-8 space-y-5">
-            <div><label className="block text-sm font-semibold text-white mb-2">Sektör</label>
-              <select value={sector} onChange={(e) => setSector(e.target.value)} className="w-full px-4 py-3 min-h-[44px] rounded-lg bg-white/5 border border-white/10 text-white">
+            <div><label htmlFor="eic-sector" className="block text-sm font-semibold text-white mb-2">Sektör</label>
+              <select id="eic-sector" value={sector} onChange={(e) => setSector(e.target.value)} className="w-full px-4 py-3 min-h-[44px] rounded-lg bg-white/5 border border-white/10 text-white">
                 {SECTORS.map((s) => <option key={s}>{s}</option>)}
               </select></div>
-            <div><label className="block text-sm font-semibold text-white mb-2">Bölge</label>
-              <select value={region} onChange={(e) => setRegion(e.target.value)} className="w-full px-4 py-3 min-h-[44px] rounded-lg bg-white/5 border border-white/10 text-white">
+            <div><label htmlFor="eic-region" className="block text-sm font-semibold text-white mb-2">Bölge</label>
+              <select id="eic-region" value={region} onChange={(e) => setRegion(e.target.value)} className="w-full px-4 py-3 min-h-[44px] rounded-lg bg-white/5 border border-white/10 text-white">
                 {REGIONS.map((r) => <option key={r}>{r}</option>)}
               </select></div>
             <div><label className="block text-sm font-semibold text-white mb-2">Çalışan Sayısı: <span className="text-secondary font-serif">{workforce}</span></label>

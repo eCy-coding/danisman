@@ -37,8 +37,8 @@ export const UrbanReadinessScore: React.FC = () => {
         </div>
         <div className="grid md:grid-cols-2 gap-8">
           <div className="bg-white/5 border border-white/10 rounded-2xl p-6 md:p-8 space-y-5">
-            <div><label className="block text-sm font-semibold text-white mb-2">Şehir Boyutu</label>
-              <select value={size} onChange={(e) => setSize(e.target.value)} className="w-full px-4 py-3 min-h-[44px] rounded-lg bg-white/5 border border-white/10 text-white">
+            <div><label htmlFor="urs-city-size" className="block text-sm font-semibold text-white mb-2">Şehir Boyutu</label>
+              <select id="urs-city-size" value={size} onChange={(e) => setSize(e.target.value)} className="w-full px-4 py-3 min-h-[44px] rounded-lg bg-white/5 border border-white/10 text-white">
                 {SIZES.map((s) => <option key={s}>{s}</option>)}
               </select></div>
             <div><label className="block text-sm font-semibold text-white mb-2">Nüfus: <span className="text-secondary font-serif">{(population / 1000).toFixed(0)}k</span></label>

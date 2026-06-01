@@ -58,8 +58,8 @@ export const MarketFeasibilityMatrix: React.FC = () => {
         </div>
         <div className="grid md:grid-cols-2 gap-8">
           <div className="bg-white/5 border border-white/10 rounded-2xl p-6 md:p-8 space-y-5">
-            <div><label className="block text-sm font-semibold text-white mb-2">Hedef Ülke</label>
-              <select value={country.code} onChange={(e) => onCountryChange(e.target.value)} className="w-full px-4 py-3 min-h-[44px] rounded-lg bg-white/5 border border-white/10 text-white">
+            <div><label htmlFor="mfm-target-country" className="block text-sm font-semibold text-white mb-2">Hedef Ülke</label>
+              <select id="mfm-target-country" value={country.code} onChange={(e) => onCountryChange(e.target.value)} className="w-full px-4 py-3 min-h-[44px] rounded-lg bg-white/5 border border-white/10 text-white">
                 {COUNTRIES.map((c) => <option key={c.code} value={c.code}>{c.name}</option>)}
               </select>
               <p className="text-xs text-slate-400 mt-2">Ülke seçimi default kriterleri set eder; ihtiyaca göre düzenleyin.</p></div>
