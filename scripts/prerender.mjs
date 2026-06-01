@@ -131,8 +131,18 @@ async function prerenderRoute(browser, route) {
 async function main() {
   // Opt-out instead of opt-in for production. Skip only when explicitly disabled
   // (local dev, fast iteration).
-  if (process.env.PRERENDER === '0' || process.env.SKIP_PRERENDER === '1') {
-    console.log('[prerender] skipped — PRERENDER=0 or SKIP_PRERENDER=1 set');
+  // Vercel build env: chromium binary memory/timeout sınırı 130-route
+  // prerender'ı sustainably destekleyemiyor (browserContext close). Vercel'de
+  // prerender otomatik skip; lokal `npm run build`'de çalışır.
+  if (
+    process.env.PRERENDER === '0' ||
+    process.env.SKIP_PRERENDER === '1' ||
+    process.env.VERCEL === '1'
+  ) {
+    const reason = process.env.VERCEL === '1'
+      ? 'VERCEL=1 build env (chromium unstable on Vercel)'
+      : 'PRERENDER=0 or SKIP_PRERENDER=1 set';
+    console.log(`[prerender] skipped — ${reason}`);
     return;
   }
   if (!fs.existsSync(path.join(distDir, 'index.html'))) {
