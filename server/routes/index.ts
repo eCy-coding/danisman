@@ -7,6 +7,7 @@ import newsletterLifecycleRoutes from './newsletter-lifecycle';
 import aiRoutes from './ai';
 import adminRoutes from './admin';
 import webhookRoutes from './webhooks';
+import uptimeWebhookRoutes from './uptime-webhook';
 import manageRoutes from './manage';
 import totpRoutes from './totp';
 import sessionRoutes from './sessions';
@@ -531,6 +532,8 @@ router.use('/admin/insights/categories', adminInsightsCategoriesRouter);
 router.use('/admin/insights', adminInsightsRouter);
 router.use('/insights', publicInsightsSearchRouter);
 router.use('/webhooks', webhookRoutes);
+// P40-T04: UptimeRobot → Telegram (Observability)
+router.use('/webhooks', uptimeWebhookRoutes);
 router.use('/manage', manageRoutes);
 router.use('/auth/2fa', totpRoutes);
 router.use('/sessions', sessionRoutes);
