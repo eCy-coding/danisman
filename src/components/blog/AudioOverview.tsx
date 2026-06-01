@@ -34,6 +34,8 @@
 
 import { useId, useMemo, type ReactElement } from 'react';
 
+import { buildAudioObjectSchema } from '@/lib/structured-data';
+
 export interface AudioOverviewProps {
   /** Direct URL to the audio asset (mp3/m4a/wav). */
   audioUrl: string;
@@ -58,15 +60,6 @@ function formatDuration(sec: number): string {
   return `${m}:${String(s).padStart(2, '0')}`;
 }
 
-function toIsoDuration(sec: number): string {
-  if (!Number.isFinite(sec) || sec <= 0) return 'PT0S';
-  const m = Math.floor(sec / 60);
-  const s = Math.floor(sec % 60);
-  if (m && s) return `PT${m}M${s}S`;
-  if (m) return `PT${m}M`;
-  return `PT${s}S`;
-}
-
 export function AudioOverview({
   audioUrl,
   title,
@@ -85,18 +78,16 @@ export function AudioOverview({
 
   const schemaJson = useMemo(() => {
     if (!includeSchema || !canonicalUrl) return null;
-    const obj: Record<string, unknown> = {
-      '@context': 'https://schema.org',
-      '@type': 'AudioObject',
-      name: title,
-      contentUrl: audioUrl,
-      encodingFormat: audioUrl.endsWith('.m4a') ? 'audio/mp4' : 'audio/mpeg',
-      url: canonicalUrl,
-    };
-    if (durationSec) obj.duration = toIsoDuration(durationSec);
-    if (publishedAt) obj.uploadDate = publishedAt;
-    if (description) obj.description = description;
-    return JSON.stringify(obj);
+    return JSON.stringify(
+      buildAudioObjectSchema({
+        audioUrl,
+        title,
+        url: canonicalUrl,
+        durationSec,
+        publishedAt,
+        description,
+      }),
+    );
   }, [includeSchema, canonicalUrl, title, audioUrl, durationSec, publishedAt, description]);
 
   return (

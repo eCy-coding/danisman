@@ -203,6 +203,60 @@ export function buildFaqSchema(input: FaqSchemaInput): Record<string, unknown> {
   };
 }
 
+/**
+ * Sprint 7 P42 — canonical AudioObject schema for NotebookLM Audio Overview
+ * embeds (originally inlined in `src/components/blog/AudioOverview.tsx`).
+ *
+ * Codifies the JSON-LD AudioObject pattern flagged by the Coding Patterns
+ * Librarian as an "Architect codification gap" during Sprint 6. Centralises
+ * the encodingFormat auto-detection (mp3 → `audio/mpeg`, m4a → `audio/mp4`)
+ * and the ISO-8601 duration encoding so future audio embeds reuse this
+ * helper instead of growing ad-hoc inline schemas.
+ */
+export interface AudioObjectSchemaInput {
+  /** Direct URL to the audio asset (mp3/m4a/wav). */
+  audioUrl: string;
+  /** Human-readable title — used as schema headline. */
+  title: string;
+  /** Canonical page URL — used as schema `url`. */
+  url: string;
+  /** Duration in seconds — serialised to ISO-8601 (PT…M…S). */
+  durationSec?: number;
+  /** ISO-8601 publish date — used as schema `uploadDate`. */
+  publishedAt?: string;
+  /** One-line description (≤160 chars). */
+  description?: string;
+  /** Override the auto-detected encodingFormat (e.g. `audio/wav`). */
+  encodingFormat?: string;
+}
+
+/** Serialise a duration in seconds to schema.org ISO-8601 (PT…). */
+function toIsoDuration(sec: number): string {
+  if (!Number.isFinite(sec) || sec <= 0) return 'PT0S';
+  const m = Math.floor(sec / 60);
+  const s = Math.floor(sec % 60);
+  if (m && s) return `PT${m}M${s}S`;
+  if (m) return `PT${m}M`;
+  return `PT${s}S`;
+}
+
+export function buildAudioObjectSchema(input: AudioObjectSchemaInput): Record<string, unknown> {
+  const encodingFormat =
+    input.encodingFormat ?? (input.audioUrl.endsWith('.m4a') ? 'audio/mp4' : 'audio/mpeg');
+  const obj: Record<string, unknown> = {
+    '@context': 'https://schema.org',
+    '@type': 'AudioObject',
+    name: input.title,
+    contentUrl: input.audioUrl,
+    encodingFormat,
+    url: input.url,
+  };
+  if (input.durationSec) obj.duration = toIsoDuration(input.durationSec);
+  if (input.publishedAt) obj.uploadDate = input.publishedAt;
+  if (input.description) obj.description = input.description;
+  return obj;
+}
+
 export interface CaseStudySchemaInput {
   url: string;
   title: string;
