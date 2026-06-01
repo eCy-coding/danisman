@@ -11,6 +11,7 @@
  */
 
 import { describe, it, expect } from 'vitest';
+import '@testing-library/jest-dom';
 import { render, screen, within } from '@testing-library/react';
 import { AudioOverview } from './AudioOverview';
 

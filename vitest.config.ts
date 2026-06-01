@@ -22,6 +22,11 @@ export default defineConfig({
     ],
     alias: {
       '@': path.resolve(__dirname, './src'),
+      // Mirror vite.config alias: react-helmet-async@2 is incompatible with
+      // React 19, so the package is NOT installed — both build and tests resolve
+      // it to the local useEffect-based shim. Without this, every test importing
+      // a Helmet-using component fails "Failed to resolve import".
+      'react-helmet-async': path.resolve(__dirname, './src/lib/seo-helmet.tsx'),
     },
     coverage: {
       provider: 'istanbul',
@@ -53,6 +58,7 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
+      'react-helmet-async': path.resolve(__dirname, './src/lib/seo-helmet.tsx'),
     },
   },
 });
