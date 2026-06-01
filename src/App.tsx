@@ -417,6 +417,36 @@ const AnimatedRoutes = () => {
           />
           {/* /perspektifler canonical alias → /blog */}
           <Route path="/perspektifler" element={<Navigate to="/blog" replace />} />
+          {/*
+            Sprint 9 P44-T02b — Localized TR slug aliases.
+            Türkçe yüksek-niyetli anahtar kelimeler için 301-style SPA redirect.
+            Foundation slug map: src/i18n/localized-slugs.ts (PR #168).
+            Canonical EN slug page'inde yaşamaya devam ediyor; sonraki atomic PR
+            bu yönü ters çevirecek (TR canonical + EN 301 alias) ve SeoManager
+            canonical href'lerini güncelleyecek.
+          */}
+          <Route path="/hizmetler/*" element={<Navigate to="/services" replace />} />
+          <Route path="/iletisim" element={<Navigate to="/contact" replace />} />
+          <Route path="/fiyatlandirma" element={<Navigate to="/pricing" replace />} />
+          <Route path="/hakkimizda" element={<Navigate to="/about" replace />} />
+          <Route path="/hizli-kontrol" element={<Navigate to="/quick-check" replace />} />
+          <Route
+            path="/fiyatlandirma-hesabi"
+            element={<Navigate to="/pricing-calculator" replace />}
+          />
+          <Route path="/kariyer" element={<Navigate to="/careers" replace />} />
+          <Route path="/vaka-calismalari" element={<Navigate to="/case-studies" replace />} />
+          <Route path="/metodoloji" element={<Navigate to="/methodology" replace />} />
+          <Route path="/ekip" element={<Navigate to="/team" replace />} />
+          <Route path="/is-ortaklari" element={<Navigate to="/partners" replace />} />
+          <Route path="/basin" element={<Navigate to="/press" replace />} />
+          <Route path="/etkinlikler" element={<Navigate to="/events" replace />} />
+          <Route path="/lokasyonlar" element={<Navigate to="/locations" replace />} />
+          <Route path="/gizlilik" element={<Navigate to="/privacy" replace />} />
+          <Route path="/kosullar" element={<Navigate to="/terms" replace />} />
+          <Route path="/cerezler" element={<Navigate to="/cookies" replace />} />
+          <Route path="/sss" element={<Navigate to="/faq" replace />} />
+          <Route path="/konusmalar" element={<Navigate to="/speaking" replace />} />
           {/* --- Perspektif Wave-3A PB-6 routes --- */}
           <Route
             path="/insights/search"
