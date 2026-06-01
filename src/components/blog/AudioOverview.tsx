@@ -32,7 +32,7 @@
  *   />
  */
 
-import { useId, useMemo } from 'react';
+import { useId, useMemo, type ReactElement } from 'react';
 
 export interface AudioOverviewProps {
   /** Direct URL to the audio asset (mp3/m4a/wav). */
@@ -75,7 +75,7 @@ export function AudioOverview({
   canonicalUrl,
   description,
   includeSchema = true,
-}: AudioOverviewProps): JSX.Element {
+}: AudioOverviewProps): ReactElement {
   const headingId = useId();
 
   const durationLabel = useMemo(
