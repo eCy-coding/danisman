@@ -26,8 +26,17 @@ router.get('/:slug', async (req: Request, res: Response, next: NextFunction) => 
       res.status(400).json({ status: 'error', message: 'invalid slug' });
       return;
     }
-    const raw = await redis.get(KEY(slug));
-    const override = raw ? JSON.parse(raw) : null;
+    // Override is optional cache data — the frontend merges it over build-time
+    // static service-content.ts. A Redis outage (or no Redis in test/CI) must
+    // degrade to override: null, NOT 500 the public page. Only the read is
+    // guarded; a genuine programming error still propagates to next(err).
+    let override: unknown = null;
+    try {
+      const raw = await redis.get(KEY(slug));
+      override = raw ? JSON.parse(raw) : null;
+    } catch {
+      override = null;
+    }
     res.setHeader('Cache-Control', 'public, max-age=30, stale-while-revalidate=60');
     res.json({ status: 'ok', data: { slug, override } });
   } catch (err) {
