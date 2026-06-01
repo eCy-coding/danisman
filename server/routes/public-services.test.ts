@@ -1,6 +1,20 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import express from 'express';
 import request from 'supertest';
+
+// Sprint 6 A1d-b — `public-services` is Redis-backed (no Prisma). Without a
+// redis mock the route handler tries to connect to a non-existent Redis in
+// CI and throws → 500. Wire the same `vi.mock('../config/redis', ...)`
+// pattern used by `auth.test.ts:9-15`. `null` from `get()` keeps the
+// `override` value null, which matches the route's "no override" branch.
+vi.mock('../config/redis', () => ({
+  redis: {
+    status: 'end',
+    get: vi.fn().mockResolvedValue(null),
+    set: vi.fn().mockResolvedValue('OK'),
+  },
+}));
+
 import publicServicesRoutes from './public-services';
 
 describe('P66 public-services', () => {

@@ -13,19 +13,24 @@ export default defineConfig({
     exclude: [
       '**/node_modules/**',
       '**/dist/**',
+      // Recursive matchers — nested .backups / .claude / .claire copies
+      // (orphan worktrees + phase snapshots) were leaking into the run and
+      // produced 78 transform failures from stale react-helmet-async imports.
+      '**/.backups/**',
+      '**/.claude/**',
+      '**/.claire/**',
       'e2e/**',
-      '.claude/**',
-      '.claire/**',
       'crowler/**',
       'scripts/**',
       'server/**',
     ],
     alias: {
       '@': path.resolve(__dirname, './src'),
-      // Mirror vite.config alias: react-helmet-async@2 is incompatible with
-      // React 19, so the package is NOT installed — both build and tests resolve
-      // it to the local useEffect-based shim. Without this, every test importing
-      // a Helmet-using component fails "Failed to resolve import".
+      // P46 C2 mirror — react-helmet-async@2 is incompatible with React 19;
+      // production build aliases to the useEffect-based shim in vite.config.ts.
+      // Vitest needs the same alias so test source files (and component code
+      // imported by tests) can resolve `react-helmet-async` without the npm
+      // package. Without this mirror 1230 tests fail to transform on CI.
       'react-helmet-async': path.resolve(__dirname, './src/lib/seo-helmet.tsx'),
     },
     coverage: {

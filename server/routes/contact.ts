@@ -19,7 +19,6 @@
  *   503 NOTIFY_DISABLED     — TELEGRAM_BOT_TOKEN missing in env
  */
 
-import crypto from 'node:crypto';
 import { Router, Request, Response, NextFunction } from 'express';
 import { z } from 'zod';
 import * as Sentry from '@sentry/node';
@@ -28,6 +27,7 @@ import { idempotency } from '../middleware/idempotency';
 import { HttpError } from '../middleware/error';
 import { notify } from '../lib/telegram';
 import { logger } from '../config/logger';
+import { hashIp } from '../lib/crypto/hashIp';
 import { captureWithConsent } from '../lib/posthog-server';
 import { prisma } from '../config/db';
 import { upsertProspect } from '../services/notion';
@@ -113,11 +113,10 @@ router.post(
       }
 
       // SAT-01: immutable consent provenance — 3yr retention (KVKK_CONTACT_FORM).
-      // IP sha256-hashed for data minimality (m.5). Best-effort: DB blip
-      // must NOT fail the user submission.
-      const ipHash = req.ip
-        ? crypto.createHash('sha256').update(req.ip).digest('hex').slice(0, 16)
-        : null;
+      // KVKK m.4 (Veri minimizasyonu) + m.12 (Veri güvenliği): IP is pseudonymized
+      // via the canonical hashIp helper (32-char SHA-256 hex). Best-effort: DB
+      // blip must NOT fail the user submission.
+      const ipHash = hashIp(req.ip);
       void prisma.consentRecord
         .create({
           data: {
