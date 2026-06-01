@@ -26,6 +26,9 @@ WORKDIR /app
 ENV NODE_OPTIONS="--max-old-space-size=4096"
 
 COPY package.json package-lock.json .npmrc ./
+# prisma/ must exist before `npm ci`: the postinstall hook runs
+# `npx prisma generate`, which reads prisma/schema.prisma.
+COPY prisma ./prisma
 # node-pty (terminal server) is a native addon — node-gyp needs python3 + a C++
 # toolchain to compile it on alpine. Build-stage only; runtime stages copy the
 # compiled artifact, so the final images stay slim.
