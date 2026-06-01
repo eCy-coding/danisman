@@ -1,14 +1,10 @@
-import crypto from 'crypto';
 import { Request, Response, NextFunction } from 'express';
 import { redis } from '../config/redis';
 import { logger } from '../config/logger';
+import { hashIp } from '../lib/crypto/hashIp';
 
 const MAX_COMMENTS_PER_HOUR = 5;
 const WINDOW_SEC = 3600;
-
-function hashIp(ip: string): string {
-  return crypto.createHash('sha256').update(ip).digest('hex');
-}
 
 export async function rateLimitComments(
   req: Request,
@@ -16,7 +12,11 @@ export async function rateLimitComments(
   next: NextFunction,
 ): Promise<void> {
   const rawIp = req.ip ?? req.socket.remoteAddress ?? 'unknown';
-  const ipHash = hashIp(rawIp);
+  // KVKK m.4 + m.12 — canonical 32-char SHA-256 hex pseudonymization. The
+  // raw IP NEVER reaches Redis; bucket key is the hash digest. Birthday
+  // paradox over 2^128 makes collision negligible at our traffic scale, so
+  // the shorter key (32 vs prior 64) is safe AND reduces store memory.
+  const ipHash = hashIp(rawIp) ?? 'unknown';
   const key = `comment:ratelimit:${ipHash}`;
 
   try {
