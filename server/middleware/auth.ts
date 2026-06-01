@@ -57,13 +57,37 @@ export const authenticate = async (
   }
 };
 
-export const requireRole = (role: string) => {
+/**
+ * Sprint 9 P44-T03 — RBAC middleware (Architect CONVERGENT spec).
+ *
+ * Frontend RoleGuard already covers 5-role authorization (USER, CLIENT,
+ * CONSULTANT, ADMIN, PREMIUM). This middleware is the server-side mirror.
+ *
+ * Signature accepts either a single role string OR a readonly array of
+ * roles so call sites can do either:
+ *   router.get('/x', authenticate, requireRole('ADMIN'), handler)
+ *   router.get('/y', authenticate, requireRole(['ADMIN', 'CONSULTANT']), handler)
+ *
+ * ADMIN remains an implicit super-role (god-mode bypass) so admin-only
+ * call sites stay short. Pass `requireRole(['ADMIN'])` if you need an
+ * explicit ADMIN-only gate without the bypass semantics.
+ *
+ * Returns 401 when authenticate() did not populate req.user (defensive)
+ * and 403 (Forbidden) when the role is mismatched.
+ */
+export const requireRole = (role: string | readonly string[]) => {
+  const allowedRoles: readonly string[] =
+    typeof role === 'string' ? [role] : role;
   return (req: AuthRequest, res: Response, next: NextFunction): void => {
     if (!req.user) {
       res.status(401).json({ status: 'error', message: 'Authentication required' });
       return;
     }
-    if (req.user.role !== role && req.user.role !== 'ADMIN') {
+    if (req.user.role === 'ADMIN') {
+      next();
+      return;
+    }
+    if (!allowedRoles.includes(req.user.role)) {
       res.status(403).json({ status: 'error', message: 'Insufficient permissions' });
       return;
     }
