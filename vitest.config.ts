@@ -26,6 +26,12 @@ export default defineConfig({
     ],
     alias: {
       '@': path.resolve(__dirname, './src'),
+      // P46 C2 mirror — react-helmet-async@2 is incompatible with React 19;
+      // production build aliases to the useEffect-based shim in vite.config.ts.
+      // Vitest needs the same alias so test source files (and component code
+      // imported by tests) can resolve `react-helmet-async` without the npm
+      // package. Without this mirror 1230 tests fail to transform on CI.
+      'react-helmet-async': path.resolve(__dirname, './src/lib/seo-helmet.tsx'),
     },
     coverage: {
       provider: 'istanbul',
@@ -57,6 +63,7 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
+      'react-helmet-async': path.resolve(__dirname, './src/lib/seo-helmet.tsx'),
     },
   },
 });
