@@ -1,4 +1,3 @@
-import crypto from 'node:crypto';
 import { Router, Request, Response, NextFunction } from 'express';
 import { z } from 'zod';
 import { Prisma } from '@prisma/client';
@@ -6,6 +5,7 @@ import { prisma } from '../config/db';
 import { contactLimiter } from '../middleware/rateLimiter';
 import { logger } from '../config/logger';
 import { captureWithConsent } from '../lib/posthog-server';
+import { hashIp } from '../lib/crypto/hashIp';
 
 const router = Router();
 
@@ -34,9 +34,9 @@ router.post(
     try {
       const { email, consent, analyticsConsent, source } = subscribeSchema.parse(req.body);
       const key = email.toLowerCase();
-      const ip = req.ip
-        ? crypto.createHash('sha256').update(req.ip).digest('hex').slice(0, 16)
-        : null;
+      // KVKK m.4 + m.12: canonical pseudonymization helper. 32-char (128-bit)
+      // hex digest replaces the earlier ad-hoc inline slice(0,16) pattern.
+      const ip = hashIp(req.ip);
       const userAgent = (req.headers['user-agent'] ?? null) as string | null;
 
       const existing = await prisma.newsletterSubscriber.findUnique({ where: { email: key } });
