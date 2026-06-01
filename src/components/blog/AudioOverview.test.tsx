@@ -114,11 +114,7 @@ describe('AudioOverview', () => {
 
   it('encodes pure-minutes duration as PT{m}M without seconds', () => {
     const { container } = render(
-      <AudioOverview
-        {...baseProps}
-        durationSec={360}
-        canonicalUrl="https://ecypro.com/blog/foo"
-      />,
+      <AudioOverview {...baseProps} durationSec={360} canonicalUrl="https://ecypro.com/blog/foo" />,
     );
     const script = container.querySelector('script[type="application/ld+json"]');
     expect(JSON.parse(script!.innerHTML).duration).toBe('PT6M');

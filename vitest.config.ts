@@ -47,6 +47,10 @@ export default defineConfig({
         'src/generated/**',
         'src/types/**',
         'src/**/*.stories.{ts,tsx}',
+        // vitest 4.1 instruments uncovered files too; UpdatePrompt imports the
+        // build-time `virtual:pwa-register/react` module that vite-plugin-pwa
+        // only provides at build, so coverage instrumentation can't resolve it.
+        'src/components/pwa/UpdatePrompt.tsx',
       ],
       // Phase 109b: regression-trap thresholds.
       // Baseline (2026-05-08): lines 3.62%, statements 3.58%, branches 3.06%,

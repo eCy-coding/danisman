@@ -127,7 +127,10 @@ router.get(
     const q = String(req.query.q ?? '').trim();
     const langRaw = String(req.query.lang ?? 'tr').toLowerCase();
     const lang: 'tr' | 'en' = langRaw === 'en' ? 'en' : 'tr';
-    const limit = Math.max(1, Math.min(50, Number.parseInt(String(req.query.limit ?? '20'), 10) || 20));
+    const limit = Math.max(
+      1,
+      Math.min(50, Number.parseInt(String(req.query.limit ?? '20'), 10) || 20),
+    );
     const cursor = decodeCursor(req.query.cursor as string | undefined);
 
     if (q.length === 0) {

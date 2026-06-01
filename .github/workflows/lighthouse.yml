@@ -1,6 +1,6 @@
 # P40-T92: Lighthouse CI — Fail-on-Regression
 # Runs on every PR + push to main.
-# Fails CI if performance drops below .lighthouserc.js thresholds.
+# Fails CI if performance drops below .lighthouserc.local.cjs thresholds.
 name: Lighthouse CI
 
 on:
@@ -45,7 +45,7 @@ jobs:
         run: npx wait-on http://localhost:4173 --timeout 30000
 
       - name: Run Lighthouse CI
-        run: npx lhci autorun --config .lighthouserc.js
+        run: npx lhci autorun --config .lighthouserc.local.cjs
         env:
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
 

@@ -59,9 +59,7 @@ describe('uptime-webhook', () => {
 
   it('returns 401 on wrong-length secret (constant-time guard)', async () => {
     process.env.UPTIMEROBOT_WEBHOOK_SECRET = 'super-secret-32-chars-minimum-len';
-    const res = await request(buildApp())
-      .post('/api/webhooks/uptime?secret=short')
-      .send({});
+    const res = await request(buildApp()).post('/api/webhooks/uptime?secret=short').send({});
     expect(res.status).toBe(401);
     expect(telegramSpy).not.toHaveBeenCalled();
   });

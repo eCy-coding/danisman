@@ -12,8 +12,7 @@ import crypto from 'node:crypto';
 
 import { hashIp } from './hashIp';
 
-const sha256_32 = (s: string) =>
-  crypto.createHash('sha256').update(s).digest('hex').slice(0, 32);
+const sha256_32 = (s: string) => crypto.createHash('sha256').update(s).digest('hex').slice(0, 32);
 
 describe('hashIp', () => {
   it('returns null for undefined', () => {

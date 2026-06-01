@@ -13,4 +13,4 @@ jobs:
         with: { node-version: '22', cache: 'npm' }
       - run: npm ci
       - run: npx prisma generate
-      - run: npx vitest run --config vitest.config.server.ts --reporter=verbose
+      - run: npx vitest run --config vitest.server.config.ts --reporter=verbose

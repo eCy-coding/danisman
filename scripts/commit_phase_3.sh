@@ -22,7 +22,7 @@ info "Phase 3 KVKK Compliance Shield — Pre-commit checks"
 info "Running frontend tests..."
 npm test -- --run 2>&1 | tail -3
 info "Running server tests..."
-npx vitest --config vitest.config.server.ts run server/routes/admin-dsar server/routes/admin-consent server/routes/admin-ropa server/routes/admin-breach server/routes/admin-verbis server/routes/admin-retention server/routes/admin-independence 2>&1 | tail -3
+npx vitest --config vitest.server.config.ts run server/routes/admin-dsar server/routes/admin-consent server/routes/admin-ropa server/routes/admin-breach server/routes/admin-verbis server/routes/admin-retention server/routes/admin-independence 2>&1 | tail -3
 
 info "Frontend typecheck..."
 npx tsc --noEmit 2>&1 | grep -v "ignoreDeprecations" | grep "error TS" | head -5 || pass "Frontend typecheck clean"

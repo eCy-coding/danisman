@@ -110,10 +110,7 @@ export function AudioOverview({
           <p className="text-xs uppercase tracking-wider text-white/60">
             Audio Deep Dive · NotebookLM
           </p>
-          <h2
-            id={headingId}
-            className="text-golden-lg font-semibold text-white"
-          >
+          <h2 id={headingId} className="text-golden-lg font-semibold text-white">
             {title}
           </h2>
         </div>
@@ -134,23 +131,13 @@ export function AudioOverview({
           the authoritative captioned source. Re-evaluate when NotebookLM
           exports VTT transcripts. */}
       {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
-      <audio
-        controls
-        preload="metadata"
-        className="w-full"
-        aria-label={title}
-      >
-        <source
-          src={audioUrl}
-          type={audioUrl.endsWith('.m4a') ? 'audio/mp4' : 'audio/mpeg'}
-        />
+      <audio controls preload="metadata" className="w-full" aria-label={title}>
+        <source src={audioUrl} type={audioUrl.endsWith('.m4a') ? 'audio/mp4' : 'audio/mpeg'} />
         Audio not supported in this browser.
       </audio>
 
       {description && (
-        <p className="text-golden-base text-white/70 mt-fib-4 leading-relaxed">
-          {description}
-        </p>
+        <p className="text-golden-base text-white/70 mt-fib-4 leading-relaxed">{description}</p>
       )}
 
       {schemaJson && (

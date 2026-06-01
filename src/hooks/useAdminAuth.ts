@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAppStore } from '@/store/useAppStore';
+import { useAppStore } from '@/stores/useAppStore';
 import { authApi } from '@/lib/api';
 
 interface LoginResult {
