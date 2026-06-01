@@ -6,6 +6,10 @@ import {
   trackForm,
   trackPageView,
   trackBooking,
+  trackContactConversion,
+  trackNewsletterConversion,
+  trackBookingConversion,
+  trackQuoteRequest,
 } from './analytics';
 
 describe('analytics', () => {
@@ -158,6 +162,99 @@ describe('analytics', () => {
     it('does not throw when window.gtag is undefined', () => {
       delete window.gtag;
       expect(() => trackCTA('Test', 'test')).not.toThrow();
+    });
+  });
+
+  // ─── P34-T01 GA4 Conversion Goals ─────────────────────────────────────
+  describe('GA4 Conversion Goals (P34-T01)', () => {
+    beforeEach(() => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (window as any).dataLayer = [];
+    });
+
+    it('trackContactConversion fires generate_lead + parallel form submit_success', () => {
+      trackContactConversion('contact', { source: 'pricing' });
+      expect(gtagSpy).toHaveBeenCalledWith(
+        'event',
+        'generate_lead',
+        expect.objectContaining({
+          form_id: 'contact',
+          method: 'contact_form',
+          value: 1,
+          currency: 'TRY',
+          source: 'pricing',
+        }),
+      );
+      // dataLayer parallel push
+      expect(window.dataLayer).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ event: 'generate_lead', form_id: 'contact' }),
+        ]),
+      );
+    });
+
+    it('trackNewsletterConversion fires sign_up + legacy newsletter_signup', () => {
+      trackNewsletterConversion('footer', 'tr', { campaign: 'launch' });
+      const calls = gtagSpy.mock.calls.map((c) => c[1]);
+      expect(calls).toContain('sign_up');
+      expect(calls).toContain('newsletter_signup');
+      expect(gtagSpy).toHaveBeenCalledWith(
+        'event',
+        'sign_up',
+        expect.objectContaining({
+          method: 'newsletter',
+          source: 'footer',
+          locale: 'tr',
+          campaign: 'launch',
+        }),
+      );
+    });
+
+    it('trackBookingConversion fires generate_lead with booking-scoped params', () => {
+      trackBookingConversion('strategy_session', 2500, { rep: 'EYL' });
+      expect(gtagSpy).toHaveBeenCalledWith(
+        'event',
+        'generate_lead',
+        expect.objectContaining({
+          form_id: 'booking',
+          method: 'booking_flow',
+          booking_type: 'strategy_session',
+          value: 2500,
+          currency: 'TRY',
+          rep: 'EYL',
+        }),
+      );
+    });
+
+    it('trackBookingConversion defaults value to 1 when omitted', () => {
+      trackBookingConversion('intro_call');
+      expect(gtagSpy).toHaveBeenCalledWith(
+        'event',
+        'generate_lead',
+        expect.objectContaining({ value: 1, booking_type: 'intro_call' }),
+      );
+    });
+
+    it('trackQuoteRequest fires quote_request with source attribution', () => {
+      trackQuoteRequest('quick_check', { tier: 'enterprise' });
+      expect(gtagSpy).toHaveBeenCalledWith(
+        'event',
+        'quote_request',
+        expect.objectContaining({
+          source: 'quick_check',
+          tier: 'enterprise',
+          value: 1,
+          currency: 'TRY',
+        }),
+      );
+    });
+
+    it('dataLayer push initializes array if undefined', () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      delete (window as any).dataLayer;
+      trackContactConversion('discovery');
+      expect(Array.isArray(window.dataLayer)).toBe(true);
+      expect(window.dataLayer!.length).toBeGreaterThan(0);
     });
   });
 });
