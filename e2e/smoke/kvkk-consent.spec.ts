@@ -40,7 +40,7 @@ test.describe('KVKK Consent Banner', () => {
     }
 
     // Click "Accept all" / "Tümünü Kabul Et"
-    const acceptBtn = bannerEl.locator('button:has-text(/kabul|accept|tümünü|allow all/i)');
+    const acceptBtn = bannerEl.getByRole('button', { name: /kabul|accept|tümünü|allow all/i });
     await acceptBtn.first().click();
 
     // Banner must disappear
