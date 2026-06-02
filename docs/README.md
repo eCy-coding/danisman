@@ -11,6 +11,7 @@ the buckets below. Operating discipline (how we plan/build/verify) → [WORKFLOW
 ## Workflow & process
 
 - [WORKFLOW.md](./WORKFLOW.md) — sustainable operating loop (Opus-plan → Sonnet-build → Opus-verify, PBVC gate)
+- [CANONICAL_PATTERNS.md](./CANONICAL_PATTERNS.md) — canonical patterns catalog (single source of truth for repo idioms; PBVC §3.11 anchor)
 - Slash-command routing & quality gates → root [`CLAUDE.md`](../CLAUDE.md)
 
 ## Reference (`reference/`)
