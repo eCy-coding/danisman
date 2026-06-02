@@ -1,0 +1,56 @@
+# ============================================================================
+# eCyPro — gitleaks.yml (Secret Scan, Fail-Fast)
+# Source: ci-cd-workflows/gitleaks.yml.template  •  Generated: 2026-06-02
+# Authority: owner-manual/secret-rotation-runbook.md + KVKK m.12
+# Gate: zero leaks tolerated; any finding blocks merge + notifies Telegram
+# UNKNOWN-TAG: .gitleaks.toml ruleset path (assumed repo root)
+# ============================================================================
+
+name: Gitleaks — Secret Scan
+
+on:
+  push:
+    branches: [main, develop, "release/**", "sprint-*/**"]
+  pull_request:
+    branches: [main, develop]
+  schedule:
+    - cron: "0 6 * * 1" # Mon 06:00 UTC weekly deep-history sweep
+  workflow_dispatch:
+
+concurrency:
+  group: gitleaks-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pull-requests: write
+  security-events: write
+
+jobs:
+  gitleaks:
+    name: Gitleaks — Scan
+    runs-on: ubuntu-22.04
+    timeout-minutes: 8
+    steps:
+      - name: Checkout (full history on schedule, shallow on PR)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: ${{ github.event_name == 'schedule' && '0' || '1' }}
+
+      - name: Run Gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE }}
+          GITLEAKS_CONFIG: .gitleaks.toml
+          GITLEAKS_ENABLE_COMMENTS: "true"
+          GITLEAKS_ENABLE_UPLOAD_ARTIFACT: "true"
+          GITLEAKS_ENABLE_SUMMARY: "true"
+
+      - name: Telegram on leak
+        if: failure()
+        run: |
+          curl -sS -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
+            -d "chat_id=${{ secrets.TELEGRAM_CHAT_ID }}" \
+            -d "parse_mode=Markdown" \
+            -d "text=🚨 *SECRET LEAK DETECTED*%0Arepo: ${{ github.repository }}%0Asha: \`${{ github.sha }}\`%0Across-link: owner-manual/secret-rotation-runbook.md"

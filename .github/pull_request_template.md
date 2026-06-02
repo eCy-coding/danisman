@@ -1,53 +1,97 @@
 <!--
-  eCyPro Pull Request
-  This template enforces the Definition of Done from docs/reference/WEB_STANDARDS.md.
-  Fill every section. Do not delete headings — write "N/A" if not applicable.
+eCyPro PR Template
+Adoption path: .github/PULL_REQUEST_TEMPLATE.md
+Authority: protocols/AI_COORDINATION_PROTOCOL_v1.md §3 (7-step canonical) + DoD #24 NotebookLM Consensus
+Lexicon: Aday/Süreç/Anlaşma canonical. "Müşteri/Lead" YASAK.
+git push --no-verify YASAK. git push --force YASAK.
 -->
 
-## Why
+## Özet (TR)
 
-<!-- The problem or goal. Link issue/ticket if any. -->
+<!-- Tek paragraf, 2-3 cümle. Aday/Süreç/Anlaşma terminolojisi. -->
 
-## What
+## Summary (EN)
 
-<!-- What changed, at a glance. Scope of files/areas touched. -->
+<!-- 2-3 sentences. -->
 
-## How verified
+## Atomic spec reference
 
-<!-- Commands run + result. Screenshots/recordings for UI. Both TR and EN if user-facing. -->
+- ROADMAP: `sprint-11-12/ROADMAP_2026_06_02.md` § __
+- Atomic ID: S__.A__
+- BUILD_MANIFEST: §__
 
-## Risk
+## Değişiklik tipi
 
-<!-- Blast radius, rollback plan, and any SHOULD-clause deviations (justify per WEB_STANDARDS §1.2). -->
+- [ ] feat — yeni yetenek
+- [ ] fix — hata düzeltme
+- [ ] refactor — davranış değişmedi
+- [ ] perf — performans iyileştirme
+- [ ] docs — sadece dokümantasyon
+- [ ] test — sadece test
+- [ ] chore — bağımlılık / CI / yapı
+- [ ] security — KVKK / GDPR / PII
+
+## 7-step canonical (protocols §3)
+
+- [ ] 1. Plan modu (READ-ONLY, atomic spec netleşti)
+- [ ] 2. NotebookLM consensus (vault citation veya `DEFERRED — RESOURCE_EXHAUSTED YYYY-MM-DD`)
+- [ ] 3. Code mode (lefthook pre-commit yeşil)
+- [ ] 4. Vitest +N delta (baseline ~1909)
+- [ ] 5. Playwright smoke (etkilenen kategori)
+- [ ] 6. PR body bu şablon ile dolu
+- [ ] 7. CI yeşil, push standart kanaldan
+
+## DoD checklist
+
+- [ ] Typecheck (`pnpm typecheck`) yeşil
+- [ ] Lint + Prettier yeşil
+- [ ] Vitest tüm paketler yeşil, delta belirtildi: `__`
+- [ ] Playwright smoke etkilenen kategori yeşil
+- [ ] axe-core 4 critical route regresyon yok
+- [ ] Sentry PII fixture yeşil (KVKK gate)
+- [ ] PostHog opt-out-default davranışı bozulmadı
+- [ ] Lexicon (Aday/Süreç/Anlaşma) ihlali yok
+- [ ] CHANGELOG / changeset eklendi
+- [ ] Dokümantasyon güncellendi (gerekiyorsa)
+
+## NotebookLM Consensus
+
+<!-- ZORUNLU. Format: -->
+<!-- "NotebookLM consensus on YYYY-MM-DD: <vault-name> notebook + <vault-name> notebook → consensus on <decision>." -->
+<!-- veya quota durumunda: -->
+<!-- "DEFERRED — NotebookLM RESOURCE_EXHAUSTED YYYY-MM-DD. Fallback: memory + closed-track citation." -->
+
+```
+<NotebookLM consensus statement>
+```
+
+## KVKK / Güvenlik etkisi
+
+- [ ] PII alanı eklendi veya kaldırıldı (sentry/posthog scrub etkilendi mi?)
+- [ ] Yeni dış servis çağrısı (KVKK m.9 yurt dışı aktarım?)
+- [ ] Yeni cookie / localStorage / sessionStorage anahtarı (consent gate?)
+- [ ] Yeni log alanı (Better Stack quota / PII?)
+- [ ] Secret eklendi → `SECRETS_INVENTORY.md` güncellendi
+
+## Test kanıtı
+
+<!-- Komut çıktısı + ekran görüntüsü -->
+
+```bash
+pnpm test
+pnpm playwright test e2e/smoke/<category>
+```
+
+## Rollback planı
+
+<!-- Tek-cümle: revert nasıl çalışır, etki nedir, kaç dakika sürer. -->
+
+## Cross-link
+
+- launch-readiness: `__`
+- owner-manual: `__`
+- protocols: `__`
 
 ---
 
-## Definition of Done
-
-> Normative gate — see [docs/reference/WEB_STANDARDS.md](../docs/reference/WEB_STANDARDS.md). Every box must be checked (or marked N/A with reason) before requesting review.
-
-- [ ] **TR + EN parity** — `npm run i18n:parity` passes (no drift, no empty values)
-- [ ] **hreflang validator** — `tr-TR`, `en`, `x-default` present and correct
-- [ ] **Lighthouse mobile** — Performance ≥ 85
-- [ ] **axe-core** — 0 violations
-- [ ] **typecheck** — `npm run typecheck` PASS
-- [ ] **lint** — `npm run lint` PASS
-- [ ] **test** — `npm run test -- --run` PASS
-- [ ] **Bundle size** — initial JS ≤ 500 KB
-- [ ] **Canonical** — emitted via `buildCanonical()` only (no inline)
-- [ ] **Brand casing** — every brand mention is exactly `eCyPro`
-- [ ] **No hardcoded strings** — all user-facing text from `t()`
-- [ ] **Alt text + ARIA** — all `img` have `alt`; icon-only buttons labeled
-- [ ] **No `any`** — or justified with inline comment
-- [ ] **No `console.log`** — server uses winston logger
-- [ ] **No magic number/string** — Fibonacci/φ scale used
-- [ ] **Loading / empty / error states** — handled for async UI
-- [ ] **Mobile responsive** — verified at 320 / 768 / 1024 / 1440
-- [ ] **Touch targets** — ≥ 44 × 44 px
-- [ ] **Keyboard navigable** — all interactive elements tab-reachable, no traps
-- [ ] **Color contrast** — text ≥ 4.5:1, UI ≥ 3:1
-- [ ] **og:locale + og:url** — present and locale-aware
-- [ ] **JSON-LD valid** — Organization + applicable schemas validate
-- [ ] **Sitemap current** — new routes reflected in sitemaps
-- [ ] **PR template** — all sections (Why / What / How verified / Risk) filled
-- [ ] **Squash merge** — `--delete-branch` on merge
+**Sözlü taahhüt:** Bu PR `git push --no-verify` veya `--force` kullanmadan açıldı. Standardı bozmadım.
