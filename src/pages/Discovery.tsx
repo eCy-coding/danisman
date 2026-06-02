@@ -6,7 +6,10 @@
  * Brand voice TR strict: Aday / Süreç / Founder.
  */
 
-import React, { useState } from 'react';
+import React from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { discoverySchema, type DiscoveryFormData } from '@/schemas/discovery';
 import { Helmet } from '@/lib/seo-helmet';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { useTranslation } from 'react-i18next';
@@ -53,35 +56,49 @@ export const Discovery: React.FC = () => {
   const { t } = useTranslation('contact');
   const sectors = t('discovery.sectors', { returnObjects: true }) as string[];
 
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [company, setCompany] = useState('');
-  const [sector, setSector] = useState('');
-  const [headcount, setHeadcount] = useState('');
-  const [description, setDescription] = useState('');
-  const [kvkkConsent, setKvkkConsent] = useState(false);
+  const { register, handleSubmit, watch } = useForm<DiscoveryFormData>({
+    resolver: zodResolver(discoverySchema),
+    defaultValues: {
+      name: '',
+      email: '',
+      company: '',
+      sector: '',
+      headcount: '',
+      description: '',
+      kvkkConsent: false,
+      hp_field: '',
+    },
+  });
+
+  const watchedKvkk = watch('kvkkConsent');
 
   const mutation = useMutation({
     mutationFn: submitDiscovery,
-    onSuccess: () => {
+    onSuccess: (_data, variables) => {
       // L2-5: PostHog event — no PII, structural signals only
       getPostHog()
         .then((ph) =>
           ph?.capture('discovery_submit', {
-            has_company: Boolean(company),
-            has_sector: Boolean(sector),
-            has_headcount: Boolean(headcount),
-            description_length: description.length,
+            has_company: Boolean(variables.company),
+            has_sector: Boolean(variables.sector),
+            has_headcount: Boolean(variables.headcount),
+            description_length: variables.description?.length ?? 0,
           }),
         )
         .catch(() => {});
     },
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    mutation.mutate({ name, email, company, sector, headcount, description, kvkkConsent });
-  };
+  const onSubmit = (data: DiscoveryFormData) =>
+    mutation.mutate({
+      name: data.name,
+      email: data.email,
+      company: data.company,
+      sector: data.sector ?? '',
+      headcount: data.headcount ?? '',
+      description: data.description ?? '',
+      kvkkConsent: data.kvkkConsent,
+    });
 
   const fieldClass =
     'w-full bg-neutral-800 border border-slate-600 rounded-xl px-4 py-3 text-sm text-slate-50 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent transition-colors';
@@ -186,7 +203,7 @@ export const Discovery: React.FC = () => {
             </div>
           ) : (
             <form
-              onSubmit={handleSubmit}
+              onSubmit={handleSubmit(onSubmit)}
               noValidate
               className="bg-neutral-900 border border-slate-700 rounded-2xl p-6 md:p-8 space-y-5"
             >
@@ -203,8 +220,7 @@ export const Discovery: React.FC = () => {
                     type="text"
                     required
                     autoComplete="name"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
+                    {...register('name')}
                     className={fieldClass}
                     placeholder={t('discovery.placeholder_name')}
                   />
@@ -221,8 +237,7 @@ export const Discovery: React.FC = () => {
                     type="email"
                     required
                     autoComplete="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    {...register('email')}
                     className={fieldClass}
                     placeholder={t('discovery.placeholder_email')}
                   />
@@ -241,8 +256,7 @@ export const Discovery: React.FC = () => {
                   type="text"
                   required
                   autoComplete="organization"
-                  value={company}
-                  onChange={(e) => setCompany(e.target.value)}
+                  {...register('company')}
                   className={fieldClass}
                   placeholder={t('discovery.placeholder_company')}
                 />
@@ -253,12 +267,7 @@ export const Discovery: React.FC = () => {
                   <label htmlFor="disc-sector" className={labelClass}>
                     {t('discovery.label_sector')}
                   </label>
-                  <select
-                    id="disc-sector"
-                    value={sector}
-                    onChange={(e) => setSector(e.target.value)}
-                    className={fieldClass}
-                  >
+                  <select id="disc-sector" {...register('sector')} className={fieldClass}>
                     <option value="">{t('discovery.placeholder_select')}</option>
                     {sectors.map((s) => (
                       <option key={s} value={s}>
@@ -271,12 +280,7 @@ export const Discovery: React.FC = () => {
                   <label htmlFor="disc-headcount" className={labelClass}>
                     {t('discovery.label_headcount')}
                   </label>
-                  <select
-                    id="disc-headcount"
-                    value={headcount}
-                    onChange={(e) => setHeadcount(e.target.value)}
-                    className={fieldClass}
-                  >
+                  <select id="disc-headcount" {...register('headcount')} className={fieldClass}>
                     <option value="">{t('discovery.placeholder_select')}</option>
                     {HEADCOUNTS.map((h) => (
                       <option key={h} value={h}>
@@ -295,8 +299,7 @@ export const Discovery: React.FC = () => {
                   id="disc-description"
                   rows={4}
                   maxLength={1000}
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
+                  {...register('description')}
                   className={`${fieldClass} resize-none`}
                   placeholder={t('discovery.placeholder_description')}
                 />
@@ -308,8 +311,7 @@ export const Discovery: React.FC = () => {
                   id="disc-kvkk"
                   type="checkbox"
                   required
-                  checked={kvkkConsent}
-                  onChange={(e) => setKvkkConsent(e.target.checked)}
+                  {...register('kvkkConsent')}
                   className="mt-0.5 w-4 h-4 accent-amber-500 focus:ring-2 focus:ring-amber-400 focus:ring-offset-neutral-900 rounded"
                   aria-required="true"
                 />
@@ -349,7 +351,7 @@ export const Discovery: React.FC = () => {
 
               <button
                 type="submit"
-                disabled={mutation.isPending || !kvkkConsent}
+                disabled={mutation.isPending || !watchedKvkk}
                 aria-busy={mutation.isPending}
                 className="w-full flex items-center justify-center gap-2 px-5 py-3 bg-amber-500 hover:bg-amber-400 disabled:bg-amber-500/40 disabled:cursor-not-allowed text-neutral-900 font-semibold text-sm rounded-xl transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-300"
               >

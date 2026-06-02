@@ -7,10 +7,13 @@
  */
 
 import React, { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { Mail, CheckCircle2, AlertCircle, Loader2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { trackNewsletterSubscribe } from '../../lib/integrations/analytics';
 import { KvkkLayered } from '../legal/KvkkLayered';
+import { newsletterSchema, type NewsletterFormData } from '@/schemas/newsletter';
 
 type Status = 'idle' | 'submitting' | 'success' | 'error';
 
@@ -27,42 +30,36 @@ export const NewsletterCapture: React.FC<NewsletterCaptureProps> = ({
   className = '',
   variant = 'card',
 }) => {
-  const [email, setEmail] = useState('');
-  const [consent, setConsent] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<NewsletterFormData>({
+    resolver: zodResolver(newsletterSchema),
+    defaultValues: { email: '', consent: false },
+  });
   const [status, setStatus] = useState<Status>('idle');
   const [message, setMessage] = useState('');
 
-  async function onSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    if (!email || !/^\S+@\S+\.\S+$/.test(email)) {
-      setStatus('error');
-      setMessage('Lütfen geçerli bir e-posta adresi girin.');
-      return;
-    }
-    if (!consent) {
-      setStatus('error');
-      setMessage('Lütfen KVKK aydınlatma metnine açık rıza verin.');
-      return;
-    }
-
+  async function onSubmit(data: NewsletterFormData) {
     setStatus('submitting');
     setMessage('');
     try {
       const res = await fetch(`${API_BASE}/newsletter/subscribe`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: email.trim(), source }),
+        body: JSON.stringify({ email: data.email.trim(), consent: data.consent, source }),
       });
       if (res.ok) {
         setStatus('success');
         setMessage('Teşekkürler! Onay e-postanızı kontrol edin (spam klasörünü unutmayın).');
-        setEmail('');
-        setConsent(false);
+        reset();
         trackNewsletterSubscribe(source);
       } else if (res.status === 409) {
         setStatus('success');
         setMessage('Bu e-posta zaten kayıtlı. Teşekkürler!');
-        setEmail('');
+        reset();
       } else {
         setStatus('error');
         setMessage('Şu anda kaydedemedik. Lütfen birkaç dakika sonra tekrar deneyin.');
@@ -85,16 +82,14 @@ export const NewsletterCapture: React.FC<NewsletterCaptureProps> = ({
       <p className="text-sm text-slate-400 mb-5 leading-relaxed">
         Ayda bir özet — premium consulting trendleri, sektörel pratik notları, aylık macro briefing.
       </p>
-      <form onSubmit={onSubmit} className="space-y-3" noValidate>
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-3" noValidate>
         <div className="flex flex-col sm:flex-row gap-2">
           <input
             type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            {...register('email')}
             placeholder="email@sirket.com"
-            required
             aria-required="true"
-            aria-invalid={status === 'error' ? 'true' : 'false'}
+            aria-invalid={errors.email ? 'true' : 'false'}
             disabled={status === 'submitting' || status === 'success'}
             className="flex-1 px-4 py-3 min-h-[44px] rounded-lg bg-white/5 border border-white/10 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-secondary disabled:opacity-50"
           />
@@ -115,8 +110,7 @@ export const NewsletterCapture: React.FC<NewsletterCaptureProps> = ({
         <label className="flex items-start gap-2 text-xs text-slate-400 cursor-pointer">
           <input
             type="checkbox"
-            checked={consent}
-            onChange={(e) => setConsent(e.target.checked)}
+            {...register('consent')}
             className="mt-0.5 accent-secondary"
             aria-required="true"
           />

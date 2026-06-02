@@ -11,11 +11,14 @@
  */
 
 import React, { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { motion, AnimatePresence } from 'motion/react';
 import { Mail, CheckCircle, ArrowRight, Sparkles } from 'lucide-react';
 import { useTranslation } from '../../lib/i18n';
 import { trackEvent } from '../../lib/analytics';
 import { KVKKBadge } from '../common/KVKKBadge';
+import { newsletterSchema, type NewsletterFormData } from '@/schemas/newsletter';
 
 const RECENT_ISSUES = [
   {
@@ -36,14 +39,25 @@ export const NewsletterSection: React.FC = () => {
   const { i18n } = useTranslation();
   const lang = (i18n.language || 'en').startsWith('tr') ? 'tr' : 'en';
 
-  const [email, setEmail] = useState('');
-  const [consent, setConsent] = useState(false);
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [errorMsg, setErrorMsg] = useState('');
 
-  const handleSubmit = async (e: React.FormEvent): Promise<void> => {
-    e.preventDefault();
-    if (!email || !consent || status === 'loading') return;
+  const {
+    register,
+    handleSubmit,
+    watch,
+    reset,
+    formState: { errors },
+  } = useForm<NewsletterFormData>({
+    resolver: zodResolver(newsletterSchema),
+    defaultValues: { email: '', consent: false },
+  });
+
+  const watchedEmail = watch('email');
+  const watchedConsent = watch('consent');
+
+  const onSubmit = async (data: NewsletterFormData): Promise<void> => {
+    if (status === 'loading') return;
 
     setStatus('loading');
     trackEvent('Newsletter', 'Subscribe', 'section');
@@ -55,15 +69,19 @@ export const NewsletterSection: React.FC = () => {
       const res = await fetch(`${baseUrl}/v1/newsletter/subscribe`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        // Sprint 9 P44-T08 — send the real `consent` state, not a hardcoded
-        // `true`. The submit guard above already short-circuits when consent
-        // is missing, but threading the real value defends against a future
-        // refactor that removes the guard.
-        body: JSON.stringify({ email, consent, source: 'newsletter-section' }),
+        // Sprint 9 P44-T08 — send the real `consent` value from validated form
+        // data, not a hardcoded `true`. zodResolver already enforces consent===true
+        // before onSubmit is called, but threading the real value defends against
+        // a future schema change.
+        body: JSON.stringify({
+          email: data.email,
+          consent: data.consent,
+          source: 'newsletter-section',
+        }),
       });
       if (!res.ok) throw new Error('Failed');
       setStatus('success');
-      setEmail('');
+      reset();
       trackEvent('Newsletter', 'Subscribe', 'success');
     } catch {
       setStatus('error');
@@ -168,7 +186,9 @@ export const NewsletterSection: React.FC = () => {
                 ) : (
                   <motion.form
                     key="form"
-                    onSubmit={(e) => void handleSubmit(e)}
+                    onSubmit={handleSubmit(async (data) => {
+                      await onSubmit(data);
+                    })}
                     className="space-y-4"
                     noValidate
                   >
@@ -187,12 +207,13 @@ export const NewsletterSection: React.FC = () => {
                           id="nl-email"
                           type="email"
                           data-testid="newsletter-email"
-                          value={email}
-                          onChange={(e) => setEmail(e.target.value)}
+                          {...register('email')}
                           required
                           aria-required="true"
-                          aria-invalid={status === 'error' ? true : undefined}
-                          aria-describedby={status === 'error' ? 'nl-email-error' : undefined}
+                          aria-invalid={(errors.email ?? status === 'error') ? true : undefined}
+                          aria-describedby={
+                            (errors.email ?? status === 'error') ? 'nl-email-error' : undefined
+                          }
                           placeholder={lang === 'tr' ? 'kurumsal@email.com' : 'work@email.com'}
                           className="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-secondary/50 transition-colors"
                         />
@@ -205,18 +226,17 @@ export const NewsletterSection: React.FC = () => {
                         <input
                           type="checkbox"
                           data-testid="newsletter-consent"
-                          checked={consent}
-                          onChange={(e) => setConsent(e.target.checked)}
+                          {...register('consent')}
                           className="sr-only"
                         />
                         <div
                           className={`w-4 h-4 rounded border flex items-center justify-center transition-colors ${
-                            consent
+                            watchedConsent
                               ? 'bg-secondary border-secondary'
                               : 'border-white/30 group-hover:border-white/50'
                           }`}
                         >
-                          {consent && (
+                          {watchedConsent && (
                             <CheckCircle size={10} className="text-white" aria-hidden="true" />
                           )}
                         </div>
@@ -247,7 +267,7 @@ export const NewsletterSection: React.FC = () => {
                       data-cta="newsletter"
                       data-track="cta-click"
                       data-cta-source="newsletter-section"
-                      disabled={!email || !consent || status === 'loading'}
+                      disabled={!watchedEmail || !watchedConsent || status === 'loading'}
                       className="w-full flex items-center justify-center gap-2 bg-secondary hover:bg-secondary/90 disabled:opacity-50 text-neutral font-semibold py-3 rounded-xl transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-secondary"
                     >
                       {status === 'loading' ? (

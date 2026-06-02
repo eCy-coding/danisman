@@ -3,6 +3,10 @@ import { Link } from 'react-router-dom';
 import { motion, useReducedMotion } from 'motion/react';
 import { ShieldCheck, User, ArrowRight, AlertCircle, CheckCircle2 } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { discoveryPageSchema, type DiscoveryPageFormData } from '@/schemas/discovery';
+import type { z } from 'zod';
 import { PageWrapper } from '../components/layout/PageWrapper';
 import { FadeIn } from '../components/common/FadeIn';
 import { KVKKBadge } from '../components/discovery/KVKKBadge';
@@ -13,16 +17,6 @@ import { buildCanonical } from '@/i18n/canonical';
 // ── TYPES ────────────────────────────────────────────────────────────────────
 
 type FormState = 'idle' | 'submitting' | 'success' | 'error';
-
-interface DiscoveryFormFields {
-  name: string;
-  email: string;
-  company: string;
-  revenue: string;
-  services: string[];
-  message: string;
-  kvkkConsent: boolean;
-}
 
 // ── COPY ────────────────────────────────────────────────────────────────────
 
@@ -90,15 +84,21 @@ export const DiscoveryPage: React.FC = () => {
 
   const [formState, setFormState] = useState<FormState>('idle');
   const [errorMsg, setErrorMsg] = useState('');
-  const [fields, setFields] = useState<DiscoveryFormFields>({
-    name: '',
-    email: '',
-    company: '',
-    revenue: '',
-    services: [],
-    message: '',
-    kvkkConsent: false,
+
+  type FormInput = z.input<typeof discoveryPageSchema>;
+  const { register, handleSubmit, watch } = useForm<FormInput, unknown, DiscoveryPageFormData>({
+    resolver: zodResolver(discoveryPageSchema),
+    defaultValues: {
+      name: '',
+      email: '',
+      company: '',
+      revenue: '',
+      services: [],
+      message: '',
+      kvkkConsent: false,
+    },
   });
+  const watchedKvkk = watch('kvkkConsent');
 
   const fadeProps = shouldReduce
     ? {}
@@ -108,45 +108,30 @@ export const DiscoveryPage: React.FC = () => {
         transition: { duration: 0.5 },
       };
 
-  const handleServiceToggle = (value: string) => {
-    setFields((prev) => ({
-      ...prev,
-      services: prev.services.includes(value)
-        ? prev.services.filter((s) => s !== value)
-        : [...prev.services, value],
-    }));
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!fields.kvkkConsent) return;
+  const onSubmit = async (data: DiscoveryPageFormData) => {
     if (formState === 'submitting') return;
-
     setFormState('submitting');
     setErrorMsg('');
-
     try {
       const res = await fetch(`${API_BASE}/v1/contact`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          name: fields.name,
-          email: fields.email,
-          company: fields.company,
-          revenue: fields.revenue,
-          services: fields.services,
-          message: fields.message,
-          kvkkConsent: fields.kvkkConsent,
+          name: data.name,
+          email: data.email,
+          company: data.company,
+          revenue: data.revenue,
+          services: data.services,
+          message: data.message,
+          kvkkConsent: data.kvkkConsent,
           service: 'discovery',
           source: 'discovery-page',
         }),
       });
-
       if (!res.ok) {
         const body = (await res.json().catch(() => ({}))) as { message?: string };
         throw new Error(body.message ?? 'Gönderim başarısız');
       }
-
       setFormState('success');
     } catch (err) {
       setFormState('error');
@@ -231,7 +216,7 @@ export const DiscoveryPage: React.FC = () => {
               </div>
             ) : (
               <form
-                onSubmit={handleSubmit}
+                onSubmit={handleSubmit(onSubmit)}
                 data-testid="discovery-form"
                 noValidate
                 className="space-y-6 bg-slate-800/30 border border-slate-700/50 rounded-2xl p-8"
@@ -250,14 +235,11 @@ export const DiscoveryPage: React.FC = () => {
                   <input
                     id="discovery-name"
                     type="text"
-                    required
-                    minLength={2}
-                    value={fields.name}
-                    onChange={(e) => setFields((p) => ({ ...p, name: e.target.value }))}
                     placeholder={isTr ? 'Adınız ve soyadınız' : 'Your full name'}
                     className="w-full bg-slate-900 border border-slate-600 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-amber-500/50 focus:ring-1 focus:ring-amber-500/30 transition-colors"
                     aria-required="true"
                     data-testid="discovery-name-input"
+                    {...register('name')}
                   />
                 </div>
 
@@ -275,13 +257,11 @@ export const DiscoveryPage: React.FC = () => {
                   <input
                     id="discovery-email"
                     type="email"
-                    required
-                    value={fields.email}
-                    onChange={(e) => setFields((p) => ({ ...p, email: e.target.value }))}
                     placeholder={isTr ? 'ornek@sirket.com' : 'you@company.com'}
                     className="w-full bg-slate-900 border border-slate-600 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-amber-500/50 focus:ring-1 focus:ring-amber-500/30 transition-colors"
                     aria-required="true"
                     data-testid="discovery-email-input"
+                    {...register('email')}
                   />
                 </div>
 
@@ -299,12 +279,10 @@ export const DiscoveryPage: React.FC = () => {
                   <input
                     id="discovery-company"
                     type="text"
-                    required
-                    value={fields.company}
-                    onChange={(e) => setFields((p) => ({ ...p, company: e.target.value }))}
                     placeholder={isTr ? 'Şirket adı' : 'Company name'}
                     className="w-full bg-slate-900 border border-slate-600 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-amber-500/50 focus:ring-1 focus:ring-amber-500/30 transition-colors"
                     aria-required="true"
+                    {...register('company')}
                   />
                 </div>
 
@@ -318,10 +296,9 @@ export const DiscoveryPage: React.FC = () => {
                   </label>
                   <select
                     id="discovery-revenue"
-                    value={fields.revenue}
-                    onChange={(e) => setFields((p) => ({ ...p, revenue: e.target.value }))}
                     className="w-full bg-slate-900 border border-slate-600 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-amber-500/50 focus:ring-1 focus:ring-amber-500/30 transition-colors"
                     data-testid="discovery-revenue-select"
+                    {...register('revenue')}
                   >
                     <option value="">{isTr ? 'Seçiniz…' : 'Select…'}</option>
                     {REVENUE_OPTIONS.map((opt) => (
@@ -346,10 +323,9 @@ export const DiscoveryPage: React.FC = () => {
                         <input
                           type="checkbox"
                           value={opt.value}
-                          checked={fields.services.includes(opt.value)}
-                          onChange={() => handleServiceToggle(opt.value)}
                           className="rounded border-slate-600 bg-slate-900 text-amber-500 focus:ring-amber-500/30"
                           data-testid={`discovery-service-${opt.value}`}
+                          {...register('services')}
                         />
                         <span className="text-sm text-slate-300 group-hover:text-white transition-colors">
                           {isTr ? opt.labelTr : opt.labelEn}
@@ -369,8 +345,6 @@ export const DiscoveryPage: React.FC = () => {
                   </label>
                   <textarea
                     id="discovery-message"
-                    value={fields.message}
-                    onChange={(e) => setFields((p) => ({ ...p, message: e.target.value }))}
                     rows={4}
                     placeholder={
                       isTr
@@ -378,6 +352,7 @@ export const DiscoveryPage: React.FC = () => {
                         : 'Briefly describe your current situation and priorities…'
                     }
                     className="w-full bg-slate-900 border border-slate-600 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-amber-500/50 focus:ring-1 focus:ring-amber-500/30 transition-colors resize-none"
+                    {...register('message')}
                   />
                 </div>
 
@@ -387,12 +362,10 @@ export const DiscoveryPage: React.FC = () => {
                     <input
                       type="checkbox"
                       id="discovery-kvkk"
-                      checked={fields.kvkkConsent}
-                      onChange={(e) => setFields((p) => ({ ...p, kvkkConsent: e.target.checked }))}
-                      required
                       className="mt-0.5 rounded border-slate-600 bg-slate-900 text-amber-500 focus:ring-amber-500/30 shrink-0"
                       data-testid="discovery-kvkk-checkbox"
                       aria-required="true"
+                      {...register('kvkkConsent')}
                     />
                     <span className="text-sm text-slate-400 leading-relaxed">
                       {isTr ? (
@@ -445,10 +418,10 @@ export const DiscoveryPage: React.FC = () => {
                 {/* Submit */}
                 <button
                   type="submit"
-                  disabled={!fields.kvkkConsent || formState === 'submitting'}
+                  disabled={!watchedKvkk || formState === 'submitting'}
                   data-testid="discovery-submit"
                   className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-amber-500 hover:bg-amber-400 disabled:bg-slate-700 disabled:text-slate-500 disabled:cursor-not-allowed text-slate-900 font-bold rounded-xl transition-colors"
-                  aria-disabled={!fields.kvkkConsent}
+                  aria-disabled={!watchedKvkk}
                 >
                   {formState === 'submitting' ? (
                     isTr ? (

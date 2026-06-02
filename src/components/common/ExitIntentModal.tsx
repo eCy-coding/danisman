@@ -19,8 +19,11 @@ import React, { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'motion/react';
 import { X, Gift, CheckCircle, Send, ArrowRight } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslation } from '../../lib/i18n';
 import { trackEvent } from '../../lib/analytics';
+import { newsletterSchema, type NewsletterFormData } from '@/schemas/newsletter';
 
 const SHOWN_KEY = 'exit_intent_shown';
 const PASSIVE_TIMEOUT_MS = 60_000;
@@ -51,13 +54,22 @@ export const ExitIntentModal: React.FC = () => {
   const prefersReduced = useReducedMotion();
 
   const [open, setOpen] = useState(false);
-  const [email, setEmail] = useState('');
   // Sprint 9 P44-T07 — explicit KVKK m.5 + GDPR Art.4(11) açık rıza checkbox.
   // The previous implementation hard-coded `consent: true` in the request body
   // without ever asking the user — i.e. it claimed consent that was never given.
   // The submit button is now gated on this checkbox.
-  const [consent, setConsent] = useState(false);
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors: _errors },
+  } = useForm<NewsletterFormData>({
+    resolver: zodResolver(newsletterSchema),
+    defaultValues: { email: '', consent: false },
+  });
+  const watchedEmail = watch('email');
+  const watchedConsent = watch('consent');
   const [errorMsg, setErrorMsg] = useState('');
   const passiveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const triggeredRef = useRef(false);
@@ -160,10 +172,9 @@ export const ExitIntentModal: React.FC = () => {
     // handleClose is stable (closure over setOpen/trackEvent only).
   }, [open]);
 
-  const handleSubmit = async (e: React.FormEvent): Promise<void> => {
-    e.preventDefault();
-    if (!email || status === 'loading') return;
-    if (!consent) {
+  const onSubmit = async (data: NewsletterFormData): Promise<void> => {
+    if (status === 'loading') return;
+    if (!data.consent) {
       // Defensive guard — submit button is already disabled, but we never
       // want a `consent: true` body to escape without the checkbox checked.
       setStatus('error');
@@ -184,7 +195,7 @@ export const ExitIntentModal: React.FC = () => {
       const res = await fetch(`${baseUrl}/newsletter/subscribe`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, consent, source: 'exit-intent' }),
+        body: JSON.stringify({ email: data.email, consent: data.consent, source: 'exit-intent' }),
       });
       if (!res.ok) throw new Error('subscribe_failed');
       setStatus('success');
@@ -324,12 +335,10 @@ export const ExitIntentModal: React.FC = () => {
                     </ul>
 
                     {/* Form */}
-                    <form onSubmit={(e) => void handleSubmit(e)} className="flex flex-col gap-3">
+                    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3">
                       <input
                         type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
+                        {...register('email')}
                         placeholder={lang === 'tr' ? 'kurumsal@email.com' : 'work@email.com'}
                         aria-label={lang === 'tr' ? 'Email adresi' : 'Email address'}
                         className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-secondary transition-colors"
@@ -342,9 +351,7 @@ export const ExitIntentModal: React.FC = () => {
                         <input
                           id="exit-intent-consent"
                           type="checkbox"
-                          checked={consent}
-                          onChange={(e) => setConsent(e.target.checked)}
-                          required
+                          {...register('consent')}
                           data-testid="exit-intent-consent"
                           aria-describedby="exit-intent-consent-desc"
                           className="mt-0.5 h-4 w-4 shrink-0 rounded border-white/20 bg-white/5 text-secondary focus:ring-2 focus:ring-secondary"
@@ -386,7 +393,7 @@ export const ExitIntentModal: React.FC = () => {
 
                       <button
                         type="submit"
-                        disabled={!email || !consent || status === 'loading'}
+                        disabled={!watchedEmail || !watchedConsent || status === 'loading'}
                         data-testid="exit-intent-submit"
                         className="w-full flex items-center justify-center gap-2 bg-secondary hover:bg-secondary/90 disabled:opacity-50 disabled:cursor-not-allowed text-neutral font-semibold py-3 rounded-xl transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-secondary"
                       >

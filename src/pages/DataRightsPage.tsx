@@ -15,14 +15,15 @@
 
 import React, { useEffect, useId, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { LegalLayout } from '@/components/legal/LegalLayout';
 import { trackForm } from '@/lib/analytics';
 import { Logger } from '@/lib/logger';
+import { dsarSchema, type DsarFormData } from '@/schemas/dsar';
 
 const LAST_UPDATED_ISO = '2026-05-16';
 const LAST_UPDATED_DISPLAY = '16.05.2026';
-
-type ReqKind = 'export' | 'delete';
 
 interface SubmissionState {
   status: 'idle' | 'submitting' | 'success' | 'error';
@@ -43,12 +44,19 @@ export const DataRightsPage: React.FC = () => {
   const { t, i18n } = useTranslation('legal');
   const lang = (i18n.language?.startsWith('en') ? 'en' : 'tr') as 'tr' | 'en';
 
-  const [kind, setKind] = useState<ReqKind>('export');
-  const [email, setEmail] = useState('');
-  const [reason, setReason] = useState('');
-  const [hp, setHp] = useState('');
   const [state, setState] = useState<SubmissionState>({ status: 'idle' });
   const [idempotencyKey] = useState<string>(() => newIdempotencyKey());
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm<DsarFormData>({
+    resolver: zodResolver(dsarSchema),
+    defaultValues: { kind: 'export', email: '', reason: '', hp_field: '' },
+  });
+  const watchedKind = watch('kind');
 
   // P14 — abort + isMounted guard:
   //   - AbortController cancels in-flight fetch on unmount or duplicate submit
@@ -105,39 +113,26 @@ export const DataRightsPage: React.FC = () => {
     [lang],
   );
 
-  const validate = (): string | null => {
-    const e = email.trim();
-    if (!e || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)) return labels.invalidEmail;
-    return null;
-  };
-
-  const onSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const validation = validate();
-    if (validation) {
-      setState({ status: 'error', message: validation });
-      return;
-    }
-
+  const onFormSubmit = async (data: DsarFormData): Promise<void> => {
     // P14 — submit lock: abort any earlier in-flight submit (double-click safety).
     abortRef.current?.abort();
     const ac = new AbortController();
     abortRef.current = ac;
 
     setState({ status: 'submitting' });
-    trackForm(`data-rights:${kind}`, 'start');
+    trackForm(`data-rights:${data.kind}`, 'start');
 
     try {
-      const res = await fetch(`${apiBase()}/gdpr/${kind}`, {
+      const res = await fetch(`${apiBase()}/gdpr/${data.kind}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Idempotency-Key': idempotencyKey,
         },
         body: JSON.stringify({
-          email: email.trim(),
-          reason: reason.trim(),
-          hp_field: hp,
+          email: data.email.trim(),
+          reason: data.reason?.trim() ?? '',
+          hp_field: data.hp_field ?? '',
           lang,
         }),
         signal: ac.signal,
@@ -153,26 +148,25 @@ export const DataRightsPage: React.FC = () => {
       if (!mountedRef.current || ac.signal.aborted) return;
 
       if (res.ok && body.ok) {
-        trackForm(`data-rights:${kind}`, 'submit_success');
+        trackForm(`data-rights:${data.kind}`, 'submit_success');
         setState({ status: 'success', message: body.message ?? labels.successHint });
-        setReason('');
         return;
       }
 
       if (res.status === 429 || body.code === 'RATE_LIMITED') {
-        trackForm(`data-rights:${kind}`, 'submit_error', { reason: 'rate_limited' });
+        trackForm(`data-rights:${data.kind}`, 'submit_error', { reason: 'rate_limited' });
         setState({ status: 'error', message: labels.rateHint });
         return;
       }
 
-      trackForm(`data-rights:${kind}`, 'submit_error', { reason: body.code ?? 'unknown' });
+      trackForm(`data-rights:${data.kind}`, 'submit_error', { reason: body.code ?? 'unknown' });
       setState({ status: 'error', message: body.message ?? labels.errorHint });
     } catch (err) {
       // Swallow abort errors — they are intentional unmount/double-submit cancels.
       if ((err as { name?: string } | null)?.name === 'AbortError') return;
       if (!mountedRef.current) return;
       Logger.warn('[DataRights] submit failed', err as Error);
-      trackForm(`data-rights:${kind}`, 'submit_error', { reason: 'network' });
+      trackForm(`data-rights:${data.kind}`, 'submit_error', { reason: 'network' });
       setState({ status: 'error', message: labels.errorHint });
     }
   };
@@ -305,7 +299,7 @@ export const DataRightsPage: React.FC = () => {
       </section>
 
       <form
-        onSubmit={onSubmit}
+        onSubmit={handleSubmit(onFormSubmit)}
         className="mt-fib-7 p-fib-6 bg-surface-2 border border-white/10 rounded-lg max-w-2xl"
         aria-labelledby="data-rights-form-heading"
         noValidate
@@ -323,10 +317,9 @@ export const DataRightsPage: React.FC = () => {
             <label className="inline-flex items-center gap-fib-3 cursor-pointer">
               <input
                 type="radio"
-                name="kind"
                 value="export"
-                checked={kind === 'export'}
-                onChange={() => setKind('export')}
+                checked={watchedKind === 'export'}
+                {...register('kind')}
                 className="w-4 h-4"
               />
               <span className="text-slate-200">{labels.kindExport}</span>
@@ -334,10 +327,9 @@ export const DataRightsPage: React.FC = () => {
             <label className="inline-flex items-center gap-fib-3 cursor-pointer">
               <input
                 type="radio"
-                name="kind"
                 value="delete"
-                checked={kind === 'delete'}
-                onChange={() => setKind('delete')}
+                checked={watchedKind === 'delete'}
+                {...register('kind')}
                 className="w-4 h-4"
               />
               <span className="text-slate-200">{labels.kindDelete}</span>
@@ -355,14 +347,13 @@ export const DataRightsPage: React.FC = () => {
             type="email"
             inputMode="email"
             autoComplete="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
             placeholder={labels.emailPlaceholder}
             required
             aria-required="true"
-            aria-invalid={state.status === 'error' ? 'true' : 'false'}
+            aria-invalid={errors.email ? 'true' : 'false'}
             aria-describedby={state.status === 'error' ? errorId : undefined}
             className="w-full px-fib-4 py-fib-3 bg-surface-1 border border-white/10 rounded-md text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-secondary"
+            {...register('email')}
           />
         </div>
 
@@ -374,11 +365,10 @@ export const DataRightsPage: React.FC = () => {
           <textarea
             id={reasonId}
             rows={4}
-            value={reason}
-            onChange={(e) => setReason(e.target.value)}
             placeholder={labels.reasonPlaceholder}
             maxLength={2000}
             className="w-full px-fib-4 py-fib-3 bg-surface-1 border border-white/10 rounded-md text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-secondary"
+            {...register('reason')}
           />
         </div>
 
@@ -400,8 +390,7 @@ export const DataRightsPage: React.FC = () => {
             type="text"
             tabIndex={-1}
             autoComplete="off"
-            value={hp}
-            onChange={(e) => setHp(e.target.value)}
+            {...register('hp_field')}
           />
         </div>
 
