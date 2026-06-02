@@ -24,7 +24,12 @@ export const Footer: React.FC = () => {
   const { i18n } = useTranslation();
   const lang = (i18n.language || 'en').startsWith('tr') ? 'tr' : 'en';
   const [email, setEmail] = useState('');
-  const [consent, setConsent] = useState(true);
+  // Sprint 9 P44-T08 — KVKK m.5 + EDPB 05/2020 Guidelines fix.
+  // The previous default `useState(true)` rendered the consent checkbox
+  // pre-ticked, which does NOT constitute valid consent under GDPR Art.4(11)
+  // / EDPB Guidelines 05/2020 ("pre-ticked boxes do not constitute valid
+  // consent"). Defaulting to false forces an explicit affirmative action.
+  const [consent, setConsent] = useState(false);
   const [state, setState] = useState<NewsletterState>({ status: 'idle' });
 
   const handleSubscribe = async (e: React.FormEvent) => {
