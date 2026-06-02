@@ -18,7 +18,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'motion/react';
 import { X, Gift, CheckCircle, Send, ArrowRight } from 'lucide-react';
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from '../../lib/i18n';
 import { trackEvent } from '../../lib/analytics';
 
@@ -52,6 +52,11 @@ export const ExitIntentModal: React.FC = () => {
 
   const [open, setOpen] = useState(false);
   const [email, setEmail] = useState('');
+  // Sprint 9 P44-T07 — explicit KVKK m.5 + GDPR Art.4(11) açık rıza checkbox.
+  // The previous implementation hard-coded `consent: true` in the request body
+  // without ever asking the user — i.e. it claimed consent that was never given.
+  // The submit button is now gated on this checkbox.
+  const [consent, setConsent] = useState(false);
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [errorMsg, setErrorMsg] = useState('');
   const passiveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -158,6 +163,17 @@ export const ExitIntentModal: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
     if (!email || status === 'loading') return;
+    if (!consent) {
+      // Defensive guard — submit button is already disabled, but we never
+      // want a `consent: true` body to escape without the checkbox checked.
+      setStatus('error');
+      setErrorMsg(
+        lang === 'tr'
+          ? 'Devam etmek için KVKK aydınlatma metnine açık rıza vermelisiniz.'
+          : 'Please give explicit consent to the privacy notice to continue.',
+      );
+      return;
+    }
 
     setStatus('loading');
     trackEvent('ExitIntent', 'Submit');
@@ -168,7 +184,7 @@ export const ExitIntentModal: React.FC = () => {
       const res = await fetch(`${baseUrl}/newsletter/subscribe`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, consent: true, source: 'exit-intent' }),
+        body: JSON.stringify({ email, consent, source: 'exit-intent' }),
       });
       if (!res.ok) throw new Error('subscribe_failed');
       setStatus('success');
@@ -319,6 +335,49 @@ export const ExitIntentModal: React.FC = () => {
                         className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-secondary transition-colors"
                       />
 
+                      <label
+                        htmlFor="exit-intent-consent"
+                        className="flex items-start gap-2 text-xs text-slate-300 leading-relaxed select-none"
+                      >
+                        <input
+                          id="exit-intent-consent"
+                          type="checkbox"
+                          checked={consent}
+                          onChange={(e) => setConsent(e.target.checked)}
+                          required
+                          data-testid="exit-intent-consent"
+                          aria-describedby="exit-intent-consent-desc"
+                          className="mt-0.5 h-4 w-4 shrink-0 rounded border-white/20 bg-white/5 text-secondary focus:ring-2 focus:ring-secondary"
+                        />
+                        <span id="exit-intent-consent-desc">
+                          {lang === 'tr' ? (
+                            <>
+                              KVKK kapsamında e-posta adresimin bülten gönderimi için işlenmesine{' '}
+                              <span className="text-secondary">açık rıza</span> veriyorum.{' '}
+                              <Link
+                                to="/privacy"
+                                className="text-secondary underline hover:no-underline"
+                                onClick={(e) => e.stopPropagation()}
+                              >
+                                Aydınlatma metni
+                              </Link>
+                            </>
+                          ) : (
+                            <>
+                              I give my <span className="text-secondary">explicit consent</span> to
+                              process my email for newsletter purposes under GDPR.{' '}
+                              <Link
+                                to="/privacy"
+                                className="text-secondary underline hover:no-underline"
+                                onClick={(e) => e.stopPropagation()}
+                              >
+                                Privacy notice
+                              </Link>
+                            </>
+                          )}
+                        </span>
+                      </label>
+
                       {status === 'error' && (
                         <p role="alert" className="text-xs text-rose-400">
                           {errorMsg}
@@ -327,8 +386,9 @@ export const ExitIntentModal: React.FC = () => {
 
                       <button
                         type="submit"
-                        disabled={!email || status === 'loading'}
-                        className="w-full flex items-center justify-center gap-2 bg-secondary hover:bg-secondary/90 disabled:opacity-50 text-neutral font-semibold py-3 rounded-xl transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-secondary"
+                        disabled={!email || !consent || status === 'loading'}
+                        data-testid="exit-intent-submit"
+                        className="w-full flex items-center justify-center gap-2 bg-secondary hover:bg-secondary/90 disabled:opacity-50 disabled:cursor-not-allowed text-neutral font-semibold py-3 rounded-xl transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-secondary"
                       >
                         {status === 'loading' ? (
                           <div
