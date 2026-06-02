@@ -45,6 +45,9 @@ jobs:
           name: coverage-report
           path: coverage/
           retention-days: 14
+      - name: Env preflight check
+        run: npm run preflight:env
+        continue-on-error: true
 
   # ── P35-T10: Dependency Security Audit (npm audit) ────────
   security-audit:
@@ -90,6 +93,11 @@ jobs:
       - run: npm ci
       - name: Build (with Sentry source-map upload when token present)
         run: npm run build
+      - name: Sentry release (explicit sentry-cli)
+        if: env.SENTRY_AUTH_TOKEN != ''
+        run: npm run release:sentry
+        env:
+          SENTRY_RELEASE: ecypro@${{ github.sha }}
       - name: Sentry release status
         if: always()
         run: |

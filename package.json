@@ -37,6 +37,8 @@
     "gen:content": "tsx scripts/generate-content.ts",
     "gen:og-image": "node scripts/generate-og-image.mjs",
     "release:sentry": "node scripts/upload-sourcemaps.mjs",
+    "preflight:env": "tsx scripts/preflight-env.ts",
+    "preflight:env:dry": "tsx scripts/preflight-env.ts --dry-run",
     "smoke": "node scripts/smoke-test.mjs",
     "api:contract": "node scripts/api-contract-test.mjs",
     "api:contract:strict": "STRICT=1 node scripts/api-contract-test.mjs",
