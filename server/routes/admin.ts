@@ -10,6 +10,7 @@ import { Router, Request, Response, NextFunction } from 'express';
 import fs from 'fs';
 import path from 'path';
 import { authenticate, requireRole } from '../middleware/auth';
+import { hashIp } from '../lib/crypto/hashIp';
 import { cacheStats, invalidateCache, getCacheStore } from '../middleware/cache';
 import {
   clampAuditLimit,
@@ -262,12 +263,13 @@ router.patch(
       await prisma.auditLog.create({
         data: {
           adminId: (req as Request & { user?: { id: string } }).user?.id ?? 'unknown',
+          actorRole: (req as Request & { user?: { role: string } }).user?.role,
           action: 'USER_ROLE_CHANGE',
           targetType: 'User',
           targetId: req.params.id,
           oldValue: { role: before?.role },
           newValue: { role },
-          ip: req.ip,
+          actorIpHash: hashIp(req.ip),
           userAgent: req.headers['user-agent'],
         },
       });
@@ -293,10 +295,11 @@ router.patch(
       await prisma.auditLog.create({
         data: {
           adminId: (req as Request & { user?: { id: string } }).user?.id ?? 'unknown',
+          actorRole: (req as Request & { user?: { role: string } }).user?.role,
           action: isActive ? 'USER_ACTIVATED' : 'USER_DEACTIVATED',
           targetType: 'User',
           targetId: req.params.id,
-          ip: req.ip,
+          actorIpHash: hashIp(req.ip),
           userAgent: req.headers['user-agent'],
         },
       });
@@ -372,9 +375,10 @@ router.patch(
       await prisma.auditLog.create({
         data: {
           adminId,
+          actorRole: (req as Request & { user?: { role: string } }).user?.role,
           action: 'SETTING_UPDATE',
           newValue: Object.fromEntries(updates.map((u) => [u.key, u.value])) as never,
-          ip: req.ip,
+          actorIpHash: hashIp(req.ip),
           userAgent: req.headers['user-agent'],
         },
       });

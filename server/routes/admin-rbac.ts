@@ -6,6 +6,7 @@ import { prisma } from '../config/db';
 import { UserRole } from '@prisma/client';
 import { logger } from '../config/logger';
 import { AuthRequest } from '../middleware/auth';
+import { auditMiddleware } from '../middleware/audit';
 
 const router = Router();
 
@@ -60,6 +61,7 @@ router.get('/matrix', requirePermission('rbac.read'), async (_req: AuthRequest, 
 
 router.patch(
   '/matrix',
+  auditMiddleware({ action: 'admin.rbac.matrix.update', resourceType: 'RolePermission' }),
   requirePermission('rbac.write'),
   async (req: AuthRequest, res: Response) => {
     const { role, permissionKey, granted, reason } = req.body as {
