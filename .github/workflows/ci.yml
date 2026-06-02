@@ -199,6 +199,7 @@ jobs:
       - name: Run Lighthouse CI (fail-on-regression)
         run: |
           npx lhci autorun \
+            --no-lighthouserc \
             --collect.url=http://localhost:4173 \
             --collect.numberOfRuns=1 \
             --assert.assertions.categories:accessibility=error,0.98 \
