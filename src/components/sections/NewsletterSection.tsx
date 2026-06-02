@@ -55,7 +55,11 @@ export const NewsletterSection: React.FC = () => {
       const res = await fetch(`${baseUrl}/v1/newsletter/subscribe`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, consent: true, source: 'newsletter-section' }),
+        // Sprint 9 P44-T08 — send the real `consent` state, not a hardcoded
+        // `true`. The submit guard above already short-circuits when consent
+        // is missing, but threading the real value defends against a future
+        // refactor that removes the guard.
+        body: JSON.stringify({ email, consent, source: 'newsletter-section' }),
       });
       if (!res.ok) throw new Error('Failed');
       setStatus('success');
