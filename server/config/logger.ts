@@ -17,16 +17,32 @@ import winston from 'winston';
 const { combine, timestamp, printf, json } = winston.format;
 
 // ─── Redact sensitive fields from log metadata ────────────
+// Sprint 9 P44-T10: extended with PII categories (KVKK m.12 + GDPR Art.32).
+// Only structured metadata is redacted; free-form `message` strings remain
+// the caller's responsibility — never log a raw email/phone in a message,
+// pass it as a metadata field instead so this filter can do its job.
+// Keys are matched case-insensitively below (see `REDACTED_KEYS.has(key.toLowerCase())`).
 const REDACTED_KEYS = new Set([
+  // secrets
   'password',
-  'passwordHash',
+  'passwordhash',
   'token',
   'secret',
-  'totpSecret',
+  'totpsecret',
   'authorization',
   'cookie',
-  'apiKey',
-  'backupCodes',
+  'apikey',
+  'backupcodes',
+  // PII (added P44-T10)
+  'email',
+  'phone',
+  'phonenumber',
+  'ip',
+  'ipaddress',
+  'ip_address',
+  'fullname',
+  'firstname',
+  'lastname',
 ]);
 
 const redactFormat = winston.format((info) => {
