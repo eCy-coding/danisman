@@ -95,6 +95,7 @@ jobs:
         run: npm run build
       - name: Sentry release (explicit sentry-cli)
         if: env.SENTRY_AUTH_TOKEN != ''
+        continue-on-error: true
         run: npm run release:sentry
         env:
           SENTRY_RELEASE: ecypro@${{ github.sha }}

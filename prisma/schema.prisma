@@ -1,5 +1,6 @@
 // EcyPro Premium Consulting — Production Database Schema
 // Prisma v7 + PostgreSQL
+// Sprint 11 P44-T03: AuditResult enum + AuditLog additive fields (migration:approved)
 
 generator client {
   provider = "prisma-client-js"
