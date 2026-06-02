@@ -8,6 +8,7 @@ import aiRoutes from './ai';
 import adminRoutes from './admin';
 import webhookRoutes from './webhooks';
 import uptimeWebhookRoutes from './uptime-webhook';
+import heartbeatRoutes from './heartbeat';
 import manageRoutes from './manage';
 import totpRoutes from './totp';
 import sessionRoutes from './sessions';
@@ -534,6 +535,8 @@ router.use('/insights', publicInsightsSearchRouter);
 router.use('/webhooks', webhookRoutes);
 // P40-T04: UptimeRobot → Telegram (Observability)
 router.use('/webhooks', uptimeWebhookRoutes);
+// P44-T04: BetterStack signed heartbeat
+router.use('/heartbeat', heartbeatRoutes);
 router.use('/manage', manageRoutes);
 router.use('/auth/2fa', totpRoutes);
 router.use('/sessions', sessionRoutes);

@@ -16,6 +16,9 @@ const OPTIONAL = [
   'SENTRY_DSN',
   'TELEGRAM_BOT_TOKEN',
   'TELEGRAM_CHAT_ID',
+  'BETTERSTACK_HEARTBEAT_URL',
+  'BETTERSTACK_HEARTBEAT_SECRET',
+  'SENTRY_AUTH_TOKEN',
 ] as const;
 
 export function validateEnv(): void {
