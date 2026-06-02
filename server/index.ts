@@ -78,6 +78,31 @@ if (process.env.SENTRY_DSN) {
             event.request.query_string = '[redacted]';
           }
         }
+        // Sprint 9 P44-T09 (KVKK m.12 + GDPR Art.32) — also scrub
+        // `event.extra`. server/middleware/sentry.ts forwards an
+        // ErrorEvent payload as `extra` whose `metadata.ip` and
+        // `metadata.query` would otherwise leak raw IPs / email
+        // query params to Sentry. Mirror server/routes/contact.ts
+        // and any other Sentry.captureException(..., { extra }) call.
+        if (event.extra && typeof event.extra === 'object') {
+          const extra = event.extra as Record<string, unknown>;
+          if (typeof extra.ip === 'string') extra.ip = '[redacted]';
+          if (extra.query) extra.query = '[redacted]';
+          if (extra.metadata && typeof extra.metadata === 'object') {
+            const m = extra.metadata as Record<string, unknown>;
+            if (typeof m.ip === 'string') m.ip = '[redacted]';
+            if (m.query) m.query = '[redacted]';
+            if (typeof m.userAgent === 'string') {
+              // User-Agent itself is not PII per se, but it's part of the
+              // device fingerprint surface — keep the family, drop the
+              // detailed version + build tokens.
+              m.userAgent = m.userAgent.replace(
+                /\(.*?\)/g,
+                '([redacted])',
+              );
+            }
+          }
+        }
       } catch {
         /* never let scrubbing fail the event */
       }
