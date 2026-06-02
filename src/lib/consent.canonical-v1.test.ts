@@ -98,7 +98,7 @@ describe('consent.getConsent — canonical v1 source-of-truth', () => {
     expect(getConsent()).toBeNull();
   });
 
-  it('hasConsent(\"analytics\") reflects the canonical v1 record', () => {
+  it('hasConsent("analytics") reflects the canonical v1 record', () => {
     window.localStorage.setItem(
       STORAGE_KEY_V1_CANONICAL,
       JSON.stringify({
