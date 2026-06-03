@@ -161,7 +161,10 @@ export const Contact: React.FC = () => {
             className="relative"
           >
             {/* Soft backdrop glow behind the form */}
-            <div className="absolute -inset-10 bg-linear-to-br from-primary/20 to-secondary/20 rounded-full blur-3xl opacity-20 pointer-events-none" />
+            <div
+              className="absolute -inset-10 bg-linear-to-br from-primary/20 to-secondary/20 rounded-full blur-3xl opacity-20 pointer-events-none"
+              aria-hidden="true"
+            />
 
             <div className="relative bg-surface/80 border border-white/10 rounded-3xl p-8 md:p-12 overflow-hidden">
               <MouseGlow />

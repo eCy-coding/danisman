@@ -175,7 +175,10 @@ export const BusinessHealthQuiz: React.FC = () => {
         animate={{ opacity: 1, y: 0 }}
         className="w-full max-w-4xl mx-auto p-1 glass-card rounded-3xl bg-white/5 border border-white/10 overflow-hidden relative"
       >
-        <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-primary/20 rounded-full blur-[120px] pointer-events-none" />
+        <div
+          className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-primary/20 rounded-full blur-[120px] pointer-events-none"
+          aria-hidden="true"
+        />
 
         <div className="p-8 md:p-12 relative z-10 grid md:grid-cols-2 gap-12 items-center">
           <div>

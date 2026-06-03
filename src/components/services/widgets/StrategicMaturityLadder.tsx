@@ -209,7 +209,10 @@ export const StrategicMaturityLadder: React.FC = () => {
             role="status"
             aria-live="polite"
           >
-            <div className="absolute -top-12 -right-12 w-40 h-40 bg-secondary/20 rounded-full blur-3xl pointer-events-none" />
+            <div
+              className="absolute -top-12 -right-12 w-40 h-40 bg-secondary/20 rounded-full blur-3xl pointer-events-none"
+              aria-hidden="true"
+            />
             <div className="relative">
               <div className="text-xs font-bold uppercase tracking-[0.25em] text-secondary mb-3">
                 Size Önerilen Engagement

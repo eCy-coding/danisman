@@ -53,7 +53,10 @@ export const Booking: React.FC = () => {
     >
       {/* Background Ambient */}
       <div className="absolute top-0 right-0 w-1/2 h-full bg-linear-to-bl from-primary/5 via-transparent to-transparent pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-96 h-96 bg-secondary/5 blur-3xl rounded-full pointer-events-none -translate-x-1/2 translate-y-1/2" />
+      <div
+        className="absolute bottom-0 left-0 w-96 h-96 bg-secondary/5 blur-3xl rounded-full pointer-events-none -translate-x-1/2 translate-y-1/2"
+        aria-hidden="true"
+      />
 
       <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
@@ -161,8 +164,14 @@ export const Booking: React.FC = () => {
               </div>
 
               {/* Decor Blobs */}
-              <div className="absolute -bottom-8 -right-8 w-32 h-32 bg-secondary/20 rounded-full blur-3xl pointer-events-none" />
-              <div className="absolute -top-8 -left-8 w-32 h-32 bg-primary/20 rounded-full blur-3xl pointer-events-none" />
+              <div
+                className="absolute -bottom-8 -right-8 w-32 h-32 bg-secondary/20 rounded-full blur-3xl pointer-events-none"
+                aria-hidden="true"
+              />
+              <div
+                className="absolute -top-8 -left-8 w-32 h-32 bg-primary/20 rounded-full blur-3xl pointer-events-none"
+                aria-hidden="true"
+              />
             </motion.div>
           </FadeIn>
         </div>

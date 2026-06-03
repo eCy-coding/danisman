@@ -33,6 +33,7 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({ service, categoryLabel
       {/* Ambient glow */}
       <div
         className={`absolute -top-20 -right-20 w-40 h-40 bg-primary/10 rounded-full blur-3xl ${accent.glow} transition-colors duration-700 pointer-events-none`}
+        aria-hidden="true"
       />
 
       {/* Bottom accent line */}
