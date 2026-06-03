@@ -35,6 +35,14 @@ test.describe('Visitor Journey Smoke', () => {
   test('home → pricing page', async ({ page }) => {
     await page.goto('/pricing');
     await expect(page.locator('h1').first()).toBeVisible();
+    // Wait for React to set page-specific title (webkit is slower than chromium/firefox).
+    await page
+      .waitForFunction(() => /ecypro|pricing|fiyat/i.test(document.title), undefined, {
+        timeout: 5000,
+      })
+      .catch(() => {
+        /* title set race — proceed with assertion for debug output */
+      });
     const title = await page.title();
     expect(title.toLowerCase()).toMatch(/ecypro|pricing|fiyat/i);
   });
