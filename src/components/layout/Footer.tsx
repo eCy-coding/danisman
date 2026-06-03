@@ -417,7 +417,7 @@ export const Footer: React.FC = () => {
         <div className="flex justify-center mb-6">
           <Link
             to="/privacy"
-            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-800/80 border border-slate-700 text-slate-200 text-xs hover:text-white hover:border-slate-600 transition-colors"
+            className="inline-flex items-center gap-2 px-4 py-2.5 min-h-[44px] min-w-[44px] rounded-full bg-slate-800/80 border border-slate-700 text-slate-200 text-xs hover:text-white hover:border-slate-600 transition-colors"
             aria-label="KVKK uyumluluk bilgisi"
           >
             <ShieldCheck size={13} aria-hidden="true" className="text-secondary shrink-0" />
@@ -432,57 +432,57 @@ export const Footer: React.FC = () => {
             {FOOTER_COPY.rights[lang]}
           </p>
           <CountrySelector />
-          <div className="flex flex-wrap gap-x-6 gap-y-2 mt-4 md:mt-0 justify-center md:justify-end">
+          <div className="flex flex-wrap gap-x-4 gap-y-1 mt-4 md:mt-0 justify-center md:justify-end">
             <Link
               to={localizedHref('/privacy', lang as Locale)}
-              className="hover:text-white transition-colors"
+              className="hover:text-white transition-colors py-2 min-h-[44px] inline-flex items-center"
             >
               {FOOTER_COPY.privacy[lang]}
             </Link>
-            <span className="text-slate-400" aria-hidden="true">
+            <span className="text-slate-400 self-center" aria-hidden="true">
               |
             </span>
             <Link
               to={localizedHref('/terms', lang as Locale)}
-              className="hover:text-white transition-colors"
+              className="hover:text-white transition-colors py-2 min-h-[44px] inline-flex items-center"
             >
               {lang === 'tr' ? 'Kullanım Koşulları' : 'Terms of Use'}
             </Link>
-            <span className="text-slate-400" aria-hidden="true">
+            <span className="text-slate-400 self-center" aria-hidden="true">
               |
             </span>
             <Link
               to={localizedHref('/cookies', lang as Locale)}
-              className="hover:text-white transition-colors"
+              className="hover:text-white transition-colors py-2 min-h-[44px] inline-flex items-center"
             >
               {FOOTER_COPY.cookies[lang]}
             </Link>
-            <span className="text-slate-400" aria-hidden="true">
+            <span className="text-slate-400 self-center" aria-hidden="true">
               |
             </span>
             <Link
               to={localizedHref('/privacy#m10', lang as Locale)}
-              className="hover:text-white transition-colors"
+              className="hover:text-white transition-colors py-2 min-h-[44px] inline-flex items-center"
               data-testid="kvkk-m10"
             >
               {lang === 'tr' ? 'KVKK m.10 Aydınlatma' : 'KVKK Art.10 Disclosure'}
             </Link>
-            <span className="text-slate-400" aria-hidden="true">
+            <span className="text-slate-400 self-center" aria-hidden="true">
               |
             </span>
             <Link
               to={localizedHref('/privacy/data-rights', lang as Locale)}
-              className="hover:text-white transition-colors"
+              className="hover:text-white transition-colors py-2 min-h-[44px] inline-flex items-center"
               data-testid="kvkk-m11"
             >
               {lang === 'tr' ? 'KVKK m.11 Haklar' : 'KVKK Art.11 Rights'}
             </Link>
-            <span className="text-slate-400" aria-hidden="true">
+            <span className="text-slate-400 self-center" aria-hidden="true">
               |
             </span>
             <Link
               to={localizedHref('/quick-check', lang as Locale)}
-              className="hover:text-white transition-colors"
+              className="hover:text-white transition-colors py-2 min-h-[44px] inline-flex items-center"
               data-testid="quick-check"
             >
               {lang === 'tr' ? 'Quick Check' : 'Quick Check'}
