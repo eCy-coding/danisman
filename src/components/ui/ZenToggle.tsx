@@ -20,7 +20,7 @@ export const ZenToggle: React.FC = () => {
       whileTap={{ scale: 0.95 }}
       onClick={toggleZen}
       className={`
-        fixed bottom-6 left-6 z-50 p-3 rounded-full shadow-lg transition-all duration-300
+        fixed bottom-6 left-6 z-50 p-3 min-w-[44px] min-h-[44px] rounded-full shadow-lg transition-all duration-300
         ${
           isZenMode
             ? 'bg-black text-white border border-gray-800'

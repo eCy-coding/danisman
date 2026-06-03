@@ -417,7 +417,7 @@ export const Footer: React.FC = () => {
         <div className="flex justify-center mb-6">
           <Link
             to="/privacy"
-            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-800/80 border border-slate-700 text-slate-400 text-xs hover:text-slate-200 hover:border-slate-600 transition-colors"
+            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-800/80 border border-slate-700 text-slate-200 text-xs hover:text-white hover:border-slate-600 transition-colors"
             aria-label="KVKK uyumluluk bilgisi"
           >
             <ShieldCheck size={13} aria-hidden="true" className="text-secondary shrink-0" />

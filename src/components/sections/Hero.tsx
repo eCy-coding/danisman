@@ -391,7 +391,7 @@ export const Hero: React.FC = () => {
                           ? () => trackEvent('Hero', 'Click', 'Hero Primary Discovery')
                           : (e) => handleCtaClick(e, '#contact', 'Hero Primary')
                       }
-                      className="group relative px-8 py-4 bg-secondary hover:bg-amber-400 text-neutral font-bold uppercase tracking-widest rounded-xl shadow-[0_0_40px_rgba(250,204,21,0.3)] hover:shadow-[0_0_60px_rgba(250,204,21,0.5)] transition-all duration-300 flex items-center justify-center gap-3 min-w-50 w-full sm:w-auto overflow-hidden border border-secondary/20"
+                      className="group relative px-8 py-4 bg-secondary hover:bg-amber-400 text-slate-950 font-bold uppercase tracking-widest rounded-xl shadow-[0_0_40px_rgba(250,204,21,0.3)] hover:shadow-[0_0_60px_rgba(250,204,21,0.5)] transition-all duration-300 flex items-center justify-center gap-3 min-w-50 w-full sm:w-auto overflow-hidden border border-secondary/20"
                     >
                       <div className="absolute inset-0 -translate-x-full group-hover:animate-[shimmer_1.5s_infinite] bg-linear-to-r from-transparent via-white/20 to-transparent skew-x-12" />
                       <span className="relative z-10">{primaryCtaLabel}</span>
