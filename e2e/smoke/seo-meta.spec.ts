@@ -77,8 +77,9 @@ test.describe('SEO Meta Smoke', () => {
     for (const route of ROUTES) {
       const response = await page.goto(route.path);
       if (route.graceful && response && response.status() === 404) continue;
-      // Wait for React to mount and set route-specific title via Helmet/useEffect.
-      await page.waitForLoadState('networkidle');
+      // Wait for React to render route-specific title. networkidle times out on
+      // production (persistent WS/polling connections), so use a short fixed wait.
+      await page.waitForTimeout(800);
       titles.push(await page.title());
     }
 
