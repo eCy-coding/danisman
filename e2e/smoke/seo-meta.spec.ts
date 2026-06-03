@@ -53,17 +53,21 @@ test.describe('SEO Meta Smoke', () => {
     });
   }
 
-  test('robots.txt accessible', async ({ page }) => {
-    const response = await page.goto('/robots.txt');
-    expect(response?.status()).toBe(200);
-    const body = (await response?.text()) ?? '';
+  test('robots.txt accessible', async ({ request }) => {
+    // Use request fixture (not page.goto) to avoid Firefox NS_ERROR_FAILURE
+    // when calling response.text() on non-HTML content types.
+    const response = await request.get('/robots.txt');
+    expect(response.status()).toBe(200);
+    const body = await response.text();
     expect(body).toContain('User-agent');
   });
 
-  test('sitemap.xml accessible', async ({ page }) => {
-    const response = await page.goto('/sitemap.xml');
-    expect(response?.status()).toBe(200);
-    const body = (await response?.text()) ?? '';
+  test('sitemap.xml accessible', async ({ request }) => {
+    // Use request fixture (not page.goto) to avoid Firefox NS_ERROR_FAILURE
+    // when calling response.text() on non-HTML content types.
+    const response = await request.get('/sitemap.xml');
+    expect(response.status()).toBe(200);
+    const body = await response.text();
     expect(body).toContain('<urlset');
   });
 
