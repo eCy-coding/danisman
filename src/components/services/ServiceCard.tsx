@@ -78,7 +78,7 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({ service, categoryLabel
         to={service.link}
         data-testid="service-card-cta"
         className="inline-flex items-center gap-1.5 text-xs font-semibold tracking-wide
-                   text-slate-500 group-hover:text-secondary transition-colors duration-300 mt-auto
+                   text-slate-600 group-hover:text-secondary transition-colors duration-300 mt-auto
                    focus:outline-none focus-visible:ring-2 focus-visible:ring-secondary rounded"
         aria-label={`${service.title} detaylarını görüntüle`}
       >

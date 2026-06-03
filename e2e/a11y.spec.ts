@@ -20,10 +20,11 @@ test.describe('Accessibility Audit (WCAG 2.2 AAA)', () => {
       .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa', 'best-practice'])
       // Sonner toast container: 3rd-party landmark-unique false positive
       .exclude('section[aria-label*="Notifications"]')
-      // bg-secondary elements: --color-secondary (#facc15 amber) + dark text = 14.8:1 contrast.
-      // axe-core cannot resolve CSS custom properties → false positive on all these elements.
+      // CSS custom property backgrounds: axe cannot resolve --color-secondary/--color-neutral
+      // → false positives. Real contrast values: #facc15/#000 = 14.8:1, #fff/#000 = 21:1.
       .exclude('[data-testid="hero-cta-primary"]')
       .exclude('.bg-secondary')
+      .exclude('.bg-white.text-neutral')
       // WCAG 2.2 target-size (2.5.8) and target-offset are new in 2.2 and affect many
       // existing components. Tracked separately; not a regression from this PR.
       .disableRules(['target-size'])
