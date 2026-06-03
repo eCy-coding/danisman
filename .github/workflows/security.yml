@@ -80,6 +80,7 @@ jobs:
           cmd_options: '-a -j'
           allow_issue_writing: false
           fail_action: false       # Warn-only on baseline (no custom rules yet)
+          artifact_name: zap-report-frontend
 
       - name: OWASP ZAP — API Baseline Scan
         uses: zaproxy/action-baseline@v0.12.0
@@ -89,6 +90,7 @@ jobs:
           cmd_options: '-a -j'
           allow_issue_writing: false
           fail_action: false
+          artifact_name: zap-report-api
 
       - name: Upload ZAP reports
         uses: actions/upload-artifact@v4
