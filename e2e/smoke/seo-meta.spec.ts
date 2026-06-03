@@ -77,11 +77,16 @@ test.describe('SEO Meta Smoke', () => {
     for (const route of ROUTES) {
       const response = await page.goto(route.path);
       if (route.graceful && response && response.status() === 404) continue;
+      // Wait for React to mount and set route-specific title via Helmet/useEffect.
+      await page.waitForLoadState('networkidle');
       titles.push(await page.title());
     }
 
     const unique = new Set(titles);
-    // At least 80% of titles must be unique (allows for minor title collisions)
-    expect(unique.size).toBeGreaterThanOrEqual(Math.floor(titles.length * 0.8));
+    // At least 80% of titles must be unique (allows for minor title collisions).
+    // Actual titles collected: helps debug if assertion fails.
+    expect(unique.size, `Titles: ${JSON.stringify([...titles])}`).toBeGreaterThanOrEqual(
+      Math.floor(titles.length * 0.8),
+    );
   });
 });
