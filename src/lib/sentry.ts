@@ -69,9 +69,26 @@ class SentryClient {
             blockAllMedia: true,
           }),
         ],
-        tracesSampleRate: import.meta.env.MODE === 'production' ? 0.05 : 1.0,
+        // S13-R2-P4 — production homepage was emitting 3 envelopes per
+        // visit and hitting sentry.io's 503 ceiling (quota / rate limit).
+        // Halving production trace sample rate (0.05 → 0.02) cuts traffic
+        // without losing meaningful error signal: errors and unhandled
+        // rejections always emit at 100% regardless of trace rate. Replay
+        // rates already conservative; left untouched.
+        tracesSampleRate: import.meta.env.MODE === 'production' ? 0.02 : 1.0,
         replaysSessionSampleRate: 0.01,
         replaysOnErrorSampleRate: 1.0,
+        // Skip telemetry for third-party scripts we don't own — these
+        // errors aren't actionable and inflate our org quota. Sentry's
+        // `denyUrls` matches the script source URL of the exception
+        // (substring or regex).
+        denyUrls: [
+          /clarity\.ms/i,
+          /googletagmanager\.com/i,
+          /google-analytics\.com/i,
+          /posthog\.com/i,
+          /calendly\.com/i,
+        ],
         tracePropagationTargets: [/^\//, /^https:\/\/(www\.|api\.)?ecypro\.com/],
         beforeSend(event) {
           // `@sentry/react` Event type has stricter request shape; the

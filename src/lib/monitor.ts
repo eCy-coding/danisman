@@ -37,20 +37,46 @@ const flushQueue = () => {
 
   const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
 
-  // Send vitals via beacon (reliable even during page unload)
+  // Send vitals via beacon (reliable even during page unload).
+  // S13-R2-P3 — backend trackInteractionSchema requires sessionId + target
+  // and a known `type` enum value; the previous payload omitted both and
+  // used type="WEB_VITALS" (not in the enum), producing a 400 on every
+  // page load. Backend enum now includes WEB_VITALS; here we satisfy the
+  // remaining required fields. Falls back to a per-tab session UUID so a
+  // user who deletes cookies still gets one consistent id per browsing
+  // session.
   const vitals = queue.filter((item) => item.type === 'vital');
   if (vitals.length > 0 && typeof navigator?.sendBeacon === 'function') {
+    let sessionId = '';
+    try {
+      sessionId = sessionStorage.getItem('ecypro_vitals_sid') ?? '';
+      if (!sessionId) {
+        sessionId =
+          typeof crypto?.randomUUID === 'function'
+            ? crypto.randomUUID()
+            : `sid-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+        sessionStorage.setItem('ecypro_vitals_sid', sessionId);
+      }
+    } catch {
+      // sessionStorage may be unavailable (incognito iframe, etc.) —
+      // still emit a non-empty session id so the request validates.
+      sessionId = `sid-${Date.now()}`;
+    }
     navigator.sendBeacon(
       `${apiUrl}/analytics/interaction`,
       JSON.stringify({
+        sessionId,
         type: 'WEB_VITALS',
-        metrics: vitals.map((v) => ({
-          name: (v as VitalItem).name,
-          value: (v as VitalItem).value,
-          rating: (v as VitalItem).rating,
-          delta: (v as VitalItem).delta,
-        })),
-        timestamp: Date.now(),
+        target: 'web-vitals-batch',
+        metadata: {
+          metrics: vitals.map((v) => ({
+            name: (v as VitalItem).name,
+            value: (v as VitalItem).value,
+            rating: (v as VitalItem).rating,
+            delta: (v as VitalItem).delta,
+          })),
+          timestamp: Date.now(),
+        },
       }),
     );
   }
