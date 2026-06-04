@@ -32,12 +32,16 @@ export const SchemaOrg: React.FC = () => {
   const logoUrl = `${baseUrl}/pwa-512x512.png`;
 
   // 1. ProfessionalService Schema (The Core Identity)
+  // S13-R4-S1 — @id aligned to `${baseUrl}/#organization` so WebSite.publisher
+  // and SEO.tsx Organization fallback can reference the same node. Dual
+  // @type ['Organization', 'ProfessionalService'] merges the two identities
+  // into one Knowledge Graph entity instead of competing duplicates.
   const professionalServiceSchema = {
     '@context': 'https://schema.org',
-    '@type': 'ProfessionalService',
+    '@type': ['Organization', 'ProfessionalService'],
     name: 'eCyPro Premium Consulting',
     image: logoUrl,
-    '@id': baseUrl,
+    '@id': `${baseUrl}/#organization`,
     url: baseUrl,
     telephone: '+90-541-714-3000',
     priceRange: '$$$',

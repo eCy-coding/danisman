@@ -167,7 +167,7 @@ function StepItem({ step, lang, index }: { step: Step; lang: 'tr' | 'en'; index:
         {/* Deliverables */}
         <ul className="mt-4 space-y-1.5">
           {(lang === 'tr' ? step.deliverables.tr : step.deliverables.en).map((d) => (
-            <li key={d} className="flex items-center gap-2 text-xs text-slate-500">
+            <li key={d} className="flex items-center gap-2 text-xs text-slate-400">
               <div className={`w-1 h-1 rounded-full ${step.color} opacity-70`} aria-hidden="true" />
               {d}
             </li>

@@ -80,7 +80,13 @@ export const Insights: React.FC = () => {
                 onClick={() => trackEvent('Blog', 'Read', filteredPosts[0]?.title[lang] || '')}
               >
                 <MouseGlow />
-                <div className="absolute inset-0 bg-linear-to-t from-neutral via-neutral/50 to-transparent z-10 opacity-80" />
+                {/* S13-R4-A12 — featured post meta + headline render OVER */}
+                {/* the cover image. Original overlay `via-neutral/50` left */}
+                {/* mid-image regions translucent; text contrast was not */}
+                {/* guaranteed against bright photo areas. Strengthened mid */}
+                {/* stop to `via-neutral/80` so the bottom 2/3 of the */}
+                {/* gradient is near-solid; visual feel preserved. */}
+                <div className="absolute inset-0 bg-linear-to-t from-neutral via-neutral/80 to-transparent z-10 opacity-80" />
 
                 {filteredPosts[0].image && (
                   <img

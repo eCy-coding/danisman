@@ -75,7 +75,8 @@ export const SuccessStories: React.FC = () => {
                   <div className="relative h-64 overflow-hidden">
                     <img
                       src={study.image}
-                      alt={study.client}
+                      alt=""
+                      aria-hidden="true"
                       width={1200}
                       height={800}
                       loading="lazy"
@@ -146,7 +147,8 @@ export const SuccessStories: React.FC = () => {
                     {/* P15 — width/height CLS=0; loading=lazy below-fold gallery için. */}
                     <ResponsiveImage
                       src={study.image}
-                      alt={study.client}
+                      alt=""
+                      aria-hidden="true"
                       width={640}
                       height={384}
                       loading="lazy"

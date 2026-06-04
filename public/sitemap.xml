@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  S13-R4-S9 — Apex homepage entry removed. sitemap-tr.xml and sitemap-en.xml
+  already cover the / locale-prefixed homepages with their own hreflang
+  reciprocity. Listing the apex URL here in addition created a 3rd
+  competing entry that Google flagged as "duplicate without user-selected
+  canonical" since the apex 301s to a locale.
+-->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
-  <url>
-    <loc>https://www.ecypro.com</loc>
-    <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.ecypro.com/en" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.ecypro.com" />
-    <lastmod>2026-05-28</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>1.0</priority>
-  </url>
   <url>
     <loc>https://www.ecypro.com/founder</loc>
     <xhtml:link rel="alternate" hreflang="tr-TR" href="https://www.ecypro.com/tr/founder" />
