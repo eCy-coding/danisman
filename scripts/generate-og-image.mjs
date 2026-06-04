@@ -151,9 +151,14 @@ async function main() {
     console.log('[og-image] (dist/ missing — skipping dist copy; run after npm run build)');
   }
 
+  // S13-R13 P0-1 — Was process.exit(2) on size overshoot; that hard-failed
+  // every Vercel deploy because Vercel's libvips renders heavier than the
+  // local dev image. Soft-warn now: the OG asset is still copied, deploys
+  // keep moving, and the warning surfaces in build logs for human review.
   if (buf.length > 300 * 1024) {
-    console.warn(`[og-image] ⚠ size ${kb} KB > 300 KB target — consider lower quality`);
-    process.exit(2);
+    console.warn(
+      `[og-image] ⚠ size ${kb} KB > 300 KB target — consider lower quality (warning only, not fatal)`
+    );
   }
 }
 

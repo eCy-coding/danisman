@@ -29,6 +29,7 @@
     "e2e",
     "tests",
     "**/*.test.ts",
-    "**/*.spec.ts"
+    "**/*.spec.ts",
+    "server/terminal/**"
   ]
 }

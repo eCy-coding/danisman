@@ -32,7 +32,12 @@ services:
         npx prisma migrate resolve --applied "$m" 2>/dev/null || true; \
       done && \
       npx prisma migrate deploy && \
-      npx tsc -p tsconfig.server.json
+      npx tsc -p tsconfig.server.json && \
+      # S13-R13 P0-2 — Root package.json is "type":"module" but tsc emits CJS.
+      # Without this override Node parses compiled CJS as ESM and crashes with
+      # `SyntaxError: Cannot use import statement outside a module`. The
+      # Dockerfile already does this; the native Node runtime did not.
+      printf '{"type":"commonjs"}' > dist/package.json
     startCommand: node dist/server/index.js
     healthCheckPath: /api/health
     # P20 BE Aşama 4 — Post-deploy cache warm-up.
