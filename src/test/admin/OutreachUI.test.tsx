@@ -1,9 +1,18 @@
 import { render, screen } from '@testing-library/react';
 import { describe, test, expect } from 'vitest';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { WaveKPICard } from '../../components/admin/outreach/WaveKPICard';
 import { ProspectStatusBadge } from '../../components/admin/outreach/ProspectStatusBadge';
 import { WaveDetailView } from '../../components/admin/outreach/WaveDetailView';
 import type { WaveRow } from '../../types/revenue';
+
+function makeQC() {
+  return new QueryClient({ defaultOptions: { queries: { retry: false } } });
+}
+
+function withQC(ui: React.ReactElement) {
+  return <QueryClientProvider client={makeQC()}>{ui}</QueryClientProvider>;
+}
 
 describe('OutreachUI', () => {
   test('1. WaveKPICard shows open/reply/meeting rates as percentages', () => {
@@ -50,7 +59,7 @@ describe('OutreachUI', () => {
       targetRevenueUsd: 30000,
       realizedRevenueUsd: 12000,
     };
-    render(<WaveDetailView wave={wave} />);
+    render(withQC(<WaveDetailView wave={wave} />));
 
     expect(screen.getByTestId('wave-detail-view')).toBeTruthy();
     expect(screen.getByText('Alpha A.Ş.')).toBeTruthy();
@@ -67,7 +76,7 @@ describe('OutreachUI', () => {
       targetRevenueUsd: 50000,
       realizedRevenueUsd: 25000,
     };
-    render(<WaveDetailView wave={wave} />);
+    render(withQC(<WaveDetailView wave={wave} />));
 
     const bar = screen.getByTestId('revenue-progress-bar');
     expect(bar).toBeTruthy();
