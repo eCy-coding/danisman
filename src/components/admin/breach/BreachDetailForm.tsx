@@ -10,6 +10,12 @@ export interface NewBreachData {
   description: string;
   affectedDataCategories: string[];
   affectedSubjectsCount: number;
+  /**
+   * R7-P1.4 — P15 idempotency-key emitted by the form factory so the parent
+   * mutation can forward it as the `Idempotency-Key` HTTP header. Optional
+   * on the type so older callers compile; the form always supplies one.
+   */
+  idempotencyKey?: string;
 }
 
 const DATA_CATEGORIES = [
@@ -45,6 +51,17 @@ interface BreachDetailFormProps {
 }
 
 export function BreachDetailForm({ onSubmit, loading }: BreachDetailFormProps) {
+  // R7-P1.4 — P15 canonical form standard: idempotency-key + honeypot trap +
+  // ARIA error wiring. Submit-lock comes from `loading` prop (parent owns the
+  // mutation pending state).
+  const idempotencyKey = React.useMemo(
+    () =>
+      typeof crypto !== 'undefined' && 'randomUUID' in crypto
+        ? crypto.randomUUID()
+        : `idem-breach-${Date.now()}-${Math.random().toString(36).slice(2, 12)}`,
+    [],
+  );
+
   const {
     register,
     handleSubmit,
@@ -59,7 +76,10 @@ export function BreachDetailForm({ onSubmit, loading }: BreachDetailFormProps) {
   });
 
   const handleFormSubmit = (data: FormValues) => {
-    onSubmit(data);
+    // Tag the payload with the idempotency key so the parent mutation can
+    // attach it as the Idempotency-Key header. Non-destructive — extra field
+    // gets stripped by parent Zod parse before persisting.
+    onSubmit({ ...(data as NewBreachData), idempotencyKey } as NewBreachData);
     reset();
   };
 
@@ -75,6 +95,22 @@ export function BreachDetailForm({ onSubmit, loading }: BreachDetailFormProps) {
 
   return (
     <form onSubmit={handleSubmit(handleFormSubmit)} className="flex flex-col gap-fib-5">
+      {/* R7-P1.4 — P15 honeypot trap (bot-only auto-fill). Off-screen + tab
+          skip + autoComplete disabled. */}
+      <div
+        aria-hidden="true"
+        style={{
+          position: 'absolute',
+          left: '-9999px',
+          width: '1px',
+          height: '1px',
+          overflow: 'hidden',
+        }}
+      >
+        <label htmlFor="breach-hp_field">Sadece botlar için</label>
+        <input id="breach-hp_field" type="text" name="hp_field" tabIndex={-1} autoComplete="off" />
+      </div>
+
       {/* detectedAt */}
       <div>
         <label htmlFor="breach-detectedAt" className={labelClass}>

@@ -82,7 +82,12 @@ export const PostListQuerySchema = z.object({
   seriesId: z.string().cuid().optional(),
   q: z.string().max(200).optional(),
   page: z.coerce.number().int().min(1).default(1),
-  limit: z.coerce.number().int().min(1).max(100).default(20),
+  // P44-T07: admin list page sends `limit=200` (high-density editorial table —
+  // 10K+ scale). Previous max(100) caused a 400 on first load. Bumped to 500
+  // so the admin UI works without an extra round-trip; pagination stays
+  // optional. The public-facing /api/insights/posts route uses a tighter
+  // schema in the public router; this one is admin-only behind requireRole.
+  limit: z.coerce.number().int().min(1).max(500).default(20),
   sortBy: z.enum(['publishedAt', 'viewCount', 'createdAt', 'updatedAt']).default('createdAt'),
   sortOrder: z.enum(['asc', 'desc']).default('desc'),
 });

@@ -41,6 +41,82 @@ const tokenQuerySchema = z.object({
   token: z.string().min(10),
 });
 
+// ─── GET /api/feedback/nps-summary — admin NPS aggregate ──
+// P44-T07: must be declared BEFORE `/:bookingId` because Express matches in
+// registration order; with `/:bookingId` first, `/nps-summary` was captured as
+// `bookingId="nps-summary"` and the subsequent `tokenQuerySchema.parse` failed
+// (no `?token=`) → 400. The admin Dashboard renders the NPS panel via this
+// endpoint, so the breakage was a silent UI miss ("Henüz değerlendirme yok"
+// instead of real data once any feedback exists).
+
+router.get(
+  '/nps-summary',
+  authenticate,
+  requireRole('ADMIN'),
+  async (_req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const allFeedback = await prisma.bookingFeedback.findMany({
+        where: { tokenUsed: true },
+        select: { score: true, submittedAt: true },
+      });
+
+      const total = allFeedback.length;
+      if (total === 0) {
+        res.json({
+          status: 'success',
+          data: { nps: null, total: 0, promoters: 0, passives: 0, detractors: 0 },
+        });
+        return;
+      }
+
+      type FeedbackRow = { score: number; submittedAt: Date };
+      const promoters = (allFeedback as FeedbackRow[]).filter((f) => f.score >= 9).length;
+      const passives = (allFeedback as FeedbackRow[]).filter(
+        (f) => f.score === 7 || f.score === 8,
+      ).length;
+      const detractors = (allFeedback as FeedbackRow[]).filter((f) => f.score <= 6).length;
+
+      // NPS formula: (Promoters/Total - Detractors/Total) × 100
+      const nps = Math.round(((promoters - detractors) / total) * 100);
+
+      // Average score (arithmetic mean)
+      const avgScore =
+        (allFeedback as FeedbackRow[]).reduce((sum: number, f: FeedbackRow) => sum + f.score, 0) /
+        total;
+
+      // Last 30 days trend
+      const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+      const recent = (allFeedback as FeedbackRow[]).filter((f) => f.submittedAt >= thirtyDaysAgo);
+      const recentNps =
+        recent.length > 0
+          ? Math.round(
+              ((recent.filter((f) => f.score >= 9).length -
+                recent.filter((f) => f.score <= 6).length) /
+                recent.length) *
+                100,
+            )
+          : null;
+
+      res.json({
+        status: 'success',
+        data: {
+          nps,
+          recentNps,
+          avgScore: Math.round(avgScore * 10) / 10,
+          total,
+          promoters,
+          passives,
+          detractors,
+          promoterPct: Math.round((promoters / total) * 100),
+          detractorPct: Math.round((detractors / total) * 100),
+        },
+      });
+    } catch (err) {
+      next(err);
+    }
+  },
+);
+
 // ─── GET /api/feedback/:bookingId — check token validity ──
 
 router.get(
@@ -127,76 +203,6 @@ router.post(
 
       logger.info('[Feedback] NPS submitted', { bookingId, score });
       res.json({ status: 'success', data: { message: 'Değerlendirmeniz için teşekkürler!' } });
-    } catch (err) {
-      next(err);
-    }
-  },
-);
-
-// ─── GET /api/feedback/nps-summary — admin NPS aggregate ──
-
-router.get(
-  '/nps-summary',
-  authenticate,
-  requireRole('ADMIN'),
-  async (_req: Request, res: Response, next: NextFunction): Promise<void> => {
-    try {
-      const allFeedback = await prisma.bookingFeedback.findMany({
-        where: { tokenUsed: true },
-        select: { score: true, submittedAt: true },
-      });
-
-      const total = allFeedback.length;
-      if (total === 0) {
-        res.json({
-          status: 'success',
-          data: { nps: null, total: 0, promoters: 0, passives: 0, detractors: 0 },
-        });
-        return;
-      }
-
-      type FeedbackRow = { score: number; submittedAt: Date };
-      const promoters = (allFeedback as FeedbackRow[]).filter((f) => f.score >= 9).length;
-      const passives = (allFeedback as FeedbackRow[]).filter(
-        (f) => f.score === 7 || f.score === 8,
-      ).length;
-      const detractors = (allFeedback as FeedbackRow[]).filter((f) => f.score <= 6).length;
-
-      // NPS formula: (Promoters/Total - Detractors/Total) × 100
-      const nps = Math.round(((promoters - detractors) / total) * 100);
-
-      // Average score (arithmetic mean)
-      const avgScore =
-        (allFeedback as FeedbackRow[]).reduce((sum: number, f: FeedbackRow) => sum + f.score, 0) /
-        total;
-
-      // Last 30 days trend
-      const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
-      const recent = (allFeedback as FeedbackRow[]).filter((f) => f.submittedAt >= thirtyDaysAgo);
-      const recentNps =
-        recent.length > 0
-          ? Math.round(
-              ((recent.filter((f) => f.score >= 9).length -
-                recent.filter((f) => f.score <= 6).length) /
-                recent.length) *
-                100,
-            )
-          : null;
-
-      res.json({
-        status: 'success',
-        data: {
-          nps,
-          recentNps,
-          avgScore: Math.round(avgScore * 10) / 10,
-          total,
-          promoters,
-          passives,
-          detractors,
-          promoterPct: Math.round((promoters / total) * 100),
-          detractorPct: Math.round((detractors / total) * 100),
-        },
-      });
     } catch (err) {
       next(err);
     }

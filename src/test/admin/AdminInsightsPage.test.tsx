@@ -198,7 +198,8 @@ describe('AdminInsightsPage', () => {
     await waitFor(() => screen.getByLabelText('Yorumu onayla'));
     fireEvent.click(screen.getByLabelText('Yorumu onayla'));
     await waitFor(() => {
-      expect(apiClient.patch).toHaveBeenCalledWith('/api/v1/admin/insights/comments/c1', {
+      // P44-T06: apiClient baseURL already includes `/api`; expect bare `/v1/...`.
+      expect(apiClient.patch).toHaveBeenCalledWith('/v1/admin/insights/comments/c1', {
         status: 'APPROVED',
       });
     });

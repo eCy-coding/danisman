@@ -65,6 +65,17 @@ import commentsRoutes from './comments';
 import adminCommentsRoutes from './admin-comments';
 import dsarCommentsRoutes from './dsar-comments';
 import adminInsightsDashboardRoutes from './admin-insights-dashboard';
+// P44-T07: outreach (Wave-1 sales pipeline) — backend exists, wire it up so the
+// admin /admin/outreach page can leave MOCK_WAVES behind.
+import { adminOutreachRouter } from './admin-outreach';
+// P44-T07 (extension): /api/admin/analytics-stream — SSE wire for the admin
+// LiveLeadFeed widget. Bridges adminEventBus → wire-format events.
+import adminAnalyticsStreamRoutes from './admin-analytics-stream';
+// P44-T07 Round-4: ESG/Fintech/Succession previously had Prisma models and
+// frontend pages but no backend routes — these stubs un-orphan them.
+import adminEsgRoutes from './admin-esg';
+import adminFintechComplianceRoutes from './admin-fintech-compliance';
+import adminSuccessionRoutes from './admin-succession';
 import { openApiSpec } from '../config/openapi';
 import { redis } from '../config/redis';
 import { prisma } from '../config/db';
@@ -544,7 +555,14 @@ router.use('/leads', leadRoutes);
 router.use('/feedback', feedbackRoutes);
 router.use('/geo', geoRoutes);
 router.use('/crm', crmRoutes);
+// P44-T07: frontend AdminDevAnalyticsPage queries `/dev-analytics/events`
+// (hyphen) via apiClient — historical convention. The mount was `/dev/analytics`
+// (slash) which produced `/api/dev/analytics/events` and 404'd. We mount BOTH so
+// the frontend works today and any prior script/test that hit the slash form
+// still resolves. The route file's own header comment also documents
+// `/api/dev/analytics/...` — keeping that compatible avoids breaking scripts.
 router.use('/dev/analytics', devAnalyticsRoutes);
+router.use('/dev-analytics', devAnalyticsRoutes);
 router.use('/contact', contactRoutes);
 router.use('/discovery', discoveryRoutes);
 router.use('/calendly', calendlyRoutes);
@@ -568,8 +586,30 @@ router.use('/insights-seo', insightsSeoRoutes);
 
 // Perspektif Blog — PB-11 KVKK Comments + PB-10 Admin Dashboard
 router.use('/insights/posts', commentsRoutes);
-router.use('/admin/insights/comments', adminCommentsRoutes);
+// P44-T06: same double-prefix drift as admin-insights-dashboard. Source file
+// declares its routes at /insights/comments and asks for /api/v1/admin mount.
+router.use('/admin', adminCommentsRoutes);
 router.use('/dsar/comments', dsarCommentsRoutes);
-router.use('/admin/insights/dashboard', adminInsightsDashboardRoutes);
+// P44-T06: was '/admin/insights/dashboard' which double-prefixed the inner
+// router's `/insights/dashboard/stats` → mount at `/admin` per the source
+// file's own "Register: app.use('/api/v1/admin', …)" comment so final path
+// resolves to `/api/v1/admin/insights/dashboard/stats` (matches frontend
+// useDashboardStats which calls /api/v1/admin/insights/dashboard/stats).
+router.use('/admin', adminInsightsDashboardRoutes);
+// P44-T07: final path resolves to /api/v1/admin/outreach (router defines '/' GET/POST).
+router.use('/admin/outreach', adminOutreachRouter);
+// P44-T07 (extension): final path resolves to /api/admin/analytics-stream.
+router.use('/admin/analytics-stream', adminAnalyticsStreamRoutes);
+// P44-T07 Round-4: ESG/Fintech/Succession backend mounts.
+// Frontend paths the pages already call:
+//   /api/admin/esg/datapoints           → adminEsgRoutes /datapoints
+//   /api/admin/esg/assessments          → adminEsgRoutes /assessments
+//   /api/admin/fintech/compliance       → adminFintechComplianceRoutes /compliance
+//   /api/admin/succession-roadmaps      → adminSuccessionRoutes /succession-roadmaps
+//                                         (router defines the leaf path directly so
+//                                          we mount the parent here, not /succession)
+router.use('/admin/esg', adminEsgRoutes);
+router.use('/admin/fintech', adminFintechComplianceRoutes);
+router.use('/admin', adminSuccessionRoutes);
 
 export default router;

@@ -1,0 +1,85 @@
+/**
+ * M4: View-As Simulation Context
+ *
+ * Provides the global state for "View As Role" simulation mode.
+ * When active, all mutation buttons are disabled and API requests
+ * include X-View-As-Role header.
+ *
+ * Why a separate context: keeps View-As state decoupled from auth,
+ * allows any subtree to query or trigger simulation without prop drilling.
+ */
+
+import React, { createContext, useCallback, useContext, useState } from 'react';
+import type { UserRole } from './rbac';
+import { adminFetch } from './admin-fetch';
+
+export interface ViewAsState {
+  activeRole: UserRole | null;
+  sessionId: string | null;
+  isViewAsMode: boolean;
+  startViewAs: (role: UserRole) => Promise<void>;
+  endViewAs: () => Promise<void>;
+}
+
+const ViewAsContext = createContext<ViewAsState | null>(null);
+
+export const ViewAsProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [activeRole, setActiveRole] = useState<UserRole | null>(null);
+  const [sessionId, setSessionId] = useState<string | null>(null);
+
+  const startViewAs = useCallback(async (role: UserRole) => {
+    // Optimistically set the role before awaiting server confirmation.
+    // The server echoes the same role back — if it rejects we'll clear.
+    setActiveRole(role);
+
+    try {
+      const res = await fetch('/api/admin/rbac/view-as', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ viewingAsRole: role }),
+      });
+      if (!res.ok) {
+        setActiveRole(null);
+        return;
+      }
+      const json = (await res.json()) as { status: string; data: { sessionId: string } };
+      setSessionId(json.data.sessionId);
+    } catch {
+      // Network error — revert optimistic update
+      setActiveRole(null);
+    }
+  }, []);
+
+  const endViewAs = useCallback(async () => {
+    const sid = sessionId;
+    // Clear state immediately (optimistic)
+    setActiveRole(null);
+    setSessionId(null);
+
+    if (sid) {
+      try {
+        await fetch(`/api/admin/rbac/view-as/${sid}`, { method: 'DELETE' });
+      } catch {
+        // Best-effort cleanup; state is already cleared
+      }
+    }
+  }, [sessionId]);
+
+  const value: ViewAsState = {
+    activeRole,
+    sessionId,
+    isViewAsMode: activeRole !== null,
+    startViewAs,
+    endViewAs,
+  };
+
+  return <ViewAsContext.Provider value={value}>{children}</ViewAsContext.Provider>;
+};
+
+export function useViewAs(): ViewAsState {
+  const ctx = useContext(ViewAsContext);
+  if (!ctx) {
+    throw new Error('useViewAs must be used inside <ViewAsProvider>');
+  }
+  return ctx;
+}

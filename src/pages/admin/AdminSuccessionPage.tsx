@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { adminFetch } from '../../lib/admin-fetch';
 
 type SuccessionStatus = 'ASSESSMENT' | 'PLANNING' | 'EXECUTION' | 'COMPLETED';
 type MilestoneStatus = 'PENDING' | 'IN_PROGRESS' | 'COMPLETED' | 'DELAYED';
@@ -50,7 +51,7 @@ export const AdminSuccessionPage: React.FC = () => {
   const { data: roadmaps = [], isLoading } = useQuery<SuccessionRoadmap[]>({
     queryKey: ['succession-roadmaps'],
     queryFn: async () => {
-      const res = await fetch('/api/admin/succession-roadmaps');
+      const res = await adminFetch('/api/admin/succession-roadmaps');
       if (!res.ok) throw new Error('Failed to fetch succession roadmaps');
       const json = (await res.json()) as { data: SuccessionRoadmap[] };
       return json.data;

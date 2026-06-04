@@ -255,6 +255,20 @@ const AdminVERBISPage = React.lazy(() =>
 const AdminRetentionPage = React.lazy(() =>
   import('./pages/admin/AdminRetentionPage').then((m) => ({ default: m.AdminRetentionPage })),
 );
+// P44-T07 Round-4: ESG / Fintech / Succession were orphan pages (UI built,
+// no route, no sidebar link). Pages and Prisma models existed; backend
+// stubs added this round. Lazy-loaded to keep the admin bundle slim.
+const AdminESGPage = React.lazy(() =>
+  import('./pages/admin/AdminESGPage').then((m) => ({ default: m.AdminESGPage })),
+);
+const AdminFintechCompliancePage = React.lazy(() =>
+  import('./pages/admin/AdminFintechCompliancePage').then((m) => ({
+    default: m.AdminFintechCompliancePage,
+  })),
+);
+const AdminSuccessionPage = React.lazy(() =>
+  import('./pages/admin/AdminSuccessionPage').then((m) => ({ default: m.AdminSuccessionPage })),
+);
 const AdminPageEditPage = React.lazy(() => import('./pages/admin/AdminPageEditPage'));
 const AdminBlogPage = React.lazy(() =>
   import('./pages/admin/AdminBlogPage').then((module) => ({ default: module.AdminBlogPage })),
@@ -1399,6 +1413,31 @@ const AnimatedRoutes = () => {
                 element={
                   <Suspense fallback={<LoadingFallback />}>
                     <AdminRetentionPage />
+                  </Suspense>
+                }
+              />
+              {/* P44-T07 Round-4: previously orphan KVKK/regulatory pages */}
+              <Route
+                path="esg"
+                element={
+                  <Suspense fallback={<LoadingFallback />}>
+                    <AdminESGPage />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="fintech-compliance"
+                element={
+                  <Suspense fallback={<LoadingFallback />}>
+                    <AdminFintechCompliancePage />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="succession"
+                element={
+                  <Suspense fallback={<LoadingFallback />}>
+                    <AdminSuccessionPage />
                   </Suspense>
                 }
               />

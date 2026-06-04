@@ -13,89 +13,27 @@ import {
   ChevronDown,
   Eye,
 } from 'lucide-react';
+import {
+  useAdminBookings,
+  useUpdateBookingStatus,
+  type AdminBookingRow,
+  type AdminBookingStatus,
+} from '../../hooks/useAdminBookings';
 
-type Status = 'pending' | 'confirmed' | 'cancelled' | 'completed';
+/**
+ * P44-T07 (extension) — AdminBookingsPage rewired to real backend.
+ *
+ * Previous `MOCK_BOOKINGS` (Ahmet/Sarah/Mehmet/Emma/Can/Lisa placeholder
+ * entries) is gone. Data now flows from `useAdminBookings` →
+ * `GET /api/bookings` with the existing admin scope (ADMIN/CONSULTANT see all
+ * bookings, controller `listBookings`). Status updates go through
+ * `useUpdateBookingStatus` → `PATCH /api/bookings/:id/status` (server-side
+ * `requireRole('ADMIN')`). No silent fallback to mock data — KVKK launch
+ * discipline requires explicit loading / error / empty states.
+ */
 
-interface Booking {
-  id: string;
-  name: string;
-  email: string;
-  company: string;
-  date: string;
-  time: string;
-  message: string;
-  status: Status;
-  createdAt: string;
-}
-
-const MOCK_BOOKINGS: Booking[] = [
-  {
-    id: 'bk-001',
-    name: 'Ahmet Yılmaz',
-    email: 'ahmet@teknoloji.com',
-    company: 'Teknoloji A.Ş.',
-    date: '2026-05-15',
-    time: '10:00',
-    message: 'Yapay zeka stratejimizi tartışmak istiyoruz.',
-    status: 'pending',
-    createdAt: '2026-05-04',
-  },
-  {
-    id: 'bk-002',
-    name: 'Sarah Johnson',
-    email: 'sarah@globalcorp.com',
-    company: 'GlobalCorp Ltd.',
-    date: '2026-05-16',
-    time: '14:30',
-    message: 'M&A advisory for our European expansion.',
-    status: 'confirmed',
-    createdAt: '2026-05-03',
-  },
-  {
-    id: 'bk-003',
-    name: 'Mehmet Demir',
-    email: 'mdemir@fintech.io',
-    company: 'FinTech Solutions',
-    date: '2026-05-12',
-    time: '11:00',
-    message: 'Dijital dönüşüm projesini değerlendirmek istiyoruz.',
-    status: 'completed',
-    createdAt: '2026-05-01',
-  },
-  {
-    id: 'bk-004',
-    name: 'Emma Schmidt',
-    email: 'eschmidt@eu-energy.de',
-    company: 'EU Energy GmbH',
-    date: '2026-05-18',
-    time: '09:30',
-    message: 'Net zero roadmap consultation.',
-    status: 'pending',
-    createdAt: '2026-05-04',
-  },
-  {
-    id: 'bk-005',
-    name: 'Can Öztürk',
-    email: 'coztürk@saas.co',
-    company: 'SaaS Platform Inc.',
-    date: '2026-05-08',
-    time: '15:00',
-    message: 'PLG stratejimiz için danışmanlık.',
-    status: 'cancelled',
-    createdAt: '2026-04-30',
-  },
-  {
-    id: 'bk-006',
-    name: 'Lisa Chen',
-    email: 'lchen@healthnet.org',
-    company: 'Regional Health Network',
-    date: '2026-05-20',
-    time: '10:30',
-    message: 'AI platform implementation review.',
-    status: 'confirmed',
-    createdAt: '2026-05-02',
-  },
-];
+type Status = AdminBookingStatus;
+type Booking = AdminBookingRow;
 
 const STATUS_CONFIG: Record<Status, { label: string; bg: string; text: string; dot: string }> = {
   pending: {
@@ -120,22 +58,47 @@ const STATUS_CONFIG: Record<Status, { label: string; bg: string; text: string; d
 };
 
 export const AdminBookingsPage: React.FC = () => {
-  const [bookings, setBookings] = useState<Booking[]>(MOCK_BOOKINGS);
+  const { data: bookings = [], isLoading, isError, error, refetch } = useAdminBookings();
+  const updateMutation = useUpdateBookingStatus();
   const [search, setSearch] = useState('');
   const [filterStatus, setFilterStatus] = useState<Status | 'all'>('all');
+  // R8-P4 — temporal scope tab: all / upcoming / past. Upcoming is scheduledAt
+  // > now; past is everything else. Cancelled is excluded from upcoming.
+  const [scope, setScope] = useState<'all' | 'upcoming' | 'past'>('all');
+  // R8-P4 — sort by scheduledAt. desc default (newest / soonest first).
+  const [sortDir, setSortDir] = useState<'asc' | 'desc'>('desc');
   const [selected, setSelected] = useState<Booking | null>(null);
 
-  const filtered = bookings.filter((b) => {
-    const matchSearch =
-      !search ||
-      [b.name, b.email, b.company].some((f) => f.toLowerCase().includes(search.toLowerCase()));
-    const matchStatus = filterStatus === 'all' || b.status === filterStatus;
-    return matchSearch && matchStatus;
-  });
+  const todayMidnight = (() => {
+    const d = new Date();
+    d.setHours(0, 0, 0, 0);
+    return d;
+  })();
+
+  const filtered = bookings
+    .filter((b) => {
+      const matchSearch =
+        !search ||
+        [b.name, b.email, b.company].some((f) =>
+          (f ?? '').toLowerCase().includes(search.toLowerCase()),
+        );
+      const matchStatus = filterStatus === 'all' || b.status === filterStatus;
+      if (!matchSearch || !matchStatus) return false;
+      if (scope === 'all') return true;
+      const dt = new Date(`${b.date}T${b.time || '00:00'}:00`);
+      const isUpcoming = dt >= todayMidnight && b.status !== 'cancelled';
+      return scope === 'upcoming' ? isUpcoming : !isUpcoming;
+    })
+    .sort((a, b) => {
+      const ka = new Date(`${a.date}T${a.time || '00:00'}:00`).getTime();
+      const kb = new Date(`${b.date}T${b.time || '00:00'}:00`).getTime();
+      return sortDir === 'desc' ? kb - ka : ka - kb;
+    });
 
   const updateStatus = (id: string, status: Status) => {
-    setBookings((prev) => prev.map((b) => (b.id === id ? { ...b, status } : b)));
+    // Optimistic UI: keep the detail-panel echo while the mutation flies.
     if (selected?.id === id) setSelected((prev) => (prev ? { ...prev, status } : null));
+    updateMutation.mutate({ id, status });
   };
 
   const stats = {
@@ -155,6 +118,37 @@ export const AdminBookingsPage: React.FC = () => {
         </div>
       </div>
 
+      {/* P44-T07: loading / error banners replace the silent MOCK fallback. */}
+      {isLoading && (
+        <div
+          role="status"
+          aria-live="polite"
+          className="rounded-xl border border-white/8 bg-white/3 p-4 text-sm text-slate-400"
+        >
+          Görüşmeler yükleniyor…
+        </div>
+      )}
+      {isError && (
+        <div
+          role="alert"
+          className="rounded-xl border border-red-500/30 bg-red-500/10 p-4 text-sm text-red-300"
+        >
+          <div className="font-semibold mb-1">Görüşme listesi yüklenemedi.</div>
+          <div className="text-red-200 mb-2">
+            {error instanceof Error ? error.message : 'Bilinmeyen hata'}
+          </div>
+          <button
+            type="button"
+            onClick={() => {
+              void refetch();
+            }}
+            className="rounded-lg border border-red-500/40 px-3 py-1.5 text-xs font-semibold hover:bg-red-500/20"
+          >
+            Tekrar dene
+          </button>
+        </div>
+      )}
+
       {/* Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {[
@@ -168,6 +162,37 @@ export const AdminBookingsPage: React.FC = () => {
             <p className={`text-3xl font-bold ${s.color}`}>{s.value}</p>
           </div>
         ))}
+      </div>
+
+      {/* R8-P4 — temporal scope tabs */}
+      <div className="flex gap-2" role="tablist" aria-label="Görüşme Zaman Kapsamı">
+        {(['all', 'upcoming', 'past'] as const).map((s) => {
+          const label = s === 'all' ? 'Tümü' : s === 'upcoming' ? 'Yaklaşan' : 'Geçmiş';
+          return (
+            <button
+              key={s}
+              type="button"
+              role="tab"
+              aria-selected={scope === s}
+              onClick={() => setScope(s)}
+              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition border ${
+                scope === s
+                  ? 'bg-blue-500/25 border-blue-400 text-blue-100'
+                  : 'border-white/10 text-slate-400 hover:bg-white/5'
+              }`}
+            >
+              {label}
+            </button>
+          );
+        })}
+        <button
+          type="button"
+          onClick={() => setSortDir((d) => (d === 'desc' ? 'asc' : 'desc'))}
+          className="ml-auto px-3 py-1.5 rounded-lg text-xs font-medium border border-white/10 text-slate-300 hover:bg-white/5"
+          aria-label="Sıralama yönü"
+        >
+          Tarih: {sortDir === 'desc' ? '↓ Yeni' : '↑ Eski'}
+        </button>
       </div>
 
       {/* Filters */}

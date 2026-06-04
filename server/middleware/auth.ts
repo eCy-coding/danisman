@@ -26,14 +26,25 @@ export const authenticate = async (
   next: NextFunction,
 ): Promise<void> => {
   const authHeader = req.headers.authorization;
-  if (!authHeader?.startsWith('Bearer ')) {
-    res.status(401).json({ status: 'error', message: 'Authentication required' });
-    return;
+
+  // P44-T07: SSE/EventSource fallback — the W3C EventSource spec does NOT allow
+  // setting custom request headers, so `Authorization: Bearer …` is impossible
+  // for streaming endpoints (e.g. /api/sse/dashboard, /api/admin/analytics-stream).
+  // The frontend appends `?token=<jwt>` to the SSE URL; we honour that here.
+  // Production caveat: tokens-in-query are logged in access logs + referers.
+  // Mitigation already in place: tokens are short-lived (~15 min) and bound to
+  // user session, and we never log full URLs in our structured logger.
+  // For non-SSE endpoints, browsers continue to use the Authorization header
+  // (apiClient axios interceptor), so this fallback is dormant in normal use.
+  let token: string | undefined;
+  if (authHeader?.startsWith('Bearer ')) {
+    token = authHeader.split(' ')[1];
+  } else if (typeof req.query.token === 'string' && req.query.token.length > 0) {
+    token = req.query.token;
   }
 
-  const token = authHeader.split(' ')[1];
   if (!token) {
-    res.status(401).json({ status: 'error', message: 'Invalid token format' });
+    res.status(401).json({ status: 'error', message: 'Authentication required' });
     return;
   }
 
@@ -76,8 +87,7 @@ export const authenticate = async (
  * and 403 (Forbidden) when the role is mismatched.
  */
 export const requireRole = (role: string | readonly string[]) => {
-  const allowedRoles: readonly string[] =
-    typeof role === 'string' ? [role] : role;
+  const allowedRoles: readonly string[] = typeof role === 'string' ? [role] : role;
   return (req: AuthRequest, res: Response, next: NextFunction): void => {
     if (!req.user) {
       res.status(401).json({ status: 'error', message: 'Authentication required' });

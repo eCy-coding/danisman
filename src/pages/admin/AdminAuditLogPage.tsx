@@ -18,8 +18,8 @@
  *   oldValue (Json), newValue (Json), ip, userAgent, createdAt
  */
 
-import React, { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import React, { useState, useEffect } from 'react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   ClipboardList,
   ChevronDown,
@@ -155,6 +155,63 @@ export const AdminAuditLogPage: React.FC = () => {
   const [actionFilter, setActionFilter] = useState<string>('');
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [rbacDrawerId, setRbacDrawerId] = useState<string | null>(null);
+  const queryClient = useQueryClient();
+
+  // R8-P2 — real-time audit feed via SSE.
+  //
+  // AdminRealtimeToasts intentionally drops the `audit_action` channel
+  // (no toast spam), but the dedicated audit page is the right place to
+  // surface them live. We open a private SSE connection to
+  // /api/admin/analytics-stream and invalidate the audit-log query whenever
+  // a new audit_action lands. Backoff-on-error + clean unmount.
+  useEffect(() => {
+    let es: EventSource | null = null;
+    let retryTimer: ReturnType<typeof setTimeout> | null = null;
+    let backoff = 2000;
+    let alive = true;
+
+    const connect = () => {
+      if (!alive) return;
+      try {
+        const raw = window.localStorage.getItem('ecypro-app-storage');
+        const token = raw
+          ? (JSON.parse(raw) as { state?: { token?: string } })?.state?.token
+          : undefined;
+        if (!token) {
+          retryTimer = setTimeout(connect, backoff);
+          backoff = Math.min(backoff * 2, 30_000);
+          return;
+        }
+        const env = (import.meta as unknown as { env?: Record<string, string | undefined> }).env;
+        const base = env?.VITE_API_URL ?? 'http://localhost:3001/api';
+        const url = `${base}/admin/analytics-stream?token=${encodeURIComponent(token)}`;
+        es = new EventSource(url);
+        es.addEventListener('open', () => {
+          backoff = 2000;
+        });
+        es.addEventListener('audit_action', () => {
+          // Refresh page 1 of the audit list so the newest entry pops in.
+          void queryClient.invalidateQueries({ queryKey: ['admin-audit-log'] });
+        });
+        es.addEventListener('error', () => {
+          es?.close();
+          if (!alive) return;
+          retryTimer = setTimeout(connect, backoff);
+          backoff = Math.min(backoff * 2, 30_000);
+        });
+      } catch {
+        retryTimer = setTimeout(connect, backoff);
+        backoff = Math.min(backoff * 2, 30_000);
+      }
+    };
+
+    connect();
+    return () => {
+      alive = false;
+      if (retryTimer) clearTimeout(retryTimer);
+      es?.close();
+    };
+  }, [queryClient]);
 
   // RBAC audit endpoint — fetched only when RBAC_CHANGE filter is active
   const { data: rbacAuditData, isLoading: isRbacLoading } = useQuery<RbacAuditResponse>({

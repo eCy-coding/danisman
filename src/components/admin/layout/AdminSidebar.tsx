@@ -25,6 +25,13 @@ import {
   FolderOpen,
   PenSquare,
   Tags,
+  // P44-T07 Round-4: KVKK / ESG / Fintech / Succession nav icons
+  Leaf,
+  Landmark,
+  Crown,
+  ShieldAlert,
+  Trash2,
+  FileWarning,
 } from 'lucide-react';
 import { useAdminAuth } from '../../../hooks/useAdminAuth';
 import { CommandPalette } from '../CommandPalette';
@@ -93,6 +100,38 @@ const MENU_ITEMS: MenuItem[] = [
     permission: 'analytics:view',
   },
   { icon: Settings, label: 'Settings', path: '/admin/settings', permission: 'settings:view' },
+  // P44-T07 Round-4: KVKK / regulatory compliance suite — backend routes were
+  // wired this round; previously orphan UI now reachable through the sidebar.
+  { type: 'section', label: 'KVKK & Regülasyon' },
+  {
+    icon: ShieldAlert,
+    label: 'DSAR (m.11)',
+    path: '/admin/dsar',
+    permission: 'dsar:view',
+    indent: true,
+  },
+  {
+    icon: FileWarning,
+    label: 'Veri İhlali (m.12)',
+    path: '/admin/breach',
+    permission: 'breach:view',
+    indent: true,
+  },
+  {
+    icon: Trash2,
+    label: 'Saklama & İmha (m.7)',
+    path: '/admin/retention',
+    permission: 'retention:view',
+    indent: true,
+  },
+  { icon: Leaf, label: 'ESG (ESRS)', path: '/admin/esg', indent: true },
+  {
+    icon: Landmark,
+    label: 'Fintech Uyum',
+    path: '/admin/fintech-compliance',
+    indent: true,
+  },
+  { icon: Crown, label: 'Halefiyet', path: '/admin/succession', indent: true },
 ];
 
 export const AdminSidebar: React.FC = () => {

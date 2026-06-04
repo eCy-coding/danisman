@@ -53,7 +53,28 @@ export function useSSE({
       eventSourceRef.current.close();
     }
 
-    const es = new EventSource(sseUrl);
+    // P44-T07: EventSource cannot set Authorization headers (W3C spec); read
+    // the admin JWT from the Zustand persisted store and append as `?token=`.
+    // Backend `authenticate` middleware accepts this as a fallback when the
+    // Authorization header is absent — see server/middleware/auth.ts.
+    let urlWithToken = sseUrl;
+    try {
+      if (typeof window !== 'undefined' && window.localStorage) {
+        const raw = window.localStorage.getItem('ecypro-app-storage');
+        if (raw) {
+          const parsed = JSON.parse(raw) as { state?: { token?: string } };
+          const tok = parsed?.state?.token;
+          if (tok) {
+            urlWithToken = `${sseUrl}${sseUrl.includes('?') ? '&' : '?'}token=${encodeURIComponent(tok)}`;
+          }
+        }
+      }
+    } catch {
+      // Bad JSON in storage — fall through with unauthenticated URL; the
+      // backend will respond 401 and the existing retry logic will back off.
+    }
+
+    const es = new EventSource(urlWithToken);
     eventSourceRef.current = es;
 
     es.onopen = () => {
