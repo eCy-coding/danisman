@@ -21,7 +21,10 @@ const EXPERTISE = [
 
 export const FounderSnippet: React.FC<FounderSnippetProps> = ({ className }) => {
   return (
+    // S13-R3-A7 — same as HomeServicePreview: section copy is TR-only;
+    // declare `lang="tr"` so screen readers pronounce correctly.
     <section
+      lang="tr"
       data-testid="founder-snippet"
       aria-label="Kurucu & Vizyon"
       className={cn(

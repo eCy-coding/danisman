@@ -6,6 +6,7 @@ import {
   useTransform,
   useSpring,
   useMotionValue,
+  useInView,
   Variants,
 } from 'motion/react';
 import {
@@ -121,9 +122,20 @@ const scaleInVariants: Variants = {
   },
 };
 
+// S13-R3-P1 — DataFlowBackground was rendering two infinite motion.circle
+// animations (15s/18s loops) + a Gaussian-blur glow filter ABOVE THE FOLD,
+// running every frame for the entire 140vh hero — biggest sustained GPU
+// burner on the page. Two fixes:
+//   - prefersReducedMotion → render the static SVG paths only, skip the
+//     two animated circles entirely (also satisfies WCAG 2.3.3).
+//   - useInView gate → when the hero scrolls out, return null so the
+//     compositor can drop the layer entirely.
 const DataFlowBackground = () => {
+  const ref = useRef<HTMLDivElement>(null);
+  const prefersReducedMotion = useReducedMotion();
+  const inView = useInView(ref, { once: false, margin: '200px' });
   return (
-    <div className="absolute inset-0 pointer-events-none opacity-40" aria-hidden="true">
+    <div ref={ref} className="absolute inset-0 pointer-events-none opacity-40" aria-hidden="true">
       <svg
         width="100%"
         height="100%"
@@ -175,28 +187,34 @@ const DataFlowBackground = () => {
         />
 
         {/* Animated Particles along paths */}
-        <motion.circle
-          r="3"
-          fill="#38BDF8"
-          filter="url(#glow)"
-          initial={{ cx: 0, cy: 200 }}
-          animate={{
-            cx: [0, 300, 600, 900, 1200, 1500, 1800],
-            cy: [200, 150, 300, 250, 200, 300, 400],
-          }}
-          transition={{ duration: 15, repeat: Infinity, ease: 'linear' }}
-        />
-        <motion.circle
-          r="3"
-          fill="#2563EB"
-          filter="url(#glow)"
-          initial={{ cx: 0, cy: 600 }}
-          animate={{
-            cx: [0, 400, 800, 1150, 1500, 2000],
-            cy: [600, 700, 500, 600, 700, 500],
-          }}
-          transition={{ duration: 18, repeat: Infinity, ease: 'linear', delay: 2 }}
-        />
+        {/* S13-R3-P1 — only mount the two infinite-loop motion.circles when */}
+        {/* the hero is in view AND the user hasn't opted out of motion. */}
+        {!prefersReducedMotion && inView && (
+          <>
+            <motion.circle
+              r="3"
+              fill="#38BDF8"
+              filter="url(#glow)"
+              initial={{ cx: 0, cy: 200 }}
+              animate={{
+                cx: [0, 300, 600, 900, 1200, 1500, 1800],
+                cy: [200, 150, 300, 250, 200, 300, 400],
+              }}
+              transition={{ duration: 15, repeat: Infinity, ease: 'linear' }}
+            />
+            <motion.circle
+              r="3"
+              fill="#2563EB"
+              filter="url(#glow)"
+              initial={{ cx: 0, cy: 600 }}
+              animate={{
+                cx: [0, 400, 800, 1150, 1500, 2000],
+                cy: [600, 700, 500, 600, 700, 500],
+              }}
+              transition={{ duration: 18, repeat: Infinity, ease: 'linear', delay: 2 }}
+            />
+          </>
+        )}
       </svg>
       {/* Node Points */}
       <div className="absolute top-50 left-0 w-2 h-2 rounded-full bg-primary/50 shadow-[0_0_10px_#2563EB]" />
@@ -297,19 +315,30 @@ export const Hero: React.FC = () => {
         </div>
 
         {/* Persona Switcher — env-gated, off in production by default. */}
+        {/* S13-R3-A4 — a11y triple-fix on the toggle: */}
+        {/*   - aria-pressed reflects current persona for SR + Voice Control */}
+        {/*   - text-slate-400 on bg-white/5 over neutral-950 was ~3.9:1 — */}
+        {/*     raise inactive to text-slate-300 (~5.7:1) */}
+        {/*   - focus-visible:ring-2 so keyboard users see the focus target */}
         {AUDIENCE_TOGGLE_ENABLED && (
-          <div className="absolute top-28 left-1/2 -translate-x-1/2 z-30 flex items-center bg-white/5 border border-white/10 rounded-full p-1 shadow-2xl">
+          <div
+            role="group"
+            aria-label="Persona switcher"
+            className="absolute top-28 left-1/2 -translate-x-1/2 z-30 flex items-center bg-white/5 border border-white/10 rounded-full p-1 shadow-2xl"
+          >
             <button
               type="button"
+              aria-pressed={persona === 'executive'}
               onClick={() => setPersona('executive')}
-              className={`px-6 py-2 rounded-full text-sm font-bold transition-all duration-300 ${persona === 'executive' ? 'bg-primary text-white shadow-[0_0_20px_rgba(37,99,235,0.4)]' : 'text-slate-400 hover:text-white'}`}
+              className={`px-6 py-2 rounded-full text-sm font-bold transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-950 ${persona === 'executive' ? 'bg-primary text-white shadow-[0_0_20px_rgba(37,99,235,0.4)]' : 'text-slate-300 hover:text-white'}`}
             >
               Executive
             </button>
             <button
               type="button"
+              aria-pressed={persona === 'developer'}
               onClick={() => setPersona('developer')}
-              className={`px-6 py-2 rounded-full text-sm font-bold transition-all duration-300 ${persona === 'developer' ? 'bg-secondary text-neutral shadow-[0_0_20px_rgba(56,189,248,0.4)]' : 'text-slate-400 hover:text-white'}`}
+              className={`px-6 py-2 rounded-full text-sm font-bold transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-950 ${persona === 'developer' ? 'bg-secondary text-neutral shadow-[0_0_20px_rgba(56,189,248,0.4)]' : 'text-slate-300 hover:text-white'}`}
             >
               Developer
             </button>
@@ -474,12 +503,20 @@ export const Hero: React.FC = () => {
               variants={itemVariants}
               className="mt-8 flex items-center gap-3 text-sm text-slate-400"
             >
+              {/* S13-R3-P6 — founder avatar is above-fold; loading="lazy" */}
+              {/* on above-fold images is discouraged by Google and delays */}
+              {/* LCP on mobile (browser skips eager fetch). Switch to */}
+              {/* loading="eager" + decoding="async" + fetchPriority="low" */}
+              {/* so it joins the critical fetch queue without competing */}
+              {/* with the hero LCP <p>. */}
               <img
                 src="/founder.jpg"
                 alt="Emre Can Yalçın — eCyPro Kurucu Ortak, Stratejik Danışman"
                 width={40}
                 height={40}
-                loading="lazy"
+                loading="eager"
+                decoding="async"
+                fetchPriority="low"
                 className="w-10 h-10 rounded-full object-cover border border-white/10 shrink-0"
                 onError={(e) => {
                   (e.currentTarget as HTMLImageElement).src = '/brand/founder-fallback.svg';
@@ -541,10 +578,20 @@ export const Hero: React.FC = () => {
         </div>
 
         {/* Scroll Indicator */}
+        {/* S13-R3-A2/A20/P3 — three fixes here: */}
+        {/* (a) aria-hidden="true" — orphan "Scroll" word was being announced */}
+        {/*     as content by SRs while serving only as a hint. */}
+        {/* (b) Respect prefers-reduced-motion — kill the infinite y-bounce */}
+        {/*     for users opting out of motion (WCAG 2.3.3 + vestibular). */}
+        {/* (c) Contrast bump — slate-400 + opacity-50 on neutral-950 was */}
+        {/*     ~2.3:1; raise to slate-300 + opacity-70 (~5.0:1). */}
         <motion.div
-          className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-slate-400 opacity-50"
-          animate={{ y: [0, 10, 0] }}
-          transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+          aria-hidden="true"
+          className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-slate-300 opacity-70"
+          animate={prefersReducedMotion ? undefined : { y: [0, 10, 0] }}
+          transition={
+            prefersReducedMotion ? undefined : { duration: 2, repeat: Infinity, ease: 'easeInOut' }
+          }
         >
           <span className="text-xs tracking-[0.2em] uppercase font-bold">Scroll</span>
           <div className="w-px h-12 bg-linear-to-b from-slate-500 to-transparent" />
