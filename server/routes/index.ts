@@ -58,6 +58,7 @@ import discoveryRoutes from './discovery';
 import { adminInsightsRouter } from './admin-insights';
 import { adminInsightsCategoriesRouter } from './admin-insights-categories';
 import { publicInsightsSearchRouter } from './public-insights-search';
+import { publicInsightsPostsRouter } from './public-insights-posts';
 // Wave-3A — Insights SEO sitemap management
 import insightsSeoRoutes from './insights-seo';
 // Perspektif Blog — PB-11 KVKK Comments + PB-10 Admin Dashboard
@@ -543,6 +544,11 @@ router.use('/admin/rbac', adminRbacRoutes);
 router.use('/admin/insights/categories', adminInsightsCategoriesRouter);
 router.use('/admin/insights', adminInsightsRouter);
 router.use('/insights', publicInsightsSearchRouter);
+// R12-P6 — public single-post + recent-list endpoint (real-data wire-up).
+// Mounted on the same /insights base so /api/v1/insights/posts/:slug works.
+// Order matters: this is mounted AFTER search so `/insights/search` still hits
+// the search router (no conflict — search uses `GET /`, this uses /posts).
+router.use('/insights/posts', publicInsightsPostsRouter);
 router.use('/webhooks', webhookRoutes);
 // P40-T04: UptimeRobot → Telegram (Observability)
 router.use('/webhooks', uptimeWebhookRoutes);

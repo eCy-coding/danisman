@@ -502,6 +502,21 @@ const AnimatedRoutes = () => {
               </Suspense>
             }
           />
+          {/* R12-P8 — route order swap. React Router v7 ranks */}
+          {/* `/insights/:domain/:subDomain?` higher than `/insights/:slug` */}
+          {/* even on a single-segment URL because the optional segment is */}
+          {/* still part of the score. Putting `:slug` first ensures real */}
+          {/* article URLs hit InsightArticle; domain landing pages remain */}
+          {/* reachable via their canonical `/insights/:domain/:subDomain` */}
+          {/* two-segment form which is more specific. */}
+          <Route
+            path="/insights/:slug"
+            element={
+              <Suspense fallback={<LoadingFallback />}>
+                <InsightArticle />
+              </Suspense>
+            }
+          />
           <Route
             path="/insights/:domain/:subDomain?"
             element={
@@ -511,14 +526,6 @@ const AnimatedRoutes = () => {
             }
           />
           {/* --- end Perspektif --- */}
-          <Route
-            path="/insights/:slug"
-            element={
-              <Suspense fallback={<LoadingFallback />}>
-                <InsightArticle />
-              </Suspense>
-            }
-          />
           <Route
             path="/insights"
             element={
