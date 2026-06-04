@@ -86,6 +86,25 @@ async function writeAuditLog(p: AuditPayload): Promise<void> {
       newValue: p.metadata as never,
     },
   });
+
+  // P44-T07 Round-5 — emit on adminEventBus so the real-time admin audit
+  // feed updates without polling /admin/audit-log. The bridge in
+  // server/routes/admin-analytics-stream.ts maps `audit.action` to the
+  // wire-format `audit_action` event. Fire-and-forget — bus publish must
+  // never fail the audit write.
+  try {
+    const { adminEventBus } = await import('../lib/event-bus');
+    adminEventBus.publish('audit.action', {
+      action: p.action,
+      adminId: p.actorId ?? 'system',
+      actorRole: p.actorRole,
+      targetType: p.resourceType ?? null,
+      targetId: p.resourceId ?? null,
+      result: p.result,
+    });
+  } catch {
+    /* never block on bus publish */
+  }
 }
 
 /** Strip PII keys from response body before storing in audit metadata. */

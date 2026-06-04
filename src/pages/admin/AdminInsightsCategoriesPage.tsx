@@ -255,37 +255,66 @@ function CategoryModal({
 
   const nameTr = watch('nameTr');
 
+  // R7-P1.3: P15 canonical form standard (honeypot + idempotency-key) applied
+  // to the existing dual-mode (create POST / edit PATCH) modal without
+  // breaking its surface. The full createForm factory only supports a single
+  // submit target; CategoryModal needs both. We bring the standard features
+  // here instead of forcing a structural rewrite.
+  const idempotencyKey = React.useMemo(
+    () =>
+      typeof crypto !== 'undefined' && 'randomUUID' in crypto
+        ? crypto.randomUUID()
+        : `idem-${Date.now()}-${Math.random().toString(36).slice(2, 12)}`,
+    // Regenerate on initial change (open new modal → fresh key); within the
+    // same open modal, retries dedupe on the same key.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [initial?.id, isEdit],
+  );
+  const idemHeaders = { 'Idempotency-Key': idempotencyKey };
+
   const createMutation = useMutation({
     mutationFn: (data: CategoryFormData) =>
-      apiClient.post('/admin/insights/categories', {
-        ...data,
-        slug: data.slug || toSlug(data.nameTr),
-        parentId: data.parentId || undefined,
-      }),
+      apiClient.post(
+        '/admin/insights/categories',
+        {
+          ...data,
+          slug: data.slug || toSlug(data.nameTr),
+          parentId: data.parentId || undefined,
+        },
+        { headers: idemHeaders },
+      ),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['admin-insight-categories'] });
       toast.success('Kategori oluşturuldu');
       onSaved();
     },
-    onError: (err: { response?: { data?: { error?: string } } }) => {
-      const msg = err?.response?.data?.error ?? 'Hata oluştu';
+    onError: (err: { response?: { data?: { error?: string; detail?: string } } }) => {
+      const d = err?.response?.data;
+      // R7-P1.1 dev backend now returns `detail` on 500 so the operator sees
+      // the actual prisma message; prod still shows only the generic error.
+      const msg = d?.detail ?? d?.error ?? 'Hata oluştu';
       toast.error(msg);
     },
   });
 
   const updateMutation = useMutation({
     mutationFn: (data: CategoryFormData) =>
-      apiClient.patch(`/admin/insights/categories/${initial!.id}`, {
-        ...data,
-        parentId: data.parentId || undefined,
-      }),
+      apiClient.patch(
+        `/admin/insights/categories/${initial!.id}`,
+        {
+          ...data,
+          parentId: data.parentId || undefined,
+        },
+        { headers: idemHeaders },
+      ),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['admin-insight-categories'] });
       toast.success('Kategori güncellendi');
       onSaved();
     },
-    onError: (err: { response?: { data?: { error?: string } } }) => {
-      const msg = err?.response?.data?.error ?? 'Hata oluştu';
+    onError: (err: { response?: { data?: { error?: string; detail?: string } } }) => {
+      const d = err?.response?.data;
+      const msg = d?.detail ?? d?.error ?? 'Hata oluştu';
       toast.error(msg);
     },
   });
@@ -330,6 +359,23 @@ function CategoryModal({
           className="p-fib-6 space-y-4"
           data-testid="category-form"
         >
+          {/* R7-P1.3 — P15 honeypot trap. Bots that auto-fill all form fields
+              populate this; real users never see it. Backend can drop the
+              submission silently on non-empty value. */}
+          <div
+            aria-hidden="true"
+            style={{
+              position: 'absolute',
+              left: '-9999px',
+              width: '1px',
+              height: '1px',
+              overflow: 'hidden',
+            }}
+          >
+            <label htmlFor="cat-hp_field">Sadece botlar için</label>
+            <input id="cat-hp_field" type="text" name="hp_field" tabIndex={-1} autoComplete="off" />
+          </div>
+
           {/* Ad TR + EN */}
           <div className="grid grid-cols-2 gap-3">
             <div>

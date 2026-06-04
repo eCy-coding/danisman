@@ -47,6 +47,11 @@ enum InteractionType {
   BOOKING_START
   DOWNLOAD
   SCROLL_DEPTH
+  // S13-R2-P3 — Core Web Vitals batches (LCP/CLS/INP/FCP/TTFB) sent by
+  // src/lib/monitor.ts on idle / page unload. Backend zod enum +
+  // trackInteractionSchema accept it; the DB enum needs the value to
+  // satisfy Prisma writes.
+  WEB_VITALS
 }
 
 // ─── CORE MODELS ─────────────────────────────────────────

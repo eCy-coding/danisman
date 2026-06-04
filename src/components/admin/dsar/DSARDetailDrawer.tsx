@@ -3,6 +3,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { cn } from '../../../lib/utils';
 import { DSARCountdownBadge } from './DSARCountdownBadge';
 import { DSARResponseEditor } from './DSARResponseEditor';
+import { adminFetch } from '../../../lib/admin-fetch';
 
 interface DSARAuditEntry {
   id: string;
@@ -65,7 +66,7 @@ export function DSARDetailDrawer({ dsarId, onClose }: DSARDetailDrawerProps) {
   const { data, isLoading, error } = useQuery<{ status: string; dsar: DSARDetail }>({
     queryKey: ['dsar-detail', dsarId],
     queryFn: async () => {
-      const res = await fetch(`/api/admin/dsar?id=${dsarId}`);
+      const res = await adminFetch(`/api/admin/dsar?id=${dsarId}`);
       if (!res.ok) throw new Error('Failed to load DSAR');
       return res.json() as Promise<{ status: string; dsar: DSARDetail }>;
     },
@@ -74,7 +75,7 @@ export function DSARDetailDrawer({ dsarId, onClose }: DSARDetailDrawerProps) {
 
   const statusMutation = useMutation({
     mutationFn: async (newStatus: string) => {
-      const res = await fetch(`/api/admin/dsar/${dsarId}`, {
+      const res = await adminFetch(`/api/admin/dsar/${dsarId}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status: newStatus }),
@@ -87,7 +88,7 @@ export function DSARDetailDrawer({ dsarId, onClose }: DSARDetailDrawerProps) {
 
   const respondMutation = useMutation({
     mutationFn: async (responseText: string) => {
-      const res = await fetch(`/api/admin/dsar/${dsarId}/respond`, {
+      const res = await adminFetch(`/api/admin/dsar/${dsarId}/respond`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ responseText }),

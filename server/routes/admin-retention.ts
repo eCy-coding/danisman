@@ -83,6 +83,16 @@ router.get(
       const twoYearsAgo = new Date();
       twoYearsAgo.setFullYear(twoYearsAgo.getFullYear() - 2);
 
+      // P44-T07: explicit `select` instead of default SELECT *. Two reasons:
+      //   (1) the frontend only renders `{id, action, targetType, targetId,
+      //       createdAt, adminId}` — narrower payload, lower bandwidth.
+      //   (2) the new `actorRole / actorIpHash / result` columns from
+      //       migration `20260603000000_add_audit_log_rbac_fields` may not be
+      //       applied yet on a given environment (Neon dev branch, local
+      //       psql). Without `select`, Prisma issues SELECT * and the query
+      //       throws `column audit_logs.actorRole does not exist`. Whitelisting
+      //       the legacy columns keeps the endpoint resilient until migration
+      //       deploy lands on every environment.
       const entries = await prisma.auditLog.findMany({
         where: {
           createdAt: { gte: twoYearsAgo },
@@ -91,6 +101,14 @@ router.get(
           })),
         },
         orderBy: { createdAt: 'desc' },
+        select: {
+          id: true,
+          action: true,
+          targetType: true,
+          targetId: true,
+          createdAt: true,
+          adminId: true,
+        },
       });
 
       res.json({ status: 'ok', count: entries.length, data: entries });

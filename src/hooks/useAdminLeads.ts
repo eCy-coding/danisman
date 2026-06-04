@@ -1,10 +1,11 @@
 import { useMutation, useInfiniteQuery } from '@tanstack/react-query';
 import type { AdayInput } from '../lib/aday-schema';
+import { adminFetch } from '../lib/admin-fetch';
 
 export function useCreateAday() {
   return useMutation({
     mutationFn: async (data: AdayInput) => {
-      const res = await fetch('/api/admin/leads', {
+      const res = await adminFetch('/api/admin/leads', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),

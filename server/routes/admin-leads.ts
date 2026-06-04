@@ -102,6 +102,23 @@ router.post(
         // SSE failure never blocks the response
       }
 
+      // P44-T07 Round-5 — adminEventBus emit so the LiveLeadFeed widget on
+      // CRM dashboard refreshes without polling. The bridge in
+      // server/routes/admin-analytics-stream.ts maps `lead.created` to the
+      // wire-format `lead_new` event consumed by the React widget.
+      try {
+        const { adminEventBus } = await import('../lib/event-bus');
+        adminEventBus.publish('lead.created', {
+          id: result.id,
+          name: parsed.data.name,
+          company: parsed.data.company,
+          email: parsed.data.email,
+          source: parsed.data.source,
+        });
+      } catch {
+        // never block lead create on bus publish
+      }
+
       res.status(201).json({ status: 'success', data: result });
     } catch (err) {
       if (err instanceof NotionLeadsError) {
@@ -124,6 +141,72 @@ router.get(
       const cursor = typeof req.query.cursor === 'string' ? req.query.cursor : undefined;
       const result = await listAdaylarFromNotion(cursor);
       res.json({ status: 'success', data: result });
+    } catch (err) {
+      if (err instanceof NotionLeadsError) {
+        const { status, message } = notionErrorToHttp(err);
+        res.status(status).json({ status: 'error', message });
+        return;
+      }
+      next(err);
+    }
+  },
+);
+
+// ── PATCH /:id — update Aday status / notes ──────────────────────────────────
+//
+// R7-P1.2: Notion remote update is not yet implemented in
+// `lib/notion-leads-client` so this endpoint is a thin echo + bus publish.
+// LiveLeadFeed real-time refresh works today; once the Notion patch API is
+// wired we'll fold the remote write back in without changing the contract.
+
+const AdayUpdateSchema = z.object({
+  status: z
+    .enum([
+      'NEW',
+      'CONTACTED',
+      'QUALIFIED',
+      'MEETING_BOOKED',
+      'PROPOSAL_SENT',
+      'WON',
+      'LOST',
+      'DISQUALIFIED',
+    ])
+    .optional(),
+  notes: z.string().max(2000).optional(),
+});
+
+router.patch(
+  '/:id',
+  ...adminOnly,
+  async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    const id = req.params['id'] ?? '';
+    if (!id) {
+      res.status(400).json({ status: 'error', message: 'Aday id gerekli' });
+      return;
+    }
+    const parsed = AdayUpdateSchema.safeParse(req.body);
+    if (!parsed.success) {
+      const msg = parsed.error?.issues?.[0]?.message ?? 'Geçersiz istek';
+      res.status(400).json({ status: 'error', message: msg });
+      return;
+    }
+
+    try {
+      // P44-T07 Round-7 — adminEventBus emit so the LiveLeadFeed + CRM tier
+      // roster refresh without polling. The bridge in admin-analytics-stream.ts
+      // maps `lead.updated` to the wire-format `lead_updated` event.
+      try {
+        const { adminEventBus } = await import('../lib/event-bus');
+        adminEventBus.publish('lead.updated', {
+          id,
+          ...parsed.data,
+        });
+      } catch {
+        /* never block patch on bus publish */
+      }
+
+      logger.info('[admin-leads] patched', { id, fields: Object.keys(parsed.data) });
+      res.json({ status: 'success', data: { id, ...parsed.data } });
     } catch (err) {
       if (err instanceof NotionLeadsError) {
         const { status, message } = notionErrorToHttp(err);

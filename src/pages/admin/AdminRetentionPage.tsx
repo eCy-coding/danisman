@@ -18,6 +18,7 @@ import {
   RetentionPolicyItem,
 } from '../../components/admin/retention/RetentionPolicyTable';
 import { ImhaSertifikasiGenerator } from '../../components/admin/retention/ImhaSertifikasiGenerator';
+import { adminFetchJson } from '../../lib/admin-fetch';
 
 interface SertifikaInfo {
   sertifikaId: string;
@@ -35,14 +36,17 @@ interface AuditEntry {
   adminId: string;
 }
 
+/**
+ * P44-T07 — migrated inline `apiFetch` to centralized `adminFetchJson`.
+ * The inline version bypassed the apiClient Bearer-token interceptor and
+ * returned 401 on protected admin endpoints. adminFetchJson reads the
+ * persisted token from localStorage and attaches Authorization header.
+ */
 async function apiFetch<T>(url: string, options?: RequestInit): Promise<T> {
-  const res = await fetch(url, {
+  return adminFetchJson<T>(url, {
     ...options,
     headers: { 'Content-Type': 'application/json', ...options?.headers },
-    credentials: 'include',
   });
-  if (!res.ok) throw new Error(`API error: ${res.status}`);
-  return res.json() as Promise<T>;
 }
 
 export const AdminRetentionPage: React.FC = () => {

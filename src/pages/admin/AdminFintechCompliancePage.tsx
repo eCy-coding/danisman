@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { adminFetch } from '../../lib/admin-fetch';
 
 type Regulator = 'SPK' | 'MASAK' | 'KVKK' | 'TCMB' | 'BDDK';
 type ComplianceItemStatus =
@@ -42,7 +43,7 @@ export const AdminFintechCompliancePage: React.FC = () => {
   const { data: items = [], isLoading } = useQuery<ComplianceItem[]>({
     queryKey: ['fintech-compliance'],
     queryFn: async () => {
-      const res = await fetch('/api/admin/fintech/compliance');
+      const res = await adminFetch('/api/admin/fintech/compliance');
       if (!res.ok) throw new Error('Failed to fetch compliance items');
       const json = (await res.json()) as { data: ComplianceItem[] };
       return json.data;

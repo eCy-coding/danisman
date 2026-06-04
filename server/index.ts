@@ -15,7 +15,10 @@ import { sentryErrorHandler } from './middleware/sentry';
 import { authenticate } from './middleware/auth';
 import { requestTimeout } from './middleware/timeout';
 import { logger } from './config/logger';
-import { shutdownDatabase } from './config/db';
+import { prisma, shutdownDatabase } from './config/db';
+// P44-T07 (extension) — readiness probe needs Redis ping; import the shared
+// adapter (already used by rate limiter + SSE manager).
+import { redis } from './config/redis';
 import { validateEnv } from './lib/preflight';
 import { sendTelegramAlert } from './lib/telegram-alert';
 
@@ -96,10 +99,7 @@ if (process.env.SENTRY_DSN) {
               // User-Agent itself is not PII per se, but it's part of the
               // device fingerprint surface — keep the family, drop the
               // detailed version + build tokens.
-              m.userAgent = m.userAgent.replace(
-                /\(.*?\)/g,
-                '([redacted])',
-              );
+              m.userAgent = m.userAgent.replace(/\(.*?\)/g, '([redacted])');
             }
           }
         }
@@ -211,14 +211,62 @@ app.get('/healthz', (_req, res) => {
   res.setHeader('Cache-Control', 'no-store');
   res.json({ status: 'ok', service: 'ecypro-api' });
 });
-app.get('/readyz', (_req, res) => {
+app.get('/readyz', async (_req, res) => {
   res.setHeader('Cache-Control', 'no-store');
   if (isShuttingDown) {
     res.setHeader('Retry-After', '15');
     res.status(503).json({ status: 'not_ready', reason: 'draining' });
     return;
   }
-  res.json({ status: 'ready', service: 'ecypro-api' });
+
+  // P44-T07 (extension) — real readiness: ping DB + Redis instead of
+  // declaring "ready" just because the process is alive. NLM Standards vault
+  // calls the prior 200-no-matter-what implementation a "False Green":
+  // monitors got OK while the DB was unreachable. The check has a short
+  // budget so platform probes (Render every 30 s) stay snappy.
+  const checks: Record<string, { ok: boolean; ms: number; err?: string }> = {};
+  const start = Date.now();
+
+  // Database — Prisma `$queryRaw` is the canonical ping.
+  try {
+    const t0 = Date.now();
+    await Promise.race([
+      prisma.$queryRaw`SELECT 1`,
+      new Promise((_, reject) => setTimeout(() => reject(new Error('db_timeout')), 1500)),
+    ]);
+    checks.db = { ok: true, ms: Date.now() - t0 };
+  } catch (err) {
+    checks.db = { ok: false, ms: Date.now() - start, err: (err as Error).message };
+  }
+
+  // Redis — `.ping()` returns "PONG"; tolerate 'connecting'/'reconnecting'
+  // states because Redis is best-effort cache layer (rate limit / SSE) and
+  // app stays functional on the in-memory fallback. Mark non-fatal.
+  try {
+    const t0 = Date.now();
+    if (redis.status === 'ready') {
+      await Promise.race([
+        redis.ping(),
+        new Promise((_, reject) => setTimeout(() => reject(new Error('redis_timeout')), 1000)),
+      ]);
+      checks.redis = { ok: true, ms: Date.now() - t0 };
+    } else {
+      checks.redis = { ok: false, ms: Date.now() - t0, err: `status=${redis.status}` };
+    }
+  } catch (err) {
+    checks.redis = { ok: false, ms: Date.now() - start, err: (err as Error).message };
+  }
+
+  // Only DB is a hard dependency; Redis degrades gracefully. Mirror Render
+  // readiness contract: 503 with body so platform / BetterStack alerting
+  // can surface the failing component.
+  const ready = checks.db.ok;
+  if (!ready) {
+    res.setHeader('Retry-After', '5');
+    res.status(503).json({ status: 'not_ready', service: 'ecypro-api', checks });
+    return;
+  }
+  res.json({ status: 'ready', service: 'ecypro-api', checks });
 });
 
 // ─── Health Check Endpoint ───────────────────────────────

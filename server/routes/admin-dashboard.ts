@@ -59,12 +59,32 @@ router.get('/kpi', ...adminOnly, async (_req: Request, res: Response, next: Next
     const subscribersDelta =
       subsPrev7 > 0 ? Math.round(((subs7 - subsPrev7) / subsPrev7) * 100) : 0;
 
-    // Hot leads = high-recent ContactSubmission unread (heuristic; gerçek skor API'siyle değiştirilecek)
-    const hotLeads = await safeCount(
-      prisma.contactSubmission.count({
-        where: { isRead: false, createdAt: { gte: since7 } },
-      }),
-    );
+    // P44-T07 Round-6 — replace the "unread last 7d" heuristic with real
+    // server-side lead scoring. Pulls the last-30d contact submissions
+    // (capped at 200 for stability) and counts Tier A (score >= 80). Also
+    // computes the avg lead score so the dashboard "Sıcak Lead" panel finally
+    // surfaces a meaningful number.
+    const { countHotLeads, scoreLead } = await import('../services/lead-scoring');
+    const recentContacts = await prisma.contactSubmission.findMany({
+      where: { createdAt: { gte: since30 } },
+      select: {
+        id: true,
+        email: true,
+        service: true,
+        messageTr: true,
+        messageEn: true,
+        phone: true,
+        source: true,
+      },
+      take: 200,
+    });
+    const { count: hotLeads } = countHotLeads(recentContacts);
+    const avgLeadScore =
+      recentContacts.length > 0
+        ? Math.round(
+            recentContacts.reduce((s, c) => s + scoreLead(c).score, 0) / recentContacts.length,
+          )
+        : 0;
 
     const conversionRate = leads30 > 0 ? (bookingsMonth / leads30) * 100 : 0;
 
@@ -78,7 +98,7 @@ router.get('/kpi', ...adminOnly, async (_req: Request, res: Response, next: Next
         hotLeads,
         discoveryCallsThisMonth: bookingsMonth,
         conversionRate: Math.round(conversionRate * 10) / 10,
-        avgLeadScore: 0, // P57.6 sonrası gerçek skor agregasyonu
+        avgLeadScore,
         totalActiveSubs: totalSubs,
       },
     });

@@ -11,6 +11,7 @@
 
 import React, { createContext, useCallback, useContext, useState } from 'react';
 import type { UserRole } from './rbac';
+import { adminFetch } from './admin-fetch';
 
 export interface ViewAsState {
   activeRole: UserRole | null;
@@ -32,7 +33,7 @@ export const ViewAsProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     setActiveRole(role);
 
     try {
-      const res = await fetch('/api/admin/rbac/view-as', {
+      const res = await adminFetch('/api/admin/rbac/view-as', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ viewingAsRole: role }),
@@ -57,7 +58,7 @@ export const ViewAsProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
     if (sid) {
       try {
-        await fetch(`/api/admin/rbac/view-as/${sid}`, { method: 'DELETE' });
+        await adminFetch(`/api/admin/rbac/view-as/${sid}`, { method: 'DELETE' });
       } catch {
         // Best-effort cleanup; state is already cleared
       }

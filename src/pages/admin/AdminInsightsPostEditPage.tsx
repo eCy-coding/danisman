@@ -110,6 +110,23 @@ const STATUS_LABELS: Record<PostStatus, string> = {
   ARCHIVED: 'Arşiv',
 };
 
+// R12-P5 — Editorial workflow state machine (mirror of server/schemas/insights.zod.ts
+// VALID_TRANSITIONS). Surface forward + sibling transitions in the publishing
+// tab so an admin can walk a post from IN_REVIEW → … → PUBLISHED entirely
+// inside the admin panel. Backward sibling transitions are intentionally
+// included (e.g. SEO_REVIEW → COPY_EDIT) so editors can bounce items back
+// without leaving the page.
+const VALID_TRANSITIONS: Partial<Record<PostStatus, PostStatus[]>> = {
+  DRAFT: ['IN_REVIEW', 'ARCHIVED'],
+  IN_REVIEW: ['COPY_EDIT', 'DRAFT', 'ARCHIVED'],
+  COPY_EDIT: ['SEO_REVIEW', 'IN_REVIEW', 'ARCHIVED'],
+  SEO_REVIEW: ['LEGAL_REVIEW', 'COPY_EDIT', 'SCHEDULED', 'ARCHIVED'],
+  LEGAL_REVIEW: ['SCHEDULED', 'SEO_REVIEW', 'ARCHIVED'],
+  SCHEDULED: ['PUBLISHED', 'DRAFT', 'ARCHIVED'],
+  PUBLISHED: ['ARCHIVED'],
+  ARCHIVED: ['DRAFT'],
+};
+
 // ── Empty form state ──────────────────────────────────────────────────────────
 
 const emptyForm = (): Omit<PostDetail, 'id'> => ({
@@ -239,8 +256,34 @@ export const AdminInsightsPostEditPage: React.FC = () => {
   };
 
   const handleSaveDraft = () => {
+    // R12-P2 — Zod schema marks optional string fields as `.optional()` which
+    // accepts `undefined` but NOT `null`. The form state initializes these to
+    // `null` (Domain TS type), so a raw `mutate(form)` ships nulls and the
+    // server returns 400 on every fresh draft. Strip nulls + empty strings
+    // for optional keys before submission. Required fields (titleTr, slug,
+    // bodyTrMdx, …) stay as-is so Zod surfaces real validation gaps.
+    const optionalKeys: (keyof typeof form)[] = [
+      'titleEn',
+      'excerptEn',
+      'bodyEnMdx',
+      'topic',
+      'seriesId',
+      'ogImageUrl',
+      'metaTitleTr',
+      'metaTitleEn',
+      'metaDescTr',
+      'metaDescEn',
+      'publishedAt',
+      'scheduledAt',
+      'categoryId',
+    ];
+    const cleaned: Partial<typeof form> = { ...form };
+    for (const k of optionalKeys) {
+      const v = cleaned[k];
+      if (v === null || v === '') delete cleaned[k];
+    }
     saveMutation.mutate({
-      ...form,
+      ...cleaned,
       titleTr: form.titleTr || undefined,
     } as Partial<typeof form>);
   };
@@ -776,6 +819,38 @@ export const AdminInsightsPostEditPage: React.FC = () => {
               <div className="p-4 bg-white/5 border border-white/10 rounded-xl">
                 <p className="text-sm font-medium text-slate-300 mb-3">Mevcut Durum</p>
                 <p className="text-white font-semibold mb-4">{STATUS_LABELS[currentStatus]}</p>
+
+                {/* R12-P5 — Inline editorial workflow buttons. Render every */}
+                {/* valid forward / sibling transition for the current status. */}
+                {/* PUBLISHED is gated server-side to ADMIN role (returns 403 */}
+                {/* otherwise). */}
+                {(VALID_TRANSITIONS[currentStatus] ?? []).length > 0 && (
+                  <div className="space-y-2">
+                    <p className="text-xs uppercase tracking-wide text-slate-400">
+                      Sonraki Aşamaya Geçir
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      {(VALID_TRANSITIONS[currentStatus] ?? []).map((next) => (
+                        <button
+                          key={next}
+                          type="button"
+                          data-testid={`transition-to-${next.toLowerCase()}`}
+                          onClick={() => transitionMutation.mutate(next)}
+                          disabled={transitionMutation.isPending}
+                          className={`px-4 py-2 text-xs font-medium rounded-lg border transition-colors disabled:opacity-50 ${
+                            next === 'PUBLISHED'
+                              ? 'bg-emerald-600 hover:bg-emerald-500 text-white border-emerald-500'
+                              : next === 'ARCHIVED'
+                                ? 'bg-rose-600/30 hover:bg-rose-600/50 text-rose-200 border-rose-500/40'
+                                : 'bg-white/5 hover:bg-white/10 text-slate-200 border-white/10'
+                          }`}
+                        >
+                          → {STATUS_LABELS[next]}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             )}
           </div>

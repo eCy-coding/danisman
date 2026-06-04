@@ -13,6 +13,11 @@ const trackPageViewSchema = z.object({
   durationMs: z.number().int().optional(),
 });
 
+// S13-R2-P3 — Added WEB_VITALS to the type enum. monitor.ts ships
+// Core Web Vitals (LCP/CLS/INP/FCP/TTFB) batches via sendBeacon to this
+// endpoint on idle / page unload; the schema previously rejected every
+// such payload as 400 ("Invalid enum value WEB_VITALS"), polluting
+// Sentry with noise on every homepage load.
 const trackInteractionSchema = z.object({
   sessionId: z.string().min(1),
   type: z.enum([
@@ -22,6 +27,7 @@ const trackInteractionSchema = z.object({
     'BOOKING_START',
     'DOWNLOAD',
     'SCROLL_DEPTH',
+    'WEB_VITALS',
   ]),
   target: z.string().min(1),
   metadata: z.record(z.string(), z.unknown()).optional(),
