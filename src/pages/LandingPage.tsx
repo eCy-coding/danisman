@@ -2,6 +2,7 @@ import React, { Suspense } from 'react';
 import { Hero } from '../components/sections/Hero';
 import { SEO } from '../components/common/SEO';
 import { JsonLd } from '../components/seo/JsonLd';
+import { HomepageErrorBoundary } from '../components/common/HomepageErrorBoundary';
 import { useTranslation } from '../lib/i18n';
 import { ShieldCheck, Clock, Target, Globe } from 'lucide-react';
 
@@ -103,9 +104,18 @@ export const LandingPage: React.FC = () => {
       */}
       <Hero />
       <TrustBar />
-      <Suspense fallback={<div className="min-h-screen" />}>
-        <LandingContent />
-      </Suspense>
+      {/*
+        S13-R12-T1 — ErrorBoundary wraps the lazy LandingContent tree so a
+        render-phase crash (chunk-load failure, JS parse error in any below-
+        fold section, MIME poisoning) renders a graceful fallback instead of
+        collapsing the whole page to a blank screen. Hero + TrustBar (above
+        the fold) stay outside the boundary so they keep painting regardless.
+      */}
+      <HomepageErrorBoundary>
+        <Suspense fallback={<div className="min-h-screen" />}>
+          <LandingContent />
+        </Suspense>
+      </HomepageErrorBoundary>
     </>
   );
 };

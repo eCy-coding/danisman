@@ -299,7 +299,12 @@ export const Contact: React.FC = () => {
                           <span className="relative z-10 group-hover:text-white transition-colors duration-500">
                             {status === 'submitting' ? 'Gönderiliyor...' : 'Mesajı Gönder'}
                           </span>
-                          {!status.includes('submitting') && (
+                          {/* S13-R12-T1 — `status.includes('submitting')` */}
+                          {/* worked only because TS narrowed the finite union */}
+                          {/* to `string`. The intent is "hide the icon while */}
+                          {/* submitting"; equality is the correct, deterministic */}
+                          {/* check that doesn't pretend to substring-match. */}
+                          {status !== 'submitting' && (
                             <Send
                               size={18}
                               className="relative z-10 group-hover:text-white group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-500"

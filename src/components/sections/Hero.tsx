@@ -88,7 +88,10 @@ const PERSONA_CONTENT = {
     ],
   },
 };
-// * Müşteri görüşmelerine dayalı, bağımsız doğrulamaya açık gösterge.
+// S13-R12-T1 — orphan `// *` footnote belonged with the `95%* Memnuniyet` stat
+// (it was lifted out of JSX when stats were promoted to a module constant).
+// Re-rendered inline next to the `*` glyph in the StatCard label so it actually
+// reaches the user. Comment removed.
 
 const containerVariants: Variants = {
   hidden: {},
@@ -110,15 +113,10 @@ const itemVariants: Variants = {
   },
 };
 
-const scaleInVariants: Variants = {
-  hidden: { scale: 0.9, rotateX: 10 },
-  visible: {
-    opacity: 1,
-    scale: 1,
-    rotateX: 0,
-    transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] },
-  },
-};
+// S13-R12-T1 — `scaleInVariants` was previously declared here but never
+// referenced anywhere in the repo (verified via grep). R6 StatCard rewrite
+// dropped its only consumer when motion.div was swapped for plain div +
+// CSS perspective. Removed to keep the module surface clean.
 
 // S13-R3-P1 — DataFlowBackground was rendering two infinite motion.circle
 // animations (15s/18s loops) + a Gaussian-blur glow filter ABOVE THE FOLD,
