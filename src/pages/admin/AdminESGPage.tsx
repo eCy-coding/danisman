@@ -1,5 +1,7 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
+import { SkeletonList } from '../../components/admin/ui/Skeleton';
 import { useQuery } from '@tanstack/react-query';
+import { adminFetch } from '../../lib/admin-fetch';
 
 type ESGPillar = 'ENVIRONMENTAL' | 'SOCIAL' | 'GOVERNANCE';
 
@@ -34,28 +36,58 @@ export const AdminESGPage: React.FC = () => {
   const { data: datapoints = [], isLoading: dpLoading } = useQuery<ESGDatapoint[]>({
     queryKey: ['esg-datapoints'],
     queryFn: async () => {
-      const res = await fetch('/api/admin/esg/datapoints');
+      const res = await adminFetch('/api/admin/esg/datapoints');
       if (!res.ok) throw new Error('Failed to fetch ESG datapoints');
       const json = (await res.json()) as { data: ESGDatapoint[] };
       return json.data;
     },
   });
 
-  const filtered = useMemo(
-    () =>
-      activePillar === 'ALL' ? datapoints : datapoints.filter((d) => d.pillar === activePillar),
-    [datapoints, activePillar],
-  );
+  // R7-P3.4 — search across code/topic/metric + isMandatory/isDoubleMaterial chips.
+  const [search, setSearch] = useState('');
+  const [onlyMandatory, setOnlyMandatory] = useState(false);
+  const [onlyDoubleMaterial, setOnlyDoubleMaterial] = useState(false);
+  // R7-P3.4 — load-more pagination (50 rows at a time). Resets whenever a
+  // filter changes so the user doesn't see a stale paginated view.
+  const [visibleCount, setVisibleCount] = useState(50);
+  useEffect(() => {
+    setVisibleCount(50);
+  }, [activePillar, search, onlyMandatory, onlyDoubleMaterial]);
+
+  const filtered = useMemo(() => {
+    const q = search.trim().toLowerCase();
+    return datapoints.filter((d) => {
+      if (activePillar !== 'ALL' && d.pillar !== activePillar) return false;
+      if (onlyMandatory && !d.isMandatory) return false;
+      if (onlyDoubleMaterial && !d.isDoubleMaterial) return false;
+      if (q) {
+        const hay = (
+          d.esrsCode +
+          ' ' +
+          d.category +
+          ' ' +
+          d.topic +
+          ' ' +
+          d.metricName
+        ).toLowerCase();
+        if (!hay.includes(q)) return false;
+      }
+      return true;
+    });
+  }, [datapoints, activePillar, search, onlyMandatory, onlyDoubleMaterial]);
 
   const doubleMaterial = filtered.filter((d) => d.isDoubleMaterial);
   const mandatory = filtered.filter((d) => d.isMandatory);
 
-  if (dpLoading)
+  if (dpLoading) {
+    // R8-P3 — canonical skeleton loader replaces "Yükleniyor…" text. Reserves
+    // the layout so the user's eye isn't jolted when 61 rows pop in.
     return (
-      <div role="status" aria-live="polite">
-        Yükleniyor…
-      </div>
+      <main className="p-fib-6">
+        <SkeletonList count={10} withAvatar={false} />
+      </main>
     );
+  }
 
   return (
     <main className="p-fib-6">
@@ -86,6 +118,42 @@ export const AdminESGPage: React.FC = () => {
         ))}
       </div>
 
+      {/* R7-P3.4 — search + filter chips */}
+      <div className="flex flex-wrap items-center gap-fib-6 mb-fib-7">
+        <input
+          type="text"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="ESRS kodu, konu veya metrik ara…"
+          aria-label="ESRS veri noktası ara"
+          className="flex-1 min-w-[260px] bg-white/5 border border-white/10 rounded-lg px-fib-5 py-fib-3 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-amber-500/50"
+        />
+        <button
+          type="button"
+          aria-pressed={onlyMandatory}
+          onClick={() => setOnlyMandatory((v) => !v)}
+          className={`px-fib-5 py-fib-3 text-xs rounded-lg border transition ${
+            onlyMandatory
+              ? 'bg-blue-500/30 border-blue-400 text-blue-100'
+              : 'border-white/10 text-slate-400 hover:bg-white/5'
+          }`}
+        >
+          Sadece Zorunlu
+        </button>
+        <button
+          type="button"
+          aria-pressed={onlyDoubleMaterial}
+          onClick={() => setOnlyDoubleMaterial((v) => !v)}
+          className={`px-fib-5 py-fib-3 text-xs rounded-lg border transition ${
+            onlyDoubleMaterial
+              ? 'bg-purple-500/30 border-purple-400 text-purple-100'
+              : 'border-white/10 text-slate-400 hover:bg-white/5'
+          }`}
+        >
+          Sadece Çift Materyel
+        </button>
+      </div>
+
       {/* Stats */}
       <div className="flex gap-fib-7 mb-fib-7 text-sm">
         <span>{filtered.length} veri noktası</span>
@@ -93,9 +161,9 @@ export const AdminESGPage: React.FC = () => {
         <span className="opacity-60">{mandatory.length} zorunlu</span>
       </div>
 
-      {/* Virtual list (shows first 50 for perf) */}
+      {/* R7-P3.4: filtered list with "load more" pagination (50 rows page) */}
       <ul aria-label="ESRS Veri Noktaları" className="space-y-1">
-        {filtered.slice(0, 50).map((dp) => (
+        {filtered.slice(0, visibleCount).map((dp) => (
           <li
             key={dp.id}
             className="flex items-center gap-4 text-sm py-1 border-b border-surface-600"
@@ -119,8 +187,19 @@ export const AdminESGPage: React.FC = () => {
           </li>
         ))}
       </ul>
-      {filtered.length > 50 && (
-        <p className="text-sm opacity-50 mt-2">{filtered.length - 50} daha…</p>
+      {filtered.length > visibleCount && (
+        <div className="mt-fib-6 flex items-center justify-between text-sm">
+          <span className="opacity-50">
+            {filtered.length - visibleCount} satır daha gösterilebilir
+          </span>
+          <button
+            type="button"
+            onClick={() => setVisibleCount((c) => c + 50)}
+            className="px-fib-5 py-fib-3 rounded-lg bg-white/5 hover:bg-white/10 text-xs border border-white/10"
+          >
+            Daha fazla yükle
+          </button>
+        </div>
       )}
     </main>
   );

@@ -53,17 +53,21 @@ test.describe('SEO Meta Smoke', () => {
     });
   }
 
-  test('robots.txt accessible', async ({ page }) => {
-    const response = await page.goto('/robots.txt');
-    expect(response?.status()).toBe(200);
-    const body = (await response?.text()) ?? '';
+  test('robots.txt accessible', async ({ request }) => {
+    // Use request fixture (not page.goto) to avoid Firefox NS_ERROR_FAILURE
+    // when calling response.text() on non-HTML content types.
+    const response = await request.get('/robots.txt');
+    expect(response.status()).toBe(200);
+    const body = await response.text();
     expect(body).toContain('User-agent');
   });
 
-  test('sitemap.xml accessible', async ({ page }) => {
-    const response = await page.goto('/sitemap.xml');
-    expect(response?.status()).toBe(200);
-    const body = (await response?.text()) ?? '';
+  test('sitemap.xml accessible', async ({ request }) => {
+    // Use request fixture (not page.goto) to avoid Firefox NS_ERROR_FAILURE
+    // when calling response.text() on non-HTML content types.
+    const response = await request.get('/sitemap.xml');
+    expect(response.status()).toBe(200);
+    const body = await response.text();
     expect(body).toContain('<urlset');
   });
 
@@ -73,11 +77,17 @@ test.describe('SEO Meta Smoke', () => {
     for (const route of ROUTES) {
       const response = await page.goto(route.path);
       if (route.graceful && response && response.status() === 404) continue;
+      // Wait for React to render route-specific title. networkidle times out on
+      // production (persistent WS/polling connections), so use a short fixed wait.
+      await page.waitForTimeout(800);
       titles.push(await page.title());
     }
 
     const unique = new Set(titles);
-    // At least 80% of titles must be unique (allows for minor title collisions)
-    expect(unique.size).toBeGreaterThanOrEqual(Math.floor(titles.length * 0.8));
+    // At least 80% of titles must be unique (allows for minor title collisions).
+    // Actual titles collected: helps debug if assertion fails.
+    expect(unique.size, `Titles: ${JSON.stringify([...titles])}`).toBeGreaterThanOrEqual(
+      Math.floor(titles.length * 0.8),
+    );
   });
 });

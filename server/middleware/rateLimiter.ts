@@ -183,10 +183,14 @@ export const generalLimiter = createRateLimiter({
  * Tightened from 10/15min per P3 backend hardening: login/register/refresh
  * are the highest-value targets and 5 attempts/15min still allows a real
  * user 4 typo retries while crushing credential stuffing.
+ *
+ * P44-T06: Window/max are env-overrideable (`AUTH_RATE_LIMIT_*`) so local
+ * dev can relax the cap while PROD keeps the strict 5/15min default. The
+ * production .env never sets these, so prod stays at 5/15min by default.
  */
 export const authLimiter = createRateLimiter({
-  windowMs: 15 * 60 * 1000,
-  maxRequests: 5,
+  windowMs: Number.parseInt(process.env.AUTH_RATE_LIMIT_WINDOW_MS ?? '', 10) || 15 * 60 * 1000,
+  maxRequests: Number.parseInt(process.env.AUTH_RATE_LIMIT_MAX ?? '', 10) || 5,
   message: 'Too many authentication attempts. Please wait 15 minutes.',
 });
 
@@ -229,10 +233,15 @@ export const quickCheckLimiter = createRateLimiter({
   message: 'Quick-Check için saatlik gönderim limitine ulaşıldı.',
 });
 
-/** SSE connections: 3 per minute */
+/**
+ * SSE connections: 3 per minute.
+ * P44-T07: env-overrideable so local dev (admin reconnect storm during hot
+ * reload) doesn't lock itself out for a full minute every page navigation.
+ * Prod keeps the strict 3/min default by leaving the env vars unset.
+ */
 export const sseLimiter = createRateLimiter({
-  windowMs: 60 * 1000,
-  maxRequests: 3,
+  windowMs: Number.parseInt(process.env.SSE_RATE_LIMIT_WINDOW_MS ?? '', 10) || 60 * 1000,
+  maxRequests: Number.parseInt(process.env.SSE_RATE_LIMIT_MAX ?? '', 10) || 3,
   message: 'Too many SSE connection attempts.',
 });
 

@@ -119,6 +119,29 @@ adminInsightsRouter.get(
   },
 );
 
+// GET /api/v1/admin/insights/posts/:id
+// R12-P3 — single-post fetch used by the admin edit page. Previously the
+// editor called apiClient.get(`/admin/insights/posts/${id}`) but no such
+// route existed, so every "edit existing post" view loaded a blank form and
+// blocked the DRAFT→IN_REVIEW→…→PUBLISHED workflow. Mirror the list query
+// shape (data wrapped) so the existing client code works without changes.
+adminInsightsRouter.get(
+  '/posts/:id',
+  requireInsightsRead,
+  async (req: AuthRequest, res: Response): Promise<void> => {
+    const { id } = req.params;
+    const post = await prisma.blogPost.findUnique({
+      where: { id },
+      include: { author: { select: { displayName: true, slug: true } }, tags: true },
+    });
+    if (!post) {
+      res.status(404).json({ error: 'Post bulunamadı' });
+      return;
+    }
+    res.json({ data: post });
+  },
+);
+
 // POST /api/v1/admin/insights/posts
 adminInsightsRouter.post(
   '/posts',

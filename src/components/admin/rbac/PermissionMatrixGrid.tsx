@@ -18,6 +18,7 @@ import { Loader2, ShieldCheck } from 'lucide-react';
 import { RoleHeader } from './RoleHeader';
 import { PermissionGroupCollapse } from './PermissionGroupCollapse';
 import type { UserRole } from '../../../lib/rbac';
+import { adminFetch } from '../../../lib/admin-fetch';
 
 // ─── Types ────────────────────────────────────────────────────
 
@@ -53,14 +54,14 @@ const QUERY_KEY = ['admin', 'rbac', 'matrix'] as const;
 // ─── API functions ────────────────────────────────────────────
 
 async function fetchMatrix(): Promise<MatrixData> {
-  const res = await fetch('/api/admin/rbac/matrix');
+  const res = await adminFetch('/api/admin/rbac/matrix');
   if (!res.ok) throw new Error('Failed to fetch permission matrix');
   const json = (await res.json()) as ApiResponse;
   return json.data;
 }
 
 async function patchMatrix(payload: PatchPayload): Promise<void> {
-  const res = await fetch('/api/admin/rbac/matrix', {
+  const res = await adminFetch('/api/admin/rbac/matrix', {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload),

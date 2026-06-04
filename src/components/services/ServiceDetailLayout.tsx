@@ -238,7 +238,10 @@ export const ServiceDetailLayout: React.FC<ServiceDetailLayoutProps> = ({
       {/* ── Hero (2-column with illustration) ── */}
       <section className="relative pt-32 pb-16 px-6 md:px-12 overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_50%_at_50%_-10%,rgba(37,99,235,0.12),transparent)] pointer-events-none" />
-        <div className="absolute top-20 right-0 w-96 h-96 bg-secondary/5 rounded-full blur-[120px] pointer-events-none" />
+        <div
+          className="absolute top-20 right-0 w-96 h-96 bg-secondary/5 rounded-full blur-[120px] pointer-events-none"
+          aria-hidden="true"
+        />
 
         <div className="relative max-w-7xl mx-auto">
           <nav className="text-sm text-slate-500 mb-8" aria-label="Breadcrumb">
@@ -573,7 +576,10 @@ export const ServiceDetailLayout: React.FC<ServiceDetailLayoutProps> = ({
               ) : null}
               {content?.investment?.range ? (
                 <div className="bg-gradient-to-br from-secondary/10 to-primary/5 border border-secondary/20 rounded-2xl p-8 relative overflow-hidden">
-                  <div className="absolute -top-12 -right-12 w-40 h-40 bg-secondary/20 rounded-full blur-3xl pointer-events-none" />
+                  <div
+                    className="absolute -top-12 -right-12 w-40 h-40 bg-secondary/20 rounded-full blur-3xl pointer-events-none"
+                    aria-hidden="true"
+                  />
                   <div className="relative">
                     <div className="flex items-center gap-3 mb-6">
                       <CircleDollarSign size={22} className="text-secondary" />

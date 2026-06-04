@@ -20,6 +20,7 @@ import { BreachDetailForm } from '../../components/admin/breach/BreachDetailForm
 import { BreachCountdownTimer } from '../../components/admin/breach/BreachCountdownTimer';
 import { KurulFormDraftGenerator } from '../../components/admin/breach/KurulFormDraftGenerator';
 import type { NewBreachData } from '../../components/admin/breach/BreachDetailForm';
+import { adminFetch } from '../../lib/admin-fetch';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -67,7 +68,7 @@ export function AdminBreachPage() {
   const { data, isLoading, error } = useQuery<BreachListResponse>({
     queryKey: ['breach-list'],
     queryFn: async () => {
-      const res = await fetch('/api/admin/breach');
+      const res = await adminFetch('/api/admin/breach');
       if (!res.ok) throw new Error('Failed to load breach incidents');
       return res.json() as Promise<BreachListResponse>;
     },
@@ -76,7 +77,7 @@ export function AdminBreachPage() {
   // ── Create mutation ──────────────────────────────────────────────────────────
   const createMutation = useMutation({
     mutationFn: async (payload: NewBreachData) => {
-      const res = await fetch('/api/admin/breach', {
+      const res = await adminFetch('/api/admin/breach', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
@@ -93,7 +94,7 @@ export function AdminBreachPage() {
   // ── Report-to-Kurul mutation ──────────────────────────────────────────────────
   const reportToKurulMutation = useMutation({
     mutationFn: async (id: string) => {
-      const res = await fetch(`/api/admin/breach/${id}/report-to-kurul`, {
+      const res = await adminFetch(`/api/admin/breach/${id}/report-to-kurul`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
       });

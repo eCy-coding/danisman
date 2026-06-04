@@ -19,6 +19,7 @@ import { cn } from '../../lib/utils';
 import { DSARRequestList, type DSARListItem } from '../../components/admin/dsar/DSARRequestList';
 import { DSARDetailDrawer } from '../../components/admin/dsar/DSARDetailDrawer';
 import { DSARRequestForm } from '../../components/admin/dsar/DSARRequestForm';
+import { adminFetch } from '../../lib/admin-fetch';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -58,7 +59,7 @@ export function AdminDSARPage() {
   const { data, isLoading, error } = useQuery<DSARListResponse>({
     queryKey: ['dsar-list', statusFilter],
     queryFn: async () => {
-      const res = await fetch(`/api/admin/dsar${queryParams}`);
+      const res = await adminFetch(`/api/admin/dsar${queryParams}`);
       if (!res.ok) throw new Error('Failed to load DSAR list');
       return res.json() as Promise<DSARListResponse>;
     },
@@ -67,7 +68,7 @@ export function AdminDSARPage() {
   // ── Create mutation ──────────────────────────────────────────────────────────
   const createMutation = useMutation({
     mutationFn: async (payload: CreateDSARPayload) => {
-      const res = await fetch('/api/admin/dsar', {
+      const res = await adminFetch('/api/admin/dsar', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),

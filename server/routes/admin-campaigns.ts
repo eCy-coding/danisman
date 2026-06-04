@@ -120,6 +120,22 @@ router.post('/', ...adminOnly, async (req: Request, res: Response, next: NextFun
   }
 });
 
+// ── GET /metrics ──────────────────────────────────────────────────────────
+// P44-T07: must be declared BEFORE `/:id` because Express matches in
+// registration order; with `/:id` first, `/metrics` was being captured as
+// `id=metrics` and rejected by loadCampaign() with a 404. The admin newsletter
+// UI calls this endpoint to populate Queue depth / DLQ depth / processed
+// counters on the campaigns dashboard.
+router.get('/metrics', ...adminOnly, async (_req: Request, res: Response, next: NextFunction) => {
+  try {
+    const [queue, dlq] = await Promise.all([getQueueDepth(), getDlqDepth()]);
+    const counters = getDripMetrics();
+    res.json({ status: 'ok', data: { queue, dlq, counters } });
+  } catch (err) {
+    next(err);
+  }
+});
+
 // ── GET /:id ──────────────────────────────────────────────────────────────
 
 router.get('/:id', ...adminOnly, async (req: Request, res: Response, next: NextFunction) => {
@@ -175,6 +191,22 @@ router.post('/:id/send', ...adminOnly, async (req: Request, res: Response, next:
     await saveCampaign(c);
     logger.info('[admin-campaigns] queued', { id, recipients: subscribers.length });
 
+    // P44-T07 Round-6 — adminEventBus emit so the Newsletter Kampanyalar
+    // dashboard's campaign ticker updates without polling. The bridge in
+    // admin-analytics-stream.ts maps `campaign.sent` to the wire-format
+    // `campaign_sent` event.
+    try {
+      const { adminEventBus } = await import('../lib/event-bus');
+      adminEventBus.publish('campaign.sent', {
+        id,
+        subject: c.subject,
+        recipientCount: subscribers.length,
+        enrolled,
+      });
+    } catch {
+      /* never block campaign queueing on bus publish */
+    }
+
     res.json({ status: 'ok', data: { id, recipients: subscribers.length, enrolled } });
   } catch (err) {
     next(err);
@@ -200,18 +232,6 @@ router.post('/test', ...adminOnly, async (req: Request, res: Response, next: Nex
       text: data.body,
     });
     res.status(204).end();
-  } catch (err) {
-    next(err);
-  }
-});
-
-// ── GET /metrics ──────────────────────────────────────────────────────────
-
-router.get('/metrics', ...adminOnly, async (_req: Request, res: Response, next: NextFunction) => {
-  try {
-    const [queue, dlq] = await Promise.all([getQueueDepth(), getDlqDepth()]);
-    const counters = getDripMetrics();
-    res.json({ status: 'ok', data: { queue, dlq, counters } });
   } catch (err) {
     next(err);
   }

@@ -8,6 +8,8 @@ import { Outlet } from 'react-router-dom';
 import { AdminSidebar } from './AdminSidebar';
 import { useAdminShortcuts, ALL_SHORTCUTS } from '../../../hooks/useAdminShortcuts';
 import { X, Keyboard, Menu } from 'lucide-react';
+// R7-P2.2 — global SSE → toast bridge for the 5 admin bus channels.
+import { AdminRealtimeToasts } from '../realtime/AdminRealtimeToasts';
 
 const ShortcutsHelpModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
   const byCategory = ALL_SHORTCUTS.reduce<Record<string, typeof ALL_SHORTCUTS>>((acc, s) => {
@@ -128,6 +130,9 @@ export const AdminLayout: React.FC = () => {
         </div>
       </main>
       {helpModalOpen && <ShortcutsHelpModal onClose={() => setHelpModalOpen(false)} />}
+      {/* R7-P2.2 — real-time SSE bridge → admin toasts. Mounted once at layout
+          level so a single connection handles all admin pages. */}
+      <AdminRealtimeToasts />
     </div>
   );
 };

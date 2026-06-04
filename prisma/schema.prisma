@@ -1,5 +1,6 @@
 // EcyPro Premium Consulting — Production Database Schema
 // Prisma v7 + PostgreSQL
+// Sprint 11 P44-T03: AuditResult enum + AuditLog additive fields (migration:approved)
 
 generator client {
   provider = "prisma-client-js"
@@ -24,6 +25,13 @@ enum UserRole {
   VIEWER
 }
 
+// Sprint 11 P44-T03 — audit outcome (SUCCESS/DENIED/ERROR)
+enum AuditResult {
+  SUCCESS
+  DENIED
+  ERROR
+}
+
 enum BookingStatus {
   PENDING
   CONFIRMED
@@ -39,6 +47,11 @@ enum InteractionType {
   BOOKING_START
   DOWNLOAD
   SCROLL_DEPTH
+  // S13-R2-P3 — Core Web Vitals batches (LCP/CLS/INP/FCP/TTFB) sent by
+  // src/lib/monitor.ts on idle / page unload. Backend zod enum +
+  // trackInteractionSchema accept it; the DB enum needs the value to
+  // satisfy Prisma writes.
+  WEB_VITALS
 }
 
 // ─── CORE MODELS ─────────────────────────────────────────
@@ -299,16 +312,22 @@ model Session {
 }
 
 model AuditLog {
-  id         String   @id @default(uuid())
-  adminId    String
-  action     String // e.g. "USER_ROLE_CHANGE", "SETTING_UPDATE", "BOOKING_STATUS"
-  targetType String? // e.g. "User", "Booking", "Service"
-  targetId   String?
-  oldValue   Json?
-  newValue   Json?
-  ip         String?
-  userAgent  String?
-  createdAt  DateTime @default(now())
+  id          String      @id @default(uuid())
+  adminId     String
+  action      String // e.g. "USER_ROLE_CHANGE", "SETTING_UPDATE", "BOOKING_STATUS"
+  targetType  String? // e.g. "User", "Booking", "Service"
+  targetId    String?
+  oldValue    Json?
+  newValue    Json?
+  // Sprint 11 P44-T03: ip deprecated — KVKK m.4 forbids raw IP storage.
+  // New writes must use actorIpHash. Kept for backward compat with existing rows.
+  ip          String?
+  userAgent   String?
+  createdAt   DateTime    @default(now())
+  // Sprint 11 P44-T03 additive fields
+  actorRole   String? // role at time of action (ADMIN / EDITOR / VIEWER / …)
+  actorIpHash String? // SHA-256 hex of req.ip — never raw IP (KVKK m.4)
+  result      AuditResult @default(SUCCESS) // outcome: SUCCESS | DENIED | ERROR
 
   // P21-BE: explicit @@index([adminId]) removed — leftmost-prefix of
   // @@index([adminId, createdAt]) already covers it.
@@ -321,6 +340,9 @@ model AuditLog {
   // the admin-activity report; without this we degrade to a full scan over
   // audit_logs filtered in app code.
   @@index([adminId, createdAt])
+  // Sprint 11 P44-T03: role-scoped audit trail + action outcome index
+  @@index([actorRole, createdAt])
+  @@index([action, result])
   @@map("audit_logs")
 }
 

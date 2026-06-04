@@ -125,13 +125,30 @@ export const AdminContactsPage: React.FC = () => {
           </h1>
           <p className="text-slate-400 text-sm mt-1">{data?.data.total ?? 0} total submissions</p>
         </div>
-        <button
-          type="button"
-          onClick={exportCsv}
-          className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-slate-300 hover:bg-white/10 transition-colors text-sm"
-        >
-          <Download size={14} /> Export CSV
-        </button>
+        <div className="flex items-center gap-2">
+          {/* R7-P4.1 — bulk mark-all-unread-as-read. Loops through the visible
+              unread set; backend already exposes PATCH /:id/read. Disabled
+              when no unread row exists. */}
+          <button
+            type="button"
+            disabled={unreadCount === 0 || markReadMutation.isPending}
+            onClick={() => {
+              const unread = (data?.data.items ?? []).filter((c) => !c.isRead);
+              for (const c of unread) markReadMutation.mutate(c.id);
+            }}
+            className="px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-slate-300 hover:bg-white/10 transition-colors text-sm disabled:opacity-40 disabled:cursor-not-allowed"
+            title={`${unreadCount} okunmamış kaydı okunmuş olarak işaretle`}
+          >
+            Tümünü Okundu
+          </button>
+          <button
+            type="button"
+            onClick={exportCsv}
+            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-slate-300 hover:bg-white/10 transition-colors text-sm"
+          >
+            <Download size={14} /> Export CSV
+          </button>
+        </div>
       </div>
 
       {/* Filters */}

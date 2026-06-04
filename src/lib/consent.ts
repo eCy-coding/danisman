@@ -125,7 +125,7 @@ function migrateLegacyV1(): ConsentRecord | null {
 }
 
 /** @deprecated use migrateCanonicalV1/migrateLegacyV1. Kept for tests that exported `migrateV1`. */
-function migrateV1(): ConsentRecord | null {
+function _migrateV1(): ConsentRecord | null {
   return migrateCanonicalV1() ?? migrateLegacyV1();
 }
 

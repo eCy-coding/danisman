@@ -190,26 +190,47 @@ adminInsightsCategoriesRouter.post(
         data: {
           ...data,
           slug,
-          createdBy: req.user?.id as string,
+          createdBy: req.user?.id ?? null,
         },
         include: { _count: { select: { posts: true } } },
       });
 
-      await prisma.auditLog.create({
-        data: {
-          adminId: req.user?.id as string,
-          action: 'CATEGORY_CREATE',
-          targetType: 'InsightCategory',
-          targetId: category.id,
-          newValue: { slug: category.slug, domain: category.domain },
-        },
-      });
+      // R7-P1.1: audit log write must never fail the business write. If the
+      // audit table is mid-migration or the actor row has been purged, we'd
+      // still want the category created — admin can re-log via correction.
+      try {
+        await prisma.auditLog.create({
+          data: {
+            adminId: req.user?.id ?? 'system',
+            action: 'CATEGORY_CREATE',
+            targetType: 'InsightCategory',
+            targetId: category.id,
+            newValue: { slug: category.slug, domain: String(category.domain) } as never,
+          },
+        });
+      } catch (auditErr) {
+        logger.warn('category audit log failed (non-blocking)', {
+          err: (auditErr as Error)?.message,
+        });
+      }
 
       logger.info('category created', { id: category.id, slug: category.slug });
       res.status(201).json({ status: 'ok', data: category });
     } catch (err) {
-      logger.error('category create error', { err });
-      res.status(500).json({ error: 'Internal server error' });
+      // R7-P1.1: surface root cause in dev so the Round-6 mutation matrix
+      // failure (POST 500 "Internal server error") becomes diagnosable.
+      // Prod still hides the message body (no leak), only dev includes detail.
+      const e = err as Error;
+      logger.error('category create error', {
+        message: e?.message,
+        stack: e?.stack?.split('\n').slice(0, 5).join(' | '),
+        code: (err as { code?: string })?.code,
+      });
+      const isDev = process.env.NODE_ENV !== 'production';
+      res.status(500).json({
+        error: 'Internal server error',
+        ...(isDev ? { detail: e?.message, code: (err as { code?: string })?.code } : {}),
+      });
     }
   },
 );

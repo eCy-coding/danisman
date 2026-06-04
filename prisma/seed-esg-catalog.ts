@@ -1,0 +1,677 @@
+/**
+ * P44-T07 Round-5 — ESRS Datapoint Catalogue Seed (Real Data).
+ *
+ * Source: EFRAG Amended ESRS (November 2025 simplification package) — what
+ * companies need to disclose under the revised CSRD framework starting
+ * FY2027 (voluntary FY2026). The catalogue covers Environmental (E1-E5),
+ * Social (S1-S4), and Governance (G1) pillars.
+ *
+ * This seed is intentionally CURATED, not exhaustive — the AdminESGPage UI
+ * is a "taxonomy explorer", not a full ESRS browser. 60+ datapoints across
+ * the 10 standards is enough to render meaningful pillar/topic distributions
+ * + filter chips. Customers extend per-engagement.
+ *
+ * Idempotent: uses `esrsCode` unique constraint via upsert.
+ *
+ * Run: `npx tsx prisma/seed-esg-catalog.ts` or via master orchestrator.
+ */
+import { PrismaClient, ESGPillar } from '@prisma/client';
+import { Pool } from 'pg';
+import { PrismaPg } from '@prisma/adapter-pg';
+
+const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+const adapter = new PrismaPg(pool);
+const prisma = new PrismaClient({ adapter });
+
+interface DatapointDef {
+  esrsCode: string;
+  pillar: ESGPillar;
+  category: string; // ESRS standard (E1, E2, S1, ...)
+  topic: string;
+  metricName: string;
+  unit?: string;
+  isDoubleMaterial: boolean;
+  isMandatory: boolean;
+}
+
+// ── ENVIRONMENTAL ────────────────────────────────────────────────────────────
+const ENVIRONMENTAL: DatapointDef[] = [
+  // E1 Climate Change — 11 DRs in Amended ESRS
+  {
+    esrsCode: 'E1-1-1',
+    pillar: 'ENVIRONMENTAL',
+    category: 'E1',
+    topic: 'Transition Plan',
+    metricName: 'Climate transition plan disclosure',
+    isDoubleMaterial: true,
+    isMandatory: true,
+  },
+  {
+    esrsCode: 'E1-2-1',
+    pillar: 'ENVIRONMENTAL',
+    category: 'E1',
+    topic: 'Policies',
+    metricName: 'Climate change mitigation policy',
+    isDoubleMaterial: true,
+    isMandatory: true,
+  },
+  {
+    esrsCode: 'E1-3-1',
+    pillar: 'ENVIRONMENTAL',
+    category: 'E1',
+    topic: 'Actions',
+    metricName: 'Climate action portfolio (decarbonisation levers)',
+    isDoubleMaterial: true,
+    isMandatory: true,
+  },
+  {
+    esrsCode: 'E1-4-1',
+    pillar: 'ENVIRONMENTAL',
+    category: 'E1',
+    topic: 'Targets',
+    metricName: 'Science-based emissions reduction targets',
+    unit: '% baseline',
+    isDoubleMaterial: true,
+    isMandatory: true,
+  },
+  {
+    esrsCode: 'E1-5-1',
+    pillar: 'ENVIRONMENTAL',
+    category: 'E1',
+    topic: 'Energy',
+    metricName: 'Total energy consumption',
+    unit: 'MWh',
+    isDoubleMaterial: true,
+    isMandatory: true,
+  },
+  {
+    esrsCode: 'E1-5-2',
+    pillar: 'ENVIRONMENTAL',
+    category: 'E1',
+    topic: 'Energy',
+    metricName: 'Renewable energy share',
+    unit: '%',
+    isDoubleMaterial: false,
+    isMandatory: true,
+  },
+  {
+    esrsCode: 'E1-6-1',
+    pillar: 'ENVIRONMENTAL',
+    category: 'E1',
+    topic: 'GHG Emissions',
+    metricName: 'Scope 1 GHG emissions',
+    unit: 'tCO₂e',
+    isDoubleMaterial: true,
+    isMandatory: true,
+  },
+  {
+    esrsCode: 'E1-6-2',
+    pillar: 'ENVIRONMENTAL',
+    category: 'E1',
+    topic: 'GHG Emissions',
+    metricName: 'Scope 2 GHG emissions (location-based)',
+    unit: 'tCO₂e',
+    isDoubleMaterial: true,
+    isMandatory: true,
+  },
+  {
+    esrsCode: 'E1-6-3',
+    pillar: 'ENVIRONMENTAL',
+    category: 'E1',
+    topic: 'GHG Emissions',
+    metricName: 'Scope 2 GHG emissions (market-based)',
+    unit: 'tCO₂e',
+    isDoubleMaterial: true,
+    isMandatory: true,
+  },
+  {
+    esrsCode: 'E1-6-4',
+    pillar: 'ENVIRONMENTAL',
+    category: 'E1',
+    topic: 'GHG Emissions',
+    metricName: 'Scope 3 GHG emissions (15 categories aggregate)',
+    unit: 'tCO₂e',
+    isDoubleMaterial: true,
+    isMandatory: true,
+  },
+  {
+    esrsCode: 'E1-7-1',
+    pillar: 'ENVIRONMENTAL',
+    category: 'E1',
+    topic: 'Removals',
+    metricName: 'GHG removals and storage',
+    unit: 'tCO₂e',
+    isDoubleMaterial: false,
+    isMandatory: false,
+  },
+  {
+    esrsCode: 'E1-8-1',
+    pillar: 'ENVIRONMENTAL',
+    category: 'E1',
+    topic: 'Carbon Pricing',
+    metricName: 'Internal carbon price applied',
+    unit: 'EUR/tCO₂e',
+    isDoubleMaterial: false,
+    isMandatory: false,
+  },
+  {
+    esrsCode: 'E1-9-1',
+    pillar: 'ENVIRONMENTAL',
+    category: 'E1',
+    topic: 'Financial Effects',
+    metricName: 'Anticipated financial effects from climate risks',
+    unit: 'EUR M',
+    isDoubleMaterial: true,
+    isMandatory: true,
+  },
+  // E2 Pollution
+  {
+    esrsCode: 'E2-4-1',
+    pillar: 'ENVIRONMENTAL',
+    category: 'E2',
+    topic: 'Air Emissions',
+    metricName: 'Pollutants emitted to air',
+    unit: 'tonnes',
+    isDoubleMaterial: true,
+    isMandatory: true,
+  },
+  {
+    esrsCode: 'E2-4-2',
+    pillar: 'ENVIRONMENTAL',
+    category: 'E2',
+    topic: 'Water Emissions',
+    metricName: 'Pollutants discharged to water',
+    unit: 'tonnes',
+    isDoubleMaterial: true,
+    isMandatory: true,
+  },
+  {
+    esrsCode: 'E2-4-3',
+    pillar: 'ENVIRONMENTAL',
+    category: 'E2',
+    topic: 'Soil Emissions',
+    metricName: 'Pollutants emitted to soil',
+    unit: 'tonnes',
+    isDoubleMaterial: true,
+    isMandatory: false,
+  },
+  {
+    esrsCode: 'E2-4-4',
+    pillar: 'ENVIRONMENTAL',
+    category: 'E2',
+    topic: 'Microplastics',
+    metricName: 'Microplastics generated or used',
+    unit: 'tonnes',
+    isDoubleMaterial: false,
+    isMandatory: false,
+  },
+  {
+    esrsCode: 'E2-5-1',
+    pillar: 'ENVIRONMENTAL',
+    category: 'E2',
+    topic: 'Substances of Concern',
+    metricName: 'Substances of concern produced / used',
+    unit: 'tonnes',
+    isDoubleMaterial: true,
+    isMandatory: true,
+  },
+  // E3 Water & Marine
+  {
+    esrsCode: 'E3-4-1',
+    pillar: 'ENVIRONMENTAL',
+    category: 'E3',
+    topic: 'Water Use',
+    metricName: 'Total water consumption',
+    unit: 'm³',
+    isDoubleMaterial: true,
+    isMandatory: true,
+  },
+  {
+    esrsCode: 'E3-4-2',
+    pillar: 'ENVIRONMENTAL',
+    category: 'E3',
+    topic: 'Water Use',
+    metricName: 'Water consumption in water-stress areas',
+    unit: 'm³',
+    isDoubleMaterial: true,
+    isMandatory: true,
+  },
+  {
+    esrsCode: 'E3-4-3',
+    pillar: 'ENVIRONMENTAL',
+    category: 'E3',
+    topic: 'Water Use',
+    metricName: 'Total water withdrawal',
+    unit: 'm³',
+    isDoubleMaterial: false,
+    isMandatory: true,
+  },
+  // E4 Biodiversity (phase-in: omittable < FY2030)
+  {
+    esrsCode: 'E4-5-1',
+    pillar: 'ENVIRONMENTAL',
+    category: 'E4',
+    topic: 'Biodiversity Sites',
+    metricName: 'Operational sites in or near biodiversity-sensitive areas',
+    unit: 'count',
+    isDoubleMaterial: true,
+    isMandatory: false,
+  },
+  {
+    esrsCode: 'E4-5-2',
+    pillar: 'ENVIRONMENTAL',
+    category: 'E4',
+    topic: 'Land Use',
+    metricName: 'Land use change footprint',
+    unit: 'hectares',
+    isDoubleMaterial: true,
+    isMandatory: false,
+  },
+  // E5 Circular Economy
+  {
+    esrsCode: 'E5-4-1',
+    pillar: 'ENVIRONMENTAL',
+    category: 'E5',
+    topic: 'Resource Inflow',
+    metricName: 'Total weight of recycled / reused input materials',
+    unit: 'tonnes',
+    isDoubleMaterial: true,
+    isMandatory: true,
+  },
+  {
+    esrsCode: 'E5-5-1',
+    pillar: 'ENVIRONMENTAL',
+    category: 'E5',
+    topic: 'Resource Outflow',
+    metricName: 'Products designed for circularity (share)',
+    unit: '%',
+    isDoubleMaterial: false,
+    isMandatory: true,
+  },
+  {
+    esrsCode: 'E5-5-2',
+    pillar: 'ENVIRONMENTAL',
+    category: 'E5',
+    topic: 'Waste',
+    metricName: 'Total waste generated',
+    unit: 'tonnes',
+    isDoubleMaterial: true,
+    isMandatory: true,
+  },
+  {
+    esrsCode: 'E5-5-3',
+    pillar: 'ENVIRONMENTAL',
+    category: 'E5',
+    topic: 'Waste',
+    metricName: 'Hazardous waste share',
+    unit: '%',
+    isDoubleMaterial: true,
+    isMandatory: true,
+  },
+];
+
+// ── SOCIAL ──────────────────────────────────────────────────────────────────
+const SOCIAL: DatapointDef[] = [
+  // S1 Own Workforce
+  {
+    esrsCode: 'S1-6-1',
+    pillar: 'SOCIAL',
+    category: 'S1',
+    topic: 'Headcount',
+    metricName: 'Total employees (head count)',
+    unit: 'count',
+    isDoubleMaterial: false,
+    isMandatory: true,
+  },
+  {
+    esrsCode: 'S1-6-2',
+    pillar: 'SOCIAL',
+    category: 'S1',
+    topic: 'Headcount',
+    metricName: 'Employees by gender',
+    unit: 'count',
+    isDoubleMaterial: false,
+    isMandatory: true,
+  },
+  {
+    esrsCode: 'S1-6-3',
+    pillar: 'SOCIAL',
+    category: 'S1',
+    topic: 'Contract Type',
+    metricName: 'Permanent vs temporary contract ratio',
+    unit: '%',
+    isDoubleMaterial: false,
+    isMandatory: true,
+  },
+  {
+    esrsCode: 'S1-7-1',
+    pillar: 'SOCIAL',
+    category: 'S1',
+    topic: 'Non-Employees',
+    metricName: 'Non-employees in own workforce',
+    unit: 'count',
+    isDoubleMaterial: true,
+    isMandatory: true,
+  },
+  {
+    esrsCode: 'S1-8-1',
+    pillar: 'SOCIAL',
+    category: 'S1',
+    topic: 'Collective Bargaining',
+    metricName: 'Employees covered by collective bargaining',
+    unit: '%',
+    isDoubleMaterial: false,
+    isMandatory: true,
+  },
+  {
+    esrsCode: 'S1-9-1',
+    pillar: 'SOCIAL',
+    category: 'S1',
+    topic: 'Diversity',
+    metricName: 'Gender distribution at top management',
+    unit: '%',
+    isDoubleMaterial: true,
+    isMandatory: true,
+  },
+  {
+    esrsCode: 'S1-9-2',
+    pillar: 'SOCIAL',
+    category: 'S1',
+    topic: 'Diversity',
+    metricName: 'Age distribution (under 30 / 30-50 / 50+)',
+    unit: '%',
+    isDoubleMaterial: false,
+    isMandatory: true,
+  },
+  {
+    esrsCode: 'S1-10-1',
+    pillar: 'SOCIAL',
+    category: 'S1',
+    topic: 'Adequate Wages',
+    metricName: 'Employees earning below adequate-wage threshold',
+    unit: '%',
+    isDoubleMaterial: true,
+    isMandatory: true,
+  },
+  {
+    esrsCode: 'S1-11-1',
+    pillar: 'SOCIAL',
+    category: 'S1',
+    topic: 'Social Protection',
+    metricName: 'Employees covered by social protection',
+    unit: '%',
+    isDoubleMaterial: true,
+    isMandatory: true,
+  },
+  {
+    esrsCode: 'S1-12-1',
+    pillar: 'SOCIAL',
+    category: 'S1',
+    topic: 'Disability',
+    metricName: 'Persons with disabilities in workforce',
+    unit: '%',
+    isDoubleMaterial: false,
+    isMandatory: false,
+  },
+  {
+    esrsCode: 'S1-13-1',
+    pillar: 'SOCIAL',
+    category: 'S1',
+    topic: 'Training',
+    metricName: 'Average training hours per employee',
+    unit: 'hours',
+    isDoubleMaterial: false,
+    isMandatory: true,
+  },
+  {
+    esrsCode: 'S1-14-1',
+    pillar: 'SOCIAL',
+    category: 'S1',
+    topic: 'Health & Safety',
+    metricName: 'Work-related injuries (recordable)',
+    unit: 'count',
+    isDoubleMaterial: true,
+    isMandatory: true,
+  },
+  {
+    esrsCode: 'S1-14-2',
+    pillar: 'SOCIAL',
+    category: 'S1',
+    topic: 'Health & Safety',
+    metricName: 'Fatalities from work-related incidents',
+    unit: 'count',
+    isDoubleMaterial: true,
+    isMandatory: true,
+  },
+  {
+    esrsCode: 'S1-14-3',
+    pillar: 'SOCIAL',
+    category: 'S1',
+    topic: 'Health & Safety',
+    metricName: 'Lost-time incident frequency rate',
+    unit: 'per 1M hrs',
+    isDoubleMaterial: true,
+    isMandatory: true,
+  },
+  {
+    esrsCode: 'S1-15-1',
+    pillar: 'SOCIAL',
+    category: 'S1',
+    topic: 'Work-Life Balance',
+    metricName: 'Family-leave take-up by gender',
+    unit: '%',
+    isDoubleMaterial: false,
+    isMandatory: false,
+  },
+  {
+    esrsCode: 'S1-16-1',
+    pillar: 'SOCIAL',
+    category: 'S1',
+    topic: 'Compensation',
+    metricName: 'Gender pay gap (median)',
+    unit: '%',
+    isDoubleMaterial: true,
+    isMandatory: true,
+  },
+  {
+    esrsCode: 'S1-16-2',
+    pillar: 'SOCIAL',
+    category: 'S1',
+    topic: 'Compensation',
+    metricName: 'CEO-to-median worker compensation ratio',
+    isDoubleMaterial: false,
+    isMandatory: true,
+  },
+  {
+    esrsCode: 'S1-17-1',
+    pillar: 'SOCIAL',
+    category: 'S1',
+    topic: 'Incidents',
+    metricName: 'Discrimination & harassment complaints',
+    unit: 'count',
+    isDoubleMaterial: true,
+    isMandatory: true,
+  },
+  // S2 Workers in the Value Chain (phase-in until FY2030)
+  {
+    esrsCode: 'S2-4-1',
+    pillar: 'SOCIAL',
+    category: 'S2',
+    topic: 'Value Chain Workers',
+    metricName: 'Value chain workers at heightened risk (assessed)',
+    unit: 'count',
+    isDoubleMaterial: true,
+    isMandatory: false,
+  },
+  {
+    esrsCode: 'S2-5-1',
+    pillar: 'SOCIAL',
+    category: 'S2',
+    topic: 'Targets',
+    metricName: 'Targets for improving value chain working conditions',
+    isDoubleMaterial: false,
+    isMandatory: false,
+  },
+  // S3 Affected Communities
+  {
+    esrsCode: 'S3-4-1',
+    pillar: 'SOCIAL',
+    category: 'S3',
+    topic: 'Communities',
+    metricName: 'Communities consulted on material impacts',
+    unit: 'count',
+    isDoubleMaterial: true,
+    isMandatory: false,
+  },
+  // S4 Consumers & End-users
+  {
+    esrsCode: 'S4-4-1',
+    pillar: 'SOCIAL',
+    category: 'S4',
+    topic: 'Consumer Safety',
+    metricName: 'Product safety incidents',
+    unit: 'count',
+    isDoubleMaterial: true,
+    isMandatory: false,
+  },
+  {
+    esrsCode: 'S4-5-1',
+    pillar: 'SOCIAL',
+    category: 'S4',
+    topic: 'Privacy',
+    metricName: 'Substantiated data privacy complaints',
+    unit: 'count',
+    isDoubleMaterial: true,
+    isMandatory: false,
+  },
+];
+
+// ── GOVERNANCE ──────────────────────────────────────────────────────────────
+const GOVERNANCE: DatapointDef[] = [
+  {
+    esrsCode: 'G1-1-1',
+    pillar: 'GOVERNANCE',
+    category: 'G1',
+    topic: 'Business Conduct Policies',
+    metricName: 'Code of conduct adoption + scope',
+    isDoubleMaterial: false,
+    isMandatory: true,
+  },
+  {
+    esrsCode: 'G1-2-1',
+    pillar: 'GOVERNANCE',
+    category: 'G1',
+    topic: 'Supplier Conduct',
+    metricName: 'Suppliers screened on ESG criteria',
+    unit: '%',
+    isDoubleMaterial: true,
+    isMandatory: true,
+  },
+  {
+    esrsCode: 'G1-2-2',
+    pillar: 'GOVERNANCE',
+    category: 'G1',
+    topic: 'Supplier Conduct',
+    metricName: 'Payment-practice compliance with SME terms',
+    unit: '%',
+    isDoubleMaterial: false,
+    isMandatory: true,
+  },
+  {
+    esrsCode: 'G1-3-1',
+    pillar: 'GOVERNANCE',
+    category: 'G1',
+    topic: 'Anti-Corruption',
+    metricName: 'Anti-corruption policy coverage',
+    unit: '%',
+    isDoubleMaterial: true,
+    isMandatory: true,
+  },
+  {
+    esrsCode: 'G1-3-2',
+    pillar: 'GOVERNANCE',
+    category: 'G1',
+    topic: 'Anti-Corruption',
+    metricName: 'Employees trained on anti-corruption',
+    unit: '%',
+    isDoubleMaterial: false,
+    isMandatory: true,
+  },
+  {
+    esrsCode: 'G1-4-1',
+    pillar: 'GOVERNANCE',
+    category: 'G1',
+    topic: 'Confirmed Incidents',
+    metricName: 'Confirmed corruption / bribery incidents',
+    unit: 'count',
+    isDoubleMaterial: true,
+    isMandatory: true,
+  },
+  {
+    esrsCode: 'G1-4-2',
+    pillar: 'GOVERNANCE',
+    category: 'G1',
+    topic: 'Confirmed Incidents',
+    metricName: 'Legal proceedings related to anti-competitive behaviour',
+    unit: 'count',
+    isDoubleMaterial: true,
+    isMandatory: true,
+  },
+  {
+    esrsCode: 'G1-5-1',
+    pillar: 'GOVERNANCE',
+    category: 'G1',
+    topic: 'Political Influence',
+    metricName: 'Political contributions disclosed',
+    unit: 'EUR',
+    isDoubleMaterial: false,
+    isMandatory: true,
+  },
+  {
+    esrsCode: 'G1-5-2',
+    pillar: 'GOVERNANCE',
+    category: 'G1',
+    topic: 'Political Influence',
+    metricName: 'Lobbying expenditure',
+    unit: 'EUR',
+    isDoubleMaterial: false,
+    isMandatory: true,
+  },
+  {
+    esrsCode: 'G1-6-1',
+    pillar: 'GOVERNANCE',
+    category: 'G1',
+    topic: 'Whistleblowing',
+    metricName: 'Whistleblowing channels operational',
+    isDoubleMaterial: true,
+    isMandatory: true,
+  },
+  {
+    esrsCode: 'G1-6-2',
+    pillar: 'GOVERNANCE',
+    category: 'G1',
+    topic: 'Whistleblowing',
+    metricName: 'Reports received via whistleblowing channel',
+    unit: 'count',
+    isDoubleMaterial: true,
+    isMandatory: true,
+  },
+];
+
+const ALL_DATAPOINTS = [...ENVIRONMENTAL, ...SOCIAL, ...GOVERNANCE];
+
+export async function seedEsgCatalog(): Promise<{ created: number; updated: number }> {
+  let created = 0;
+  let updated = 0;
+  for (const dp of ALL_DATAPOINTS) {
+    const existing = await prisma.eSGDatapoint.findUnique({ where: { esrsCode: dp.esrsCode } });
+    if (existing) {
+      await prisma.eSGDatapoint.update({ where: { esrsCode: dp.esrsCode }, data: dp });
+      updated++;
+    } else {
+      await prisma.eSGDatapoint.create({ data: dp });
+      created++;
+    }
+  }
+  return { created, updated };
+}

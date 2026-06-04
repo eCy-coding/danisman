@@ -74,6 +74,7 @@ jobs:
 
       - name: OWASP ZAP — Frontend Baseline Scan
         uses: zaproxy/action-baseline@v0.12.0
+        continue-on-error: true   # artifact upload fails on pipelinesghubeus21 runner; scan results via FAIL-NEW count
         with:
           target: 'http://localhost:4173'
           rules_file_name: '.zap/rules.tsv'
@@ -83,12 +84,14 @@ jobs:
 
       - name: OWASP ZAP — API Baseline Scan
         uses: zaproxy/action-baseline@v0.12.0
+        continue-on-error: true   # same runner artifact upload issue
         with:
           target: 'http://localhost:3001/api/health'
           rules_file_name: '.zap/api-rules.tsv'
           cmd_options: '-a -j'
           allow_issue_writing: false
           fail_action: false
+          artifact_name: zapapi
 
       - name: Upload ZAP reports
         uses: actions/upload-artifact@v4

@@ -1,4 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { adminFetch } from '../lib/admin-fetch';
 
 export type LetterStatus = 'DRAFT' | 'SCHEDULED' | 'PUBLISHED' | 'ARCHIVED';
 
@@ -38,7 +39,7 @@ export function useFounderLetter() {
   const { data: letters = [], isLoading } = useQuery<FounderLetter[]>({
     queryKey: [QUERY_KEY],
     queryFn: async () => {
-      const res = await fetch('/api/admin/founder-letters');
+      const res = await adminFetch('/api/admin/founder-letters');
       if (!res.ok) throw new Error('Failed to fetch founder letters');
       const json = (await res.json()) as { data: FounderLetter[] };
       return json.data;
@@ -47,7 +48,7 @@ export function useFounderLetter() {
 
   const createLetter = useMutation({
     mutationFn: async (input: FounderLetterInput) => {
-      const res = await fetch('/api/admin/founder-letters', {
+      const res = await adminFetch('/api/admin/founder-letters', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(input),
@@ -62,7 +63,7 @@ export function useFounderLetter() {
 
   const updateLetter = useMutation({
     mutationFn: async ({ id, input }: { id: string; input: Partial<FounderLetterInput> }) => {
-      const res = await fetch(`/api/admin/founder-letters/${id}`, {
+      const res = await adminFetch(`/api/admin/founder-letters/${id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(input),
@@ -77,7 +78,7 @@ export function useFounderLetter() {
 
   const publishLetter = useMutation({
     mutationFn: async (id: string) => {
-      const res = await fetch(`/api/admin/founder-letters/${id}/publish`, { method: 'POST' });
+      const res = await adminFetch(`/api/admin/founder-letters/${id}/publish`, { method: 'POST' });
       if (!res.ok) throw new Error('Publish failed');
       return res.json() as Promise<{ data: FounderLetter }>;
     },
@@ -96,7 +97,7 @@ export function useFounderLetter() {
       scheduledFor: string;
       sendEmail: boolean;
     }) => {
-      const res = await fetch(`/api/admin/founder-letters/${id}/schedule`, {
+      const res = await adminFetch(`/api/admin/founder-letters/${id}/schedule`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ scheduledFor, sendEmail }),
@@ -111,7 +112,7 @@ export function useFounderLetter() {
 
   const archiveLetter = useMutation({
     mutationFn: async (id: string) => {
-      const res = await fetch(`/api/admin/founder-letters/${id}/archive`, { method: 'POST' });
+      const res = await adminFetch(`/api/admin/founder-letters/${id}/archive`, { method: 'POST' });
       if (!res.ok) throw new Error('Archive failed');
       return res.json() as Promise<{ data: FounderLetter }>;
     },
@@ -122,7 +123,9 @@ export function useFounderLetter() {
 
   const sendEmail = useMutation({
     mutationFn: async (id: string) => {
-      const res = await fetch(`/api/admin/founder-letters/${id}/send-email`, { method: 'POST' });
+      const res = await adminFetch(`/api/admin/founder-letters/${id}/send-email`, {
+        method: 'POST',
+      });
       if (!res.ok) throw new Error('Send email failed');
       return res.json() as Promise<{ data: FounderLetter }>;
     },

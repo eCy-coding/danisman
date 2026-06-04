@@ -2,10 +2,21 @@ import React from 'react';
 import { ProspectStatusBadge } from './ProspectStatusBadge';
 import { WaveKPICard } from './WaveKPICard';
 import type { WaveRow, ProspectStatus } from '../../../types/revenue';
+import { useUpdateProspectStatus } from '../../../hooks/useOutreachWaves';
 
 interface WaveDetailViewProps {
   wave: WaveRow;
 }
+
+const STATUS_OPTIONS: ProspectStatus[] = ['SENT', 'OPENED', 'REPLIED', 'MEETING', 'DISQUALIFIED'];
+
+const STATUS_LABELS: Record<ProspectStatus, string> = {
+  SENT: 'Gönderildi',
+  OPENED: 'Açıldı',
+  REPLIED: 'Yanıtlandı',
+  MEETING: 'Görüşme',
+  DISQUALIFIED: 'Elendi',
+};
 
 function calcRate(prospects: WaveRow['prospects'], statuses: ProspectStatus[]): number {
   if (prospects.length === 0) return 0;
@@ -13,6 +24,7 @@ function calcRate(prospects: WaveRow['prospects'], statuses: ProspectStatus[]): 
 }
 
 export function WaveDetailView({ wave }: WaveDetailViewProps) {
+  const updateStatus = useUpdateProspectStatus();
   const openRate = calcRate(wave.prospects, ['OPENED', 'REPLIED', 'MEETING']);
   const replyRate = calcRate(wave.prospects, ['REPLIED', 'MEETING']);
   const meetingRate = calcRate(wave.prospects, ['MEETING']);
@@ -63,7 +75,33 @@ export function WaveDetailView({ wave }: WaveDetailViewProps) {
               className="flex items-center justify-between rounded-md bg-[#2A2B2C] px-fib-4 py-fib-3"
             >
               <span className="text-sm text-[#E5E7EB]">{p.companyName}</span>
-              <ProspectStatusBadge status={p.status} />
+              <div className="flex items-center gap-2">
+                <ProspectStatusBadge status={p.status} />
+                {/* R8-P1 — inline status dropdown. Native <select> for native
+                    keyboard a11y + small payload. Disabled while a mutation
+                    flies so optimistic UI stays consistent. */}
+                <label htmlFor={`prospect-status-${p.id}`} className="sr-only">
+                  Durum güncelle: {p.companyName}
+                </label>
+                <select
+                  id={`prospect-status-${p.id}`}
+                  value={p.status}
+                  disabled={updateStatus.isPending}
+                  onChange={(e) =>
+                    updateStatus.mutate({
+                      id: p.id,
+                      status: e.target.value as ProspectStatus,
+                    })
+                  }
+                  className="bg-[#1E1F20] border border-white/10 rounded px-2 py-1 text-xs text-[#E5E7EB] focus:outline-none focus:border-amber-500/50 disabled:opacity-60"
+                >
+                  {STATUS_OPTIONS.map((s) => (
+                    <option key={s} value={s}>
+                      {STATUS_LABELS[s]}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
           ))}
         </div>

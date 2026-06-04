@@ -38,9 +38,36 @@ const DEFAULT_OPTIONS: LenisOptions = {
   easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
 };
 
+/**
+ * Check OS-level reduced-motion preference (WCAG 2.3.3 + Apple HIG +
+ * Material Design accessibility guidance). Users who set
+ * "Reduce Motion" / "Bewegung reduzieren" in their OS settings get the
+ * browser's native instant scroll path instead of Lenis's inertia
+ * physics — both for vestibular comfort and battery / CPU savings on
+ * older devices.
+ */
+function prefersReducedMotion(): boolean {
+  if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') {
+    return false;
+  }
+  try {
+    return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  } catch {
+    return false;
+  }
+}
+
 /** Initialise and start Lenis scroll loop. Wires GSAP ScrollTrigger tick. */
 export function startLenis(options: LenisOptions = {}): void {
   if (lenis) return; // Already running
+
+  // S13-R2-P2 — respect OS-level prefers-reduced-motion. Lenis adds a
+  // physics-based inertia layer over native scroll; users who explicitly
+  // opt out of motion (vestibular disorders, low-spec hardware, battery
+  // saver) must NOT be force-smoothed. Bail before instantiation —
+  // browser falls back to its standard instant scroll, GSAP ScrollTrigger
+  // wires itself to native scroll events automatically.
+  if (prefersReducedMotion()) return;
 
   lenis = new Lenis({
     ...DEFAULT_OPTIONS,

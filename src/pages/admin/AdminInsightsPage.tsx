@@ -103,7 +103,8 @@ const PIPELINE_STATUSES = [
 function useDashboardStats() {
   return useQuery<DashboardStats>({
     queryKey: ['admin', 'insights', 'dashboard'],
-    queryFn: () => apiClient.get('/api/v1/admin/insights/dashboard/stats').then((r) => r.data.data),
+    // P44-T06: apiClient baseURL already includes `/api`; do NOT repeat it here.
+    queryFn: () => apiClient.get('/v1/admin/insights/dashboard/stats').then((r) => r.data.data),
     staleTime: 60_000,
   });
 }
@@ -112,7 +113,7 @@ function useModerateComment() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: ({ id, status }: { id: string; status: string }) =>
-      apiClient.patch(`/api/v1/admin/insights/comments/${id}`, { status }),
+      apiClient.patch(`/v1/admin/insights/comments/${id}`, { status }),
     onSuccess: () => {
       void qc.invalidateQueries({ queryKey: ['admin', 'insights', 'dashboard'] });
     },
