@@ -3,9 +3,13 @@
     "name": "Initial JS (entry + critical chunks, brotli)",
     "path": [
       "dist/assets/main-*.js",
-      "dist/assets/vendor-*.js"
+      "dist/assets/vendor-*.js",
+      "!dist/assets/vendor-code-*.js",
+      "!dist/assets/vendor-diagrams-*.js",
+      "!dist/assets/vendor-lightbox-*.js",
+      "!dist/assets/vendor-math-*.js"
     ],
-    "limit": "120 KB",
+    "limit": "105 KB",
     "brotli": true,
     "gzip": false
   },
@@ -13,9 +17,13 @@
     "name": "Initial JS (gzip fallback)",
     "path": [
       "dist/assets/main-*.js",
-      "dist/assets/vendor-*.js"
+      "dist/assets/vendor-*.js",
+      "!dist/assets/vendor-code-*.js",
+      "!dist/assets/vendor-diagrams-*.js",
+      "!dist/assets/vendor-lightbox-*.js",
+      "!dist/assets/vendor-math-*.js"
     ],
-    "limit": "160 KB",
+    "limit": "130 KB",
     "gzip": true
   },
   {
