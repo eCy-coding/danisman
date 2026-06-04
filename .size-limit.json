@@ -1,6 +1,5 @@
 [
   {
-    "_comment": "S13-R13 P1-9 — Entry glob was matching vendor-code/diagrams/lightbox/math (named split chunks not on the critical path), inflating the 88.4 KB number. Real initial-JS measurement is ~75 KB brotli. Exclude the named splits via !-prefix; tighten limit to 90 KB brotli / 115 KB gzip to lock in the real measurement.",
     "name": "Initial JS (entry + critical chunks, brotli)",
     "path": [
       "dist/assets/main-*.js",
