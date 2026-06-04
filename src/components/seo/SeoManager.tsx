@@ -33,7 +33,11 @@ export const SeoManager: React.FC<SeoManagerProps> = ({
   // hreflang (P39-T01 — bilingual SEO'nun çekirdeği) ve sabit OG/Twitter
   // varsayılanları. Path'e bağlı canonical/og:url buradan KALDIRILDI ki
   // per-page değerleri ezmesin.
-  const finalTitle = title ? `${title} | eCyPro` : undefined;
+  // S13-P4 F2 — mirror SEO.tsx defensive append (skip suffix when the page
+  // title already includes the brand). Prevents "… | eCyPro Premium
+  // Consulting | eCyPro" double-brand in SERP & social previews.
+  const titleHasBrand = title ? /\becypro\b/i.test(title) : false;
+  const finalTitle = title ? (titleHasBrand ? title : `${title} | eCyPro`) : undefined;
   const finalDescription = description ?? undefined;
   const ogLocale = currentLang === 'tr' ? 'tr_TR' : 'en_US';
   const ogLocaleAlt = currentLang === 'tr' ? 'en_US' : 'tr_TR';

@@ -338,15 +338,30 @@ export const Hero: React.FC = () => {
               </span>
             </motion.div>
 
-            <h1 className="font-serif-display text-5xl md:text-6xl lg:text-[5.5rem] font-bold text-white leading-[1.05] mb-8 tracking-tight">
+            {/*
+              S13-P4 F1 — Three `<span class="block">` segments emit a
+              textContent of "Vizyon. Strateji.SürdürülebilirSonuç." because
+              there are no whitespace text nodes between them. Screen readers
+              and Google's text extractor concatenate verbatim — premium
+              SEO/a11y damage. Fix without altering visual layout:
+                (a) aria-label on <h1> sets the canonical spoken / indexed
+                    string ("Vizyon. Strateji. Sürdürülebilir Sonuç.")
+                (b) zero-width space-text nodes between segments rescue
+                    user copy-paste output without affecting line breaks
+                    (block-level spans still control visible layout).
+            */}
+            <h1
+              className="font-serif-display text-5xl md:text-6xl lg:text-[5.5rem] font-bold text-white leading-[1.05] mb-8 tracking-tight"
+              aria-label={`${currentContent.title.line1[lang]} ${currentContent.title.highlight[lang]} ${currentContent.title.line2[lang]}`}
+            >
               <span className="block overflow-hidden pb-1 drop-shadow-sm">
                 <TextReveal immediate delay={0.05} text={currentContent.title.line1[lang]} />
-              </span>
+              </span>{' '}
               <span className="block overflow-hidden pb-2">
                 <span className="bg-linear-to-r from-blue-400 via-primary to-secondary bg-clip-text text-transparent shimmer inline-block">
                   <TextReveal immediate delay={0.15} text={currentContent.title.highlight[lang]} />
                 </span>
-              </span>
+              </span>{' '}
               <span className="block overflow-hidden pt-1 drop-shadow-sm">
                 <TextReveal immediate delay={0.25} text={currentContent.title.line2[lang]} />
               </span>
