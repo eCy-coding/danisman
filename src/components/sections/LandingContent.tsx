@@ -75,8 +75,15 @@ const SectionShell: React.FC<{ minHeight?: string; cards?: number; children: Rea
   children,
 }) => {
   const { ref, inView } = useInViewDefer({ rootMargin: '300px 0px' });
+  // R7-A3 — content-visibility:auto lets the browser skip paint + layout
+  // for below-fold sections until they approach the viewport. Pairs with
+  // contain-intrinsic-size so the scrollbar geometry stays stable (no CLS).
   return (
-    <div ref={ref} style={{ minHeight: inView ? undefined : minHeight }}>
+    <div
+      ref={ref}
+      className="[content-visibility:auto] [contain-intrinsic-size:auto_500px]"
+      style={{ minHeight: inView ? undefined : minHeight }}
+    >
       {inView ? (
         <Suspense fallback={<SectionSkeleton cards={cards} />}>{children}</Suspense>
       ) : (

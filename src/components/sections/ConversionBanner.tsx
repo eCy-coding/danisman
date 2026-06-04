@@ -181,7 +181,7 @@ export const ConversionBanner: React.FC<ConversionBannerProps> = ({
               {/* Avatar queue */}
               <div className="flex items-center gap-3 pt-1 pl-1">
                 <div className="flex -space-x-2.5">
-                  {['#2563EB', '#7C3AED', '#10B981', '#F59E0B', '#EF4444'].map((c, i) => (
+                  {['#2563EB', '#7C3AED', '#065F46', '#92400E', '#B91C1C'].map((c, i) => (
                     <div
                       key={i}
                       className="w-8 h-8 rounded-full border-2 border-[#080d1a] flex items-center justify-center text-xs text-white font-semibold"

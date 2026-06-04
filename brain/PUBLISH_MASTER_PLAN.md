@@ -6,6 +6,47 @@
 
 ---
 
+## Sprint 13 — Homepage Hardening Closure (2026-06-04)
+
+> **Durum:** 7 round kapalı, 9 PR canlı. Anasayfa a11y + perf + SEO + image pipeline + Playwright e2e fully covered. Playbook: `~/Documents/eCyPro-memory/slash-homepage-audit.md`.
+
+### PR Cascade
+
+| PR | Branch | Tema | Durum |
+|---|---|---|---|
+| #189 | `sprint-13/homepage-hardening-cascade` (R12 prior) | 6-faz audit + 7 fix (F1/F2/F7/F8/F13/F17/F26 Contact backend wire + H1 spacing + SchemaOrg dedupe) | OPEN |
+| #190 | `sprint-13/r1-homepage-hardening` | R1: 7 atomic fix initial cascade | OPEN |
+| #191 | `sprint-13/r2-homepage-deep-fixes` | R2: Lenis reduced-motion gate + WEB_VITALS payload reshape + zod enum + Sentry tracesSampleRate 0.02 + denyUrls | OPEN |
+| #192 | `sprint-13/r3-homepage-agent-audit` | R3: 3 paralel agent (a11y/perf/SEO) → 10 surgical fix (FAQ 2→8 Q&A, Hero DataFlowBackground gate, TR title trim, og:image dims, scroll-indicator a11y, founder.jpg eager+priority) | OPEN |
+| #193 | `sprint-13/r4-homepage-cluster-cleanup` | R4: 11 fix (SEO cluster S1/S3/S7/S8/S9/S14 + a11y contrast A5/A11/A14/A16 + Newsletter A17/A18 + Insights A12) | OPEN |
+| #194 | `sprint-13/r5-homepage-a11y-seo-ci` | R5: a11y deep (carousel keyboard, ConversionBanner contrast) + SEO scrub (phone E.164, Person.sameAs) + og:home.png live + schema-validator.yml CI gate + validate-schemas.mjs | OPEN |
+| #195 | `sprint-13/r6-homepage-motion-cls` | R6: Hero StatCard Framer→CSS (15 motion primitives drop) + App Shell h1 Playfair parity + GeoPersonalizedHero placeholderData + backend ops runbook | OPEN |
+| #196 | `sprint-13/r7-homepage-mobile-cv` | R7: Lenis coarse-pointer gate + ValueProp blur-3xl mobile gate + useReducedMotion + Hero 140vh→110vh + content-visibility:auto 11 below-fold sections + Services Framer→CSS keyframe + Lighthouse thresholds tightened (Perf 0.85→0.90, A11y/BP/SEO 1.00, CLS 0.05) | OPEN |
+| #197 | `sprint-13/r8-image-pipeline-e2e` | R8: sharp ESM convert-images.mjs + AVIF q50 + WebP q80 + retina @2x + Hero `<picture>` chain + index.html preload + Playwright e2e 5 spec (C1 hero CTA, C2 contact form, C3 FAQ, C4 mega-menu Esc, C5 SuccessStories ArrowRight) | OPEN |
+
+### Phase Items Closed by S13
+
+These items from earlier W (Weakness) / G (Gap) lists are now covered:
+
+- **W3** (Tailwind v4 cosmetic warns) — R6 motion budget + class hygiene sweep
+- **G2** (Newsletter inline form) — R4 A17/A18 form a11y fixes confirm form ships
+- **G4** (i18n en/tr completion) — R5 TR title + Person.sameAs scrub, SEO surface bilingual
+- **W10** (Bundle / motion overload) — R6 Framer→CSS conversion (~20 motion primitives removed above-fold)
+- Anasayfa Core Web Vitals + a11y + JSON-LD baseline (prev "Phase 15 W1" implicit) — R3..R7 cluster
+
+### Open Verification Queue (R9)
+
+- R8-A production deploy verify (Tier-3 sequential PR merge order)
+- WEB_VITALS Neon prod migration (idempotent `ADD VALUE IF NOT EXISTS`)
+- Sentry org quota lever (503 envelope POST)
+- e2e verify matrix (R8-C 5 spec on production)
+- R8-D schema-validator dry-run after R5 deploy
+- R8-E S13 retro doc
+
+**Owner gate:** PR sequential merge order: #189 → #190 → #191 → #192 → #193 → #194 → #195 → #196 → #197. Tier-3 sahip onayı.
+
+---
+
 ## 0. Komutan Bağlamı
 
 - **Repo kökü:** `/Users/emrecnyngmail.com/Desktop/copy-of-ecypro-premium-consulting 2`

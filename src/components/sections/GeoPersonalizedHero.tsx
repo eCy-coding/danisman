@@ -72,33 +72,48 @@ const DEFAULT_CONTENT = {
   color: 'text-secondary',
 };
 
+// R6-C2 — placeholderData seed. Default to TR because (a) it's the
+// largest single-country traffic slice for ecypro.com, (b) any TR/EU
+// banner has identical layout dimensions to the resolved banner so the
+// pixel box never shifts. The real geo response will replace these
+// fields in-place once the API responds.
+const PLACEHOLDER_RESPONSE: ApiResponse = {
+  status: 'success',
+  data: {
+    country: 'TR',
+    nameTr: 'Türkiye',
+    nameEn: 'Türkiye',
+    currency: 'TRY',
+    flag: '🇹🇷',
+    suggestedLang: 'tr',
+    message: '',
+  },
+};
+
 export const GeoPersonalizedHero: React.FC = () => {
   const { i18n } = useTranslation();
   const lang = (i18n.language || 'en').startsWith('tr') ? 'tr' : 'en';
   const { currency } = useCurrencyStore();
 
-  const { data, isLoading } = useQuery<ApiResponse>({
+  // R6-C2 — placeholderData eliminates the skeleton CLS flicker. The geo
+  // banner API has variable latency (Cloudflare → Render cold-start path
+  // is 300-1200ms), and the previous isLoading skeleton swap caused a
+  // visible layout shift when the real banner painted. We hand back a
+  // generic "TR" default immediately so the first render is real content;
+  // when the actual geo data arrives TanStack swaps it in without
+  // remounting the subtree.
+  const { data } = useQuery<ApiResponse>({
     queryKey: ['geo-banner'],
     queryFn: () => apiClient.get<ApiResponse>('/geo/banner').then((r) => r.data),
     staleTime: 60 * 60 * 1000,
     gcTime: 2 * 60 * 60 * 1000,
     retry: 1,
     refetchOnWindowFocus: false,
+    placeholderData: PLACEHOLDER_RESPONSE,
   });
 
   const geoData = data?.data;
   const content = (geoData ? GEO_CONTENT[geoData.country] : null) ?? DEFAULT_CONTENT;
-
-  if (isLoading) {
-    return (
-      <div className="py-8 px-4" data-testid="geo-hero-loading">
-        <div className="max-w-3xl mx-auto">
-          <div className="h-5 w-32 bg-white/5 rounded animate-pulse mb-3" />
-          <div className="h-8 w-96 max-w-full bg-white/10 rounded animate-pulse" />
-        </div>
-      </div>
-    );
-  }
 
   if (!geoData) return null; // fallback: zaten mevcut hero yeterli
 
