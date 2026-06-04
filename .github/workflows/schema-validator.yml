@@ -1,0 +1,123 @@
+# schema-validator.yml — S13-R5-G4
+#
+# Validate the homepage JSON-LD payload against schema.org definitions and
+# Google Rich Results preset using `structured-data-testing-tool` (sdtt).
+#
+# Why this exists:
+#   - Existing a11y-ci.yml gates accessibility, lighthouse-ci.yml gates
+#     performance/SEO basics, but neither catches malformed JSON-LD or
+#     Rich Result eligibility regressions.
+#   - S13-R3-S2 was a "structured data does not match visible content"
+#     bug that ate 6 weeks of rich-result eligibility. Catching the next
+#     one at PR time is cheaper than catching it in Search Console
+#     three weeks after deploy.
+#
+# Scope:
+#   - Runs on the built static homepage (`/`) only — this is the
+#     highest-traffic + Rich-Result-eligible route. Other routes can be
+#     added by extending the `paths` array in scripts/validate-schemas.mjs.
+#
+# Trigger:
+#   - PR to main: gate the change (block merge on regression).
+#   - Push to main: post-deploy verification.
+#   - workflow_dispatch: manual ad-hoc.
+#   - schedule daily 03:30 UTC: drift detection if upstream schema.org
+#     definitions change.
+
+name: Schema Validator (JSON-LD)
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'src/components/seo/**'
+      - 'src/components/common/SEO.tsx'
+      - 'src/pages/LandingPage.tsx'
+      - 'src/components/sections/FAQSection.tsx'
+      - '.github/workflows/schema-validator.yml'
+      - 'scripts/validate-schemas.mjs'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'src/components/seo/**'
+      - 'src/components/common/SEO.tsx'
+      - 'src/pages/LandingPage.tsx'
+      - 'src/components/sections/FAQSection.tsx'
+      - '.github/workflows/schema-validator.yml'
+      - 'scripts/validate-schemas.mjs'
+  workflow_dispatch:
+  schedule:
+    - cron: '30 3 * * *'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: schema-validator-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: Validate homepage JSON-LD
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci --no-audit --no-fund
+
+      - name: Install structured-data-testing-tool
+        # Pinned to a known-good version. Update only after vetting upstream
+        # schema.org diff against our Person/FAQPage/Organization usage.
+        run: npm install -g structured-data-testing-tool@^5.1.0 || npm install -g structured-data-testing-tool
+
+      - name: Install Playwright Chromium
+        # S13-R13 P1-7 — validate-schemas.mjs imports playwright but the
+        # chromium browser binary is a separate download. CI was missing it,
+        # so `chromium.launch()` failed before any schema check ran.
+        run: npx playwright install --with-deps chromium
+
+      - name: Build site (homepage critical)
+        run: npm run build
+        env:
+          NODE_OPTIONS: '--max-old-space-size=4096'
+
+      - name: Start preview server
+        # S13-R13 P1-7 — Previously the validator pointed at `file://$PWD/dist`
+        # which broke SPA route resolution (chrome's file:// scheme refuses
+        # hashed JS chunk preloads and /tr /en don't exist as static files).
+        # Vite preview serves the SPA with proper routing + Content-Type.
+        run: |
+          npx vite preview --port 4173 &
+          npx wait-on http://localhost:4173 --timeout 60000
+
+      - name: Validate homepage JSON-LD via sdtt
+        # Two passes:
+        #   1) Schema.org base validation — Google.org / Schema.org core types.
+        #   2) Google Rich Results preset — FAQPage, Organization,
+        #      ProfessionalService, Person, WebSite, BreadcrumbList.
+        #
+        # Script renders the index.html through a headless browser to
+        # capture client-side-injected schemas (upsertJsonLd nodes from
+        # SchemaOrg.tsx + SEO.tsx). Static HTML alone misses them.
+        run: |
+          node scripts/validate-schemas.mjs --base-url http://localhost:4173 --route / --preset google
+          node scripts/validate-schemas.mjs --base-url http://localhost:4173 --route /tr --preset google
+          node scripts/validate-schemas.mjs --base-url http://localhost:4173 --route /en --preset google
+
+      - name: Upload validation report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: schema-validation-report
+          path: schema-validation-report.json
+          retention-days: 30
