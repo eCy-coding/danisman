@@ -68,7 +68,18 @@ jobs:
         with:
           context: .
           file: ./Dockerfile
-          platforms: linux/amd64,linux/arm64
+          # S13-R13 P1-6 — Was `linux/amd64,linux/arm64`. The arm64 build runs
+          # under QEMU emulation; combined with alpine + node-gyp + node-pty
+          # cross-compile it routinely timed out > 60min and surfaced as the
+          # "Docker CI/CD build & push fail" workflow signal. amd64 alone
+          # covers Render/Vercel/GHCR consumers today; revisit when host
+          # moves to Apple Silicon.
+          platforms: linux/amd64
+          # S13-R13 P1-6 — Pin `target: backend` so the published image is
+          # deterministic. Without target, BuildKit builds the last stage in
+          # the Dockerfile — that already happens to be `backend`, but making
+          # it explicit removes the foot-gun if stages are reordered.
+          target: backend
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
