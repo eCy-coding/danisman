@@ -83,7 +83,15 @@ export const SEO: React.FC<SEOProps> = ({
     language === 'tr'
       ? 'eCyPro | Premium Kurumsal Danışmanlık'
       : 'eCyPro | Premium Management Consulting';
-  const finalTitle = title ? `${title} | eCyPro` : siteTitle;
+  // S13-P4 F2 — Pages that already include the brand in their per-page
+  // title (e.g. "… | eCyPro Premium Consulting") were getting "| eCyPro"
+  // appended again, producing "… | eCyPro Premium Consulting | eCyPro" in
+  // SERP and OG previews. Skip the suffix when the page title already
+  // contains the brand token (case-insensitive). Cheap defensive guard;
+  // pages that want explicit double-brand still can opt out by passing the
+  // already-suffixed title.
+  const titleHasBrand = title ? /\becypro\b/i.test(title) : false;
+  const finalTitle = title ? (titleHasBrand ? title : `${title} | eCyPro`) : siteTitle;
 
   const siteDescription =
     language === 'tr'
