@@ -169,7 +169,7 @@ jobs:
           path: playwright-report/
           retention-days: 14
 
-  # ── Phase 40-T02: Lighthouse CI — warn-only on preview (no CDN) ──
+  # ── Phase 40-T02: Lighthouse CI — preview build, warn-only ──
   lighthouse:
     name: Lighthouse Budget
     needs: build
@@ -184,27 +184,12 @@ jobs:
       - run: npm ci
       - name: Build
         run: npm run build
-      - name: Start preview server
-        run: |
-          npx vite preview --port 4173 > /tmp/preview.log 2>&1 &
-          # Wait up to ~30s for the preview to come up.
-          for i in $(seq 1 30); do
-            if curl -sSf http://localhost:4173 > /dev/null; then
-              echo "Preview ready after ${i}s"
-              break
-            fi
-            sleep 1
-          done
-      - name: Run Lighthouse CI (fail-on-regression)
-        run: |
-          npx lhci autorun \
-            --collect.url=http://localhost:4173 \
-            --collect.numberOfRuns=1 \
-            --assert.assertions.categories:accessibility=warn,0.90 \
-            --assert.assertions.categories:seo=warn,0.90 \
-            --assert.assertions.categories:best-practices=warn,0.85 \
-            --assert.assertions.categories:performance=warn,0.50 \
-            --upload.target=temporary-public-storage
+      - name: Install LHCI
+        run: npm install -g @lhci/cli@0.13.x
+      - name: Run Lighthouse CI
+        run: lhci autorun --config lighthouserc.json
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
       - uses: actions/upload-artifact@v4
         if: always()
         with:
