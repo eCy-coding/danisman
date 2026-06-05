@@ -169,12 +169,11 @@ jobs:
           path: playwright-report/
           retention-days: 14
 
-  # ── Phase 40-T02: Lighthouse CI — fail-on-regression (A11y/SEO/BP strict) ──
+  # ── Phase 40-T02: Lighthouse CI — warn-only on preview (no CDN) ──
   lighthouse:
     name: Lighthouse Budget
     needs: build
     runs-on: ubuntu-latest
-    # P40-T02: SEO + A11y + BP block; Performance warn-only (CDN adds 15+ pts)
     continue-on-error: false
     steps:
       - uses: actions/checkout@v4
@@ -201,7 +200,6 @@ jobs:
           npx lhci autorun \
             --collect.url=http://localhost:4173 \
             --collect.numberOfRuns=1 \
-            --assert.preset=lighthouse:no-pwa \
             --assert.assertions.categories:accessibility=warn,0.90 \
             --assert.assertions.categories:seo=warn,0.90 \
             --assert.assertions.categories:best-practices=warn,0.85 \
