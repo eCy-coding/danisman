@@ -88,7 +88,7 @@ test.describe('Admin Leads Page', () => {
     });
 
     await page.goto(`${BASE_URL}/admin/leads`);
-    await page.waitForLoadState('networkidle');
+    await page.waitForLoadState('load');
 
     // Page must have an h1
     const h1 = page.locator('h1');
@@ -116,7 +116,7 @@ test.describe('Admin Leads Page', () => {
     });
 
     await page.goto(`${BASE_URL}/admin/leads`);
-    await page.waitForLoadState('networkidle');
+    await page.waitForLoadState('load');
 
     // Table or list showing the mocked lead
     const cell = page.getByText('Ahmet Yılmaz');
@@ -158,7 +158,7 @@ test.describe('Admin Leads Page', () => {
     });
 
     await page.goto(`${BASE_URL}/admin/leads`);
-    await page.waitForLoadState('networkidle');
+    await page.waitForLoadState('load');
 
     // Fill form
     const nameInput = page.getByLabel(/ad soyad/i);

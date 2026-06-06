@@ -15,7 +15,8 @@ const BASE_URL = process.env.PREVIEW_URL ?? 'http://localhost:4173';
 test.describe('Phase 0 — AdminGuard RBAC enforcement (unauthenticated)', () => {
   test('unauthenticated access to /admin/blog redirects to login', async ({ page }) => {
     await page.goto(`${BASE_URL}/admin/blog`);
-    await page.waitForLoadState('domcontentloaded');
+    // SPA auth-guard fires after React hydration; wait for the actual URL change
+    await page.waitForURL(/\/admin\/login$/, { timeout: 8000 });
     const url = new URL(page.url());
     // Must redirect to login, never serve blog admin to unauthenticated user
     expect(url.pathname).toMatch(/\/admin\/login$/);
@@ -23,7 +24,8 @@ test.describe('Phase 0 — AdminGuard RBAC enforcement (unauthenticated)', () =>
 
   test('unauthenticated access to /admin/users redirects to login', async ({ page }) => {
     await page.goto(`${BASE_URL}/admin/users`);
-    await page.waitForLoadState('domcontentloaded');
+    // SPA auth-guard fires after React hydration; wait for the actual URL change
+    await page.waitForURL(/\/admin\/login$/, { timeout: 8000 });
     const url = new URL(page.url());
     expect(url.pathname).toMatch(/\/admin\/login$/);
   });

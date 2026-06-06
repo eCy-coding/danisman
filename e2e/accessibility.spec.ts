@@ -4,8 +4,8 @@ import AxeBuilder from '@axe-core/playwright';
 test.describe('Phase 33: The Standard Bearer (Accessibility)', () => {
   test('should pass A11y scan on Homepage', async ({ page }) => {
     await page.goto('/');
-    await page.waitForLoadState('networkidle');
-    await page.waitForTimeout(1500);
+    await page.waitForLoadState('load');
+    await page.waitForTimeout(2000);
 
     const accessibilityScanResults = await new AxeBuilder({ page })
       .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])

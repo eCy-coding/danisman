@@ -52,9 +52,9 @@ test.describe('Admin insights — public smoke (no auth)', () => {
   for (const route of INSIGHTS_ROUTES) {
     test(`${route} redirects unauthenticated user to /admin/login`, async ({ page }) => {
       await page.goto(`${BASE_URL}${route}`);
-      await page.waitForLoadState('domcontentloaded');
+      // SPA auth-guard fires after React hydration; wait for the actual URL change
+      await page.waitForURL(/\/admin(\/login)?$/, { timeout: 8000 });
       const url = new URL(page.url());
-      // SPA auth-guard: path becomes /admin/login (or stays /admin/login after redirect)
       expect(url.pathname).toMatch(/^\/admin(\/login)?$/);
     });
   }
