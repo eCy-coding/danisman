@@ -190,6 +190,7 @@ describe('AdminInsightsCategoriesPage — "+ Kategori Ekle" modal', () => {
       expect(vi.mocked(apiClient.post)).toHaveBeenCalledWith(
         '/admin/insights/categories',
         expect.objectContaining({ nameTr: 'Yeni Kategori' }),
+        expect.anything(), // idempotency headers added in P46
       ),
     );
   });

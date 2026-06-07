@@ -74,12 +74,14 @@ test.describe('SEO Meta Smoke', () => {
   test('page titles are unique across routes', async ({ page }) => {
     const titles: string[] = [];
 
+    const DEFAULT_TITLE = 'eCyPro — KVKK + EU Regulatory Consulting';
     for (const route of ROUTES) {
       const response = await page.goto(route.path);
       if (route.graceful && response && response.status() === 404) continue;
-      // Wait for React to render route-specific title. networkidle times out on
-      // production (persistent WS/polling connections), so use a short fixed wait.
-      await page.waitForTimeout(800);
+      // Wait for React to replace the shell title with the route-specific one
+      await page
+        .waitForFunction((d) => document.title !== d, DEFAULT_TITLE, { timeout: 5_000 })
+        .catch(() => {});
       titles.push(await page.title());
     }
 
