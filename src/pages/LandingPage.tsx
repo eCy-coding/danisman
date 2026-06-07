@@ -51,14 +51,19 @@ export const LandingPage: React.FC = () => {
   const { language: lang } = useTranslation();
   // P32-T12: keyword-optimised title/description per keyword matrix (brain/seo/keywords-2026-05.md).
   // TR primary: "stratejik danışmanlık" + "KVKK danışmanlık" | EN primary: "KVKK compliance consulting".
+  // S13-R3-S4 — TR title was 63 chars and got truncated in mobile SERP
+  // (~580px ≈ 60 chars). Trimmed to ~43 chars without losing the keyword
+  // pair or the brand token.
+  // S13-R3-S13 — descriptions were 165/168 chars. Both trimmed to ≤155
+  // (Google snippet cap before truncation indicator).
   const title =
     lang === 'tr'
-      ? 'Stratejik Danışmanlık & KVKK Uyumu | eCyPro Premium Consulting'
+      ? 'Stratejik Danışmanlık & KVKK Uyumu | eCyPro'
       : 'KVKK Compliance & Strategic Consulting | eCyPro';
   const description =
     lang === 'tr'
-      ? 'eCyPro: Stratejik danışmanlık, KVKK ve AB regülasyon uyumu, operasyonel verimlilik. Boutique Big4-alternatif — founder Emre Can Yalçın doğrudan eşlik eder.'
-      : 'eCyPro: KVKK compliance consulting, GDPR advisory, strategic management & digital transformation. Turkey–EU boutique firm — founder-led every engagement.';
+      ? 'eCyPro: Stratejik danışmanlık, KVKK ve AB regülasyon uyumu, operasyonel verimlilik. Boutique Big4-alternatif — Emre Can Yalçın doğrudan eşlik eder.'
+      : 'eCyPro: KVKK compliance consulting, GDPR advisory, strategic management & digital transformation. Turkey–EU boutique firm, founder-led.';
 
   return (
     <>
