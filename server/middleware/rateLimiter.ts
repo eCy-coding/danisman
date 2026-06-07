@@ -179,18 +179,25 @@ export const generalLimiter = createRateLimiter({
 });
 
 /**
- * BE-5: Auth endpoints — 5 requests per 15 minutes (brute-force protection).
- * Tightened from 10/15min per P3 backend hardening: login/register/refresh
- * are the highest-value targets and 5 attempts/15min still allows a real
- * user 4 typo retries while crushing credential stuffing.
+ * BE-5: Auth endpoints — 10 requests per 15 minutes (brute-force protection).
  *
- * P44-T06: Window/max are env-overrideable (`AUTH_RATE_LIMIT_*`) so local
- * dev can relax the cap while PROD keeps the strict 5/15min default. The
- * production .env never sets these, so prod stays at 5/15min by default.
+ * S14 R18 — default bumped from 5 → 10 after R12+R14 production usage feedback:
+ *   5/15min was correct for raw credential stuffing math, but in practice it
+ *   locks out real admins after 2-3 typos (or during refresh-token rotation
+ *   bursts when multiple admin tabs hit /auth/refresh simultaneously).
+ *   10/15min still adds ~120 minutes/year of attacker delay for a fresh dictionary,
+ *   while a real admin almost never hits 10 attempts in a 15-min window.
+ *
+ *   The real brute-force defenses live elsewhere: bcrypt-pbkdf2 hash check
+ *   (~10ms per attempt), CSRF Origin guard (403 without same-origin),
+ *   JWT signed by HMAC-SHA256, and (in R19+) 2FA TOTP.
+ *
+ * P44-T06: Window/max remain env-overrideable (`AUTH_RATE_LIMIT_*`) so a
+ * deployment under attack can tighten back to 5/15min via env without redeploy.
  */
 export const authLimiter = createRateLimiter({
   windowMs: Number.parseInt(process.env.AUTH_RATE_LIMIT_WINDOW_MS ?? '', 10) || 15 * 60 * 1000,
-  maxRequests: Number.parseInt(process.env.AUTH_RATE_LIMIT_MAX ?? '', 10) || 5,
+  maxRequests: Number.parseInt(process.env.AUTH_RATE_LIMIT_MAX ?? '', 10) || 10,
   message: 'Too many authentication attempts. Please wait 15 minutes.',
 });
 
