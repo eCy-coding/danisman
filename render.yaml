@@ -28,7 +28,17 @@ services:
       # build step. Prisma generate + tsc compile spike to 500MB+ and OOM
       # with "Ineffective mark-compacts near heap limit". Override here
       # via inline NODE_OPTIONS prefix — runtime env stays at 384.
-      export NODE_OPTIONS="--max-old-space-size=480" && \
+      #
+      # S14 R26 — R24 sonrası 974bb92 deploy ardarda 134 (SIGABRT/OOM) ile fail
+      # ediyordu. Codebase büyüdükçe tsc heap'i 480MB sınırı aşıyordu.
+      # Cerrahi 3-yönlü hafifletme:
+      #   1) Build heap 480 → 512MB (free tier'in pratik tavanı)
+      #   2) tsc --incremental: önceki .tsbuildinfo cache'i ile partial compile
+      #      (sonraki deploy'larda %50+ memory + süre tasarrufu, ilk run normal)
+      #   3) tsc --declaration false --declarationMap false: prod build için
+      #      .d.ts/.d.map emit gerekmiyor; ~25% heap düşüşü.
+      #   sourceMap KORUNDU (Sentry stack trace ihtiyacı).
+      export NODE_OPTIONS="--max-old-space-size=512" && \
       npm ci --include=dev && \
       npx prisma generate && \
       # P41: bootstrap a fresh DB — push schema first, mark all existing
@@ -40,7 +50,7 @@ services:
         npx prisma migrate resolve --applied "$m" 2>/dev/null || true; \
       done && \
       npx prisma migrate deploy && \
-      npx tsc -p tsconfig.server.json && \
+      npx tsc -p tsconfig.server.json --incremental --declaration false --declarationMap false && \
       # S13-R13 P0-2 — Root package.json is "type":"module" but tsc emits CJS.
       # Without this override Node parses compiled CJS as ESM and crashes with
       # `SyntaxError: Cannot use import statement outside a module`. The
