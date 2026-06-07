@@ -46,10 +46,14 @@ test.describe('KVKK Consent Banner', () => {
     // Banner must disappear
     await expect(bannerEl).toBeHidden({ timeout: 5_000 });
 
-    // Consent must be persisted in localStorage
-    const v1 = await page.evaluate(() => localStorage.getItem('ecypro_cookie_consent'));
+    // Consent must be persisted in localStorage. The live CookieBanner writes
+    // the canonical v1 key (ecypro_consent_v1, P44-T11/#179); consent.ts also
+    // mirrors to v2. Legacy pre-v1 devices used ecypro_cookie_consent. Accept
+    // any of the three so the test tracks the real write path.
+    const canonical = await page.evaluate(() => localStorage.getItem('ecypro_consent_v1'));
     const v2 = await page.evaluate(() => localStorage.getItem('ecypro_cookie_consent_v2'));
-    expect(v1 || v2).toBeTruthy();
+    const legacy = await page.evaluate(() => localStorage.getItem('ecypro_cookie_consent'));
+    expect(canonical || v2 || legacy).toBeTruthy();
 
     // Reload — banner must stay hidden
     await page.reload({ waitUntil: 'domcontentloaded' });

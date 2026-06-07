@@ -132,8 +132,13 @@ jobs:
           path: dist/
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
-      - name: Run E2E Tests
-        run: npx playwright test
+      - name: Run E2E Tests (smoke subset against local preview)
+        # S14 — full e2e/ suite includes crawl_*/axe-production/consulting specs
+        # that target LIVE production (real API keys, DB, MCP) and cannot pass
+        # against a local vite preview. PR gate runs the curated smoke subset
+        # (relative-path specs) via the default config's localhost webServer.
+        # Prod-targeting audits run separately via playwright.smoke.config.ts.
+        run: npx playwright test e2e/smoke
       - uses: actions/upload-artifact@v4
         if: always()
         with:
