@@ -1,0 +1,24 @@
+# Gitleaks fingerprint allowlist (.gitleaksignore — auto-loaded by gitleaks v8)
+# S14 R10 — gitleaks-action@v2 .gitleaks.toml path patterns'ları her zaman
+# uygulamıyor; fingerprint-based ignore daha güvenilir.
+#
+# Whitelist: 8 finding'in tümü FALSE POSITIVE (test fixtures, docs, examples).
+# Audit: 2026-06-07 R9 launch-prep cascade post-mortem.
+
+# .env.example — placeholder API key sample
+cc655014835421bb19021511d853f8135c790ed6:.env.example:generic-api-key:287
+
+# brain/roadmap — Early Hints CDN config example: <"/fonts/...">; rel=preload
+cc655014835421bb19021511d853f8135c790ed6:brain/roadmap/roadmap_30.md:generic-api-key:73
+
+# docs/prompts — security hardening example code
+cc655014835421bb19021511d853f8135c790ed6:docs/prompts/06-security-hardening.md:generic-api-key:25
+
+# e2e test — JWT fixture (test-only token)
+cc655014835421bb19021511d853f8135c790ed6:e2e/crawl_security_headers.spec.ts:jwt:223
+
+# server tests — mock API keys
+cc655014835421bb19021511d853f8135c790ed6:server/lib/posthog-server.test.ts:generic-api-key:22
+cc655014835421bb19021511d853f8135c790ed6:server/middleware/idempotency.test.ts:generic-api-key:42
+cc655014835421bb19021511d853f8135c790ed6:server/routes/calendly.test.ts:generic-api-key:22
+cc655014835421bb19021511d853f8135c790ed6:server/routes/gdpr.test.ts:generic-api-key:117
