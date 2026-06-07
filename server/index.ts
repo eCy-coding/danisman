@@ -154,7 +154,19 @@ app.use(corsProd());
 // Webhooks + health probes carry no Origin → bypass via prefix list.
 app.use(
   originGuard({
-    ignore: ['/api/webhooks', '/api/health', '/api/sse', '/__health', '/healthz', '/readyz'],
+    // S14 R13 — SSE path'lerinin İKİ versiyonu da originGuard'dan muaf olmalı:
+    // /api/sse (versionless, legacy) + /api/v1/sse (canonical, frontend useSSE hook'u
+    // VITE_API_URL=…/api/v1 ile bu path'i çağırıyor). Aksi halde EventSource
+    // bağlantısı CORS-preflight olmadığı için Origin guard'a takılır.
+    ignore: [
+      '/api/webhooks',
+      '/api/health',
+      '/api/sse',
+      '/api/v1/sse',
+      '/__health',
+      '/healthz',
+      '/readyz',
+    ],
   }),
 );
 
@@ -300,32 +312,42 @@ app.get('/api/health', (_req, res) => {
 // ─── SSE: Real-Time Dashboard Stream ─────────────────────
 const sseClients = new Set<express.Response>();
 
-app.get('/api/sse/dashboard', sseLimiter, authenticate as express.RequestHandler, (req, res) => {
-  // Set SSE headers
-  res.writeHead(200, {
-    'Content-Type': 'text/event-stream',
-    'Cache-Control': 'no-cache',
-    Connection: 'keep-alive',
-    'X-Accel-Buffering': 'no',
-  });
+// S14 R13 — Frontend useSSE hook'u `${VITE_API_URL}/sse/dashboard` çağırıyor;
+// VITE_API_URL production'da `https://ecypro-api.onrender.com/api/v1` set edilmiş,
+// yani gerçek istek `/api/v1/sse/dashboard` oluyor. Önceki tek mount path
+// `/api/sse/dashboard` (versionless) olduğu için 404 → dashboard sürekli OFFLINE.
+// Array path ile her iki versiyonu da destekle: geriye uyumlu + v1 canonical.
+app.get(
+  ['/api/sse/dashboard', '/api/v1/sse/dashboard'],
+  sseLimiter,
+  authenticate as express.RequestHandler,
+  (req, res) => {
+    // Set SSE headers
+    res.writeHead(200, {
+      'Content-Type': 'text/event-stream',
+      'Cache-Control': 'no-cache',
+      Connection: 'keep-alive',
+      'X-Accel-Buffering': 'no',
+    });
 
-  // Send initial heartbeat
-  res.write(`data: ${JSON.stringify({ type: 'connected', timestamp: Date.now() })}\n\n`);
+    // Send initial heartbeat
+    res.write(`data: ${JSON.stringify({ type: 'connected', timestamp: Date.now() })}\n\n`);
 
-  sseClients.add(res);
-  logger.info(`[SSE] Client connected. Total: ${sseClients.size}`);
+    sseClients.add(res);
+    logger.info(`[SSE] Client connected. Total: ${sseClients.size}`);
 
-  // Keep-alive ping every 30s
-  const keepAlive = setInterval(() => {
-    res.write(`: keepalive\n\n`);
-  }, 30_000);
+    // Keep-alive ping every 30s
+    const keepAlive = setInterval(() => {
+      res.write(`: keepalive\n\n`);
+    }, 30_000);
 
-  req.on('close', () => {
-    clearInterval(keepAlive);
-    sseClients.delete(res);
-    logger.info(`[SSE] Client disconnected. Total: ${sseClients.size}`);
-  });
-});
+    req.on('close', () => {
+      clearInterval(keepAlive);
+      sseClients.delete(res);
+      logger.info(`[SSE] Client disconnected. Total: ${sseClients.size}`);
+    });
+  },
+);
 
 // Broadcast function for Director engine
 export function broadcastSSE(event: string, data: unknown): void {
