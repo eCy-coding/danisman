@@ -1,5 +1,6 @@
 import React from 'react';
 import { useTranslation } from '../../lib/i18n';
+import { FAQS } from '../sections/FAQSection';
 
 /**
  * S13-P4 F17 — upsertJsonLd helper. Helmet-injected <script> tags do NOT
@@ -31,14 +32,18 @@ export const SchemaOrg: React.FC = () => {
   const logoUrl = `${baseUrl}/pwa-512x512.png`;
 
   // 1. ProfessionalService Schema (The Core Identity)
+  // S13-R4-S1 — @id aligned to `${baseUrl}/#organization` so WebSite.publisher
+  // and SEO.tsx Organization fallback can reference the same node. Dual
+  // @type ['Organization', 'ProfessionalService'] merges the two identities
+  // into one Knowledge Graph entity instead of competing duplicates.
   const professionalServiceSchema = {
     '@context': 'https://schema.org',
-    '@type': 'ProfessionalService',
+    '@type': ['Organization', 'ProfessionalService'],
     name: 'eCyPro Premium Consulting',
     image: logoUrl,
-    '@id': baseUrl,
+    '@id': `${baseUrl}/#organization`,
     url: baseUrl,
-    telephone: '+90-541-714-3000',
+    telephone: '+905417143000',
     priceRange: '$$$',
     address: {
       '@type': 'PostalAddress',
@@ -121,39 +126,20 @@ export const SchemaOrg: React.FC = () => {
     },
   };
 
-  // 3. FAQPage Schema (For SERP Dominance)
-  // Using static data for now, ideally mapped from FAQ component
+  // 3. FAQPage Schema — S13-R3-S2 — mirror the SAME 8 Q&A that
+  // FAQSection.tsx renders. Hand-rolled 2-entry version was a Google rich-
+  // result blocker ("structured data doesn't match visible content").
   const faqSchema = {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
-    mainEntity: [
-      {
-        '@type': 'Question',
-        name:
-          language === 'tr' ? 'Danışmanlık ücretleriniz nedir?' : 'What are your consulting fees?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text:
-            language === 'tr'
-              ? 'Proje kapsamına ve süresine göre değişmektedir. Detaylı bilgi için iletişime geçiniz.'
-              : 'Fees vary based on project scope and duration. Please contact us for details.',
-        },
+    mainEntity: FAQS.map((f) => ({
+      '@type': 'Question',
+      name: f.q[language === 'tr' ? 'tr' : 'en'],
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: f.a[language === 'tr' ? 'tr' : 'en'],
       },
-      {
-        '@type': 'Question',
-        name:
-          language === 'tr'
-            ? 'Hangi sektörlere hizmet veriyorsunuz?'
-            : 'Which industries do you serve?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text:
-            language === 'tr'
-              ? 'Finans, Enerji, Teknoloji ve Perakende sektörleri başta olmak üzere geniş bir yelpazede hizmet sunuyoruz.'
-              : 'We serve a wide range of sectors, primarily Finance, Energy, Technology, and Retail.',
-        },
-      },
-    ],
+    })),
   };
 
   // P12/4 — Person schema for founder / about page (Knowledge Graph signal)
@@ -169,11 +155,7 @@ export const SchemaOrg: React.FC = () => {
       name: 'eCyPro Premium Consulting',
       url: baseUrl,
     },
-    sameAs: [
-      'https://www.linkedin.com/in/emre-can-yalcin',
-      'https://twitter.com/ecypro',
-      'https://github.com/emrecnyn',
-    ],
+    sameAs: ['https://www.linkedin.com/in/emre-can-yalcin', 'https://github.com/emrecnyn'],
     knowsAbout: [
       'Management Consulting',
       'Digital Transformation',
@@ -184,13 +166,18 @@ export const SchemaOrg: React.FC = () => {
 
   // S13-P4 F17 — upsert (data-seo-id keyed) instead of Helmet append so
   // double-mount / SSR-hydration don't emit duplicate <script> tags.
+  // S13-R3-S12 — depend on `language` only; the four schema literals were
+  // rebuilt every render, so the effect re-ran (and re-stringified the
+  // four <script> tags) on every state change in any parent. Stringifying
+  // once per locale is enough — the upsert dedupe still guarantees a single
+  // node per data-seo-id.
   React.useEffect(() => {
     upsertJsonLd('schema-org-professional-service', professionalServiceSchema);
     upsertJsonLd('schema-org-service', serviceSchema);
     upsertJsonLd('schema-org-faq', faqSchema);
     upsertJsonLd('schema-org-person', personSchema);
-    // Run on every locale change so localized fields (FAQ Q&A text) refresh.
-  }, [professionalServiceSchema, serviceSchema, faqSchema, personSchema]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [language]);
 
   return null;
 };

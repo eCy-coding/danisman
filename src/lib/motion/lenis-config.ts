@@ -57,6 +57,29 @@ function prefersReducedMotion(): boolean {
   }
 }
 
+/**
+ * S13-R7-A1 — coarse-pointer mobile gate. Lenis layers a JS-driven
+ * inertia loop on top of native scroll; on touch-primary mobile devices
+ * (where native rubber-band scroll is already smooth and the RAF loop
+ * adds ~2-4% sustained CPU on mid-range Android), the cost outweighs
+ * any premium-feel gain. Bail when BOTH conditions hold:
+ *   - pointer: coarse (touch is the primary input)
+ *   - max-width: 768px (mobile viewport, matches Tailwind `md` breakpoint)
+ * Desktop with mouse (fine pointer) keeps the full Lenis experience.
+ */
+function isCoarseMobile(): boolean {
+  if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') {
+    return false;
+  }
+  try {
+    const coarse = window.matchMedia('(pointer: coarse)').matches;
+    const narrow = window.matchMedia('(max-width: 768px)').matches;
+    return coarse && narrow;
+  } catch {
+    return false;
+  }
+}
+
 /** Initialise and start Lenis scroll loop. Wires GSAP ScrollTrigger tick. */
 export function startLenis(options: LenisOptions = {}): void {
   if (lenis) return; // Already running
@@ -68,6 +91,11 @@ export function startLenis(options: LenisOptions = {}): void {
   // browser falls back to its standard instant scroll, GSAP ScrollTrigger
   // wires itself to native scroll events automatically.
   if (prefersReducedMotion()) return;
+
+  // S13-R7-A1 — skip Lenis on touch-primary mobile devices. Native
+  // scroll already feels good on touch; the RAF loop just burns CPU
+  // / battery on phones. Desktop (fine pointer) is unaffected.
+  if (isCoarseMobile()) return;
 
   lenis = new Lenis({
     ...DEFAULT_OPTIONS,

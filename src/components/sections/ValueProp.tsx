@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { VALUE_PROPS } from '../../constants';
-import { motion, useScroll, useTransform } from 'motion/react';
+import { motion, useScroll, useTransform, useReducedMotion } from 'motion/react';
 import { FadeIn } from '../common/FadeIn';
 import { useTranslation } from 'react-i18next';
 import { cardHoverVariants, getCardTransition } from '@/lib/motion/get-card-context';
@@ -24,24 +24,39 @@ export const ValueProp: React.FC = () => {
     stagger: 0.1,
     selector: '.value-card',
   });
+
+  // S13-R7-A2 — gate scroll-driven parallax math + blur-3xl decoration on
+  // mobile / prefers-reduced-motion. blur-3xl on a 600×600 element is one
+  // of the most expensive composited operations on mid-range mobile GPUs
+  // (Android Snapdragon 6xx series, older A-series iPhones). Combined
+  // with two parallax layers driven by useScroll/useTransform, the layout
+  // pegs the compositor thread. Approach:
+  //   - render gate (`max-md:hidden`) removes the layers from the DOM on
+  //     small viewports (Tailwind `md` = 768px) → zero paint/composite cost
+  //   - useReducedMotion() guard skips useTransform math entirely for
+  //     users who opted out (vestibular comfort + battery)
+  // Desktop with fine pointer + motion enabled keeps the full effect.
+  const prefersReducedMotion = useReducedMotion();
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ['start end', 'end start'],
   });
 
-  const yBg1 = useTransform(scrollYProgress, [0, 1], [0, 200]);
-  const yBg2 = useTransform(scrollYProgress, [0, 1], [0, -150]);
+  const yBg1Raw = useTransform(scrollYProgress, [0, 1], [0, 200]);
+  const yBg2Raw = useTransform(scrollYProgress, [0, 1], [0, -150]);
+  const yBg1 = prefersReducedMotion ? 0 : yBg1Raw;
+  const yBg2 = prefersReducedMotion ? 0 : yBg2Raw;
 
   return (
     <section ref={sectionRef} className="py-24 lg:py-32 bg-neutral relative overflow-hidden">
-      {/* Ambient Parallax Backgrounds */}
+      {/* Ambient Parallax Backgrounds — hidden on mobile (max-md) to skip blur-3xl compositor cost */}
       <motion.div
         style={{ y: yBg1 }}
-        className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(37,99,235,0.06),transparent_50%)] pointer-events-none"
+        className="max-md:hidden absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(37,99,235,0.06),transparent_50%)] pointer-events-none"
       />
       <motion.div
         style={{ y: yBg2 }}
-        className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-secondary/5 blur-3xl rounded-full pointer-events-none -translate-x-1/2 translate-y-1/4"
+        className="max-md:hidden absolute bottom-0 left-0 w-[600px] h-[600px] bg-secondary/5 blur-3xl rounded-full pointer-events-none -translate-x-1/2 translate-y-1/4"
       />
 
       <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
