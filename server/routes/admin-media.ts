@@ -35,7 +35,12 @@ interface MediaRecord {
   createdAt: number;
 }
 
-router.get('/', ...adminOnly, async (_req: Request, res: Response, next: NextFunction) => {
+router.get('/', ...adminOnly, async (_req: Request, res: Response, _next: NextFunction) => {
+  // S14 R16 — Redis "status=end" senaryosunda admin paneli media listesi
+  // 500 alıyordu (global error handler aşağı geçti). Production /readyz
+  // redis.ok=false zaten degraded mode'da olduğumuzu gösteriyor; UI'nin
+  // burada tamamen 500'le crash etmesi yerine boş listeyi degraded bayrağı
+  // ile döndür. Redis geri gelince transparent şekilde dolacak.
   try {
     const map = await redis.hgetall(KEY);
     const items = Object.values(map)
@@ -50,7 +55,13 @@ router.get('/', ...adminOnly, async (_req: Request, res: Response, next: NextFun
     items.sort((a, b) => b.createdAt - a.createdAt);
     res.json({ status: 'ok', data: { items, total: items.length } });
   } catch (err) {
-    next(err);
+    // Redis down → 200 with empty + degraded flag (admin UI render-safe).
+    res.json({
+      status: 'ok',
+      data: { items: [], total: 0 },
+      degraded: 'redis_unavailable',
+      detail: err instanceof Error ? err.message.slice(0, 80) : String(err).slice(0, 80),
+    });
   }
 });
 
