@@ -1,0 +1,8 @@
+# eCyPro AI usage policy
+User-Agent: *
+Allow: /
+Disallow: /admin
+Disallow: /api
+Train: Restricted
+Cite: Required
+Contact: ai-policy@ecypro.com

@@ -1,0 +1,71 @@
+# ============================================================================
+# eCyPro — dependabot.yml
+# Path on adoption: .github/dependabot.yml
+# Authority: Sprint 11 atomic candidate (CI/CD hardening) + KVKK m.12 (timely patching)
+# Cadence: weekly major/minor; daily security
+# ============================================================================
+
+version: 2
+updates:
+  # ----- Root pnpm workspace -----
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "06:00"
+      timezone: "Europe/Istanbul"
+    open-pull-requests-limit: 8
+    versioning-strategy: "increase"
+    labels: ["deps", "javascript"]
+    reviewers: ["emrecnyngmail.com"]
+    commit-message:
+      prefix: "chore(deps)"
+      include: "scope"
+    groups:
+      vitest-ecosystem:
+        patterns: ["vitest", "@vitest/*", "happy-dom", "jsdom"]
+      playwright-ecosystem:
+        patterns: ["playwright", "@playwright/*", "axe-core", "@axe-core/*"]
+      sentry-ecosystem:
+        patterns: ["@sentry/*"]
+      posthog-ecosystem:
+        patterns: ["posthog-js", "posthog-node"]
+      prisma-ecosystem:
+        patterns: ["prisma", "@prisma/*"]
+      typescript-ecosystem:
+        patterns: ["typescript", "tslib", "ts-node", "@types/*"]
+      eslint-ecosystem:
+        patterns: ["eslint", "@eslint/*", "eslint-*"]
+      react-ecosystem:
+        patterns: ["react", "react-dom", "@types/react", "@types/react-dom"]
+
+  # ----- GitHub Actions -----
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    open-pull-requests-limit: 5
+    labels: ["deps", "github-actions"]
+    commit-message:
+      prefix: "chore(ci)"
+
+  # ----- Docker (if any image used in CI / Render) -----
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    labels: ["deps", "docker"]
+
+  # ----- Security-only daily sweep (high priority) -----
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    open-pull-requests-limit: 5
+    labels: ["security", "priority:high"]
+    allow:
+      - dependency-type: "all"
+    commit-message:
+      prefix: "fix(security)"
