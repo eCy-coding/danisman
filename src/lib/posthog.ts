@@ -51,6 +51,16 @@ export function initPostHog(): void {
       });
       _instance = posthog;
 
+      // S14 R23 — posthog-js@1.374 does NOT attach to window by default when
+      // imported as an ES module via Vite dynamic chunk (only the IIFE bundle
+      // attaches automatically). Without `window.posthog`:
+      //   - production smoke tests cannot detect runtime presence
+      //   - browser DevTools cannot poke at the live instance
+      //   - other modules using legacy `window.posthog?.capture(...)` no-op
+      // Explicit assignment keeps PostHog discoverable like the official
+      // snippet would, without affecting init behaviour.
+      (window as unknown as { posthog?: typeof posthog }).posthog = posthog;
+
       // Restore consent from storage on init (v2 auto-migrates from v1).
       applyConsent(posthog);
 
