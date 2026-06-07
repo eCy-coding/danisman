@@ -69,6 +69,10 @@
 .archive/
 .cache
 .cache/
+# S14 R3.3 — local agent/sync noise (auto-generated, never committed)
+.sync/
+AGENTS.md
+public/_blog_draft.json
 .claude/.credentials.json
 .claude/cache/
 .claude/scheduled_tasks.lock
