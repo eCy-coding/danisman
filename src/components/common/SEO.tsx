@@ -105,10 +105,14 @@ export const SEO: React.FC<SEOProps> = ({
   const finalCanonical = buildCanonical(canonical ?? '/', language);
 
   // Default JSON-LD for the organization from constants
+  // S13-R4-S1 — @id aligned with SchemaOrg's ProfessionalService node so
+  // WebSite.publisher refs (LandingPage) resolve to a single Organization
+  // entity in the Knowledge Graph instead of orphaned duplicates.
   const defaultJsonLd = React.useMemo(
     () => ({
       '@context': 'https://schema.org',
       '@type': 'Organization',
+      '@id': 'https://www.ecypro.com/#organization',
       name: 'eCyPro',
       url: SITE_URL,
       logo: `${SITE_URL}/logo.png`,

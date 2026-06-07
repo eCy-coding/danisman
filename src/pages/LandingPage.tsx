@@ -29,7 +29,7 @@ const TrustBar: React.FC = () => {
       className="border-y border-white/5 bg-white/2"
     >
       <div className="max-w-7xl mx-auto px-6 md:px-12 py-5">
-        <ul className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-xs md:text-sm text-slate-400">
+        <ul className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-xs md:text-sm text-slate-300">
           {TRUST_PILLS.map((p) => {
             const Icon = p.icon;
             return (
@@ -95,20 +95,12 @@ export const LandingPage: React.FC = () => {
           publisher: { '@id': 'https://www.ecypro.com/#organization' },
         }}
       />
-      <JsonLd
-        data={{
-          '@context': 'https://schema.org',
-          '@type': 'BreadcrumbList',
-          itemListElement: [
-            {
-              '@type': 'ListItem',
-              position: 1,
-              name: lang === 'tr' ? 'Anasayfa' : 'Home',
-              item: 'https://www.ecypro.com/',
-            },
-          ],
-        }}
-      />
+      {/*
+        S13-R4-S14 — BreadcrumbList removed from homepage. schema.org spec
+        requires ≥2 ListItems; a single "Home" breadcrumb is meaningless,
+        invalid markup, and was flagged by Google's Rich Results Test as a
+        warning. Per-page breadcrumbs (≥2 items) live on inner routes.
+      */}
       <Hero />
       <TrustBar />
       <Suspense fallback={<div className="min-h-screen" />}>

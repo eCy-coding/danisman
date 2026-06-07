@@ -153,7 +153,7 @@ export const TrustSignalBadges: React.FC = () => {
                 </div>
                 <div>
                   <p className={`text-xs font-bold ${badge.color}`}>{badge.label}</p>
-                  <p className="text-[10px] text-slate-500 leading-tight mt-0.5">
+                  <p className="text-xs text-slate-400 leading-tight mt-0.5">
                     {lang === 'tr' ? badge.sub.tr : badge.sub.en}
                   </p>
                 </div>

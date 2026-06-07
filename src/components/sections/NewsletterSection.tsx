@@ -200,17 +200,24 @@ export const NewsletterSection: React.FC = () => {
                     </div>
 
                     {/* Consent */}
+                    {/* S13-R4-A17/A18 — custom checkbox keyboard focus was */}
+                    {/* invisible because the visible square has no focus */}
+                    {/* style; only the sr-only input gets focus, leaving */}
+                    {/* sighted keyboard users guessing. Switched to Tailwind */}
+                    {/* `peer` pattern so focus-visible on the real input */}
+                    {/* paints a ring on the styled square. */}
                     <label className="flex items-start gap-3 cursor-pointer group">
                       <div className="relative mt-0.5 shrink-0">
                         <input
                           type="checkbox"
+                          id="nl-consent"
                           data-testid="newsletter-consent"
                           checked={consent}
                           onChange={(e) => setConsent(e.target.checked)}
-                          className="sr-only"
+                          className="peer sr-only"
                         />
                         <div
-                          className={`w-4 h-4 rounded border flex items-center justify-center transition-colors ${
+                          className={`w-4 h-4 rounded border flex items-center justify-center transition-colors peer-focus-visible:ring-2 peer-focus-visible:ring-secondary peer-focus-visible:ring-offset-2 peer-focus-visible:ring-offset-neutral-950 ${
                             consent
                               ? 'bg-secondary border-secondary'
                               : 'border-white/30 group-hover:border-white/50'
@@ -241,6 +248,11 @@ export const NewsletterSection: React.FC = () => {
                     )}
 
                     {/* Submit */}
+                    {/* S13-R4-A18 — aria-disabled mirrors HTML `disabled` */}
+                    {/* so assistive tech announces the inactive state */}
+                    {/* (HTML disabled removes the button from the focus */}
+                    {/* order entirely on some SRs, suppressing the cue). */}
+                    {/* aria-busy=true during submit so SRs say "busy". */}
                     <button
                       type="submit"
                       data-testid="newsletter-submit"
@@ -248,6 +260,8 @@ export const NewsletterSection: React.FC = () => {
                       data-track="cta-click"
                       data-cta-source="newsletter-section"
                       disabled={!email || !consent || status === 'loading'}
+                      aria-disabled={!email || !consent || status === 'loading'}
+                      aria-busy={status === 'loading'}
                       className="w-full flex items-center justify-center gap-2 bg-secondary hover:bg-secondary/90 disabled:opacity-50 text-neutral font-semibold py-3 rounded-xl transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-secondary"
                     >
                       {status === 'loading' ? (
