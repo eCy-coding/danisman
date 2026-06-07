@@ -154,7 +154,19 @@ app.use(corsProd());
 // Webhooks + health probes carry no Origin → bypass via prefix list.
 app.use(
   originGuard({
-    ignore: ['/api/webhooks', '/api/health', '/api/sse', '/__health', '/healthz', '/readyz'],
+    // S14 R13 — SSE path'lerinin İKİ versiyonu da originGuard'dan muaf olmalı:
+    // /api/sse (versionless, legacy) + /api/v1/sse (canonical, frontend useSSE hook'u
+    // VITE_API_URL=…/api/v1 ile bu path'i çağırıyor). Aksi halde EventSource
+    // bağlantısı CORS-preflight olmadığı için Origin guard'a takılır.
+    ignore: [
+      '/api/webhooks',
+      '/api/health',
+      '/api/sse',
+      '/api/v1/sse',
+      '/__health',
+      '/healthz',
+      '/readyz',
+    ],
   }),
 );
 
