@@ -38,6 +38,13 @@ const HEALTH_PATHS = new Set<string>([
   '/ready',
   '/api/ready',
   '/api/v1/ready',
+  // K8s-standard probes (Sprint 10 Phase 10B P46)
+  '/healthz',
+  '/readyz',
+  '/api/healthz',
+  '/api/readyz',
+  '/api/v1/healthz',
+  '/api/v1/readyz',
 ]);
 
 const HEALTH_UA_PATTERNS: RegExp[] = [
