@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import { Send, CheckCircle, Mail, MapPin, Phone } from 'lucide-react';
+import { Send, CheckCircle, Mail, MapPin, Phone, AlertCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { MouseGlow } from '../ui/MouseGlow';
 import { MagneticButton } from '../ui/MagneticButton';
 import { CONTACT_CONFIG } from '../../constants';
+import { sendContactEmail } from '../../services/emailService';
+import { Logger } from '../../lib/logger';
 
 const ContactInfoItem: React.FC<{
   icon: React.ReactNode;
@@ -94,16 +96,40 @@ const InputField: React.FC<{
 export const Contact: React.FC = () => {
   const [formState, setFormState] = useState({ name: '', email: '', message: '' });
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
+  const [serverError, setServerError] = useState<string>('');
 
+  // S13-P4 F26 — Previously this handler did
+  //   `await new Promise(r => setTimeout(r, 1500)); setStatus('success')`
+  // i.e. the homepage contact form was a SILENT NO-OP and pretended every
+  // submission succeeded. Users were never reaching us. Wire it to the same
+  // backend pipeline (`/api/contact` via sendContactEmail) used by the
+  // dedicated /contact page so submissions actually hit Telegram + audit
+  // log. EmailService already handles validation, demo-mode fallback, and
+  // i18n error strings.
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus('submitting');
+    setServerError('');
 
-    // Simulate API Call
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+    try {
+      const result = await sendContactEmail({
+        name: formState.name,
+        email: formState.email,
+        message: formState.message,
+      });
 
-    setStatus('success');
-    setFormState({ name: '', email: '', message: '' });
+      if (result.success) {
+        setStatus('success');
+        setFormState({ name: '', email: '', message: '' });
+      } else {
+        setStatus('error');
+        setServerError(result.message);
+      }
+    } catch (err) {
+      Logger.error('Homepage contact submit failed', err);
+      setStatus('error');
+      setServerError('Bir hata oluştu — lütfen birkaç saniye sonra tekrar deneyin.');
+    }
   };
 
   return (
@@ -124,9 +150,20 @@ export const Contact: React.FC = () => {
                 <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
                 İletişim
               </div>
-              <h2 className="text-4xl md:text-5xl lg:text-6xl font-sans font-light text-white mb-8 leading-tight tracking-tight">
-                Geleceği Birlikte <br />{' '}
-                <span className="text-secondary font-medium">Tasarlayalım</span>
+              {/* S13-P4 F13 — original "Geleceği Birlikte<br/>{' '} */}
+              {/* <span>Tasarlayalım</span>" produced "Geleceği Birlikte  */}
+              {/* Tasarlayalım" (double space) in textContent. Dropping the */}
+              {/* whitespace entirely produced "Geleceği BirlikteTasarlayalım" */}
+              {/* (no space). The visual layout uses <br/> for the line break; */}
+              {/* a single explicit {' '} keeps textContent and aria-label sane */}
+              {/* for SEO and screen readers without a visible glyph. */}
+              <h2
+                className="text-4xl md:text-5xl lg:text-6xl font-sans font-light text-white mb-8 leading-tight tracking-tight"
+                aria-label="Geleceği Birlikte Tasarlayalım"
+              >
+                Geleceği Birlikte
+                <br />
+                <span className="text-secondary font-medium"> Tasarlayalım</span>
               </h2>
               <p className="text-slate-400 text-lg lg:text-xl font-light mb-16 max-w-lg leading-relaxed">
                 Projeleriniz için stratejik bir ortak arıyorsanız, uzman ekibimizle tanışın. İlk
@@ -208,7 +245,17 @@ export const Contact: React.FC = () => {
                     exit={{ opacity: 0 }}
                     onSubmit={handleSubmit}
                     className="space-y-6 relative z-10"
+                    noValidate
                   >
+                    {status === 'error' && serverError && (
+                      <div
+                        role="alert"
+                        className="flex items-center gap-3 rounded-lg border border-red-700/40 bg-red-900/30 px-4 py-3 text-sm text-red-200"
+                      >
+                        <AlertCircle size={18} className="shrink-0" aria-hidden="true" />
+                        <span>{serverError}</span>
+                      </div>
+                    )}
                     <InputField
                       label="Ad Soyad"
                       value={formState.name}

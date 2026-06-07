@@ -116,9 +116,16 @@ export const MegaMenu: React.FC<MegaMenuProps> = ({
               <span className="inline-block text-[10px] font-bold tracking-[0.2em] text-secondary uppercase border border-secondary/30 bg-secondary/10 rounded-full px-2.5 py-1 mb-4">
                 {data.featured.tag[lang]}
               </span>
-              <h3 className="text-base font-bold text-white leading-snug mb-3">
+              {/* S13-P4 F8 — Navbar MegaMenu featured panel was using <h3>, */}
+              {/* placing AI Olgunluk Analizi / 2026 AI Dönüşüm Raporu in the */}
+              {/* document outline BEFORE the <h1> hero, breaking heading */}
+              {/* hierarchy for screen readers and Google's outline parser. */}
+              {/* These are navigation labels (not content), so demote to */}
+              {/* <p> with the same visual class set. Hierarchy now starts */}
+              {/* at the hero <h1>. */}
+              <p className="text-base font-bold text-white leading-snug mb-3">
                 {data.featured.title[lang]}
-              </h3>
+              </p>
               <p className="text-xs text-slate-400 leading-relaxed">
                 {data.featured.description[lang]}
               </p>

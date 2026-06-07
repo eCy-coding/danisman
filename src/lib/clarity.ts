@@ -43,13 +43,25 @@ export function loadClarity(projectId: string): void {
   if (!projectId) return;
   if (findExistingScript()) return;
 
-  // Bootstrap Clarity queue stub (prevents errors before script loads)
+  // S13-P4 F7 — Clarity's CDN script crashed with
+  //   "TypeError: Cannot read properties of undefined (reading 'unshift')"
+  // on every page load. Root cause: Clarity's vendor snippet drains its own
+  // call queue via `clarity.q.unshift(...)`. Our previous stub set
+  // `window.clarity` to a function that pushed into a SEPARATE
+  // `_clarityQueue` array — so `clarity.q` was `undefined` when the CDN
+  // script arrived and tried to read it. Match Clarity's official snippet
+  // shape: a function with its own `.q` property. We also keep the legacy
+  // `_clarityQueue` mirror so any existing call sites don't break.
   window._clarityQueue = window._clarityQueue ?? [];
   if (!window.clarity) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    window.clarity = function (...args: any[]) {
+    const stub: any = function (...args: any[]) {
+      stub.q = stub.q || [];
+      stub.q.push(args);
       window._clarityQueue?.push(args);
     };
+    stub.q = [];
+    window.clarity = stub;
   }
 
   const script = document.createElement('script');

@@ -1,6 +1,28 @@
 import React from 'react';
-import { Helmet } from '../../lib/seo-helmet';
 import { useTranslation } from '../../lib/i18n';
+
+/**
+ * S13-P4 F17 — upsertJsonLd helper. Helmet-injected <script> tags do NOT
+ * de-duplicate across StrictMode double-mount + SSR/CSR hydration paths,
+ * so SchemaOrg's four schemas (ProfessionalService + Service + FAQPage +
+ * Person) were appearing TWICE in the homepage <head>. Switching to a
+ * data-seo-id keyed upsert (mirror of common/SEO.tsx) makes each schema
+ * idempotent: subsequent mounts update the existing node in place.
+ *
+ * Effect: 17 → ~10 JSON-LD <script> tags on /. SERP de-duplication +
+ * faster head parse + no risk of Google flagging conflicting schemas.
+ */
+function upsertJsonLd(id: string, data: Record<string, unknown>): void {
+  if (typeof document === 'undefined') return;
+  let el = document.querySelector<HTMLScriptElement>(`script[data-seo-id="${id}"]`);
+  if (!el) {
+    el = document.createElement('script');
+    el.setAttribute('type', 'application/ld+json');
+    el.setAttribute('data-seo-id', id);
+    document.head.appendChild(el);
+  }
+  el.textContent = JSON.stringify(data);
+}
 
 export const SchemaOrg: React.FC = () => {
   const { language } = useTranslation();
@@ -160,12 +182,15 @@ export const SchemaOrg: React.FC = () => {
     ],
   };
 
-  return (
-    <Helmet>
-      <script type="application/ld+json">{JSON.stringify(professionalServiceSchema)}</script>
-      <script type="application/ld+json">{JSON.stringify(serviceSchema)}</script>
-      <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
-      <script type="application/ld+json">{JSON.stringify(personSchema)}</script>
-    </Helmet>
-  );
+  // S13-P4 F17 — upsert (data-seo-id keyed) instead of Helmet append so
+  // double-mount / SSR-hydration don't emit duplicate <script> tags.
+  React.useEffect(() => {
+    upsertJsonLd('schema-org-professional-service', professionalServiceSchema);
+    upsertJsonLd('schema-org-service', serviceSchema);
+    upsertJsonLd('schema-org-faq', faqSchema);
+    upsertJsonLd('schema-org-person', personSchema);
+    // Run on every locale change so localized fields (FAQ Q&A text) refresh.
+  }, [professionalServiceSchema, serviceSchema, faqSchema, personSchema]);
+
+  return null;
 };
