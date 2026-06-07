@@ -219,6 +219,12 @@ export const Hero: React.FC = () => {
   const lang = (i18n.language || 'en').startsWith('tr') ? 'tr' : 'en';
   const prefersReducedMotion = useReducedMotion();
   const [persona, setPersona] = useState<'executive' | 'developer'>('executive');
+  // S14 R2.1 — Founder ribbon img src state gate (re-render-safe).
+  // Önceki pattern `(e.currentTarget).src = fallback` DOM mutation idi: React her
+  // re-render'da src="/founder.jpg" üzerine yazıp 30+ fetch döngüsü tetikliyordu
+  // (canlı production: ecypro.com network 30× founder-fallback.svg 200 OK). useState
+  // ile gate edilince single-fetch garanti + re-render-safe.
+  const [founderSrc, setFounderSrc] = useState<string>('/founder.jpg');
 
   // Mobile LCP: the decorative background (MouseGlow pointer tracking, Spotlight,
   // and DataFlowBackground's infinite animated SVG with glow filters) ran at mount
@@ -343,7 +349,14 @@ export const Hero: React.FC = () => {
                 <TextReveal immediate delay={0.05} text={currentContent.title.line1[lang]} />
               </span>
               <span className="block overflow-hidden pb-2">
-                <span className="bg-linear-to-r from-blue-400 via-primary to-secondary bg-clip-text text-transparent shimmer inline-block">
+                {/* S14 R2.2 — .shimmer class kaldırıldı. CSS specificity nedeniyle
+                    .shimmer'ın background-image: linear-gradient(transparent → white sweep)
+                    Tailwind brand gradient'ini (bg-linear-to-r from-blue-400 via-primary to-secondary)
+                    eziyordu. Sonuç: text-transparent + bg-clip-text + transparent shimmer = "Sürdürülebilir"
+                    INVISIBLE production'da. Brand gradient saf hali zaten premium görsel veriyor;
+                    shimmer animation isteniyorsa ::after pseudo-element'le mix-blend-mode overlay olarak
+                    eklenmeli. */}
+                <span className="bg-linear-to-r from-blue-400 via-primary to-secondary bg-clip-text text-transparent inline-block">
                   <TextReveal immediate delay={0.15} text={currentContent.title.highlight[lang]} />
                 </span>
               </span>
@@ -457,15 +470,14 @@ export const Hero: React.FC = () => {
               className="mt-8 flex items-center gap-3 text-sm text-slate-400"
             >
               <img
-                src="/founder.jpg"
+                src={founderSrc}
                 alt="Emre Can Yalçın — eCyPro Kurucu Ortak, Stratejik Danışman"
                 width={40}
                 height={40}
                 loading="lazy"
+                decoding="async"
                 className="w-10 h-10 rounded-full object-cover border border-white/10 shrink-0"
-                onError={(e) => {
-                  (e.currentTarget as HTMLImageElement).src = '/brand/founder-fallback.svg';
-                }}
+                onError={() => setFounderSrc('/brand/founder-fallback.svg')}
               />
               <span className="leading-snug">
                 {lang === 'tr' ? (
