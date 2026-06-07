@@ -52,6 +52,9 @@ import adminRetentionRoutes from './admin-retention';
 import adminIndependenceRoutes from './admin-independence';
 // Phase 4 — RBAC Hardening
 import adminRbacRoutes from './admin-rbac';
+// S14 R20 — Revenue surface (deals + retainers) — mount altta `/admin/rbac`'tan sonra.
+import { adminDealsRouter } from './admin-deals';
+import { adminRetainersRouter } from './admin-retainers';
 // L1-3 — Discovery form public endpoint
 import discoveryRoutes from './discovery';
 // Perspektif Blog — PB-2 admin API + PB-3 public search
@@ -552,6 +555,14 @@ router.use('/admin/retention', adminRetentionRoutes);
 router.use('/admin/independence', adminIndependenceRoutes);
 // Phase 4 — RBAC Hardening
 router.use('/admin/rbac', adminRbacRoutes);
+// S14 R20 — Revenue surface mounts.
+// Routers existed (server/routes/admin-deals.ts + server/routes/admin-retainers.ts)
+// + tests existed (admin-revenue-contract.test.ts) ama server/routes/index.ts'e
+// hiç mount edilmemişlerdi → AdminDealsPage + AdminRetainersPage 404'le karşılaşıyor +
+// vitest 'Revenue API contract' suite 401 expected actual 404. Bu 1 commit her ikisini de
+// düzeltir; auth + RBAC zinciri zaten her iki router'ın handler tarafında uygulanıyor.
+router.use('/admin/deals', adminDealsRouter);
+router.use('/admin/retainers', adminRetainersRouter);
 // Perspektif Blog — PB-2 admin API + PB-3 public search
 router.use('/admin/insights/categories', adminInsightsCategoriesRouter);
 router.use('/admin/insights', adminInsightsRouter);
