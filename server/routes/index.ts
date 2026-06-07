@@ -86,6 +86,16 @@ import { checkEnvPresence } from '../config/env';
 
 const router = Router();
 
+// S14 R19 — Deploy traceability: ops + Sentry + admin paneli /admin/dashboard/health
+// hangi git SHA'sının canlı olduğunu doğrudan görsün. Render `RENDER_GIT_COMMIT`
+// env'i her deploy'da otomatik yazıyor; lokal/test çalıştırmalarında undefined olur.
+const COMMIT_SHA =
+  process.env.RENDER_GIT_COMMIT ||
+  process.env.SENTRY_RELEASE ||
+  process.env.RELEASE_VERSION ||
+  undefined;
+const COMMIT_SHA_SHORT = COMMIT_SHA ? COMMIT_SHA.replace(/^ecypro@/, '').slice(0, 8) : undefined;
+
 // BE-7: SERVICE_VERSION pulled from npm_package_version (set by node when run
 // via `npm`/`pnpm`) → falls back to RELEASE_VERSION env (set by Render) → "1.0.0".
 const SERVICE_VERSION = process.env.npm_package_version || process.env.RELEASE_VERSION || '1.0.0';
@@ -121,6 +131,8 @@ router.get('/health', (_req, res) => {
     status: 'ok',
     service: 'ecypro-api',
     version: SERVICE_VERSION,
+    // S14 R19 — commit traceability for ops/Sentry correlation.
+    commit: COMMIT_SHA_SHORT,
     uptime: process.uptime(),
     timestamp: new Date().toISOString(),
   });
