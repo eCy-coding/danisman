@@ -19,7 +19,12 @@ interface ApiResponse {
 async function fetchInsightArticleReal(slug: string): Promise<InsightPost | null> {
   // Vite proxy: /api → backend. apiBase defaults to relative so it works in
   // both dev (Vite proxy) and prod (same origin).
-  const res = await fetch(`/api/insights/posts/${encodeURIComponent(slug)}`);
+  // S14 R10 — test (Node) environment'da relative URL parse hatası veriyor
+  // (TypeError: Failed to parse URL from /api/insights/posts/). typeof window
+  // === 'undefined' (Node/vitest) iken `http://localhost` prefix at; browser'da
+  // boş string ile relative URL kalır → existing behavior preserved.
+  const baseUrl = typeof window === 'undefined' ? 'http://localhost' : '';
+  const res = await fetch(`${baseUrl}/api/insights/posts/${encodeURIComponent(slug)}`);
   if (res.status === 404) return null;
   if (!res.ok) throw new Error(`fetchInsightArticle failed: ${res.status}`);
   const json = (await res.json()) as ApiResponse;
