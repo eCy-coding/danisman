@@ -4,8 +4,6 @@ import {
   useReducedMotion,
   useScroll,
   useTransform,
-  useSpring,
-  useMotionValue,
   useInView,
   Variants,
 } from 'motion/react';
@@ -112,19 +110,14 @@ const itemVariants: Variants = {
   },
 };
 
-const scaleInVariants: Variants = {
-  hidden: { scale: 0.9, rotateX: 10 },
-  visible: {
-    opacity: 1,
-    scale: 1,
-    rotateX: 0,
-    transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] },
-  },
-};
+// S14 R8 — scaleInVariants was unused after R6-A2 StatCard refactored from
+// Framer Motion spring physics to plain CSS perspective+rotateX/Y (motion
+// primitives drop). Removed to satisfy lint + prune bundle.
 
 // S13-R3-P1 — DataFlowBackground was rendering two infinite motion.circle
 // animations (15s/18s loops) + a Gaussian-blur glow filter ABOVE THE FOLD,
-// running every frame for the entire 140vh hero — biggest sustained GPU
+// running every frame for the entire hero (was 140vh, trimmed to 110vh in
+// R7-A3 to reduce the composited layer area) — biggest sustained GPU
 // burner on the page. Two fixes:
 //   - prefersReducedMotion → render the static SVG paths only, skip the
 //     two animated circles entirely (also satisfies WCAG 2.3.3).
@@ -293,7 +286,7 @@ export const Hero: React.FC = () => {
     <section
       id="hero"
       ref={containerRef}
-      className="relative min-h-[140vh] bg-[#050810] pt-28 pb-32"
+      className="relative min-h-[110vh] bg-[#050810] pt-28 pb-32"
     >
       {/* Sticky Hero Container to keep it visible while scrolling the background */}
       <div className="sticky top-0 h-screen flex flex-col justify-center overflow-hidden">
@@ -522,17 +515,32 @@ export const Hero: React.FC = () => {
               {/* loading="eager" + decoding="async" + fetchPriority="low" */}
               {/* so it joins the critical fetch queue without competing */}
               {/* with the hero LCP <p>. */}
-              <img
-                src={founderSrc}
-                alt="Emre Can Yalçın — eCyPro Kurucu Ortak, Stratejik Danışman"
-                width={40}
-                height={40}
-                loading="eager"
-                decoding="async"
-                fetchPriority="low"
-                className="w-10 h-10 rounded-full object-cover border border-white/10 shrink-0"
-                onError={() => setFounderSrc('/brand/founder-fallback.svg')}
-              />
+              {/* S13-R8-B + S14 R2 hybrid — <picture> chain (AVIF→WebP→JPG retina) */}
+              {/* AVIF ~80-85% bandwidth saving vs JPG, WebP ~30% saving. Browser */}
+              {/* silently falls back to <img> if AVIF/WebP not generated. */}
+              {/* CRITICAL: <img> hala S14 R2 useState gate kullanır (founderSrc + */}
+              {/* setFounderSrc). DOM mutation onError pattern'e DÖNME — re-render */}
+              {/* sonsuz fetch döngüsünü tetikler (production'da kanıtlanmıştı). */}
+              <picture>
+                <source srcSet="/founder.avif 1x, /founder@2x.avif 2x" type="image/avif" />
+                <source srcSet="/founder.webp 1x, /founder@2x.webp 2x" type="image/webp" />
+                <img
+                  src={founderSrc}
+                  srcSet={
+                    founderSrc === '/founder.jpg'
+                      ? '/founder.jpg 1x, /founder@2x.jpg 2x'
+                      : undefined
+                  }
+                  alt="Emre Can Yalçın — eCyPro Kurucu Ortak, Stratejik Danışman"
+                  width={40}
+                  height={40}
+                  loading="eager"
+                  decoding="async"
+                  fetchPriority="low"
+                  className="w-10 h-10 rounded-full object-cover border border-white/10 shrink-0"
+                  onError={() => setFounderSrc('/brand/founder-fallback.svg')}
+                />
+              </picture>
               <span className="leading-snug">
                 {lang === 'tr' ? (
                   <>
@@ -665,27 +673,44 @@ const StatCard: React.FC<{
   delay?: number;
   className?: string;
 }> = ({ icon, value, label, delay = 0, className = '' }) => {
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-  const mouseXSpring = useSpring(x, { stiffness: 150, damping: 15 });
-  const mouseYSpring = useSpring(y, { stiffness: 150, damping: 15 });
-  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ['15deg', '-15deg']);
-  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ['-15deg', '15deg']);
+  // R6-A2 — Framer spring tilt (useMotionValue+useSpring+useTransform) replaced
+  // with CSS perspective + transform on local state. Eliminates 4 motion
+  // primitives per StatCard × N cards in hero. Visual match within hover
+  // tolerance: same -10°/+10° rotateX/rotateY envelope, 200ms ease-out
+  // settle instead of spring overshoot (stiffness:150, damping:15 was already
+  // near-critically-damped).
+  const prefersReducedMotion = useReducedMotion();
+  const [tilt, setTilt] = useState({ x: 0, y: 0 });
+
+  const handleMouseMove = prefersReducedMotion
+    ? undefined
+    : (e: React.MouseEvent<HTMLDivElement>) => {
+        const r = e.currentTarget.getBoundingClientRect();
+        setTilt({
+          x: ((e.clientY - r.top - r.height / 2) / r.height) * -10,
+          y: ((e.clientX - r.left - r.width / 2) / r.width) * 10,
+        });
+      };
+
+  const handleMouseLeave = prefersReducedMotion ? undefined : () => setTilt({ x: 0, y: 0 });
+
+  const tiltStyle: React.CSSProperties = prefersReducedMotion
+    ? {}
+    : {
+        transform: `perspective(1000px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
+        transformStyle: 'preserve-3d',
+        transition: 'transform 200ms ease-out',
+      };
 
   return (
     <FloatingElement delay={delay} amplitude={8} className={className}>
-      <motion.div
-        variants={scaleInVariants}
-        style={{ rotateX, rotateY, transformStyle: 'preserve-3d' }}
-        onMouseMove={(e) => {
-          const rect = e.currentTarget.getBoundingClientRect();
-          x.set((e.clientX - rect.left) / rect.width - 0.5);
-          y.set((e.clientY - rect.top) / rect.height - 0.5);
-        }}
-        onMouseLeave={() => {
-          x.set(0);
-          y.set(0);
-        }}
+      {/* S14 R8 — role='presentation' + mouse-only tilt = decorative; klavye */}
+      {/* kullanıcıları için hiçbir kayıp yok (cursor-default zaten kart non-clickable). */}
+      <div
+        role="presentation"
+        style={tiltStyle}
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
         className="bg-[#0A0F1C]/70 border border-white/5 rounded-2xl p-6 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.5)] flex flex-col gap-4 min-w-60 cursor-default hover:border-primary/40 hover:bg-[#0A0F1C]/90 transition-colors duration-500 relative group overflow-hidden"
       >
         <div className="absolute inset-0 bg-linear-to-br from-primary/10 via-transparent to-secondary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
@@ -711,7 +736,7 @@ const StatCard: React.FC<{
             {label}
           </span>
         </div>
-      </motion.div>
+      </div>
     </FloatingElement>
   );
 };

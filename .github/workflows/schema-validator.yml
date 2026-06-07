@@ -86,6 +86,7 @@ jobs:
         # so `chromium.launch()` failed before any schema check ran.
         run: npx playwright install --with-deps chromium
 
+
       - name: Build site (homepage critical)
         run: npm run build
         env:
@@ -99,6 +100,7 @@ jobs:
         run: |
           npx vite preview --port 4173 &
           npx wait-on http://localhost:4173 --timeout 60000
+
 
       - name: Validate homepage JSON-LD via sdtt
         # Two passes:

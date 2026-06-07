@@ -43,7 +43,7 @@ export const SchemaOrg: React.FC = () => {
     image: logoUrl,
     '@id': `${baseUrl}/#organization`,
     url: baseUrl,
-    telephone: '+90-541-714-3000',
+    telephone: '+905417143000',
     priceRange: '$$$',
     address: {
       '@type': 'PostalAddress',
@@ -155,11 +155,7 @@ export const SchemaOrg: React.FC = () => {
       name: 'eCyPro Premium Consulting',
       url: baseUrl,
     },
-    sameAs: [
-      'https://www.linkedin.com/in/emre-can-yalcin',
-      'https://twitter.com/ecypro',
-      'https://github.com/emrecnyn',
-    ],
+    sameAs: ['https://www.linkedin.com/in/emre-can-yalcin', 'https://github.com/emrecnyn'],
     knowsAbout: [
       'Management Consulting',
       'Digital Transformation',

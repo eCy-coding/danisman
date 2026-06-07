@@ -1,6 +1,5 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { motion } from 'motion/react';
 import { SERVICES } from '../../data/services';
 import { ServiceCard } from '../services/ServiceCard';
 import { Service } from '../../schemas/service';
@@ -15,29 +14,29 @@ const SERVICES_COPY = {
   },
 };
 
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.12,
-      delayChildren: 0.2,
-    },
-  },
-};
-
-const cardVariants = {
-  hidden: { opacity: 0, y: 30, scale: 0.95 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    transition: {
-      duration: 0.6,
-      ease: [0.25, 0.46, 0.45, 0.94] as [number, number, number, number],
-    },
-  },
-};
+// R7-A4 — Framer container/card variants (staggerChildren + per-card spring)
+// replaced with a CSS keyframe + per-card animation-delay. Eliminates 6×
+// motion.div reveal subscriptions + viewport observer churn on a section
+// that was previously gated by whileInView. Same visual envelope: opacity
+// 0→1, y +20→0, 550ms with the in-house cubic-bezier(0.16,1,0.3,1).
+// prefers-reduced-motion neutralises the entry per WCAG 2.3.3.
+const SERVICE_CARD_KEYFRAMES = `
+@keyframes service-card-in {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.service-card-in {
+  opacity: 0;
+  animation: service-card-in 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .service-card-in {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+`;
 
 export const Services: React.FC = () => {
   const { t, i18n } = useTranslation();
@@ -83,17 +82,18 @@ export const Services: React.FC = () => {
       </div>
 
       {/* Services Scrolling Grid */}
-      <motion.div
-        variants={containerVariants}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: '-50px' }}
-        className="lg:w-2/3 grid grid-cols-1 sm:grid-cols-2 gap-6"
-      >
-        {displayServices.map((service: Service) => (
-          <ServiceCard key={service.id} service={service} variants={cardVariants} />
+      <style>{SERVICE_CARD_KEYFRAMES}</style>
+      <div className="lg:w-2/3 grid grid-cols-1 sm:grid-cols-2 gap-6">
+        {displayServices.map((service: Service, index: number) => (
+          <div
+            key={service.id}
+            className="service-card-in"
+            style={{ animationDelay: `${index * 100}ms` }}
+          >
+            <ServiceCard service={service} />
+          </div>
         ))}
-      </motion.div>
+      </div>
     </section>
   );
 };
