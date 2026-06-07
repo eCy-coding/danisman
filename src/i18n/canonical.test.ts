@@ -24,8 +24,10 @@ describe('buildAlternateLinks', () => {
       'https://www.ecypro.com/tr/services',
     );
     expect(alts.find((a) => a.hrefLang === 'en')?.href).toBe('https://www.ecypro.com/en/services');
+    // S13-R4-S7/S8 — x-default points to apex (locale-less) to match
+    // sitemap.xml hreflang reciprocity; see canonical.ts buildAlternateLinks.
     expect(alts.find((a) => a.hrefLang === 'x-default')?.href).toBe(
-      'https://www.ecypro.com/tr/services',
+      'https://www.ecypro.com/services',
     );
   });
 });

@@ -517,8 +517,8 @@ export const Hero: React.FC = () => {
               {/* with the hero LCP <p>. */}
               {/* S13-R8-B + S14 R2 hybrid — <picture> chain (AVIF→WebP→JPG retina) */}
               {/* AVIF ~80-85% bandwidth saving vs JPG, WebP ~30% saving. Browser */}
-              {/* silently falls back to <img> if AVIF/WebP not generated. */}
-              {/* CRITICAL: <img> hala S14 R2 useState gate kullanır (founderSrc + */}
+              {/* silently falls back to the image element if AVIF/WebP not generated. */}
+              {/* CRITICAL: the image element still uses S14 R2 useState gate (founderSrc + */}
               {/* setFounderSrc). DOM mutation onError pattern'e DÖNME — re-render */}
               {/* sonsuz fetch döngüsünü tetikler (production'da kanıtlanmıştı). */}
               <picture>
