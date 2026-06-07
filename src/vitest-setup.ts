@@ -11,6 +11,36 @@ declare global {
 // React 19: configure act() support for the jsdom environment
 globalThis.IS_REACT_ACT_ENVIRONMENT = true;
 
+// S14 R21 — React 19.2.6 production bundle ships without `React.act`; falls back
+// to the deprecated `react-dom/test-utils` shim that re-throws
+// "React.act is not a function". @testing-library/react@16.3.2 expects
+// `React.act` to be a function; result was 747/1118 vitest cases failing on the
+// very first `render()` call.
+//
+// Minimal sync+async-aware polyfill: matches the React 18 act() contract
+// (returns a thenable) so testing-library's `withGlobalActEnvironment` wrapper
+// is satisfied without needing a real React commit-scheduler tick.
+function actPolyfill(callback: () => unknown): unknown {
+  const result = callback();
+  if (result !== null && typeof result === 'object' && 'then' in result) {
+    return Promise.resolve(result);
+  }
+  return {
+    then(resolve: () => void) {
+      resolve();
+    },
+  };
+}
+// CJS require — ESM React module exports are frozen; @testing-library uses
+// `require('react')` internally which returns the mutable CJS interop object,
+// so attaching `act` there gets picked up by act-compat.js. Top-level await
+// avoids the read-only ESM namespace error from `import * as React`.
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const ReactCJS = require('react') as Record<string, unknown>;
+if (typeof ReactCJS.act !== 'function') {
+  ReactCJS.act = actPolyfill;
+}
+
 // Mock matchMedia
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
