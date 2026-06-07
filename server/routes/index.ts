@@ -55,6 +55,8 @@ import adminRbacRoutes from './admin-rbac';
 // S14 R20 — Revenue surface (deals + retainers) — mount altta `/admin/rbac`'tan sonra.
 import { adminDealsRouter } from './admin-deals';
 import { adminRetainersRouter } from './admin-retainers';
+// S14 R24 — Integration status (ops single source of truth).
+import adminIntegrationsRouter from './admin-integrations';
 // L1-3 — Discovery form public endpoint
 import discoveryRoutes from './discovery';
 // Perspektif Blog — PB-2 admin API + PB-3 public search
@@ -563,6 +565,8 @@ router.use('/admin/rbac', adminRbacRoutes);
 // düzeltir; auth + RBAC zinciri zaten her iki router'ın handler tarafında uygulanıyor.
 router.use('/admin/deals', adminDealsRouter);
 router.use('/admin/retainers', adminRetainersRouter);
+// S14 R24 — /api/v1/admin/integrations/status — single ops health snapshot.
+router.use('/admin/integrations', adminIntegrationsRouter);
 // Perspektif Blog — PB-2 admin API + PB-3 public search
 router.use('/admin/insights/categories', adminInsightsCategoriesRouter);
 router.use('/admin/insights', adminInsightsRouter);
