@@ -6,7 +6,7 @@
  *   - missing kvkkConsent → 400 KVKK_REQUIRED.
  *   - happy path returns ok + paket.
  */
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import request from 'supertest';
 import express from 'express';
 
@@ -78,6 +78,13 @@ describe('recommendPaket', () => {
 
 describe('POST /api/v1/pricing-calculator-submit', () => {
   beforeEach(() => {
+    __resetFallbackStoreForTests();
+  });
+  afterEach(() => {
+    // Reset after each test too so the next test file inherits a clean
+    // fallback store — cross-file pollution previously caused
+    // middleware/cache.test.ts + middleware/rate-limit-health to fail when
+    // this file ran first in the suite.
     __resetFallbackStoreForTests();
   });
 
