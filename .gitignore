@@ -186,3 +186,6 @@ typecheck.log
 typings/
 yarn-debug.log*
 yarn-error.log*
+
+# S14 R9 — .test-write only (AGENTS.md + .sync/ already covered by R3.3 entry above)
+.test-write

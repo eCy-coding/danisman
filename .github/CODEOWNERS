@@ -1,0 +1,53 @@
+# ============================================================================
+# eCyPro CODEOWNERS
+# Adoption path: .github/CODEOWNERS
+# Authority: protocols/AI_COORDINATION_PROTOCOL_v1.md §5 (Tier 1/2/3 ownership)
+# Single-founder repo: @emrecnyngmail.com owns everything by default;
+# this file enforces explicit review when critical paths change.
+# ============================================================================
+
+# ----- Default owner -----
+*                                       @emrecnyngmail.com
+
+# ----- Frontend canonical -----
+/apps/web/                              @emrecnyngmail.com
+/packages/ui/                           @emrecnyngmail.com
+
+# ----- Backend canonical -----
+/apps/api/                              @emrecnyngmail.com
+/packages/db/                           @emrecnyngmail.com
+/prisma/                                @emrecnyngmail.com
+
+# ----- CI/CD (this directory's adoption target) -----
+/.github/                               @emrecnyngmail.com
+/.github/workflows/                     @emrecnyngmail.com
+/.github/CODEOWNERS                     @emrecnyngmail.com
+
+# ----- Compliance + observability (KVKK m.12 critical) -----
+/launch-readiness/                      @emrecnyngmail.com
+/launch-readiness/compliance/           @emrecnyngmail.com
+/launch-readiness/observability/        @emrecnyngmail.com
+/owner-manual/                          @emrecnyngmail.com
+
+# ----- Sentry / PII scrubber -----
+/apps/web/src/lib/sentry/               @emrecnyngmail.com
+/apps/api/src/lib/sentry/               @emrecnyngmail.com
+/apps/web/src/lib/posthog/              @emrecnyngmail.com
+
+# ----- Protocols + canonical docs (read-mostly) -----
+/protocols/                             @emrecnyngmail.com
+/docs/CANONICAL_PATTERNS.md             @emrecnyngmail.com
+/MEMORY.md                              @emrecnyngmail.com
+/ECYPRO_DISCIPLINE.md                   @emrecnyngmail.com
+
+# ----- E2E + smoke (Sprint 11 A2) -----
+/e2e/                                   @emrecnyngmail.com
+/e2e-master-smoke/                      @emrecnyngmail.com
+
+# ----- Secrets inventory -----
+/ci-cd-workflows/SECRETS_INVENTORY.md   @emrecnyngmail.com
+/.env.example                           @emrecnyngmail.com
+
+# ----- Legal + KVKK -----
+/legal-drafts/                          @emrecnyngmail.com
+/legal.json                             @emrecnyngmail.com
