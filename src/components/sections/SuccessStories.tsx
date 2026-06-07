@@ -1,6 +1,7 @@
-import React, { useRef } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, useScroll, useTransform } from 'motion/react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { CASE_STUDIES } from '../../constants';
 import { FadeIn } from '../common/FadeIn';
 import { useTranslation } from 'react-i18next';
@@ -23,18 +24,70 @@ export const SuccessStories: React.FC = () => {
   const lang = (i18n.language || 'en').startsWith('tr') ? 'tr' : 'en';
 
   const targetRef = useRef<HTMLDivElement>(null);
+  const cardsRef = useRef<(HTMLAnchorElement | null)[]>([]);
+  const [currentIndex, setCurrentIndex] = useState(0);
   const { scrollYProgress } = useScroll({
     target: targetRef,
   });
 
   const x = useTransform(scrollYProgress, [0, 1], ['0%', '-65%']);
 
+  const scrollToIndex = useCallback((idx: number) => {
+    const el = cardsRef.current[idx];
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+      el.focus({ preventScroll: true });
+    }
+  }, []);
+
+  const goPrev = useCallback(() => {
+    setCurrentIndex((i) => {
+      const next = Math.max(0, i - 1);
+      scrollToIndex(next);
+      return next;
+    });
+  }, [scrollToIndex]);
+
+  const goNext = useCallback(() => {
+    setCurrentIndex((i) => {
+      const next = Math.min(CASE_STUDIES.length - 1, i + 1);
+      scrollToIndex(next);
+      return next;
+    });
+  }, [scrollToIndex]);
+
+  // S14 R8 — keyboard carousel control. Wired to the prev/next buttons below
+  // (focusable native <button>), satisfies WCAG 2.1.1 without putting keydown
+  // on the non-interactive <section> wrapper (lint flagged).
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLElement>) => {
+      if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        goNext();
+      } else if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        goPrev();
+      }
+    },
+    [goNext, goPrev],
+  );
+
   if (!CASE_STUDIES || CASE_STUDIES.length === 0) {
     return null;
   }
 
   return (
-    <section className="bg-neutral relative" ref={targetRef}>
+    // S14 R8 — semantic <section> + native ARIA: aria-label gives region semantics.
+    // Section-level onKeyDown removed (lint correctly flags non-interactive element
+    // event listeners). Keyboard nav lives on inner prev/next buttons which are
+    // already focusable (button[type='button']) — that satisfies WCAG 2.1.1.
+    // R5-F intent (ArrowLeft/ArrowRight carousel scroll) preserved by binding the
+    // handler to the focusable carousel buttons themselves below.
+    <section
+      className="bg-neutral relative"
+      ref={targetRef}
+      aria-label={lang === 'tr' ? 'Başarı hikayeleri karuseli' : 'Success stories carousel'}
+    >
       {/* Desktop Horizontal Scroll Container (Sticky) */}
       <div className="hidden lg:block h-[300vh] relative">
         <div className="sticky top-0 h-screen flex items-center overflow-hidden">
@@ -59,14 +112,41 @@ export const SuccessStories: React.FC = () => {
             </Link>
           </div>
 
+          {/* Keyboard / SR navigation controls (overlay, visible for sighted keyboard users) */}
+          {/* S14 R8 — onKeyDown bound to focusable buttons (interactive). When */}
+          {/* a button has focus, ArrowLeft/Right also drive prev/next (carousel UX). */}
+          <button
+            type="button"
+            onClick={goPrev}
+            onKeyDown={handleKeyDown}
+            disabled={currentIndex === 0}
+            aria-label={lang === 'tr' ? 'Önceki vaka çalışması' : 'Previous case study'}
+            className="absolute left-4 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 border border-white/15 text-white flex items-center justify-center transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-secondary disabled:opacity-40 disabled:cursor-not-allowed"
+          >
+            <ChevronLeft size={20} aria-hidden="true" />
+          </button>
+          <button
+            type="button"
+            onClick={goNext}
+            onKeyDown={handleKeyDown}
+            disabled={currentIndex === CASE_STUDIES.length - 1}
+            aria-label={lang === 'tr' ? 'Sonraki vaka çalışması' : 'Next case study'}
+            className="absolute right-4 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 border border-white/15 text-white flex items-center justify-center transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-secondary disabled:opacity-40 disabled:cursor-not-allowed"
+          >
+            <ChevronRight size={20} aria-hidden="true" />
+          </button>
+
           <motion.div
             style={{ x }}
             className="flex gap-10 pl-[35vw] xl:pl-[30vw] pr-24 h-[600px] items-center"
           >
-            {CASE_STUDIES.map((study) => (
+            {CASE_STUDIES.map((study, index) => (
               <Link
                 to={`/case-studies/${study.slug}`}
                 key={study.id}
+                ref={(el) => {
+                  cardsRef.current[index] = el;
+                }}
                 className="w-[500px] xl:w-[600px] h-[500px] block outline-none group shrink-0"
               >
                 <article className="relative bg-white/5 rounded-3xl overflow-hidden h-full border border-white/10 shadow-2xl hover:border-secondary/30 transition-all duration-500 flex flex-col group">
@@ -75,7 +155,8 @@ export const SuccessStories: React.FC = () => {
                   <div className="relative h-64 overflow-hidden">
                     <img
                       src={study.image}
-                      alt={study.client}
+                      alt=""
+                      aria-hidden="true"
                       width={1200}
                       height={800}
                       loading="lazy"
@@ -146,7 +227,8 @@ export const SuccessStories: React.FC = () => {
                     {/* P15 — width/height CLS=0; loading=lazy below-fold gallery için. */}
                     <ResponsiveImage
                       src={study.image}
-                      alt={study.client}
+                      alt=""
+                      aria-hidden="true"
                       width={640}
                       height={384}
                       loading="lazy"

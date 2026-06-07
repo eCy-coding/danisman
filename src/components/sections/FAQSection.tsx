@@ -16,13 +16,17 @@ import { Plus, Minus, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from '../../lib/i18n';
 
-interface FAQItem {
+// S13-R3-S2 — Export FAQItem + FAQS so the SchemaOrg JSON-LD FAQPage emits
+// the SAME questions the DOM renders. Previously SchemaOrg.tsx hand-rolled
+// 2 entries while this section renders 8 — Google flags structured-data /
+// rendered-content mismatch and revokes rich-result eligibility.
+export interface FAQItem {
   id: string;
   q: { tr: string; en: string };
   a: { tr: string; en: string };
 }
 
-const FAQS: FAQItem[] = [
+export const FAQS: FAQItem[] = [
   {
     id: 'f1',
     q: {

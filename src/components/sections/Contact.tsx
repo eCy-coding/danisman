@@ -63,10 +63,15 @@ const InputField: React.FC<{
       />
 
       <div className="relative bg-surface rounded-xl border border-white/10 overflow-hidden transition-colors duration-300">
+        {/* S13-R3-A9 — aria-required mirrors HTML `required` so SR users */}
+        {/* are informed before they leave the field empty. Bare `*` glyph */}
+        {/* in the label is announced as "asterisk" by some SRs — keep it */}
+        {/* visible but back it up with semantic aria-required. */}
         {multiline ? (
           <textarea
             id={fieldId}
             aria-label={label}
+            aria-required={required}
             value={value}
             onChange={(e) => onChange(e.target.value)}
             onFocus={() => setIsFocused(true)}
@@ -79,6 +84,7 @@ const InputField: React.FC<{
           <input
             id={fieldId}
             aria-label={label}
+            aria-required={required}
             type={type}
             value={value}
             onChange={(e) => onChange(e.target.value)}
@@ -133,7 +139,10 @@ export const Contact: React.FC = () => {
   };
 
   return (
-    <section id="contact" className="py-32 lg:py-48 bg-surface relative overflow-hidden">
+    // S13-R3-A8 — section copy is TR-only ("İletişim", "Geleceği Birlikte
+    // Tasarlayalım", etc.). Set lang="tr" so SR/Voice Control pronounce
+    // correctly until proper i18n wiring lands.
+    <section id="contact" lang="tr" className="py-32 lg:py-48 bg-surface relative overflow-hidden">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_right,rgba(30,58,138,0.08),transparent_50%)] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10">

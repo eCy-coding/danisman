@@ -67,7 +67,11 @@ interface HomeServicePreviewProps {
 
 export const HomeServicePreview: React.FC<HomeServicePreviewProps> = ({ className }) => {
   return (
+    // S13-R3-A6 — section copy is hard-coded Turkish (untranslated). Mark
+    // the language so EN users' screen readers don't try to read TR text
+    // with English pronunciation. TODO: thread through i18n properly.
     <section
+      lang="tr"
       data-testid="home-service-preview"
       aria-label="Hizmet kümeleri"
       className={cn('py-24 bg-[#060A14]', className)}

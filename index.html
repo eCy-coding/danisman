@@ -209,6 +209,27 @@
     <link rel="preload" href="/index.css" as="style" />
     <link rel="stylesheet" href="/index.css" media="print" onload="this.media='all'" />
     <noscript><link rel="stylesheet" href="/index.css" /></noscript>
+    <!-- S13-R8-B3: preload hint for the above-fold founder avatar. AVIF first;
+         browsers that don't support AVIF will skip (no penalty) and the <picture>
+         element's WebP/JPG sources cover them on demand. -->
+    <link rel="preload" as="image" type="image/avif" href="/founder.avif" fetchpriority="low" />
+    <!-- R6-C1 — App Shell h1 ↔ React Hero h1 parity (CLS fix).
+         The App Shell h1 paints first (system Georgia fallback if Playfair
+         not yet loaded). React Hero h1 hydrates with text-5xl/md:6xl/
+         lg:[5.5rem] + tracking-tight + Playfair Display. Any size/family/
+         letter-spacing mismatch shifts layout on hydration. We match
+         font-size at Tailwind md (768px) and lg (1024px) breakpoints and
+         declare Playfair first in the font-family stack so it activates
+         the moment @font-face resolves — single composited paint instead
+         of a Georgia→Playfair reflow. -->
+    <style>
+      @media (min-width: 768px) {
+        .ecy-app-shell-h1 { font-size: 3.75rem; }
+      }
+      @media (min-width: 1024px) {
+        .ecy-app-shell-h1 { font-size: 5.5rem; }
+      }
+    </style>
     <!-- P20 — JS disabled fallback styles. SovereignBoundary + App Shell
          hero zaten inline CSS; bu blok sadece üst banner için. -->
     <noscript>
@@ -300,14 +321,15 @@
             &#9679;&nbsp;Premium Consulting &middot; eCyverse
           </div>
           <h1
+            class="ecy-app-shell-h1"
             style="
               color: #fff;
-              font-size: clamp(3rem, 5.5vw, 5.5rem);
+              font-size: 3rem;
               line-height: 1.05;
               margin: 0 0 1.5rem;
               font-weight: 700;
-              font-family: Georgia, serif;
-              letter-spacing: -0.02em;
+              font-family: 'Playfair Display', Georgia, serif;
+              letter-spacing: -0.025em;
             "
           >
             Vizyon. Strateji.<br />

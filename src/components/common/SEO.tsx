@@ -105,10 +105,14 @@ export const SEO: React.FC<SEOProps> = ({
   const finalCanonical = buildCanonical(canonical ?? '/', language);
 
   // Default JSON-LD for the organization from constants
+  // S13-R4-S1 — @id aligned with SchemaOrg's ProfessionalService node so
+  // WebSite.publisher refs (LandingPage) resolve to a single Organization
+  // entity in the Knowledge Graph instead of orphaned duplicates.
   const defaultJsonLd = React.useMemo(
     () => ({
       '@context': 'https://schema.org',
       '@type': 'Organization',
+      '@id': 'https://www.ecypro.com/#organization',
       name: 'eCyPro',
       url: SITE_URL,
       logo: `${SITE_URL}/logo.png`,
@@ -156,12 +160,26 @@ export const SEO: React.FC<SEOProps> = ({
     upsertMeta('meta[property="og:type"]', 'property', 'og:type', type);
     upsertMeta('meta[property="og:url"]', 'property', 'og:url', finalCanonical);
     upsertMeta('meta[property="og:image"]', 'property', 'og:image', image);
+    // S13-R3-S5 — explicit OG image dimensions + type + alt. LinkedIn and
+    // Facebook fall back to a crawl-time fetch when dimensions are missing
+    // (or rejects SVG entirely), often producing empty / wrong-shape link
+    // previews. The pinned PNG card is 1200×630.
+    upsertMeta('meta[property="og:image:width"]', 'property', 'og:image:width', '1200');
+    upsertMeta('meta[property="og:image:height"]', 'property', 'og:image:height', '630');
+    upsertMeta(
+      'meta[property="og:image:type"]',
+      'property',
+      'og:image:type',
+      image.endsWith('.svg') ? 'image/svg+xml' : 'image/png',
+    );
+    upsertMeta('meta[property="og:image:alt"]', 'property', 'og:image:alt', finalTitle);
 
     // Twitter
     upsertMeta('meta[name="twitter:card"]', 'name', 'twitter:card', 'summary_large_image');
     upsertMeta('meta[name="twitter:title"]', 'name', 'twitter:title', finalTitle);
     upsertMeta('meta[name="twitter:description"]', 'name', 'twitter:description', finalDescription);
     upsertMeta('meta[name="twitter:image"]', 'name', 'twitter:image', image);
+    upsertMeta('meta[name="twitter:image:alt"]', 'name', 'twitter:image:alt', finalTitle);
 
     // Per-page JSON-LD
     upsertJsonLd('page-default', jsonLd || defaultJsonLd);
