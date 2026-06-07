@@ -42,19 +42,93 @@ const STORE_KEY = 'ecypro-app-storage';
 interface PersistedAuthState {
   state?: {
     token?: string;
+    refreshToken?: string;
+    user?: unknown;
   };
+  version?: number;
 }
 
-function readAdminToken(): string | undefined {
+function readPersistedAuth(): PersistedAuthState['state'] | undefined {
   if (typeof window === 'undefined' || !window.localStorage) return undefined;
   try {
     const raw = window.localStorage.getItem(STORE_KEY);
     if (!raw) return undefined;
     const parsed = JSON.parse(raw) as PersistedAuthState;
-    return parsed?.state?.token;
+    return parsed?.state;
   } catch {
     return undefined;
   }
+}
+
+function readAdminToken(): string | undefined {
+  return readPersistedAuth()?.token;
+}
+
+function writeAdminTokens(newAccess: string, newRefresh?: string): void {
+  if (typeof window === 'undefined' || !window.localStorage) return;
+  try {
+    const raw = window.localStorage.getItem(STORE_KEY);
+    if (!raw) return;
+    const parsed = JSON.parse(raw) as PersistedAuthState;
+    if (!parsed.state) parsed.state = {};
+    parsed.state.token = newAccess;
+    if (newRefresh) parsed.state.refreshToken = newRefresh;
+    window.localStorage.setItem(STORE_KEY, JSON.stringify(parsed));
+  } catch {
+    /* never let storage corruption crash the app */
+  }
+}
+
+// S14 R14 — In-flight refresh deduplication. Multiple parallel 401s during a
+// burst of admin requests would otherwise fire N parallel /auth/refresh calls;
+// only the first one rotates the refresh token, the others fail with "token
+// reuse detected" and force re-login. Single shared promise = single rotation.
+let inflightRefresh: Promise<string | null> | null = null;
+
+const API_BASE =
+  (typeof window !== 'undefined' &&
+    (window as unknown as { __ECYPRO_API_URL?: string }).__ECYPRO_API_URL) ||
+  (typeof import.meta !== 'undefined' &&
+    (import.meta as ImportMeta & { env?: Record<string, string> }).env?.VITE_API_URL) ||
+  '';
+
+async function performRefresh(): Promise<string | null> {
+  const persisted = readPersistedAuth();
+  const refreshToken = persisted?.refreshToken;
+  if (!refreshToken) return null;
+
+  try {
+    // The refresh endpoint lives under the same VITE_API_URL prefix that
+    // apiClient (axios) uses. No Authorization header — refresh proves identity
+    // via the refresh token in the body.
+    const res = await fetch(`${API_BASE}/auth/refresh`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ refreshToken }),
+    });
+    if (!res.ok) return null;
+    const json = (await res.json()) as {
+      data?: { token?: string; refreshToken?: string };
+    };
+    const newAccess = json.data?.token;
+    const newRefresh = json.data?.refreshToken;
+    if (!newAccess) return null;
+    writeAdminTokens(newAccess, newRefresh);
+    return newAccess;
+  } catch {
+    return null;
+  }
+}
+
+function refreshOnce(): Promise<string | null> {
+  if (inflightRefresh) return inflightRefresh;
+  inflightRefresh = performRefresh().finally(() => {
+    // Reset so the *next* 401 (after the new access token also ages out)
+    // triggers a fresh refresh round instead of returning the cached result.
+    inflightRefresh = null;
+  });
+  return inflightRefresh;
 }
 
 /**
@@ -63,23 +137,43 @@ function readAdminToken(): string | undefined {
  * Adds:
  *   - Authorization: Bearer <jwt>   (if persisted token available)
  *   - credentials: 'include'         (so HttpOnly refresh cookies travel)
+ *   - S14 R14 — On 401, attempts ONE refresh round via /auth/refresh and
+ *     retries the original request with the new access token. Concurrent 401s
+ *     dedupe to a single refresh promise. If refresh also fails, the original
+ *     401 response is returned so callers can render their own auth-expired
+ *     UI / trigger logout. SSE endpoints (text/event-stream) are skipped —
+ *     they manage their own reconnect with fresh tokens.
  *
  * Caller-supplied headers and options take precedence — pass them in `init`.
  */
-export function adminFetch(input: RequestInfo | URL, init: RequestInit = {}): Promise<Response> {
+export async function adminFetch(
+  input: RequestInfo | URL,
+  init: RequestInit = {},
+): Promise<Response> {
   const token = readAdminToken();
 
-  // Merge headers without clobbering caller-supplied values
   const headers = new Headers(init.headers);
   if (token && !headers.has('Authorization')) {
     headers.set('Authorization', `Bearer ${token}`);
   }
 
-  return fetch(input, {
-    credentials: 'include',
-    ...init,
-    headers,
-  });
+  const opts: RequestInit = { credentials: 'include', ...init, headers };
+  let res = await fetch(input, opts);
+
+  // Skip the refresh-retry dance for SSE / streaming requests — the EventSource
+  // wrapper handles reconnect on its own with a fresh token, and replaying the
+  // GET would just open a doomed second stream.
+  const acceptsStream = headers.get('Accept')?.includes('text/event-stream');
+  if (res.status !== 401 || acceptsStream) return res;
+
+  const newAccess = await refreshOnce();
+  if (!newAccess) return res;
+
+  // Retry once with the new access token.
+  const retryHeaders = new Headers(init.headers);
+  retryHeaders.set('Authorization', `Bearer ${newAccess}`);
+  res = await fetch(input, { credentials: 'include', ...init, headers: retryHeaders });
+  return res;
 }
 
 /**
