@@ -56,8 +56,9 @@ import { errorHandler } from '../middleware/error';
 
 // ── Test utilities ────────────────────────────────────────────────────────────
 
+// Mirrors the JWT_SECRET injected globally by vitest.server.config.ts — read,
+// don't re-assign process.env (avoid any cross-file global mutation).
 const JWT_SECRET = 'test-jwt-secret-not-for-production-32chars!!';
-process.env.JWT_SECRET = JWT_SECRET;
 
 function makeToken(userId: string, role = 'USER') {
   return jwt.sign({ id: userId, role, jti: crypto.randomUUID() }, JWT_SECRET, {
