@@ -47,36 +47,44 @@ async function scan(): Promise<Finding[]> {
     const src = await fs.readFile(f, 'utf8');
     const rel = path.relative(path.resolve(__dirname, '../..'), f);
 
+    // Strip JS/JSX comments before scanning so explanatory tokens inside
+    // comments (e.g. a literal `<img>` in a `{/* ... */}` block) aren't flagged
+    // as real markup. Comment chars become spaces → byte offsets + newlines are
+    // preserved, so reported line numbers stay accurate. `[^:]` guards URLs.
+    const stripped = src
+      .replace(/\/\*[\s\S]*?\*\//g, (c) => c.replace(/[^\n]/g, ' '))
+      .replace(/(^|[^:])\/\/[^\n]*/g, (full, p1) => p1 + ' '.repeat(full.length - p1.length));
+
     // <img without alt
     const imgRe = /<img\b[^>]*?>/g;
     let m: RegExpExecArray | null;
-    while ((m = imgRe.exec(src))) {
+    while ((m = imgRe.exec(stripped))) {
       if (!/\balt\s*=/.test(m[0])) {
         found.push({
           rule: 'IMG_NO_ALT',
           file: rel,
-          line: src.slice(0, m.index).split('\n').length,
+          line: stripped.slice(0, m.index).split('\n').length,
         });
       }
     }
 
     // empty aria-label
     const emptyAriaRe = /aria-label\s*=\s*['"]\s*['"]/g;
-    while ((m = emptyAriaRe.exec(src))) {
+    while ((m = emptyAriaRe.exec(stripped))) {
       found.push({
         rule: 'EMPTY_ARIA_LABEL',
         file: rel,
-        line: src.slice(0, m.index).split('\n').length,
+        line: stripped.slice(0, m.index).split('\n').length,
       });
     }
 
     // positive tabindex (anti-pattern, breaks tab order)
     const tabRe = /tabIndex\s*=\s*\{?\s*([1-9]\d*)\s*\}?/g;
-    while ((m = tabRe.exec(src))) {
+    while ((m = tabRe.exec(stripped))) {
       found.push({
         rule: 'POSITIVE_TABINDEX',
         file: rel,
-        line: src.slice(0, m.index).split('\n').length,
+        line: stripped.slice(0, m.index).split('\n').length,
       });
     }
   }
