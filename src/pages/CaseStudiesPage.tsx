@@ -4,13 +4,16 @@ import { motion } from 'motion/react';
 import { useSearchParams, Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { CaseStudyCard } from '../components/features/case-studies/CaseStudyCard';
-import { CASE_STUDIES } from '@/data/mockCaseStudies';
+import { getCaseStudies } from '@/lib/data';
 import { FadeIn } from '../components/common/FadeIn';
 import { PageWrapper } from '../components/layout/PageWrapper';
 import { JsonLd } from '../components/seo/JsonLd';
 import { buildBreadcrumbSchema } from '../lib/structured-data';
 import { useTranslation } from '@/lib/i18n';
 import { buildCanonical } from '@/i18n/canonical';
+
+// Real (.mdoc) content merged over mock — see getCaseStudies().
+const CASE_STUDIES = getCaseStudies();
 
 const ALL_INDUSTRY = '__all__';
 

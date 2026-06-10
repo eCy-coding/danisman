@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { ArrowLeft, Building2, Trophy, Calendar, Target, TrendingUp } from 'lucide-react';
-import { CASE_STUDIES } from '@/data/mockCaseStudies';
+import { getCaseStudies } from '@/lib/data';
 import { FadeIn } from '../components/common/FadeIn';
 import { PageWrapper } from '../components/layout/PageWrapper';
 import { JsonLd } from '../components/seo/JsonLd';
@@ -12,6 +12,9 @@ import { useTranslation } from '@/lib/i18n';
 import { buildCanonical } from '@/i18n/canonical';
 import { NotFoundPage } from './NotFoundPage';
 import { ResponsiveImage } from '../components/ui/ResponsiveImage';
+
+// Real (.mdoc) content merged over mock — see getCaseStudies().
+const CASE_STUDIES = getCaseStudies();
 
 export const CaseStudyDetailPage: React.FC = () => {
   const { language } = useTranslation();

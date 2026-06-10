@@ -15,10 +15,11 @@
  *     bounded enough to fit comfortably inside the per-request 30s
  *     timeout. Queue it, email the link.
  *
- * For sandbox compatibility we DO NOT actually persist the artifact in
- * this skeleton (no S3/MinIO yet). The handler builds the dataset in
- * memory and logs a structured summary; the storage step is a TODO
- * marker pending the object-storage decision in P18.
+ * Persistence (P18): the artifact is written through the storage adapter
+ * (`server/lib/storage`) — local filesystem by default, S3-compatible when
+ * `STORAGE_BACKEND=s3`. A time-limited (7-day) signed URL is emitted to the
+ * `gdpr-export-ready` email. No external credentials are required in dev/CI:
+ * the local adapter keeps the pipeline testable end-to-end on a laptop.
  */
 
 import {
@@ -30,6 +31,7 @@ import {
   type IORedisLike,
 } from '../queues/bullmq-types';
 import { registerInlineHandler, enqueue, type GdprExportJobPayload } from '../queues';
+import { getStorage } from '../lib/storage';
 import { logger } from '../config/logger';
 
 const QUEUE_NAME = 'gdpr-export';
@@ -76,21 +78,37 @@ async function processGdprExportJob(payload: GdprExportJobPayload): Promise<void
     },
   };
 
-  // TODO(P18): persist to object storage + sign a 7-day URL.
-  // For now we emit a structured marker the operator can correlate
-  // against the audit log + queue stats.
-  logger.info('[workers/gdpr-export] artifact built', {
+  // P18: persist to object storage + sign a 7-day URL. The storage adapter
+  // abstracts local-fs (default) vs S3-compatible cloud; keys are opaque,
+  // slash-delimited paths validated by the adapter against traversal.
+  const storage = getStorage();
+  const ttlSeconds = 7 * 24 * 3600;
+  const storageKey = `gdpr-exports/${userId}/${Date.now()}.json`;
+  const body = Buffer.from(JSON.stringify(artifact), 'utf8');
+
+  await storage.put({
+    key: storageKey,
+    body,
+    contentType: 'application/json',
+    // The export contains personal data — never cache at the edge.
+    cacheControl: 'private, no-store',
+  });
+  const downloadUrl = await storage.signedUrl(storageKey, ttlSeconds);
+
+  logger.info('[workers/gdpr-export] artifact persisted', {
     userId,
-    bytes: JSON.stringify(artifact).length,
+    key: storageKey,
+    backend: storage.name,
+    bytes: body.length,
     durationMs: Date.now() - start,
   });
 
-  // Email the (placeholder) link. In P18 swap with the signed S3 URL.
+  // Email the real, time-limited signed link.
   await enqueue('email', {
     type: 'gdpr-export-ready',
     to: payload.email,
-    downloadUrl: `https://ecypro.com/account/exports/${userId}.json`,
-    expiresAt: new Date(Date.now() + 7 * 24 * 3600_000).toISOString(),
+    downloadUrl,
+    expiresAt: new Date(Date.now() + ttlSeconds * 1000).toISOString(),
     lang: 'tr',
   });
 }

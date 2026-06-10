@@ -30,43 +30,47 @@ vi.mock('@/i18n/canonical', () => ({
   buildCanonical: (path: string) => `https://www.ecypro.com${path}`,
 }));
 
-vi.mock('@/data/mockCaseStudies', () => ({
-  CASE_STUDIES: [
-    {
-      slug: 'sanayi-holding-cikis',
-      title: 'M&A Vaka — Sanayi Holdingi',
-      client: 'Büyük Sanayi Holdingi (Anonim)',
-      industry: 'Sanayi & Üretim',
-      result: '€65M başarılı anlaşma',
-      duration: '8 ay',
-      goLive: '2024-Q3',
-      content: '<p>Detaylı vaka içeriği.</p>',
-      image: null,
-    },
-    {
-      slug: 'tekstil-esg-donusum',
-      title: 'ESG Dönüşüm — Tekstil İhracatçısı',
-      client: 'Lider Tekstil İhracatçısı (Anonim)',
-      industry: 'Tekstil & Moda',
-      result: '+42% ESG Skoru',
-      duration: '6 ay',
-      goLive: '2024-Q2',
-      content: '<p>ESG dönüşüm detayları.</p>',
-      image: null,
-    },
-    {
-      slug: 'aile-yonetisim',
-      title: 'Aile Şirketi Yönetişim',
-      client: '3. Nesil Aile Şirketi (Anonim)',
-      industry: 'Perakende & Tüketim',
-      result: '%100 Uzlaşı',
-      duration: '5 ay',
-      goLive: '2024-Q1',
-      content: '<p>Yönetişim detayları.</p>',
-      image: null,
-    },
-  ],
-}));
+// CaseStudiesPage now reads getCaseStudies() (real .mdoc loader + mock merge),
+// not the raw CASE_STUDIES export. Mock the loader so the page renders exactly
+// these fixtures regardless of real content/merge.
+vi.mock('@/lib/data', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@/lib/data')>();
+  return {
+    ...actual,
+    getCaseStudies: () => [
+      {
+        slug: 'sanayi-holding-cikis',
+        title: 'M&A Vaka — Sanayi Holdingi',
+        client: 'Büyük Sanayi Holdingi (Anonim)',
+        industry: 'Sanayi & Üretim',
+        result: '€65M başarılı anlaşma',
+        duration: '8 ay',
+        goLive: '2024-Q3',
+        content: '<p>Detaylı vaka içeriği.</p>',
+      },
+      {
+        slug: 'tekstil-esg-donusum',
+        title: 'ESG Dönüşüm — Tekstil İhracatçısı',
+        client: 'Lider Tekstil İhracatçısı (Anonim)',
+        industry: 'Tekstil & Moda',
+        result: '+42% ESG Skoru',
+        duration: '6 ay',
+        goLive: '2024-Q2',
+        content: '<p>ESG dönüşüm detayları.</p>',
+      },
+      {
+        slug: 'aile-yonetisim',
+        title: 'Aile Şirketi Yönetişim',
+        client: '3. Nesil Aile Şirketi (Anonim)',
+        industry: 'Perakende & Tüketim',
+        result: '%100 Uzlaşı',
+        duration: '5 ay',
+        goLive: '2024-Q1',
+        content: '<p>Yönetişim detayları.</p>',
+      },
+    ],
+  };
+});
 
 vi.mock('../components/features/case-studies/CaseStudyCard', () => ({
   CaseStudyCard: ({ study }: { study: { title: string; industry: string } }) => (

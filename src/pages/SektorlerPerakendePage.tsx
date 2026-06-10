@@ -4,6 +4,10 @@ import { SEO } from '../components/common/SEO';
 import { JsonLd } from '../components/seo/JsonLd';
 import { buildBreadcrumbSchema } from '../lib/structured-data';
 import { FadeIn } from '../components/common/FadeIn';
+import { FAQSection } from '../components/blog/FAQSection';
+import { getSectorFaqItems } from '../data/sectorFaqs';
+import { SectorDepth } from '../components/sections/SectorDepth';
+import { getSectorContent } from '../data/sectorContent';
 import { useTranslation } from '@/lib/i18n';
 
 const PAIN_POINTS = [
@@ -59,6 +63,7 @@ const SERVICES = [
 
 export const SektorlerPerakendePage: React.FC = () => {
   const { language: lang } = useTranslation();
+  const sectorDepth = getSectorContent('perakende-e-ticaret');
 
   const serviceJsonLd = {
     '@context': 'https://schema.org',
@@ -165,6 +170,19 @@ export const SektorlerPerakendePage: React.FC = () => {
               ))}
             </ul>
           </div>
+        </FadeIn>
+
+        {sectorDepth && (
+          <FadeIn>
+            <SectorDepth content={sectorDepth} lang={lang} />
+          </FadeIn>
+        )}
+
+        <FadeIn>
+          <FAQSection
+            items={getSectorFaqItems('perakende-e-ticaret', lang)}
+            title={lang === 'tr' ? 'Sık Sorulan Sorular' : 'Frequently Asked Questions'}
+          />
         </FadeIn>
 
         <FadeIn>

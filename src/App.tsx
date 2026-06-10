@@ -234,6 +234,14 @@ const AdminSettingsTabsPage = React.lazy(() => import('./pages/admin/AdminSettin
 const AdminSecurityPage = React.lazy(() => import('./pages/admin/AdminSecurityPage'));
 const AdminProfilePage = React.lazy(() => import('./pages/admin/AdminProfilePage'));
 const AdminHelpPage = React.lazy(() => import('./pages/admin/AdminHelpPage'));
+const AdminRBACPage = React.lazy(() =>
+  import('./pages/admin/AdminRBACPage').then((m) => ({ default: m.AdminRBACPage })),
+);
+const AdminFounderLetterPage = React.lazy(() =>
+  import('./pages/admin/AdminFounderLetterPage').then((m) => ({
+    default: m.AdminFounderLetterPage,
+  })),
+);
 // Phase 3 — KVKK Compliance Shield
 const AdminDSARPage = React.lazy(() =>
   import('./pages/admin/AdminDSARPage').then((m) => ({ default: m.AdminDSARPage })),
@@ -1355,6 +1363,22 @@ const AnimatedRoutes = () => {
                 element={
                   <Suspense fallback={<LoadingFallback />}>
                     <AdminSecurityPage />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="rbac"
+                element={
+                  <Suspense fallback={<LoadingFallback />}>
+                    <AdminRBACPage />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="founder-letter"
+                element={
+                  <Suspense fallback={<LoadingFallback />}>
+                    <AdminFounderLetterPage />
                   </Suspense>
                 }
               />

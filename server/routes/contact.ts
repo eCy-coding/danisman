@@ -97,7 +97,7 @@ router.post(
 
       // Silent-200 on honeypot match — don't let bots learn the trap.
       if (data.hp_field) {
-        logger.info('[contact] honeypot triggered, silently accepting', { ip: req.ip });
+        logger.info('[contact] honeypot triggered, silently accepting', { ip: hashIp(req.ip) });
         res.json({ ok: true });
         return;
       }
@@ -155,7 +155,8 @@ router.post(
         ...(data.budget ? { Bütçe: data.budget } : {}),
         ...(data.message ? { Mesaj: data.message.slice(0, 600) } : {}),
         KVKK: 'onaylandı',
-        IP: req.ip ?? 'unknown',
+        // KVKK m.4/m.12: pseudonymize IP before it leaves our infra (Telegram).
+        IP: hashIp(req.ip) ?? 'unknown',
       });
 
       // Resend dual-send: founder notification + visitor confirmation.
