@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Menu, X, ChevronDown, ChevronUp, MessageCircle } from 'lucide-react';
-import { NAV_ITEMS } from '@/data/copy/common';
+import { NAV_ITEMS, getMegaChildren } from '@/data/copy/common';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { MegaMenu } from './MegaMenu';
 import { useScrollToSection } from '../common/useScrollToSection';
@@ -120,7 +120,8 @@ export const Navbar: React.FC = () => {
         {/* Desktop Menu */}
         <div className="hidden lg:flex items-center space-x-8 xl:space-x-10">
           {(Object.values(NAV_ITEMS) as NavItem[]).map((item) => {
-            const isDropdown = item.children && item.children.length > 0;
+            // Mega-menü öğeleri children dizisi taşımasa da dropdown sayılır.
+            const isDropdown = (item.children?.length ?? 0) > 0 || !!item.hasMegaMenu;
             const isActive = activeSection === item.href.substring(1);
 
             return (
@@ -306,7 +307,11 @@ export const Navbar: React.FC = () => {
       >
         <div className="flex flex-col h-full pt-28 px-8 pb-10 overflow-y-auto">
           {(Object.values(NAV_ITEMS) as NavItem[]).map((item) => {
-            const isDropdown = item.children && item.children.length > 0;
+            // services: mobil akordeon çocukları MEGA_MENUS'tan türetilir (9 öğe,
+            // masaüstü mega-menüyle birebir). Diğerleri kendi children'ını kullanır.
+            const children =
+              item.id === 'services' ? getMegaChildren('services') : (item.children ?? []);
+            const isDropdown = children.length > 0;
             const isExpanded = mobileExpanded === item.id;
 
             return (
@@ -327,7 +332,7 @@ export const Navbar: React.FC = () => {
                       className={`overflow-hidden transition-all duration-300 ease-in-out ${isExpanded ? 'max-h-96 opacity-100 mt-2' : 'max-h-0 opacity-0'}`}
                     >
                       <div className="pl-4 space-y-3 border-l-2 border-white/10 ml-1 py-2">
-                        {item.children!.map((child) => (
+                        {children.map((child) => (
                           <a
                             key={child.id}
                             href={child.href}

@@ -26,7 +26,9 @@ vi.mock('@/components/services/ServiceDetailLayout', () => ({
 }));
 vi.mock('@/components/seo/JsonLd', () => ({ JsonLd: () => null }));
 vi.mock('@/lib/i18n', () => ({ useTranslation: () => ({ language: 'tr' }) }));
-vi.mock('@/i18n/canonical', () => ({ buildCanonical: (p: string) => `https://www.ecypro.com${p}` }));
+vi.mock('@/i18n/canonical', () => ({
+  buildCanonical: (p: string) => `https://www.ecypro.com${p}`,
+}));
 
 function renderAt(slug: string) {
   return render(
@@ -46,6 +48,12 @@ const CONTENT_ONLY_SLUGS = [
   'ai-analytics',
   'digital-strategy',
   'operational-excellence',
+  // Phase 2 — yeni SEO/GEO mega-menü hizmet sayfaları
+  'organizational-design',
+  'cloud-platform-modernization',
+  'revenue-growth-strategy',
+  'cost-optimization',
+  'digital-operations',
 ];
 
 describe('ServiceDetailPage — resolver', () => {

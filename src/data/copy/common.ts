@@ -19,18 +19,9 @@ export const NAV_ITEMS = {
     href: '#services',
     label: { tr: 'Hizmetler', en: 'Services' },
     hasMegaMenu: true,
-    children: [
-      {
-        id: 'strategy',
-        label: { tr: 'Stratejik Yönetim', en: 'Strategic Management' },
-        href: '/services/strategic-transformation',
-      },
-      {
-        id: 'digital',
-        label: { tr: 'Dijital Dönüşüm', en: 'Digital Transformation' },
-        href: '/services/digital-strategy',
-      },
-    ],
+    // NOT: services alt-öğeleri TEK kaynaktan gelir → MEGA_MENUS.services.
+    // Masaüstü mega-menü ve mobil akordeon ikisi de oradan türetilir
+    // (Navbar.getMegaChildren). Buraya stale `children` kopyası eklemeyin.
   },
   sektorler: {
     id: 'sektorler',
@@ -135,7 +126,7 @@ export const MEGA_MENUS = {
               tr: 'Verimli yapılar ve yönetim modelleri',
               en: 'Efficient structures and governance models',
             },
-            href: '/services/strategic-transformation',
+            href: '/services/organizational-design',
             iconName: 'Network',
           },
         ],
@@ -171,7 +162,7 @@ export const MEGA_MENUS = {
               tr: 'Ölçeklenebilir bulut mimarisi ve geçiş stratejisi',
               en: 'Scalable cloud architecture and migration strategy',
             },
-            href: '/services/digital-strategy',
+            href: '/services/cloud-platform-modernization',
             iconName: 'Cloud',
           },
         ],
@@ -187,7 +178,7 @@ export const MEGA_MENUS = {
               tr: 'Pazar penetrasyonu ve yeni gelir akışları',
               en: 'Market penetration and new revenue streams',
             },
-            href: '/services',
+            href: '/services/revenue-growth-strategy',
             iconName: 'TrendingUp',
           },
           {
@@ -197,7 +188,7 @@ export const MEGA_MENUS = {
               tr: 'Operasyonel verimlilik ve maliyet optimizasyonu',
               en: 'Operational efficiency and cost optimization',
             },
-            href: '/services',
+            href: '/services/cost-optimization',
             iconName: 'BarChart3',
           },
           {
@@ -207,7 +198,7 @@ export const MEGA_MENUS = {
               tr: 'Otomasyon, süreç mükemmelliği ve lean yönetim',
               en: 'Automation, process excellence and lean management',
             },
-            href: '/services',
+            href: '/services/digital-operations',
             iconName: 'Settings',
           },
         ],
@@ -325,6 +316,27 @@ export const MEGA_MENUS = {
       gradient: 'from-secondary/20 to-primary/10',
     },
   },
+};
+
+/**
+ * Tek doğruluk kaynağı (single source of truth) yardımcı fonksiyonu.
+ *
+ * Mega-menü öğeleri için Navbar mobil akordeon çocukları, masaüstü mega-menüyle
+ * AYNI veriden (MEGA_MENUS) türetilir. Böylece mobil ve masaüstü asla sapmaz.
+ * (Daha önce NAV_ITEMS.services.children stale 2-öğelik bir kopya tutuyordu.)
+ */
+export interface MegaMenuChild {
+  id: string;
+  label: { tr: string; en: string };
+  href: string;
+}
+
+export const getMegaChildren = (menuId: string): MegaMenuChild[] => {
+  const menu = MEGA_MENUS[menuId as keyof typeof MEGA_MENUS];
+  if (!menu) return [];
+  return menu.sections
+    .flatMap((section) => section.items)
+    .map((item) => ({ id: item.id, label: item.label, href: item.href }));
 };
 
 // P52: Gerçek telefon numarası entegrasyonu. ENV `VITE_CONTACT_PHONE` override edebilir.

@@ -91,10 +91,18 @@ describe('service-content — boutique tone compliance', () => {
       'conflict-resolution',
       'family-business-governance',
     ];
-    for (const slug of [...originalSlugs, ...catalogSlugs]) {
+    // Phase 2 — SEO/GEO mega-menü hizmet sayfaları (intent-rich slug'lar)
+    const megaMenuSlugs = [
+      'organizational-design',
+      'cloud-platform-modernization',
+      'revenue-growth-strategy',
+      'cost-optimization',
+      'digital-operations',
+    ];
+    for (const slug of [...originalSlugs, ...catalogSlugs, ...megaMenuSlugs]) {
       expect(SERVICE_CONTENT[slug], `${slug}: missing from SERVICE_CONTENT`).toBeDefined();
     }
-    // 21 original + 17 new = 38 total entries
-    expect(Object.keys(SERVICE_CONTENT)).toHaveLength(38);
+    // 21 original + 17 catalog + 5 mega-menu = 43 total entries
+    expect(Object.keys(SERVICE_CONTENT)).toHaveLength(43);
   });
 });

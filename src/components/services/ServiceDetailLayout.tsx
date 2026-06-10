@@ -35,6 +35,7 @@ import {
   Users,
 } from 'lucide-react';
 import type { ServiceContent } from '../../data/service-content';
+import { getServiceContent } from '../../data/service-content';
 import { SERVICES } from '../../data/services';
 import { JsonLd } from '../seo/JsonLd';
 import { ServiceIllustration } from './ServiceIllustration';
@@ -188,9 +189,36 @@ export const ServiceDetailLayout: React.FC<ServiceDetailLayoutProps> = ({
   const valueProp = override?.valueProp || content?.hero?.valueProp;
   const primaryCta = content?.hero?.primaryCtaText || 'Ücretsiz Strateji Görüşmesi Al';
 
+  // Related (internal-linking — SEO). Resolve from the SERVICES catalog when
+  // possible; otherwise fall back to the SERVICE_CONTENT data layer so that
+  // content-only service pages (strategic-transformation, ai-analytics,
+  // cost-optimization, …) still render related cards and contribute internal
+  // links instead of silently dropping out.
   const relatedServices = (content?.related || [])
-    .map((slug) => SERVICES.find((s) => s.link?.endsWith(`/${slug}`)))
-    .filter((s): s is (typeof SERVICES)[number] => Boolean(s));
+    .map((slug) => {
+      const catalog = SERVICES.find((s) => s.link?.endsWith(`/${slug}`));
+      if (catalog) {
+        return {
+          id: catalog.id,
+          link: catalog.link,
+          title: catalog.title,
+          description: catalog.description,
+        };
+      }
+      const c = getServiceContent(slug);
+      if (c) {
+        return {
+          id: slug,
+          link: `/services/${slug}`,
+          title: c.hero.title,
+          description: c.hero.subtitle,
+        };
+      }
+      return undefined;
+    })
+    .filter((s): s is { id: string; link: string; title: string; description: string } =>
+      Boolean(s),
+    );
 
   const serviceSchema = {
     '@context': 'https://schema.org',

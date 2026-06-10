@@ -148,6 +148,12 @@ async function generateSitemap() {
     'global-intelligence',
     'smart-cities',
     'government-relations',
+    // Phase 2 — SEO/GEO mega-menü hizmet sayfaları (intent-rich slug'lar)
+    'organizational-design',
+    'cloud-platform-modernization',
+    'revenue-growth-strategy',
+    'cost-optimization',
+    'digital-operations',
   ];
 
   // P39-T10: Multilingual sitemap with hreflang xhtml:link alternates

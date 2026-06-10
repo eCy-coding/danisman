@@ -4197,6 +4197,546 @@ const SERVICE_CONTENT_LIST: ServiceContent[] = [
       'Kurumsallaşma & Bağımsız Yönetim',
     ),
   },
+
+  // ─────────────────────────────────────────────────────────────
+  // SEO/GEO — Navbar mega-menü hizmet sayfaları (Phase 2)
+  //
+  // Slug'lar arama-amacı (search intent) zengin, GEO (Generative Engine
+  // Optimization) için anlamsal olarak açık seçildi. Mevcut indeksli slug'lar
+  // (strategic-transformation, ai-analytics, digital-strategy,
+  // mergers-acquisitions, operational-excellence) KORUNDU; aşağıdakiler yeni.
+  // ─────────────────────────────────────────────────────────────
+  {
+    slug: 'organizational-design',
+    hero: {
+      title: 'Organizasyonel Tasarım & Operasyon Modeli Danışmanlığı',
+      subtitle:
+        'Strateji ile yapı arasındaki kopukluğu kapatan operasyon modeli, rol mimarisi ve karar hakları tasarımı.',
+      valueProp:
+        'Büyüme stratejinizi destekleyecek doğru organizasyon yapısını, karar haklarını ve yönetim ritmini kurar; sorumluluk boşluklarını ve mükerrer rolleri ortadan kaldırır.',
+      primaryCtaText: 'Organizasyon Teşhisi Talep Et',
+    },
+    problem: {
+      title: 'Tipik Organizasyonel Sorunlar',
+      painPoints: [
+        'Strateji değişti ama organizasyon şeması eski; yapı yeni hedefleri taşımıyor.',
+        'Karar hakları belirsiz; her şey üst yönetime çıkıyor, hız düşüyor.',
+        'Roller çakışıyor veya boşta kalıyor; hesap verebilirlik zayıf.',
+        'Büyümeyle birlikte katman sayısı arttı; iletişim ve onay zincirleri uzadı.',
+        'Yetenek doğru pozisyonda değil; span of control dengesiz.',
+      ],
+    },
+    outcomes: {
+      title: 'Engagement Sonunda Elde Edecekleriniz',
+      results: [
+        'Stratejiyle hizalı hedef operasyon modeli (target operating model).',
+        'Net karar hakları matrisi (RACI / RAPID) ve eskalasyon eşikleri.',
+        'Yeniden tasarlanmış organizasyon şeması + rol tanımları.',
+        'Span-of-control ve katman optimizasyonu önerisi.',
+        '90 günlük geçiş (transition) yol haritası.',
+      ],
+    },
+    methodology: {
+      title: 'Organizasyonel Tasarım Yaklaşımı',
+      phases: [
+        {
+          name: '1. Mevcut Durum Teşhisi',
+          duration: '2 hafta',
+          description:
+            'Strateji-yapı uyumu analizi, karar akışı haritalama, span/layer ölçümü, yetenek envanteri.',
+        },
+        {
+          name: '2. Tasarım İlkeleri',
+          duration: '1 hafta',
+          description:
+            'Operasyon modeli ilkeleri, merkezi/dağıtık denge kararları, tasarım kriterleri çalıştayı.',
+        },
+        {
+          name: '3. Yapı & Rol Tasarımı',
+          duration: '3 hafta',
+          description: 'Hedef organizasyon şeması, rol tanımları, karar hakları matrisi tasarımı.',
+        },
+        {
+          name: '4. Geçiş Planı',
+          duration: '2 hafta',
+          description: 'Değişim yönetimi, iletişim planı, 90 günlük geçiş yol haritası.',
+        },
+      ],
+    },
+    deliverables: {
+      title: 'Teslim Edilen Çıktılar',
+      artifacts: [
+        'Hedef Operasyon Modeli Dokümanı',
+        'Karar Hakları Matrisi (RACI/RAPID)',
+        'Yeniden Tasarlanmış Organizasyon Şeması',
+        'Rol & Sorumluluk Tanımları Seti',
+        'Span-of-Control Analiz Raporu',
+        '90 Günlük Geçiş Yol Haritası',
+      ],
+    },
+    timeline: {
+      totalDuration: '8 hafta (2 ay)',
+      milestones: [
+        { name: 'Teşhis tamamlandı', week: 'Hafta 2' },
+        { name: 'Tasarım ilkeleri onaylandı', week: 'Hafta 3' },
+        { name: 'Hedef yapı + roller', week: 'Hafta 6' },
+        { name: 'Geçiş planı handoff', week: 'Hafta 8' },
+      ],
+    },
+    investment: {
+      range: '₺250.000 – ₺650.000',
+      model: 'Sabit fiyat; kapsam ve süre yazılı önergede netleşir.',
+      paymentPlan: '3 milestone: %30 teşhis, %40 tasarım, %30 geçiş planı.',
+    },
+    trust: {
+      anonymizedExample:
+        'Hızlı büyüyen teknoloji şirketi (220 çalışan), 8 haftalık engagement. 6 yönetim katmanı 4’e indirildi, karar hakları netleştirildi. Sonuç: onay süresi %45 kısaldı, kilit pozisyonlarda hesap verebilirlik raporlandı.',
+    },
+    faq: {
+      items: [
+        {
+          q: 'Organizasyonel tasarım ile yeniden yapılanma (reorg) aynı şey mi?',
+          a: 'Hayır. Reorg çoğu zaman sadece şema değiştirir; organizasyonel tasarım karar haklarını, rol mimarisini ve yönetim ritmini stratejiyle hizalar — kalıcı sonuç için bu üçü birlikte kurulur.',
+        },
+        {
+          q: 'Mevcut ekibi küçültmek (downsizing) zorunda mıyız?',
+          a: 'Hayır. Amaç doğru rolü doğru yere yerleştirmek; çoğu engagement’ta toplam kadro korunur, dağılım ve sorumluluklar optimize edilir.',
+        },
+        {
+          q: 'Sonuç sürdürülebilir mi, eskiye dönülür mü?',
+          a: 'Yönetim ritmi (decision cadence) ve karar hakları yazılı kurulduğu için sürdürülebilir; geçiş döneminde liderlere moderasyon desteği verilir.',
+        },
+        ...SHARED_FAQ_END('organizational-design'),
+      ],
+    },
+    related: ['strategic-transformation', 'hr-transformation', 'digital-strategy'],
+    assessment: STANDARD_ASSESSMENT('organizational-design', 'Organizasyonel Tasarım'),
+  },
+  {
+    slug: 'cloud-platform-modernization',
+    hero: {
+      title: 'Bulut & Platform Modernizasyonu',
+      subtitle:
+        'Ölçeklenebilir bulut mimarisi, uygulama modernizasyonu ve maliyet-verimli platform geçiş stratejisi.',
+      valueProp:
+        'Eski (legacy) sistemleri ölçeklenebilir bulut mimarisine taşır; performans, güvenlik ve maliyet dengesini kurarak teknoloji borcunu azaltır ve geliştirme hızını artırır.',
+      primaryCtaText: 'Bulut Hazırlık Değerlendirmesi Al',
+    },
+    problem: {
+      title: 'Modernizasyonu Geciktiren Sorunlar',
+      painPoints: [
+        'Legacy mimari ölçeklenmiyor; trafik artışında performans düşüyor.',
+        'Bulut maliyeti kontrolsüz büyüyor; FinOps disiplini yok.',
+        'Dağıtım (deployment) yavaş ve riskli; otomasyon eksik.',
+        'Güvenlik ve uyum (compliance) bulut ortamında belirsiz.',
+        '“Lift-and-shift” yapıldı ama bulutun avantajları kullanılamıyor.',
+      ],
+    },
+    outcomes: {
+      title: 'Modernizasyon Sonuçları',
+      results: [
+        'Hedef bulut mimarisi ve geçiş (migration) yol haritası.',
+        'FinOps ile bulut maliyetinde %20-40 optimizasyon.',
+        'CI/CD otomasyonu ile dağıtım frekansında artış.',
+        'Güvenlik & uyum baseline (least-privilege, şifreleme, denetim izi).',
+        'Ölçeklenebilirlik ve dayanıklılık (resilience) testleri.',
+      ],
+    },
+    methodology: {
+      title: 'Modernizasyon Yaklaşımı',
+      phases: [
+        {
+          name: '1. Bulut Hazırlık Değerlendirmesi',
+          duration: '2 hafta',
+          description:
+            'Mevcut mimari envanteri, 6R analizi (rehost/replatform/refactor…), maliyet baseline.',
+        },
+        {
+          name: '2. Hedef Mimari Tasarımı',
+          duration: '2 hafta',
+          description: 'Landing zone, ağ/güvenlik tasarımı, referans mimari ve geçiş dalgaları.',
+        },
+        {
+          name: '3. Pilot Geçiş',
+          duration: '4 hafta',
+          description:
+            'Düşük riskli iş yükünde pilot migration, CI/CD ve gözlemlenebilirlik kurulumu.',
+        },
+        {
+          name: '4. Ölçekli Geçiş & FinOps',
+          duration: '4-8 hafta',
+          description: 'Dalga dalga geçiş, maliyet optimizasyonu, otomasyon ve handoff.',
+        },
+      ],
+    },
+    deliverables: {
+      title: 'Teslim Edilen Çıktılar',
+      artifacts: [
+        'Bulut Hazırlık & 6R Analiz Raporu',
+        'Hedef Referans Mimari (landing zone)',
+        'Migration Dalga Planı',
+        'CI/CD + Gözlemlenebilirlik Kurulum Kılavuzu',
+        'FinOps Maliyet Optimizasyon Raporu',
+        'Güvenlik & Uyum Baseline Dokümanı',
+      ],
+    },
+    timeline: {
+      totalDuration: '12-16 hafta (3-4 ay)',
+      milestones: [
+        { name: 'Hazırlık değerlendirmesi', week: 'Hafta 2' },
+        { name: 'Hedef mimari onayı', week: 'Hafta 4' },
+        { name: 'Pilot geçiş tamamlandı', week: 'Hafta 8' },
+        { name: 'Ölçekli geçiş handoff', week: 'Hafta 16' },
+      ],
+    },
+    investment: {
+      range: '₺350.000 – ₺1.200.000',
+      model: 'Sabit fiyat + opsiyonel FinOps tasarruf-paylaşımı bileşeni.',
+      paymentPlan: '4 milestone: %20 değerlendirme, %20 tasarım, %30 pilot, %30 ölçekli geçiş.',
+    },
+    trust: {
+      anonymizedExample:
+        'B2B SaaS şirketi, 14 haftalık engagement. Monolit uygulama konteynerleştirilip yönetilen bulut platformuna taşındı. Sonuç: aylık bulut maliyeti %32 düştü, dağıtım frekansı haftada 1’den günde birkaç kez seviyesine çıktı.',
+    },
+    faq: {
+      items: [
+        {
+          q: 'Hangi bulut sağlayıcısını kullanıyorsunuz — AWS, Azure, Google Cloud?',
+          a: 'Sağlayıcıdan bağımsızız. Hedef mimariyi iş yüküne, mevcut yeteneklere ve maliyete göre seçeriz; çoklu-bulut (multi-cloud) senaryoları da değerlendirilir.',
+        },
+        {
+          q: 'Geçiş sırasında sistemimiz kesintiye uğrar mı?',
+          a: 'Dalga dalga ve pilot-önce yaklaşımıyla kesintisiz geçişi hedefleriz; kritik iş yükleri için geri-alma (rollback) planı her dalgada hazır tutulur.',
+        },
+        {
+          q: 'Bulut maliyetimi nasıl kontrol altına alırsınız?',
+          a: 'FinOps disipliniyle: kullanım görünürlüğü, sağ-boyutlandırma (right-sizing), rezervasyon/spot optimizasyonu ve maliyet uyarıları kurulur.',
+        },
+        ...SHARED_FAQ_END('cloud-platform-modernization'),
+      ],
+    },
+    related: ['digital-strategy', 'ai-analytics', 'data-governance'],
+    assessment: STANDARD_ASSESSMENT(
+      'cloud-platform-modernization',
+      'Bulut & Platform Modernizasyonu',
+    ),
+  },
+  {
+    slug: 'revenue-growth-strategy',
+    hero: {
+      title: 'Gelir Büyümesi Stratejisi & Ticari Mükemmellik',
+      subtitle:
+        'Pazar penetrasyonu, fiyatlandırma optimizasyonu ve yeni gelir akışları ile sürdürülebilir büyüme.',
+      valueProp:
+        'Pazar segmentasyonu, fiyatlandırma ve satış motorunu yeniden kurarak sürdürülebilir gelir büyümesi yaratır; tek seferlik kampanya yerine tekrarlanabilir ticari sistem inşa eder.',
+      primaryCtaText: 'Büyüme Teşhisi Talep Et',
+    },
+    problem: {
+      title: 'Büyümeyi Engelleyen Sorunlar',
+      painPoints: [
+        'Gelir büyümesi yavaşladı veya tek bir kanala/müşteriye bağımlı.',
+        'Fiyatlandırma maliyet-bazlı; değer-bazlı fiyatlama fırsatı kaçıyor.',
+        'Satış hunisi (funnel) ölçülmüyor; dönüşüm darboğazları görünmüyor.',
+        'Yeni pazar/segment fırsatları analiz edilmeden bırakılıyor.',
+        'Pazarlama ve satış hizasız; lead kalitesi düşük.',
+      ],
+    },
+    outcomes: {
+      title: 'Büyüme Sonuçları',
+      results: [
+        'Önceliklendirilmiş büyüme fırsatları portföyü (etki × uygulanabilirlik).',
+        'Değer-bazlı fiyatlandırma modeli ve segment bazlı paketleme.',
+        'Satış hunisi metrikleri + dönüşüm iyileştirme planı.',
+        'Yeni gelir akışı / pazar giriş iş senaryosu.',
+        'Çeyreklik büyüme OKR’ları ve ticari yönetim ritmi.',
+      ],
+    },
+    methodology: {
+      title: 'Gelir Büyümesi Yaklaşımı',
+      phases: [
+        {
+          name: '1. Büyüme Teşhisi',
+          duration: '2 hafta',
+          description:
+            'Gelir köprüsü (revenue bridge) analizi, segment kârlılığı, funnel metrikleri, fiyat esnekliği.',
+        },
+        {
+          name: '2. Fırsat Haritalama',
+          duration: '2 hafta',
+          description: 'Pazar/segment/fiyat/çapraz-satış fırsatlarının önceliklendirilmesi.',
+        },
+        {
+          name: '3. Ticari Model Tasarımı',
+          duration: '3 hafta',
+          description: 'Fiyatlandırma, paketleme, satış süreci ve kanal stratejisi tasarımı.',
+        },
+        {
+          name: '4. Pilot & Ölçekleme',
+          duration: '4 hafta',
+          description: 'Seçili fırsatta pilot, ölçüm, ve büyüme OKR ritmine bağlama.',
+        },
+      ],
+    },
+    deliverables: {
+      title: 'Teslim Edilen Çıktılar',
+      artifacts: [
+        'Gelir Köprüsü & Segment Kârlılık Analizi',
+        'Önceliklendirilmiş Büyüme Fırsatları Portföyü',
+        'Değer-Bazlı Fiyatlandırma & Paketleme Modeli',
+        'Satış Hunisi Metrik Panosu + İyileştirme Planı',
+        'Yeni Gelir Akışı İş Senaryosu (business case)',
+        'Çeyreklik Büyüme OKR Seti',
+      ],
+    },
+    timeline: {
+      totalDuration: '10-12 hafta (2.5-3 ay)',
+      milestones: [
+        { name: 'Büyüme teşhisi', week: 'Hafta 2' },
+        { name: 'Fırsat portföyü onayı', week: 'Hafta 4' },
+        { name: 'Ticari model tasarımı', week: 'Hafta 7' },
+        { name: 'Pilot sonucu + handoff', week: 'Hafta 12' },
+      ],
+    },
+    investment: {
+      range: '₺300.000 – ₺800.000',
+      model: 'Sabit fiyat + opsiyonel sonuç-bazlı (gerçekleşen artışa bağlı) bileşen.',
+      paymentPlan: '4 milestone: %25 teşhis, %25 fırsat, %30 model, %20 pilot.',
+    },
+    trust: {
+      anonymizedExample:
+        'Orta ölçek B2B hizmet şirketi, 12 haftalık engagement. Değer-bazlı fiyatlandırma ve segment paketleme uygulandı. Sonuç: ortalama sözleşme değeri %18 arttı, en kârlı segmentte dönüşüm oranı belirgin yükseldi.',
+    },
+    faq: {
+      items: [
+        {
+          q: 'Gelir büyümesi danışmanlığı satış eğitiminden farklı mı?',
+          a: 'Evet. Satış eğitimi davranış geliştirir; bizim odağımız ticari sistemi (segment, fiyat, paket, funnel) yeniden tasarlamak — yani tekrarlanabilir büyüme motoru kurmak.',
+        },
+        {
+          q: 'Fiyat artışı müşteri kaybına yol açmaz mı?',
+          a: 'Değer-bazlı fiyatlandırma segmentin ödeme istekliliğine göre kurgulanır; pilot ile esneklik test edilir, riskli segmentlerde kademeli geçiş uygulanır.',
+        },
+        {
+          q: 'Sonuçları nasıl ölçüyorsunuz?',
+          a: 'Gelir köprüsü, ortalama sözleşme değeri, dönüşüm oranı ve segment kârlılığı gibi metrikler baseline’a göre çeyreklik izlenir.',
+        },
+        ...SHARED_FAQ_END('revenue-growth-strategy'),
+      ],
+    },
+    related: ['strategic-transformation', 'market-entry', 'neuromarketing'],
+    assessment: STANDARD_ASSESSMENT('revenue-growth-strategy', 'Gelir Büyümesi'),
+  },
+  {
+    slug: 'cost-optimization',
+    hero: {
+      title: 'Maliyet Optimizasyonu & Verimlilik Dönüşümü',
+      subtitle:
+        'Yapısal maliyet azaltma, harcama görünürlüğü ve sürdürülebilir verimlilik — büyümeyi feda etmeden.',
+      valueProp:
+        'Maliyet yapısını kalem kalem söker; tek seferlik kesinti yerine yapısal ve sürdürülebilir verimlilik yaratır, tasarrufu büyümeyi besleyecek alanlara yönlendirir.',
+      primaryCtaText: 'Maliyet Teşhisi Talep Et',
+    },
+    problem: {
+      title: 'Tipik Maliyet Sorunları',
+      painPoints: [
+        'Maliyetler gelirden hızlı büyüyor; marj eriyor.',
+        'Harcama görünürlüğü düşük; nereye ne harcandığı net değil.',
+        'Geçmiş kesintiler kalıcı olmadı; maliyet geri geldi.',
+        'Tedarikçi/sözleşme tarafında kaçak değer (value leakage) var.',
+        'Verimlilik girişimleri büyümeyi yavaşlatma korkusuyla ertelendi.',
+      ],
+    },
+    outcomes: {
+      title: 'Optimizasyon Sonuçları',
+      results: [
+        'Kategori bazlı harcama görünürlüğü (spend cube).',
+        'Önceliklendirilmiş, yapısal tasarruf fırsatları listesi.',
+        'Tedarik & sözleşme optimizasyonu kazanımları.',
+        '“Zero-based” bütçeleme yaklaşımıyla yeniden tahsis.',
+        'Tasarrufu koruyan yönetişim ve takip mekanizması.',
+      ],
+    },
+    methodology: {
+      title: 'Maliyet Optimizasyonu Yaklaşımı',
+      phases: [
+        {
+          name: '1. Harcama Teşhisi',
+          duration: '2 hafta',
+          description:
+            'Spend cube oluşturma, kategori analizi, benchmark, hızlı kazanım (quick win) tespiti.',
+        },
+        {
+          name: '2. Fırsat Önceliklendirme',
+          duration: '1 hafta',
+          description:
+            'Tasarruf fırsatlarının etki/uygulanabilirlik matrisiyle önceliklendirilmesi.',
+        },
+        {
+          name: '3. Uygulama Sprintleri',
+          duration: '6-8 hafta',
+          description: 'Tedarik renegotiation, süreç sadeleştirme, talep yönetimi uygulamaları.',
+        },
+        {
+          name: '4. Yönetişim & Koruma',
+          duration: '2 hafta',
+          description: 'Tasarruf takip panosu, sahiplik atama, geri-dönüşü önleyen kontroller.',
+        },
+      ],
+    },
+    deliverables: {
+      title: 'Teslim Edilen Çıktılar',
+      artifacts: [
+        'Spend Cube (kategori bazlı harcama analizi)',
+        'Önceliklendirilmiş Tasarruf Fırsatları Raporu',
+        'Tedarik & Sözleşme Optimizasyon Planı',
+        'Zero-Based Bütçe Çerçevesi',
+        'Tasarruf Takip Panosu (savings tracker)',
+        'Yönetişim & Sahiplik Modeli',
+      ],
+    },
+    timeline: {
+      totalDuration: '11-13 hafta (~3 ay)',
+      milestones: [
+        { name: 'Harcama teşhisi', week: 'Hafta 2' },
+        { name: 'Fırsat önceliklendirme', week: 'Hafta 3' },
+        { name: 'İlk tasarruf kazanımları', week: 'Hafta 8' },
+        { name: 'Yönetişim handoff', week: 'Hafta 13' },
+      ],
+    },
+    investment: {
+      range: '₺250.000 – ₺750.000',
+      model: 'Sabit fiyat + opsiyonel value-based (gerçekleşen tasarrufun %5-10’u) bileşen.',
+      paymentPlan: '4 milestone: %25 teşhis, %20 önceliklendirme, %35 uygulama, %20 yönetişim.',
+    },
+    trust: {
+      anonymizedExample:
+        'Çok lokasyonlu perakende zinciri, 12 haftalık engagement. Dolaylı harcama kategorilerinde renegotiation ve talep yönetimi uygulandı. Sonuç: yıllıklandırılmış ₺6.8M tasarruf, marj noktasal iyileşme, tasarruf takip panosuyla korundu.',
+    },
+    faq: {
+      items: [
+        {
+          q: 'Maliyet optimizasyonu işten çıkarma anlamına mı geliyor?',
+          a: 'Hayır. Önceliğimiz yapısal verimlilik: tedarik, süreç ve talep yönetimi. Kadro kararları müşterinin tasarrufudur; çoğu kazanım personel dışı kalemlerden gelir.',
+        },
+        {
+          q: 'Tasarruf kalıcı olur mu, yoksa bir yıl sonra geri mi gelir?',
+          a: 'Tasarruf takip panosu, sahiplik atama ve geri-dönüşü önleyen kontrollerle kalıcılığı hedefleriz; bu, tek seferlik kesintiden temel farkımızdır.',
+        },
+        {
+          q: 'Büyümeyi yavaşlatır mı?',
+          a: 'Hayır; amaç tasarrufu büyümeyi besleyecek alanlara yeniden tahsis etmektir (zero-based yaklaşım). Stratejik yatırımlar korunur.',
+        },
+        ...SHARED_FAQ_END('cost-optimization'),
+      ],
+    },
+    related: ['operational-excellence', 'digital-strategy', 'ai-analytics'],
+    assessment: STANDARD_ASSESSMENT('cost-optimization', 'Maliyet Optimizasyonu'),
+  },
+  {
+    slug: 'digital-operations',
+    hero: {
+      title: 'Dijital Operasyonlar & Süreç Otomasyonu',
+      subtitle:
+        'Uçtan uca süreç otomasyonu, yalın akış ve dijital operasyon yönetimi ile ölçeklenebilir verimlilik.',
+      valueProp:
+        'Manuel ve kopuk süreçleri uçtan uca otomasyon ve yalın akışla yeniden kurar; operasyonel hatayı azaltır, hızı ve ölçeklenebilirliği artırır.',
+      primaryCtaText: 'Süreç Otomasyon Teşhisi Al',
+    },
+    problem: {
+      title: 'Dijital Operasyon Sorunları',
+      painPoints: [
+        'Süreçler manuel ve kopuk; tekrar eden işler insan zamanını yiyor.',
+        'Sistemler birbirine bağlı değil; veriyi elle taşıma hatası yüksek.',
+        'Süreç performansı ölçülmüyor; darboğazlar görünmez.',
+        'Otomasyon girişimleri noktasal kaldı; uçtan uca akış kurulamadı.',
+        'Ölçeklenirken operasyon maliyeti orantısız artıyor.',
+      ],
+    },
+    outcomes: {
+      title: 'Dijital Operasyon Sonuçları',
+      results: [
+        'Uçtan uca süreç haritası ve otomasyon fırsat listesi.',
+        'Öncelikli süreçlerde otomasyon (workflow/RPA/entegrasyon).',
+        'Süreç performans panosu (cycle time, hata oranı, hacim).',
+        'Manuel iş yükünde ölçülebilir azalma.',
+        'Sürdürülebilir operasyon yönetim ritmi.',
+      ],
+    },
+    methodology: {
+      title: 'Dijital Operasyon Yaklaşımı',
+      phases: [
+        {
+          name: '1. Süreç Teşhisi & Madenciliği',
+          duration: '2 hafta',
+          description:
+            'Uçtan uca süreç haritalama, process mining, darboğaz ve israf (müda) tespiti.',
+        },
+        {
+          name: '2. Otomasyon Yol Haritası',
+          duration: '1 hafta',
+          description: 'Otomasyon fırsatlarının ROI/uygulanabilirlik ile önceliklendirilmesi.',
+        },
+        {
+          name: '3. Uygulama Sprintleri',
+          duration: '6-8 hafta',
+          description: 'Workflow otomasyonu, sistem entegrasyonu, RPA pilotları, yalın akış.',
+        },
+        {
+          name: '4. Ölçekleme & Yönetim',
+          duration: '2 hafta',
+          description: 'Performans panosu, operasyon yönetim ritmi, ekip eğitimi ve handoff.',
+        },
+      ],
+    },
+    deliverables: {
+      title: 'Teslim Edilen Çıktılar',
+      artifacts: [
+        'Uçtan Uca Süreç Haritaları',
+        'Otomasyon Fırsat & ROI Raporu',
+        'Otomatize Edilmiş İş Akışları (workflow/RPA)',
+        'Sistem Entegrasyon Tasarımı',
+        'Süreç Performans Panosu (KPI dashboard)',
+        'Operasyon Yönetim Ritmi Şablonu',
+      ],
+    },
+    timeline: {
+      totalDuration: '11-13 hafta (~3 ay)',
+      milestones: [
+        { name: 'Süreç teşhisi', week: 'Hafta 2' },
+        { name: 'Otomasyon yol haritası', week: 'Hafta 3' },
+        { name: 'İlk otomasyon canlıda', week: 'Hafta 8' },
+        { name: 'Ölçekleme handoff', week: 'Hafta 13' },
+      ],
+    },
+    investment: {
+      range: '₺300.000 – ₺850.000',
+      model: 'Sabit fiyat + opsiyonel value-based (kazanılan verimlilik) bileşen.',
+      paymentPlan: '4 milestone: %25 teşhis, %15 yol haritası, %40 uygulama, %20 ölçekleme.',
+    },
+    trust: {
+      anonymizedExample:
+        'Finansal hizmet şirketi back-office operasyonu, 12 haftalık engagement. Onboarding ve mutabakat süreçleri otomatize edildi. Sonuç: manuel iş yükü %38 azaldı, döngü süresi (cycle time) yarıdan fazla kısaldı, hata oranı belirgin düştü.',
+    },
+    faq: {
+      items: [
+        {
+          q: 'Dijital operasyonlar RPA ile aynı şey mi?',
+          a: 'RPA bir araçtır; biz önce uçtan uca süreci yalınlaştırır, sonra doğru noktada workflow otomasyonu, entegrasyon veya RPA kullanırız. Kötü süreci otomatize etmek hatayı hızlandırır.',
+        },
+        {
+          q: 'Mevcut sistemlerimizi değiştirmemiz gerekir mi?',
+          a: 'Çoğu zaman hayır. Önce mevcut sistemler arasında entegrasyon ve otomasyon ile değer üretiriz; sistem değişimi ancak iş senaryosu gerektirirse önerilir.',
+        },
+        {
+          q: 'Otomasyonun etkisini nasıl ölçüyorsunuz?',
+          a: 'Döngü süresi, hata oranı, işlem hacmi ve manuel saat tasarrufu gibi metrikler baseline’a göre süreç performans panosunda izlenir.',
+        },
+        ...SHARED_FAQ_END('digital-operations'),
+      ],
+    },
+    related: ['operational-excellence', 'ai-analytics', 'digital-strategy'],
+    assessment: STANDARD_ASSESSMENT('digital-operations', 'Dijital Operasyonlar'),
+  },
 ];
 
 export const SERVICE_CONTENT: Record<string, ServiceContent> = Object.fromEntries(
