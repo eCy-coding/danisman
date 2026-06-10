@@ -131,6 +131,17 @@ export const Navbar: React.FC = () => {
                 className="relative h-full flex items-center"
                 onMouseEnter={() => isDropdown && handleDropdownEnter(item.id)}
                 onMouseLeave={() => isDropdown && handleDropdownLeave()}
+                // A11y + cross-browser kararlılık: menü yalnızca hover ile değil,
+                // klavye focus'u ile de açılır. (React onFocus/onBlur focusin/out
+                // semantiğiyle çocuk öğelerden bubble eder.) Bu, klavye
+                // kullanıcıları için erişilebilirliği sağlar ve Firefox dahil tüm
+                // tarayıcılarda mega-menünün deterministik açılmasını mümkün kılar.
+                onFocus={() => isDropdown && handleDropdownEnter(item.id)}
+                onBlur={(e) => {
+                  if (isDropdown && !e.currentTarget.contains(e.relatedTarget as Node | null)) {
+                    handleDropdownLeave();
+                  }
+                }}
               >
                 <a
                   href={item.href}

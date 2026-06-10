@@ -31,7 +31,14 @@ async function openServicesMenu(page: Page) {
   await page.goto('/');
   const trigger = page.getByTestId('navbar-link-services');
   await expect(trigger).toBeVisible();
+
+  // Menü hem hover hem de klavye focus'u ile açılır (Navbar onMouseEnter +
+  // onFocus). Firefox'ta saf hover, Playwright pointer modeli + 200ms kapanma
+  // gecikmesi + paneldeki şeffaf boşluk yüzünden kararsız kalabiliyordu; bu
+  // nedenle deterministik olan focus'u kullanıyoruz (tüm tarayıcılarda stabil).
   await trigger.hover();
+  await trigger.focus();
+
   const panel = page.getByRole('region', { name: 'Hizmetler açılır paneli' });
   await expect(panel).toBeVisible();
   return panel;
