@@ -23,14 +23,23 @@ export const ServiceDetailPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
   if (!slug) return <Navigate to="/services" replace />;
 
-  // Find canonical service entry from SERVICES catalog
+  // Resolve a service detail page from EITHER the SERVICES catalog OR the
+  // slug-specific SERVICE_CONTENT data layer. Historically only the catalog
+  // was consulted, so content-only slugs that are linked from the navbar
+  // mega-menu (strategic-transformation, ai-analytics, digital-strategy,
+  // operational-excellence, …) resolved to /404 even though full 16-section
+  // content existed. We now treat SERVICE_CONTENT as a first-class source of
+  // truth: a slug is valid if it appears in either source.
   const service = SERVICES.find((s) => s.link?.endsWith(`/${slug}`));
-  if (!service) return <Navigate to="/404" replace />;
-
-  const fallbackTitle = service.title;
-  const fallbackDescription = service.description;
-  const serviceUrl = buildCanonical(`/services/${slug}`, language);
   const detailedContent = getServiceContent(slug);
+  if (!service && !detailedContent) return <Navigate to="/404" replace />;
+
+  // Catalog metadata wins for SEO when present; otherwise derive from the
+  // content hero so meta tags / breadcrumb stay accurate for content-only slugs.
+  const fallbackTitle = service?.title ?? detailedContent?.hero.title ?? slug;
+  const fallbackDescription =
+    service?.description ?? detailedContent?.hero.subtitle ?? '';
+  const serviceUrl = buildCanonical(`/services/${slug}`, language);
 
   // ServiceDetailLayout her halükarda render olur; içerik yoksa hero + fallback CTA döner.
   const content = detailedContent ?? {
