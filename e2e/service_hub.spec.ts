@@ -26,7 +26,8 @@ test.describe('Service Intelligence Hub', () => {
     // visible" premise is stale. Behavioral contract: the section is
     // optional, and when rendered it must contain at least one article link.
     await page.goto('/services/payroll-audit');
-    await page.waitForLoadState('networkidle');
+    // networkidle never settles here (persistent connections) — the h1
+    // auto-wait below is the real readiness signal.
 
     // Verify Page Loaded
     await expect(page.locator('h1').first()).toBeVisible();
