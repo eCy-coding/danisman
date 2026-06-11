@@ -86,8 +86,11 @@ test.describe('GATE-3 perspektifler hub', () => {
     await expect(
       fresh.locator('[data-testid="perspektifler-facet-bar"] select').first(),
     ).toHaveValue('makale');
+    const expectedCount = Number.parseInt(countText, 10);
     const freshStatus = fresh.locator('[data-testid="perspektifler-facet-bar"] [role="status"]');
-    await expect(freshStatus).toHaveText(countText);
+    await expect
+      .poll(async () => Number.parseInt(await freshStatus.innerText(), 10), { timeout: 10_000 })
+      .toBe(expectedCount);
     await fresh.close();
   });
 

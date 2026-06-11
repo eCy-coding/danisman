@@ -38,3 +38,11 @@ Until then the fence is enforced procedurally (SCOPE.md discipline).
 **Evidence:** e2e 67 passed + 1 firefox retry-green flaky (brain/perspektifler/gate3-e2e.txt) · unit 10/10 lib/perspektifler.test.ts · typecheck+build green.
 **Lighthouse (local preview, loaded rig):** hub perf 60 / a11y 97 / seo 100 / bp 96 — site baseline landing=62; hub at parity, a11y best-of-site. ≥90 unattainable on ANY page locally (pre-existing serving infra per project memory). AC-06 final read = isolated rerun Gate-6 + prod URL post-deploy. Not claimed as pass.
 **Premise notes:** service_hub test-1 404 = pre-existing services catalog gap (OUT_OF_SCOPE.md) · prototype routes unmounted (8 lazy imports removed), files deleted in Gate-6.
+
+## Gate-4 (2026-06-11)
+**Done:** BlogPostPage: visible breadcrumb Hub→Kategori→Makale, category+format meta chips (was raw tag slug), canonical/OG/JSON-LD → /perspektifler, 4-item BreadcrumbList w/ category, founder inline CTA portal after 2nd content H2 (#founder-letter anchor → capsule at article foot), related top-3 (overlap→same-cat→newest fill), series prev/next (schema-ready), zod schema extended (categorySlug/format/readTimeMin/seriesId/pairId…). CaseStudiesPage filters now shared 10-category taxonomy (legacy ?industry= mapped) + cross-link to hub format view.
+**Evidence:** check-links 20-sample + --all 49/49 PASS (gate4-check-links.txt) · rich-results longest+shortest PASS (gate4-rich-results.txt) · typecheck+build+e2e batch exit 0 (66 passed, 2 retry-green flakes; firefox round-trip hardened to numeric poll).
+
+## Gate-5 (2026-06-11)
+**Done:** ranked zero-dep search `searchPerspektifler` (title×3/tags×2/body×1, TR-fold), hub ?q= live, zero-result state suggests categories; events via consent-gated trackEvent: search_query, zero_result, load_more, category_click, newsletter_submit (no PII).
+**Evidence:** vitest GATE-5 suite 4/4 — zero-result 1/30 (3.3% <5%), p95 0.23ms (<300ms), diacritic equivalence, relevance ordering (brain/perspektifler/gate5-search.txt).

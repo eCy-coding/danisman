@@ -17,9 +17,18 @@ export const BlogPostSchema = z.object({
   // BlogList filter chips still draw from BLOG_CATEGORIES so the curated
   // taxonomy is preserved.
   category: z.string().optional(),
+  /** Perspektifler taxonomy (GATE-1): canonical category slug for URLs. */
+  categorySlug: z.string().optional(),
   tags: z.array(z.string()),
   serviceCategories: z.array(z.string()).optional(),
   readingTime: z.string(),
+  readTimeMin: z.number().int().positive().optional(),
+  wordCount: z.number().int().nonnegative().optional(),
+  lang: z.enum(['tr', 'en']).optional(),
+  format: z.enum(['makale', 'vaka-analizi', 'rapor', 'founder-letter']).optional(),
+  pairId: z.string().optional(),
+  seriesId: z.string().optional(),
+  updated: z.string().optional(),
   featured: z.boolean().optional(),
   // Sprint 4 — NotebookLM Audio Overview embed (markdown frontmatter pattern,
   // vault konsensüsü: BE schema dondurulduğu için content layer'ında tutulur).

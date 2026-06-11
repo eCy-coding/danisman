@@ -205,3 +205,59 @@ export function topTopics(f: HubFilter, limit = 12): FacetOption[] {
     }))
     .filter((o) => o.count > 0);
 }
+
+/** Tag-overlap related articles (mirrors scripts/check-links.ts contract):
+ *  overlap desc → same-category → newest-any fill, always 3 when corpus allows. */
+export function relatedItems(slug: string, limit = 3): FeedItem[] {
+  const source = posts.find((p) => p.slug === slug);
+  if (!source) return [];
+  const scored = posts
+    .filter((p) => p.slug !== slug)
+    .map((p) => ({
+      p,
+      overlap: p.tags.filter((t) => source.tags.includes(t)).length,
+      sameCat: p.categorySlug === source.categorySlug ? 1 : 0,
+    }))
+    .sort(
+      (a, b) => b.overlap - a.overlap || b.sameCat - a.sameCat || b.p.date.localeCompare(a.p.date),
+    );
+  const cluster = scored.filter((s) => s.overlap > 0 || s.sameCat > 0).map((s) => s.p);
+  if (cluster.length >= limit) return cluster.slice(0, limit);
+  const fill = scored.map((s) => s.p).filter((p) => !cluster.includes(p));
+  return [...cluster, ...fill].slice(0, limit);
+}
+
+/** Series siblings sorted by date (prev/next nav when series_id is set). */
+export function seriesSiblings(seriesId: string): FeedItem[] {
+  return posts
+    .filter((p) => (p as FeedItem & { seriesId?: string }).seriesId === seriesId)
+    .sort((a, b) => a.date.localeCompare(b.date));
+}
+
+/** GATE-5 ranked search: title hits ×3, tag hits ×2, excerpt/category ×1. */
+export function searchPerspektifler(q: string): FeedItem[] {
+  const tokens = foldForSearch(q).split(/\s+/).filter(Boolean);
+  if (!tokens.length) return [];
+  const scored: { item: FeedItem; score: number }[] = [];
+  for (const item of ALL_ITEMS) {
+    const title = foldForSearch(item.title);
+    const tags = foldForSearch(item.tags.map((t) => TAG_BY_SLUG[t]?.labelTr ?? t).join(' '));
+    const body = foldForSearch(`${item.excerpt} ${item.category}`);
+    let score = 0;
+    let miss = false;
+    for (const tok of tokens) {
+      const inTitle = title.includes(tok);
+      const inTags = tags.includes(tok);
+      const inBody = body.includes(tok);
+      if (!inTitle && !inTags && !inBody) {
+        miss = true;
+        break;
+      }
+      score += (inTitle ? 3 : 0) + (inTags ? 2 : 0) + (inBody ? 1 : 0);
+    }
+    if (!miss) scored.push({ item, score });
+  }
+  return scored
+    .sort((a, b) => b.score - a.score || b.item.date.localeCompare(a.item.date))
+    .map((s) => s.item);
+}
