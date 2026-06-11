@@ -12,3 +12,14 @@
 ## Decisions log
 - 2026-06-11 D1: scope fenced to Perspektifler vertical (SCOPE.md). /about BUG-07 only if global.
 - 2026-06-11 D2: canonical hub = /perspektifler (reverse current /perspektifler->/blog redirect).
+
+## GATE-1 — Taxonomy (DONE 2026-06-11)
+- DONE: src/data/perspektifler/{taxonomy,merge-map,redirects}.json + scripts/
+  build-perspektifler-taxonomy.mjs + scripts/check-taxonomy.mjs.
+- EVIDENCE (node scripts/check-taxonomy.mjs): 13/13 PASS — 10 categories, 57 tags (<=60),
+  0 dup normalized slugs, 100% of 108 raw tags mapped, 100% of 21 raw cats mapped,
+  /blog->/perspektifler correct, 100% article 301s (36), 100% retired tag-URL 301s (108),
+  no chain >1 hop. 146 redirects total.
+- DECISION: 57-term controlled vocab (room under 60 for quarterly additions); ecyverse tag
+  dropped (brand noise); strateji/m-and-a/degerleme/ESG/Liderlik tags dropped (= categories).
+- NEXT: Phase 2 — menu BUG-01..04 + BUG-12.

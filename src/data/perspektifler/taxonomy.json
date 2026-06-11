@@ -1,0 +1,425 @@
+{
+  "version": 1,
+  "generated": "2026-06-11",
+  "slug_rule": "lowercase ASCII (ç→c ğ→g ı→i İ→i ö→o ş→s ü→u), hyphen",
+  "categories": [
+    {
+      "slug": "strateji",
+      "label_tr": "Strateji",
+      "label_en": "Strategy"
+    },
+    {
+      "slug": "yapay-zeka-teknoloji",
+      "label_tr": "Yapay Zeka & Teknoloji",
+      "label_en": "AI & Technology"
+    },
+    {
+      "slug": "finans-ekonomi",
+      "label_tr": "Finans & Ekonomi",
+      "label_en": "Finance & Economy"
+    },
+    {
+      "slug": "insan-organizasyon",
+      "label_tr": "İnsan & Organizasyon",
+      "label_en": "People & Organization"
+    },
+    {
+      "slug": "operasyon",
+      "label_tr": "Operasyon",
+      "label_en": "Operations"
+    },
+    {
+      "slug": "pazarlama-cx",
+      "label_tr": "Pazarlama & Müşteri Deneyimi",
+      "label_en": "Marketing & CX"
+    },
+    {
+      "slug": "global-vizyon",
+      "label_tr": "Global Vizyon",
+      "label_en": "Global Vision"
+    },
+    {
+      "slug": "kamu-esg",
+      "label_tr": "Kamu & ESG",
+      "label_en": "Public & ESG"
+    },
+    {
+      "slug": "liderlik",
+      "label_tr": "Liderlik",
+      "label_en": "Leadership"
+    },
+    {
+      "slug": "ma-degerleme",
+      "label_tr": "M&A & Değerleme",
+      "label_en": "M&A & Valuation"
+    }
+  ],
+  "category_merge": {
+    "Strateji": "strateji",
+    "Stratejik Danışmanlık": "strateji",
+    "Danışmanlık": "strateji",
+    "Risk & Kriz Yönetimi": "strateji",
+    "AI & Analitik": "yapay-zeka-teknoloji",
+    "Analitik": "yapay-zeka-teknoloji",
+    "Yapay Zeka": "yapay-zeka-teknoloji",
+    "Teknoloji": "yapay-zeka-teknoloji",
+    "Dijital Dönüşüm": "yapay-zeka-teknoloji",
+    "Finans": "finans-ekonomi",
+    "Finance": "finans-ekonomi",
+    "Aile Şirketleri": "insan-organizasyon",
+    "İnsan Kaynakları": "insan-organizasyon",
+    "Endüstriyel İlişkiler": "insan-organizasyon",
+    "Operasyonel Verimlilik": "operasyon",
+    "Operasyon": "operasyon",
+    "Pazarlama": "pazarlama-cx",
+    "ESG & Sürdürülebilirlik": "kamu-esg",
+    "KVKK & Regülasyon": "kamu-esg",
+    "Liderlik": "liderlik",
+    "M&A & Strateji": "ma-degerleme"
+  },
+  "tags": [
+    {
+      "slug": "kurumsal-strateji",
+      "label_tr": "Kurumsal Strateji",
+      "label_en": "Corporate Strategy",
+      "category": "strateji"
+    },
+    {
+      "slug": "danismanlik",
+      "label_tr": "Danışmanlık",
+      "label_en": "Consulting",
+      "category": "strateji"
+    },
+    {
+      "slug": "danismanlik-fiyatlandirma",
+      "label_tr": "Danışmanlık Fiyatlandırma",
+      "label_en": "Consulting Pricing",
+      "category": "strateji"
+    },
+    {
+      "slug": "vizyon",
+      "label_tr": "Vizyon",
+      "label_en": "Vision",
+      "category": "strateji"
+    },
+    {
+      "slug": "degisim-yonetimi",
+      "label_tr": "Değişim Yönetimi",
+      "label_en": "Change Management",
+      "category": "strateji"
+    },
+    {
+      "slug": "risk-yonetimi",
+      "label_tr": "Risk Yönetimi",
+      "label_en": "Risk Management",
+      "category": "strateji"
+    },
+    {
+      "slug": "kriz-yonetimi",
+      "label_tr": "Kriz Yönetimi",
+      "label_en": "Crisis Management",
+      "category": "strateji"
+    },
+    {
+      "slug": "inovasyon",
+      "label_tr": "İnovasyon",
+      "label_en": "Innovation",
+      "category": "strateji"
+    },
+    {
+      "slug": "yapay-zeka",
+      "label_tr": "Yapay Zeka",
+      "label_en": "Artificial Intelligence",
+      "category": "yapay-zeka-teknoloji"
+    },
+    {
+      "slug": "uretken-yapay-zeka",
+      "label_tr": "Üretken Yapay Zeka",
+      "label_en": "Generative AI",
+      "category": "yapay-zeka-teknoloji"
+    },
+    {
+      "slug": "dijital-donusum",
+      "label_tr": "Dijital Dönüşüm",
+      "label_en": "Digital Transformation",
+      "category": "yapay-zeka-teknoloji"
+    },
+    {
+      "slug": "mlops",
+      "label_tr": "MLOps",
+      "label_en": "MLOps",
+      "category": "yapay-zeka-teknoloji"
+    },
+    {
+      "slug": "veri-analitigi",
+      "label_tr": "Veri Analitiği",
+      "label_en": "Data Analytics",
+      "category": "yapay-zeka-teknoloji"
+    },
+    {
+      "slug": "tahminleme",
+      "label_tr": "Tahminleme",
+      "label_en": "Forecasting",
+      "category": "yapay-zeka-teknoloji"
+    },
+    {
+      "slug": "kpi",
+      "label_tr": "KPI",
+      "label_en": "KPI",
+      "category": "yapay-zeka-teknoloji"
+    },
+    {
+      "slug": "roi",
+      "label_tr": "ROI",
+      "label_en": "ROI",
+      "category": "finans-ekonomi"
+    },
+    {
+      "slug": "cfo",
+      "label_tr": "CFO Gündemi",
+      "label_en": "CFO Agenda",
+      "category": "finans-ekonomi"
+    },
+    {
+      "slug": "yatirim",
+      "label_tr": "Yatırım",
+      "label_en": "Investment",
+      "category": "finans-ekonomi"
+    },
+    {
+      "slug": "insan-kaynaklari",
+      "label_tr": "İnsan Kaynakları",
+      "label_en": "Human Resources",
+      "category": "insan-organizasyon"
+    },
+    {
+      "slug": "yetenek-yonetimi",
+      "label_tr": "Yetenek Yönetimi",
+      "label_en": "Talent Management",
+      "category": "insan-organizasyon"
+    },
+    {
+      "slug": "isveren-markasi",
+      "label_tr": "İşveren Markası",
+      "label_en": "Employer Branding",
+      "category": "insan-organizasyon"
+    },
+    {
+      "slug": "calisan-deneyimi",
+      "label_tr": "Çalışan Deneyimi",
+      "label_en": "Employee Experience",
+      "category": "insan-organizasyon"
+    },
+    {
+      "slug": "kurumsal-yonetisim",
+      "label_tr": "Kurumsal Yönetişim",
+      "label_en": "Corporate Governance",
+      "category": "insan-organizasyon"
+    },
+    {
+      "slug": "kurumsallasma",
+      "label_tr": "Kurumsallaşma",
+      "label_en": "Institutionalization",
+      "category": "insan-organizasyon"
+    },
+    {
+      "slug": "aile-sirketleri",
+      "label_tr": "Aile Şirketleri",
+      "label_en": "Family Business",
+      "category": "insan-organizasyon"
+    },
+    {
+      "slug": "nesil-gecisi",
+      "label_tr": "Nesil Geçişi",
+      "label_en": "Succession",
+      "category": "insan-organizasyon"
+    },
+    {
+      "slug": "endustriyel-iliskiler",
+      "label_tr": "Endüstriyel İlişkiler",
+      "label_en": "Industrial Relations",
+      "category": "insan-organizasyon"
+    },
+    {
+      "slug": "arabuluculuk",
+      "label_tr": "Arabuluculuk",
+      "label_en": "Mediation",
+      "category": "insan-organizasyon"
+    },
+    {
+      "slug": "is-hukuku",
+      "label_tr": "İş Hukuku",
+      "label_en": "Labor Law",
+      "category": "insan-organizasyon"
+    },
+    {
+      "slug": "operasyonel-verimlilik",
+      "label_tr": "Operasyonel Verimlilik",
+      "label_en": "Operational Excellence",
+      "category": "operasyon"
+    },
+    {
+      "slug": "surec-optimizasyonu",
+      "label_tr": "Süreç Optimizasyonu",
+      "label_en": "Process Optimization",
+      "category": "operasyon"
+    },
+    {
+      "slug": "yalin-uretim",
+      "label_tr": "Yalın Üretim",
+      "label_en": "Lean",
+      "category": "operasyon"
+    },
+    {
+      "slug": "alti-sigma",
+      "label_tr": "Altı Sigma",
+      "label_en": "Six Sigma",
+      "category": "operasyon"
+    },
+    {
+      "slug": "uretim",
+      "label_tr": "Üretim",
+      "label_en": "Manufacturing",
+      "category": "operasyon"
+    },
+    {
+      "slug": "proje-yonetimi",
+      "label_tr": "Proje Yönetimi",
+      "label_en": "Project Management",
+      "category": "operasyon"
+    },
+    {
+      "slug": "kobi",
+      "label_tr": "KOBİ",
+      "label_en": "SME",
+      "category": "operasyon"
+    },
+    {
+      "slug": "marka-yonetimi",
+      "label_tr": "Marka Yönetimi",
+      "label_en": "Brand Management",
+      "category": "pazarlama-cx"
+    },
+    {
+      "slug": "musteri-deneyimi",
+      "label_tr": "Müşteri Deneyimi",
+      "label_en": "Customer Experience",
+      "category": "pazarlama-cx"
+    },
+    {
+      "slug": "kurumsal-iletisim",
+      "label_tr": "Kurumsal İletişim",
+      "label_en": "Corporate Communications",
+      "category": "pazarlama-cx"
+    },
+    {
+      "slug": "globallesme",
+      "label_tr": "Globalleşme",
+      "label_en": "Globalization",
+      "category": "global-vizyon"
+    },
+    {
+      "slug": "ihracat",
+      "label_tr": "İhracat",
+      "label_en": "Exports",
+      "category": "global-vizyon"
+    },
+    {
+      "slug": "turkiye-ab",
+      "label_tr": "Türkiye-AB",
+      "label_en": "Türkiye-EU",
+      "category": "global-vizyon"
+    },
+    {
+      "slug": "sinir-otesi",
+      "label_tr": "Sınır Ötesi",
+      "label_en": "Cross-Border",
+      "category": "global-vizyon"
+    },
+    {
+      "slug": "surdurulebilirlik",
+      "label_tr": "Sürdürülebilirlik",
+      "label_en": "Sustainability",
+      "category": "kamu-esg"
+    },
+    {
+      "slug": "csrd",
+      "label_tr": "CSRD",
+      "label_en": "CSRD",
+      "category": "kamu-esg"
+    },
+    {
+      "slug": "karbon-muhasebesi",
+      "label_tr": "Karbon Muhasebesi",
+      "label_en": "Carbon Accounting",
+      "category": "kamu-esg"
+    },
+    {
+      "slug": "cbam",
+      "label_tr": "CBAM",
+      "label_en": "CBAM",
+      "category": "kamu-esg"
+    },
+    {
+      "slug": "kvkk",
+      "label_tr": "KVKK",
+      "label_en": "KVKK",
+      "category": "kamu-esg"
+    },
+    {
+      "slug": "gdpr",
+      "label_tr": "GDPR",
+      "label_en": "GDPR",
+      "category": "kamu-esg"
+    },
+    {
+      "slug": "veri-koruma",
+      "label_tr": "Veri Koruma",
+      "label_en": "Data Protection",
+      "category": "kamu-esg"
+    },
+    {
+      "slug": "ab-regulasyonu",
+      "label_tr": "AB Regülasyonu",
+      "label_en": "EU Regulation",
+      "category": "kamu-esg"
+    },
+    {
+      "slug": "regulasyon-uyum",
+      "label_tr": "Regülasyon & Uyum",
+      "label_en": "Regulation & Compliance",
+      "category": "kamu-esg"
+    },
+    {
+      "slug": "founder-mektubu",
+      "label_tr": "Founder Mektubu",
+      "label_en": "Founder Letter",
+      "category": "liderlik"
+    },
+    {
+      "slug": "itibar-yonetimi",
+      "label_tr": "İtibar Yönetimi",
+      "label_en": "Reputation",
+      "category": "liderlik"
+    },
+    {
+      "slug": "performans-yonetimi",
+      "label_tr": "Performans Yönetimi",
+      "label_en": "Performance Management",
+      "category": "liderlik"
+    },
+    {
+      "slug": "due-diligence",
+      "label_tr": "Due Diligence",
+      "label_en": "Due Diligence",
+      "category": "ma-degerleme"
+    },
+    {
+      "slug": "entegrasyon",
+      "label_tr": "Entegrasyon (PMI)",
+      "label_en": "Integration (PMI)",
+      "category": "ma-degerleme"
+    }
+  ],
+  "max_tags_per_article": 5
+}

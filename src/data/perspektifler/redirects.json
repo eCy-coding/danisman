@@ -1,0 +1,734 @@
+{
+  "redirects": [
+    {
+      "from": "/blog",
+      "to": "/perspektifler",
+      "code": 301
+    },
+    {
+      "from": "/insights",
+      "to": "/perspektifler",
+      "code": 301
+    },
+    {
+      "from": "/blog/ai-tabanli-kpi-tahminlemesi-6-adim",
+      "to": "/perspektifler/ai-tabanli-kpi-tahminlemesi-6-adim",
+      "code": 301
+    },
+    {
+      "from": "/blog/ai-yatirim-roi-hesaplama",
+      "to": "/perspektifler/ai-yatirim-roi-hesaplama",
+      "code": 301
+    },
+    {
+      "from": "/blog/aile-anayasasi-5-maddelik-cekirdek",
+      "to": "/perspektifler/aile-anayasasi-5-maddelik-cekirdek",
+      "code": 301
+    },
+    {
+      "from": "/blog/aile-sirketleri-stratejik-gecis",
+      "to": "/perspektifler/aile-sirketleri-stratejik-gecis",
+      "code": 301
+    },
+    {
+      "from": "/blog/csrd-uyumunda-2026-hareket-plani",
+      "to": "/perspektifler/csrd-uyumunda-2026-hareket-plani",
+      "code": 301
+    },
+    {
+      "from": "/blog/danismanlik-ucretleri-nasil-belirlenir",
+      "to": "/perspektifler/danismanlik-ucretleri-nasil-belirlenir",
+      "code": 301
+    },
+    {
+      "from": "/blog/dijital-donusum-kpi-ornekleri",
+      "to": "/perspektifler/dijital-donusum-kpi-ornekleri",
+      "code": 301
+    },
+    {
+      "from": "/blog/dijital-donusum-stratejisi-nasil-olusturulur",
+      "to": "/perspektifler/dijital-donusum-stratejisi-nasil-olusturulur",
+      "code": 301
+    },
+    {
+      "from": "/blog/gdpr-kvkk-farklari",
+      "to": "/perspektifler/gdpr-kvkk-farklari",
+      "code": 301
+    },
+    {
+      "from": "/blog/global-pazarlara-acilma",
+      "to": "/perspektifler/global-pazarlara-acilma",
+      "code": 301
+    },
+    {
+      "from": "/blog/gpt-tabanli-musteri-hizmetleri-roi",
+      "to": "/perspektifler/gpt-tabanli-musteri-hizmetleri-roi",
+      "code": 301
+    },
+    {
+      "from": "/blog/insan-kaynaklari-stratejisi-talent-management",
+      "to": "/perspektifler/insan-kaynaklari-stratejisi-talent-management",
+      "code": 301
+    },
+    {
+      "from": "/blog/is-uyusmazliklari-arabuluculuk-stratejisi",
+      "to": "/perspektifler/is-uyusmazliklari-arabuluculuk-stratejisi",
+      "code": 301
+    },
+    {
+      "from": "/blog/karbon-muhasebesi-scope-1-2-3-ilk-adimlar",
+      "to": "/perspektifler/karbon-muhasebesi-scope-1-2-3-ilk-adimlar",
+      "code": 301
+    },
+    {
+      "from": "/blog/kpi-belirleme-ve-olcme-yontemleri",
+      "to": "/perspektifler/kpi-belirleme-ve-olcme-yontemleri",
+      "code": 301
+    },
+    {
+      "from": "/blog/kriz-yonetimi-iletisim-cercevesi",
+      "to": "/perspektifler/kriz-yonetimi-iletisim-cercevesi",
+      "code": 301
+    },
+    {
+      "from": "/blog/kurumsal-kultur-donusumu",
+      "to": "/perspektifler/kurumsal-kultur-donusumu",
+      "code": 301
+    },
+    {
+      "from": "/blog/kvkk-uyum-sureci-adim-adim",
+      "to": "/perspektifler/kvkk-uyum-sureci-adim-adim",
+      "code": 301
+    },
+    {
+      "from": "/blog/ma-90-gunluk-kural",
+      "to": "/perspektifler/ma-90-gunluk-kural",
+      "code": 301
+    },
+    {
+      "from": "/blog/measuring-ai-investment-roi",
+      "to": "/perspektifler/measuring-ai-investment-roi",
+      "code": 301
+    },
+    {
+      "from": "/blog/nesil-gecisinde-3-yillik-sermaye-devir-stratejisi",
+      "to": "/perspektifler/nesil-gecisinde-3-yillik-sermaye-devir-stratejisi",
+      "code": 301
+    },
+    {
+      "from": "/blog/operasyonel-verimlilik-nasil-arttirilir",
+      "to": "/perspektifler/operasyonel-verimlilik-nasil-arttirilir",
+      "code": 301
+    },
+    {
+      "from": "/blog/organizasyonel-degisim-yonetimi",
+      "to": "/perspektifler/organizasyonel-degisim-yonetimi",
+      "code": 301
+    },
+    {
+      "from": "/blog/premium-consulting-komoditelesemez",
+      "to": "/perspektifler/premium-consulting-komoditelesemez",
+      "code": 301
+    },
+    {
+      "from": "/blog/proje-yonetimi-best-practices",
+      "to": "/perspektifler/proje-yonetimi-best-practices",
+      "code": 301
+    },
+    {
+      "from": "/blog/sinir-otesi-ma-degerleme-tuzaklari",
+      "to": "/perspektifler/sinir-otesi-ma-degerleme-tuzaklari",
+      "code": 301
+    },
+    {
+      "from": "/blog/stratejik-danismanlik-hizmetleri-secim-kilavuzu",
+      "to": "/perspektifler/stratejik-danismanlik-hizmetleri-secim-kilavuzu",
+      "code": 301
+    },
+    {
+      "from": "/blog/stratejik-dijital-donusum-2026",
+      "to": "/perspektifler/stratejik-dijital-donusum-2026",
+      "code": 301
+    },
+    {
+      "from": "/blog/stratejik-planlama-rehberi",
+      "to": "/perspektifler/stratejik-planlama-rehberi",
+      "code": 301
+    },
+    {
+      "from": "/blog/surecler-nasil-standardize-edilir",
+      "to": "/perspektifler/surecler-nasil-standardize-edilir",
+      "code": 301
+    },
+    {
+      "from": "/blog/turk-kobi-lean-six-sigma",
+      "to": "/perspektifler/turk-kobi-lean-six-sigma",
+      "code": 301
+    },
+    {
+      "from": "/blog/uretim-hattinda-mlops-ilk-90-gun",
+      "to": "/perspektifler/uretim-hattinda-mlops-ilk-90-gun",
+      "code": 301
+    },
+    {
+      "from": "/blog/veri-odakli-karar-verme",
+      "to": "/perspektifler/veri-odakli-karar-verme",
+      "code": 301
+    },
+    {
+      "from": "/blog/vizyon-strateji-sonuc-trinity",
+      "to": "/perspektifler/vizyon-strateji-sonuc-trinity",
+      "code": 301
+    },
+    {
+      "from": "/blog/yapay-zeka-ile-is-sureclerini-optimize-etme",
+      "to": "/perspektifler/yapay-zeka-ile-is-sureclerini-optimize-etme",
+      "code": 301
+    },
+    {
+      "from": "/blog/yapay-zeka-yonetim-devrimi",
+      "to": "/perspektifler/yapay-zeka-yonetim-devrimi",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/yapay-zeka",
+      "to": "/perspektifler/konu/yapay-zeka",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/kpi",
+      "to": "/perspektifler/konu/kpi",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/predictive-analytics",
+      "to": "/perspektifler/konu/tahminleme",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/forecasting",
+      "to": "/perspektifler/konu/tahminleme",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/roi",
+      "to": "/perspektifler/konu/roi",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/cfo",
+      "to": "/perspektifler/konu/cfo",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/yatirim",
+      "to": "/perspektifler/konu/yatirim",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/aile-anayasasi",
+      "to": "/perspektifler/konu/aile-sirketleri",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/yonetisim",
+      "to": "/perspektifler/konu/kurumsal-yonetisim",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/aile-sirketi",
+      "to": "/perspektifler/konu/aile-sirketleri",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/devir",
+      "to": "/perspektifler/konu/nesil-gecisi",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/aile-sirketi",
+      "to": "/perspektifler/konu/aile-sirketleri",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/kurumsallasma",
+      "to": "/perspektifler/konu/kurumsallasma",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/strateji",
+      "to": "/perspektifler/kategori/strateji",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/yonetim-kurulu",
+      "to": "/perspektifler/konu/kurumsal-yonetisim",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/founder-notes",
+      "to": "/perspektifler/konu/founder-mektubu",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/csrd",
+      "to": "/perspektifler/konu/csrd",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/esg",
+      "to": "/perspektifler/kategori/kamu-esg",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/surdurulebilirlik",
+      "to": "/perspektifler/konu/surdurulebilirlik",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/ab-regulasyon",
+      "to": "/perspektifler/konu/ab-regulasyonu",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/danismanlik-ucretleri",
+      "to": "/perspektifler/konu/danismanlik-fiyatlandirma",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/fiyatlandirma",
+      "to": "/perspektifler/konu/danismanlik-fiyatlandirma",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/retainer",
+      "to": "/perspektifler/konu/danismanlik-fiyatlandirma",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/stratejik-danismanlik",
+      "to": "/perspektifler/konu/danismanlik",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/consulting",
+      "to": "/perspektifler/konu/danismanlik",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/dijital-donusum",
+      "to": "/perspektifler/konu/dijital-donusum",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/olcum",
+      "to": "/perspektifler/konu/kpi",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/kurumsal",
+      "to": "/perspektifler/konu/kurumsal-strateji",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/operasyonel-verimlilik",
+      "to": "/perspektifler/konu/operasyonel-verimlilik",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/gdpr",
+      "to": "/perspektifler/konu/gdpr",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/kvkk",
+      "to": "/perspektifler/konu/kvkk",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/ab-regulasyon",
+      "to": "/perspektifler/konu/ab-regulasyonu",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/veri-koruma",
+      "to": "/perspektifler/konu/veri-koruma",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/turkiye-ab",
+      "to": "/perspektifler/konu/turkiye-ab",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/globallesme",
+      "to": "/perspektifler/konu/globallesme",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/ihracat",
+      "to": "/perspektifler/konu/ihracat",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/marka-yonetimi",
+      "to": "/perspektifler/konu/marka-yonetimi",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/gpt",
+      "to": "/perspektifler/konu/uretken-yapay-zeka",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/musteri-hizmetleri",
+      "to": "/perspektifler/konu/musteri-deneyimi",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/llm",
+      "to": "/perspektifler/konu/uretken-yapay-zeka",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/insan-kaynaklari",
+      "to": "/perspektifler/konu/insan-kaynaklari",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/yetenek-yonetimi",
+      "to": "/perspektifler/konu/yetenek-yonetimi",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/isveren-markasi",
+      "to": "/perspektifler/konu/isveren-markasi",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/hr-strateji",
+      "to": "/perspektifler/konu/insan-kaynaklari",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/calisan-deneyimi",
+      "to": "/perspektifler/konu/calisan-deneyimi",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/endustriyel-iliskiler",
+      "to": "/perspektifler/konu/endustriyel-iliskiler",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/arabuluculuk",
+      "to": "/perspektifler/konu/arabuluculuk",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/is-hukuku",
+      "to": "/perspektifler/konu/is-hukuku",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/uyusmazlik",
+      "to": "/perspektifler/konu/endustriyel-iliskiler",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/insan-kaynaklari",
+      "to": "/perspektifler/konu/insan-kaynaklari",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/karbon",
+      "to": "/perspektifler/konu/karbon-muhasebesi",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/scope-3",
+      "to": "/perspektifler/konu/karbon-muhasebesi",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/cbam",
+      "to": "/perspektifler/konu/cbam",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/emisyon-hesabi",
+      "to": "/perspektifler/konu/karbon-muhasebesi",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/kriz-yonetimi",
+      "to": "/perspektifler/konu/kriz-yonetimi",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/iletisim",
+      "to": "/perspektifler/konu/kurumsal-iletisim",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/itibar",
+      "to": "/perspektifler/konu/itibar-yonetimi",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/risk",
+      "to": "/perspektifler/konu/risk-yonetimi",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/kurumsal-strateji",
+      "to": "/perspektifler/konu/kurumsal-strateji",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/uyum",
+      "to": "/perspektifler/konu/regulasyon-uyum",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/regulasyon",
+      "to": "/perspektifler/konu/regulasyon-uyum",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/m-and-a",
+      "to": "/perspektifler/kategori/ma-degerleme",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/post-merger-integration",
+      "to": "/perspektifler/konu/entegrasyon",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/entegrasyon",
+      "to": "/perspektifler/konu/entegrasyon",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/artificial-intelligence",
+      "to": "/perspektifler/konu/yapay-zeka",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/investment",
+      "to": "/perspektifler/konu/yatirim",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/nesil-gecisi",
+      "to": "/perspektifler/konu/nesil-gecisi",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/sermaye-devri",
+      "to": "/perspektifler/konu/nesil-gecisi",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/veraset",
+      "to": "/perspektifler/konu/nesil-gecisi",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/surec-optimizasyonu",
+      "to": "/perspektifler/konu/surec-optimizasyonu",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/lean",
+      "to": "/perspektifler/konu/yalin-uretim",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/six-sigma",
+      "to": "/perspektifler/konu/alti-sigma",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/degisim-yonetimi",
+      "to": "/perspektifler/konu/degisim-yonetimi",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/insan-kaynaklari",
+      "to": "/perspektifler/konu/insan-kaynaklari",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/donusum",
+      "to": "/perspektifler/konu/dijital-donusum",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/liderlik",
+      "to": "/perspektifler/kategori/liderlik",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/premium-consulting",
+      "to": "/perspektifler/konu/danismanlik",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/danismanlik",
+      "to": "/perspektifler/konu/danismanlik",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/ecyverse",
+      "to": "/perspektifler",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/proje-yonetimi",
+      "to": "/perspektifler/konu/proje-yonetimi",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/pmo",
+      "to": "/perspektifler/konu/proje-yonetimi",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/agile",
+      "to": "/perspektifler/konu/proje-yonetimi",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/pmp",
+      "to": "/perspektifler/konu/proje-yonetimi",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/cross-border",
+      "to": "/perspektifler/konu/sinir-otesi",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/degerleme",
+      "to": "/perspektifler/kategori/ma-degerleme",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/due-diligence",
+      "to": "/perspektifler/konu/due-diligence",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/uluslararasi",
+      "to": "/perspektifler/konu/globallesme",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/danismanlik-hizmetleri",
+      "to": "/perspektifler/konu/danismanlik",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/secim-kriterleri",
+      "to": "/perspektifler/konu/danismanlik",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/dijital-donusum",
+      "to": "/perspektifler/konu/dijital-donusum",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/strateji",
+      "to": "/perspektifler/kategori/strateji",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/six-sigma",
+      "to": "/perspektifler/konu/alti-sigma",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/kobi",
+      "to": "/perspektifler/konu/kobi",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/operasyonel-mukemmellik",
+      "to": "/perspektifler/konu/operasyonel-verimlilik",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/uretim",
+      "to": "/perspektifler/konu/uretim",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/mlops",
+      "to": "/perspektifler/konu/mlops",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/ai",
+      "to": "/perspektifler/konu/yapay-zeka",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/production",
+      "to": "/perspektifler/konu/uretim",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/devops",
+      "to": "/perspektifler/konu/mlops",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/vizyon",
+      "to": "/perspektifler/konu/vizyon",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/performans",
+      "to": "/perspektifler/konu/performans-yonetimi",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/yonetim",
+      "to": "/perspektifler/konu/kurumsal-yonetisim",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/yapay-zeka",
+      "to": "/perspektifler/konu/yapay-zeka",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/ai",
+      "to": "/perspektifler/konu/yapay-zeka",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/generative-ai",
+      "to": "/perspektifler/konu/uretken-yapay-zeka",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/kurumsal-ai",
+      "to": "/perspektifler/konu/yapay-zeka",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/yonetim",
+      "to": "/perspektifler/konu/kurumsal-yonetisim",
+      "code": 301
+    },
+    {
+      "from": "/insights/tag/inovasyon",
+      "to": "/perspektifler/konu/inovasyon",
+      "code": 301
+    }
+  ]
+}
