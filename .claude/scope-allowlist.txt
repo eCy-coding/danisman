@@ -14,6 +14,7 @@ src/pages/PerspektiflerKonularPage.tsx
 src/pages/CaseStudiesPage.tsx
 src/pages/CaseStudyDetailPage.tsx
 src/pages/insights/**
+src/components/features/case-studies/**
 src/components/insights/**
 src/components/blog/**
 src/components/layout/Navbar.tsx
@@ -48,6 +49,7 @@ scripts/migrate-blog-frontmatter.ts
 public/locales/tr/**
 public/locales/en/**
 tests/**
+e2e/**
 playwright.config.ts
 docs/guides/perspektifler-content-ops.md
 .claude/scope-allowlist.txt

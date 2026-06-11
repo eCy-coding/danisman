@@ -17,6 +17,9 @@ export interface CaseStudy {
   goLive?: string;
   /** Short one-line problem statement. */
   challenge?: string;
+  /** Shared Perspektifler taxonomy category (BUG-11 unification). */
+  categorySlug?: string;
+  format?: 'vaka-analizi';
 }
 
 interface CaseStudyCardProps {
