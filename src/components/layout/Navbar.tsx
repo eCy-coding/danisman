@@ -1,6 +1,19 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
-import { Menu, X, ChevronDown, ChevronUp, MessageCircle } from 'lucide-react';
+import {
+  Menu,
+  X,
+  ChevronDown,
+  ChevronUp,
+  MessageCircle,
+  Home,
+  Briefcase,
+  Factory,
+  Newspaper,
+  Tag,
+  Users,
+  Mail,
+} from 'lucide-react';
 import { NAV_ITEMS } from '@/data/copy/common';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { MegaMenu } from './MegaMenu';
@@ -20,9 +33,22 @@ interface NavItem {
   href: string;
   label: MultiLang;
   icon?: React.ReactNode;
+  /** Lucide icon key resolved via NAV_ICON_MAP (BUG-02 "replace with real
+   *  icons" path — data file stays JSX-free, same pattern as MegaMenu). */
+  iconName?: string;
   hasMegaMenu?: boolean;
   children?: NavItem[];
 }
+
+const NAV_ICON_MAP: Record<string, React.ReactNode> = {
+  Home: <Home size={15} />,
+  Briefcase: <Briefcase size={15} />,
+  Factory: <Factory size={15} />,
+  Newspaper: <Newspaper size={15} />,
+  Tag: <Tag size={15} />,
+  Users: <Users size={15} />,
+  Mail: <Mail size={15} />,
+};
 
 export const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -227,9 +253,9 @@ export const Navbar: React.FC = () => {
                   }
                   aria-current={isActive ? 'page' : undefined}
                 >
-                  {/* BUG-02: the icon box used to render unconditionally while
-                      NAV_ITEMS defines no icons → empty checkbox-like squares. */}
-                  {item.icon && (
+                  {/* BUG-02 follow-through: real lucide icons via iconName
+                      (boxes render only when an icon actually exists). */}
+                  {(item.icon || (item.iconName && NAV_ICON_MAP[item.iconName])) && (
                     <div
                       className={`
                   w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300
@@ -239,8 +265,9 @@ export const Navbar: React.FC = () => {
                       : 'bg-white/5 text-gray-400 group-hover:bg-white/10 group-hover:text-white'
                   }
                 `}
+                      aria-hidden="true"
                     >
-                      {item.icon}
+                      {item.icon ?? NAV_ICON_MAP[item.iconName as string]}
                     </div>
                   )}
                   {item.label[lang]}
@@ -411,7 +438,14 @@ export const Navbar: React.FC = () => {
                       className="flex items-center justify-between w-full text-left text-xl font-sans font-medium text-white py-2 outline-none focus:text-secondary"
                       aria-expanded={isExpanded}
                     >
-                      {item.label[lang]}
+                      <span className="flex items-center gap-3">
+                        {item.iconName && NAV_ICON_MAP[item.iconName] && (
+                          <span className="text-slate-400" aria-hidden="true">
+                            {NAV_ICON_MAP[item.iconName]}
+                          </span>
+                        )}
+                        {item.label[lang]}
+                      </span>
                       {isExpanded ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
                     </button>
 
@@ -438,8 +472,13 @@ export const Navbar: React.FC = () => {
                   <a
                     href={item.href}
                     onClick={(e) => handleNavClick(e, item.href, `Mobile ${item.label[lang]}`)}
-                    className="block text-xl font-sans font-medium text-white hover:text-secondary py-2 outline-none focus:text-secondary"
+                    className="flex items-center gap-3 text-xl font-sans font-medium text-white hover:text-secondary py-2 outline-none focus:text-secondary"
                   >
+                    {item.iconName && NAV_ICON_MAP[item.iconName] && (
+                      <span className="text-slate-400" aria-hidden="true">
+                        {NAV_ICON_MAP[item.iconName]}
+                      </span>
+                    )}
                     {item.label[lang]}
                   </a>
                 )}
