@@ -1,0 +1,4 @@
+    [chromium] › e2e/service_hub.spec.ts:23:3 › Service Intelligence Hub › insights section is conditional: when shown it links real articles 
+  1 flaky
+    [chromium] › e2e/hub.spec.ts:125:3 › GATE-3 perspektifler hub › search box filters via ?q= (diacritic-insensitive) 
+  24 passed (1.9m)
