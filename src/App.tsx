@@ -3,7 +3,7 @@ import React, { Suspense, useState, useEffect } from 'react';
 const BookingModal = React.lazy(() =>
   import('./components/features/booking/BookingModal').then((m) => ({ default: m.BookingModal })),
 );
-import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation, useParams } from 'react-router-dom';
 import { AppProviders } from './components/providers/AppProviders';
 import { NotFoundPage } from './pages/NotFoundPage';
 import { director } from '@/lib/director';
@@ -33,12 +33,14 @@ const ServiceDetailPage = React.lazy(() =>
 );
 const BlogPostPage = React.lazy(() => import('./pages/BlogPostPage'));
 const BlogPage = React.lazy(() => import('./pages/BlogPage'));
-const InsightsPage = React.lazy(() =>
-  import('./pages/InsightsPage').then((module) => ({ default: module.InsightsPage })),
-);
-const InsightArticle = React.lazy(() =>
-  import('./pages/InsightArticle').then((module) => ({ default: module.InsightArticle })),
-);
+const PerspektiflerKategoriPage = React.lazy(() => import('./pages/PerspektiflerKategoriPage'));
+const PerspektiflerKonularPage = React.lazy(() => import('./pages/PerspektiflerKonularPage'));
+
+/** Param-preserving client redirect for in-app /blog/:slug links (edge 301 covers full loads). */
+const BlogSlugRedirect: React.FC = () => {
+  const { slug = '' } = useParams();
+  return <Navigate to={`/perspektifler/${slug}`} replace />;
+};
 const AboutPage = React.lazy(() =>
   import('./pages/AboutPage').then((module) => ({ default: module.AboutPage })),
 );
@@ -107,24 +109,6 @@ const ForgotPasswordPage = React.lazy(() =>
 );
 
 // Wave-3A PB-6: Perspektif secondary pages
-const InsightCategory = React.lazy(() =>
-  import('./pages/InsightCategory').then((m) => ({ default: m.InsightCategory })),
-);
-const InsightTag = React.lazy(() =>
-  import('./pages/InsightTag').then((m) => ({ default: m.InsightTag })),
-);
-const InsightSeries = React.lazy(() =>
-  import('./pages/InsightSeries').then((m) => ({ default: m.InsightSeries })),
-);
-const InsightAuthor = React.lazy(() =>
-  import('./pages/InsightAuthor').then((m) => ({ default: m.InsightAuthor })),
-);
-const InsightArchive = React.lazy(() =>
-  import('./pages/InsightArchive').then((m) => ({ default: m.InsightArchive })),
-);
-const InsightSearch = React.lazy(() =>
-  import('./pages/InsightSearch').then((m) => ({ default: m.InsightSearch })),
-);
 
 // const KeystaticPage = React.lazy(() => import('./src/app/keystatic/page')); // Moved to MPA
 const AssessmentPage = React.lazy(() =>
@@ -413,8 +397,26 @@ const AnimatedRoutes = () => {
             />
           </Route>
           {/* Flattening the routes for simplicity as per original structure */}
+          {/* Perspektifler is canonical (BUG-06); /blog 301s at the edge and
+              Navigates here for in-app pushState (istek.md v2 §PHASE 3). */}
           <Route
-            path="/blog/:slug"
+            path="/perspektifler/kategori/:slug"
+            element={
+              <Suspense fallback={<LoadingFallback />}>
+                <PerspektiflerKategoriPage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/perspektifler/konular"
+            element={
+              <Suspense fallback={<LoadingFallback />}>
+                <PerspektiflerKonularPage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/perspektifler/:slug"
             element={
               <Suspense fallback={<LoadingFallback />}>
                 <BlogPostPage />
@@ -422,15 +424,15 @@ const AnimatedRoutes = () => {
             }
           />
           <Route
-            path="/blog"
+            path="/perspektifler"
             element={
               <Suspense fallback={<LoadingFallback />}>
                 <BlogPage />
               </Suspense>
             }
           />
-          {/* /perspektifler canonical alias → /blog */}
-          <Route path="/perspektifler" element={<Navigate to="/blog" replace />} />
+          <Route path="/blog/:slug" element={<BlogSlugRedirect />} />
+          <Route path="/blog" element={<Navigate to="/perspektifler" replace />} />
           {/*
             Sprint 9 P44-T02b — Localized TR slug aliases.
             Türkçe yüksek-niyetli anahtar kelimeler için 301-style SPA redirect.
@@ -461,79 +463,9 @@ const AnimatedRoutes = () => {
           <Route path="/cerezler" element={<Navigate to="/cookies" replace />} />
           <Route path="/sss" element={<Navigate to="/faq" replace />} />
           <Route path="/konusmalar" element={<Navigate to="/speaking" replace />} />
-          {/* --- Perspektif Wave-3A PB-6 routes --- */}
-          <Route
-            path="/insights/search"
-            element={
-              <Suspense fallback={<LoadingFallback />}>
-                <InsightSearch />
-              </Suspense>
-            }
-          />
-          <Route
-            path="/insights/tag/:slug"
-            element={
-              <Suspense fallback={<LoadingFallback />}>
-                <InsightTag />
-              </Suspense>
-            }
-          />
-          <Route
-            path="/insights/series/:slug/:part?"
-            element={
-              <Suspense fallback={<LoadingFallback />}>
-                <InsightSeries />
-              </Suspense>
-            }
-          />
-          <Route
-            path="/insights/author/:slug"
-            element={
-              <Suspense fallback={<LoadingFallback />}>
-                <InsightAuthor />
-              </Suspense>
-            }
-          />
-          <Route
-            path="/insights/archive/:year?/:month?"
-            element={
-              <Suspense fallback={<LoadingFallback />}>
-                <InsightArchive />
-              </Suspense>
-            }
-          />
-          {/* R12-P8 — route order swap. React Router v7 ranks */}
-          {/* `/insights/:domain/:subDomain?` higher than `/insights/:slug` */}
-          {/* even on a single-segment URL because the optional segment is */}
-          {/* still part of the score. Putting `:slug` first ensures real */}
-          {/* article URLs hit InsightArticle; domain landing pages remain */}
-          {/* reachable via their canonical `/insights/:domain/:subDomain` */}
-          {/* two-segment form which is more specific. */}
-          <Route
-            path="/insights/:slug"
-            element={
-              <Suspense fallback={<LoadingFallback />}>
-                <InsightArticle />
-              </Suspense>
-            }
-          />
-          <Route
-            path="/insights/:domain/:subDomain?"
-            element={
-              <Suspense fallback={<LoadingFallback />}>
-                <InsightCategory />
-              </Suspense>
-            }
-          />
-          {/* --- end Perspektif --- */}
-          <Route
-            path="/insights"
-            element={
-              <Suspense fallback={<LoadingFallback />}>
-                <InsightsPage />
-              </Suspense>
-            }
-          />
+          {/* Legacy /insights prototype URLs → canonical hub (one hop) */}
+          <Route path="/insights" element={<Navigate to="/perspektifler" replace />} />
+          <Route path="/insights/*" element={<Navigate to="/perspektifler" replace />} />
           <Route
             path="/about"
             element={
@@ -929,7 +861,23 @@ const AnimatedRoutes = () => {
               }
             />
             <Route
-              path="blog/:slug"
+              path="perspektifler/kategori/:slug"
+              element={
+                <Suspense fallback={<LoadingFallback />}>
+                  <PerspektiflerKategoriPage />
+                </Suspense>
+              }
+            />
+            <Route
+              path="perspektifler/konular"
+              element={
+                <Suspense fallback={<LoadingFallback />}>
+                  <PerspektiflerKonularPage />
+                </Suspense>
+              }
+            />
+            <Route
+              path="perspektifler/:slug"
               element={
                 <Suspense fallback={<LoadingFallback />}>
                   <BlogPostPage />
@@ -937,63 +885,18 @@ const AnimatedRoutes = () => {
               }
             />
             <Route
-              path="blog"
+              path="perspektifler"
               element={
                 <Suspense fallback={<LoadingFallback />}>
                   <BlogPage />
                 </Suspense>
               }
             />
-            {/* --- Perspektif Wave-3A PB-6 locale routes --- */}
-            <Route
-              path="insights/search"
-              element={
-                <Suspense fallback={<LoadingFallback />}>
-                  <InsightSearch />
-                </Suspense>
-              }
-            />
-            <Route
-              path="insights/tag/:slug"
-              element={
-                <Suspense fallback={<LoadingFallback />}>
-                  <InsightTag />
-                </Suspense>
-              }
-            />
-            <Route
-              path="insights/series/:slug/:part?"
-              element={
-                <Suspense fallback={<LoadingFallback />}>
-                  <InsightSeries />
-                </Suspense>
-              }
-            />
-            <Route
-              path="insights/author/:slug"
-              element={
-                <Suspense fallback={<LoadingFallback />}>
-                  <InsightAuthor />
-                </Suspense>
-              }
-            />
-            <Route
-              path="insights/archive/:year?/:month?"
-              element={
-                <Suspense fallback={<LoadingFallback />}>
-                  <InsightArchive />
-                </Suspense>
-              }
-            />
-            <Route
-              path="insights/:domain/:subDomain?"
-              element={
-                <Suspense fallback={<LoadingFallback />}>
-                  <InsightCategory />
-                </Suspense>
-              }
-            />
-            {/* --- end Perspektif --- */}
+            <Route path="blog/:slug" element={<BlogSlugRedirect />} />
+            <Route path="blog" element={<Navigate to="/perspektifler" replace />} />
+            {/* Legacy locale-prefixed /insights URLs → hub */}
+            <Route path="insights" element={<Navigate to="/perspektifler" replace />} />
+            <Route path="insights/*" element={<Navigate to="/perspektifler" replace />} />
             <Route
               path="about"
               element={

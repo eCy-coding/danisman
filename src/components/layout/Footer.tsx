@@ -224,7 +224,7 @@ export const Footer: React.FC = () => {
               </li>
               <li>
                 <Link
-                  to="/blog"
+                  to="/perspektifler"
                   className="hover:text-secondary transition-colors block min-h-11 py-2 outline-none focus-visible:text-secondary"
                 >
                   {FOOTER_COPY.blog[lang]}

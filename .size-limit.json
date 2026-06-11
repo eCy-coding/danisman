@@ -126,6 +126,18 @@
     "brotli": true
   },
   {
+    "name": "Route: PerspektiflerKategoriPage (brotli)",
+    "path": "dist/assets/PerspektiflerKategoriPage-*.js",
+    "limit": "50 KB",
+    "brotli": true
+  },
+  {
+    "name": "Route: PerspektiflerKonularPage (brotli)",
+    "path": "dist/assets/PerspektiflerKonularPage-*.js",
+    "limit": "30 KB",
+    "brotli": true
+  },
+  {
     "name": "Route: CaseStudiesPage (brotli)",
     "path": "dist/assets/CaseStudiesPage-*.js",
     "limit": "50 KB",

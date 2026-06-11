@@ -61,8 +61,8 @@ const generateRSS = () => {
     rss += `
     <item>
         <title>${escapeXml(post.title)}</title>
-        <link>${SITE_URL}/blog/${post.slug}</link>
-        <guid>${SITE_URL}/blog/${post.slug}</guid>
+        <link>${SITE_URL}/perspektifler/${post.slug}</link>
+        <guid>${SITE_URL}/perspektifler/${post.slug}</guid>
         <pubDate>${new Date(post.date).toUTCString()}</pubDate>
         <description>${escapeXml(post.excerpt)}</description>
         <author>info@ecypro.com (${post.author})</author>
@@ -93,110 +93,8 @@ const generateRSS = () => {
 
 // Wave-3A: Insights RSS feeds (full + per-domain).
 // Reads stub data today; replace with live Prisma query when Wave-1 merges.
-interface InsightStub {
-  slug: string;
-  publishedAt: string;
-  updatedAt: string;
-  primaryDomain: string;
-  subDomain: string;
-}
-
-const DOMAIN_LABEL: Record<string, string> = {
-  M_A: 'Birleşme & Satın Alma',
-  ESG: 'ESG & Sürdürülebilirlik',
-  FINTECH: 'Fintech & Regülasyon',
-  AILE_SIRKETI: 'Aile Şirketi',
-};
-
-const DOMAIN_SLUG: Record<string, string> = {
-  M_A: 'insights-m-a',
-  ESG: 'insights-esg',
-  FINTECH: 'insights-fintech',
-  AILE_SIRKETI: 'insights-aile-sirketi',
-};
-
-const buildInsightsChannel = (
-  title: string,
-  feedHref: string,
-  items: InsightStub[],
-  lang: 'tr' | 'en' = 'tr',
-): string => {
-  const baseUrl = lang === 'en' ? `${SITE_URL}/en` : SITE_URL;
-  const itemsXml = items
-    .map(
-      (p) => `
-    <item>
-        <title>${escapeXml(p.slug.replace(/-/g, ' '))}</title>
-        <link>${baseUrl}/insights/${p.slug}</link>
-        <guid>${baseUrl}/insights/${p.slug}</guid>
-        <pubDate>${new Date(p.publishedAt).toUTCString()}</pubDate>
-        <description>${escapeXml(p.subDomain)}</description>
-        <author>info@ecypro.com (eCyPro)</author>
-        <category>${escapeXml(DOMAIN_LABEL[p.primaryDomain] ?? p.primaryDomain)}</category>
-    </item>`,
-    )
-    .join('');
-
-  return `<?xml version="1.0" encoding="UTF-8" ?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-<channel>
-    <title>${escapeXml(title)}</title>
-    <link>${baseUrl}</link>
-    <description>eCyPro Perspektif — ${escapeXml(title)}</description>
-    <language>${lang}</language>
-    <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
-    <atom:link href="${SITE_URL}/${feedHref}" rel="self" type="application/rss+xml" />${itemsXml}
-</channel>
-</rss>`;
-};
-
-const generateInsightsRSS = () => {
-  console.log('📰 Generating Insights RSS Feeds...');
-
-  const stubPath = path.resolve(__dirname, '../src/data/insights-stub-posts.json');
-  if (!fs.existsSync(stubPath)) {
-    console.warn('⚠️  insights-stub-posts.json not found — skipping insights RSS.');
-    return;
-  }
-
-  const posts: InsightStub[] = JSON.parse(fs.readFileSync(stubPath, 'utf-8'));
-
-  if (!fs.existsSync(OUTPUT_DIR)) {
-    fs.mkdirSync(OUTPUT_DIR, { recursive: true });
-  }
-
-  // Full insights feed — TR
-  const fullFeedTr = buildInsightsChannel('eCyPro Perspektif', 'insights-rss.xml', posts, 'tr');
-  fs.writeFileSync(path.join(OUTPUT_DIR, 'insights-rss.xml'), fullFeedTr);
-  console.log(`✅ insights-rss.xml (${posts.length} items, TR)`);
-
-  // Full insights feed — EN (/en/insights/rss.xml)
-  const enDir = path.join(OUTPUT_DIR, 'en', 'insights');
-  fs.mkdirSync(enDir, { recursive: true });
-  const fullFeedEn = buildInsightsChannel('eCyPro Perspektif', 'en/insights/rss.xml', posts, 'en');
-  fs.writeFileSync(path.join(enDir, 'rss.xml'), fullFeedEn);
-  console.log(`✅ en/insights/rss.xml (${posts.length} items, EN)`);
-
-  // Per-domain feeds
-  const domains = ['M_A', 'ESG', 'FINTECH', 'AILE_SIRKETI'];
-  for (const domain of domains) {
-    const domainPosts = posts.filter((p) => p.primaryDomain === domain);
-    const feedSlug = DOMAIN_SLUG[domain];
-    const label = DOMAIN_LABEL[domain] ?? domain;
-    const feed = buildInsightsChannel(
-      `eCyPro Perspektif — ${label}`,
-      `${feedSlug}-rss.xml`,
-      domainPosts,
-      'tr',
-    );
-    fs.writeFileSync(path.join(OUTPUT_DIR, `${feedSlug}-rss.xml`), feed);
-    console.log(`✅ ${feedSlug}-rss.xml (${domainPosts.length} items)`);
-  }
-};
-
 try {
   generateRSS();
-  generateInsightsRSS();
 } catch (error) {
   console.error('❌ Error generating RSS feed:', error);
 }

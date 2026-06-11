@@ -55,7 +55,7 @@ export const Insights: React.FC = () => {
           </FadeIn>
           <FadeIn delay={200}>
             <Link
-              to="/blog"
+              to="/perspektifler"
               className="hidden md:inline-flex items-center gap-2 px-8 py-4 border border-white/10 text-white text-sm font-medium rounded-full hover:bg-white/5 hover:border-white/20 transition-all group"
             >
               {INSIGHTS_COPY.viewAll[lang]}
@@ -75,7 +75,7 @@ export const Insights: React.FC = () => {
               className="lg:col-span-7"
             >
               <Link
-                to={`/blog/${filteredPosts[0].slug}`}
+                to={`/perspektifler/${filteredPosts[0].slug}`}
                 className="block h-full group relative rounded-3xl overflow-hidden border border-white/5 bg-white/2 outline-none"
                 onClick={() => trackEvent('Blog', 'Read', filteredPosts[0]?.title[lang] || '')}
               >
@@ -140,7 +140,7 @@ export const Insights: React.FC = () => {
                 className="flex-1"
               >
                 <Link
-                  to={`/blog/${post.slug}`}
+                  to={`/perspektifler/${post.slug}`}
                   className="block h-full group relative rounded-3xl overflow-hidden border border-white/5 bg-white/2 p-8 lg:p-10 outline-none hover:bg-white/4 transition-colors duration-500"
                   onClick={() => trackEvent('Blog', 'Read', post.title[lang])}
                 >
@@ -173,7 +173,7 @@ export const Insights: React.FC = () => {
 
         <div className="md:hidden mt-12 text-center">
           <Link
-            to="/blog"
+            to="/perspektifler"
             className="inline-flex items-center gap-2 px-8 py-4 border border-white/10 text-white text-sm font-medium rounded-full hover:bg-white/5 transition-all"
           >
             {INSIGHTS_COPY.viewAll[lang]}

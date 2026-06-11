@@ -57,7 +57,7 @@ const BlogPostPage: React.FC = () => {
       <div className="min-h-screen bg-neutral flex items-center justify-center text-white">
         <div className="text-center">
           <h1 className="text-3xl font-serif mb-4">Makele Bulunamadı</h1>
-          <Link to="/blog" className="text-blue-400 hover:text-blue-300">
+          <Link to="/perspektifler" className="text-blue-400 hover:text-blue-300">
             Blog'a Dön
           </Link>
         </div>
@@ -112,7 +112,7 @@ const BlogPostPage: React.FC = () => {
             {/* Main article column */}
             <div className="flex-1 min-w-0 max-w-4xl">
               <Link
-                to="/blog"
+                to="/perspektifler"
                 className="inline-flex items-center gap-2 text-slate-400 hover:text-white transition-colors mb-8 group"
               >
                 <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />

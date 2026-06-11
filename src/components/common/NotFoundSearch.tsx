@@ -84,7 +84,7 @@ const KNOWN_ROUTES: RouteHint[] = [
     keywords: ['pricing', 'fiyat', 'ücret', 'tarife'],
   },
   {
-    path: '/blog',
+    path: '/perspektifler',
     label: { tr: 'Perspektifler', en: 'Perspectives' },
     keywords: ['blog', 'perspektif', 'içgörü', 'insight'],
   },

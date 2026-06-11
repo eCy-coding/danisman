@@ -17,7 +17,7 @@ export function RelatedArticles({ posts }: RelatedArticlesProps) {
         {posts.slice(0, 3).map((post) => (
           <Link
             key={post.slug}
-            to={`/blog/${post.slug}`}
+            to={`/perspektifler/${post.slug}`}
             className="group block rounded-xl bg-white/5 border border-white/10 p-5 hover:border-amber-500/30 transition-colors"
           >
             {post.coverImage && (

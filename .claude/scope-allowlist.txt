@@ -22,6 +22,7 @@ src/components/layout/MegaMenu.tsx
 src/components/common/SocialProofToast.tsx
 src/components/common/UrgencyBanner.tsx
 src/data/taxonomy.ts
+src/data/pillar-content.ts
 src/data/copy/common.ts
 src/data/blog-posts.json
 src/data/search-index.json
@@ -55,3 +56,10 @@ docs/guides/perspektifler-content-ops.md
 .claude/scope-allowlist.txt
 .claude/hooks/**
 .claude/settings.json
+# GATE-3 link sweep: no internal click may land on a 301 (PROGRESS.md)
+src/components/ui/CommandMenu.tsx
+src/components/sections/Insights.tsx
+src/components/layout/Footer.tsx
+src/components/common/NotFoundSearch.tsx
+src/lib/useRouteNamespaces.ts
+src/pages/NotFoundPage.tsx
