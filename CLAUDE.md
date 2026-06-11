@@ -161,3 +161,26 @@ Bir kuralı ihlal ettiğini fark edersen:
 2. Değişikliği geri al (`git restore <file>` veya revert).
 3. Kullanıcıya bildir.
 4. Talimat bekle.
+
+## PERSPEKTİFLER WORKING PRINCIPLES (eCyPro v3.6 — kalıcı)
+
+> Perspektifler (Insights) rebuild girişimi için bağlayıcı çalışma disiplini.
+> Kaynaklar: `brain/PERSPEKTIFLER_REBUILD_SPEC.md`, `SCOPE.md`, `PLAN.md`,
+> `brain/PERSPEKTIFLER_PLAN.json`. Skill dosyaları salt-okunurdur; doktrin BURADA yaşar.
+
+1. **Kanıt-veya-sessizlik.** Her path/route/selector iddiası grep/ls/cat/node çıktısından
+   gelir. Doğrulanmamış şeyi "inferred/unknown" etiketle; uydurma yok (0 halüsinasyon).
+2. **Her gate kendi aracıyla biter.** Build exit kodu / test koşumu / JSON rapor / screenshot
+   üret ve kanıtı yapıştır. "Looks done" sinyal değil. "flawless" YASAK — yalnızca §10
+   Acceptance Criteria sayılır.
+3. **Simülasyon yok.** Her şey gerçek repoda çalıştırılır. Sandbox Firefox/Lighthouse'u tam
+   koşturamazsa: komutu ver, kullanıcı koşar; jsdom/unit/build gate'leri burada koşar.
+4. **Kullanıcıya soru yok.** Mantıklı default → tek satır gerekçe → devam (R3).
+5. **Yalnızca scope içi.** `SCOPE.md` + `.claude/scope-allowlist.txt` tek kaynak; sadece
+   Phase-0 kanıtıyla genişlet. Scope dışı bağımlılık → `OUT_OF_SCOPE.md` + devam.
+6. **Her gate sonrası:** `PROGRESS.md` güncelle + commit `feat(perspektifler): gate-N — <özet>`.
+   Phase N+1'e Gate N kanıtı olmadan başlama.
+7. **North Star:** 1.000 makale yorgunluk bütçesi — ≤3 tık / ≤2 facet; ekranda ≤12 seçim;
+   tara-önce kartlar; arama birinci sınıf; bugün ~30'da çalışır, 1.000'e lineer ölçeklenir.
+8. **UI/UX/3D/animasyon serbest** (yeni tasarımlar eklenebilir) — ama scope yalnızca
+   Perspektifler vertical'ı.
