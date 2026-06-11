@@ -2,7 +2,7 @@
   "$schema": "./perspektifler/tasks.schema.json",
   "contract": "~/Desktop/istek.md (v2) — micro-focus: Perspektifler vertical only",
   "branch": "claude/cranky-bassi-9bd8b1",
-  "updated": "2026-06-11T14:05:00+03:00",
+  "updated": "2026-06-11T15:25:00+03:00",
   "legend": {
     "status": [
       "pending",
@@ -170,7 +170,7 @@
       "id": "P4",
       "title": "Category pillars + article upgrades (BUG-11)",
       "gate": "GATE-4: check-links.ts quotas on 20-sample + rich-results longest/shortest",
-      "status": "in_progress",
+      "status": "done",
       "tasks": [
         {
           "id": "P4-1",
@@ -198,7 +198,7 @@
       "id": "P5",
       "title": "Search (BUG-09)",
       "gate": "GATE-5: 30-query set → zero-result <5%, p95 <300ms",
-      "status": "in_progress",
+      "status": "done",
       "tasks": [
         {
           "id": "P5-1",
@@ -226,37 +226,37 @@
       "id": "P6",
       "title": "Quality sweep + prototype deletion (BUG-05 leftovers, 07, 08)",
       "gate": "GATE-6: LH ≥90/≥95 JSONs + axe 0 crit/serious + crawl clean + ≤2-float screenshot",
-      "status": "pending",
+      "status": "done",
       "tasks": [
         {
           "id": "P6-1",
           "title": "Float governance: toast→nav 'Yeni' badge, banner returning+8s, merge a11y+lang, keep chat (≤2 persistent)",
-          "status": "pending"
+          "status": "done"
         },
         {
           "id": "P6-2",
           "title": "BUG-07 /about root cause verify (shared layer? else OUT_OF_SCOPE)",
-          "status": "pending"
+          "status": "done"
         },
         {
           "id": "P6-3",
           "title": "Delete dead insights prototype (8 pages, 16 components, mock libs, types, hook) after harvest",
-          "status": "pending"
+          "status": "done"
         },
         {
           "id": "P6-4",
           "title": "Migrate ~10 /blog-asserting Playwright specs",
-          "status": "pending"
+          "status": "done"
         },
         {
           "id": "P6-5",
           "title": "axe on hub/category/article/open-menu; SEO: hreflang, konular noindex,follow, param canonicalization, sitemap",
-          "status": "pending"
+          "status": "done"
         },
         {
           "id": "P6-6",
           "title": "audit-broken-links + audit-canonical crawl clean",
-          "status": "pending"
+          "status": "done"
         }
       ]
     },
@@ -264,29 +264,30 @@
       "id": "PF",
       "title": "Final proof + PR",
       "gate": "FINAL: e2e-perspektifler.spec green + PBVC + PR with AC-01..12 evidence (no merge)",
-      "status": "pending",
+      "status": "done",
       "tasks": [
         {
           "id": "PF-1",
           "title": "tests/e2e-perspektifler.spec.ts full journey",
-          "status": "pending"
+          "status": "done"
         },
         {
           "id": "PF-2",
           "title": "PBVC: typecheck+lint+unit(fresh)+build+e2e",
-          "status": "pending"
+          "status": "done"
         },
         {
           "id": "PF-3",
           "title": "docs/guides/perspektifler-content-ops.md runbook",
-          "status": "pending"
+          "status": "done"
         },
         {
           "id": "PF-4",
           "title": "PR 'feat(perspektifler): rebuild insights vertical' + AC table — DO NOT MERGE",
-          "status": "pending"
+          "status": "done"
         }
       ]
     }
-  ]
+  ],
+  "pr": "https://github.com/eCy-coding/danisman/pull/222"
 }
