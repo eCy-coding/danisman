@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useLocation } from 'react-router-dom';
 import { Menu, X, ChevronDown, ChevronUp, MessageCircle } from 'lucide-react';
 import { NAV_ITEMS } from '@/data/copy/common';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { MegaMenu } from './MegaMenu';
+import { NEWEST_POST_DATE } from './insightsMenuData';
 import { useScrollToSection } from '../common/useScrollToSection';
 import { trackEvent } from '../../lib/analytics';
 import { getCalendlyCta, hasExternalCalendly } from '../../lib/cta/calendly';
@@ -43,6 +45,10 @@ export const Navbar: React.FC = () => {
 
   const scrollToSection = useScrollToSection();
   const dropdownTimeoutRef = useRef<number | null>(null);
+  const dropdownOpenTimeoutRef = useRef<number | null>(null);
+  const dropdownOpenScrollY = useRef(0);
+  const navRef = useRef<HTMLElement | null>(null);
+  const location = useLocation();
 
   // Custom Hooks
   useBodyLock(isOpen);
@@ -50,6 +56,65 @@ export const Navbar: React.FC = () => {
     setIsOpen(false);
     setActiveDropdown(null);
   });
+
+  // BUG-01: panels must never survive a navigation — close on route change.
+  useEffect(() => {
+    setActiveDropdown(null);
+    setIsOpen(false);
+  }, [location.pathname]);
+
+  // D-6 float governance: one dismissible "Yeni" badge on the Perspektifler
+  // nav item replaces the SocialProofToast on insights surfaces. Fresh content
+  // = newest post younger than 14 days; visiting the hub dismisses it.
+  const [showYeniBadge, setShowYeniBadge] = useState(false);
+  useEffect(() => {
+    try {
+      const dismissedFor = localStorage.getItem('perspektifler_yeni_seen');
+      const fresh = Date.now() - new Date(NEWEST_POST_DATE).getTime() < 14 * 24 * 3600 * 1000;
+      setShowYeniBadge(fresh && dismissedFor !== NEWEST_POST_DATE);
+    } catch {
+      setShowYeniBadge(false);
+    }
+  }, []);
+  useEffect(() => {
+    if (location.pathname.startsWith('/perspektifler')) {
+      try {
+        localStorage.setItem('perspektifler_yeni_seen', NEWEST_POST_DATE);
+      } catch {
+        /* private mode */
+      }
+      setShowYeniBadge(false);
+    }
+  }, [location.pathname]);
+
+  // BUG-01: close on outside click/tap.
+  useEffect(() => {
+    if (!activeDropdown) return;
+    const onPointerDown = (e: MouseEvent | TouchEvent) => {
+      if (navRef.current && !navRef.current.contains(e.target as Node)) {
+        setActiveDropdown(null);
+      }
+    };
+    document.addEventListener('mousedown', onPointerDown);
+    document.addEventListener('touchstart', onPointerDown);
+    return () => {
+      document.removeEventListener('mousedown', onPointerDown);
+      document.removeEventListener('touchstart', onPointerDown);
+    };
+  }, [activeDropdown]);
+
+  // BUG-01: close once the reader scrolls >100px away from where the panel opened.
+  useEffect(() => {
+    if (!activeDropdown) return;
+    dropdownOpenScrollY.current = window.scrollY;
+    const onScroll = () => {
+      if (Math.abs(window.scrollY - dropdownOpenScrollY.current) > 100) {
+        setActiveDropdown(null);
+      }
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, [activeDropdown]);
 
   // Active section tracking
   useEffect(() => {
@@ -83,10 +148,20 @@ export const Navbar: React.FC = () => {
 
   const handleDropdownEnter = (id: string) => {
     if (dropdownTimeoutRef.current) clearTimeout(dropdownTimeoutRef.current);
-    setActiveDropdown(id);
+    if (dropdownOpenTimeoutRef.current) clearTimeout(dropdownOpenTimeoutRef.current);
+    if (activeDropdown) {
+      // A panel is already open — switch immediately.
+      setActiveDropdown(id);
+      return;
+    }
+    // Hover-intent: a drive-by cursor must not pop the panel (BUG-01).
+    dropdownOpenTimeoutRef.current = window.setTimeout(() => {
+      setActiveDropdown(id);
+    }, 220);
   };
 
   const handleDropdownLeave = () => {
+    if (dropdownOpenTimeoutRef.current) clearTimeout(dropdownOpenTimeoutRef.current);
     dropdownTimeoutRef.current = window.setTimeout(() => {
       setActiveDropdown(null);
     }, 200); // 200ms delay for better UX
@@ -98,6 +173,7 @@ export const Navbar: React.FC = () => {
 
   return (
     <nav
+      ref={navRef}
       className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 border-b ${
         scrolled
           ? 'glass shadow-glow border-white/5 py-3'
@@ -136,6 +212,7 @@ export const Navbar: React.FC = () => {
                   onClick={(e) =>
                     !isDropdown && handleNavClick(e, item.href, item.label[lang] || '')
                   }
+                  onFocus={() => isDropdown && setActiveDropdown(item.id)}
                   data-testid={`navbar-link-${item.id}`}
                   data-active={isActive ? 'true' : 'false'}
                   className={`text-sm font-medium transition-all duration-300 flex items-center gap-1 py-4 tracking-wide outline-none ${
@@ -145,10 +222,16 @@ export const Navbar: React.FC = () => {
                   }`}
                   aria-haspopup={isDropdown}
                   aria-expanded={activeDropdown === item.id}
+                  aria-controls={
+                    isDropdown && item.hasMegaMenu ? `mega-menu-${item.id}` : undefined
+                  }
                   aria-current={isActive ? 'page' : undefined}
                 >
-                  <div
-                    className={`
+                  {/* BUG-02: the icon box used to render unconditionally while
+                      NAV_ITEMS defines no icons → empty checkbox-like squares. */}
+                  {item.icon && (
+                    <div
+                      className={`
                   w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300
                   ${
                     isActive
@@ -156,10 +239,19 @@ export const Navbar: React.FC = () => {
                       : 'bg-white/5 text-gray-400 group-hover:bg-white/10 group-hover:text-white'
                   }
                 `}
-                  >
-                    {item.icon}
-                  </div>
+                    >
+                      {item.icon}
+                    </div>
+                  )}
                   {item.label[lang]}
+                  {item.id === 'insights' && showYeniBadge && (
+                    <span
+                      data-testid="perspektifler-yeni-badge"
+                      className="ml-1 rounded-full bg-secondary/20 border border-secondary/40 text-secondary text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5"
+                    >
+                      Yeni
+                    </span>
+                  )}
                   {isDropdown && (
                     <ChevronDown
                       size={14}

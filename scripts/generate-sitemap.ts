@@ -18,7 +18,6 @@ const STATIC_ROUTES = [
   'hizmetler',
   'pricing',
   'fiyatlandirma',
-  'blog',
   'contact',
   'iletisim',
   'discovery',
@@ -64,14 +63,18 @@ const STATIC_ROUTES = [
   'webinars/esg-cbam-2026-readiness',
   'webinars/family-business-transition-2026',
   'industry-reports/turkey-premium-consulting-2026',
-  // Wave-3A: Perspektif (Insights) hub + domain routes
-  'insights',
-  'insights/archive',
-  'insights/search',
-  'insights/m-a',
-  'insights/esg',
-  'insights/fintech',
-  'insights/aile-sirketi',
+  // Perspektifler hub + indexable category pillars (konular is noindex — excluded)
+  'perspektifler',
+  'perspektifler/kategori/strateji',
+  'perspektifler/kategori/yapay-zeka-teknoloji',
+  'perspektifler/kategori/finans-ekonomi',
+  'perspektifler/kategori/insan-organizasyon',
+  'perspektifler/kategori/operasyon',
+  'perspektifler/kategori/pazarlama-cx',
+  'perspektifler/kategori/global-vizyon',
+  'perspektifler/kategori/kamu-esg',
+  'perspektifler/kategori/liderlik',
+  'perspektifler/kategori/ma-degerleme',
 ];
 
 // Competitor gap routes with custom priority per spec
@@ -187,9 +190,9 @@ async function generateSitemap() {
     xml += buildUrl(route, 'weekly', route === '' ? '1.0' : '0.8');
   });
 
-  // Add Blog Posts (MDX + generated; deduped via Set in `blogSlugs`).
+  // Add Perspektifler articles (MDX + generated; deduped via Set in `blogSlugs`).
   blogSlugs.forEach((slug) => {
-    xml += buildUrl(`blog/${slug}`, 'monthly', '0.7');
+    xml += buildUrl(`perspektifler/${slug}`, 'monthly', '0.7');
   });
 
   // Add Case Study detail pages (slugs imported from mockCaseStudies → single source of truth)
@@ -240,7 +243,11 @@ async function generateSitemap() {
         changefreq: 'weekly',
         priority: r === '' ? '1.0' : '0.8',
       })),
-      ...blogSlugs.map((s) => ({ path: `blog/${s}`, changefreq: 'monthly', priority: '0.7' })),
+      ...blogSlugs.map((s) => ({
+        path: `perspektifler/${s}`,
+        changefreq: 'monthly',
+        priority: '0.7',
+      })),
       ...caseSlugs.map((s) => ({
         path: `case-studies/${s}`,
         changefreq: 'monthly',
@@ -333,77 +340,7 @@ Sitemap: ${BASE_URL}/sitemap-en.xml
   console.log(`✅ Sitemap index: sitemap-index.xml → 3 child sitemaps.`);
 }
 
-// Wave-3A: Insights chunked sitemap generator.
-// Reads stub data today; replace with live Prisma query when Wave-1 merges.
-async function generateInsightsSitemap() {
-  console.log('🗺️  Generating Insights sitemap chunk...');
-
-  const __dirname = path.dirname(fileURLToPath(import.meta.url));
-  const stubPath = path.resolve(__dirname, '../src/data/insights-stub-posts.json');
-
-  if (!fs.existsSync(stubPath)) {
-    console.warn('⚠️  insights-stub-posts.json not found — skipping insights sitemap.');
-    return;
-  }
-
-  interface InsightStub {
-    slug: string;
-    publishedAt: string;
-    updatedAt: string;
-    primaryDomain: string;
-    subDomain: string;
-  }
-
-  const posts: InsightStub[] = JSON.parse(fs.readFileSync(stubPath, 'utf-8'));
-  const publicDir = path.resolve(__dirname, '../public');
-
-  if (!fs.existsSync(publicDir)) {
-    fs.mkdirSync(publicDir, { recursive: true });
-  }
-
-  // Chunk 1 — first 5000 posts (stub has 5)
-  const chunk = posts.slice(0, 5000);
-
-  const xmlHeader = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">`;
-
-  const urls = chunk
-    .map(
-      (p) => `
-  <url>
-    <loc>https://www.ecypro.com/insights/${p.slug}</loc>
-    <lastmod>${new Date(p.updatedAt).toISOString().split('T')[0]}</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>`,
-    )
-    .join('');
-
-  const xml = `${xmlHeader}${urls}
-</urlset>`;
-
-  fs.writeFileSync(path.join(publicDir, 'sitemap-insights-1.xml'), xml);
-  console.log(`✅ sitemap-insights-1.xml written (${chunk.length} URLs).`);
-
-  // Update sitemap-index.xml to include the insights chunk
-  const indexPath = path.join(publicDir, 'sitemap-index.xml');
-  if (fs.existsSync(indexPath)) {
-    let indexContent = fs.readFileSync(indexPath, 'utf-8');
-    const insightsEntry = `  <sitemap>
-    <loc>https://www.ecypro.com/sitemap-insights-1.xml</loc>
-    <lastmod>${new Date().toISOString().split('T')[0]}</lastmod>
-  </sitemap>`;
-
-    if (!indexContent.includes('sitemap-insights-1.xml')) {
-      indexContent = indexContent.replace('</sitemapindex>', `${insightsEntry}\n</sitemapindex>`);
-      fs.writeFileSync(indexPath, indexContent);
-      console.log('✅ sitemap-index.xml updated with insights chunk entry.');
-    }
-  }
-}
-
 generateSitemap()
-  .then(() => generateInsightsSitemap())
   .then(() => {
     // Sync public/ sitemaps → dist/ so prerender reads fresh routes.
     // Vite copies public/ to dist/ before postbuild, so dist/ is stale
@@ -417,7 +354,6 @@ generateSitemap()
         'sitemap-tr.xml',
         'sitemap-en.xml',
         'sitemap-index.xml',
-        'sitemap-insights-1.xml',
         'robots.txt',
       ];
       for (const f of files) {

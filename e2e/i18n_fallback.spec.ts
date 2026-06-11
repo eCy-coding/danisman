@@ -24,6 +24,7 @@ test.describe('i18n — language switching', () => {
   test('language toggle changes visible text', async ({ page }) => {
     await page.goto('/');
     await page.waitForLoadState('networkidle');
+    await page.locator('[data-testid="utility-dock"] > button').click(); // open merged dock (D-6)
 
     // Look for language switcher (stable via data-testid; falls back to role-based locator if absent).
     const langToggle = page

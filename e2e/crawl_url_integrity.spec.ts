@@ -64,7 +64,7 @@ test.describe('U1 — Statik Frontend Sayfalar', () => {
     '/about',
     '/services',
     '/pricing',
-    '/blog',
+    '/perspektifler',
     '/contact',
     '/careers',
     '/team',
@@ -161,8 +161,8 @@ test.describe("U3 — Blog Post URL'leri", () => {
   ];
 
   for (const slug of BLOG_SLUGS) {
-    test(`/blog/${slug} — 200, içerik yükleniyor`, async ({ page }) => {
-      const res = await page.goto(`${BASE}/blog/${slug}`, {
+    test(`/perspektifler/${slug} — 200, içerik yükleniyor`, async ({ page }) => {
+      const res = await page.goto(`${BASE}/perspektifler/${slug}`, {
         waitUntil: 'domcontentloaded',
         timeout: 15000,
       });
@@ -424,12 +424,10 @@ test.describe('U9 — 404 Handling', () => {
       bodyText.toLowerCase().includes('404') ||
       bodyText.toLowerCase().includes('sayfa bulunamadı') ||
       bodyText.toLowerCase().includes('bulunamadı');
-    test
-      .info()
-      .annotations.push({
-        type: 'not-found',
-        description: `title: ${title} | body: ${bodyText.slice(0, 100)}`,
-      });
+    test.info().annotations.push({
+      type: 'not-found',
+      description: `title: ${title} | body: ${bodyText.slice(0, 100)}`,
+    });
     expect(is404, '404 sayfası gösterilmedi').toBeTruthy();
   });
 
@@ -441,7 +439,7 @@ test.describe('U9 — 404 Handling', () => {
       .innerText()
       .catch(() => '');
     const is404orRedirect =
-      url.includes('/blog') ||
+      url.includes('/perspektifler') ||
       text.toLowerCase().includes('bulunamadı') ||
       text.toLowerCase().includes('404');
     expect(is404orRedirect, 'Geçersiz blog slug uygun şekilde işlenmedi').toBeTruthy();

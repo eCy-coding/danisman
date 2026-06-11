@@ -37,7 +37,7 @@ const PUBLIC_PAGES = [
   { url: '/contact', name: 'Contact', hasH1: true },
   { url: '/pricing', name: 'Pricing', hasH1: true },
   { url: '/faq', name: 'FAQ', hasH1: true },
-  { url: '/blog', name: 'Blog', hasH1: true },
+  { url: '/perspektifler', name: 'Blog', hasH1: true },
   { url: '/case-studies', name: 'Case Studies', hasH1: true },
   { url: '/careers', name: 'Careers', hasH1: true },
   { url: '/industries', name: 'Industries', hasH1: true },
@@ -431,7 +431,7 @@ test.describe('Navigation — Sayfa Geçişleri', () => {
 
   test('/ → /blog: blog sayfası', async ({ page }) => {
     await setupMocks(page);
-    await page.goto('/blog', { waitUntil: 'domcontentloaded' });
+    await page.goto('/perspektifler', { waitUntil: 'domcontentloaded' });
     await expect(page.locator('body')).toBeVisible();
   });
 

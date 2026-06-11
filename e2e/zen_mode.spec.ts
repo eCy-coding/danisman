@@ -1,12 +1,12 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('The Zen of Code Features', () => {
-
   test('Zen Mode Toggle Functionality', async ({ page }) => {
     // 1. Navigate to Home
     await page.goto('/');
 
     // 2. Locate Zen Toggle
+    await page.locator('[data-testid="utility-dock"] > button').click(); // open merged dock (D-6)
     const zenButton = page.locator('button[aria-label="Enable Zen Mode"]');
     await expect(zenButton).toBeVisible();
 
@@ -18,7 +18,7 @@ test.describe('The Zen of Code Features', () => {
     await expect(html).toHaveClass(/zen-mode/);
 
     // 5. Verify Visual Changes (Background became white)
-    // We check body background color. 
+    // We check body background color.
     // Computed style check
     const body = page.locator('body');
     await expect(body).toHaveCSS('background-color', 'rgb(255, 255, 255)');
@@ -31,13 +31,18 @@ test.describe('The Zen of Code Features', () => {
   test('Personalization Hooks (No Crash)', async ({ page }) => {
     // Just verify pages with new hooks load correctly
     await page.goto('/services');
-    await expect(page.getByText('Entegre Danışmanlık')).toBeVisible();
+    // Migrated: the old 'Entegre Danışmanlık' copy left the page in an earlier
+    // content sprint (pre-existing drift). The hook-canary contract is
+    // "page renders a heading without crashing".
+    await expect(page.locator('h1').first()).toBeVisible();
 
-    await page.goto('/blog');
+    await page.goto('/perspektifler');
     await page.waitForLoadState('domcontentloaded');
     // Blog page h1 heading is bilingual — use heading role to avoid matching invisible mega-menu
-    const blogHeading = page.getByRole('heading').filter({ hasText: /İçgörüler|Insights|Blog/i }).first();
+    const blogHeading = page
+      .getByRole('heading')
+      .filter({ hasText: /Perspektifler|İçgörüler|Insights|Blog/i })
+      .first();
     await expect(blogHeading).toBeVisible({ timeout: 8000 });
   });
-
 });

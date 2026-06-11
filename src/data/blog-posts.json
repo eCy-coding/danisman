@@ -1,163 +1,23 @@
 [
   {
-    "slug": "tedarik-zinciri-optimizasyonu-lean-six-sigma",
-    "title": "Tedarik Zinciri Optimizasyonu: Lean ve Six Sigma ile Operasyonel Mükemmellik",
-    "excerpt": "COVID-19 pandemisi, küresel tedarik zincirlerinin yapısal kırılganlıklarını açığa çıkarmıştır. Japon otomotiv sanayii, ABD elektronik sektörü ve Avrupa imalat endüstrisinin eş zamanlı tedarik şoklarıyla karşılaşması; sad",
-    "date": "2026-05-31T19:12:09.279Z",
-    "author": "eCyPro Consulting",
-    "coverImage": "/images/blog-default.jpg",
-    "category": "Operasyon",
-    "tags": [],
-    "readingTime": "9 dk"
-  },
-  {
-    "slug": "uluslararasi-pazar-giris-stratejisi-turquality",
-    "title": "Uluslararası Pazar Girişi: Turquality'den Küresel Markaya Stratejik Yol Haritası",
-    "excerpt": "Türkiye'nin ihracat hacmi 2023 yılında 255 milyar dolara ulaşmıştır. Ancak Türk markalarının küresel marka değeri sıralamasındaki görece düşük konumu, ihracat başarısının marka değerine henüz tam olarak dönüşemediğini or",
-    "date": "2026-05-31T19:12:09.279Z",
-    "author": "eCyPro Consulting",
-    "coverImage": "/images/blog-default.jpg",
-    "category": "Global Vizyon",
-    "tags": [],
-    "readingTime": "9 dk"
-  },
-  {
-    "slug": "veri-yonetisimi-kvkk-gdpr-uyum",
-    "title": "Veri Yönetişimi ve KVKK/GDPR Uyumu: Kurumsal Veri Stratejisi Çerçevesi",
-    "excerpt": "Kişisel Verilerin Korunması Kurumu (KVKK), 2025 yılında kurumsal veri ihlalleri nedeniyle 180 milyon TL'yi aşan idari para cezası uygulamıştır. Avrupa'da ise GDPR kapsamında 2024 yılında uygulanan cezaların toplamı 2,5 m",
-    "date": "2026-05-31T19:12:09.279Z",
-    "author": "eCyPro Analiz Ekibi",
-    "coverImage": "/images/blog-default.jpg",
-    "category": "Yapay Zeka & Teknoloji",
-    "tags": [],
-    "readingTime": "10 dk"
-  },
-  {
-    "slug": "noropazarlama-tuketici-davranisi-stratejisi",
-    "title": "Nöropazarlama: Bilinçdışı Tüketici Davranışlarını Anlamak ve Strateji Üretmek",
-    "excerpt": "Harvard Business School profesörü Gerald Zaltman'ın araştırmaları, satın alma kararlarının %95'inin bilinçdışı süreçlerle şekillendiğini ortaya koymaktadır (Zaltman, 2003). Bu bulgu, geleneksel pazar araştırması yöntemle",
-    "date": "2026-05-31T19:12:09.278Z",
-    "author": "eCyPro Analiz Ekibi",
-    "coverImage": "/images/blog-default.jpg",
-    "category": "Pazarlama & CX",
-    "tags": [],
-    "readingTime": "8 dk"
-  },
-  {
-    "slug": "net-zero-eylem-plani",
-    "title": "Net Sıfır Taahhüdünden Eylem Planına: 5 Kritik Adım",
-    "excerpt": "2015 Paris Anlaşması'ndan bu yana 140'ı aşkın ülke ve binlerce kurum \"net sıfır\" karbon emisyon taahhüdü vermiştir. Ancak araştırmalar, bu taahhütlerin önemli bir bölümünün ölçülebilir eylem planına dönüşmediğini ortaya ",
-    "date": "2026-05-31T19:12:09.277Z",
-    "author": "eCyPro Analiz Ekibi",
-    "coverImage": "/images/blog-default.jpg",
-    "category": "Kamu & ESG",
-    "tags": [],
-    "readingTime": "7 dk"
-  },
-  {
-    "slug": "lean-ai-operational-excellence",
-    "title": "Lean AI & Operasyonel Mükemmellik: Klasik Yalın Üretim ile Yapay Zekanın Sinerjisi",
-    "excerpt": "Endüstri 4.0 dönüşümünün en güçlü paradoksu, en modern teknolojilerin en köklü metodoloji ile birleştiğinde maksimum değer üretmesidir. Toyota Üretim Sistemi'nden (TPS) türeyen Lean felsefesi, Yapay Zeka ve Endüstriyel N",
-    "date": "2026-05-31T19:12:09.276Z",
-    "author": "eCyPro Analiz Ekibi",
-    "coverImage": "/images/blog-default.jpg",
-    "category": "Operasyon",
-    "tags": [],
-    "readingTime": "7 dk"
-  },
-  {
-    "slug": "ma-degerleme-due-diligence-rehberi",
-    "title": "M&A Due Diligence: Şirket Birleşme ve Satın Almalarında Değerleme Metodolojisi",
-    "excerpt": "McKinsey & Company'nin kapsamlı araştırması, M&A işlemlerinin %70'inin hedeflenen sinerji değerlerini yakalayamadığını ortaya koymaktadır (Christofferson et al., 2004). Bu çarpıcı istatistiğin ardında yatan temel nedenle",
-    "date": "2026-05-31T19:12:09.276Z",
-    "author": "eCyPro Consulting",
-    "coverImage": "/images/blog-default.jpg",
-    "category": "M&A & Değerleme",
-    "tags": [],
-    "readingTime": "11 dk"
-  },
-  {
-    "slug": "makroekonomik-risk-yonetimi-2026",
-    "title": "Makroekonomik Risk Yönetimi: Kur, Enflasyon ve Faiz Baskısında Kurumsal Strateji",
-    "excerpt": "2024–2026 döneminde küresel ekonomik ortam, kurumsal yöneticiler için olağandışı bir belirsizlik tablosu sergilemektedir: ABD'de enflasyonun yapısal direnci, Avrupa'da büyüme yavaşlaması, Orta Doğu ve Ukrayna'da süregele",
-    "date": "2026-05-31T19:12:09.276Z",
-    "author": "eCyPro Analiz Ekibi",
-    "coverImage": "/images/blog-default.jpg",
-    "category": "Finans & Ekonomi",
-    "tags": [],
-    "readingTime": "10 dk"
-  },
-  {
-    "slug": "endustriyel-iliskiler-toplu-sozlesme-stratejisi",
-    "title": "Endüstriyel İlişkiler ve Toplu Sözleşme: Çalışma Barışının Stratejik Yönetimi",
-    "excerpt": "Küresel işgücü piyasasında köklü dönüşümlerin yaşandığı günümüzde —Büyük İstifa dalgası, ücret enflasyonu, çalışan güçlenmesi ve sendikacılığın yeniden yükselişi— endüstriyel ilişkiler yönetimi hiçbir dönemde bu denli st",
-    "date": "2026-05-31T19:12:09.274Z",
-    "author": "eCyPro Consulting",
-    "coverImage": "/images/blog-default.jpg",
-    "category": "İnsan & Organizasyon",
-    "tags": [],
-    "readingTime": "8 dk"
-  },
-  {
-    "slug": "esg-strateji-kurumsal-surdurulebilirlik",
-    "title": "ESG Stratejisi ve Kurumsal Sürdürülebilirlik: C-Suite Rehberi 2026",
-    "excerpt": "ESG (Environmental, Social, Governance — Çevresel, Sosyal, Yönetişim) kriterleri, son on yılda kurumsal yönetim gündeminin en üst sıralarına yerleşmiştir. Ancak pek çok yönetici ESG'yi hâlâ bir uyum yükümlülüğü ya da iti",
-    "date": "2026-05-31T19:12:09.274Z",
-    "author": "eCyPro Analiz Ekibi",
-    "coverImage": "/images/blog-default.jpg",
-    "category": "Kamu & ESG",
-    "tags": [],
-    "readingTime": "9 dk"
-  },
-  {
-    "slug": "aile-sirketleri-kurumsallasma-yonetisim",
-    "title": "Aile Şirketlerinde Kurumsallaşma ve Yönetişim: Anayasa Modeli",
-    "excerpt": "Dünya ekonomilerinin omurgasını oluşturan aile şirketleri, küresel GSYH'nin %70'ini ve istihdamın %60'ından fazlasını temsil etmektedir (Family Business Network International, 2022). Türkiye'de ise büyük ölçekli şirketle",
-    "date": "2026-05-31T19:12:09.272Z",
-    "author": "eCyPro Consulting",
-    "coverImage": "/images/blog-default.jpg",
-    "category": "Strateji",
-    "tags": [],
-    "readingTime": "10 dk"
-  },
-  {
-    "slug": "akilli-sehirler-kamu-politikasi-dijital-yonetim",
-    "title": "Akıllı Şehirler ve Dijital Kamu Yönetimi: Yerel Yönetimler için Dönüşüm Rehberi",
-    "excerpt": "Birleşmiş Milletler tahminlerine göre, 2030 yılına kadar dünya nüfusunun %60'ı kentlerde yaşayacaktır. Bu demografik gerçeklik, şehirleri iklim değişikliği, altyapı baskısı ve hizmet kalitesi talepleriyle aynı anda yüzle",
-    "date": "2026-05-31T19:12:09.272Z",
-    "author": "eCyPro Consulting",
-    "coverImage": "/images/blog-default.jpg",
-    "category": "Kamu & ESG",
-    "tags": [],
-    "readingTime": "9 dk"
-  },
-  {
-    "slug": "boardroom-agility-uncertainty",
-    "title": "Belirsizlik Çağında Yönetim Kurulu Çevikliği: Senaryo Planlama ve Karar Hızını Yeniden Tasarlamak",
-    "excerpt": "2020-2026 döneminin kurumsal yönetim tarihine bakıldığında, yönetim kurullarının hiçbir zaman bu denli karmaşık, hızlı değişen ve belirsiz bir ortamda karar almak zorunda kalmadığı görülmektedir. Pandemi, jeopolitik kriz",
-    "date": "2026-05-31T19:12:09.272Z",
-    "author": "eCyPro Consulting",
-    "coverImage": "/images/blog-default.jpg",
-    "category": "Liderlik",
-    "tags": [],
-    "readingTime": "6 dk"
-  },
-  {
     "slug": "danismanlik-ucretleri-nasil-belirlenir",
     "title": "Danışmanlık Ücretleri Nasıl Belirlenir? Fiyatlandırma Modelleri Karşılaştırması",
     "excerpt": "Stratejik danışmanlık ücretleri nasıl hesaplanır? Saat bazlı, proje bazlı ve retainer modellerinin avantaj-dezavantajları, Türkiye piyasa değerleri.",
     "date": "2026-05-29T00:00:00.000Z",
     "author": "eCyPro Consulting",
     "coverImage": "/images/blog-default.jpg",
-    "category": "Danışmanlık",
+    "category": "Strateji",
+    "categorySlug": "strateji",
     "tags": [
-      "danışmanlık ücretleri",
-      "fiyatlandırma",
-      "retainer",
-      "stratejik danışmanlık",
-      "consulting"
+      "fiyatlandirma",
+      "danismanlik"
     ],
-    "readingTime": "5 dk okuma"
+    "readingTime": "3 dk okuma",
+    "readTimeMin": 3,
+    "wordCount": 579,
+    "lang": "tr",
+    "format": "makale",
+    "featured": true
   },
   {
     "slug": "dijital-donusum-kpi-ornekleri",
@@ -166,15 +26,19 @@
     "date": "2026-05-29T00:00:00.000Z",
     "author": "eCyPro Consulting",
     "coverImage": "/images/blog-default.jpg",
-    "category": "Dijital Dönüşüm",
+    "category": "Yapay Zeka & Teknoloji",
+    "categorySlug": "yapay-zeka-teknoloji",
     "tags": [
-      "dijital dönüşüm",
-      "KPI",
-      "ölçüm",
-      "strateji",
-      "kurumsal"
+      "dijital-donusum",
+      "kpi",
+      "kurumsallasma"
     ],
-    "readingTime": "5 dk okuma"
+    "readingTime": "3 dk okuma",
+    "readTimeMin": 3,
+    "wordCount": 673,
+    "lang": "tr",
+    "format": "makale",
+    "featured": true
   },
   {
     "slug": "gdpr-kvkk-farklari",
@@ -183,15 +47,18 @@
     "date": "2026-05-29T00:00:00.000Z",
     "author": "eCyPro Consulting",
     "coverImage": "/images/blog-default.jpg",
-    "category": "KVKK & Regülasyon",
+    "category": "Kamu & ESG",
+    "categorySlug": "kamu-esg",
     "tags": [
-      "GDPR",
-      "KVKK",
-      "AB regülasyon",
-      "veri koruma",
-      "Türkiye-AB"
+      "veri-koruma",
+      "ab-regulasyonu"
     ],
-    "readingTime": "5 dk okuma"
+    "readingTime": "4 dk okuma",
+    "readTimeMin": 4,
+    "wordCount": 739,
+    "lang": "tr",
+    "format": "makale",
+    "featured": true
   },
   {
     "slug": "kvkk-uyum-sureci-adim-adim",
@@ -200,15 +67,19 @@
     "date": "2026-05-29T00:00:00.000Z",
     "author": "eCyPro Consulting",
     "coverImage": "/images/blog-default.jpg",
-    "category": "KVKK & Regülasyon",
+    "category": "Kamu & ESG",
+    "categorySlug": "kamu-esg",
     "tags": [
-      "KVKK",
-      "uyum",
-      "veri koruma",
-      "regülasyon",
-      "kurumsal"
+      "veri-koruma",
+      "regulasyon-uyum",
+      "kurumsallasma"
     ],
-    "readingTime": "5 dk okuma"
+    "readingTime": "4 dk okuma",
+    "readTimeMin": 4,
+    "wordCount": 745,
+    "lang": "tr",
+    "format": "makale",
+    "featured": false
   },
   {
     "slug": "proje-yonetimi-best-practices",
@@ -217,16 +88,20 @@
     "date": "2026-05-29T00:00:00.000Z",
     "author": "eCyPro Consulting",
     "coverImage": "/images/blog-default.jpg",
-    "category": "Operasyonel Verimlilik",
+    "category": "Operasyon",
+    "categorySlug": "operasyon",
     "tags": [
-      "proje yönetimi",
-      "PMO",
-      "agile",
-      "PMP",
-      "kurumsal",
-      "operasyonel verimlilik"
+      "proje-yonetimi",
+      "ceviklik",
+      "kurumsallasma",
+      "operasyonel-verimlilik"
     ],
-    "readingTime": "5 dk okuma"
+    "readingTime": "4 dk okuma",
+    "readTimeMin": 4,
+    "wordCount": 770,
+    "lang": "tr",
+    "format": "makale",
+    "featured": true
   },
   {
     "slug": "karbon-muhasebesi-scope-1-2-3-ilk-adimlar",
@@ -235,14 +110,17 @@
     "date": "2026-05-28T00:00:00.000Z",
     "author": "Mehmet Çelik",
     "coverImage": "/brand/blog-covers/karbon-scope-123.svg",
-    "category": "ESG & Sürdürülebilirlik",
+    "category": "Kamu & ESG",
+    "categorySlug": "kamu-esg",
     "tags": [
-      "Karbon",
-      "Scope 3",
-      "CBAM",
-      "Emisyon Hesabı"
+      "karbon-yonetimi"
     ],
-    "readingTime": "7 dk"
+    "readingTime": "3 dk okuma",
+    "readTimeMin": 3,
+    "wordCount": 693,
+    "lang": "tr",
+    "format": "makale",
+    "featured": false
   },
   {
     "slug": "gpt-tabanli-musteri-hizmetleri-roi",
@@ -251,14 +129,19 @@
     "date": "2026-05-25T00:00:00.000Z",
     "author": "Ali Demir",
     "coverImage": "/brand/blog-covers/gpt-musteri-hizmetleri-roi.svg",
-    "category": "AI & Analitik",
+    "category": "Yapay Zeka & Teknoloji",
+    "categorySlug": "yapay-zeka-teknoloji",
     "tags": [
-      "GPT",
-      "Müşteri Hizmetleri",
-      "ROI",
-      "LLM"
+      "uretken-ai",
+      "musteri-deneyimi",
+      "roi"
     ],
-    "readingTime": "8 dk"
+    "readingTime": "3 dk okuma",
+    "readTimeMin": 3,
+    "wordCount": 526,
+    "lang": "tr",
+    "format": "makale",
+    "featured": false
   },
   {
     "slug": "uretim-hattinda-mlops-ilk-90-gun",
@@ -267,14 +150,19 @@
     "date": "2026-05-22T00:00:00.000Z",
     "author": "Ali Demir",
     "coverImage": "/brand/blog-covers/mlops-90-gun.svg",
-    "category": "AI & Analitik",
+    "category": "Yapay Zeka & Teknoloji",
+    "categorySlug": "yapay-zeka-teknoloji",
     "tags": [
-      "MLOps",
-      "AI",
-      "Production",
-      "DevOps"
+      "mlops",
+      "yapay-zeka",
+      "uretim"
     ],
-    "readingTime": "6 dk"
+    "readingTime": "2 dk okuma",
+    "readTimeMin": 2,
+    "wordCount": 486,
+    "lang": "tr",
+    "format": "makale",
+    "featured": false
   },
   {
     "slug": "is-uyusmazliklari-arabuluculuk-stratejisi",
@@ -283,15 +171,19 @@
     "date": "2026-05-19T00:00:00.000Z",
     "author": "Emre Can Yalçın",
     "coverImage": "/images/blog-default.jpg",
-    "category": "Endüstriyel İlişkiler",
+    "category": "İnsan & Organizasyon",
+    "categorySlug": "insan-organizasyon",
     "tags": [
       "endustriyel-iliskiler",
-      "arabuluculuk",
       "is-hukuku",
-      "uyusmazlik",
       "insan-kaynaklari"
     ],
-    "readingTime": "9 dk"
+    "readingTime": "4 dk okuma",
+    "readTimeMin": 4,
+    "wordCount": 809,
+    "lang": "tr",
+    "format": "makale",
+    "featured": false
   },
   {
     "slug": "kriz-yonetimi-iletisim-cercevesi",
@@ -300,15 +192,19 @@
     "date": "2026-05-19T00:00:00.000Z",
     "author": "Emre Can Yalçın",
     "coverImage": "/images/blog-default.jpg",
-    "category": "Risk & Kriz Yönetimi",
+    "category": "Strateji",
+    "categorySlug": "strateji",
     "tags": [
-      "kriz-yonetimi",
-      "iletisim",
-      "itibar",
-      "risk",
-      "kurumsal-strateji"
+      "risk-yonetimi",
+      "kurumsal-iletisim",
+      "marka-yonetimi"
     ],
-    "readingTime": "10 dk"
+    "readingTime": "5 dk okuma",
+    "readTimeMin": 5,
+    "wordCount": 943,
+    "lang": "tr",
+    "format": "makale",
+    "featured": false
   },
   {
     "slug": "sinir-otesi-ma-degerleme-tuzaklari",
@@ -317,15 +213,19 @@
     "date": "2026-05-19T00:00:00.000Z",
     "author": "Emre Can Yalçın",
     "coverImage": "/images/blog-default.jpg",
-    "category": "M&A & Strateji",
+    "category": "M&A & Değerleme",
+    "categorySlug": "ma-degerleme",
     "tags": [
-      "m-and-a",
-      "cross-border",
+      "uluslararasilasma",
       "degerleme",
-      "due-diligence",
-      "uluslararasi"
+      "due-diligence"
     ],
-    "readingTime": "10 dk"
+    "readingTime": "4 dk okuma",
+    "readTimeMin": 4,
+    "wordCount": 782,
+    "lang": "tr",
+    "format": "makale",
+    "featured": false
   },
   {
     "slug": "vizyon-strateji-sonuc-trinity",
@@ -335,15 +235,18 @@
     "author": "Emre Can Yalçın",
     "coverImage": "/images/blog-default.jpg",
     "category": "Strateji",
+    "categorySlug": "strateji",
     "tags": [
-      "strateji",
-      "vizyon",
-      "performans",
-      "yonetim",
-      "founder-notes",
+      "kpi",
+      "kurumsal-yonetisim",
       "ecyverse"
     ],
-    "readingTime": "9 dk"
+    "readingTime": "5 dk okuma",
+    "readTimeMin": 5,
+    "wordCount": 1003,
+    "lang": "tr",
+    "format": "founder-letter",
+    "featured": false
   },
   {
     "slug": "ai-tabanli-kpi-tahminlemesi-6-adim",
@@ -352,14 +255,19 @@
     "date": "2026-05-15T00:00:00.000Z",
     "author": "Ali Demir",
     "coverImage": "/brand/blog-covers/ai-kpi-tahminleme.svg",
-    "category": "AI & Analitik",
+    "category": "Yapay Zeka & Teknoloji",
+    "categorySlug": "yapay-zeka-teknoloji",
     "tags": [
-      "Yapay Zeka",
-      "KPI",
-      "Predictive Analytics",
-      "Forecasting"
+      "yapay-zeka",
+      "kpi",
+      "tahminleme"
     ],
-    "readingTime": "7 dk"
+    "readingTime": "3 dk okuma",
+    "readTimeMin": 3,
+    "wordCount": 517,
+    "lang": "tr",
+    "format": "makale",
+    "featured": false
   },
   {
     "slug": "ma-90-gunluk-kural",
@@ -369,14 +277,16 @@
     "author": "Emre Can Yalçın",
     "coverImage": "/images/blog-default.jpg",
     "category": "Strateji",
+    "categorySlug": "strateji",
     "tags": [
-      "m-and-a",
-      "post-merger-integration",
-      "strateji",
-      "entegrasyon",
-      "founder-notes"
+      "pmi"
     ],
-    "readingTime": "9 dk"
+    "readingTime": "5 dk okuma",
+    "readTimeMin": 5,
+    "wordCount": 990,
+    "lang": "tr",
+    "format": "founder-letter",
+    "featured": false
   },
   {
     "slug": "aile-anayasasi-5-maddelik-cekirdek",
@@ -385,14 +295,20 @@
     "date": "2026-05-12T00:00:00.000Z",
     "author": "Ayşe Kaya",
     "coverImage": "/brand/blog-covers/aile-anayasasi-5-madde.svg",
-    "category": "Aile Şirketleri",
+    "category": "İnsan & Organizasyon",
+    "categorySlug": "insan-organizasyon",
     "tags": [
-      "Aile Anayasası",
-      "Yönetişim",
-      "Aile Şirketi",
-      "Devir"
+      "aile-anayasasi",
+      "kurumsal-yonetisim",
+      "aile-sirketleri",
+      "nesil-gecisi"
     ],
-    "readingTime": "6 dk"
+    "readingTime": "3 dk okuma",
+    "readTimeMin": 3,
+    "wordCount": 575,
+    "lang": "tr",
+    "format": "makale",
+    "featured": false
   },
   {
     "slug": "turk-kobi-lean-six-sigma",
@@ -402,15 +318,71 @@
     "author": "Emre Can Yalçın",
     "coverImage": "/images/blog-default.jpg",
     "category": "Operasyon",
+    "categorySlug": "operasyon",
     "tags": [
-      "lean",
-      "six-sigma",
+      "yalin-operasyon",
+      "alti-sigma",
       "kobi",
-      "operasyonel-mukemmellik",
-      "uretim",
-      "founder-notes"
+      "operasyonel-verimlilik",
+      "uretim"
     ],
-    "readingTime": "9 dk"
+    "readingTime": "5 dk okuma",
+    "readTimeMin": 5,
+    "wordCount": 912,
+    "lang": "tr",
+    "format": "founder-letter",
+    "featured": false
+  },
+  {
+    "slug": "aile-sirketleri-kurumsallasma-yonetisim",
+    "title": "Aile Şirketlerinde Kurumsallaşma ve Yönetişim: Anayasa Modeli",
+    "excerpt": "Dünya ekonomilerinin omurgasını oluşturan aile şirketleri, küresel GSYH'nin %70'ini ve istihdamın %60'ından fazlasını temsil etmektedir (Family Business…",
+    "date": "2026-05-10T00:00:00.000Z",
+    "author": "eCyPro Consulting",
+    "coverImage": "/images/blog-default.jpg",
+    "category": "Strateji",
+    "categorySlug": "strateji",
+    "tags": [],
+    "readingTime": "5 dk okuma",
+    "readTimeMin": 5,
+    "wordCount": 953,
+    "lang": "tr",
+    "format": "makale",
+    "featured": false
+  },
+  {
+    "slug": "akilli-sehirler-kamu-politikasi-dijital-yonetim",
+    "title": "Akıllı Şehirler ve Dijital Kamu Yönetimi: Yerel Yönetimler için Dönüşüm Rehberi",
+    "excerpt": "Birleşmiş Milletler tahminlerine göre, 2030 yılına kadar dünya nüfusunun %60'ı kentlerde yaşayacaktır. Bu demografik gerçeklik, şehirleri iklim değişikliği,…",
+    "date": "2026-05-10T00:00:00.000Z",
+    "author": "eCyPro Consulting",
+    "coverImage": "/images/blog-default.jpg",
+    "category": "Kamu & ESG",
+    "categorySlug": "kamu-esg",
+    "tags": [],
+    "readingTime": "5 dk okuma",
+    "readTimeMin": 5,
+    "wordCount": 946,
+    "lang": "tr",
+    "format": "makale",
+    "featured": false
+  },
+  {
+    "slug": "boardroom-agility-uncertainty",
+    "title": "Belirsizlik Çağında Yönetim Kurulu Çevikliği: Senaryo Planlama ve Karar Hızını Yeniden Tasarlamak",
+    "excerpt": "2020-2026 döneminin kurumsal yönetim tarihine bakıldığında, yönetim kurullarının hiçbir zaman bu denli karmaşık, hızlı değişen ve belirsiz bir ortamda karar…",
+    "date": "2026-05-10T00:00:00.000Z",
+    "author": "eCyPro Consulting",
+    "coverImage": "/images/blog-default.jpg",
+    "category": "Liderlik",
+    "categorySlug": "liderlik",
+    "tags": [],
+    "readingTime": "4 dk okuma",
+    "readTimeMin": 4,
+    "wordCount": 809,
+    "lang": "tr",
+    "format": "makale",
+    "featured": false
   },
   {
     "slug": "csrd-uyumunda-2026-hareket-plani",
@@ -419,14 +391,188 @@
     "date": "2026-05-10T00:00:00.000Z",
     "author": "Mehmet Çelik",
     "coverImage": "/brand/blog-covers/csrd-2026.svg",
-    "category": "ESG & Sürdürülebilirlik",
+    "category": "Kamu & ESG",
+    "categorySlug": "kamu-esg",
     "tags": [
-      "CSRD",
-      "ESG",
-      "Sürdürülebilirlik",
-      "AB Regulasyon"
+      "esg",
+      "ab-regulasyonu"
     ],
-    "readingTime": "7 dk"
+    "readingTime": "3 dk okuma",
+    "readTimeMin": 3,
+    "wordCount": 688,
+    "lang": "tr",
+    "format": "makale",
+    "featured": false
+  },
+  {
+    "slug": "endustriyel-iliskiler-toplu-sozlesme-stratejisi",
+    "title": "Endüstriyel İlişkiler ve Toplu Sözleşme: Çalışma Barışının Stratejik Yönetimi",
+    "excerpt": "Küresel işgücü piyasasında köklü dönüşümlerin yaşandığı günümüzde —Büyük İstifa dalgası, ücret enflasyonu, çalışan güçlenmesi ve sendikacılığın yeniden…",
+    "date": "2026-05-10T00:00:00.000Z",
+    "author": "eCyPro Consulting",
+    "coverImage": "/images/blog-default.jpg",
+    "category": "İnsan & Organizasyon",
+    "categorySlug": "insan-organizasyon",
+    "tags": [],
+    "readingTime": "5 dk okuma",
+    "readTimeMin": 5,
+    "wordCount": 940,
+    "lang": "tr",
+    "format": "makale",
+    "featured": false
+  },
+  {
+    "slug": "esg-strateji-kurumsal-surdurulebilirlik",
+    "title": "ESG Stratejisi ve Kurumsal Sürdürülebilirlik: C-Suite Rehberi 2026",
+    "excerpt": "ESG (Environmental, Social, Governance — Çevresel, Sosyal, Yönetişim) kriterleri, son on yılda kurumsal yönetim gündeminin en üst sıralarına yerleşmiştir.…",
+    "date": "2026-05-10T00:00:00.000Z",
+    "author": "eCyPro Analiz Ekibi",
+    "coverImage": "/images/blog-default.jpg",
+    "category": "Kamu & ESG",
+    "categorySlug": "kamu-esg",
+    "tags": [],
+    "readingTime": "5 dk okuma",
+    "readTimeMin": 5,
+    "wordCount": 1062,
+    "lang": "tr",
+    "format": "makale",
+    "featured": false
+  },
+  {
+    "slug": "lean-ai-operational-excellence",
+    "title": "Lean AI & Operasyonel Mükemmellik: Klasik Yalın Üretim ile Yapay Zekanın Sinerjisi",
+    "excerpt": "Endüstri 4.0 dönüşümünün en güçlü paradoksu, en modern teknolojilerin en köklü metodoloji ile birleştiğinde maksimum değer üretmesidir. Toyota Üretim…",
+    "date": "2026-05-10T00:00:00.000Z",
+    "author": "eCyPro Analiz Ekibi",
+    "coverImage": "/images/blog-default.jpg",
+    "category": "Operasyon",
+    "categorySlug": "operasyon",
+    "tags": [],
+    "readingTime": "4 dk okuma",
+    "readTimeMin": 4,
+    "wordCount": 861,
+    "lang": "tr",
+    "format": "makale",
+    "featured": false
+  },
+  {
+    "slug": "ma-degerleme-due-diligence-rehberi",
+    "title": "M&A Due Diligence: Şirket Birleşme ve Satın Almalarında Değerleme Metodolojisi",
+    "excerpt": "McKinsey & Company'nin kapsamlı araştırması, M&A işlemlerinin %70'inin hedeflenen sinerji değerlerini yakalayamadığını ortaya koymaktadır (Christofferson et…",
+    "date": "2026-05-10T00:00:00.000Z",
+    "author": "eCyPro Consulting",
+    "coverImage": "/images/blog-default.jpg",
+    "category": "M&A & Değerleme",
+    "categorySlug": "ma-degerleme",
+    "tags": [],
+    "readingTime": "5 dk okuma",
+    "readTimeMin": 5,
+    "wordCount": 992,
+    "lang": "tr",
+    "format": "makale",
+    "featured": false
+  },
+  {
+    "slug": "makroekonomik-risk-yonetimi-2026",
+    "title": "Makroekonomik Risk Yönetimi: Kur, Enflasyon ve Faiz Baskısında Kurumsal Strateji",
+    "excerpt": "2024–2026 döneminde küresel ekonomik ortam, kurumsal yöneticiler için olağandışı bir belirsizlik tablosu sergilemektedir: ABD'de enflasyonun yapısal…",
+    "date": "2026-05-10T00:00:00.000Z",
+    "author": "eCyPro Analiz Ekibi",
+    "coverImage": "/images/blog-default.jpg",
+    "category": "Finans & Ekonomi",
+    "categorySlug": "finans-ekonomi",
+    "tags": [],
+    "readingTime": "5 dk okuma",
+    "readTimeMin": 5,
+    "wordCount": 909,
+    "lang": "tr",
+    "format": "makale",
+    "featured": false
+  },
+  {
+    "slug": "net-zero-eylem-plani",
+    "title": "Net Sıfır Taahhüdünden Eylem Planına: 5 Kritik Adım",
+    "excerpt": "2015 Paris Anlaşması'ndan bu yana 140'ı aşkın ülke ve binlerce kurum \"net sıfır\" karbon emisyon taahhüdü vermiştir. Ancak araştırmalar, bu taahhütlerin…",
+    "date": "2026-05-10T00:00:00.000Z",
+    "author": "eCyPro Analiz Ekibi",
+    "coverImage": "/images/blog-default.jpg",
+    "category": "Kamu & ESG",
+    "categorySlug": "kamu-esg",
+    "tags": [],
+    "readingTime": "5 dk okuma",
+    "readTimeMin": 5,
+    "wordCount": 906,
+    "lang": "tr",
+    "format": "makale",
+    "featured": false
+  },
+  {
+    "slug": "noropazarlama-tuketici-davranisi-stratejisi",
+    "title": "Nöropazarlama: Bilinçdışı Tüketici Davranışlarını Anlamak ve Strateji Üretmek",
+    "excerpt": "Harvard Business School profesörü Gerald Zaltman'ın araştırmaları, satın alma kararlarının %95'inin bilinçdışı süreçlerle şekillendiğini ortaya koymaktadır…",
+    "date": "2026-05-10T00:00:00.000Z",
+    "author": "eCyPro Analiz Ekibi",
+    "coverImage": "/images/blog-default.jpg",
+    "category": "Pazarlama & CX",
+    "categorySlug": "pazarlama-cx",
+    "tags": [],
+    "readingTime": "5 dk okuma",
+    "readTimeMin": 5,
+    "wordCount": 1082,
+    "lang": "tr",
+    "format": "makale",
+    "featured": false
+  },
+  {
+    "slug": "tedarik-zinciri-optimizasyonu-lean-six-sigma",
+    "title": "Tedarik Zinciri Optimizasyonu: Lean ve Six Sigma ile Operasyonel Mükemmellik",
+    "excerpt": "COVID-19 pandemisi, küresel tedarik zincirlerinin yapısal kırılganlıklarını açığa çıkarmıştır. Japon otomotiv sanayii, ABD elektronik sektörü ve Avrupa…",
+    "date": "2026-05-10T00:00:00.000Z",
+    "author": "eCyPro Consulting",
+    "coverImage": "/images/blog-default.jpg",
+    "category": "Operasyon",
+    "categorySlug": "operasyon",
+    "tags": [],
+    "readingTime": "5 dk okuma",
+    "readTimeMin": 5,
+    "wordCount": 963,
+    "lang": "tr",
+    "format": "makale",
+    "featured": false
+  },
+  {
+    "slug": "uluslararasi-pazar-giris-stratejisi-turquality",
+    "title": "Uluslararası Pazar Girişi: Turquality'den Küresel Markaya Stratejik Yol Haritası",
+    "excerpt": "Türkiye'nin ihracat hacmi 2023 yılında 255 milyar dolara ulaşmıştır. Ancak Türk markalarının küresel marka değeri sıralamasındaki görece düşük konumu,…",
+    "date": "2026-05-10T00:00:00.000Z",
+    "author": "eCyPro Consulting",
+    "coverImage": "/images/blog-default.jpg",
+    "category": "Global Vizyon",
+    "categorySlug": "global-vizyon",
+    "tags": [],
+    "readingTime": "5 dk okuma",
+    "readTimeMin": 5,
+    "wordCount": 922,
+    "lang": "tr",
+    "format": "makale",
+    "featured": false
+  },
+  {
+    "slug": "veri-yonetisimi-kvkk-gdpr-uyum",
+    "title": "Veri Yönetişimi ve KVKK/GDPR Uyumu: Kurumsal Veri Stratejisi Çerçevesi",
+    "excerpt": "Kişisel Verilerin Korunması Kurumu (KVKK), 2025 yılında kurumsal veri ihlalleri nedeniyle 180 milyon TL'yi aşan idari para cezası uygulamıştır. Avrupa'da…",
+    "date": "2026-05-10T00:00:00.000Z",
+    "author": "eCyPro Analiz Ekibi",
+    "coverImage": "/images/blog-default.jpg",
+    "category": "Yapay Zeka & Teknoloji",
+    "categorySlug": "yapay-zeka-teknoloji",
+    "tags": [],
+    "readingTime": "5 dk okuma",
+    "readTimeMin": 5,
+    "wordCount": 945,
+    "lang": "tr",
+    "format": "makale",
+    "featured": false
   },
   {
     "slug": "stratejik-planlama-rehberi",
@@ -436,8 +582,14 @@
     "author": "eCyPro Consulting",
     "coverImage": "/images/blog-default.jpg",
     "category": "Strateji",
+    "categorySlug": "strateji",
     "tags": [],
-    "readingTime": "5 dk okuma"
+    "readingTime": "5 dk okuma",
+    "readTimeMin": 5,
+    "wordCount": 990,
+    "lang": "tr",
+    "format": "makale",
+    "featured": false
   },
   {
     "slug": "aile-sirketleri-stratejik-gecis",
@@ -447,14 +599,18 @@
     "author": "Emre Can Yalçın",
     "coverImage": "/images/blog-default.jpg",
     "category": "Strateji",
+    "categorySlug": "strateji",
     "tags": [
-      "aile-sirketi",
+      "aile-sirketleri",
       "kurumsallasma",
-      "strateji",
-      "yonetim-kurulu",
-      "founder-notes"
+      "kurumsal-yonetisim"
     ],
-    "readingTime": "10 dk"
+    "readingTime": "5 dk okuma",
+    "readTimeMin": 5,
+    "wordCount": 917,
+    "lang": "tr",
+    "format": "founder-letter",
+    "featured": false
   },
   {
     "slug": "nesil-gecisinde-3-yillik-sermaye-devir-stratejisi",
@@ -463,14 +619,18 @@
     "date": "2026-05-08T00:00:00.000Z",
     "author": "Ayşe Kaya",
     "coverImage": "/brand/blog-covers/nesil-gecisi-3-yil.svg",
-    "category": "Aile Şirketleri",
+    "category": "İnsan & Organizasyon",
+    "categorySlug": "insan-organizasyon",
     "tags": [
-      "Nesil Geçişi",
-      "Sermaye Devri",
-      "Aile Şirketi",
-      "Veraset"
+      "nesil-gecisi",
+      "aile-sirketleri"
     ],
-    "readingTime": "7 dk"
+    "readingTime": "3 dk okuma",
+    "readTimeMin": 3,
+    "wordCount": 614,
+    "lang": "tr",
+    "format": "makale",
+    "featured": false
   },
   {
     "slug": "surecler-nasil-standardize-edilir",
@@ -480,8 +640,14 @@
     "author": "eCyPro Consulting",
     "coverImage": "/images/blog-default.jpg",
     "category": "Operasyon",
+    "categorySlug": "operasyon",
     "tags": [],
-    "readingTime": "5 dk okuma"
+    "readingTime": "4 dk okuma",
+    "readTimeMin": 4,
+    "wordCount": 846,
+    "lang": "tr",
+    "format": "makale",
+    "featured": false
   },
   {
     "slug": "kurumsal-kultur-donusumu",
@@ -490,9 +656,15 @@
     "date": "2026-05-07T00:00:00.000Z",
     "author": "eCyPro Consulting",
     "coverImage": "/images/blog-default.jpg",
-    "category": "İnsan Kaynakları",
+    "category": "İnsan & Organizasyon",
+    "categorySlug": "insan-organizasyon",
     "tags": [],
-    "readingTime": "5 dk okuma"
+    "readingTime": "4 dk okuma",
+    "readTimeMin": 4,
+    "wordCount": 879,
+    "lang": "tr",
+    "format": "makale",
+    "featured": false
   },
   {
     "slug": "veri-odakli-karar-verme",
@@ -501,9 +673,15 @@
     "date": "2026-05-06T00:00:00.000Z",
     "author": "eCyPro Consulting",
     "coverImage": "/images/blog-default.jpg",
-    "category": "Analitik",
+    "category": "Yapay Zeka & Teknoloji",
+    "categorySlug": "yapay-zeka-teknoloji",
     "tags": [],
-    "readingTime": "5 dk okuma"
+    "readingTime": "4 dk okuma",
+    "readTimeMin": 4,
+    "wordCount": 832,
+    "lang": "tr",
+    "format": "makale",
+    "featured": false
   },
   {
     "slug": "dijital-donusum-stratejisi-nasil-olusturulur",
@@ -512,14 +690,19 @@
     "date": "2026-05-05T00:00:00.000Z",
     "author": "eCyPro Consulting",
     "coverImage": "/images/blog-default.jpg",
-    "category": "Dijital Dönüşüm",
+    "category": "Yapay Zeka & Teknoloji",
+    "categorySlug": "yapay-zeka-teknoloji",
     "tags": [
-      "dijital dönüşüm",
-      "strateji",
-      "kurumsal",
-      "operasyonel verimlilik"
+      "dijital-donusum",
+      "kurumsallasma",
+      "operasyonel-verimlilik"
     ],
-    "readingTime": "5 dk okuma"
+    "readingTime": "4 dk okuma",
+    "readTimeMin": 4,
+    "wordCount": 707,
+    "lang": "tr",
+    "format": "makale",
+    "featured": false
   },
   {
     "slug": "kpi-belirleme-ve-olcme-yontemleri",
@@ -529,8 +712,14 @@
     "author": "eCyPro Consulting",
     "coverImage": "/images/blog-default.jpg",
     "category": "Strateji",
+    "categorySlug": "strateji",
     "tags": [],
-    "readingTime": "5 dk okuma"
+    "readingTime": "5 dk okuma",
+    "readTimeMin": 5,
+    "wordCount": 938,
+    "lang": "tr",
+    "format": "makale",
+    "featured": false
   },
   {
     "slug": "premium-consulting-komoditelesemez",
@@ -540,14 +729,17 @@
     "author": "Emre Can Yalçın",
     "coverImage": "/images/blog-default.jpg",
     "category": "Strateji",
+    "categorySlug": "strateji",
     "tags": [
-      "premium-consulting",
-      "strateji",
       "danismanlik",
-      "founder-notes",
       "ecyverse"
     ],
-    "readingTime": "9 dk"
+    "readingTime": "5 dk okuma",
+    "readTimeMin": 5,
+    "wordCount": 900,
+    "lang": "tr",
+    "format": "founder-letter",
+    "featured": false
   },
   {
     "slug": "stratejik-danismanlik-hizmetleri-secim-kilavuzu",
@@ -556,14 +748,18 @@
     "date": "2026-05-04T00:00:00.000Z",
     "author": "eCyPro Consulting",
     "coverImage": "/images/blog-default.jpg",
-    "category": "Stratejik Danışmanlık",
+    "category": "Strateji",
+    "categorySlug": "strateji",
     "tags": [
-      "stratejik danışmanlık",
-      "danışmanlık hizmetleri",
-      "kurumsal",
-      "seçim kriterleri"
+      "danismanlik",
+      "kurumsallasma"
     ],
-    "readingTime": "5 dk okuma"
+    "readingTime": "4 dk okuma",
+    "readTimeMin": 4,
+    "wordCount": 742,
+    "lang": "tr",
+    "format": "makale",
+    "featured": false
   },
   {
     "slug": "operasyonel-verimlilik-nasil-arttirilir",
@@ -572,15 +768,21 @@
     "date": "2026-05-03T00:00:00.000Z",
     "author": "eCyPro Consulting",
     "coverImage": "/images/blog-default.jpg",
-    "category": "Operasyonel Verimlilik",
+    "category": "Operasyon",
+    "categorySlug": "operasyon",
     "tags": [
-      "operasyonel verimlilik",
-      "süreç optimizasyonu",
-      "lean",
-      "six sigma",
-      "kurumsal"
+      "operasyonel-verimlilik",
+      "surec-optimizasyonu",
+      "yalin-operasyon",
+      "alti-sigma",
+      "kurumsallasma"
     ],
-    "readingTime": "5 dk okuma"
+    "readingTime": "4 dk okuma",
+    "readTimeMin": 4,
+    "wordCount": 795,
+    "lang": "tr",
+    "format": "makale",
+    "featured": false
   },
   {
     "slug": "insan-kaynaklari-stratejisi-talent-management",
@@ -589,15 +791,20 @@
     "date": "2026-05-02T00:00:00.000Z",
     "author": "eCyPro Consulting",
     "coverImage": "/images/blog-default.jpg",
-    "category": "İnsan Kaynakları",
+    "category": "İnsan & Organizasyon",
+    "categorySlug": "insan-organizasyon",
     "tags": [
-      "insan kaynakları",
-      "yetenek yönetimi",
-      "işveren markası",
-      "hr strateji",
-      "çalışan deneyimi"
+      "insan-kaynaklari",
+      "yetenek-yonetimi",
+      "isveren-markasi",
+      "calisan-deneyimi"
     ],
-    "readingTime": "5 dk okuma"
+    "readingTime": "4 dk okuma",
+    "readTimeMin": 4,
+    "wordCount": 721,
+    "lang": "tr",
+    "format": "makale",
+    "featured": false
   },
   {
     "slug": "yapay-zeka-ile-is-sureclerini-optimize-etme",
@@ -606,15 +813,19 @@
     "date": "2026-05-01T00:00:00.000Z",
     "author": "eCyPro Consulting",
     "coverImage": "/images/blog-default.jpg",
-    "category": "Yapay Zeka",
+    "category": "Yapay Zeka & Teknoloji",
+    "categorySlug": "yapay-zeka-teknoloji",
     "tags": [
-      "yapay zeka",
-      "ai",
-      "süreç optimizasyonu",
-      "generative ai",
-      "kurumsal ai"
+      "yapay-zeka",
+      "surec-optimizasyonu",
+      "uretken-ai"
     ],
-    "readingTime": "5 dk okuma"
+    "readingTime": "4 dk okuma",
+    "readTimeMin": 4,
+    "wordCount": 877,
+    "lang": "tr",
+    "format": "makale",
+    "featured": false
   },
   {
     "slug": "organizasyonel-degisim-yonetimi",
@@ -624,13 +835,18 @@
     "author": "Selin Yıldız",
     "coverImage": "https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
     "category": "Liderlik",
+    "categorySlug": "liderlik",
     "tags": [
-      "Değişim Yönetimi",
-      "İnsan Kaynakları",
-      "Dönüşüm",
-      "Liderlik"
+      "degisim-yonetimi",
+      "insan-kaynaklari",
+      "dijital-donusum"
     ],
-    "readingTime": "6 min read"
+    "readingTime": "2 dk okuma",
+    "readTimeMin": 2,
+    "wordCount": 301,
+    "lang": "tr",
+    "format": "makale",
+    "featured": false
   },
   {
     "slug": "ai-yatirim-roi-hesaplama",
@@ -639,14 +855,20 @@
     "date": "2026-02-10T00:00:00.000Z",
     "author": "Dr. Emre Can",
     "coverImage": "https://images.pexels.com/photos/8386440/pexels-photo-8386440.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-    "category": "Finans",
+    "category": "Finans & Ekonomi",
+    "categorySlug": "finans-ekonomi",
     "tags": [
-      "Yapay Zeka",
-      "ROI",
-      "CFO",
-      "Yatırım"
+      "yapay-zeka",
+      "roi",
+      "cfo",
+      "yatirim"
     ],
-    "readingTime": "8 min read"
+    "readingTime": "2 dk okuma",
+    "readTimeMin": 2,
+    "wordCount": 305,
+    "lang": "tr",
+    "format": "makale",
+    "featured": false
   },
   {
     "slug": "measuring-ai-investment-roi",
@@ -655,14 +877,20 @@
     "date": "2026-02-10T00:00:00.000Z",
     "author": "Dr. Emre Can",
     "coverImage": "https://images.pexels.com/photos/8386440/pexels-photo-8386440.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-    "category": "Finance",
+    "category": "Finans & Ekonomi",
+    "categorySlug": "finans-ekonomi",
     "tags": [
-      "Artificial Intelligence",
-      "ROI",
-      "CFO",
-      "Investment"
+      "yapay-zeka",
+      "roi",
+      "cfo",
+      "yatirim"
     ],
-    "readingTime": "8 min read"
+    "readingTime": "2 dk okuma",
+    "readTimeMin": 2,
+    "wordCount": 303,
+    "lang": "en",
+    "format": "makale",
+    "featured": false
   },
   {
     "slug": "stratejik-dijital-donusum-2026",
@@ -672,12 +900,17 @@
     "author": "Dr. Emre Can",
     "coverImage": "https://images.pexels.com/photos/3183150/pexels-photo-3183150.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
     "category": "Strateji",
+    "categorySlug": "strateji",
     "tags": [
-      "Dijital Dönüşüm",
-      "Strateji",
-      "Yapay Zeka"
+      "dijital-donusum",
+      "yapay-zeka"
     ],
-    "readingTime": "7 min read"
+    "readingTime": "1 dk okuma",
+    "readTimeMin": 1,
+    "wordCount": 177,
+    "lang": "tr",
+    "format": "makale",
+    "featured": false
   },
   {
     "slug": "yapay-zeka-yonetim-devrimi",
@@ -686,13 +919,19 @@
     "date": "2026-01-02T00:00:00.000Z",
     "author": "eCyPro Analiz Ekibi",
     "coverImage": "https://images.pexels.com/photos/8386440/pexels-photo-8386440.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-    "category": "Teknoloji",
+    "category": "Yapay Zeka & Teknoloji",
+    "categorySlug": "yapay-zeka-teknoloji",
     "tags": [
-      "Yapay Zeka",
-      "Yönetim",
-      "İnovasyon"
+      "yapay-zeka",
+      "kurumsal-yonetisim",
+      "inovasyon"
     ],
-    "readingTime": "5 min read"
+    "readingTime": "1 dk okuma",
+    "readTimeMin": 1,
+    "wordCount": 130,
+    "lang": "tr",
+    "format": "makale",
+    "featured": false
   },
   {
     "slug": "global-pazarlara-acilma",
@@ -701,12 +940,17 @@
     "date": "2025-12-28T00:00:00.000Z",
     "author": "Dr. Emre Can",
     "coverImage": "https://images.pexels.com/photos/1267338/pexels-photo-1267338.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-    "category": "Pazarlama",
+    "category": "Pazarlama & CX",
+    "categorySlug": "pazarlama-cx",
     "tags": [
-      "Globalleşme",
-      "İhracat",
-      "Marka Yönetimi"
+      "uluslararasilasma",
+      "marka-yonetimi"
     ],
-    "readingTime": "6 min read"
+    "readingTime": "1 dk okuma",
+    "readTimeMin": 1,
+    "wordCount": 124,
+    "lang": "tr",
+    "format": "makale",
+    "featured": false
   }
 ]

@@ -146,7 +146,7 @@ test.describe('Crawler: Kritik UX #4 — Skeleton + TOC + Analytics + Media', ()
     await expect(h1).toBeVisible({ timeout: 6_000 });
 
     // Makale linkleri
-    const postLinks = page.locator('a[href*="/blog/"]');
+    const postLinks = page.locator('a[href*="/perspektifler/"]');
     const count = await postLinks.count();
 
     if (count > 0) {
@@ -170,7 +170,7 @@ test.describe('Crawler: Kritik UX #4 — Skeleton + TOC + Analytics + Media', ()
     await page.goto(`${BASE_URL}/blog`, { waitUntil: 'domcontentloaded' });
     await page.waitForTimeout(800);
 
-    const postLinks = page.locator('a[href*="/blog/"]');
+    const postLinks = page.locator('a[href*="/perspektifler/"]');
     if ((await postLinks.count()) === 0) {
       console.warn('⚠ Blog makale linki yok — doğrudan URL dene');
       await page.goto(`${BASE_URL}/blog/example`, { waitUntil: 'domcontentloaded' });

@@ -73,7 +73,7 @@ test.describe('Crawler: SEO Deep — Pane 4+13 (Phase 4)', () => {
     test.setTimeout(30_000);
     await setupMocks(page);
 
-    const pages = ['/', '/blog', '/services', '/about', '/pricing'];
+    const pages = ['/', '/perspektifler', '/services', '/about', '/pricing'];
     const missing: string[] = [];
 
     for (const p of pages) {
@@ -100,7 +100,7 @@ test.describe('Crawler: SEO Deep — Pane 4+13 (Phase 4)', () => {
     test.setTimeout(30_000);
     await setupMocks(page);
 
-    const pages = ['/', '/services', '/blog'];
+    const pages = ['/', '/services', '/perspektifler'];
     const issues: string[] = [];
 
     for (const p of pages) {
@@ -250,7 +250,7 @@ test.describe('Crawler: SEO Deep — Pane 4+13 (Phase 4)', () => {
     test.setTimeout(20_000);
     await setupMocks(page);
 
-    const innerPages = ['/services', '/blog', '/about'];
+    const innerPages = ['/services', '/perspektifler', '/about'];
     for (const p of innerPages) {
       await page.goto(`${BASE_URL}${p}`, { waitUntil: 'domcontentloaded' });
 
@@ -284,7 +284,7 @@ test.describe('Crawler: SEO Deep — Pane 4+13 (Phase 4)', () => {
     test.setTimeout(25_000);
     await setupMocks(page);
 
-    const pages = ['/', '/services', '/blog', '/about', '/pricing'];
+    const pages = ['/', '/services', '/perspektifler', '/about', '/pricing'];
     const issues: string[] = [];
 
     for (const p of pages) {
@@ -306,7 +306,7 @@ test.describe('Crawler: SEO Deep — Pane 4+13 (Phase 4)', () => {
     test.setTimeout(25_000);
     await setupMocks(page);
 
-    const pages = ['/', '/services', '/blog', '/about', '/pricing'];
+    const pages = ['/', '/services', '/perspektifler', '/about', '/pricing'];
     const issues: string[] = [];
 
     for (const p of pages) {
@@ -326,7 +326,7 @@ test.describe('Crawler: SEO Deep — Pane 4+13 (Phase 4)', () => {
     test.setTimeout(25_000);
     await setupMocks(page);
 
-    const criticalPages = ['/', '/services', '/blog', '/about', '/pricing'];
+    const criticalPages = ['/', '/services', '/perspektifler', '/about', '/pricing'];
     const noindexFound: string[] = [];
 
     for (const p of criticalPages) {
@@ -350,7 +350,11 @@ test.describe('Crawler: SEO Deep — Pane 4+13 (Phase 4)', () => {
     await page.goto(`${BASE_URL}/blog`, { waitUntil: 'domcontentloaded' });
     await page.waitForTimeout(600);
 
-    const postLink = page.locator('a[href*="/blog/"]').first();
+    const postLink = page
+      .locator(
+        'main [data-testid="insights-article-grid"] a[href*="/perspektifler/"], main [data-testid="article-card"] a[href*="/perspektifler/"]',
+      )
+      .first();
     if ((await postLink.count()) === 0) {
       console.warn('⚠ Blog post linki yok');
       return;
@@ -497,7 +501,7 @@ test.describe('Crawler: SEO Deep — Pane 4+13 (Phase 4)', () => {
     test.setTimeout(20_000);
     await setupMocks(page);
 
-    const testPages = ['/blog', '/services', '/about'];
+    const testPages = ['/perspektifler', '/services', '/about'];
     for (const p of testPages) {
       await page.goto(`${BASE_URL}${p}`, { waitUntil: 'domcontentloaded' });
       const canonical = await page

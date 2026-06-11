@@ -209,7 +209,7 @@ test.describe('Crawler: Keystatic CMS — Phase 7 Ops/Deploy', () => {
     await page.waitForTimeout(800);
 
     const hasContent = await page.evaluate(() => {
-      const links = document.querySelectorAll('a[href*="/blog/"]');
+      const links = document.querySelectorAll('a[href*="/perspektifler/"]');
       const h1 = document.querySelector('h1, h2');
       return links.length > 0 || !!h1;
     });
@@ -246,7 +246,7 @@ test.describe('Crawler: Keystatic CMS — Phase 7 Ops/Deploy', () => {
     await page.goto(`${BASE_URL}/blog`, { waitUntil: 'domcontentloaded' });
     await page.waitForTimeout(600);
 
-    const firstPost = page.locator('a[href*="/blog/"]').first();
+    const firstPost = page.locator('a[href*="/perspektifler/"]').first();
     if (!(await firstPost.isVisible({ timeout: 4_000 }).catch(() => false))) {
       console.warn('⚠ Blog post linki yok');
       return;
@@ -291,7 +291,7 @@ test.describe('Crawler: Keystatic CMS — Phase 7 Ops/Deploy', () => {
     }
 
     const content = await res.text();
-    const hasBlog = content.includes('/blog/') || content.includes('/blog</');
+    const hasBlog = content.includes('/perspektifler/') || content.includes('/blog</');
     if (!hasBlog) console.warn('⚠ Sitemap blog URL içermiyor');
     else console.warn(`✅ Sitemap blog içeriyor`);
     expect(true).toBeTruthy();

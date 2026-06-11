@@ -5,6 +5,7 @@ import { useSearchParams, Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { CaseStudyCard } from '../components/features/case-studies/CaseStudyCard';
 import { CASE_STUDIES } from '@/data/mockCaseStudies';
+import { CATEGORIES } from '@/data/taxonomy';
 import { FadeIn } from '../components/common/FadeIn';
 import { PageWrapper } from '../components/layout/PageWrapper';
 import { JsonLd } from '../components/seo/JsonLd';
@@ -12,32 +13,46 @@ import { buildBreadcrumbSchema } from '../lib/structured-data';
 import { useTranslation } from '@/lib/i18n';
 import { buildCanonical } from '@/i18n/canonical';
 
-const ALL_INDUSTRY = '__all__';
+const ALL_CATEGORIES = '__all__';
+
+/** Legacy ?industry= values map onto the shared Perspektifler taxonomy so old
+ *  filter URLs keep working after the BUG-11 unification. */
+const LEGACY_INDUSTRY_PARAM: Record<string, string> = Object.fromEntries(
+  CASE_STUDIES.filter((s) => s.categorySlug).map((s) => [s.industry, s.categorySlug as string]),
+);
 
 export const CaseStudiesPage: React.FC = () => {
   const { language } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
-  const activeIndustry = searchParams.get('industry') ?? ALL_INDUSTRY;
+  const legacyIndustry = searchParams.get('industry');
+  const activeCategory =
+    searchParams.get('kategori') ??
+    (legacyIndustry ? (LEGACY_INDUSTRY_PARAM[legacyIndustry] ?? ALL_CATEGORIES) : ALL_CATEGORIES);
 
-  const industries = useMemo(() => {
-    const set = new Set<string>();
+  // Shared 10-category taxonomy (BUG-11): only categories with ≥1 case render.
+  const categories = useMemo(() => {
+    const counts = new Map<string, number>();
     CASE_STUDIES.forEach((s) => {
-      if (s.industry) set.add(s.industry);
+      if (s.categorySlug) counts.set(s.categorySlug, (counts.get(s.categorySlug) ?? 0) + 1);
     });
-    return Array.from(set).sort();
+    return CATEGORIES.filter((c) => counts.has(c.slug)).map((c) => ({
+      ...c,
+      count: counts.get(c.slug) ?? 0,
+    }));
   }, []);
 
   const visibleStudies = useMemo(() => {
-    if (activeIndustry === ALL_INDUSTRY) return CASE_STUDIES;
-    return CASE_STUDIES.filter((s) => s.industry === activeIndustry);
-  }, [activeIndustry]);
+    if (activeCategory === ALL_CATEGORIES) return CASE_STUDIES;
+    return CASE_STUDIES.filter((s) => s.categorySlug === activeCategory);
+  }, [activeCategory]);
 
-  const setIndustry = (industry: string) => {
+  const setCategory = (slug: string) => {
     const next = new URLSearchParams(searchParams);
-    if (industry === ALL_INDUSTRY) {
-      next.delete('industry');
+    next.delete('industry');
+    if (slug === ALL_CATEGORIES) {
+      next.delete('kategori');
     } else {
-      next.set('industry', industry);
+      next.set('kategori', slug);
     }
     setSearchParams(next, { replace: true });
   };
@@ -82,15 +97,15 @@ export const CaseStudiesPage: React.FC = () => {
             </FadeIn>
           </div>
 
-          <nav aria-label="Sektör filtresi" className="mb-12">
+          <nav aria-label="Kategori filtresi" className="mb-12">
             <ul className="flex flex-wrap justify-center gap-2">
               <li>
                 <button
                   type="button"
-                  onClick={() => setIndustry(ALL_INDUSTRY)}
-                  aria-pressed={activeIndustry === ALL_INDUSTRY}
+                  onClick={() => setCategory(ALL_CATEGORIES)}
+                  aria-pressed={activeCategory === ALL_CATEGORIES}
                   className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                    activeIndustry === ALL_INDUSTRY
+                    activeCategory === ALL_CATEGORIES
                       ? 'bg-secondary text-neutral'
                       : 'bg-white/5 text-slate-300 hover:bg-white/10'
                   }`}
@@ -98,14 +113,13 @@ export const CaseStudiesPage: React.FC = () => {
                   Tümü ({CASE_STUDIES.length})
                 </button>
               </li>
-              {industries.map((industry) => {
-                const count = CASE_STUDIES.filter((s) => s.industry === industry).length;
-                const active = activeIndustry === industry;
+              {categories.map((cat) => {
+                const active = activeCategory === cat.slug;
                 return (
-                  <li key={industry}>
+                  <li key={cat.slug}>
                     <button
                       type="button"
-                      onClick={() => setIndustry(industry)}
+                      onClick={() => setCategory(cat.slug)}
                       aria-pressed={active}
                       className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
                         active
@@ -113,12 +127,20 @@ export const CaseStudiesPage: React.FC = () => {
                           : 'bg-white/5 text-slate-300 hover:bg-white/10'
                       }`}
                     >
-                      {industry} ({count})
+                      {cat.label} ({cat.count})
                     </button>
                   </li>
                 );
               })}
             </ul>
+            <p className="text-center mt-4">
+              <Link
+                to="/perspektifler?format=vaka-analizi"
+                className="text-xs text-secondary hover:underline"
+              >
+                Perspektifler'de tüm vaka analizlerini görün →
+              </Link>
+            </p>
           </nav>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8" aria-live="polite">

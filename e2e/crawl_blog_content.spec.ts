@@ -53,7 +53,7 @@ test.describe('Crawler: Blog Content Quality — Phase 4+5', () => {
     await page.waitForTimeout(800);
 
     const articleCards = page.locator(
-      'article, [data-testid*="blog"], [class*="blog-card"], a[href*="/blog/"]',
+      'article, [data-testid*="blog"], [class*="blog-card"], a[href*="/perspektifler/"]',
     );
     const count = await articleCards.count();
     console.warn(`Blog liste: ${count} makale/kart bulundu`);
@@ -68,7 +68,7 @@ test.describe('Crawler: Blog Content Quality — Phase 4+5', () => {
     await page.waitForTimeout(800);
 
     const links = await page.evaluate(() => {
-      const anchors = Array.from(document.querySelectorAll('a[href*="/blog/"]'));
+      const anchors = Array.from(document.querySelectorAll('a[href*="/perspektifler/"]'));
       return anchors
         .map((a) => ({
           href: a.getAttribute('href') ?? '',
@@ -79,7 +79,7 @@ test.describe('Crawler: Blog Content Quality — Phase 4+5', () => {
 
     console.warn(`Blog linkleri: ${links.length}`);
     if (links.length > 0) {
-      expect(links[0].href).toContain('/blog/');
+      expect(links[0].href).toContain('/perspektifler/');
     }
     expect(true).toBeTruthy();
   });
@@ -90,7 +90,7 @@ test.describe('Crawler: Blog Content Quality — Phase 4+5', () => {
     await page.goto(`${BASE_URL}/blog`, { waitUntil: 'domcontentloaded' });
     await page.waitForTimeout(600);
 
-    const firstLink = page.locator('a[href*="/blog/"]').first();
+    const firstLink = page.locator('a[href*="/perspektifler/"]').first();
     if (!(await firstLink.isVisible({ timeout: 4_000 }).catch(() => false))) {
       console.warn('⚠ Blog post linki yok');
       return;
@@ -116,7 +116,7 @@ test.describe('Crawler: Blog Content Quality — Phase 4+5', () => {
     await page.goto(`${BASE_URL}/blog`, { waitUntil: 'domcontentloaded' });
     await page.waitForTimeout(600);
 
-    const firstLink = page.locator('a[href*="/blog/"]').first();
+    const firstLink = page.locator('a[href*="/perspektifler/"]').first();
     if (!(await firstLink.isVisible({ timeout: 4_000 }).catch(() => false))) {
       return;
     }
@@ -148,7 +148,7 @@ test.describe('Crawler: Blog Content Quality — Phase 4+5', () => {
     test.setTimeout(30_000);
     await setupMocks(page);
     await page.goto(`${BASE_URL}/blog`, { waitUntil: 'domcontentloaded' });
-    const firstLink = page.locator('a[href*="/blog/"]').first();
+    const firstLink = page.locator('a[href*="/perspektifler/"]').first();
     if (!(await firstLink.isVisible({ timeout: 4_000 }).catch(() => false))) {
       return;
     }
@@ -171,7 +171,7 @@ test.describe('Crawler: Blog Content Quality — Phase 4+5', () => {
     test.setTimeout(30_000);
     await setupMocks(page);
     await page.goto(`${BASE_URL}/blog`, { waitUntil: 'domcontentloaded' });
-    const firstLink = page.locator('a[href*="/blog/"]').first();
+    const firstLink = page.locator('a[href*="/perspektifler/"]').first();
     if (!(await firstLink.isVisible({ timeout: 4_000 }).catch(() => false))) {
       return;
     }
@@ -193,7 +193,7 @@ test.describe('Crawler: Blog Content Quality — Phase 4+5', () => {
     test.setTimeout(30_000);
     await setupMocks(page);
     await page.goto(`${BASE_URL}/blog`, { waitUntil: 'domcontentloaded' });
-    const firstLink = page.locator('a[href*="/blog/"]').first();
+    const firstLink = page.locator('a[href*="/perspektifler/"]').first();
     if (!(await firstLink.isVisible({ timeout: 4_000 }).catch(() => false))) {
       return;
     }
@@ -212,7 +212,7 @@ test.describe('Crawler: Blog Content Quality — Phase 4+5', () => {
     test.setTimeout(30_000);
     await setupMocks(page);
     await page.goto(`${BASE_URL}/blog`, { waitUntil: 'domcontentloaded' });
-    const firstLink = page.locator('a[href*="/blog/"]').first();
+    const firstLink = page.locator('a[href*="/perspektifler/"]').first();
     if (!(await firstLink.isVisible({ timeout: 4_000 }).catch(() => false))) {
       return;
     }
@@ -233,7 +233,7 @@ test.describe('Crawler: Blog Content Quality — Phase 4+5', () => {
     test.setTimeout(30_000);
     await setupMocks(page);
     await page.goto(`${BASE_URL}/blog`, { waitUntil: 'domcontentloaded' });
-    const firstLink = page.locator('a[href*="/blog/"]').first();
+    const firstLink = page.locator('a[href*="/perspektifler/"]').first();
     if (!(await firstLink.isVisible({ timeout: 4_000 }).catch(() => false))) {
       return;
     }
@@ -288,7 +288,7 @@ test.describe('Crawler: Blog Content Quality — Phase 4+5', () => {
 
     await searchInput.fill('danışmanlık');
     await page.waitForTimeout(600);
-    const results = await page.locator('a[href*="/blog/"]').count();
+    const results = await page.locator('a[href*="/perspektifler/"]').count();
     console.warn(`Arama sonuçları: ${results}`);
     expect(true).toBeTruthy();
   });
@@ -332,7 +332,7 @@ test.describe('Crawler: Blog Content Quality — Phase 4+5', () => {
     }
     await catLink.click();
     await page.waitForTimeout(800);
-    const articles = await page.locator('a[href*="/blog/"]').count();
+    const articles = await page.locator('a[href*="/perspektifler/"]').count();
     console.warn(`Kategori sonuçları: ${articles}`);
     expect(true).toBeTruthy();
   });
@@ -341,7 +341,7 @@ test.describe('Crawler: Blog Content Quality — Phase 4+5', () => {
     test.setTimeout(35_000);
     await setupMocks(page);
     await page.goto(`${BASE_URL}/blog`, { waitUntil: 'domcontentloaded' });
-    const firstLink = page.locator('a[href*="/blog/"]').first();
+    const firstLink = page.locator('a[href*="/perspektifler/"]').first();
     if (!(await firstLink.isVisible({ timeout: 4_000 }).catch(() => false))) {
       return;
     }
@@ -370,7 +370,7 @@ test.describe('Crawler: Blog Content Quality — Phase 4+5', () => {
     test.setTimeout(30_000);
     await setupMocks(page);
     await page.goto(`${BASE_URL}/blog`, { waitUntil: 'domcontentloaded' });
-    const firstLink = page.locator('a[href*="/blog/"]').first();
+    const firstLink = page.locator('a[href*="/perspektifler/"]').first();
     if (!(await firstLink.isVisible({ timeout: 4_000 }).catch(() => false))) {
       return;
     }

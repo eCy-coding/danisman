@@ -56,6 +56,7 @@ test.describe('i18n EN smoke', () => {
     await expect(page.locator('text=Kurucu & Baş Stratejist')).toBeVisible();
 
     // Click language toggle
+    await page.locator('[data-testid="utility-dock"] > button').click(); // open merged dock (D-6)
     const toggle = page.getByTestId('language-toggle');
     await toggle.click();
 
@@ -69,6 +70,7 @@ test.describe('i18n EN smoke', () => {
   test('language preference persisted after analytics consent', async ({ page }) => {
     // Global setup seeds analytics consent — localStorage write should happen on changeLanguage
     await page.goto('/tr');
+    await page.locator('[data-testid="utility-dock"] > button').click(); // open merged dock (D-6)
     await page.getByTestId('language-toggle').click();
     // Wait for EN to load
     await page.waitForFunction(() => document.documentElement.getAttribute('lang') === 'en', {

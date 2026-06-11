@@ -29,7 +29,13 @@ function loadSitemapPaths(): string[] {
   if (!fs.existsSync(sitemapPath)) return ['/'];
   const xml = fs.readFileSync(sitemapPath, 'utf-8');
   return [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)]
-    .map(m => { try { return new URL(m[1].trim()).pathname; } catch { return '/'; } })
+    .map((m) => {
+      try {
+        return new URL(m[1].trim()).pathname;
+      } catch {
+        return '/';
+      }
+    })
     .filter((p, i, arr) => arr.indexOf(p) === i)
     .slice(0, 46);
 }
@@ -38,18 +44,33 @@ function isInternal(href: string): boolean {
   if (href.startsWith('/') && !href.startsWith('//')) return true;
   try {
     const u = new URL(href);
-    return u.hostname === PROD_DOMAIN || u.hostname === 'www.' + PROD_DOMAIN || u.hostname === 'localhost';
-  } catch { return false; }
+    return (
+      u.hostname === PROD_DOMAIN ||
+      u.hostname === 'www.' + PROD_DOMAIN ||
+      u.hostname === 'localhost'
+    );
+  } catch {
+    return false;
+  }
 }
 
 function normalizePath(href: string, currentPath: string): string | null {
-  if (!href || href.startsWith('#') || href.startsWith('mailto:') || href.startsWith('tel:') || href.startsWith('javascript:')) return null;
+  if (
+    !href ||
+    href.startsWith('#') ||
+    href.startsWith('mailto:') ||
+    href.startsWith('tel:') ||
+    href.startsWith('javascript:')
+  )
+    return null;
   try {
     if (href.startsWith('/')) return href.split('?')[0].split('#')[0];
     const base = `http://localhost${currentPath}`;
     const resolved = new URL(href, base);
     return resolved.pathname.split('?')[0];
-  } catch { return null; }
+  } catch {
+    return null;
+  }
 }
 
 // ─────────────────────────────────────────────────────────────────
@@ -60,7 +81,8 @@ async function _buildLinkGraph(request: any): Promise<Map<string, string[]>> {
   const graph = new Map<string, string[]>();
   const sitemapPaths = loadSitemapPaths();
 
-  for (const pagePath of sitemapPaths.slice(0, 25)) { // İlk 25 sayfa (hız için)
+  for (const pagePath of sitemapPaths.slice(0, 25)) {
+    // İlk 25 sayfa (hız için)
     try {
       const res = await request.get(`${BASE_URL}${pagePath}`, { timeout: 10000 });
       if (!res.ok()) continue;
@@ -110,14 +132,21 @@ test.describe('Crowler: Link Integrity Graf Audit', () => {
             if (linkRes.status() === 404) {
               broken.push({ from: pagePath, to: linkPath, status: 404 });
             }
-          } catch { /* timeout — skip */ }
+          } catch {
+            /* timeout — skip */
+          }
         }
-      } catch { /* sayfa erişilemez */ }
+      } catch {
+        /* sayfa erişilemez */
+      }
     }
 
     // Bildiri — broken links test failure olarak raporla
     if (broken.length > 0) {
-      const report = broken.slice(0, 10).map(b => `  ${b.from} → ${b.to} (${b.status})`).join('\n');
+      const report = broken
+        .slice(0, 10)
+        .map((b) => `  ${b.from} → ${b.to} (${b.status})`)
+        .join('\n');
       expect(broken, `Kırık iç linkler bulundu:\n${report}`).toHaveLength(0);
     }
   });
@@ -131,47 +160,64 @@ test.describe('Crowler: Link Integrity Graf Audit', () => {
     allLinked.add('/'); // Root her zaman linked
 
     // Homepage + services'ten rendered linkleri topla
-    for (const seedPath of ['/', '/services', '/blog', '/about']) {
+    for (const seedPath of ['/', '/services', '/perspektifler', '/about']) {
       try {
-        await page.goto(`${BASE_URL}${seedPath}`, { waitUntil: 'domcontentloaded', timeout: 10000 });
+        await page.goto(`${BASE_URL}${seedPath}`, {
+          waitUntil: 'domcontentloaded',
+          timeout: 10000,
+        });
         await page.waitForTimeout(300);
         const hrefs = await page.evaluate(() =>
           Array.from(document.querySelectorAll('a[href]'))
-            .map(a => (a as HTMLAnchorElement).pathname)
-            .filter(p => p && p !== '/' || p.length > 1),
+            .map((a) => (a as HTMLAnchorElement).pathname)
+            .filter((p) => (p && p !== '/') || p.length > 1),
         );
-        hrefs.forEach(h => allLinked.add(h));
-      } catch { /* skip */ }
+        hrefs.forEach((h) => allLinked.add(h));
+      } catch {
+        /* skip */
+      }
     }
 
     // Blog listesi ve case study listesi de kaynak
-    const blogPaths = sitemapPaths.filter(p => p.startsWith('/blog/'));
-    const csPaths = sitemapPaths.filter(p => p.startsWith('/case-studies/'));
-    [...blogPaths, ...csPaths].forEach(p => allLinked.add(p));
+    const blogPaths = sitemapPaths.filter((p) => p.startsWith('/perspektifler/'));
+    const csPaths = sitemapPaths.filter((p) => p.startsWith('/case-studies/'));
+    [...blogPaths, ...csPaths].forEach((p) => allLinked.add(p));
 
     // Auth / legal utility sayfalar nav'dan değil footer/email'den erişilir — orphan kabul
-    const UTILITY_PATHS = ['/login', '/register', '/forgot-password',
-                           '/privacy', '/terms', '/cookies', '/events', '/locations'];
+    const UTILITY_PATHS = [
+      '/login',
+      '/register',
+      '/forgot-password',
+      '/privacy',
+      '/terms',
+      '/cookies',
+      '/events',
+      '/locations',
+    ];
 
     const mainPaths = sitemapPaths.filter(
-      p => !p.startsWith('/blog/') &&
-           !p.startsWith('/case-studies/') &&
-           p !== '/' &&
-           !UTILITY_PATHS.includes(p),
+      (p) =>
+        !p.startsWith('/perspektifler/') &&
+        !p.startsWith('/case-studies/') &&
+        p !== '/' &&
+        !UTILITY_PATHS.includes(p),
     );
-    const orphans = mainPaths.filter(p => !allLinked.has(p));
+    const orphans = mainPaths.filter((p) => !allLinked.has(p));
 
     if (orphans.length > 0) {
       console.warn(`⚠ Orphan ana sayfalar: ${orphans.join(', ')}`);
     }
     // Kritik nav sayfaları linked olmalı — utility hariç max 9 orphan
     // (/faq, /team, /careers, /partners + /services/* gibi deep linkler footer/section'dan)
-    expect(orphans.length, `Orphan kritik sayfalar (${orphans.length}): ${orphans.join(', ')}`).toBeLessThan(10);
+    expect(
+      orphans.length,
+      `Orphan kritik sayfalar (${orphans.length}): ${orphans.join(', ')}`,
+    ).toBeLessThan(10);
   });
 
   test('Boş href / javascript: href yok', async ({ page }) => {
     test.setTimeout(30000);
-    const criticalPages = ['/', '/services', '/blog', '/about', '/contact'];
+    const criticalPages = ['/', '/services', '/perspektifler', '/about', '/contact'];
     const violations: string[] = [];
 
     for (const p of criticalPages) {
@@ -179,10 +225,14 @@ test.describe('Crowler: Link Integrity Graf Audit', () => {
       await page.waitForTimeout(300);
       const badLinks = await page.evaluate(() => {
         const links = Array.from(document.querySelectorAll('a[href]'));
-        return links
-          .map(a => (a as HTMLAnchorElement).getAttribute('href') ?? '')
-          // '#' meşru (scroll-to-top, modal, accordian) — gerçek boş ve javascript: yasak
-          .filter(h => h === '' || h.startsWith('javascript:') && !h.startsWith('javascript:#'));
+        return (
+          links
+            .map((a) => (a as HTMLAnchorElement).getAttribute('href') ?? '')
+            // '#' meşru (scroll-to-top, modal, accordian) — gerçek boş ve javascript: yasak
+            .filter(
+              (h) => h === '' || (h.startsWith('javascript:') && !h.startsWith('javascript:#')),
+            )
+        );
       });
       if (badLinks.length > 0) {
         violations.push(`${p}: ${badLinks.slice(0, 3).join(', ')}`);
@@ -197,17 +247,29 @@ test.describe('Crowler: Link Integrity Graf Audit', () => {
 
     const httpLinks = await page.evaluate(() => {
       return Array.from(document.querySelectorAll('a[href^="http:"]'))
-        .map(a => (a as HTMLAnchorElement).href)
-        .filter(h => !h.includes('localhost') && !h.includes('127.0.0.1'));
+        .map((a) => (a as HTMLAnchorElement).href)
+        .filter((h) => !h.includes('localhost') && !h.includes('127.0.0.1'));
     });
-    expect(httpLinks, `HTTP (güvensiz) dış link bulundu: ${httpLinks.slice(0, 5).join(', ')}`).toHaveLength(0);
+    expect(
+      httpLinks,
+      `HTTP (güvensiz) dış link bulundu: ${httpLinks.slice(0, 5).join(', ')}`,
+    ).toHaveLength(0);
   });
 
   test('Navigasyon menüsündeki tüm linkler çalışıyor', async ({ request }) => {
     test.setTimeout(30000);
     // Ana nav linkleri
-    const navPaths = ['/services', '/blog', '/about', '/contact', '/pricing',
-                      '/case-studies', '/methodology', '/industries', '/team'];
+    const navPaths = [
+      '/services',
+      '/perspektifler',
+      '/about',
+      '/contact',
+      '/pricing',
+      '/case-studies',
+      '/methodology',
+      '/industries',
+      '/team',
+    ];
     const failed: string[] = [];
 
     for (const p of navPaths) {
@@ -222,7 +284,7 @@ test.describe('Crowler: Link Integrity Graf Audit', () => {
   test('Blog yazı linkleri çalışıyor', async ({ request }) => {
     test.setTimeout(30000);
     const sitemapPaths = loadSitemapPaths();
-    const blogPaths = sitemapPaths.filter(p => p.startsWith('/blog/'));
+    const blogPaths = sitemapPaths.filter((p) => p.startsWith('/perspektifler/'));
     const failed: string[] = [];
 
     for (const p of blogPaths.slice(0, 8)) {
@@ -237,7 +299,7 @@ test.describe('Crowler: Link Integrity Graf Audit', () => {
   test('Case study linkleri çalışıyor', async ({ request }) => {
     test.setTimeout(30000);
     const sitemapPaths = loadSitemapPaths();
-    const csPaths = sitemapPaths.filter(p => p.startsWith('/case-studies/'));
+    const csPaths = sitemapPaths.filter((p) => p.startsWith('/case-studies/'));
     const failed: string[] = [];
 
     for (const p of csPaths) {

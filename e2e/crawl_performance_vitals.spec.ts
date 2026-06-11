@@ -198,7 +198,7 @@ test.describe('Crawler: Core Web Vitals — P33 (T21-T30)', () => {
   });
 
   // ── Services + Blog LCP budget ────────────────────────────────────
-  const lcpPages = ['/services', '/blog', '/about'];
+  const lcpPages = ['/services', '/perspektifler', '/about'];
   for (const p of lcpPages) {
     test(`P33: LCP ≤ 3.0s ${p}`, async ({ page }) => {
       test.setTimeout(30000);
@@ -214,7 +214,7 @@ test.describe('Crawler: Core Web Vitals — P33 (T21-T30)', () => {
   test('P33: CLS ≤ 0.1 kritik sayfalar (services, blog, pricing)', async ({ page }) => {
     test.setTimeout(60000);
     await setupMocks(page);
-    const pages = ['/services', '/blog', '/pricing'];
+    const pages = ['/services', '/perspektifler', '/pricing'];
     const failures: string[] = [];
 
     for (const p of pages) {
@@ -556,7 +556,7 @@ test.describe('Crawler: Core Web Vitals — P33 (T21-T30)', () => {
     test.setTimeout(60_000);
     await setupMocks(page);
 
-    const pages = ['/services', '/pricing', '/about', '/blog'];
+    const pages = ['/services', '/pricing', '/about', '/perspektifler'];
     const slow: string[] = [];
 
     for (const p of pages) {
@@ -647,7 +647,7 @@ test.describe('Crawler: Core Web Vitals — P33 (T21-T30)', () => {
     ]);
 
     const pages = await Promise.all(contexts.map((ctx) => ctx.newPage()));
-    const routes = ['/', '/blog', '/services'];
+    const routes = ['/', '/perspektifler', '/services'];
 
     for (const pg of pages) {
       await pg.route('**/ingest.sentry.io/**', (r) => r.fulfill({ status: 200 }));

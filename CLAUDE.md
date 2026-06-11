@@ -161,3 +161,14 @@ Bir kuralı ihlal ettiğini fark edersen:
 2. Değişikliği geri al (`git restore <file>` veya revert).
 3. Kullanıcıya bildir.
 4. Talimat bekle.
+
+## Micro-Focus Contract: Perspektifler (kalıcı çalışma prensibi)
+
+Perspektifler (Insights) vertical'ı üzerinde çalışırken aşağıdaki sözleşme geçerlidir:
+
+- **Spec**: `~/Desktop/istek.md` (v2, canonical English) — tek otorite. "Flawless" yasak kelime; sadece AC-01..12 sayılır.
+- **Scope fence**: `SCOPE.md` + `.claude/scope-allowlist.txt` dışına Edit/Write YASAK (`.claude/hooks/scope_guard.py`). Genişletme = kanıt + `PROGRESS.md` kaydı.
+- **Görev defteri**: `brain/PERSPEKTIFLER_TASKS.json` — her gate'te güncellenir; kanıtlar `brain/perspektifler/`.
+- **Gate disiplini**: Gate-N kanıtı (komut çıktısı) olmadan Phase-N+1 başlamaz. Her gate sonu commit: `feat(perspektifler): gate-N — <özet>`.
+- **Kesintisiz odak**: bu vertical bitmeden başka bölüm/iş yok; engel → `OUT_OF_SCOPE.md` + devam.
+- **Defaults sabit** (istek.md v2 §FIXED DEFAULTS): Option B mimari, zero-dep Türkçe-fold arama, CSS-only motion, consent-gated analytics, ≤2 kalıcı floating widget.

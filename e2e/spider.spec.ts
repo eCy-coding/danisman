@@ -19,7 +19,7 @@ const sitemapPath = path.join(process.cwd(), 'public', 'sitemap.xml');
 // ─── Sitemap parse (statik — beforeAll yerine) ──────────────────
 function discoverUrls(): string[] {
   if (!fs.existsSync(sitemapPath)) {
-    return ['/', '/services', '/about', '/contact', '/blog', '/pricing', '/case-studies'];
+    return ['/', '/services', '/about', '/contact', '/perspektifler', '/pricing', '/case-studies'];
   }
   const content = fs.readFileSync(sitemapPath, 'utf-8');
   const matches = content.match(/<loc>(.*?)<\/loc>/g) ?? [];
@@ -181,7 +181,7 @@ test.describe('The Spider Crawler (Protocol V9) — docs/prompts/07', () => {
       { path: '/contact', check: 'form' },
       { path: '/pricing', check: 'h1, h2' },
       { path: '/about', check: 'main, [class*="about"]' },
-      { path: '/blog', check: 'article, [class*="blog"], a[href*="/blog/"]' },
+      { path: '/perspektifler', check: 'article, [class*="blog"], a[href*="/perspektifler/"]' },
     ];
 
     for (const { path: p, check } of criticalPages) {
