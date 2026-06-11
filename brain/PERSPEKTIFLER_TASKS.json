@@ -2,7 +2,7 @@
   "$schema": "./perspektifler/tasks.schema.json",
   "contract": "~/Desktop/istek.md (v2) — micro-focus: Perspektifler vertical only",
   "branch": "claude/cranky-bassi-9bd8b1",
-  "updated": "2026-06-11T15:25:00+03:00",
+  "updated": "2026-06-12T02:20:00+03:00",
   "legend": {
     "status": [
       "pending",
@@ -289,5 +289,24 @@
       ]
     }
   ],
-  "pr": "https://github.com/eCy-coding/danisman/pull/222"
+  "pr": "https://github.com/eCy-coding/danisman/pull/222",
+  "faz2": {
+    "status": "done",
+    "items": [
+      "founder+discovery i18n crash fixes (live /founder restored)",
+      "UtilityDock URL-aware locale switch",
+      "PerspektiflerFeed functional setSearchParams (facet race)",
+      "locale routes founder+discovery (i18n-smoke 7/7)",
+      "gitleaks fetch-depth 0 + lighthouserc /perspektifler",
+      "nav lucide icons 7/7 (BUG-02 replace path)",
+      "prerender watchdog + PRERENDER_FORCE_LOCAL → prebuilt deploy, static titles live"
+    ],
+    "prs": {
+      "223": "MERGED 2026-06-11T17:57Z",
+      "224": "MERGED 2026-06-11T23:06Z"
+    },
+    "owner_pending": [
+      "settings.json scope-guard hook wiring (classifier-locked; snippet in PROGRESS.md)"
+    ]
+  }
 }

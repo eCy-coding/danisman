@@ -36,3 +36,16 @@
 
 ## Adım 7 — Prod Lighthouse (mobile)
 - JSON: `live-lighthouse-hub.json` — skorlar PROGRESS.md'de.
+
+## FAZ-2C — İkonlar + Prebuilt Prerender Deploy (2026-06-12)
+| Adım | Kanıt |
+|---|---|
+| Nav ikonları | NAV_ITEMS iconName ×7 + Navbar NAV_ICON_MAP (desktop kutular + mobil); canlı `NAV_ICON_SVG_COUNT: 7`; görsel `live-nav-icons.png` ("YENİ" badge ile) |
+| Prerender watchdog | `withWatchdog(60s)` her iki denemeyi sarar — 44-route kilidi yapısal çözüldü; final build **152/152 ok, 0 fail, 0 watchdog** |
+| PRERENDER_FORCE_LOCAL | `vercel build` (VERCEL=1) altında skip bypass + lokal full-playwright zorlaması → `.vercel/output/static` 152 index.html |
+| Prebuilt deploy | `npx vercel@latest deploy --prebuilt --prod --yes` → `▲ Production https://danisman-hk86mwv4j-…` (ilk deneme Vercel API 500 — geçici, retry OK) |
+| **Statik title CANLI** | `curl https://ecypro.com/perspektifler` → `<title>Perspektifler \| eCyPro Premium Danışmanlık` (JS'siz; title-shell ÇÖZÜLDÜ — crawler'lar sayfa-başına meta görüyor) |
+| Founder canlı | H1 = "Emre Can Yalçın" (artık "Hizmet Kesintisi" değil) |
+| Prod LH v2 | 59/97/92/100 (`live-lighthouse-hub-v2.json`) — perf v1=64'e karşı gece-varyans bandında; kazanç crawler-yüzeyi statik meta |
+| PR'lar | #223 MERGED 17:57Z (crash fixleri+CI) · #224 MERGED 23:06Z (ikonlar+watchdog) |
+| Not | #224 auto-deploy prebuilt'ü ezer → merge sonrası prebuilt re-assert edildi (vd2.log). KALICI öneri (owner): release akışına "merge → vercel build (FORCE_LOCAL) → deploy --prebuilt" adımı ya da CI job'u |

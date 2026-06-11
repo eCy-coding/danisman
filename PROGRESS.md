@@ -75,3 +75,9 @@ Until then the fence is enforced procedurally (SCOPE.md discipline).
 **Test düzeltmeleri:** pricing PRICING strict `.first()` · konular testinde gereksiz settle kaldırıldı (paralel teardown yarışı) · journey fresh-poll + breadcrumb scroll-into-view.
 **Doğrulama:** i18n-smoke **7/7** · paket 40 pass (tek fail = pre-existing service_hub katalog) · prerender 152/152 · typecheck/lint temiz.
 **Bekleyen (classifier kilidi):** `.claude/settings.json` scope-guard hook wiring — snippet yukarıda, owner yapıştıracak.
+
+## FAZ-2C (2026-06-12)
+**Nav ikonları (BUG-02 replace yolu):** 7 lucide ikon (Home/Briefcase/Factory/Newspaper/Tag/Users/Mail) — data JSX-free iconName + Navbar NAV_ICON_MAP; mobil dahil; canlı 7/7 doğrulandı.
+**Prerender prebuilt akışı:** watchdog(60s)×2 (kilit yapısal bitti) + PRERENDER_FORCE_LOCAL (vercel build altında lokal chromium) → 152/152, `.vercel/output` 152 statik sayfa → `deploy --prebuilt --prod` → **canlı statik title'lar** (curl kanıtı). Title-shell/SEO-meta sorunu üretimde kapandı.
+**PR #224 MERGED**; auto-deploy ezmesine karşı prebuilt re-assert. Kalıcı otomasyon önerisi DEPLOY_EVIDENCE'ta (owner).
+**Yanlış-alarm dersi:** "44'te stuck" ikinci tur = kör sayaç (maxdepth); log+pid kanıtıyla çürütüldü, build sağlıklıydı.

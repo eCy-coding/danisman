@@ -562,3 +562,9 @@
 {"ts": "2026-06-11T23:03:00.481401Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "npx -y vercel@latest deploy --prebuilt --prod --yes > /tmp/vd.log 2>&1; echo \"e\u2026"}
 {"ts": "2026-06-11T23:03:44.978045Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "sleep 12; echo \"\u2500\u2500 statik title (curl, JS yok) \u2500\u2500\"; curl -s https://ecypro.com/\u2026"}
 {"ts": "2026-06-11T23:04:10.306567Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "npx lighthouse https://ecypro.com/perspektifler --quiet --chrome-flags=\"--headl\u2026"}
+{"ts": "2026-06-11T23:05:05.744138Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "git add src/data/copy/common.ts src/components/layout/Navbar.tsx && git commit \u2026"}
+{"ts": "2026-06-11T23:05:35.045131Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "gh pr create --title \"feat(platform): nav icons + prerender watchdog/prebuilt f\u2026"}
+{"ts": "2026-06-11T23:06:20.357774Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "tail -2 /private/tmp/claude-501/-Users-emrecnyngmail-com-Desktop-ecypro--claude\u2026"}
+{"ts": "2026-06-11T23:06:49.039118Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "sleep 420; npx -y vercel@latest deploy --prebuilt --prod --yes > /tmp/vd2.log 2\u2026"}
+{"ts": "2026-06-11T23:07:29.127606Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "cat >> brain/perspektifler/DEPLOY_EVIDENCE.md << 'EOF' ## FAZ-2C \u2014 \u0130konlar + Pr\u2026"}
+{"ts": "2026-06-11T23:15:35.864927Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "for i in $(seq 1 100); do grep -qE \"exit=\" /private/tmp/claude-501/-Users-emrec\u2026"}
