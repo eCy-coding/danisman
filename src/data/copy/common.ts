@@ -11,11 +11,13 @@ export const NAV_COPY = {
 export const NAV_ITEMS = {
   home: {
     id: 'home',
+    iconName: 'Home',
     href: '#hero',
     label: { tr: 'Ana Sayfa', en: 'Home' },
   },
   services: {
     id: 'services',
+    iconName: 'Briefcase',
     href: '#services',
     label: { tr: 'Hizmetler', en: 'Services' },
     hasMegaMenu: true,
@@ -34,6 +36,7 @@ export const NAV_ITEMS = {
   },
   sektorler: {
     id: 'sektorler',
+    iconName: 'Factory',
     href: '/sektorler',
     label: { tr: 'Sektörler', en: 'Industries' },
     hasMegaMenu: true,
@@ -67,6 +70,7 @@ export const NAV_ITEMS = {
   },
   insights: {
     id: 'insights',
+    iconName: 'Newspaper',
     href: '/perspektifler',
     label: { tr: 'Perspektifler', en: 'Insights' },
     hasMegaMenu: true,
@@ -90,16 +94,19 @@ export const NAV_ITEMS = {
   },
   pricing: {
     id: 'pricing',
+    iconName: 'Tag',
     href: '/pricing',
     label: { tr: 'Fiyatlandırma', en: 'Pricing' },
   },
   about: {
     id: 'about',
+    iconName: 'Users',
     href: '/about',
     label: { tr: 'Hakkımızda', en: 'About Us' },
   },
   contact: {
     id: 'contact',
+    iconName: 'Mail',
     href: '#contact',
     label: { tr: 'İletişim', en: 'Contact' },
   },
