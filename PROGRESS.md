@@ -23,3 +23,17 @@
 - DECISION: 57-term controlled vocab (room under 60 for quarterly additions); ecyverse tag
   dropped (brand noise); strateji/m-and-a/degerleme/ESG/Liderlik tags dropped (= categories).
 - NEXT: Phase 2 — menu BUG-01..04 + BUG-12.
+
+## GATE-2 — Menu (DONE 2026-06-11)
+- DONE (görünür ilk düzeltmeler):
+  - BUG-01: Navbar'a route-change/outside-click/scroll close listener eklendi (ESC zaten vardı).
+  - BUG-02: ikon kutusu yalnızca item.icon varsa render edilir (boş kareler gitti).
+  - BUG-03: MEGA_MENUS.insights insights-only → Kategoriler(6)+Formatlar(4)+Öne Çıkanlar(3);
+    Sektörler + Hakkımızda grupları KALDIRILDI.
+  - BUG-04: MegaMenu footer per-menu → insights "Tüm içgörüleri keşfedin" + /perspektifler.
+  - BUG-12: panel z-50 + aria-hidden/pointer-events (kapalı panel inert).
+- EVIDENCE: vitest 27/27 PASS (menu-insights + 4 mevcut menü testi); typecheck:web 0; eslint 0.
+  Playwright e2e/menu.spec.ts yazıldı (10 test × 3 tarayıcı, --list doğrulandı) → kullanıcıda koşar.
+- DECISION: kategori/format/öne-çıkan linkleri kanonik /perspektifler/* hedefler (Phase 3/4'te
+  resolve olur). /blog hero watermark çakışması (BUG-12 kalanı) Phase 3 hub'da ele alınır.
+- NEXT: Phase 3 — Hub /perspektifler (301 /blog→/perspektifler, hero+facet+arama+Load More).

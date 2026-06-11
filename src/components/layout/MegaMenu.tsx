@@ -65,12 +65,13 @@ export const MegaMenu: React.FC<MegaMenuProps> = ({
     <div
       role="region"
       aria-label={menuId === 'services' ? 'Hizmetler açılır paneli' : 'Perspektifler açılır paneli'}
+      aria-hidden={!isOpen}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
       className={`absolute top-full left-1/2 -translate-x-1/2 pt-3 w-225 max-w-[95vw] transition-all duration-250 origin-top z-50 ${
         isOpen
-          ? 'opacity-100 scale-100 visible translate-y-0'
-          : 'opacity-0 scale-[0.97] invisible -translate-y-2'
+          ? 'opacity-100 scale-100 visible translate-y-0 pointer-events-auto'
+          : 'opacity-0 scale-[0.97] invisible -translate-y-2 pointer-events-none'
       }`}
     >
       <div className="bg-[#0a0f1c]/98 rounded-2xl shadow-[0_20px_60px_-15px_rgba(0,0,0,0.7)] border border-white/8 overflow-hidden ring-1 ring-white/5">
@@ -141,13 +142,20 @@ export const MegaMenu: React.FC<MegaMenuProps> = ({
           </div>
         </div>
 
-        {/* Bottom bar */}
+        {/* Bottom bar — BUG-04: per-menu copy. The insights panel must NOT say
+            "Tüm hizmetlerimizi keşfedin" (services wording) nor link to /blog. */}
         <div className="px-6 py-3 border-t border-white/5 flex items-center justify-between bg-white/1">
           <p className="text-xs text-slate-600">
-            {lang === 'tr' ? 'Tüm hizmetlerimizi keşfedin' : 'Explore all our services'}
+            {menuId === 'services'
+              ? lang === 'tr'
+                ? 'Tüm hizmetlerimizi keşfedin'
+                : 'Explore all our services'
+              : lang === 'tr'
+                ? 'Tüm içgörüleri keşfedin'
+                : 'Explore all our insights'}
           </p>
           <a
-            href={menuId === 'services' ? '/services' : '/blog'}
+            href={menuId === 'services' ? '/services' : '/perspektifler'}
             onClick={onClose}
             className="text-xs font-bold text-slate-500 hover:text-white transition-colors flex items-center gap-1 group"
           >

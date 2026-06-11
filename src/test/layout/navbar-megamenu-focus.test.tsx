@@ -22,22 +22,32 @@ const renderNavbar = () =>
   );
 
 describe('Navbar mega-menü — focus ile açılma (a11y)', () => {
-  it('services paneli başlangıçta kapalı (opacity-0)', () => {
-    renderNavbar();
-    const panel = screen.getByRole('region', { name: 'Hizmetler açılır paneli' });
+  // aria-hidden öğeyi erişilebilirlik ağacından çıkardığı için getByRole
+  // güvenilmez; panele kararlı şekilde aria-label selector'ıyla erişiyoruz.
+  const getPanel = (container: HTMLElement) =>
+    container.querySelector('[aria-label="Hizmetler açılır paneli"]') as HTMLElement;
+
+  it('services paneli başlangıçta kapalı (aria-hidden + opacity-0 + pointer-events-none)', () => {
+    const { container } = renderNavbar();
+    const panel = getPanel(container);
+    expect(panel).toBeTruthy();
+    expect(panel.getAttribute('aria-hidden')).toBe('true');
     expect(panel.className).toContain('opacity-0');
+    expect(panel.className).toContain('pointer-events-none');
     expect(panel.className).not.toContain('opacity-100');
   });
 
-  it('services trigger focus alınca panel açılır (opacity-100)', () => {
-    renderNavbar();
+  it('services trigger focus alınca panel açılır (aria-hidden=false + opacity-100 + pointer-events-auto)', () => {
+    const { container } = renderNavbar();
     const trigger = screen.getByTestId('navbar-link-services');
-    const panel = screen.getByRole('region', { name: 'Hizmetler açılır paneli' });
 
     // React onFocus = focusin (bubbles); fireEvent.focusIn doğru olanı tetikler.
     fireEvent.focusIn(trigger);
 
+    const panel = getPanel(container);
+    expect(panel.getAttribute('aria-hidden')).toBe('false');
     expect(panel.className).toContain('opacity-100');
+    expect(panel.className).toContain('pointer-events-auto');
     expect(panel.className).not.toContain('opacity-0');
   });
 });

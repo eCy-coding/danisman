@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Menu, X, ChevronDown, ChevronUp, MessageCircle } from 'lucide-react';
 import { NAV_ITEMS, getMegaChildren } from '@/data/copy/common';
+import { useLocation } from 'react-router-dom';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { MegaMenu } from './MegaMenu';
 import { useScrollToSection } from '../common/useScrollToSection';
@@ -43,6 +44,8 @@ export const Navbar: React.FC = () => {
 
   const scrollToSection = useScrollToSection();
   const dropdownTimeoutRef = useRef<number | null>(null);
+  const navRef = useRef<HTMLElement | null>(null);
+  const location = useLocation();
 
   // Custom Hooks
   useBodyLock(isOpen);
@@ -50,6 +53,30 @@ export const Navbar: React.FC = () => {
     setIsOpen(false);
     setActiveDropdown(null);
   });
+
+  // BUG-01: mega-menu closed-by-default; close on route change, outside click,
+  // and scroll. (ESC already handled above.) These were the missing listeners
+  // that let the panel stay OPEN over /blog /case-studies /methodology /about.
+  useEffect(() => {
+    // Route change → always close any open dropdown + mobile drawer.
+    setActiveDropdown(null);
+    setIsOpen(false);
+  }, [location.pathname]);
+
+  useEffect(() => {
+    const onPointerDown = (e: PointerEvent) => {
+      if (navRef.current && !navRef.current.contains(e.target as Node)) {
+        setActiveDropdown(null);
+      }
+    };
+    const onScroll = () => setActiveDropdown(null); // any scroll closes hover menus
+    document.addEventListener('pointerdown', onPointerDown);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => {
+      document.removeEventListener('pointerdown', onPointerDown);
+      window.removeEventListener('scroll', onScroll);
+    };
+  }, []);
 
   // Active section tracking
   useEffect(() => {
@@ -98,6 +125,7 @@ export const Navbar: React.FC = () => {
 
   return (
     <nav
+      ref={navRef}
       className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 border-b ${
         scrolled
           ? 'glass shadow-glow border-white/5 py-3'
@@ -159,8 +187,12 @@ export const Navbar: React.FC = () => {
                   aria-expanded={activeDropdown === item.id}
                   aria-current={isActive ? 'page' : undefined}
                 >
-                  <div
-                    className={`
+                  {/* BUG-02: only paint the icon chip when a real icon exists —
+                      NAV_ITEMS carry no `icon`, so the box was an empty square
+                      before every label (and the logo's "Ana Sayfa"). */}
+                  {item.icon ? (
+                    <div
+                      className={`
                   w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300
                   ${
                     isActive
@@ -168,9 +200,10 @@ export const Navbar: React.FC = () => {
                       : 'bg-white/5 text-gray-400 group-hover:bg-white/10 group-hover:text-white'
                   }
                 `}
-                  >
-                    {item.icon}
-                  </div>
+                    >
+                      {item.icon}
+                    </div>
+                  ) : null}
                   {item.label[lang]}
                   {isDropdown && (
                     <ChevronDown
