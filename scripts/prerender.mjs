@@ -37,7 +37,7 @@ const port = Number(process.env.PRERENDER_PORT ?? 4179);
 const baseUrl = `http://127.0.0.1:${port}`;
 
 // Vercel sets VERCEL=1 in its build environment.
-const ON_VERCEL = process.env.VERCEL === '1';
+const ON_VERCEL = process.env.VERCEL === '1' && process.env.PRERENDER_FORCE_LOCAL !== '1';
 
 function getRoutes() {
   // Override via env (comma-separated).
@@ -104,6 +104,16 @@ async function launchBrowser() {
   return chromium.launch();
 }
 
+/** Hard per-route watchdog: page.goto/content can wedge past their own
+ *  timeouts (observed: run frozen at route 44 for 15+ min under
+ *  `vercel build`). A stuck route becomes a reported failure, never a hang. */
+function withWatchdog(promise, route, ms = 60_000) {
+  return Promise.race([
+    promise,
+    wait(ms).then(() => ({ route, ok: false, error: `watchdog ${ms}ms exceeded` })),
+  ]);
+}
+
 async function prerenderRoute(browser, route) {
   let ctx;
   try {
@@ -137,10 +147,16 @@ async function main() {
   // Vercel build env: chromium binary memory/timeout sınırı 130-route
   // prerender'ı sustainably destekleyemiyor (browserContext close). Vercel'de
   // prerender otomatik skip; lokal `npm run build`'de çalışır.
+  // PRERENDER_FORCE_LOCAL=1: explicit opt-in for the prebuilt-deploy flow —
+  // `vercel build` runs on this machine with VERCEL=1 set, which would both
+  // skip prerender and select the linux-only sparticuz binary. Forcing keeps
+  // the local full-playwright path while producing .vercel/output.
+  const forceLocal = process.env.PRERENDER_FORCE_LOCAL === '1';
   if (
-    process.env.PRERENDER === '0' ||
-    process.env.SKIP_PRERENDER === '1' ||
-    process.env.VERCEL === '1'
+    !forceLocal &&
+    (process.env.PRERENDER === '0' ||
+      process.env.SKIP_PRERENDER === '1' ||
+      process.env.VERCEL === '1')
   ) {
     const reason = process.env.VERCEL === '1'
       ? 'VERCEL=1 build env (chromium unstable on Vercel)'
@@ -171,13 +187,13 @@ async function main() {
   const results = [];
   let sinceRelaunch = 0;
   for (const r of routes) {
-    let res = await prerenderRoute(browser, r);
+    let res = await withWatchdog(prerenderRoute(browser, r), r);
     if (!res.ok && isBrowserDead(res.error)) {
       console.warn(`[prerender] ↻ ${r}: browser died — relaunch + retry`);
       try { await browser.close(); } catch { /* already gone */ }
       browser = await launchBrowser();
       sinceRelaunch = 0;
-      res = await prerenderRoute(browser, r);
+      res = await withWatchdog(prerenderRoute(browser, r), r);
     }
     results.push(res);
     if (res.ok) {
