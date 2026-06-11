@@ -1,4 +1,4 @@
-import React, { useMemo, useRef } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { Search } from 'lucide-react';
 import BlogCard from './BlogCard';
@@ -61,6 +61,17 @@ export const PerspektiflerFeed: React.FC<FeedProps> = ({ lockedCategory }) => {
     trackEvent('Perspektifler', 'load_more', `page_${filter.page + 1}`);
     update({ page: filter.page + 1 });
   };
+
+  // GATE-5 analytics: every committed query + explicit zero-result flag.
+  // Fires through the consent-gated helper; the URL-debounce above already
+  // throttles, so each distinct q emits exactly once.
+  useEffect(() => {
+    if (!filter.q) return;
+    trackEvent('Perspektifler', 'search_query', filter.q);
+    if (results.length === 0) {
+      trackEvent('Perspektifler', 'zero_result', filter.q);
+    }
+  }, [filter.q, results.length]);
 
   const batchOne = visible.slice(0, PAGE_SIZE);
   const rest = visible.slice(PAGE_SIZE);

@@ -339,3 +339,14 @@
 {"ts": "2026-06-11T10:46:25.933709Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "git diff --name-only c648fc7..HEAD | grep -i \"service\" | wc -l; cat >> OUT_OF_S\u2026"}
 {"ts": "2026-06-11T10:48:01.404211Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "npx playwright test hub.spec menu.spec --reporter=list 2>&1 | tail -3 | tee bra\u2026"}
 {"ts": "2026-06-11T10:51:38.663327Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "npx playwright test hub.spec menu.spec --reporter=list 2>&1 | tail -2 | tee bra\u2026"}
+{"ts": "2026-06-11T10:52:21.320169Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "cat >> PROGRESS.md << 'EOF' ## Gate-3 (2026-06-11) **Done:** Hub at /perspektif\u2026"}
+{"ts": "2026-06-11T10:53:55.429257Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "cat >> src/lib/perspektifler.ts << 'EOF' /** Tag-overlap related articles (mirr\u2026"}
+{"ts": "2026-06-11T10:56:03.196974Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "sed -i '' 's|canonicalUrl={`https://ecypro.com/blog/\\${post.slug}`}|canonicalUr\u2026"}
+{"ts": "2026-06-11T10:56:11.703578Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -n \"industry\\|filter\\|categor\" src/pages/CaseStudiesPage.tsx | head -15; w\u2026"}
+{"ts": "2026-06-11T10:57:12.579955Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -n \"import { CASE_STUDIES }\" src/pages/CaseStudiesPage.tsx && sed -i '' \"s\u2026"}
+{"ts": "2026-06-11T10:57:42.023882Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -n \"trackEvent\\|newsletter\" src/components/blog/NewsletterSidebar.tsx | he\u2026"}
+{"ts": "2026-06-11T10:58:19.464534Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "npm run typecheck 2>&1 | tail -2 && npm run build 2>&1 | tail -2 && npx playwri\u2026"}
+{"ts": "2026-06-11T10:58:24.151007Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "python3 - << 'PYEOF' import json posts = json.load(open('src/data/blog-posts.js\u2026"}
+{"ts": "2026-06-11T10:58:41.285414Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "python3 - << 'PYEOF' import json, re p = 'brain/PERSPEKTIFLER_TASKS.json' d = j\u2026"}
+{"ts": "2026-06-11T11:04:27.150331Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "for i in $(seq 1 90); do grep -qE \"passed|failed\" /private/tmp/claude-501/-User\u2026"}
+{"ts": "2026-06-11T11:04:53.786415Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "python3 - << 'PYEOF' | tee brain/perspektifler/gate4-rich-results.txt import js\u2026"}
