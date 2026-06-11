@@ -51,7 +51,11 @@ async function submitDiscovery(payload: DiscoveryPayload): Promise<{ ok: boolean
 
 export const Discovery: React.FC = () => {
   const { t } = useTranslation('contact');
-  const sectors = t('discovery.sectors', { returnObjects: true }) as string[];
+  // Same crash class as FounderPage: before the 'contact' namespace resolves,
+  // returnObjects yields the key string and sectors.map threw to the root
+  // boundary ("Hizmet Kesintisi"). Guard until i18next delivers the array.
+  const sectorsRaw = t('discovery.sectors', { returnObjects: true }) as string[];
+  const sectors = Array.isArray(sectorsRaw) ? sectorsRaw : [];
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');

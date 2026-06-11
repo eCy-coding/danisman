@@ -60,10 +60,16 @@ test('Perspektifler vertical — full reader journey', async ({ page, context })
   const fresh = await context.newPage();
   await fresh.addInitScript(() => localStorage.setItem('exit_intent_shown', '1'));
   await fresh.goto(url);
-  await expect(fresh.getByRole('button', { name: /Yapay Zeka & Teknoloji/ })).toHaveAttribute(
-    'aria-pressed',
-    'true',
-  );
+  await fresh.waitForLoadState('networkidle');
+  // Same hydration-race guard as hub.spec's round-trip: poll until the chip
+  // reflects the URL state instead of asserting the very first paint.
+  await expect
+    .poll(
+      async () =>
+        fresh.getByRole('button', { name: /Yapay Zeka & Teknoloji/ }).getAttribute('aria-pressed'),
+      { timeout: 10_000 },
+    )
+    .toBe('true');
   await fresh.close();
 
   // 6. Clear filters → Load More once; footer stays reachable.
@@ -83,6 +89,10 @@ test('Perspektifler vertical — full reader journey', async ({ page, context })
   await page.waitForURL('**/perspektifler/**');
   const crumb = page.locator('[data-testid="article-breadcrumb"]');
   await expect(crumb).toBeVisible();
+  // The article page restores scroll mid-content; bring the breadcrumb into
+  // the viewport before clicking (click auto-wait saw it as not visible).
+  await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior }));
+  await crumb.locator('a').nth(1).scrollIntoViewIfNeeded();
   await crumb.locator('a').nth(1).click(); // Hub → CATEGORY
   await page.waitForURL('**/perspektifler/kategori/**');
   await expect(page.locator('[data-testid="pillar-intro"]')).toBeVisible();

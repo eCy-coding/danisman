@@ -67,3 +67,7 @@ src/components/ui/StickyTableOfContents.tsx
 src/components/ui/UtilityDock.tsx
 src/components/ui/ZenToggle.tsx
 src/components/ui/LanguageToggle.tsx
+# FAZ-2 owner kalemleri (explicit izin 2026-06-11)
+src/pages/FounderPage.tsx
+.github/workflows/**
+lighthouserc.json

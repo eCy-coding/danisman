@@ -985,6 +985,24 @@ const AnimatedRoutes = () => {
                 </Suspense>
               }
             />
+            {/* Locale mirrors for top-level pages the i18n smoke suite expects
+                (/en/founder, /en/discovery were 404 — pages existed only at root). */}
+            <Route
+              path="founder"
+              element={
+                <Suspense fallback={<LoadingFallback />}>
+                  <FounderPage />
+                </Suspense>
+              }
+            />
+            <Route
+              path="discovery"
+              element={
+                <Suspense fallback={<LoadingFallback />}>
+                  <DiscoveryPage />
+                </Suspense>
+              }
+            />
             <Route
               path="events"
               element={

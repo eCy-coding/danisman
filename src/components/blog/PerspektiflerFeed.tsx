@@ -45,9 +45,20 @@ export const PerspektiflerFeed: React.FC<FeedProps> = ({ lockedCategory }) => {
   const showHero = isPristine && filter.page === 1 && !lockedCategory;
 
   const update = (next: Partial<HubFilter>) => {
-    const merged: HubFilter = { ...filter, ...next };
-    if (lockedCategory) merged.kategori = undefined; // path carries the category
-    setSearchParams(serializeHubFilter(merged), { replace: false });
+    // Functional form: two rapid facet changes (chip click then select) used
+    // to merge against the previous render's stale filter and dropped the
+    // first param from the URL. Deriving from `prev` makes updates race-free.
+    setSearchParams(
+      (prev) => {
+        const current = lockedCategory
+          ? { ...parseHubFilter(prev), kategori: lockedCategory }
+          : parseHubFilter(prev);
+        const merged: HubFilter = { ...current, ...next };
+        if (lockedCategory) merged.kategori = undefined; // path carries the category
+        return serializeHubFilter(merged);
+      },
+      { replace: false },
+    );
   };
 
   const onSearchInput = (value: string) => {

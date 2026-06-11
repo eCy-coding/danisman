@@ -33,8 +33,8 @@ test.describe('i18n EN smoke', () => {
     const heroTitle = page.getByTestId('pricing-hero-title');
     await expect(heroTitle).toBeVisible();
     await expect(heroTitle).toContainText('Transparent Pricing');
-    // EN CTA badge
-    await expect(page.locator('text=PRICING')).toBeVisible();
+    // EN CTA badge (several PRICING strings on the page — assert the first)
+    await expect(page.locator('text=PRICING').first()).toBeVisible();
   });
 
   test('EN discovery page renders English form labels', async ({ page }) => {

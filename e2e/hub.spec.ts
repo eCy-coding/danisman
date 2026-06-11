@@ -147,7 +147,8 @@ test.describe('GATE-3 perspektifler hub', () => {
 
   test('konular page lists vocabulary under category headings', async ({ page }) => {
     await page.goto('/perspektifler/konular');
-    await settle(page);
+    // No facet bar on this page — settle()'s bar-polling only burned time and
+    // raced parallel-worker teardown; the auto-waiting assertion is enough.
     await expect(page.locator('h1')).toContainText('Tüm Konular');
     const groups = page.locator('h2');
     expect(await groups.count()).toBeGreaterThanOrEqual(5);

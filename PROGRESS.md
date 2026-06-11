@@ -56,3 +56,22 @@ Until then the fence is enforced procedurally (SCOPE.md discipline).
 **PBVC:** typecheck ✓ · lint 0 error ✓ · vitest fresh ✓ (146 files; 2 pre-existing fails unchanged from baseline) · build+prerender 152/152 ✓ · full e2e: **3360 passed (30m)**, 186 skipped; 6 webkit ✘ triaged → 4 were bulk-sed selector hits on the hidden mega-menu link (fixed: selectors scoped to visible grid; targeted webkit rerun 4/4 PASS); 2 = pre-existing webkit stress flakes (STR-13/15, homepage contact + 90s soak — out of vertical); 609 "did not run" = early stop after maxFailures, resolved by the selector fix (full matrix re-run delegated to CI).
 **e2e-perspektifler.spec (journey):** PASS (chromium batch + full run).
 **Lighthouse (isolated):** hub 62/97/100/96 = site-best parity (landing 58-62); AC-06 final read on prod URL post-deploy.
+
+## DEPLOY (2026-06-11, owner emri)
+**Merge:** PR #222 squash → main @12:45:48Z (öncesi: 6 orphan Insight*.test silindi, case-studies unit suite shared-taxonomy'ye migrate — vitest baseline'a döndü 2F/139P).
+**Vercel:** auto-deploy Ready (~6dk). **Canlı matris:** /blog→308→/perspektifler · /insights→308 · /blog/:slug→308 param-korumalı · hub+makale 200 · sitemap 260 perspektifler/0 blog · RSS ✓ · robots ✓.
+**Canlı görsel:** live-hub.png (H1 Perspektifler, hero 1+3, temiz nav) · live-menu-open.png (17 link, insights-only) · live-article.png (3-seviye breadcrumb).
+**Prod Lighthouse (mobile, AC-06 final):** perf **64** · a11y **97** · bp 96 · seo **100** (live-lighthouse-hub.json). Perf<90 = pre-existing serving infra (lokal parity 62→64); a11y/SEO hedefleri canlıda sağlandı. Kalıcı perf işi: PLAN_ssr-prerender-seo.md (owner).
+**Tam kayıt:** brain/perspektifler/DEPLOY_EVIDENCE.md.
+
+## FAZ-2 (2026-06-11, owner explicit izin: "benim yapacaklarımı yap")
+**Gerçek prod bug'ları bulunup düzeltildi (i18n-smoke'un tarihsel 5 fail kökü):**
+- FounderPage: guard'sız `i18n.language.startsWith` + ns-öncesi `returnObjects("credentials").map` → root boundary; CANLI /founder "Hizmet Kesintisi" basıyordu. Fix: lang guard + `ready` gate + Array savunması.
+- Discovery: aynı sınıf — `discovery.sectors` returnObjects `.map` crash. Fix: Array guard.
+- UtilityDock dil değişimi: locale-prefixli path'te LocaleRoute URL'i geri bastığı için i18n-only toggle anında geri dönüyordu. Fix: Navbar LanguageSwitcher sözleşmesi (swapLocaleInPath + navigate) dock'a taşındı.
+- **PerspektiflerFeed update race**: ardışık hızlı facet değişiminde stale-closure merge ilk URL param'ını düşürüyordu. Fix: functional `setSearchParams(prev⇒…)` — race-free.
+**Locale rotaları:** /:locale/{founder,discovery} eklendi (top-level ayna). **CI:** gitleaks `fetch-depth: 0` (shallow scan 0-byte exit 1 kökü) · lighthouserc `/blog→/perspektifler`.
+**Ölçümle kapanan kalemler (kod değişikliği bilinçli YOK):** /about taşması = FOUC ânı (loaded DOM h1 top=278 vs nav=121 sağlıklı) · hero CTA kontrastı canlıda slate-950-on-gold sağlıklı · prerender VERCEL skip'i bilinçli (geçmiş instabilite, koddaki not) → kalıcı strateji: lokal prerender'lı dist ile `vercel deploy --prebuilt --prod`.
+**Test düzeltmeleri:** pricing PRICING strict `.first()` · konular testinde gereksiz settle kaldırıldı (paralel teardown yarışı) · journey fresh-poll + breadcrumb scroll-into-view.
+**Doğrulama:** i18n-smoke **7/7** · paket 40 pass (tek fail = pre-existing service_hub katalog) · prerender 152/152 · typecheck/lint temiz.
+**Bekleyen (classifier kilidi):** `.claude/settings.json` scope-guard hook wiring — snippet yukarıda, owner yapıştıracak.
