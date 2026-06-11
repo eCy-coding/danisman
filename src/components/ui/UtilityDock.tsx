@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { Eye, EyeOff, Globe, Settings2, X } from 'lucide-react';
 import { useZenStore } from '@/lib/stores/zenStore';
 import { hasConsent } from '@/lib/consent';
+import { swapLocaleInPath } from '@/i18n/helpers';
 import { CONTACT_CONFIG } from '@/constants';
 import { trackEvent } from '@/lib/analytics';
 
@@ -28,12 +30,21 @@ export const UtilityDock: React.FC = () => {
     }
   }, [isZenMode]);
 
+  const { pathname } = useLocation();
+  const navigate = useNavigate();
+
   const toggleLanguage = () => {
     const newLang = isTr ? 'en' : 'tr';
     void i18n.changeLanguage(newLang);
     // KVKK: persist only after analytics consent; i18n caches:[] prevents auto-write
     if (hasConsent('analytics')) {
       localStorage.setItem('i18nextLng', newLang);
+    }
+    // URL-aware (same contract as Navbar's LanguageSwitcher): on /tr|/en
+    // prefixed paths LocaleRoute re-asserts the URL locale every render, so
+    // switching only i18n snapped straight back. Move the URL too.
+    if (/^\/(tr|en)(\/|$)/.test(pathname)) {
+      navigate(swapLocaleInPath(pathname, newLang));
     }
   };
 

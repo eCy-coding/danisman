@@ -32,10 +32,10 @@ jobs:
     runs-on: ubuntu-22.04
     timeout-minutes: 8
     steps:
-      - name: Checkout (full history on schedule, shallow on PR)
+      - name: Checkout (full history — gitleaks scans git log; shallow made it read 0 bytes and exit 1)
         uses: actions/checkout@v4
         with:
-          fetch-depth: ${{ github.event_name == 'schedule' && '0' || '1' }}
+          fetch-depth: 0
 
       - name: Run Gitleaks
         uses: gitleaks/gitleaks-action@v2
