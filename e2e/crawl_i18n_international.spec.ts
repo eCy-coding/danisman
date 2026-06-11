@@ -51,12 +51,10 @@ test.describe('P39-T81: hreflang Tags Her Sayfada', () => {
     const hreflangLinks = await page.locator('link[rel="alternate"][hreflang]').all();
 
     if (hreflangLinks.length === 0) {
-      test
-        .info()
-        .annotations.push({
-          type: 'note',
-          description: 'hreflang tags yok — P39-T81 implement gerekiyor',
-        });
+      test.info().annotations.push({
+        type: 'note',
+        description: 'hreflang tags yok — P39-T81 implement gerekiyor',
+      });
     } else {
       const hreflangs = await Promise.all(hreflangLinks.map((l) => l.getAttribute('hreflang')));
       expect(hreflangs).toContain('tr');
@@ -71,12 +69,10 @@ test.describe('P39-T81: hreflang Tags Her Sayfada', () => {
     const content = fs.readFileSync(appPath, 'utf-8');
     const hasHreflang = content.includes('Hreflang') || content.includes('hreflang');
     if (!hasHreflang) {
-      test
-        .info()
-        .annotations.push({
-          type: 'note',
-          description: 'App.tsx: Hreflang import yok — sayfaya enjekte edilmiyor',
-        });
+      test.info().annotations.push({
+        type: 'note',
+        description: 'App.tsx: Hreflang import yok — sayfaya enjekte edilmiyor',
+      });
     }
   });
 });
@@ -101,12 +97,10 @@ test.describe('P39-T82: TR/EN URL Strategy', () => {
         return;
       }
     }
-    test
-      .info()
-      .annotations.push({
-        type: 'note',
-        description: '/tr/ /en/ URL routing yok — P39-T82 pending (şu an client-side i18n)',
-      });
+    test.info().annotations.push({
+      type: 'note',
+      description: '/tr/ /en/ URL routing yok — P39-T82 pending (şu an client-side i18n)',
+    });
   });
 
   test('T82-b: i18next aktif ve dil değiştirebiliyor', async ({ page }) => {
@@ -179,7 +173,7 @@ test.describe('P39-T83: Locale-Specific Content', () => {
   test('T83-b: Blog sayfası html lang attr ile yükleniyor', async ({ page }) => {
     test.setTimeout(15000);
     await mockSetup(page);
-    await page.goto('/blog', { waitUntil: 'domcontentloaded' });
+    await page.goto('/perspektifler', { waitUntil: 'domcontentloaded' });
     await page.waitForTimeout(400);
 
     const lang = await page.locator('html').getAttribute('lang');
@@ -229,12 +223,10 @@ test.describe('P39-T84: Currency Switcher (TRY/USD/EUR)', () => {
     ];
     const found = candidates.some((c) => fs.existsSync(path.join(ROOT, c)));
     if (!found) {
-      test
-        .info()
-        .annotations.push({
-          type: 'note',
-          description: 'Currency store yok — P39-T84 pending (şu an hardcoded TRY)',
-        });
+      test.info().annotations.push({
+        type: 'note',
+        description: 'Currency store yok — P39-T84 pending (şu an hardcoded TRY)',
+      });
     }
   });
 
@@ -244,12 +236,10 @@ test.describe('P39-T84: Currency Switcher (TRY/USD/EUR)', () => {
     const content = fs.readFileSync(envExample, 'utf-8');
     const hasRateKey = content.includes('EXCHANGE_RATE') || content.includes('CURRENCY_API');
     if (!hasRateKey) {
-      test
-        .info()
-        .annotations.push({
-          type: 'note',
-          description: '.env.example: ExchangeRate API key yok — P39-T84 pending',
-        });
+      test.info().annotations.push({
+        type: 'note',
+        description: '.env.example: ExchangeRate API key yok — P39-T84 pending',
+      });
     }
   });
 });
@@ -278,12 +268,10 @@ test.describe('P39-T85: International Schema.org (areaServed)', () => {
     }
 
     if (!hasAreaServed) {
-      test
-        .info()
-        .annotations.push({
-          type: 'note',
-          description: 'areaServed schema eksik — P39-T85 pending',
-        });
+      test.info().annotations.push({
+        type: 'note',
+        description: 'areaServed schema eksik — P39-T85 pending',
+      });
     }
   });
 
@@ -308,12 +296,10 @@ test.describe('P39-T85: International Schema.org (areaServed)', () => {
     }
 
     if (!hasLang) {
-      test
-        .info()
-        .annotations.push({
-          type: 'note',
-          description: 'availableLanguage schema eksik — P39-T85 pending',
-        });
+      test.info().annotations.push({
+        type: 'note',
+        description: 'availableLanguage schema eksik — P39-T85 pending',
+      });
     }
   });
 });
@@ -360,12 +346,10 @@ test.describe('P39-T87: i18next ICU MessageFormat', () => {
     const deps = { ...pkg.dependencies, ...pkg.devDependencies };
     const hasIcu = 'i18next-icu' in deps || 'intlify' in deps || '@formatjs/intl' in deps;
     if (!hasIcu) {
-      test
-        .info()
-        .annotations.push({
-          type: 'note',
-          description: 'i18next-icu yok — plural/gender format eksik (P39-T87 pending)',
-        });
+      test.info().annotations.push({
+        type: 'note',
+        description: 'i18next-icu yok — plural/gender format eksik (P39-T87 pending)',
+      });
     }
   });
 
@@ -391,12 +375,10 @@ test.describe('P39-T88: Translation Memory (TMS Lite)', () => {
     const candidates = ['brain/i18n/memory.json', 'brain/i18n', 'src/i18n/memory.json'];
     const found = candidates.some((c) => fs.existsSync(path.join(ROOT, c)));
     if (!found) {
-      test
-        .info()
-        .annotations.push({
-          type: 'note',
-          description: 'Translation memory (brain/i18n/) yok — P39-T88 pending',
-        });
+      test.info().annotations.push({
+        type: 'note',
+        description: 'Translation memory (brain/i18n/) yok — P39-T88 pending',
+      });
     }
   });
 
@@ -424,12 +406,10 @@ test.describe('P39-T89: RTL Support Scaffold', () => {
   test('T89-a: Tailwind logical properties kullanımı (ms-/me- classes)', () => {
     const tailwindConfig = path.join(ROOT, 'tailwind.config.ts');
     if (!fs.existsSync(tailwindConfig)) {
-      test
-        .info()
-        .annotations.push({
-          type: 'note',
-          description: 'tailwind.config.ts yok — Tailwind v4 inline config olabilir',
-        });
+      test.info().annotations.push({
+        type: 'note',
+        description: 'tailwind.config.ts yok — Tailwind v4 inline config olabilir',
+      });
       return;
     }
     // Logical properties CSS src dosyalarında var mı?
@@ -481,21 +461,17 @@ test.describe('P39-T90: Multilingual Sitemap Split', () => {
     for (const candidate of candidates) {
       const res = await request.get(`${BASE_URL}${candidate}`).catch(() => null);
       if (res && res.status() === 200) {
-        test
-          .info()
-          .annotations.push({
-            type: 'note',
-            description: `Multilingual sitemap bulundu: ${candidate}`,
-          });
+        test.info().annotations.push({
+          type: 'note',
+          description: `Multilingual sitemap bulundu: ${candidate}`,
+        });
         return;
       }
     }
-    test
-      .info()
-      .annotations.push({
-        type: 'note',
-        description: 'Multilingual sitemap yok — P39-T90 pending (şu an tek sitemap.xml)',
-      });
+    test.info().annotations.push({
+      type: 'note',
+      description: 'Multilingual sitemap yok — P39-T90 pending (şu an tek sitemap.xml)',
+    });
   });
 
   test('T90-c: scripts/generate-sitemap.ts mevcut ve locale destekli', () => {
@@ -508,12 +484,10 @@ test.describe('P39-T90: Multilingual Sitemap Split', () => {
     const hasLocale =
       content.includes('locale') || content.includes('tr') || content.includes('hreflang');
     if (!hasLocale) {
-      test
-        .info()
-        .annotations.push({
-          type: 'note',
-          description: 'generate-sitemap.ts: locale/hreflang desteği yok — P39-T90 pending',
-        });
+      test.info().annotations.push({
+        type: 'note',
+        description: 'generate-sitemap.ts: locale/hreflang desteği yok — P39-T90 pending',
+      });
     }
   });
 });

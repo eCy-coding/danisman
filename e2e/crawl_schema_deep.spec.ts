@@ -34,18 +34,22 @@ async function extractJsonLd(page: Page): Promise<JsonLdNode[]> {
       const parsed = JSON.parse(block);
       if (Array.isArray(parsed)) result.push(...parsed);
       else result.push(parsed);
-    } catch { /* invalid JSON-LD — skip */ }
+    } catch {
+      /* invalid JSON-LD — skip */
+    }
   }
   return result;
 }
 
 function findNode(nodes: JsonLdNode[], type: string): JsonLdNode | null {
-  return nodes.find(n => {
-    const t = n['@type'];
-    if (typeof t === 'string') return t === type;
-    if (Array.isArray(t)) return t.includes(type);
-    return false;
-  }) ?? null;
+  return (
+    nodes.find((n) => {
+      const t = n['@type'];
+      if (typeof t === 'string') return t === type;
+      if (Array.isArray(t)) return t.includes(type);
+      return false;
+    }) ?? null
+  );
 }
 
 function loadSitemapPaths(): string[] {
@@ -53,15 +57,21 @@ function loadSitemapPaths(): string[] {
   if (!fs.existsSync(sitemapPath)) return ['/'];
   const xml = fs.readFileSync(sitemapPath, 'utf-8');
   return [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)]
-    .map(m => { try { return new URL(m[1].trim()).pathname; } catch { return '/'; } })
+    .map((m) => {
+      try {
+        return new URL(m[1].trim()).pathname;
+      } catch {
+        return '/';
+      }
+    })
     .filter((p, i, arr) => arr.indexOf(p) === i)
     .slice(0, 46);
 }
 
 const setupMocks = async (page: Page) => {
-  await page.route('https://api.ecypro.com/**', r => r.fulfill({ status: 200, json: {} }));
-  await page.route('**/ingest.sentry.io/**', r => r.fulfill({ status: 200 }));
-  await page.route('**/api.telegram.org/**', r => r.fulfill({ status: 200, json: { ok: true } }));
+  await page.route('https://api.ecypro.com/**', (r) => r.fulfill({ status: 200, json: {} }));
+  await page.route('**/ingest.sentry.io/**', (r) => r.fulfill({ status: 200 }));
+  await page.route('**/api.telegram.org/**', (r) => r.fulfill({ status: 200, json: { ok: true } }));
 };
 
 test.describe('Crowler: JSON-LD Structured Data Deep Validation', () => {
@@ -119,7 +129,7 @@ test.describe('Crowler: JSON-LD Structured Data Deep Validation', () => {
   test('Alt sayfalar: BreadcrumbList schema var', async ({ page }) => {
     test.setTimeout(30000);
     await setupMocks(page);
-    const breadcrumbPages = ['/services', '/blog', '/about', '/pricing', '/contact'];
+    const breadcrumbPages = ['/services', '/perspektifler', '/about', '/pricing', '/contact'];
     const missing: string[] = [];
     const invalid: string[] = [];
 
@@ -152,14 +162,17 @@ test.describe('Crowler: JSON-LD Structured Data Deep Validation', () => {
     test.setTimeout(60000);
     await setupMocks(page);
     const sitemapPaths = loadSitemapPaths();
-    const blogPaths = sitemapPaths.filter(p => p.startsWith('/blog/')).slice(0, 5);
+    const blogPaths = sitemapPaths.filter((p) => p.startsWith('/perspektifler/')).slice(0, 5);
     const issues: string[] = [];
 
     for (const pagePath of blogPaths) {
       await page.goto(`${BASE_URL}${pagePath}`, { waitUntil: 'domcontentloaded' });
       await page.waitForTimeout(400);
       const nodes = await extractJsonLd(page);
-      const blogPost = findNode(nodes, 'BlogPosting') ?? findNode(nodes, 'Article') ?? findNode(nodes, 'NewsArticle');
+      const blogPost =
+        findNode(nodes, 'BlogPosting') ??
+        findNode(nodes, 'Article') ??
+        findNode(nodes, 'NewsArticle');
 
       if (!blogPost) {
         issues.push(`${pagePath}: BlogPosting/Article JSON-LD eksik`);
@@ -190,14 +203,15 @@ test.describe('Crowler: JSON-LD Structured Data Deep Validation', () => {
     test.setTimeout(30000);
     await setupMocks(page);
     const sitemapPaths = loadSitemapPaths();
-    const servicePaths = sitemapPaths.filter(p => p.startsWith('/services/'));
+    const servicePaths = sitemapPaths.filter((p) => p.startsWith('/services/'));
     const missing: string[] = [];
 
     for (const pagePath of servicePaths.slice(0, 3)) {
       await page.goto(`${BASE_URL}${pagePath}`, { waitUntil: 'domcontentloaded' });
       await page.waitForTimeout(400);
       const nodes = await extractJsonLd(page);
-      const service = findNode(nodes, 'Service') ?? findNode(nodes, 'Product') ?? findNode(nodes, 'OfferCatalog');
+      const service =
+        findNode(nodes, 'Service') ?? findNode(nodes, 'Product') ?? findNode(nodes, 'OfferCatalog');
 
       if (!service) {
         missing.push(pagePath);
@@ -220,7 +234,9 @@ test.describe('Crowler: JSON-LD Structured Data Deep Validation', () => {
     const faqSchema = findNode(nodes, 'FAQPage');
 
     if (!faqSchema) {
-      console.warn('⚠ FAQPage JSON-LD eksik — /faq sayfası Google FAQ Rich Results için FAQPage schema gerektiriyor');
+      console.warn(
+        '⚠ FAQPage JSON-LD eksik — /faq sayfası Google FAQ Rich Results için FAQPage schema gerektiriyor',
+      );
       return; // Soft — eklenmemiş olabilir
     }
 
@@ -248,10 +264,15 @@ test.describe('Crowler: JSON-LD Structured Data Deep Validation', () => {
     await page.waitForTimeout(500);
 
     const nodes = await extractJsonLd(page);
-    const offer = findNode(nodes, 'Offer') ?? findNode(nodes, 'PriceSpecification') ?? findNode(nodes, 'Product');
+    const offer =
+      findNode(nodes, 'Offer') ??
+      findNode(nodes, 'PriceSpecification') ??
+      findNode(nodes, 'Product');
 
     if (!offer) {
-      console.warn('⚠ Pricing: Offer/Product JSON-LD eksik — fiyat bilgileri markup\'sız (Google Shopping/Rich Results için önerilir)');
+      console.warn(
+        "⚠ Pricing: Offer/Product JSON-LD eksik — fiyat bilgileri markup'sız (Google Shopping/Rich Results için önerilir)",
+      );
     }
     // Soft check
   });
@@ -282,7 +303,10 @@ test.describe('Crowler: JSON-LD Structured Data Deep Validation', () => {
 
     for (const pagePath of sitemapPaths) {
       try {
-        await page.goto(`${BASE_URL}${pagePath}`, { waitUntil: 'domcontentloaded', timeout: 15000 });
+        await page.goto(`${BASE_URL}${pagePath}`, {
+          waitUntil: 'domcontentloaded',
+          timeout: 15000,
+        });
         await page.waitForTimeout(200);
         const blocks = await page.locator('script[type="application/ld+json"]').allTextContents();
         for (const block of blocks) {
@@ -292,13 +316,15 @@ test.describe('Crowler: JSON-LD Structured Data Deep Validation', () => {
             parseErrors.push(`${pagePath}: JSON-LD parse hatası — ${block.slice(0, 80)}...`);
           }
         }
-      } catch { /* timeout */ }
+      } catch {
+        /* timeout */
+      }
     }
     expect(parseErrors, `Geçersiz JSON-LD:\n${parseErrors.join('\n')}`).toHaveLength(0);
   });
 
   // ── @CONTEXT DOĞRULAMASI ───────────────────────────────────────────
-  test('JSON-LD @context schema.org\'u referans ediyor', async ({ page }) => {
+  test("JSON-LD @context schema.org'u referans ediyor", async ({ page }) => {
     await setupMocks(page);
     await page.goto(BASE_URL, { waitUntil: 'domcontentloaded' });
     await page.waitForTimeout(500);
@@ -315,14 +341,14 @@ test.describe('Crowler: JSON-LD Structured Data Deep Validation', () => {
     test.setTimeout(30000);
     await setupMocks(page);
     const sitemapPaths = loadSitemapPaths();
-    const csPaths = sitemapPaths.filter(p => p.startsWith('/case-studies/')).slice(0, 3);
+    const csPaths = sitemapPaths.filter((p) => p.startsWith('/case-studies/')).slice(0, 3);
     const missing: string[] = [];
 
     for (const pagePath of csPaths) {
       await page.goto(`${BASE_URL}${pagePath}`, { waitUntil: 'domcontentloaded' });
       await page.waitForTimeout(400);
       const nodes = await extractJsonLd(page);
-      const hasSchema = nodes.some(n => {
+      const hasSchema = nodes.some((n) => {
         const t = String(n['@type'] ?? '');
         return ['Article', 'BlogPosting', 'CreativeWork', 'CaseStudy', 'NewsArticle'].includes(t);
       });
@@ -332,6 +358,8 @@ test.describe('Crowler: JSON-LD Structured Data Deep Validation', () => {
     if (missing.length > 0) {
       console.warn(`⚠ Case study schema eksik: ${missing.join(', ')}`);
     }
-    expect(missing.length, `${missing.length} case study JSON-LD eksik`).toBeLessThan(csPaths.length);
+    expect(missing.length, `${missing.length} case study JSON-LD eksik`).toBeLessThan(
+      csPaths.length,
+    );
   });
 });

@@ -10,6 +10,19 @@ test.use({ viewport: { width: 1366, height: 900 } });
 
 async function settle(page: Page) {
   await page.waitForLoadState('networkidle');
+  // UrgencyBanner mounts late and shifts layout; wait for the facet bar to
+  // hold still so chip clicks land where they aim (same fix as menu.spec).
+  let prev = '';
+  for (let i = 0; i < 12; i++) {
+    const box = await page
+      .locator('[data-testid="perspektifler-facet-bar"]')
+      .boundingBox()
+      .catch(() => null);
+    const sig = box ? `${Math.round(box.y)}` : '';
+    if (sig && sig === prev) return;
+    prev = sig;
+    await page.waitForTimeout(150);
+  }
 }
 
 test.describe('GATE-3 perspektifler hub', () => {

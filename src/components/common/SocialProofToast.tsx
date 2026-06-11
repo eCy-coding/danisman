@@ -80,7 +80,7 @@ const SEED_DATA: ProofItem[] = [
   },
 ];
 
-const SHOW_ON_PATHS = ['/', '/services', '/pricing', '/about', '/perspektifler'];
+const SHOW_ON_PATHS = ['/', '/services', '/pricing', '/about']; // D-6: insights pages use the nav 'Yeni' badge instead of toasts
 const DISMISS_KEY = 'sp_toast_dismissed';
 const DISMISS_TTL = 24 * 60 * 60 * 1000;
 const INTERVAL_MS = 10_000;

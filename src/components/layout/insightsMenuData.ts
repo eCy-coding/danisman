@@ -88,3 +88,8 @@ export const MENU_PICKS: MenuPick[] = [...posts]
 
 export const MENU_HUB_HREF = '/perspektifler';
 export const MENU_TOPICS_HREF = '/perspektifler/konular';
+
+/** Newest publish date — drives the dismissible "Yeni" nav badge (D-6:
+ *  SocialProofToast is replaced by this badge on insights surfaces). */
+export const NEWEST_POST_DATE: string = [...posts].sort((a, b) => b.date.localeCompare(a.date))[0]!
+  .date;

@@ -323,7 +323,7 @@ test.describe('Crawler: Analytics-Dev (Pane 9) — GA4/GTM/AnalyticsDevOverlay',
     await page.goto(`${BASE_URL}/blog`, { waitUntil: 'domcontentloaded' });
     await page.waitForTimeout(800);
 
-    const postLink = page.locator('a[href*="/blog/"]').first();
+    const postLink = page.locator('a[href*="/perspektifler/"]').first();
     if (await postLink.isVisible({ timeout: 4_000 }).catch(() => false)) {
       const initial = await page.evaluate(
         () => (window as unknown as AnalyticsWindow)._analyticsEvents?.length ?? 0,
@@ -665,7 +665,7 @@ test.describe('Crawler: Analytics-Dev (Pane 9) — GA4/GTM/AnalyticsDevOverlay',
     await setupBaseMocks(page);
     await injectAnalyticsBridge(page);
 
-    const pages = ['/', '/blog', '/services', '/pricing'];
+    const pages = ['/', '/perspektifler', '/services', '/pricing'];
 
     for (const path of pages) {
       await page.goto(`${BASE_URL}${path}`, { waitUntil: 'domcontentloaded' });

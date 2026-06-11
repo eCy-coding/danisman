@@ -4,6 +4,7 @@ import { Menu, X, ChevronDown, ChevronUp, MessageCircle } from 'lucide-react';
 import { NAV_ITEMS } from '@/data/copy/common';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { MegaMenu } from './MegaMenu';
+import { NEWEST_POST_DATE } from './insightsMenuData';
 import { useScrollToSection } from '../common/useScrollToSection';
 import { trackEvent } from '../../lib/analytics';
 import { getCalendlyCta, hasExternalCalendly } from '../../lib/cta/calendly';
@@ -60,6 +61,30 @@ export const Navbar: React.FC = () => {
   useEffect(() => {
     setActiveDropdown(null);
     setIsOpen(false);
+  }, [location.pathname]);
+
+  // D-6 float governance: one dismissible "Yeni" badge on the Perspektifler
+  // nav item replaces the SocialProofToast on insights surfaces. Fresh content
+  // = newest post younger than 14 days; visiting the hub dismisses it.
+  const [showYeniBadge, setShowYeniBadge] = useState(false);
+  useEffect(() => {
+    try {
+      const dismissedFor = localStorage.getItem('perspektifler_yeni_seen');
+      const fresh = Date.now() - new Date(NEWEST_POST_DATE).getTime() < 14 * 24 * 3600 * 1000;
+      setShowYeniBadge(fresh && dismissedFor !== NEWEST_POST_DATE);
+    } catch {
+      setShowYeniBadge(false);
+    }
+  }, []);
+  useEffect(() => {
+    if (location.pathname.startsWith('/perspektifler')) {
+      try {
+        localStorage.setItem('perspektifler_yeni_seen', NEWEST_POST_DATE);
+      } catch {
+        /* private mode */
+      }
+      setShowYeniBadge(false);
+    }
   }, [location.pathname]);
 
   // BUG-01: close on outside click/tap.
@@ -219,6 +244,14 @@ export const Navbar: React.FC = () => {
                     </div>
                   )}
                   {item.label[lang]}
+                  {item.id === 'insights' && showYeniBadge && (
+                    <span
+                      data-testid="perspektifler-yeni-badge"
+                      className="ml-1 rounded-full bg-secondary/20 border border-secondary/40 text-secondary text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5"
+                    >
+                      Yeni
+                    </span>
+                  )}
                   {isDropdown && (
                     <ChevronDown
                       size={14}

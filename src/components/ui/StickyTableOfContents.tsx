@@ -190,7 +190,7 @@ export const StickyTableOfContents: React.FC<StickyTableOfContentsProps> = ({
         </AnimatePresence>
 
         {/* Reading time estimate */}
-        <div className="flex items-center gap-1.5 text-[10px] text-slate-600 pt-1">
+        <div className="flex items-center gap-1.5 text-[11px] text-slate-400 pt-1">
           <BookOpen size={10} aria-hidden="true" />
           <span>
             {lang === 'tr'

@@ -81,7 +81,15 @@ test.describe('Crawler: Runtime Stress — Phase 5+7 (Uzun Oturum & Yük)', () =
           ?.usedJSHeapSize ?? 0,
     );
 
-    const routes = ['/', '/blog', '/services', '/about', '/pricing', '/', '/blog'];
+    const routes = [
+      '/',
+      '/perspektifler',
+      '/services',
+      '/about',
+      '/pricing',
+      '/',
+      '/perspektifler',
+    ];
     for (const route of routes) {
       await page.goto(`${BASE_URL}${route}`, { waitUntil: 'domcontentloaded' });
       await page.waitForTimeout(400);
@@ -188,7 +196,15 @@ test.describe('Crawler: Runtime Stress — Phase 5+7 (Uzun Oturum & Yük)', () =
 
     await page.goto(BASE_URL, { waitUntil: 'domcontentloaded' });
 
-    const routes = ['/blog', '/services', '/pricing', '/about', '/', '/blog', '/services'];
+    const routes = [
+      '/perspektifler',
+      '/services',
+      '/pricing',
+      '/about',
+      '/',
+      '/perspektifler',
+      '/services',
+    ];
     for (const route of routes) {
       await page.goto(`${BASE_URL}${route}`, { waitUntil: 'domcontentloaded' });
       await page.waitForTimeout(150);
@@ -390,7 +406,7 @@ test.describe('Crawler: Runtime Stress — Phase 5+7 (Uzun Oturum & Yük)', () =
 
     const pages = await Promise.all([browser.newPage(), browser.newPage(), browser.newPage()]);
 
-    const routes = ['/', '/blog', '/services'];
+    const routes = ['/', '/perspektifler', '/services'];
 
     for (const [_i, pg] of pages.entries()) {
       await pg.route('**/ingest.sentry.io/**', (r) => r.fulfill({ status: 200 }));
@@ -498,7 +514,7 @@ test.describe('Crawler: Runtime Stress — Phase 5+7 (Uzun Oturum & Yük)', () =
       }
     });
 
-    const routes = ['/', '/blog', '/services', '/about', '/pricing', '/status'];
+    const routes = ['/', '/perspektifler', '/services', '/about', '/pricing', '/status'];
     for (const route of routes) {
       await page.goto(`${BASE_URL}${route}`, { waitUntil: 'domcontentloaded' });
       await page.waitForTimeout(600);

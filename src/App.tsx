@@ -1576,10 +1576,9 @@ import '@/lib/i18n'; // Initialize i18n
 const CommandMenu = React.lazy(() =>
   import('./components/ui/CommandMenu').then((m) => ({ default: m.CommandMenu })),
 );
-const ZenToggle = React.lazy(() =>
-  import('./components/ui/ZenToggle').then((m) => ({ default: m.ZenToggle })),
+const UtilityDock = React.lazy(() =>
+  import('./components/ui/UtilityDock').then((m) => ({ default: m.UtilityDock })),
 );
-import { LanguageToggle } from './components/ui/LanguageToggle';
 
 import { useWebVitals } from '@/hooks/useWebVitals';
 import { useScrollDepth } from '@/hooks/useScrollDepth';
@@ -1591,7 +1590,6 @@ const MissionControl = React.lazy(() =>
   import('./components/debug/MissionControl').then((m) => ({ default: m.MissionControl })),
 );
 import { OfflineBanner } from './components/common/OfflineBanner';
-import { WhatsAppButton } from './components/contact/WhatsAppButton';
 import { CookieBanner } from './components/CookieBanner';
 const SimpleChatWidget = React.lazy(() =>
   import('./components/chat/SimpleChatWidget').then((m) => ({ default: m.SimpleChatWidget })),
@@ -1709,9 +1707,8 @@ const App: React.FC = () => {
           <OfflineBanner />
           <Suspense fallback={null}>
             <CommandMenu />
-            <ZenToggle />
+            <UtilityDock />
           </Suspense>
-          <LanguageToggle />
           <Suspense fallback={<LoadingFallback />}>
             <AnimatedRoutes />
           </Suspense>
@@ -1719,7 +1716,6 @@ const App: React.FC = () => {
             <LiveChat />
           </Suspense>
           {/* P52: WhatsApp + simple chat — admin/auth route'larında gizli */}
-          <WhatsAppButton />
           <Suspense fallback={null}>
             <SimpleChatWidget />
             {/* P53: exit-intent + mobile sticky CTA */}

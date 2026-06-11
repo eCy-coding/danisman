@@ -46,3 +46,8 @@ Until then the fence is enforced procedurally (SCOPE.md discipline).
 ## Gate-5 (2026-06-11)
 **Done:** ranked zero-dep search `searchPerspektifler` (title×3/tags×2/body×1, TR-fold), hub ?q= live, zero-result state suggests categories; events via consent-gated trackEvent: search_query, zero_result, load_more, category_click, newsletter_submit (no PII).
 **Evidence:** vitest GATE-5 suite 4/4 — zero-result 1/30 (3.3% <5%), p95 0.23ms (<300ms), diacritic equivalence, relevance ordering (brain/perspektifler/gate5-search.txt).
+
+## Gate-6 (2026-06-11)
+**Done:** Float governance (BUG-08): SocialProofToast → dismissible nav "Yeni" badge (14-day freshness, hub visit dismisses); UrgencyBanner returning-visitors-only + 8s auto-dismiss; ZenToggle+LanguageToggle+WhatsApp float merged into single UtilityDock (persistent widgets = dock + chat = 2). Dead prototype deleted (54 files: 16 pages dupl., 16+ components, mocks, types, hooks, stub data, lib/insights utils, 2 prototype tsx, 3 orphan unit tests — all importer-verified closed-set). 24 e2e specs migrated /blog→/perspektifler; insights.spec rewritten as legacy-redirect contract; zen/i18n specs migrated to dock + stale-copy fixes. New a11y spec: axe hub/category/article/open-menu (menu-scoped) — TOC read-time contrast fixed (slate-600→400). audit:canonical 151/151 + robots OK.
+**Premise verdicts:** i18n-smoke 5 fails + zen services copy + homepage hero contrast + /about headline = ALL pre-existing (evidence: c648fc7 greps, OUT_OF_SCOPE.md). BUG-07 reproduced & classified page-local → owner.
+**Evidence:** gate6-floats-hub.png (≤2 persistent) · gate6-about-headline.png · chromium batch 39 passed incl. FINAL journey spec.

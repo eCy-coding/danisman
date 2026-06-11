@@ -63,3 +63,7 @@ src/components/layout/Footer.tsx
 src/components/common/NotFoundSearch.tsx
 src/lib/useRouteNamespaces.ts
 src/pages/NotFoundPage.tsx
+src/components/ui/StickyTableOfContents.tsx
+src/components/ui/UtilityDock.tsx
+src/components/ui/ZenToggle.tsx
+src/components/ui/LanguageToggle.tsx

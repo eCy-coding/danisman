@@ -26,7 +26,7 @@ const ROUTES: ReadonlyArray<{ path: string; label: string }> = [
   { path: '/pricing', label: 'Pricing' },
   { path: '/about', label: 'About' },
   { path: '/contact', label: 'Contact' },
-  { path: '/blog', label: 'Blog list' },
+  { path: '/perspektifler', label: 'Blog list' },
 ];
 
 // External image hosts that occasionally hang under WebKit's networkidle —
@@ -64,7 +64,7 @@ for (const route of ROUTES) {
     if (serious.length > 0) {
       // Surface serious findings in the CI log without failing the build.
       // Promote to `expect(...)` when the team is ready to flip the gate.
-       
+
       console.warn(
         `[a11y-ci] ${route.label}: ${serious.length} serious violation(s) (informational)`,
         serious.map((v) => `${v.id} — ${v.help}`),
@@ -72,7 +72,6 @@ for (const route of ROUTES) {
     }
 
     if (critical.length > 0) {
-       
       console.error(
         `[a11y-ci] ${route.label}: critical violation(s)`,
         JSON.stringify(critical, null, 2),

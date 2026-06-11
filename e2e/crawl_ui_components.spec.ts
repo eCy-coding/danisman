@@ -126,7 +126,7 @@ test.describe('Crawler: UI Components — Pane 5+12 (Phase 2)', () => {
     await page.goto(`${BASE_URL}/blog`, { waitUntil: 'domcontentloaded' });
     await page.waitForTimeout(600);
 
-    const postLinks = page.locator('a[href*="/blog/"]');
+    const postLinks = page.locator('a[href*="/perspektifler/"]');
     if ((await postLinks.count()) === 0) {
       console.warn('⚠ Blog post linki yok');
       return;
@@ -155,7 +155,7 @@ test.describe('Crawler: UI Components — Pane 5+12 (Phase 2)', () => {
     await page.goto(`${BASE_URL}/blog`, { waitUntil: 'domcontentloaded' });
     await page.waitForTimeout(600);
 
-    const postLinks = page.locator('a[href*="/blog/"]');
+    const postLinks = page.locator('a[href*="/perspektifler/"]');
     if ((await postLinks.count()) === 0) {
       console.warn('⚠ Blog post yok');
       return;
@@ -255,7 +255,7 @@ test.describe('Crawler: UI Components — Pane 5+12 (Phase 2)', () => {
     await page.goto(`${BASE_URL}/blog`, { waitUntil: 'domcontentloaded' });
     await page.waitForTimeout(600);
 
-    const postLinks = page.locator('a[href*="/blog/"]');
+    const postLinks = page.locator('a[href*="/perspektifler/"]');
     if ((await postLinks.count()) > 0) {
       await postLinks.first().click();
       await page.waitForTimeout(1_200);
@@ -296,7 +296,9 @@ test.describe('Crawler: UI Components — Pane 5+12 (Phase 2)', () => {
     await page.waitForTimeout(500);
 
     // Navigate to trigger loading bar
-    const navLink = page.locator('a[href="/blog"], a[href="/services"], a[href="/about"]').first();
+    const navLink = page
+      .locator('a[href="/perspektifler"], a[href="/services"], a[href="/about"]')
+      .first();
     if (await navLink.isVisible({ timeout: 4_000 }).catch(() => false)) {
       await navLink.click({ force: true }).catch(() => {});
       // Loading bar appears briefly — check within short window
