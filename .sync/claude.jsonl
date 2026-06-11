@@ -399,3 +399,15 @@
 {"ts": "2026-06-11T11:36:35.867836Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "npm run lint 2>&1 | tail -15"}
 {"ts": "2026-06-11T11:37:01.872825Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "sed -i '' 's| console.log(| console.warn(|' e2e/a11y-perspektifler.spec.ts && n\u2026"}
 {"ts": "2026-06-11T11:37:41.311683Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "cat >> OUT_OF_SCOPE.md << 'EOF' | 2026-06-11 | BUG-07 /about overlapping headli\u2026"}
+{"ts": "2026-06-11T11:38:10.281321Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "cat >> PROGRESS.md << 'EOF' ## Gate-6 (2026-06-11) **Done:** Float governance (\u2026"}
+{"ts": "2026-06-11T11:47:14.168310Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "echo '- [Perspektifler rebuild shipped](project_perspektifler_rebuild_shipped.m\u2026"}
+{"ts": "2026-06-11T11:58:10.359134Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "for i in $(seq 1 160); do tail -30 /private/tmp/claude-501/-Users-emrecnyngmail\u2026"}
+{"ts": "2026-06-11T11:58:26.663974Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "sleep 240; tail -6 /private/tmp/claude-501/-Users-emrecnyngmail-com-Desktop-ecy\u2026"}
+{"ts": "2026-06-11T12:02:39.708753Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "cat /private/tmp/claude-501/-Users-emrecnyngmail-com-Desktop-ecypro--claude-wor\u2026"}
+{"ts": "2026-06-11T12:14:53.011846Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "tail -40 /private/tmp/claude-501/-Users-emrecnyngmail-com-Desktop-ecypro--claud\u2026"}
+{"ts": "2026-06-11T12:16:29.780798Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "npx playwright test crawl_ui_components.spec.ts:98 crawl_ui_components.spec.ts:\u2026"}
+{"ts": "2026-06-11T12:17:20.232301Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "npx playwright test crawl_seo_deep.spec.ts:347 --project=webkit --reporter=line\u2026"}
+{"ts": "2026-06-11T12:17:39.413318Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -rn 'a\\[href\\*=\"/perspektifler/\"\\]' e2e/crawl_seo_deep.spec.ts e2e/crawl_u\u2026"}
+{"ts": "2026-06-11T12:17:51.400930Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "sed -i '' 's|page.locator(.a\\[href\\*=\"/perspektifler/\"\\].)|page.locator('\"'\"'ma\u2026"}
+{"ts": "2026-06-11T12:18:02.381264Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "sed -n '454,475p' e2e/crawl_runtime_stress.spec.ts"}
+{"ts": "2026-06-11T12:18:23.359335Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "npx playwright test crawl_ui_components.spec.ts:123 crawl_ui_components.spec.ts\u2026"}

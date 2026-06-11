@@ -126,7 +126,9 @@ test.describe('Crawler: UI Components — Pane 5+12 (Phase 2)', () => {
     await page.goto(`${BASE_URL}/blog`, { waitUntil: 'domcontentloaded' });
     await page.waitForTimeout(600);
 
-    const postLinks = page.locator('a[href*="/perspektifler/"]');
+    const postLinks = page.locator(
+      'main [data-testid="insights-article-grid"] a[href*="/perspektifler/"], main [data-testid="article-card"] a[href*="/perspektifler/"]',
+    );
     if ((await postLinks.count()) === 0) {
       console.warn('⚠ Blog post linki yok');
       return;
@@ -155,7 +157,9 @@ test.describe('Crawler: UI Components — Pane 5+12 (Phase 2)', () => {
     await page.goto(`${BASE_URL}/blog`, { waitUntil: 'domcontentloaded' });
     await page.waitForTimeout(600);
 
-    const postLinks = page.locator('a[href*="/perspektifler/"]');
+    const postLinks = page.locator(
+      'main [data-testid="insights-article-grid"] a[href*="/perspektifler/"], main [data-testid="article-card"] a[href*="/perspektifler/"]',
+    );
     if ((await postLinks.count()) === 0) {
       console.warn('⚠ Blog post yok');
       return;
@@ -255,7 +259,9 @@ test.describe('Crawler: UI Components — Pane 5+12 (Phase 2)', () => {
     await page.goto(`${BASE_URL}/blog`, { waitUntil: 'domcontentloaded' });
     await page.waitForTimeout(600);
 
-    const postLinks = page.locator('a[href*="/perspektifler/"]');
+    const postLinks = page.locator(
+      'main [data-testid="insights-article-grid"] a[href*="/perspektifler/"], main [data-testid="article-card"] a[href*="/perspektifler/"]',
+    );
     if ((await postLinks.count()) > 0) {
       await postLinks.first().click();
       await page.waitForTimeout(1_200);

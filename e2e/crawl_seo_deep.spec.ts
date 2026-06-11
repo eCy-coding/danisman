@@ -350,7 +350,11 @@ test.describe('Crawler: SEO Deep — Pane 4+13 (Phase 4)', () => {
     await page.goto(`${BASE_URL}/blog`, { waitUntil: 'domcontentloaded' });
     await page.waitForTimeout(600);
 
-    const postLink = page.locator('a[href*="/perspektifler/"]').first();
+    const postLink = page
+      .locator(
+        'main [data-testid="insights-article-grid"] a[href*="/perspektifler/"], main [data-testid="article-card"] a[href*="/perspektifler/"]',
+      )
+      .first();
     if ((await postLink.count()) === 0) {
       console.warn('⚠ Blog post linki yok');
       return;
