@@ -67,20 +67,24 @@ export const NAV_ITEMS = {
   },
   insights: {
     id: 'insights',
-    href: '#insights',
+    href: '/perspektifler',
     label: { tr: 'Perspektifler', en: 'Insights' },
     hasMegaMenu: true,
     children: [
-      { id: 'blog', label: { tr: 'Blog', en: 'Blog' }, href: '/blog' },
+      {
+        id: 'hub',
+        label: { tr: 'Tüm İçgörüler', en: 'All Insights' },
+        href: '/perspektifler',
+      },
       {
         id: 'case-studies',
         label: { tr: 'Vaka Analizleri', en: 'Case Studies' },
         href: '/case-studies',
       },
       {
-        id: 'calismalar',
-        label: { tr: 'Çalışmalar', en: 'Works' },
-        href: '/calismalar',
+        id: 'topics',
+        label: { tr: 'Tüm Konular', en: 'All Topics' },
+        href: '/perspektifler/konular',
       },
     ],
   },
@@ -226,93 +230,11 @@ export const MEGA_MENUS = {
     },
   },
   insights: {
-    sections: [
-      {
-        id: 'industries',
-        title: { tr: 'Sektörler', en: 'Industries' },
-        items: [
-          {
-            id: 'finance',
-            label: { tr: 'Finans & Bankacılık', en: 'Financial Services' },
-            description: {
-              tr: 'Dijital bankacılık ve regülasyon uyumu',
-              en: 'Digital banking and regulatory compliance',
-            },
-            href: '/case-studies',
-            iconName: 'DollarSign',
-          },
-          {
-            id: 'technology',
-            label: { tr: 'Teknoloji & SaaS', en: 'Technology & SaaS' },
-            description: { tr: 'Ürün stratejisi ve ölçekleme', en: 'Product strategy and scaling' },
-            href: '/case-studies',
-            iconName: 'Cpu',
-          },
-          {
-            id: 'manufacturing',
-            label: { tr: 'Üretim & Sanayi', en: 'Manufacturing' },
-            description: {
-              tr: 'Endüstri 4.0 ve akıllı fabrika dönüşümü',
-              en: 'Industry 4.0 and smart factory transformation',
-            },
-            href: '/case-studies',
-            iconName: 'Factory',
-          },
-        ],
-      },
-      {
-        id: 'research',
-        title: { tr: 'Araştırma & İçgörü', en: 'Research & Insights' },
-        items: [
-          {
-            id: 'blog',
-            label: { tr: 'Blog & Makaleler', en: 'Blog & Articles' },
-            description: {
-              tr: 'Uzman görüşleri ve sektör analizleri',
-              en: 'Expert opinions and industry analyses',
-            },
-            href: '/blog',
-            iconName: 'BookOpen',
-          },
-          {
-            id: 'case-studies',
-            label: { tr: 'Vaka Analizleri', en: 'Case Studies' },
-            description: {
-              tr: 'Gerçek dönüşüm hikayeleri ve ölçülebilir sonuçlar',
-              en: 'Real transformation stories and measurable results',
-            },
-            href: '/case-studies',
-            iconName: 'FileText',
-          },
-        ],
-      },
-      {
-        id: 'about-section',
-        title: { tr: 'Hakkımızda', en: 'About' },
-        items: [
-          {
-            id: 'methodology',
-            label: { tr: 'Metodolojimiz', en: 'Our Methodology' },
-            description: {
-              tr: 'Kanıtlanmış çerçevemiz ve uygulama prensiplerimiz',
-              en: 'Our proven framework and delivery principles',
-            },
-            href: '/methodology',
-            iconName: 'Compass',
-          },
-          {
-            id: 'about',
-            label: { tr: 'Firmamız', en: 'Our Firm' },
-            description: {
-              tr: 'Vizyonumuz, ekibimiz ve değerlerimiz',
-              en: 'Our vision, team and values',
-            },
-            href: '/about',
-            iconName: 'Building2',
-          },
-        ],
-      },
-    ],
+    // BUG-03/04: the panel is insights-only now. Columns (Kategoriler /
+    // Formatlar / Öne Çıkanlar) are computed live from the content index in
+    // src/components/layout/insightsMenuData.ts — only the promo card and the
+    // panel gradient remain as static copy here.
+    sections: [],
     featured: {
       tag: { tr: 'Yeni Rapor', en: 'New Report' },
       title: { tr: '2026 AI Dönüşüm Raporu', en: '2026 AI Transformation Report' },
@@ -320,7 +242,7 @@ export const MEGA_MENUS = {
         tr: 'Fortune 500 şirketlerinde AI benimseme trendleri ve başarı faktörleri.',
         en: 'AI adoption trends and success factors across Fortune 500 companies.',
       },
-      href: '/blog',
+      href: '/perspektifler',
       cta: { tr: 'Raporu İncele', en: 'Read Report' },
       gradient: 'from-secondary/20 to-primary/10',
     },
