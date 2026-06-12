@@ -9,6 +9,7 @@ import { ServiceCard } from '../components/services/ServiceCard';
 import { ServiceFilter } from '../components/services/ServiceFilter';
 import { DEPARTMENTS, SERVICES } from '@/data/services';
 import { useInterestTracker } from '@/hooks/useInterestTracker';
+import { trackEvent } from '@/lib/analytics';
 import { usePersonalizationStore } from '@/lib/stores/personalizationStore';
 import { useTranslation } from 'react-i18next';
 import { PageWrapper } from '../components/layout/PageWrapper';
@@ -89,6 +90,12 @@ export const ServicesPage: React.FC = () => {
     return () => window.clearTimeout(timer);
   }, [searchInput]);
 
+  const handleSelectCategory = (id: string) => {
+    setSelectedCategory(id);
+    // KVKK-safe: department id only, consent gate lives inside trackEvent.
+    trackEvent('services', 'service_filter', id);
+  };
+
   // Personalization — stable tag reference + sliced subscription to avoid
   // refiring trackVisit on every store mutation (see INTEREST_TAGS comment).
   useInterestTracker(INTEREST_TAGS, 'services-hub');
@@ -125,6 +132,17 @@ export const ServicesPage: React.FC = () => {
 
     return filtered;
   }, [selectedCategory, searchQuery, scores]);
+
+  // KVKK-safe search telemetry: query LENGTH + hit count only — never the raw
+  // text (it may contain personal data). Fires once per settled (debounced)
+  // query, hence the deliberately narrow dependency list.
+  useEffect(() => {
+    const len = searchQuery.trim().length;
+    if (len >= 3) {
+      trackEvent('services', 'service_search', `len:${len}|hits:${filteredServices.length}`);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchQuery]);
 
   // Fixed cluster display order for grouped view
   const CLUSTER_ORDER = DEPARTMENTS.filter((d) => d.id !== 'all');
@@ -279,7 +297,7 @@ export const ServicesPage: React.FC = () => {
             <ServiceFilter
               departments={DEPARTMENTS}
               selectedCategory={selectedCategory}
-              onSelectCategory={setSelectedCategory}
+              onSelectCategory={handleSelectCategory}
             />
 
             {/* Result count — announced to screen readers on every filter/search change */}

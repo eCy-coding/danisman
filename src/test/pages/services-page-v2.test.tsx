@@ -18,10 +18,15 @@ vi.mock('@/components/features/interactive/GrowthCalculator', () => ({
 vi.mock('@/components/features/interactive/BookingWizard', () => ({
   BookingWizard: () => null,
 }));
+vi.mock('@/lib/analytics', async (importOriginal) => {
+  const mod = await importOriginal<typeof import('@/lib/analytics')>();
+  return { ...mod, trackEvent: vi.fn() };
+});
 
 import ServicesPage from '@/pages/ServicesPage';
 import { ServicesClusterSection } from '@/components/sections/ServicesClusterSection';
 import { SERVICE_DEPARTMENTS, isCanonicalServiceSlug } from '@/data/service-taxonomy';
+import { trackEvent } from '@/lib/analytics';
 
 const renderPage = () =>
   render(
@@ -102,6 +107,37 @@ describe('/services index v2', () => {
     const cards = Array.from(document.querySelectorAll('[data-testid="service-card"]'));
     expect(cards).toHaveLength(4);
     expect(cards.every((c) => c.getAttribute('data-category') === 'insan')).toBe(true);
+  });
+});
+
+describe('consent-gated analytics events (KVKK: no raw query, no PII)', () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+    vi.mocked(trackEvent).mockClear();
+  });
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it('chip select fires service_filter with the department id', () => {
+    renderPage();
+    fireEvent.click(screen.getByTestId('services-filter-risk'));
+    expect(trackEvent).toHaveBeenCalledWith('services', 'service_filter', 'risk');
+  });
+
+  it('debounced search fires service_search with query LENGTH + hit count (never the raw text)', () => {
+    renderPage();
+    fireEvent.change(screen.getByTestId('services-search-input'), {
+      target: { value: 'Bordro' },
+    });
+    act(() => {
+      vi.advanceTimersByTime(250);
+    });
+    expect(trackEvent).toHaveBeenCalledWith('services', 'service_search', 'len:6|hits:1');
+    const rawLeak = vi
+      .mocked(trackEvent)
+      .mock.calls.some((c) => c.some((arg) => String(arg).includes('Bordro')));
+    expect(rawLeak).toBe(false);
   });
 });
 

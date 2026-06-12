@@ -41,6 +41,7 @@ import { ServiceIllustration } from './ServiceIllustration';
 import { LifecycleNav } from './LifecycleNav';
 import { DetailSectionNav, type DetailSection } from './DetailSectionNav';
 import { getCtaVariants } from '@/data/cta-variants';
+import { trackCTA } from '@/lib/analytics';
 import { useInView, useCountUp } from '../../lib/animations';
 import { useServiceOverride } from '../../hooks/useServiceOverride';
 import { StrategicMaturityLadder } from './widgets/StrategicMaturityLadder';
@@ -821,6 +822,7 @@ export const ServiceDetailLayout: React.FC<ServiceDetailLayoutProps> = ({
           <div className="flex flex-wrap gap-4 justify-center">
             <Link
               to="/contact"
+              onClick={() => trackCTA(ctaVariant.buttonLabel, 'service-detail-footer')}
               className="inline-flex items-center gap-2 px-8 py-4 min-h-[52px] rounded-xl bg-secondary text-neutral font-semibold hover:bg-secondary/90 transition-all hover:translate-x-0.5 shadow-lg shadow-secondary/20"
             >
               {ctaVariant.buttonLabel} <ArrowRight size={18} />

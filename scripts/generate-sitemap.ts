@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { CANONICAL_SERVICE_SLUGS } from '../src/data/service-taxonomy';
 
 // Define static routes
 // NOTE: P15 — privacy/data-rights ve status sitemap'in tek noktasında declare edilir.
@@ -129,29 +130,9 @@ async function generateSitemap() {
     ]),
   );
 
-  const serviceSlugs = [
-    'strategic-transformation',
-    'mergers-acquisitions',
-    'family-business',
-    'operational-excellence',
-    'neuromarketing',
-    'hr-transformation',
-    'crisis-management',
-    'ai-analytics',
-    'digital-strategy',
-    'data-governance',
-    'esg-strategy',
-    'investment-incentives',
-    'macro-risk',
-    'competition-economics',
-    'industrial-relations',
-    'payroll-audit',
-    'employer-branding',
-    'market-entry',
-    'global-intelligence',
-    'smart-cities',
-    'government-relations',
-  ];
+  // SVC P8 (ADR-services-taxonomy-v2): derived from the taxonomy registry —
+  // the old hardcoded 21-slug list shipped 17 URLs that hard-404'd in prod.
+  const serviceSlugs = CANONICAL_SERVICE_SLUGS;
 
   // P39-T10: Multilingual sitemap with hreflang xhtml:link alternates
   const xmlHeader = `<?xml version="1.0" encoding="UTF-8"?>

@@ -56,6 +56,13 @@ Spec: `~/Desktop/istemek.md` (istek-services.md) · Plan: approved 2026-06-12
 **Evidence:** unit 48/48 (4 services suites) · e2e services-menu extended 6/6 chromium (lifecycle 1/5 + next href + #methodology anchor inViewport + pillar no-nav) · typecheck 0.
 **Deliberate skip:** layout-wide below-fold React.lazy split — detail pages are content-light vs index; budget = no regression (P9 measures).
 
+## SVC Gate-8 (2026-06-12) — i18n/SEO/analytics/404
+**Sitemap (D6):** `generate-sitemap.ts` hardcoded 21-slug list → `CANONICAL_SERVICE_SLUGS` registry import. Regenerated: **39 service URLs** (170 loc total), company-valuation + all adopted orphans present, **zero 404-producing URLs** (each canonical = resolver-renderable by construction).
+**301 map:** ∅ — v2 renamed/retired nothing (ADR); /hizmetler SPA redirect untouched.
+**Parity script:** NEW `scripts/services-i18n-parity.mjs` → **PARITY OK exit 0** (services.json tr↔en 84 keys both directions · 7 departments + 9 menu items bilingual · NotFoundSearch service suggestions all canonical · sitemap registry-derivation guard). `list.*` EN content keys exist but are unwired (deliberate TR-first content strategy — noted, not scope).
+**Analytics (consent-gated, KVKK-safe):** `menu_open` (Navbar, once per panel open) · `service_filter` (dept id) · `service_search` (**query LENGTH + hit count — raw text never sent**) · `service_cta` via trackCTA (variant label + location). Unit tests assert no-raw-query leak.
+**Evidence:** services-page-v2 9/9 (2 new event tests RED→GREEN) · parity exit 0 · sitemap diff (+18 service URLs, 0 removals).
+
 ---
 
 # PERSPEKTIFLER VERTICAL (closed 2026-06-12)

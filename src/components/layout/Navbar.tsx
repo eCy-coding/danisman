@@ -99,6 +99,13 @@ export const Navbar: React.FC = () => {
     setIsOpen(false);
   }, [location.pathname]);
 
+  // SVC P8 — consent-gated menu telemetry (fires once per panel open).
+  useEffect(() => {
+    if (activeDropdown) {
+      trackEvent('navigation', 'menu_open', activeDropdown);
+    }
+  }, [activeDropdown]);
+
   // D-6 float governance: one dismissible "Yeni" badge on the Perspektifler
   // nav item replaces the SocialProofToast on insights surfaces. Fresh content
   // = newest post younger than 14 days; visiting the hub dismisses it.
