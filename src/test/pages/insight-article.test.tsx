@@ -40,6 +40,16 @@ vi.mock('@/lib/insights-article-mock', async (importOriginal) => {
   };
 });
 
+// useInsightArticle hits the real backend first (fetch('/api/insights/posts/:slug')).
+// jsdom ships no fetch, so Node's undici takes over and rejects relative URLs with
+// ERR_INVALID_URL, which the hook's catch logs as stderr noise. A 404 stub routes the
+// hook through its designed real→null→mock fallback silently.
+beforeEach(() => {
+  globalThis.fetch = vi.fn(() =>
+    Promise.resolve({ ok: false, status: 404, json: () => Promise.resolve({}) } as Response),
+  );
+});
+
 function makeQueryClient() {
   return new QueryClient({ defaultOptions: { queries: { retry: false } } });
 }
