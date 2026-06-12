@@ -293,11 +293,12 @@ export const MegaMenu: React.FC<MegaMenuProps> = ({
 
         {/* Bottom bar */}
         <div className="px-6 py-3 border-t border-white/5 flex items-center justify-between bg-white/1">
-          <p className="text-xs text-slate-600">{bottomBar.label}</p>
+          {/* slate-400: slate-600 measured 2.9:1 on the opaque panel (webkit axe) */}
+          <p className="text-xs text-slate-400">{bottomBar.label}</p>
           <a
             href={bottomBar.href}
             onClick={onClose}
-            className="text-xs font-bold text-slate-500 hover:text-white transition-colors flex items-center gap-1 group"
+            className="text-xs font-bold text-slate-400 hover:text-white transition-colors flex items-center gap-1 group"
           >
             {bottomBar.cta}
             <ArrowRight size={12} className="group-hover:translate-x-0.5 transition-transform" />

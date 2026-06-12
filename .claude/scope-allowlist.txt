@@ -51,3 +51,6 @@ playwright.config.ts
 docs/adr/**
 docs/reports/**
 docs/ECYPRO_SERVICES_CATEGORIZATION.md
+# SVC Gate-9 fence expansion (evidence: 35-servis katalog büyümesi main chunk +6.37KB brotli;
+# PR #146 stale-budget-realign emsali; PROGRESS.md SVC Gate-9 kaydı)
+.size-limit.json

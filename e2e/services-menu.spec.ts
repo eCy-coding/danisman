@@ -36,12 +36,14 @@ test.describe('SVC GATE-5 services mega menu', () => {
   });
 
   test('menu items navigate to real detail pages — never /404', async ({ page }) => {
-    for (const { label, path, h1 } of MENU_CASES) {
+    // Locale-agnostic: firefox boots EN, so items are clicked by href —
+    // never by TR label text.
+    for (const { path, h1 } of MENU_CASES) {
       await page.goto('/');
       await page.getByTestId('navbar-link-services').focus();
       const panel = page.getByTestId('mega-menu-services');
       await expect(panel).toBeVisible();
-      await panel.getByText(label, { exact: true }).click();
+      await panel.locator(`a[href="${path}"]`).click();
 
       await expect(page).toHaveURL(new RegExp(`${path}$`));
       await expect(page.locator('h1').first()).toHaveText(h1);

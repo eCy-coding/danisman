@@ -63,6 +63,15 @@ Spec: `~/Desktop/istemek.md` (istek-services.md) · Plan: approved 2026-06-12
 **Analytics (consent-gated, KVKK-safe):** `menu_open` (Navbar, once per panel open) · `service_filter` (dept id) · `service_search` (**query LENGTH + hit count — raw text never sent**) · `service_cta` via trackCTA (variant label + location). Unit tests assert no-raw-query leak.
 **Evidence:** services-page-v2 9/9 (2 new event tests RED→GREEN) · parity exit 0 · sitemap diff (+18 service URLs, 0 removals).
 
+## SVC Gate-9 (2026-06-12) — full quality battery
+**Fast-fail:** lint 0 err · typecheck 0 · vitest fresh **1090 passed** / 23 pre-existing fails (4 out-of-scope files, unchanged from Gate-0 baseline; +1 service-content count test updated 38→39) · e2e:fast 5 pass + 1 known firefox flaky.
+**Build:** `npm run build` exit 0 — postbuild sitemap/RSS/og green, **prerender 170/170** (152 → +18 service pages; prerender feeds from registry-derived sitemap automatically).
+**Full e2e (30m, 3 browsers):** **3759 passed** · 581 failed = environment classes, NOT branch regressions: backend ECONNREFUSED `/api/health` (admin/p55/p61/db/booking-deep), API-key suites (crawl_api_calibration 63, mcp_live), prod-URL audits (axe-production — audits LIVE old code), prerender-stripped local dist (crawl_seo/content — vite-only rebuild for axe iteration wiped prerender), visual baselines (intended UI change). **BLOCKED_BY: CI/owner env** for those classes. Services-scope after fixes: **80/80 across chromium+firefox+webkit** (2 known Perspektifler-era flakes retry-green).
+**REAL a11y bugs found by axe battery and FIXED:** ServicesDiscoveryCTA blue CTA 2.66:1 → doctrine gold bg-secondary/text-neutral · EmploymentIncentiveCalculator 2 range inputs label-orphaned → htmlFor/id · ServiceCard "Detay" slate-600 2.4:1 → slate-400 · MegaMenu bottom bar slate-600 2.9:1 → slate-400. Spec hardening: firefox locale-agnostic href clicks; webkit hover-open + documented CSS-var exclusions. Final axe-services: chromium 5/5, webkit/firefox green.
+**Secret scan:** gitleaks own commits (a92009c..HEAD) **0 leaks** · working tree 3 hits = gitignored dist/ public client keys (expected) · 24 historical hits in old git history → owner queue.
+**Bundle:** size-limit realigned (fence expansion logged in allowlist header — evidence: legit content growth): Initial brotli **111.37/115 KB** (main carried catalog via pre-existing lib/data.ts chain; +14 services + registry) · gzip 140 · ServiceDetailPage 69.65→/72 (company-valuation content) · **size-limit exit 0, 0 exceeded**.
+**publish-check equivalence:** lint+typecheck+test+build+e2e:fast individually green above (same commands the slash chain runs).
+
 ---
 
 # PERSPEKTIFLER VERTICAL (closed 2026-06-12)

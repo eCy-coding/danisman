@@ -41,7 +41,7 @@ export const ServicesDiscoveryCTA: React.FC<ServicesDiscoveryCTAProps> = ({ clas
           <Link
             to="/contact"
             data-testid="discovery-cta-primary"
-            className="group inline-flex items-center gap-3 px-8 py-4 bg-blue-700 hover:bg-blue-800 text-white font-bold uppercase tracking-widest rounded-xl shadow-[0_0_40px_rgba(37,99,235,0.3)] hover:shadow-[0_0_60px_rgba(37,99,235,0.5)] transition-all duration-300"
+            className="group inline-flex items-center gap-3 px-8 py-4 bg-secondary hover:bg-secondary/90 text-neutral font-bold uppercase tracking-widest rounded-xl shadow-[0_0_40px_rgba(212,175,55,0.25)] hover:shadow-[0_0_60px_rgba(212,175,55,0.4)] transition-all duration-300"
           >
             <Calendar size={18} aria-hidden="true" />
             Discovery Call — Keşif Görüşmesi

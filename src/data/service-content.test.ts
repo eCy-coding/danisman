@@ -94,7 +94,7 @@ describe('service-content — boutique tone compliance', () => {
     for (const slug of [...originalSlugs, ...catalogSlugs]) {
       expect(SERVICE_CONTENT[slug], `${slug}: missing from SERVICE_CONTENT`).toBeDefined();
     }
-    // 21 original + 17 new = 38 total entries
-    expect(Object.keys(SERVICE_CONTENT)).toHaveLength(38);
+    // taxonomy v2: 38 historical + company-valuation (ADR-services-taxonomy-v2)
+    expect(Object.keys(SERVICE_CONTENT)).toHaveLength(39);
   });
 });
