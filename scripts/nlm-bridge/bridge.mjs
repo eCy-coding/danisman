@@ -27,6 +27,9 @@
  */
 
 import { spawn } from 'node:child_process';
+import { readFile, unlink } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 import process from 'node:process';
 
 const API = (process.env.ECYPRO_API_URL ?? 'http://localhost:3001/api/v1').replace(/\/$/, '');
@@ -34,6 +37,8 @@ const KEY = process.env.RESEARCH_BRIDGE_KEY;
 const MCP_CMD = process.env.NLM_MCP_CMD ?? 'notebooklm-mcp';
 const FIXED_NOTEBOOK = process.env.NLM_NOTEBOOK_ID || null;
 const POLL_MS = Number(process.env.BRIDGE_POLL_MS ?? 15000);
+// Wait between report grace re-polls (fixture runs shrink this to ~200ms).
+const GRACE_MS = Number(process.env.RESEARCH_GRACE_MS ?? 15000);
 const ONCE = process.env.BRIDGE_ONCE === '1';
 const NOTEBOOK_TITLE = 'eCyPro Content Studio';
 
@@ -211,6 +216,96 @@ function cleanSources(items) {
     .map((s) => ({ title: String(s.title).slice(0, 300), ...(s.url ? { url: s.url } : {}) }));
 }
 
+/**
+ * Report guarantee, leg 2: when research_status never ships report text,
+ * synthesise one from the imported sources via Studio. Pattern proven in the
+ * NLM workflow factory (studio_create → studio_status poll →
+ * download_artifact to a file). Returns the report text or null — caller
+ * keeps the honest template as the last resort. RUNBOOK gotcha: report
+ * artifacts IGNORE custom_prompt, so the default synthesis is all we get.
+ */
+async function studioReport(mcp, notebookId, language, log, onTick) {
+  // The MCP wrapper returns error payloads as plain objects (it does not
+  // throw) — research_start checks `status` by hand for the same reason. The
+  // first proof run lost its report because a quota-window `status:'error'`
+  // reply slipped through unchecked. Validate, log, retry once.
+  const createOnce = () =>
+    mcp
+      .tool(
+        'studio_create',
+        { notebook_id: notebookId, artifact_type: 'report', confirm: true, language },
+        120_000,
+      )
+      .catch((err) => ({ status: 'error', error: String(err.message).slice(0, 200) }));
+  let created = await createOnce();
+  if (created?.status !== 'success' || !created?.artifact_id) {
+    log(`studio_create attempt 1 rejected: ${JSON.stringify(created).slice(0, 200)} — retrying`);
+    await sleep(30_000);
+    created = await createOnce();
+  }
+  if (created?.status !== 'success' || !created?.artifact_id) {
+    log(`studio_create failed: ${JSON.stringify(created).slice(0, 200)}`);
+    return null;
+  }
+
+  const stateOf = (a) => String(a?.status ?? a?.state ?? '').toLowerCase();
+  const idOf = (a) => a?.artifact_id ?? a?.id ?? null;
+
+  // Poll the EXACT artifact we created (other report artifacts may pre-exist
+  // in the shared notebook). Report synthesis can take >10 minutes — the
+  // factory RUNBOOK polls up to 20; 12 keeps the job under the UI's patience.
+  const artifactId = created.artifact_id;
+  const startedAt = Date.now();
+  const deadline = startedAt + 12 * 60_000;
+  let ready = false;
+  while (Date.now() < deadline) {
+    const st = await mcp
+      .tool('studio_status', { notebook_id: notebookId }, 60_000)
+      .catch(() => null);
+    const mine = (st?.artifacts ?? st?.items ?? []).find((a) => idOf(a) === artifactId);
+    const state = mine ? stateOf(mine) : 'missing';
+    if (/complet|ready|success|done|finish/.test(state)) {
+      ready = true;
+      break;
+    }
+    if (/fail|error/.test(state)) {
+      log(`studio report failed server-side: ${state}`);
+      return null;
+    }
+    if (onTick) {
+      const mins = Math.round((Date.now() - startedAt) / 60_000);
+      await onTick(`Studio raporu sentezleniyor (${state}, ${mins} dk)`).catch(() => {});
+    }
+    await sleep(20_000);
+  }
+  if (!ready) {
+    log('studio report not completed within budget');
+    return null;
+  }
+
+  const outPath = join(tmpdir(), `bridge-report-${notebookId.slice(0, 8)}-${Date.now()}.md`);
+  const dl = await mcp
+    .tool(
+      'download_artifact',
+      {
+        notebook_id: notebookId,
+        artifact_type: 'report',
+        artifact_id: artifactId,
+        output_path: outPath,
+      },
+      120_000,
+    )
+    .catch((err) => ({ status: 'error', error: String(err.message).slice(0, 200) }));
+  if (dl?.status && dl.status !== 'success') {
+    log(`download_artifact failed: ${JSON.stringify(dl).slice(0, 200)}`);
+    return null;
+  }
+  const text = await readFile(outPath, 'utf8').catch(() => null);
+  await unlink(outPath).catch(() => {});
+  const trimmed = (text ?? '').trim();
+  return trimmed.length >= 100 ? trimmed : null;
+}
+
 /** Build the draft payload purely from NotebookLM outputs. */
 function buildDraft(job, report, reportTitle, sources) {
   const titleTr = (reportTitle || job.topic).trim().slice(0, 200);
@@ -273,13 +368,23 @@ async function processJob(mcp, job) {
   const budgetMs = effectiveMode === 'deep' ? 15 * 60_000 : 6 * 60_000;
   const deadline = Date.now() + budgetMs;
   let status = null;
+  // "completed" can land with sources but the report text trailing behind
+  // (observed live: fast mode, 38s, 10 sources, empty report). Grace re-polls
+  // give the report a chance to materialise before we fall back to Studio.
+  let reportGraceLeft = 2;
   while (Date.now() < deadline) {
     status = await mcp.tool(
       'research_status',
       { notebook_id: notebookId, max_wait: 60, poll_interval: 20, compact: false },
       90_000,
     );
-    if (status?.status === 'completed' || status?.status === 'error') break;
+    if (status?.status === 'error') break;
+    if (status?.status === 'completed') {
+      if ((status.report || '').trim().length >= 100 || reportGraceLeft-- <= 0) break;
+      await stage('RESEARCHING', 'Kaynaklar toplandı — rapor metni bekleniyor');
+      await sleep(GRACE_MS);
+      continue;
+    }
     await stage('RESEARCHING', `Araştırma sürüyor (${status?.status ?? '...'})`);
   }
   if (status?.status !== 'completed') {
@@ -308,11 +413,28 @@ async function processJob(mcp, job) {
   const nb = await mcp.tool('notebook_get', { notebook_id: notebookId });
   const count = sourceCountOf(nb);
 
-  await stage('DRAFTING', `Draft hazırlanıyor (notebook ${count ?? '?'} kaynak; ${importNote})`, {
-    sourceCount: count ?? undefined,
-  });
+  let report = (status.report || '').trim();
+  let reportVia = report.length >= 100 ? 'status' : 'yok';
+  if (report.length < 100) {
+    await stage('DRAFTING', 'Rapor metni status\'ta yok — Studio report sentezleniyor');
+    // onTick refreshes the stage row every poll turn: the operator sees live
+    // progress AND the job's updatedAt keeps the bridge-alive badge green
+    // through a synthesis that can outlast the 120s liveness window.
+    const synthesised = await studioReport(mcp, notebookId, job.lang || 'tr', log, (detail) =>
+      stage('DRAFTING', detail),
+    );
+    if (synthesised) {
+      report = synthesised;
+      reportVia = 'studio-fallback';
+    }
+  }
 
-  const report = status.report || '';
+  await stage(
+    'DRAFTING',
+    `Draft hazırlanıyor (notebook ${count ?? '?'} kaynak; ${importNote}; rapor: ${reportVia})`,
+    { sourceCount: count ?? undefined },
+  );
+
   const reportTitle =
     (report.split('\n').find((l) => l.startsWith('#')) || '').replace(/^#+\s*/, '') || null;
   const sources = cleanSources(status.sources);
@@ -349,6 +471,13 @@ async function main() {
   await mcp.init();
   const info = await mcp.tool('server_info', {});
   log(`notebooklm-mcp v${info?.version ?? '?'} auth=${info?.auth_status ?? '?'}`);
+  // Stale in-process auth rejects studio_create even while the on-disk token
+  // store is valid (`nlm login --check` green). Reloading from disk at boot
+  // costs one call and prevents the silent quota-looking studio failures.
+  if (info?.auth_status && info.auth_status !== 'configured') {
+    const refreshed = await mcp.tool('refresh_auth', {}).catch(() => null);
+    log(`refresh_auth → ${refreshed?.status ?? 'failed'} (${refreshed?.message ?? 'no detail'})`);
+  }
   if (info?.auth_status === 'not_configured') {
     throw new Error('NotebookLM auth not configured — run `nlm login` first');
   }

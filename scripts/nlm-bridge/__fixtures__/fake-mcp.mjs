@@ -4,7 +4,22 @@
  * end-to-end without real NotebookLM. Used by the bridge self-test
  * (scripts/nlm-bridge/selftest.mjs) and CI. NOT a runtime dependency.
  */
+import { writeFileSync } from 'node:fs';
 import process from 'node:process';
+
+// FAKE_EMPTY_REPORT=1 → research_status completes WITHOUT report text, which
+// drives the bridge through grace re-polls into the Studio report fallback
+// (studio_create → studio_status → download_artifact writes a real file).
+const EMPTY_REPORT = process.env.FAKE_EMPTY_REPORT === '1';
+
+const STUDIO_REPORT_TEXT = [
+  '# Fixture Studio Raporu',
+  '',
+  'Bu rapor, research_status rapor metni üretmediğinde köprünün Studio',
+  'fallback bacağıyla gerçek içerik sentezlediğini kanıtlamak için fixture',
+  'tarafından üretilmiştir. Yüz karakterden uzundur ve Zod şemasını geçer;',
+  'köprü bu gövdeyi taslak makale olarak admin paneline teslim eder.',
+].join('\n');
 
 let buf = '';
 process.stdin.on('data', (c) => {
@@ -58,14 +73,32 @@ function handle(line) {
         status: 'completed',
         task_id: 'status-task-BBB',
         sources_found: 9,
-        report:
-          '# Fixture Araştırma Raporu\n\nBu fixture raporu, eCyPro araştırma köprüsünün uçtan uca çalıştığını kanıtlamak için üretilmiştir. Köprü bu metni alıp admin paneline taslak makale olarak teslim eder; gövde en az yüz karakter uzunluğundadır ve Zod şemasını geçer.',
+        report: EMPTY_REPORT
+          ? ''
+          : '# Fixture Araştırma Raporu\n\nBu fixture raporu, eCyPro araştırma köprüsünün uçtan uca çalıştığını kanıtlamak için üretilmiştir. Köprü bu metni alıp admin paneline taslak makale olarak teslim eder; gövde en az yüz karakter uzunluğundadır ve Zod şemasını geçer.',
         sources: [
           { title: 'Fixture kaynak 1 — strateji belgesi', url: 'https://example.com/1' },
           { title: 'Request Rejected', url: 'https://example.com/junk' },
           { title: 'Fixture kaynak 2 — TÜİK verisi' },
         ],
       });
+    case 'studio_create':
+      return ok(id, { status: 'success', artifact_id: 'fake-art-1' });
+    case 'studio_status':
+      return ok(id, {
+        artifacts: [
+          { id: 'fake-art-1', type: 'report', status: 'completed', title: 'Fixture Studio Raporu' },
+        ],
+      });
+    case 'download_artifact':
+      // The real tool writes the artifact to output_path; the bridge then
+      // reads that file. Mirror the contract.
+      try {
+        writeFileSync(String(a.output_path), STUDIO_REPORT_TEXT, 'utf8');
+        return ok(id, { status: 'success', path: a.output_path });
+      } catch (err) {
+        return ok(id, { status: 'error', error: String(err) });
+      }
     case 'research_import':
       // Simulate the proven false-negative: error, but the import "landed".
       send({ jsonrpc: '2.0', id, result: { isError: true, content: [{ type: 'text', text: '{"error":"API error (code 9): unknown"}' }] } });

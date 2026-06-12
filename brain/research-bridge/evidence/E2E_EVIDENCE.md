@@ -87,3 +87,58 @@ Canlıda yakalanan ve AYNI oturumda kök nedenden düzeltilen 5 kusur:
 
 Single-writer doğrulaması: köprü DONE sonrası posta bir daha dokunmadı;
 admin düzenlemesi tek yazar olarak DB'ye işlendi.
+
+## 7. Kusursuzluk Koşusu — başlangıç→YAYIN tam zincir (2026-06-12, v3)
+
+Talep: "tüm adımların kusursuz olduğunu ispatla; yeteri kadar kaynakta yeteri
+kadar bilgi". Önceki koşunun iki eksiği kapatıldı: (a) rapor-garantisi
+(fast modda boş gelen rapor → Studio sentez fallback), (b) bitiş artık
+DRAFT değil **PUBLISHED + anonim public API servis**.
+
+### Zincir (job `cmqaw…v3`, tek koşu, saatler UTC)
+12:45:38 claim (deep) → 12:45:39 deep→fast fallback (code 8, 3/3 tutarlı)
+→ grace re-poll ("Kaynaklar toplandı — rapor metni bekleniyor") → IMPORTING
+(10 kaynak; notebook toplam 50) → DRAFTING ("Studio report sentezleniyor"
+→ onTick: "(in_progress, 0 dk)") → 12:47:27 **DONE — 1 dk 49 sn**.
+Draft: `len(bodyTrMdx)=8160`, şablon-string YOK (`has_template=f`),
+reportTitle = "Aile İşletmelerinde Dönüşüm, Yapay Zekâ ve Gelecek
+Stratejileri: Brifing Belgesi" (NLM'in kendi sentez başlığı), `## Kaynaklar`
+listesi VAR. Editörde başlık düzenlendi → "Taslak Kaydet" → PATCH **200** +
+"Kaydedildi" + DB `updatedAt 12:51:46`. Yayın zinciri UI'dan:
+IN_REVIEW → COPY_EDIT → SEO_REVIEW → SCHEDULED → **PUBLISHED** (her adım
+"Durum güncellendi"; publishedAt 12:54:44 otomatik). Public kanıt çifti:
+yayın ÖNCESİ anonim `GET /api/v1/insights/posts/<slug>` → **404**; yayın
+SONRASI → **200** (status PUBLISHED, author Emre Can Yalçın, Kaynaklar
+TRUE); liste ucu `GET /insights/posts` count:1 ilk slug bizimki.
+Kareler: `proof-run-1..10*.png`.
+
+### Bu koşuda yakalanan + kapatılan kusurlar (kök neden)
+1. **studio_create sessiz error** — MCP wrapper hata payload'ını throw
+   etmeden döndürür; helper `status` kontrol etmiyordu → kota penceresinde
+   sessiz boş poll + şablon draft. Fix: yanıt doğrulama + 30 sn retry +
+   tam-metin log (`bridge.mjs`). Hata artık log'da okunur:
+   "studio_create attempt 1 rejected: …auth is not valid (reason: expired)".
+2. **MCP binary/auth nesil uyuşmazlığı** — `~/.local/bin/notebooklm-mcp`
+   0.6.15'e işaret ediyordu; auth deposu eski formatta → `auth=stale`,
+   studio reddi. Fix: `uv tool upgrade notebooklm-mcp-cli` (0.7.2,
+   `auth=configured`) + köprüye boot'ta otomatik `refresh_auth` + işletim
+   notu: `nlm login --force` cookie tazeler (44 cookie + CSRF).
+3. **Studio poll kör pencereleri** — 6 dk bütçe kısa (factory 20 dk poll
+   eder) + poll sırasında job satırı dokunulmuyor → rozet 120 sn sonra
+   yanlış "çevrimdışı". Fix: 12 dk bütçe + **onTick** her turda stage
+   yeniler (UI canlı ilerleme + updatedAt heartbeat). v3'te ekranda aktı.
+4. **id-hedefli artifact poll** — paylaşılan notebook'ta önceden kalan
+   report artifact'larıyla karışmayı önlemek için poll yalnız
+   `created.artifact_id`'yi izler.
+5. **Chat widget popup'ı kaydet butonunu örtüyor** (Tier-3 UX/a11y,
+   kod-dışı bulgu): "Welcome Back" popup'ı "Taslak Kaydet"in üstüne
+   açılıyor, tıklamaları yutuyor; erişilebilirlik ağacında kapatma butonu
+   YOK. Demo'da butonun açık kalan soluna koordinatla tıklanarak aşıldı;
+   ayrı iş olarak işaretlendi.
+
+### Fixture kanıtı (regression)
+`FAKE_EMPTY_REPORT=1 RESEARCH_GRACE_MS=200 BRIDGE_ONCE=1` + fake-mcp:
+research_status raporsuz biter → grace → studio_create/studio_status/
+download_artifact (fixture gerçek dosya yazar) → draft gövdesi "Fixture
+Studio Raporu" (`has_template=f, has_studio=t`). İki kez koşuldu (helper v1
++ yanıt-doğrulamalı v2), ikisi de PASS.
