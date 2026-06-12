@@ -46,3 +46,83 @@ content-inventory.csv
 CLAUDE.md
 brain/PERSPEKTIFLER_*
 brain/perspektifler-audit/**
+# Perspektifler rebuild — edit allowlist (one glob per line, # = comment)
+# Checked by .claude/hooks/scope_guard.py on Edit/Write. Paths repo-relative.
+brain/PERSPEKTIFLER_TASKS.json
+brain/perspektifler/**
+src/pages/PerspektiflerKategoriPage.tsx
+src/pages/PerspektiflerKonularPage.tsx
+src/pages/insights/**
+src/components/features/case-studies/**
+src/components/insights/**
+src/components/blog/**
+src/components/common/UrgencyBanner.tsx
+src/data/taxonomy.ts
+src/data/pillar-content.ts
+src/data/search-index.json
+src/types/blog.ts
+src/types/insights.ts
+src/hooks/useInsightsFeed.ts
+src/lib/slugify.ts
+src/lib/perspektifler-search.ts
+src/lib/insights-mock.ts
+src/lib/analytics.ts
+.size-limit.json
+scripts/generate-blog-index.ts
+scripts/generate-rss.ts
+scripts/generate-og-image.ts
+scripts/generate-og-images.mjs
+scripts/prerender.mjs
+scripts/check-taxonomy.ts
+scripts/check-links.ts
+scripts/migrate-blog-frontmatter.ts
+public/locales/tr/**
+public/locales/en/**
+tests/**
+e2e/**
+playwright.config.ts
+docs/guides/perspektifler-content-ops.md
+.claude/scope-allowlist.txt
+.claude/hooks/**
+.claude/settings.json
+# GATE-3 link sweep: no internal click may land on a 301 (PROGRESS.md)
+src/components/ui/CommandMenu.tsx
+src/components/sections/Insights.tsx
+src/components/layout/Footer.tsx
+src/components/common/NotFoundSearch.tsx
+src/lib/useRouteNamespaces.ts
+src/pages/NotFoundPage.tsx
+src/components/ui/StickyTableOfContents.tsx
+src/components/ui/UtilityDock.tsx
+src/components/ui/ZenToggle.tsx
+# FAZ-2 owner kalemleri (explicit izin 2026-06-11)
+src/pages/FounderPage.tsx
+.github/workflows/**
+lighthouserc.json
+# Research Bridge — NotebookLM→admin icerik hatti (T0 talimati 2026-06-12, P82; Perspektifler SHIPPED → fence genisletme, PROGRESS.md kaydi)
+prisma/schema.prisma
+server/routes/admin-research.ts
+server/routes/admin-research.test.ts
+server/routes/index.ts
+server/schemas/research.ts
+scripts/nlm-bridge/**
+src/pages/admin/AdminResearchPage.tsx
+src/components/admin/layout/AdminSidebar.tsx
+src/lib/api.ts
+src/lib/query-client.ts
+package.json
+brain/research-bridge/**
+# Hatasız-teslim turu (T0 talimatı 2026-06-12): pre-existing CI kırmızılarının kök-neden fix'leri
+src/test/**
+src/pages/track-b-phase-b5.test.tsx
+src/i18n/canonical.test.ts
+src/components/sections/Hero.tsx
+package-lock.json
+scripts/check-migration-safety.mjs
+# LHCI a11y 0.95 gate'i için gerçek ihlal düzeltmeleri (pricing/services/perspektifler)
+src/pages/PricingPage.tsx
+src/components/PricingCalculatorWizard.tsx
+src/pages/services/**
+src/components/services/**
+src/components/pricing/**
+index.html

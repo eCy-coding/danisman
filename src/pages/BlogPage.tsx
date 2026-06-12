@@ -36,7 +36,8 @@ const BlogPage: React.FC = () => {
             <p className="text-lg text-slate-400 leading-relaxed">
               Geleceği şekillendiren teknolojiler ve yönetim stratejileri üzerine uzman
               analizlerimiz.{' '}
-              <Link to="/services" className="text-secondary hover:underline">
+              {/* a11y link-in-text-block: inline link needs a non-color cue (1.71:1 vs surrounding text). */}
+              <Link to="/services" className="text-secondary underline underline-offset-4">
                 Danışmanlık hizmetlerimiz →
               </Link>
             </p>

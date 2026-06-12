@@ -142,10 +142,13 @@ export const PricingPage: React.FC = () => {
                 {t('hero.subtitle')}
               </p>
               <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
+                {/* text-neutral!: preflight `a { color: inherit }` wins the cascade on anchors
+                    (layer-order inversion), so the plain utility never applies — important
+                    restores the designed black-on-amber and fixes axe color-contrast. */}
                 <Link
                   to="/discovery"
                   onClick={() => trackEvent('Pricing', 'HeroCta', 'discovery')}
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-amber-500 text-neutral font-bold hover:bg-amber-400 transition-colors"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-amber-500 text-neutral! font-bold hover:bg-amber-400 transition-colors"
                 >
                   {t('hero.cta_discovery')}
                   <ArrowRight className="w-4 h-4" />
@@ -173,9 +176,10 @@ export const PricingPage: React.FC = () => {
             <h2 id="tier-grid-heading" className="sr-only">
               {t('tiers.heading_sr')}
             </h2>
+            {/* role="group": axe aria-allowed-role — listitem is not a permitted role on <article> */}
             <div
               className="grid md:grid-cols-3 gap-6 lg:gap-8"
-              role="list"
+              role="group"
               aria-label={t('tiers.aria_label')}
             >
               {PRICING_TIERS.map((tier, idx) => {
@@ -188,16 +192,16 @@ export const PricingPage: React.FC = () => {
                   'data-tier': tier.id,
                   'data-plan': tier.id,
                 });
+                // text-neutral!: see hero CTA note (anchor cascade) — axe color-contrast fix
                 const ctaClass = `w-full text-center px-6 py-3 rounded-xl font-semibold text-sm transition-all flex items-center justify-center gap-2 ${
                   tier.highlight
-                    ? 'bg-amber-500 text-neutral hover:bg-amber-400'
+                    ? 'bg-amber-500 text-neutral! hover:bg-amber-400'
                     : 'bg-white/10 text-white hover:bg-white/20 border border-white/10'
                 }`;
 
                 return (
                   <motion.article
                     key={tier.id}
-                    role="listitem"
                     ref={(el) => {
                       tierRefs.current[tier.id] = el;
                     }}
@@ -410,8 +414,9 @@ export const PricingPage: React.FC = () => {
             <p className="text-slate-300 mb-8">{t('cta.subtitle')}</p>
             {(() => {
               const cta = getCalendlyCta('pricing-final');
+              // text-neutral!: see hero CTA note (anchor cascade) — axe color-contrast fix
               const cls =
-                'inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-amber-500 text-neutral font-bold hover:bg-amber-400 transition-all';
+                'inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-amber-500 text-neutral! font-bold hover:bg-amber-400 transition-all';
               return hasExternalCalendly() ? (
                 <a
                   href={cta.href}
