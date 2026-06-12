@@ -25,6 +25,7 @@ import {
   FolderOpen,
   PenSquare,
   Tags,
+  FlaskConical,
   // P44-T07 Round-4: KVKK / ESG / Fintech / Succession nav icons
   Leaf,
   Landmark,
@@ -82,6 +83,13 @@ const MENU_ITEMS: MenuItem[] = [
     icon: Tags,
     label: 'Yazarlar & Etiketler',
     path: '/admin/insights/metadata',
+    permission: 'blog:view',
+    indent: true,
+  },
+  {
+    icon: FlaskConical,
+    label: 'NotebookLM Araştırma',
+    path: '/admin/research',
     permission: 'blog:view',
     indent: true,
   },

@@ -71,3 +71,16 @@ src/components/ui/LanguageToggle.tsx
 src/pages/FounderPage.tsx
 .github/workflows/**
 lighthouserc.json
+# Research Bridge — NotebookLM→admin icerik hatti (T0 talimati 2026-06-12, P82; Perspektifler SHIPPED → fence genisletme, PROGRESS.md kaydi)
+prisma/schema.prisma
+server/routes/admin-research.ts
+server/routes/admin-research.test.ts
+server/routes/index.ts
+server/schemas/research.ts
+scripts/nlm-bridge/**
+src/pages/admin/AdminResearchPage.tsx
+src/components/admin/layout/AdminSidebar.tsx
+src/lib/api.ts
+src/lib/query-client.ts
+package.json
+brain/research-bridge/**

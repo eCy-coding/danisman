@@ -502,6 +502,60 @@ model ApiKey {
   @@map("api_keys")
 }
 
+// ─── RESEARCH BRIDGE (P82): NotebookLM → admin draft pipeline ────────────
+// Admin queues a research job; the local NotebookLM bridge (owner's machine,
+// scripts/nlm-bridge) claims it via api-key auth, drives NotebookLM Deep
+// Research, then delivers a draft payload. The server materialises the
+// draft as a BlogPost(DRAFT) and links it via postId.
+//
+// postId/requestedById are plain ids (no Prisma relations) on purpose:
+// the job row is an orchestration record — keeping it relation-free means
+// zero churn on BlogPost/User and no cascade surprises on GDPR deletes.
+
+enum ResearchJobStatus {
+  QUEUED
+  CLAIMED
+  RESEARCHING
+  IMPORTING
+  DRAFTING
+  DONE
+  FAILED
+  CANCELLED
+}
+
+model ResearchJob {
+  id     String            @id @default(cuid())
+  status ResearchJobStatus @default(QUEUED)
+
+  // Request
+  topic         String @db.Text
+  lang          String @default("tr") // draft language: tr | en
+  mode          String @default("fast") // NotebookLM research mode: fast | deep
+  contentType   String @default("blog")
+  primaryDomain Domain @default(M_A)
+
+  // Live progress (bridge PATCHes these)
+  stageDetail String? @db.Text
+  notebookId  String?
+  sourceCount Int?
+  reportTitle String?
+
+  // Outcome
+  postId String?
+  error  String? @db.Text
+
+  // Bookkeeping
+  requestedById String
+  claimedAt     DateTime?
+  finishedAt    DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@index([status, createdAt])
+  @@index([requestedById, createdAt(sort: Desc)])
+  @@map("research_jobs")
+}
+
 // ─── P18 BE Track 2 / Aşama 1: UPLOADED IMAGE METADATA ────
 // One row per uploaded artifact. Storage-backend agnostic: `storageKey`
 // is the opaque key the adapter understands ("<owner>/2026/05/<uuid>.webp")

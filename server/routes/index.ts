@@ -61,6 +61,7 @@ import adminIntegrationsRouter from './admin-integrations';
 import discoveryRoutes from './discovery';
 // Perspektif Blog — PB-2 admin API + PB-3 public search
 import { adminInsightsRouter } from './admin-insights';
+import { adminResearchRouter } from './admin-research';
 import { adminInsightsCategoriesRouter } from './admin-insights-categories';
 import { publicInsightsSearchRouter } from './public-insights-search';
 import { publicInsightsPostsRouter } from './public-insights-posts';
@@ -570,6 +571,8 @@ router.use('/admin/integrations', adminIntegrationsRouter);
 // Perspektif Blog — PB-2 admin API + PB-3 public search
 router.use('/admin/insights/categories', adminInsightsCategoriesRouter);
 router.use('/admin/insights', adminInsightsRouter);
+// P82 Research Bridge — NotebookLM → admin draft pipeline (JWT + bridge ApiKey planes)
+router.use('/admin/research', adminResearchRouter);
 router.use('/insights', publicInsightsSearchRouter);
 // R12-P6 — public single-post + recent-list endpoint (real-data wire-up).
 // Mounted on the same /insights base so /api/v1/insights/posts/:slug works.

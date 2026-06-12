@@ -324,6 +324,8 @@ const AdminInsightsPostsPage = React.lazy(() =>
     default: module.AdminInsightsPostsPage,
   })),
 );
+// P82 Research Bridge — NotebookLM research queue
+const AdminResearchPage = React.lazy(() => import('./pages/admin/AdminResearchPage'));
 const AdminInsightsPostEditPage = React.lazy(() =>
   import('./pages/admin/AdminInsightsPostEditPage').then((module) => ({
     default: module.AdminInsightsPostEditPage,
@@ -1536,6 +1538,14 @@ const AnimatedRoutes = () => {
                 element={
                   <Suspense fallback={<LoadingFallback />}>
                     <AdminInsightsPostsPage />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="research"
+                element={
+                  <Suspense fallback={<LoadingFallback />}>
+                    <AdminResearchPage />
                   </Suspense>
                 }
               />

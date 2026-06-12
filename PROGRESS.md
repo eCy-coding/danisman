@@ -76,6 +76,11 @@ Until then the fence is enforced procedurally (SCOPE.md discipline).
 **Doğrulama:** i18n-smoke **7/7** · paket 40 pass (tek fail = pre-existing service_hub katalog) · prerender 152/152 · typecheck/lint temiz.
 **Bekleyen (classifier kilidi):** `.claude/settings.json` scope-guard hook wiring — snippet yukarıda, owner yapıştıracak.
 
+## RESEARCH-BRIDGE (2026-06-12) — scope genişletme kaydı
+**Gerekçe/kanıt:** Perspektifler vertical SHIPPED (PR #224 MERGED + canlı doğrulama yukarıda) → micro-focus fence'in amacı tamamlandı. T0 (Emre) 2026-06-12 talimatı: "admin panelde üretirken NotebookLM %100 + post verisi otomatik admin'e draft + eş zamanlı düzenleme + kapsamlı E2E kanıt, tüm izinler verildi". Tasarım dayanağı: brain/P1_P100_AUDIT_MATRIX.md **P82** "Automated content pipeline (NotebookLM → MDX blog posts)".
+**Genişletilen yüzey (allowlist'e eklendi):** prisma ResearchJob modeli · server/routes/admin-research(.test).ts + schemas/research.ts + routes/index mount · scripts/nlm-bridge/** (lokal worker, zero-dep) · AdminResearchPage + AdminSidebar nav + api/query-client ekleri · brain/research-bridge/** (EN spec + kanıtlar) · package.json (yalnız scripts satırı).
+**Mimari:** NotebookLM resmi API yok → lokal bridge (Mac, nlm auth) prod API'yi poll eder; draft'ı sunucu BlogPost(DRAFT) olarak yaratır; admin mevcut Insights editöründe eş zamanlı düzenler (single-writer el değişimi).
+
 ## FAZ-2C (2026-06-12)
 **Nav ikonları (BUG-02 replace yolu):** 7 lucide ikon (Home/Briefcase/Factory/Newspaper/Tag/Users/Mail) — data JSX-free iconName + Navbar NAV_ICON_MAP; mobil dahil; canlı 7/7 doğrulandı.
 **Prerender prebuilt akışı:** watchdog(60s)×2 (kilit yapısal bitti) + PRERENDER_FORCE_LOCAL (vercel build altında lokal chromium) → 152/152, `.vercel/output` 152 statik sayfa → `deploy --prebuilt --prod` → **canlı statik title'lar** (curl kanıtı). Title-shell/SEO-meta sorunu üretimde kapandı.
