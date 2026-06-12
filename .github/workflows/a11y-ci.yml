@@ -64,9 +64,13 @@ jobs:
           sed -i 's/__FILL_ME__/ci-stub/g' .env.production
 
       - name: Build production bundle
+        # SKIP_PRERENDER — axe audits the hydrated SPA via vite preview; the
+        # 170-route static prerender added ~7 min and pushed the job past its
+        # 12-min budget (every run died as "canceled" before axe started).
         run: npm run build
         env:
           NODE_ENV: production
+          SKIP_PRERENDER: '1'
 
       - name: Run a11y CI spec (critical routes only)
         run: npx playwright test e2e/a11y-ci.spec.ts --project=chromium --reporter=list
