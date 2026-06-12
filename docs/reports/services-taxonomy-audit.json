@@ -1,0 +1,709 @@
+{
+  "generated": "2026-06-12",
+  "phase": "P1",
+  "resolver_policy_today": "ServiceDetailPage.tsx:27-28 — SERVICES catalog membership required, else /404",
+  "counts": {
+    "content": 38,
+    "catalog_entries": 21,
+    "catalog_unique_slugs": 21,
+    "menu_items_visible": 9,
+    "menu_unique_detail_slugs": 4,
+    "sitemap": 21,
+    "orphans": 14,
+    "dangling": 0,
+    "sitemap_404": 17,
+    "menu_dead_items": 3,
+    "content_dead_slugs": 17,
+    "departments": 4
+  },
+  "sets": {
+    "contentSlugs": [
+      "ai-analytics",
+      "carbon-accounting",
+      "competition-economics",
+      "conflict-resolution",
+      "crisis-management",
+      "crypto-web3",
+      "csrd-compliance",
+      "data-governance",
+      "deal-structuring",
+      "digital-strategy",
+      "double-materiality",
+      "due-diligence-suite",
+      "employer-branding",
+      "esg-strategy",
+      "esrs-roadmap",
+      "family-business",
+      "family-business-governance",
+      "family-office",
+      "global-intelligence",
+      "government-relations",
+      "hr-transformation",
+      "industrial-relations",
+      "investment-incentives",
+      "macro-risk",
+      "market-entry",
+      "masak-aml",
+      "mergers-acquisitions",
+      "negotiation-loi",
+      "neuromarketing",
+      "open-banking",
+      "operational-excellence",
+      "payroll-audit",
+      "post-merger-integration",
+      "smart-cities",
+      "spk-casp",
+      "strategic-transformation",
+      "succession-planning",
+      "wealth-transfer"
+    ],
+    "catalogSlugs": [
+      "carbon-accounting",
+      "conflict-resolution",
+      "crypto-web3",
+      "csrd-compliance",
+      "data-governance",
+      "deal-structuring",
+      "double-materiality",
+      "due-diligence-suite",
+      "esg-strategy",
+      "esrs-roadmap",
+      "family-business",
+      "family-business-governance",
+      "family-office",
+      "masak-aml",
+      "mergers-acquisitions",
+      "negotiation-loi",
+      "open-banking",
+      "post-merger-integration",
+      "spk-casp",
+      "succession-planning",
+      "wealth-transfer"
+    ],
+    "menuDetailSlugs": [
+      "ai-analytics",
+      "digital-strategy",
+      "mergers-acquisitions",
+      "strategic-transformation"
+    ],
+    "sitemapSlugs": [
+      "ai-analytics",
+      "competition-economics",
+      "crisis-management",
+      "data-governance",
+      "digital-strategy",
+      "employer-branding",
+      "esg-strategy",
+      "family-business",
+      "global-intelligence",
+      "government-relations",
+      "hr-transformation",
+      "industrial-relations",
+      "investment-incentives",
+      "macro-risk",
+      "market-entry",
+      "mergers-acquisitions",
+      "neuromarketing",
+      "operational-excellence",
+      "payroll-audit",
+      "smart-cities",
+      "strategic-transformation"
+    ],
+    "orphans": [
+      "competition-economics",
+      "crisis-management",
+      "employer-branding",
+      "global-intelligence",
+      "government-relations",
+      "hr-transformation",
+      "industrial-relations",
+      "investment-incentives",
+      "macro-risk",
+      "market-entry",
+      "neuromarketing",
+      "operational-excellence",
+      "payroll-audit",
+      "smart-cities"
+    ],
+    "dangling": [],
+    "sitemap404": [
+      "ai-analytics",
+      "competition-economics",
+      "crisis-management",
+      "digital-strategy",
+      "employer-branding",
+      "global-intelligence",
+      "government-relations",
+      "hr-transformation",
+      "industrial-relations",
+      "investment-incentives",
+      "macro-risk",
+      "market-entry",
+      "neuromarketing",
+      "operational-excellence",
+      "payroll-audit",
+      "smart-cities",
+      "strategic-transformation"
+    ],
+    "menuDead": [
+      "ai-analytics",
+      "digital-strategy",
+      "strategic-transformation"
+    ],
+    "contentDead": [
+      "ai-analytics",
+      "competition-economics",
+      "crisis-management",
+      "digital-strategy",
+      "employer-branding",
+      "global-intelligence",
+      "government-relations",
+      "hr-transformation",
+      "industrial-relations",
+      "investment-incentives",
+      "macro-risk",
+      "market-entry",
+      "neuromarketing",
+      "operational-excellence",
+      "payroll-audit",
+      "smart-cities",
+      "strategic-transformation"
+    ]
+  },
+  "menu": {
+    "items": [
+      {
+        "section": "strategy",
+        "id": "corporate-strategy",
+        "href": "/services/strategic-transformation"
+      },
+      {
+        "section": "strategy",
+        "id": "ma-advisory",
+        "href": "/services/mergers-acquisitions"
+      },
+      {
+        "section": "strategy",
+        "id": "org-design",
+        "href": "/services/strategic-transformation"
+      },
+      {
+        "section": "technology",
+        "id": "ai-data",
+        "href": "/services/ai-analytics"
+      },
+      {
+        "section": "technology",
+        "id": "digital-transformation",
+        "href": "/services/digital-strategy"
+      },
+      {
+        "section": "technology",
+        "id": "cloud-platform",
+        "href": "/services/digital-strategy"
+      },
+      {
+        "section": "performance",
+        "id": "revenue-growth",
+        "href": "/services"
+      },
+      {
+        "section": "performance",
+        "id": "cost-transformation",
+        "href": "/services"
+      },
+      {
+        "section": "performance",
+        "id": "digital-ops",
+        "href": "/services"
+      }
+    ],
+    "duplicateHrefs": [
+      {
+        "href": "/services/strategic-transformation",
+        "count": 2
+      },
+      {
+        "href": "/services/digital-strategy",
+        "count": 2
+      },
+      {
+        "href": "/services",
+        "count": 3
+      }
+    ]
+  },
+  "catalog": [
+    {
+      "id": "ma-dd-suite",
+      "category": "ma",
+      "link": "/services/due-diligence-suite",
+      "slug": "due-diligence-suite"
+    },
+    {
+      "id": "ma-valuation",
+      "category": "ma",
+      "link": "/services/mergers-acquisitions",
+      "slug": "mergers-acquisitions"
+    },
+    {
+      "id": "ma-deal-structuring",
+      "category": "ma",
+      "link": "/services/deal-structuring",
+      "slug": "deal-structuring"
+    },
+    {
+      "id": "ma-negotiation",
+      "category": "ma",
+      "link": "/services/negotiation-loi",
+      "slug": "negotiation-loi"
+    },
+    {
+      "id": "ma-pmi",
+      "category": "ma",
+      "link": "/services/post-merger-integration",
+      "slug": "post-merger-integration"
+    },
+    {
+      "id": "esg-esrs",
+      "category": "esg",
+      "link": "/services/esrs-roadmap",
+      "slug": "esrs-roadmap"
+    },
+    {
+      "id": "esg-double-materiality",
+      "category": "esg",
+      "link": "/services/double-materiality",
+      "slug": "double-materiality"
+    },
+    {
+      "id": "esg-carbon",
+      "category": "esg",
+      "link": "/services/carbon-accounting",
+      "slug": "carbon-accounting"
+    },
+    {
+      "id": "esg-csrd",
+      "category": "esg",
+      "link": "/services/csrd-compliance",
+      "slug": "csrd-compliance"
+    },
+    {
+      "id": "esg-sustainability-report",
+      "category": "esg",
+      "link": "/services/esg-strategy",
+      "slug": "esg-strategy"
+    },
+    {
+      "id": "fintech-spk",
+      "category": "fintech",
+      "link": "/services/spk-casp",
+      "slug": "spk-casp"
+    },
+    {
+      "id": "fintech-masak",
+      "category": "fintech",
+      "link": "/services/masak-aml",
+      "slug": "masak-aml"
+    },
+    {
+      "id": "fintech-kvkk",
+      "category": "fintech",
+      "link": "/services/data-governance",
+      "slug": "data-governance"
+    },
+    {
+      "id": "fintech-open-banking",
+      "category": "fintech",
+      "link": "/services/open-banking",
+      "slug": "open-banking"
+    },
+    {
+      "id": "fintech-crypto",
+      "category": "fintech",
+      "link": "/services/crypto-web3",
+      "slug": "crypto-web3"
+    },
+    {
+      "id": "aile-succession",
+      "category": "aile",
+      "link": "/services/succession-planning",
+      "slug": "succession-planning"
+    },
+    {
+      "id": "aile-anayasa",
+      "category": "aile",
+      "link": "/services/family-business",
+      "slug": "family-business"
+    },
+    {
+      "id": "aile-family-office",
+      "category": "aile",
+      "link": "/services/family-office",
+      "slug": "family-office"
+    },
+    {
+      "id": "aile-wealth-transfer",
+      "category": "aile",
+      "link": "/services/wealth-transfer",
+      "slug": "wealth-transfer"
+    },
+    {
+      "id": "aile-conflict",
+      "category": "aile",
+      "link": "/services/conflict-resolution",
+      "slug": "conflict-resolution"
+    },
+    {
+      "id": "aile-kurumsallasma",
+      "category": "aile",
+      "link": "/services/family-business-governance",
+      "slug": "family-business-governance"
+    }
+  ],
+  "matrix": [
+    {
+      "slug": "ai-analytics",
+      "content": true,
+      "catalog": false,
+      "menu": true,
+      "sitemap": true,
+      "resolvable_today": false
+    },
+    {
+      "slug": "carbon-accounting",
+      "content": true,
+      "catalog": true,
+      "menu": false,
+      "sitemap": false,
+      "resolvable_today": true
+    },
+    {
+      "slug": "competition-economics",
+      "content": true,
+      "catalog": false,
+      "menu": false,
+      "sitemap": true,
+      "resolvable_today": false
+    },
+    {
+      "slug": "conflict-resolution",
+      "content": true,
+      "catalog": true,
+      "menu": false,
+      "sitemap": false,
+      "resolvable_today": true
+    },
+    {
+      "slug": "crisis-management",
+      "content": true,
+      "catalog": false,
+      "menu": false,
+      "sitemap": true,
+      "resolvable_today": false
+    },
+    {
+      "slug": "crypto-web3",
+      "content": true,
+      "catalog": true,
+      "menu": false,
+      "sitemap": false,
+      "resolvable_today": true
+    },
+    {
+      "slug": "csrd-compliance",
+      "content": true,
+      "catalog": true,
+      "menu": false,
+      "sitemap": false,
+      "resolvable_today": true
+    },
+    {
+      "slug": "data-governance",
+      "content": true,
+      "catalog": true,
+      "menu": false,
+      "sitemap": true,
+      "resolvable_today": true
+    },
+    {
+      "slug": "deal-structuring",
+      "content": true,
+      "catalog": true,
+      "menu": false,
+      "sitemap": false,
+      "resolvable_today": true
+    },
+    {
+      "slug": "digital-strategy",
+      "content": true,
+      "catalog": false,
+      "menu": true,
+      "sitemap": true,
+      "resolvable_today": false
+    },
+    {
+      "slug": "double-materiality",
+      "content": true,
+      "catalog": true,
+      "menu": false,
+      "sitemap": false,
+      "resolvable_today": true
+    },
+    {
+      "slug": "due-diligence-suite",
+      "content": true,
+      "catalog": true,
+      "menu": false,
+      "sitemap": false,
+      "resolvable_today": true
+    },
+    {
+      "slug": "employer-branding",
+      "content": true,
+      "catalog": false,
+      "menu": false,
+      "sitemap": true,
+      "resolvable_today": false
+    },
+    {
+      "slug": "esg-strategy",
+      "content": true,
+      "catalog": true,
+      "menu": false,
+      "sitemap": true,
+      "resolvable_today": true
+    },
+    {
+      "slug": "esrs-roadmap",
+      "content": true,
+      "catalog": true,
+      "menu": false,
+      "sitemap": false,
+      "resolvable_today": true
+    },
+    {
+      "slug": "family-business",
+      "content": true,
+      "catalog": true,
+      "menu": false,
+      "sitemap": true,
+      "resolvable_today": true
+    },
+    {
+      "slug": "family-business-governance",
+      "content": true,
+      "catalog": true,
+      "menu": false,
+      "sitemap": false,
+      "resolvable_today": true
+    },
+    {
+      "slug": "family-office",
+      "content": true,
+      "catalog": true,
+      "menu": false,
+      "sitemap": false,
+      "resolvable_today": true
+    },
+    {
+      "slug": "global-intelligence",
+      "content": true,
+      "catalog": false,
+      "menu": false,
+      "sitemap": true,
+      "resolvable_today": false
+    },
+    {
+      "slug": "government-relations",
+      "content": true,
+      "catalog": false,
+      "menu": false,
+      "sitemap": true,
+      "resolvable_today": false
+    },
+    {
+      "slug": "hr-transformation",
+      "content": true,
+      "catalog": false,
+      "menu": false,
+      "sitemap": true,
+      "resolvable_today": false
+    },
+    {
+      "slug": "industrial-relations",
+      "content": true,
+      "catalog": false,
+      "menu": false,
+      "sitemap": true,
+      "resolvable_today": false
+    },
+    {
+      "slug": "investment-incentives",
+      "content": true,
+      "catalog": false,
+      "menu": false,
+      "sitemap": true,
+      "resolvable_today": false
+    },
+    {
+      "slug": "macro-risk",
+      "content": true,
+      "catalog": false,
+      "menu": false,
+      "sitemap": true,
+      "resolvable_today": false
+    },
+    {
+      "slug": "market-entry",
+      "content": true,
+      "catalog": false,
+      "menu": false,
+      "sitemap": true,
+      "resolvable_today": false
+    },
+    {
+      "slug": "masak-aml",
+      "content": true,
+      "catalog": true,
+      "menu": false,
+      "sitemap": false,
+      "resolvable_today": true
+    },
+    {
+      "slug": "mergers-acquisitions",
+      "content": true,
+      "catalog": true,
+      "menu": true,
+      "sitemap": true,
+      "resolvable_today": true
+    },
+    {
+      "slug": "negotiation-loi",
+      "content": true,
+      "catalog": true,
+      "menu": false,
+      "sitemap": false,
+      "resolvable_today": true
+    },
+    {
+      "slug": "neuromarketing",
+      "content": true,
+      "catalog": false,
+      "menu": false,
+      "sitemap": true,
+      "resolvable_today": false
+    },
+    {
+      "slug": "open-banking",
+      "content": true,
+      "catalog": true,
+      "menu": false,
+      "sitemap": false,
+      "resolvable_today": true
+    },
+    {
+      "slug": "operational-excellence",
+      "content": true,
+      "catalog": false,
+      "menu": false,
+      "sitemap": true,
+      "resolvable_today": false
+    },
+    {
+      "slug": "payroll-audit",
+      "content": true,
+      "catalog": false,
+      "menu": false,
+      "sitemap": true,
+      "resolvable_today": false
+    },
+    {
+      "slug": "post-merger-integration",
+      "content": true,
+      "catalog": true,
+      "menu": false,
+      "sitemap": false,
+      "resolvable_today": true
+    },
+    {
+      "slug": "smart-cities",
+      "content": true,
+      "catalog": false,
+      "menu": false,
+      "sitemap": true,
+      "resolvable_today": false
+    },
+    {
+      "slug": "spk-casp",
+      "content": true,
+      "catalog": true,
+      "menu": false,
+      "sitemap": false,
+      "resolvable_today": true
+    },
+    {
+      "slug": "strategic-transformation",
+      "content": true,
+      "catalog": false,
+      "menu": true,
+      "sitemap": true,
+      "resolvable_today": false
+    },
+    {
+      "slug": "succession-planning",
+      "content": true,
+      "catalog": true,
+      "menu": false,
+      "sitemap": false,
+      "resolvable_today": true
+    },
+    {
+      "slug": "wealth-transfer",
+      "content": true,
+      "catalog": true,
+      "menu": false,
+      "sitemap": false,
+      "resolvable_today": true
+    }
+  ],
+  "knownBugs": [
+    {
+      "id": "typo-degerlemeokul",
+      "file": "src/data/services.ts",
+      "lines": [
+        36
+      ],
+      "note": "comment typo \"DEĞERLEMEokul\""
+    },
+    {
+      "id": "ma-valuation-shared-link",
+      "file": "src/data/services.ts",
+      "lines": [
+        53
+      ],
+      "note": "ma-valuation has no own slug; shares mergers-acquisitions link"
+    },
+    {
+      "id": "glassmorphism-comment",
+      "file": "src/pages/ServicesPage.tsx",
+      "lines": [
+        254
+      ],
+      "note": "doctrine-violating comment label (visual is solid — rename)"
+    },
+    {
+      "id": "resolver-catalog-only",
+      "file": "src/pages/ServiceDetailPage.tsx",
+      "lines": [
+        27
+      ],
+      "note": "ROOT CAUSE: catalog-only resolution → menu pillars + orphans hard-404"
+    }
+  ],
+  "i18n": {
+    "route_pair_services": true,
+    "per_service_slug_pairs": [],
+    "note": "service detail slugs are EN-canonical today; /hizmetler/* redirects to /services (App.tsx:444)"
+  }
+}

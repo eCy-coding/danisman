@@ -14,6 +14,14 @@ Spec: `~/Desktop/istemek.md` (istek-services.md) · Plan: approved 2026-06-12
 **Premise corrections vs istemek.md ground truth (verified by 3 Explore agents + direct reads):** content registry **38** slugs (not 43) · MegaMenu.tsx **302** lines (not 169), **no** aria-expanded/controls/Esc/arrows, **no test file** · menu 9 visible items → only **4 unique hrefs** (strategic-transformation ×2, digital-strategy ×2, /services ×3) · `docs/ECYPRO_SERVICES_CATEGORIZATION.md` does **not** exist · orphans = **14** · dangling = 0 · catalog↔content = **21/21** (old memory "4/21" STALE).
 **ROOT CAUSE (user's 404 screenshot):** `ServiceDetailPage.tsx:27-28` resolves ONLY via `SERVICES` catalog (21) → menu pillar slugs (strategic-transformation, ai-analytics, digital-strategy) + 14 content orphans all hard-404. Sitemap (`generate-sitemap.ts:132-154`, hardcoded 21) ships **17 URLs that 404** (14 orphans + 3 menu-only) to Google.
 
+## SVC Gate-1 (2026-06-12) — taxonomy integrity audit
+**Script (no hand-counting):** `scripts/services-taxonomy-audit.mjs` (tsx, imports REAL modules) → `docs/reports/services-taxonomy-audit.json`.
+**Deterministic counts:** content **38** · catalog 21 entries / **21 unique slugs** · menu 9 visible items / **4 unique detail slugs** (dupes: strategic-transformation×2, digital-strategy×2, `/services`×3) · sitemap 21 · **orphans 14** · dangling **0** · **sitemap_404 = 17** · menu dead items 3 (ai-analytics, digital-strategy, strategic-transformation) · content dead slugs 17.
+**ma-valuation finding refined:** NOT a slug dupe — it is the only carrier of `mergers-acquisitions` link; bug = "Şirket Değerleme & QoE" card deep-links to the generic M&A umbrella (services.ts:53). Content registry has NO valuation slug → P2 decision (own content entry).
+**Known bugs line-pinned:** DEĞERLEMEokul :36 · ma-valuation :53 · Glassmorphism comment :254 · resolver catalog-only :27.
+**i18n:** route-level pair services↔hizmetler exists; per-service slugs EN-canonical (0 localized pairs) — convention kept.
+**Baseline tests:** services-content + cluster-d 28/28 PASS. MegaMenu a11y baseline: hover-only, no aria-expanded/controls, no Esc, no arrows, no test file (static fact, axe runtime pass in P5).
+
 ---
 
 # PERSPEKTIFLER VERTICAL (closed 2026-06-12)
