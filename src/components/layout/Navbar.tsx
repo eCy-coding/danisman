@@ -80,7 +80,17 @@ export const Navbar: React.FC = () => {
   useBodyLock(isOpen);
   useKeyPress('Escape', () => {
     setIsOpen(false);
-    setActiveDropdown(null);
+    // APG disclosure: Esc must return focus to the disclosure trigger,
+    // otherwise keyboard users are dropped at <body>.
+    setActiveDropdown((current) => {
+      if (current) {
+        const trigger = navRef.current?.querySelector<HTMLElement>(
+          `[data-testid="navbar-link-${current}"]`,
+        );
+        trigger?.focus();
+      }
+      return null;
+    });
   });
 
   // BUG-01: panels must never survive a navigation — close on route change.
@@ -88,6 +98,13 @@ export const Navbar: React.FC = () => {
     setActiveDropdown(null);
     setIsOpen(false);
   }, [location.pathname]);
+
+  // SVC P8 — consent-gated menu telemetry (fires once per panel open).
+  useEffect(() => {
+    if (activeDropdown) {
+      trackEvent('navigation', 'menu_open', activeDropdown);
+    }
+  }, [activeDropdown]);
 
   // D-6 float governance: one dismissible "Yeni" badge on the Perspektifler
   // nav item replaces the SocialProofToast on insights surfaces. Fresh content

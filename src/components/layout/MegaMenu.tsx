@@ -20,6 +20,8 @@ import {
   Newspaper,
   ClipboardList,
   PenLine,
+  Database,
+  BadgePercent,
 } from 'lucide-react';
 import { MEGA_MENUS } from '@/data/copy/common';
 import { MENU_CATEGORIES, MENU_FORMATS, MENU_PICKS, MENU_HUB_HREF } from './insightsMenuData';
@@ -43,6 +45,8 @@ const ICON_MAP: Record<string, React.ReactNode> = {
   FileText: <FileText size={16} />,
   Compass: <Compass size={16} />,
   Building2: <Building2 size={16} />,
+  Database: <Database size={16} />,
+  BadgePercent: <BadgePercent size={16} />,
 };
 
 const FORMAT_ICON: Record<string, React.ReactNode> = {
@@ -213,7 +217,9 @@ export const MegaMenu: React.FC<MegaMenuProps> = ({
           data-testid={`mega-menu-${menuId}-backdrop`}
         />
       )}
-      <div className="bg-[#0a0f1c]/98 rounded-2xl shadow-[0_20px_60px_-15px_rgba(0,0,0,0.7)] border border-white/8 overflow-hidden ring-1 ring-white/5">
+      {/* Opaque surface (doctrine A9): /98 translucency let the hero H1 ghost
+          through the open panel — solid #0a0f1c kills the overlap garble. */}
+      <div className="bg-[#0a0f1c] rounded-2xl shadow-[0_20px_60px_-15px_rgba(0,0,0,0.7)] border border-white/8 overflow-hidden ring-1 ring-white/5">
         <div className="grid grid-cols-4 divide-x divide-white/5">
           {menuId === 'insights' ? (
             <InsightsColumns lang={lang} onClose={onClose} />
@@ -223,12 +229,13 @@ export const MegaMenu: React.FC<MegaMenuProps> = ({
                 <p className="text-[10px] font-bold tracking-[0.2em] text-slate-500 uppercase mb-4">
                   {section.title[lang]}
                 </p>
-                <ul className="space-y-1" role="menu">
+                {/* APG Disclosure Navigation: plain link list — ARIA menu
+                    roles would demand full menubar keyboard semantics. */}
+                <ul className="space-y-1">
                   {section.items.map((item) => (
-                    <li key={item.id} role="none">
+                    <li key={item.id}>
                       <a
                         href={item.href}
-                        role="menuitem"
                         onClick={onClose}
                         className="group flex items-start gap-3 p-2.5 rounded-xl hover:bg-white/5 transition-colors duration-150 outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
                       >
@@ -286,11 +293,12 @@ export const MegaMenu: React.FC<MegaMenuProps> = ({
 
         {/* Bottom bar */}
         <div className="px-6 py-3 border-t border-white/5 flex items-center justify-between bg-white/1">
-          <p className="text-xs text-slate-600">{bottomBar.label}</p>
+          {/* slate-400: slate-600 measured 2.9:1 on the opaque panel (webkit axe) */}
+          <p className="text-xs text-slate-400">{bottomBar.label}</p>
           <a
             href={bottomBar.href}
             onClick={onClose}
-            className="text-xs font-bold text-slate-500 hover:text-white transition-colors flex items-center gap-1 group"
+            className="text-xs font-bold text-slate-400 hover:text-white transition-colors flex items-center gap-1 group"
           >
             {bottomBar.cta}
             <ArrowRight size={12} className="group-hover:translate-x-0.5 transition-transform" />

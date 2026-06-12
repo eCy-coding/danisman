@@ -670,20 +670,86 @@ const ILLUSTRATIONS: ProfileMap = {
   ),
 };
 
+// SVC P7 — generic glyph for canonical slugs without dedicated art (taxonomy
+// v2 added company-valuation + catalog slugs outside the original 21-set).
+// Concentric arcs + ascending node path: neutral "engagement journey" motif.
+const FALLBACK_ART = (
+  <svg {...SVG_PROPS} data-testid="service-illustration-fallback-art">
+    <Defs id="sfb" />
+    <circle cx="100" cy="100" r="72" stroke="url(#sfb-grad)" strokeWidth={STROKE} opacity="0.35" />
+    <circle cx="100" cy="100" r="48" stroke="url(#sfb-grad)" strokeWidth={STROKE} opacity="0.6" />
+    <path
+      d="M52 132 L84 104 L112 116 L148 68"
+      stroke="url(#sfb-grad)"
+      strokeWidth={STROKE}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <circle cx="84" cy="104" r="4" fill="url(#sfb-grad)" fillOpacity="0.5" />
+    <circle cx="112" cy="116" r="4" fill="url(#sfb-grad)" fillOpacity="0.5" />
+    <circle cx="148" cy="68" r="6" fill="url(#sfb-gold)" data-gold-dot="true" />
+  </svg>
+);
+
 interface ServiceIllustrationProps {
   slug: string;
   className?: string;
 }
 
+/**
+ * SVC P7 — GSAP entrance + idle float (motion spec: transform/opacity only,
+ * intro ≤400ms, gentle ≤6s loop, static frame under prefers-reduced-motion
+ * via gsap.matchMedia — no JS branch needed for the static case).
+ */
 export const ServiceIllustration: React.FC<ServiceIllustrationProps> = ({
   slug,
   className = '',
 }) => {
-  const svg = ILLUSTRATIONS[slug];
-  if (!svg) return null;
+  const ref = React.useRef<HTMLDivElement | null>(null);
+
+  React.useEffect(() => {
+    const node = ref.current;
+    if (!node) return;
+    let ctx: { revert: () => void } | undefined;
+    let cancelled = false;
+    // gsap lazy-loaded: keeps it off the critical path of every detail page.
+    import('gsap').then(({ gsap }) => {
+      if (cancelled || !node) return;
+      const mm = gsap.matchMedia();
+      mm.add('(prefers-reduced-motion: no-preference)', () => {
+        const tl = gsap.timeline();
+        tl.from(node.querySelectorAll('svg path, svg rect, svg line'), {
+          opacity: 0,
+          y: 8,
+          duration: 0.4,
+          stagger: 0.05,
+          ease: 'power2.out',
+        }).from(
+          node.querySelectorAll('svg circle'),
+          { opacity: 0, scale: 0.6, transformOrigin: 'center', duration: 0.3, stagger: 0.04 },
+          '<0.1',
+        );
+        gsap.to(node, {
+          y: -6,
+          duration: 3,
+          ease: 'sine.inOut',
+          repeat: -1,
+          yoyo: true,
+        });
+      });
+      ctx = mm;
+    });
+    return () => {
+      cancelled = true;
+      ctx?.revert();
+    };
+  }, [slug]);
+
+  const svg = ILLUSTRATIONS[slug] ?? FALLBACK_ART;
   return (
     <div
-      className={`inline-block ${className}`}
+      ref={ref}
+      className={`inline-block will-change-transform ${className}`}
       aria-hidden="true"
       data-testid={`service-illustration-${slug}`}
     >

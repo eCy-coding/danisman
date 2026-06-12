@@ -1,4 +1,86 @@
-# PROGRESS — Perspektifler rebuild decision log
+# PROGRESS — vertical rebuild decision log
+
+---
+
+# SERVICES VERTICAL (2026-06-12 → )
+
+Spec: `~/Desktop/istemek.md` (istek-services.md) · Plan: approved 2026-06-12
+(`cerrahi-hassasiyet-ile-k-klere-encapsulated-whistle.md`) · Branch: `claude/competent-burnell-270d4d` (worktree)
+
+## SVC Gate-0 (2026-06-12)
+**Env:** node v24.8.0 · npm 11.6.0 · `npm install` exit 0 (audit warnings noted, not chased — out of scope).
+**Baseline (BEFORE any edit, recorded not fixed):** lint **0 errors** / 3 warnings (ThemeContext, view-as-context — out of scope) · typecheck **GREEN** (web+server; old "lenis RED" memory stale) · vitest `--run`: **23 failed / 1026 passed / 15 skipped (141 files, 4 failing files: canonical.test.ts, track-b-phase-b5.test.tsx, a11y/static-rules.test.tsx, founder-page.test.tsx — ALL pre-existing, out of services scope)**.
+**Scope re-fence:** Perspektifler contract CLOSED (shipped 2026-06-11) → allowlist + SCOPE.md rewritten for Services vertical. Evidence: owner request istemek.md + approved plan. Guard infra (`.claude/**`) deliberately dropped from allowlist (classifier: no self-modification) — fence is fixed.
+**Premise corrections vs istemek.md ground truth (verified by 3 Explore agents + direct reads):** content registry **38** slugs (not 43) · MegaMenu.tsx **302** lines (not 169), **no** aria-expanded/controls/Esc/arrows, **no test file** · menu 9 visible items → only **4 unique hrefs** (strategic-transformation ×2, digital-strategy ×2, /services ×3) · `docs/ECYPRO_SERVICES_CATEGORIZATION.md` does **not** exist · orphans = **14** · dangling = 0 · catalog↔content = **21/21** (old memory "4/21" STALE).
+**ROOT CAUSE (user's 404 screenshot):** `ServiceDetailPage.tsx:27-28` resolves ONLY via `SERVICES` catalog (21) → menu pillar slugs (strategic-transformation, ai-analytics, digital-strategy) + 14 content orphans all hard-404. Sitemap (`generate-sitemap.ts:132-154`, hardcoded 21) ships **17 URLs that 404** (14 orphans + 3 menu-only) to Google.
+
+## SVC Gate-1 (2026-06-12) — taxonomy integrity audit
+**Script (no hand-counting):** `scripts/services-taxonomy-audit.mjs` (tsx, imports REAL modules) → `docs/reports/services-taxonomy-audit.json`.
+**Deterministic counts:** content **38** · catalog 21 entries / **21 unique slugs** · menu 9 visible items / **4 unique detail slugs** (dupes: strategic-transformation×2, digital-strategy×2, `/services`×3) · sitemap 21 · **orphans 14** · dangling **0** · **sitemap_404 = 17** · menu dead items 3 (ai-analytics, digital-strategy, strategic-transformation) · content dead slugs 17.
+**ma-valuation finding refined:** NOT a slug dupe — it is the only carrier of `mergers-acquisitions` link; bug = "Şirket Değerleme & QoE" card deep-links to the generic M&A umbrella (services.ts:53). Content registry has NO valuation slug → P2 decision (own content entry).
+**Known bugs line-pinned:** DEĞERLEMEokul :36 · ma-valuation :53 · Glassmorphism comment :254 · resolver catalog-only :27.
+**i18n:** route-level pair services↔hizmetler exists; per-service slugs EN-canonical (0 localized pairs) — convention kept.
+**Baseline tests:** services-content + cluster-d 28/28 PASS. MegaMenu a11y baseline: hover-only, no aria-expanded/controls, no Esc, no arrows, no test file (static fact, axe runtime pass in P5).
+
+## SVC Gate-2 (2026-06-12) — taxonomy v2 + ADR
+**Decision (evidence = hero-title extraction from SERVICE_CONTENT):** two-axis IA. Axis-1 pillars (menu, 9/9 unique content-true targets); Axis-2 departments: 4 existing + **3 NEW adopting ALL 14 orphans** — insan(4: hr-transformation, employer-branding, industrial-relations, payroll-audit) · risk(6: macro-risk, crisis-management, competition-economics, government-relations, global-intelligence, smart-cities) · buyume(4: market-entry, investment-incentives, neuromarketing, operational-excellence). **Zero retirements → empty 301 map** (v2 only adds).
+**Menu changes:** org-design → hr-transformation (content title literally "İK & Organizasyon Tasarımı") · "Bulut & Platform" → "Veri Yönetişimi & Uyum"/data-governance (zero cloud content exists) · Performans 3× generic /services → market-entry / operational-excellence / investment-incentives ("Dijital Operasyonlar" relabeled "Teşvik & Hibe Yönetimi").
+**ma-valuation:** own `company-valuation` content entry authored in P4 (card currently deep-links M&A umbrella, services.ts:53).
+**Validation script PASS:** 35 members + 4 pillar-only = **39 canonical**; multi-dept ∅; homeless ∅; phantom ∅; menu 9/9 unique; chips 8/8.
+**Artifacts:** services-taxonomy-v2.json · ADR-services-taxonomy-v2.md · ECYPRO_SERVICES_CATEGORIZATION.md (v2).
+
+## SVC Gate-3 (2026-06-12) — design & motion spec
+`docs/reports/services-design-motion-spec.md`: verified tokens (fib 1-55, golden sm-3xl), magic-number plan (duration-500/700→300/400, min-h-[52px]→fib-13, 44px=WCAG keep), full motion budget table w/ reduced-motion path per element, 3D=CSS/GSAP-only (R3F gated; three.js absent — verified).
+
+## SVC Gate-4 (2026-06-12) — single-source data layer (test-first)
+**RED first:** `src/test/services-taxonomy-v2.test.ts` (16 tests) failed on missing registry — evidence: "Test Files 1 failed / no tests" (import error).
+**Implemented:** `src/data/service-taxonomy.ts` (registry: 7 departments + lifecycles + PILLAR_PAGES + isCanonicalServiceSlug + getLifecyclePosition + SERVICES_MEGA_MENU projection) · common.ts MEGA_MENUS.services = projection · schema category enum +insan/risk/buyume · accent map +3 (cyan/rose/teal) · services.ts +14 adopted cards, ma-valuation→/services/company-valuation, DEĞERLEMEokul typo fixed, DEPARTMENTS derived · **company-valuation 16-section content authored** · **RESOLVER FIX (ROOT CAUSE):** ServiceDetailPage registry-first — catalog membership no longer 404s menu pillars/orphans.
+**GREEN:** 44/44 (taxonomy-v2 16 + services-content updated 21→35/4→7 + cluster-d) · typecheck 0 · lint 0 err.
+
+## SVC Gate-5 (2026-06-12) — mega menu APG disclosure
+**RED first:** new `MegaMenu.test.tsx` — 3 fail (12× ARIA menu-role misuse, translucent /98 surface, Esc no focus-return), 5 pass (registry render armor).
+**Implemented:** services panel role=menu/menuitem removed (APG disclosure = plain links) · surface opaque `bg-[#0a0f1c]` (H1 ghosting through /98 killed — owner screenshot overlap) · Navbar Esc now returns focus to trigger. Trigger already had aria-haspopup/expanded/controls + outside-click/route-close (Perspektifler Gate-2 — istemek.md "no a11y" premise was stale at Navbar level).
+**Evidence:** unit 8/8 · NEW `e2e/services-menu.spec.ts` chromium **5/5** — 9 unique targets, 4 menu→detail journeys (no /404), orphan payroll-audit + new company-valuation resolve, junk→404 strict, Esc focus-return · Perspektifler menu.spec regression: 10 pass + 1 known flaky (retry-green).
+
+## SVC Gate-6 (2026-06-12) — /services index v2
+**New finding fixed:** ServicesClusterSection was a THIRD hand-maintained list with dead hrefs (`/services/esg-reporting` → 404) — rewritten as **registry-driven lifecycle visualizer** (7 numbered workflows, 35 step links, drift-proof).
+**RED first:** services-page-v2.test.tsx 5 fail / 2 pass.
+**Implemented:** debounced search 180ms (input/query split — 35-card re-render off the keystroke path) · aria-live + data-count result counter (i18n keys result_count/_all tr+en) · ServiceFilter aria-pressed · "Glassmorphism Light" comment renamed (solid-surface doctrine) · ItemList JSON-LD desc → 7 clusters · clear resets both states · ServiceCard v2: lifecycle "Adım N/M" badge, pointer-fine 3D tilt ≤6° (rAF, transform-only, reduced-motion off), motion budget 500/700→300/400, blob geometry → fib tokens (w-fib-34), line-clamp-3 scan-first.
+**Premise fix:** e2e services-filter.spec asserted an "economics"-era catalog + an i18n string the page never rendered — the historical "pre-existing service_hub fail". Spec rewritten to v2 registry (8 chips, 7 clusters, data-count, lifecycle journey link).
+**Evidence:** unit 49/49 (5 files: taxonomy-v2 + page-v2 + content + cluster-d + atom-2 updated) · e2e services-filter 5/5 + services-menu 5/5 chromium · typecheck 0 · lint 0 err.
+
+## SVC Gate-7 (2026-06-12) — /services/:slug detail v2
+**RED first:** services-detail-v2.test.tsx — imports failed (LifecycleNav/DetailSectionNav/getCtaVariants absent).
+**Implemented:** `LifecycleNav` (dept chip + "İş akışında adım N/M" + prev/next step links; pillar pages render nothing) · `DetailSectionNav` (sticky pill anchors, single IntersectionObserver scrollspy, sections computed from content presence) · section ids + scroll-mt-36 on 7 sections · **CTA variants finally wired** — footer renders per-service 'value' flavor (`getCtaVariants` wrapper +isDefault; 63 authored variants were dead code; default copy for uncovered slugs) · `ServiceIllustration`: FALLBACK_ART glyph (15+ slugs had `return null`) + lazy-GSAP entrance (≤400ms, transform/opacity, stagger) + 3s idle float, `gsap.matchMedia('(prefers-reduced-motion: no-preference)')` static fallback.
+**Updated (not deleted):** cluster-d footer assertions → variant contract.
+**Evidence:** unit 48/48 (4 services suites) · e2e services-menu extended 6/6 chromium (lifecycle 1/5 + next href + #methodology anchor inViewport + pillar no-nav) · typecheck 0.
+**Deliberate skip:** layout-wide below-fold React.lazy split — detail pages are content-light vs index; budget = no regression (P9 measures).
+
+## SVC Gate-8 (2026-06-12) — i18n/SEO/analytics/404
+**Sitemap (D6):** `generate-sitemap.ts` hardcoded 21-slug list → `CANONICAL_SERVICE_SLUGS` registry import. Regenerated: **39 service URLs** (170 loc total), company-valuation + all adopted orphans present, **zero 404-producing URLs** (each canonical = resolver-renderable by construction).
+**301 map:** ∅ — v2 renamed/retired nothing (ADR); /hizmetler SPA redirect untouched.
+**Parity script:** NEW `scripts/services-i18n-parity.mjs` → **PARITY OK exit 0** (services.json tr↔en 84 keys both directions · 7 departments + 9 menu items bilingual · NotFoundSearch service suggestions all canonical · sitemap registry-derivation guard). `list.*` EN content keys exist but are unwired (deliberate TR-first content strategy — noted, not scope).
+**Analytics (consent-gated, KVKK-safe):** `menu_open` (Navbar, once per panel open) · `service_filter` (dept id) · `service_search` (**query LENGTH + hit count — raw text never sent**) · `service_cta` via trackCTA (variant label + location). Unit tests assert no-raw-query leak.
+**Evidence:** services-page-v2 9/9 (2 new event tests RED→GREEN) · parity exit 0 · sitemap diff (+18 service URLs, 0 removals).
+
+## SVC Gate-9 (2026-06-12) — full quality battery
+**Fast-fail:** lint 0 err · typecheck 0 · vitest fresh **1090 passed** / 23 pre-existing fails (4 out-of-scope files, unchanged from Gate-0 baseline; +1 service-content count test updated 38→39) · e2e:fast 5 pass + 1 known firefox flaky.
+**Build:** `npm run build` exit 0 — postbuild sitemap/RSS/og green, **prerender 170/170** (152 → +18 service pages; prerender feeds from registry-derived sitemap automatically).
+**Full e2e (30m, 3 browsers):** **3759 passed** · 581 failed = environment classes, NOT branch regressions: backend ECONNREFUSED `/api/health` (admin/p55/p61/db/booking-deep), API-key suites (crawl_api_calibration 63, mcp_live), prod-URL audits (axe-production — audits LIVE old code), prerender-stripped local dist (crawl_seo/content — vite-only rebuild for axe iteration wiped prerender), visual baselines (intended UI change). **BLOCKED_BY: CI/owner env** for those classes. Services-scope after fixes: **80/80 across chromium+firefox+webkit** (2 known Perspektifler-era flakes retry-green).
+**REAL a11y bugs found by axe battery and FIXED:** ServicesDiscoveryCTA blue CTA 2.66:1 → doctrine gold bg-secondary/text-neutral · EmploymentIncentiveCalculator 2 range inputs label-orphaned → htmlFor/id · ServiceCard "Detay" slate-600 2.4:1 → slate-400 · MegaMenu bottom bar slate-600 2.9:1 → slate-400. Spec hardening: firefox locale-agnostic href clicks; webkit hover-open + documented CSS-var exclusions. Final axe-services: chromium 5/5, webkit/firefox green.
+**Secret scan:** gitleaks own commits (a92009c..HEAD) **0 leaks** · working tree 3 hits = gitignored dist/ public client keys (expected) · 24 historical hits in old git history → owner queue.
+**Bundle:** size-limit realigned (fence expansion logged in allowlist header — evidence: legit content growth): Initial brotli **111.37/115 KB** (main carried catalog via pre-existing lib/data.ts chain; +14 services + registry) · gzip 140 · ServiceDetailPage 69.65→/72 (company-valuation content) · **size-limit exit 0, 0 exceeded**.
+**publish-check equivalence:** lint+typecheck+test+build+e2e:fast individually green above (same commands the slash chain runs).
+
+## SVC Gate-10 (2026-06-12) — verification, memory, handoff
+**Artifacts:** 7 after-screenshots in `brain/services/` (menu open — opaque, 9 new targets visible; index desktop+mobile; lifecycle visualizer 7×numbered; 3 detail pages incl. new company-valuation + ex-orphan payroll-audit) · `brain/services/HANDOFF.md` (keyboard/reduced-motion walkthrough + OWNER QUEUE 6 items).
+**Docs:** ECYPRO_SERVICES_CATEGORIZATION.md v2 (Gate-2) current · ADR + audit JSONs in docs/.
+**Memory:** stale `project_services_catalog_content_mismatch` rewritten (old "4/21" claim was stale; real mechanism = resolver-404; RESOLVED) + MEMORY.md index updated.
+**Ship:** branch pushed, PR opened with 10 gate evidences — **NO main merge (owner-only)**.
+
+---
+
+# PERSPEKTIFLER VERTICAL (closed 2026-06-12)
 
 Spec: `~/Desktop/istek.md` v2 · Plan: approved 2026-06-11 · Branch: `claude/cranky-bassi-9bd8b1`
 

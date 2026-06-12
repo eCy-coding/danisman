@@ -12,6 +12,7 @@ import { useParams, Navigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { SERVICES } from '@/data/services';
 import { getServiceContent } from '@/data/service-content';
+import { isCanonicalServiceSlug } from '@/data/service-taxonomy';
 import { ServiceDetailLayout } from '@/components/services/ServiceDetailLayout';
 import { JsonLd } from '../components/seo/JsonLd';
 import { buildBreadcrumbSchema } from '../lib/structured-data';
@@ -23,14 +24,16 @@ export const ServiceDetailPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
   if (!slug) return <Navigate to="/services" replace />;
 
-  // Find canonical service entry from SERVICES catalog
-  const service = SERVICES.find((s) => s.link?.endsWith(`/${slug}`));
-  if (!service) return <Navigate to="/404" replace />;
+  // Registry-first resolution (ADR-services-taxonomy-v2): the canonical slug
+  // set lives in service-taxonomy.ts. The old catalog-only lookup hard-404'd
+  // every menu pillar page and all adopted content slugs.
+  if (!isCanonicalServiceSlug(slug)) return <Navigate to="/404" replace />;
 
-  const fallbackTitle = service.title;
-  const fallbackDescription = service.description;
-  const serviceUrl = buildCanonical(`/services/${slug}`, language);
   const detailedContent = getServiceContent(slug);
+  const catalogEntry = SERVICES.find((s) => s.link?.endsWith(`/${slug}`));
+  const fallbackTitle = detailedContent?.hero.title ?? catalogEntry?.title ?? slug;
+  const fallbackDescription = detailedContent?.hero.subtitle ?? catalogEntry?.description ?? '';
+  const serviceUrl = buildCanonical(`/services/${slug}`, language);
 
   // ServiceDetailLayout her halükarda render olur; içerik yoksa hero + fallback CTA döner.
   const content = detailedContent ?? {

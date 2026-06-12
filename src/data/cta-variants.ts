@@ -546,3 +546,22 @@ export function getCtaVariant(slug: string, flavor: string): CtaVariant {
  * Tüm variant key listesi — useExperiment config için weighted assignment.
  */
 export const CTA_FLAVORS: CtaFlavor[] = ['urgency', 'value', 'social'];
+
+/**
+ * SVC P7 — full variant set for a slug with an explicit default flag.
+ * Authored coverage is the historical 21-slug list; every other canonical
+ * slug (e.g. company-valuation, due-diligence-suite) gets the house default.
+ */
+export function getCtaVariants(slug: string): {
+  isDefault: boolean;
+  variants: Record<CtaFlavor, CtaVariant>;
+} {
+  const service = VARIANT_INDEX[slug];
+  if (service) return { isDefault: false, variants: service.variants };
+  return {
+    isDefault: true,
+    variants: Object.fromEntries(
+      CTA_FLAVORS.map((flavor) => [flavor, getCtaVariant(slug, flavor)]),
+    ) as Record<CtaFlavor, CtaVariant>,
+  };
+}

@@ -8,6 +8,8 @@
   "search_placeholder": "Search services...",
   "filter_clear": "Clear Filters",
   "no_results": "No results found for",
+  "result_count": "{{count}} services listed",
+  "result_count_all": "{{count}} services · 7 expertise clusters",
   "roi_calculator": {
     "title": "Calculate Your Potential",
     "desc": "See the value of digital transformation today."
