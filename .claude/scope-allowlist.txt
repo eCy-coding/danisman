@@ -84,3 +84,10 @@ src/lib/api.ts
 src/lib/query-client.ts
 package.json
 brain/research-bridge/**
+# Hatasız-teslim turu (T0 talimatı 2026-06-12): pre-existing CI kırmızılarının kök-neden fix'leri
+src/test/**
+src/pages/track-b-phase-b5.test.tsx
+src/i18n/canonical.test.ts
+src/components/sections/Hero.tsx
+package-lock.json
+scripts/check-migration-safety.mjs

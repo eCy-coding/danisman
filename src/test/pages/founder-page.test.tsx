@@ -42,6 +42,8 @@ vi.mock('react-i18next', () => ({
     t: (k: string, opts?: Record<string, unknown>) =>
       opts?.returnObjects ? [] : (TR_DICT[k] ?? k),
     i18n: { language: 'tr' },
+    // FounderPage gates render on namespace readiness (`if (!ready) return null`).
+    ready: true,
   }),
   initReactI18next: { type: '3rdParty', init: () => {} },
 }));

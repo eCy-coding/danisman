@@ -44,7 +44,11 @@ async function scan(): Promise<Finding[]> {
   for (const f of files) {
     // Skip test files themselves to avoid recursion noise.
     if (f.includes('/test/') || f.includes('.test.')) continue;
-    const src = await fs.readFile(f, 'utf8');
+    // Strip JSX {/* … */} and /* … */ comments first: prose that mentions
+    // markup (e.g. "falls back to <img>") must not trip the matchers.
+    const src = (await fs.readFile(f, 'utf8'))
+      .replace(/\{\/\*[\s\S]*?\*\/\}/g, '')
+      .replace(/\/\*[\s\S]*?\*\//g, '');
     const rel = path.relative(path.resolve(__dirname, '../..'), f);
 
     // <img without alt
