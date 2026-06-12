@@ -34,6 +34,11 @@ Görseller: `live-mega-menu-open.png` (yeni hedefler menüde) · `live-services-
 - ÖNCE: menünün 9 öğesinden 5'i 404 (owner ekran görüntüsü), 17 sitemap URL ölü.
 - SONRA: 9/9 hedef 200 + statik title; sitemap 39 canonical, 0 ölü.
 
+## Re-assert (yarış 2 — #228 docs merge sonrası)
+- `ld34rl347` (auto, prerender'sız) Ready olup alias'ı aldı; canlı title generic shell'e düştü (kanıt yakalandı).
+- `vercel deploy --prebuilt --prod` → **`rat7ce684` Aliased ecypro.com**; canlı title ilk denemede statik: "Şirket Değerleme & Kazanç Kalitesi (QoE)".
+- Final matris (re-assert sonrası): 5/5 rota 200 + statik title · sitemap 156 satır (39×4).
+
 ## Rollback
 `vercel rollback https://danisman-qhnxj3jse-ecys-projects.vercel.app` (önceki production) — tek komut.
 
