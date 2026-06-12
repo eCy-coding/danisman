@@ -59,6 +59,10 @@ async function api(method, path, body) {
     headers: {
       'content-type': 'application/json',
       authorization: `Bearer ${KEY}`,
+      // Tier limiter classifies by x-api-key (Authorization alone reads as
+      // anonymous → 60req/15min, starved by our 15s poll). Same key, both
+      // headers: auth via Authorization, tier/identity via x-api-key.
+      'x-api-key': KEY,
       origin: ORIGIN,
     },
     body: body ? JSON.stringify(body) : undefined,
@@ -238,17 +242,35 @@ async function processJob(mcp, job) {
   const notebookId = await ensureNotebook(mcp);
   await stage('RESEARCHING', 'NotebookLM Deep Research başlatılıyor', { notebookId });
 
-  const started = await mcp.tool('research_start', {
+  // Google intermittently rejects DEEP research with code 8 (quota/transient,
+  // "try fast"). Falling back keeps the job alive instead of FAILED — the
+  // stage line tells the operator which mode actually ran.
+  let effectiveMode = job.mode === 'deep' ? 'deep' : 'fast';
+  let started = await mcp.tool('research_start', {
     notebook_id: notebookId,
     query: job.topic,
-    mode: job.mode === 'deep' ? 'deep' : 'fast',
+    mode: effectiveMode,
   });
+  const startErr = () => JSON.stringify(started).slice(0, 300);
   if (started?.status && started.status !== 'success') {
-    throw new Error(`research_start: ${JSON.stringify(started).slice(0, 300)}`);
+    const quotaish = /code 8|UserDisplayableError|RESOURCE_EXHAUSTED/i.test(startErr());
+    if (effectiveMode === 'deep' && quotaish) {
+      effectiveMode = 'fast';
+      await stage('RESEARCHING', 'Deep mod Google kotasına takıldı — fast moduna düşüldü');
+      log(`job ${job.id}: deep → fast fallback (code 8)`);
+      started = await mcp.tool('research_start', {
+        notebook_id: notebookId,
+        query: job.topic,
+        mode: 'fast',
+      });
+    }
+    if (started?.status && started.status !== 'success') {
+      throw new Error(`research_start: ${startErr()}`);
+    }
   }
 
   // Poll. research_status blocks up to max_wait per call; loop with budget.
-  const budgetMs = job.mode === 'deep' ? 15 * 60_000 : 6 * 60_000;
+  const budgetMs = effectiveMode === 'deep' ? 15 * 60_000 : 6 * 60_000;
   const deadline = Date.now() + budgetMs;
   let status = null;
   while (Date.now() < deadline) {

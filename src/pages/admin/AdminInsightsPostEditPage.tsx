@@ -23,6 +23,7 @@ type Domain = 'M_A' | 'ESG' | 'FINTECH' | 'AILE_SIRKETI';
 interface PostDetail {
   id: string;
   slug: string;
+  slugEn: string | null;
   type: string;
   status: PostStatus;
   language: string;
@@ -36,11 +37,14 @@ interface PostDetail {
   subDomain: string;
   topic: string | null;
   seriesId: string | null;
+  seriesOrder: number | null;
   authorId: string;
   categoryId: string | null;
   coverImageUrl: string;
   coverImageAlt: string;
   ogImageUrl: string | null;
+  videoEmbedUrl: string | null;
+  canonicalUrl: string | null;
   metaTitleTr: string | null;
   metaTitleEn: string | null;
   metaDescTr: string | null;
@@ -50,6 +54,7 @@ interface PostDetail {
   scheduledAt: string | null;
   isFeatured: boolean;
   isEditorsPick: boolean;
+  featureOrder: number | null;
 }
 
 interface AuthorOption {
@@ -131,6 +136,7 @@ const VALID_TRANSITIONS: Partial<Record<PostStatus, PostStatus[]>> = {
 
 const emptyForm = (): Omit<PostDetail, 'id'> => ({
   slug: '',
+  slugEn: null,
   type: 'ANALYSIS',
   status: 'DRAFT',
   language: 'TR_ONLY',
@@ -144,11 +150,14 @@ const emptyForm = (): Omit<PostDetail, 'id'> => ({
   subDomain: '',
   topic: null,
   seriesId: null,
+  seriesOrder: null,
   authorId: '',
   categoryId: null,
   coverImageUrl: '',
   coverImageAlt: '',
   ogImageUrl: null,
+  videoEmbedUrl: null,
+  canonicalUrl: null,
   metaTitleTr: null,
   metaTitleEn: null,
   metaDescTr: null,
@@ -158,6 +167,7 @@ const emptyForm = (): Omit<PostDetail, 'id'> => ({
   scheduledAt: null,
   isFeatured: false,
   isEditorsPick: false,
+  featureOrder: null,
 });
 
 // ── Main Page ────────────────────────────────────────────────────────────────
@@ -258,17 +268,22 @@ export const AdminInsightsPostEditPage: React.FC = () => {
   const handleSaveDraft = () => {
     // R12-P2 — Zod schema marks optional string fields as `.optional()` which
     // accepts `undefined` but NOT `null`. The form state initializes these to
-    // `null` (Domain TS type), so a raw `mutate(form)` ships nulls and the
-    // server returns 400 on every fresh draft. Strip nulls + empty strings
-    // for optional keys before submission. Required fields (titleTr, slug,
-    // bodyTrMdx, …) stay as-is so Zod surfaces real validation gaps.
+    // `null` (Domain TS type) and GET hydration copies every null column from
+    // the API row, so a raw `mutate(form)` ships nulls and the server returns
+    // 400. Strip nulls + empty strings for ALL optional keys before
+    // submission. Required fields (titleTr, slug, bodyTrMdx, …) stay as-is so
+    // Zod surfaces real validation gaps.
     const optionalKeys: (keyof typeof form)[] = [
+      'slugEn',
       'titleEn',
       'excerptEn',
       'bodyEnMdx',
       'topic',
       'seriesId',
+      'seriesOrder',
       'ogImageUrl',
+      'videoEmbedUrl',
+      'canonicalUrl',
       'metaTitleTr',
       'metaTitleEn',
       'metaDescTr',
@@ -276,6 +291,7 @@ export const AdminInsightsPostEditPage: React.FC = () => {
       'publishedAt',
       'scheduledAt',
       'categoryId',
+      'featureOrder',
     ];
     const cleaned: Partial<typeof form> = { ...form };
     for (const k of optionalKeys) {

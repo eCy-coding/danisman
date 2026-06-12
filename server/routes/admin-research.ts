@@ -30,6 +30,18 @@ const BRIDGE_SCOPE = 'research:bridge';
 // A job counts as "bridge alive" evidence when the bridge touched it recently.
 const BRIDGE_ALIVE_WINDOW_MS = 120_000;
 
+// Idle-queue heartbeat: claim polls return 204 without touching any job row,
+// so job updatedAt alone flips the UI badge to "offline" after 2 idle
+// minutes even while the bridge polls every 15s. Stored on app.locals (not a
+// module var) so each test app starts cold; in-memory is enough — the bridge
+// repopulates it within one poll interval after a server restart.
+const HEARTBEAT_KEY = 'researchBridgeLastClaimAtMs';
+
+function readHeartbeatMs(app: { locals: Record<string, unknown> }): number {
+  const v = app.locals[HEARTBEAT_KEY];
+  return typeof v === 'number' ? v : 0;
+}
+
 // Statuses a bridge PATCH may target while the job is still in flight.
 const ACTIVE_STATUSES: ResearchJobStatus[] = [
   ResearchJobStatus.CLAIMED,
@@ -140,9 +152,11 @@ adminResearchRouter.get(
         select: { updatedAt: true },
       }),
     ]);
-    const bridgeAlive =
-      !!lastBridgeTouch &&
-      Date.now() - lastBridgeTouch.updatedAt.getTime() < BRIDGE_ALIVE_WINDOW_MS;
+    const lastSeenMs = Math.max(
+      lastBridgeTouch?.updatedAt.getTime() ?? 0,
+      readHeartbeatMs(req.app),
+    );
+    const bridgeAlive = lastSeenMs > 0 && Date.now() - lastSeenMs < BRIDGE_ALIVE_WINDOW_MS;
     res.json({
       status: 'ok',
       data: {
@@ -151,7 +165,7 @@ adminResearchRouter.get(
         page,
         limit,
         bridgeAlive,
-        lastBridgeSeenAt: lastBridgeTouch?.updatedAt ?? null,
+        lastBridgeSeenAt: lastSeenMs > 0 ? new Date(lastSeenMs) : null,
       },
     });
   },
@@ -197,7 +211,8 @@ const bridgeAuth = apiKeyAuth({ requiredScopes: [BRIDGE_SCOPE] });
 // POST /api/v1/admin/research/bridge/claim — atomically claim the oldest
 // QUEUED job. Optimistic guard (updateMany on id+QUEUED) makes double-claim
 // races resolve to exactly one winner.
-adminResearchRouter.post('/bridge/claim', bridgeAuth, async (_req, res): Promise<void> => {
+adminResearchRouter.post('/bridge/claim', bridgeAuth, async (req, res): Promise<void> => {
+  req.app.locals[HEARTBEAT_KEY] = Date.now();
   const candidate = await prisma.researchJob.findFirst({
     where: { status: ResearchJobStatus.QUEUED },
     orderBy: { createdAt: 'asc' },
@@ -244,12 +259,10 @@ adminResearchRouter.patch('/bridge/jobs/:id', bridgeAuth, async (req, res): Prom
   if (patch.status === 'DONE') {
     const draftParsed = DraftPayloadSchema.safeParse(patch.draft);
     if (!draftParsed.success) {
-      res
-        .status(400)
-        .json({
-          error: 'DONE requires a valid draft payload',
-          details: draftParsed.error.flatten(),
-        });
+      res.status(400).json({
+        error: 'DONE requires a valid draft payload',
+        details: draftParsed.error.flatten(),
+      });
       return;
     }
     const draft = draftParsed.data;

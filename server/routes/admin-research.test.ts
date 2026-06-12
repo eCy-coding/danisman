@@ -168,6 +168,21 @@ describe('GET /jobs', () => {
       .set('x-test-role', 'ADMIN');
     expect(res.body.data.bridgeAlive).toBe(false);
   });
+
+  it('bridgeAlive=true after an idle claim poll (204, no job rows touched)', async () => {
+    // Empty queue: claim returns 204 yet must still register a heartbeat,
+    // otherwise the badge shows "offline" whenever the bridge sits idle.
+    db.researchJob.findMany.mockResolvedValue([]);
+    db.researchJob.count.mockResolvedValue(0);
+    db.researchJob.findFirst.mockResolvedValue(null);
+    const app = makeApp();
+    const claim = await request(app)
+      .post('/api/v1/admin/research/bridge/claim')
+      .set('x-test-bridge', 'ok');
+    expect(claim.status).toBe(204);
+    const res = await request(app).get('/api/v1/admin/research/jobs').set('x-test-role', 'ADMIN');
+    expect(res.body.data.bridgeAlive).toBe(true);
+  });
 });
 
 describe('POST /jobs/:id/cancel', () => {

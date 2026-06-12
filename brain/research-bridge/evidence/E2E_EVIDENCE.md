@@ -51,3 +51,39 @@ NOT: Tekrarlı ekran görüntüsü `npm run preview`'in build-zamanı sabit
 VITE_API_URL ile stale dist serve etmesi yüzünden flaky oldu (serve-zamanı env
 override etkisiz) — bu harness kısıtı feature'la ilgisiz; üretim build'i doğru
 VITE_API_URL ile derlenir. Fonksiyonel kanıt §1-4 ile tam.
+
+## 6. Canlı Chrome demosu — GERÇEK NotebookLM, kullanıcı izlerken (2026-06-12)
+
+Akış: kullanıcı `/admin/research`'te kendi konusuyla ("Türkiye'deki aile
+şirketleri, kuşak çatışmaları", mode=deep) **Araştırmayı başlat**'a bizzat
+tıkladı → köprü gerçek NotebookLM'i sürdü → 38 sn'de DONE → draft admin
+editöründe açıldı → başlık canlı düzenlenip kaydedildi → DB doğrulandı.
+Kareler: `live-demo-3-research-done-bridge-online.png`,
+`live-demo-4-editor-saved-title.png`.
+
+Canlıda yakalanan ve AYNI oturumda kök nedenden düzeltilen 5 kusur:
+
+1. **Yanlış MCP binary** — venv'deki `notebooklm-mcp` farklı paket (FastMCP,
+   `server` subcommand ister); doğrusu `~/.local/bin/notebooklm-mcp`
+   (pipx, argsız stdio). `NLM_MCP_CMD` ile düzeltildi.
+2. **Google code 8 (deep reddi)** — `research_start mode=deep` quota hatası;
+   bridge'e **deep→fast otomatik fallback** eklendi (`bridge.mjs`), canlıda
+   tetiklenip log'a düştü: `deep → fast fallback (code 8)`.
+3. **429 fırtınası** — tier limiter `x-api-key` HEADER'ına bakıyor;
+   yalnız `Authorization: Bearer` gönderen bridge "anonymous" (60/15dk)
+   sayılıyordu. Bridge artık aynı key'i iki header'da yolluyor. Ayrıca UI'nin
+   5 sn poll'u tek başına generalLimiter'ı (100/15dk) aşıyor — dev'de
+   `RATE_LIMIT_MAX` env'i; prod değerlendirmesi PR notunda.
+4. **Editör PATCH 400** — GET hydration null kolonları form'a kopyalıyor,
+   `optionalKeys` strip listesi 5 alanı (slugEn, seriesOrder, videoEmbedUrl,
+   canonicalUrl, featureOrder) kaçırıyordu → her kayıtlı post düzenlemesi
+   400'dü. XHR hook ile yanıt gövdesi yakalandı, liste + PostDetail tipi
+   tamamlandı → PATCH 200 + DB'de yeni başlık (`updatedAt 11:28:40Z`).
+5. **Sahte "Köprü çevrimdışı" rozeti** — `bridgeAlive` yalnız job satırı
+   dokunuşuna bakıyordu; boş kuyrukta köprü 15 sn'de bir 204 alırken rozet
+   2 dk sonra söndü. Claim endpoint'i artık `app.locals` heartbeat yazıyor
+   (test izolasyonu için modül değişkeni değil); idle'da rozet yeşil.
+   Yeni test: `bridgeAlive=true after an idle claim poll` → suite **20/20**.
+
+Single-writer doğrulaması: köprü DONE sonrası posta bir daha dokunmadı;
+admin düzenlemesi tek yazar olarak DB'ye işlendi.
