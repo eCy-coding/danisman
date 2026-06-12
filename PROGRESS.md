@@ -46,3 +46,11 @@
 - RECLASS: BL-05 @ts-expect-error 9/9 açıklamalı-haklı → 🟢 düşük öncelik. ts-prune 410 adayı güvenilmez (false-positive kanıtlı) → BL-09 knip host.
 - PENDING-OWNER: LHCI host koşumu (BL-01 etkisi ölçümü), full e2e host, KVKK PR merge.
 - NEXT: BL-10 (TODO×2) → BL-09 (knip) → BL-06/07 (App.tsx + service-content bölme).
+
+## IMPROVE-LOOP Oturum-2 (DONE 2026-06-12)
+- BL-10 EVALUATED, aksiyon yok: iki TODO da belgeli/kasıtlı erteleme (a: i18n threading = EN içerik kararı, lang='tr' doğru ara önlem; b: TODO(P18) mimari tercih, API kontrat değişikliği) — iş üretilmedi (anti-meta-orchestration).
+- BL-13 YENİ (🔴 pre-existing): e2e Booking Wizard sanity 3/3 tarayıcı kırmızı. Kanıt: dist gate-2 anından (bugünkü 5 commit dist'te yok → regresyonumuz değil). Mekanizma: ServicesPage InteractiveLazyMount (intersection-gated) vs test timing; aynı sınıf fix main'de #225. Kalıcı çözüm: gate-3 öncesi main senkronu.
+- BL-09 FAZ-1 DONE: knip ham 104 unused file / 27 dep / 103 export (brain/KNIP_RAW_2026-06-12.txt). Örneklem teyitleri: DemoRequestModal+dayjs+emailjs gerçek ölü; keystatic FP (admin.html entry). CLAUDE.md'nin 'Email: EmailJS' satırı bayat. Faz-2: knip.json + teyitli silme.
+- ALTYAPI: taze build alındı (vite ✓; 154-route prerender detached sürüyor); brain/IMPROVE_LESSONS.md oluşturuldu (7 ders: DC nohup deseni, sandbox git-write yasağı, ts-prune güvenilmezliği, pick delete/modify kontrolü, dist tazeliği kanıtı, zsh glob, e2e harness).
+- PENDING: e2e tek-test re-check (prerender bitince) · LHCI host · KVKK PR merge (owner).
+- NEXT: BL-13 (main senkron kararı) → BL-09 faz-2 → BL-06/07.

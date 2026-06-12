@@ -1,0 +1,9 @@
+# IMPROVE LESSONS — Reflexion Kayıtları (her başarısızlık → 1 yeniden kullanılabilir ders)
+
+- 2026-06-12 L1: Desktop Commander MCP isteği ~60s'de transport timeout'a düşüyor VE oturumu öldürüyor → uzun host işleri (build, e2e, lighthouse) DAİMA `nohup cmd > /tmp/X.log 2>&1 &` ile detached başlat; kısa `tail` çağrılarıyla polla. start_process/read_process_output timeout_ms ≤ 45s tut.
+- 2026-06-12 L2: Sandbox git WRITE işlemleri bozuk (index.lock unlink edilemiyor) → tüm git add/commit/push HOST'ta; sandbox yalnız read-only git + dosya editi.
+- 2026-06-12 L3: ts-prune bu repoda güvenilmez (alias çözümleme; MEGA_MENUS'u dead gösterdi, 13× kullanımda) → dead-code için knip (host) kullan; ts-prune çıktısıyla silme YAPMA.
+- 2026-06-12 L4: cherry-pick research-bridge soyundan gelirse delete/modify conflict olası (PerspektiflerFeed bu branch'te yok) → pick öncesi `git show <sha> --name-only` ∩ `git ls-tree HEAD` kontrolü; eksik dosya = hunk'ı düşür.
+- 2026-06-12 L5: `vite preview` dist'i servis eder → e2e/Lighthouse sonuçları SADECE dist'in commit'iyle anlamlı; koşumdan önce `stat dist/index.html` ile build tazeliğini kanıtla (bayat dist 2× yanlış teşhise yol açtı: LHCI 'fail'leri + booking-wizard triage).
+- 2026-06-12 L6: zsh'ta `ls X*` glob eşleşmeyince hata basar (`no matches found`) → script'lerde `ls X* 2>/dev/null` veya `setopt NULL_GLOB`.
+- 2026-06-12 L7: `npm run test:e2e:fast` tek başına mock-server/port varsayımlarıyla eksik harness'ta koşabilir; spec in-page route mock'ları kullanıyorsa isimdeki "mock server" yanıltıcıdır — önce spec'i oku, sonra harness kur.

@@ -1,0 +1,390 @@
+Unused files (104)
+src/app/keystatic/admin.tsx                              
+src/app/keystatic/page.tsx                               
+src/components/admin/skeleton/index.ts                   
+src/components/auth/Can.tsx                              
+src/components/blog/BlogHeader.tsx                       
+src/components/common/AppErrorBoundary.tsx               
+src/components/common/DemoRequestModal.tsx               
+src/components/common/ErrorFallback.tsx                  
+src/components/common/ResponsiveImage.stories.tsx        
+src/components/common/ResponsiveImage.tsx                
+src/components/common/UrgencyBanner.tsx                  
+src/components/common/VideoModal.tsx                     
+src/components/features/assessment/AssessmentWizard.tsx  
+src/components/features/assessment/QuestionCard.tsx      
+src/components/features/assessment/ScoreGauge.tsx        
+src/components/features/case-studies/FilterBar.tsx       
+src/components/features/consulting/ServiceLiveTracker.tsx
+src/components/insights/article/mdx/NewsletterMidCTA.tsx 
+src/components/insights/CommentForm.tsx                  
+src/components/insights/CommentItem.tsx                  
+src/components/insights/CommentsSection.tsx              
+src/components/insights/LanguageSwitcher.tsx             
+src/components/layout/Contact.tsx                        
+src/components/marketing/AnonymizedClientGrid.tsx        
+src/components/marketing/NewsletterCapture.tsx           
+src/components/marketing/SocialProofFeed.stories.tsx     
+src/components/marketing/SocialProofFeed.tsx             
+src/components/marketing/TestimonialVideo.tsx            
+src/components/sections/Booking.tsx                      
+src/components/sections/HeroPattern.tsx                  
+src/components/seo/Hreflang.tsx                          
+src/components/social/ShareButtons.tsx                   
+src/components/ui/animated-beam.tsx                      
+src/components/ui/Button.stories.tsx                     
+src/components/ui/Card.stories.tsx                       
+src/components/ui/CurrencySwitcher.tsx                   
+src/components/ui/Dialog.tsx                             
+src/components/ui/Form.tsx                               
+src/components/ui/Input.stories.tsx                      
+src/components/ui/MediaPicture.tsx                       
+src/components/ui/OptimizedImage.tsx                     
+src/components/ui/SkeletonLoader.stories.tsx             
+src/components/ui/Slider.tsx                             
+src/constants/brand.ts                                   
+src/constants/styles.ts                                  
+src/data/clients.ts                                      
+src/data/cta-variants.ts                                 
+src/data/email-signatures.ts                             
+src/data/pillars-content.ts                              
+src/hooks/useApi.ts                                      
+src/hooks/useUrlState.ts                                 
+src/hooks/useVault.ts                                    
+src/hooks/useViewAs.ts                                   
+src/i18n/keys/insights.en.ts                             
+src/lib/ai/embeddings.ts                                 
+src/lib/ai/engine.ts                                     
+src/lib/ai/procedural.ts                                 
+src/lib/analytics-noop.ts                                
+src/lib/analytics/insightsEvents.ts                      
+src/lib/contact-mailto.ts                                
+src/lib/director/heuristics.ts                           
+src/lib/experiments.ts                                   
+src/lib/featureFlags.ts                                  
+src/lib/insights/imageOptimizer.ts                       
+src/lib/insights/lazyComponents.ts                       
+src/lib/network/fetch-client.ts                          
+src/lib/realtime/index.ts                                
+src/lib/realtime/useRealtime.ts                          
+src/lib/security/headers.ts                              
+src/lib/sentry-noop.ts                                   
+src/lib/seo/article-schema.ts                            
+src/lib/seo/cross-link.ts                                
+src/lib/seo/organization-schema.ts                       
+src/lib/useRouteNamespaces.ts                            
+src/lib/vault/crypto.ts                                  
+src/lib/vault/db.ts                                      
+src/lib/vault/sync.ts                                    
+src/mocks/ai.ts                                          
+src/prototype/about.tsx                                  
+src/prototype/case-studies.tsx                           
+src/prototype/contact.tsx                                
+src/prototype/discovery.tsx                              
+src/prototype/error-pages.tsx                            
+src/prototype/founder.tsx                                
+src/prototype/home.tsx                                   
+src/prototype/insight-detail.tsx                         
+src/prototype/insights.tsx                               
+src/prototype/legal.tsx                                  
+src/prototype/pricing.tsx                                
+src/prototype/service-detail.tsx                         
+src/prototype/services.tsx                               
+src/schemas/forms/index.ts                               
+src/setupTests.ts                                        
+src/stores/useStoreReset.ts                              
+src/test/setup.ts                                        
+src/theme.ts                                             
+src/tokens/colors.ts                                     
+src/tokens/elevation.ts                                  
+src/tokens/index.ts                                      
+src/tokens/motion.ts                                     
+src/tokens/spacing.ts                                    
+src/tokens/typography.ts                                 
+src/types/api.ts                                         
+src/types/index.ts                                       
+Unused dependencies (27)
+@emailjs/browser            package.json:159:6
+@keystatic/core             package.json:164:6
+@logtail/node               package.json:165:6
+@logtail/winston            package.json:166:6
+@radix-ui/react-slider      package.json:169:6
+@types/marked               package.json:180:6
+@types/qrcode               package.json:182:6
+@types/speakeasy            package.json:183:6
+dayjs                       package.json:193:6
+esbuild                     package.json:195:6
+express-validator           package.json:198:6
+ics                         package.json:205:6
+ioredis                     package.json:206:6
+katex                       package.json:208:6
+mermaid                     package.json:212:6
+node-cron                   package.json:214:6
+node-pty                    package.json:215:6
+qrcode                      package.json:218:6
+react-error-boundary        package.json:221:6
+react-markdown              package.json:226:6
+resend                      package.json:229:6
+shiki                       package.json:230:6
+speakeasy                   package.json:232:6
+winston                     package.json:235:6
+xterm                       package.json:237:6
+xterm-addon-fit             package.json:238:6
+yet-another-react-lightbox  package.json:239:6
+Unused devDependencies (5)
+@tailwindcss/typography  package.json:253:6
+@types/node-cron         package.json:260:6
+openai                   package.json:284:6
+pexels                   package.json:286:6
+zx                       package.json:306:6
+Unlisted dependencies (4)
+playwright  scripts/prerender.mjs:103:11               
+playwright  scripts/validate-schemas.mjs:41:32         
+fast-check  server/services/dsar-sla-fuzz.test.ts:2:21 
+axe-core    src/test/a11y/admin-rbac.axe.test.tsx:17:17
+Unlisted binaries (13)
+wait-on                    .github/workflows/lighthouse.yml      
+wait-on                    .github/workflows/quality-gate.yml    
+wait-on                    .github/workflows/schema-validator.yml
+commitlint                 lefthook.yml                          
+tmux                       package.json                          
+storybook                  package.json                          
+pm2                        package.json                          
+claude                     package.json                          
+crowler/.venv/bin/pip      package.json                          
+python3                    package.json                          
+crowler/.venv/bin/python3  package.json                          
+tar                        scripts/geo-watch.ts                  
+gh                         scripts/launch-readiness.ts           
+Unresolved imports (3)
+../../../types/deal     src/test/a11y/admin-deals.axe.test.tsx:28:30
+../../../types/revenue  src/test/a11y/admin-deals.axe.test.tsx:29:34
+../../../types/deal     src/test/admin/DealKanban.test.tsx:28:30    
+Unused exports (103)
+default                                  variable  src/components/admin/auth/AdminGuard.tsx:79:16              
+default                                  variable  src/components/admin/realtime/AdminRealtimeToasts.tsx:165:16
+default                                  variable  src/components/admin/ui/Accordion.tsx:43:16                 
+default                                  variable  src/components/admin/ui/Breadcrumb.tsx:90:16                
+ComplianceBadge                                    src/components/admin/ui/DataResidencyBadge.tsx:42:14        
+default                                  function  src/components/admin/ui/DataTable.tsx:314:16                
+default                                  variable  src/components/admin/ui/Drawer.tsx:89:16                    
+default                                  variable  src/components/admin/ui/EmptyState.tsx:30:16                
+default                                  variable  src/components/admin/ui/FormField.tsx:77:16                 
+default                                  variable  src/components/admin/ui/Modal.tsx:170:16                    
+default                                  variable  src/components/admin/ui/Skeleton.tsx:64:16                  
+default                                  variable  src/components/admin/ui/StatCard.tsx:66:16                  
+default                                  variable  src/components/admin/ui/Tabs.tsx:105:16                     
+PremiumOnly                                        src/components/auth/RoleGuard.tsx:31:14                     
+default                                  function  src/components/blog/AudioOverview.tsx:146:16                
+default                                  variable  src/components/blog/FAQSection.tsx:138:16                   
+StaggerContainer                                   src/components/common/FadeIn.tsx:91:14                      
+StaggerItem                                        src/components/common/FadeIn.tsx:119:14                     
+PulseGlow                                          src/components/common/FadeIn.tsx:182:14                     
+default                                  variable  src/components/common/LazyMount.tsx:55:16                   
+default                                  variable  src/components/common/NotFoundSearch.tsx:198:16             
+default                                  variable  src/components/common/OfflineBanner.tsx:51:16               
+default                                  variable  src/components/CookieBanner.tsx:340:16                      
+default                                  variable  src/components/discovery/KVKKBadge.tsx:44:16                
+default                                  variable  src/components/forms/FormErrorSummary.tsx:78:16             
+default                                  variable  src/components/LanguageSwitcher.tsx:63:16                   
+default                                  variable  src/components/legal/KvkkLayered.tsx:260:16                 
+default                                  variable  src/components/PricingCalculatorWizard.tsx:745:16           
+useTheme                                           src/components/providers/ThemeProvider.tsx:61:14            
+default                                  variable  src/components/pwa/InstallPrompt.tsx:217:16                 
+default                                  variable  src/components/pwa/UpdatePrompt.tsx:159:16                  
+default                                  variable  src/components/routing/LocaleRedirect.tsx:62:16             
+default                                  variable  src/components/routing/LocaleRoute.tsx:63:16                
+default                                  variable  src/components/ui/EmptyState.tsx:136:16                     
+default                                  variable  src/components/ui/ErrorState.tsx:161:16                     
+default                                  variable  src/components/ui/ResponsiveImage.tsx:229:16                
+ServiceCardSkeleton                                src/components/ui/Skeleton.tsx:116:14                       
+PricingCardSkeleton                                src/components/ui/Skeleton.tsx:138:14                       
+default                                  variable  src/components/ui/Skeleton.tsx:179:16                       
+Skeleton                                           src/components/ui/SkeletonLoader.tsx:28:14                  
+HeroSkeleton                                       src/components/ui/SkeletonLoader.tsx:70:14                  
+TableRowSkeleton                                   src/components/ui/SkeletonLoader.tsx:130:14                 
+TestimonialSkeleton                                src/components/ui/SkeletonLoader.tsx:150:14                 
+RETENTION_POLICIES_SEED                            src/constants/ropa-template.ts:124:14                       
+SERVICE_CATEGORIES                                 src/data/content.ts:35:14                                   
+NAV_COPY                                           src/data/copy/common.ts:1:14                                
+COOKIE_BANNER_COPY                                 src/data/copy/common.ts:459:14                              
+CONTACT_FORM_COPY                                  src/data/copy/common.ts:488:14                              
+GENERIC_SERVICE_DETAILS                            src/data/copy/pages.ts:79:14                                
+HERO_CONTENT                                       src/data/copy/pages.ts:152:14                               
+getFounderBio                            function  src/data/founder-bios.ts:60:17                              
+CASE_STUDY_SLUGS                                   src/data/mockCaseStudies.ts:212:14                          
+default                                  function  src/hooks/useAdminEvents.ts:96:16                           
+useRole                                  function  src/hooks/useCan.ts:28:17                                   
+default                                  function  src/hooks/useOnline.ts:38:16                                
+useNetworkInfo                           function  src/hooks/useSaveData.ts:104:17                             
+invalidateServiceOverride                function  src/hooks/useServiceOverride.ts:80:17                       
+useExperiment                            function  src/lib/ab-test.ts:253:17                                   
+getFeatureFlag                           function  src/lib/ab-testing.ts:101:17                                
+emitRaw                                  function  src/lib/analytics-events.ts:241:17                          
+trackROICalc                                       src/lib/analytics.ts:104:14                                 
+initWebVitalsPostHog                     function  src/lib/analytics/web-vitals.ts:24:17                       
+formatCompactNumber                      function  src/lib/animations.ts:110:17                                
+bookingsApi                                        src/lib/api.ts:239:14                                       
+analyticsApi                                       src/lib/api.ts:247:14                                       
+isClarityLoaded                          function  src/lib/clarity.ts:37:17                                    
+claritySend                              function  src/lib/clarity.ts:93:17                                    
+maskFromClarity                          function  src/lib/clarity.ts:103:17                                   
+STORAGE_KEY_V1                                     src/lib/consent.ts:29:14                                    
+DEFAULT_PREFERENCES                                src/lib/consent.ts:46:14                                    
+setConsent                               function  src/lib/consent.ts:154:17                                   
+clearConsent                             function  src/lib/consent.ts:182:17                                   
+onConsentChange                          function  src/lib/consent.ts:189:17                                   
+isTransferRequired                       function  src/lib/data-residency.ts:58:17                             
+StateMachine                             class     src/lib/director/engine.ts:93:14                            
+setGrowthBookAttributes                  function  src/lib/growthbook.ts:68:17                                 
+CACHE_TTL                                          src/lib/insights/cacheKeys.ts:1:14                          
+CACHE_KEYS                                         src/lib/insights/cacheKeys.ts:9:14                          
+initAnalytics                            function  src/lib/integrations/analytics.ts:53:17                     
+denyAnalyticsConsent                     function  src/lib/integrations/analytics.ts:107:17                    
+trackPageView                            function  src/lib/integrations/analytics.ts:117:17                    
+trackServiceView                         function  src/lib/integrations/analytics.ts:137:17                    
+trackWidgetInteraction                   function  src/lib/integrations/analytics.ts:143:17                    
+trackNewsletterSubscribe                 function  src/lib/integrations/analytics.ts:161:17                    
+trackAssessmentComplete                  function  src/lib/integrations/analytics.ts:167:17                    
+gsapCardEnter                            function  src/lib/motion/get-card-context.ts:50:17                    
+gsapCardLeave                            function  src/lib/motion/get-card-context.ts:62:17                    
+ollamaClient                                       src/lib/ollama-client.ts:310:14                             
+getDefaultSSEClient                      function  src/lib/realtime/sse-client.ts:405:17                       
+resetDefaultSSEClient                    function  src/lib/realtime/sse-client.ts:414:17                       
+getCurrentDir                            function  src/lib/rtl.ts:53:17                                        
+getDir                                   function  src/lib/rtl.ts:66:17                                        
+flushRumStats                            function  src/lib/rum-stats.ts:585:17                                 
+__resetRumStats                          function  src/lib/rum-stats.ts:590:17                                 
+notifyRouteChange                        function  src/lib/rum.ts:106:17                                       
+tracedOp                                 function  src/lib/rum.ts:116:23                                       
+tracedSync                               function  src/lib/rum.ts:123:17                                       
+default                                  variable  src/lib/seo-helmet.tsx:177:16                               
+autoBreadcrumbFromPath                   function  src/lib/seo/breadcrumb.ts:30:17                             
+buildInsightsOgImagePath                 function  src/lib/seo/insightsOgImage.ts:11:17                        
+default                                  variable  src/pages/DiscoveryPage.tsx:523:16                          
+initEmailService           emailService  function  src/services/emailService.ts:109:17                         
+logError                                 function  src/utils/monitoring.ts:68:17                               
+Unused exported types (31)
+CompliancePermission      type       src/constants/ropa-template.ts:161:13         
+Lang                      type       src/data/sectorContent.ts:282:15              
+InsightsKey               type       src/i18n/keys/insights.ts:85:13               
+CaseStudyRecord           type       src/schemas/caseStudy.ts:24:13                
+NewsletterSubscribeInput  type       src/schemas/forms/newsletterSubscribe.ts:46:13
+BlogPostIndex             interface  src/types/blog.ts:73:18                       
+NavItems                  type       src/types/legacy_types.ts:17:13               
+ContactConfig             interface  src/types/legacy_types.ts:19:18               
+HeroContent               interface  src/types/legacy_types.ts:105:18              
+TrustBarCopy              interface  src/types/legacy_types.ts:124:18              
+ContactFormCopy           interface  src/types/legacy_types.ts:128:18              
+FooterCopy                interface  src/types/legacy_types.ts:158:18              
+CookieBannerCopy          interface  src/types/legacy_types.ts:176:18              
+InsightsCopy              interface  src/types/legacy_types.ts:193:18              
+SuccessStoriesCopy        interface  src/types/legacy_types.ts:201:18              
+KPICopy                   interface  src/types/legacy_types.ts:212:18              
+ValuePropCopy             interface  src/types/legacy_types.ts:218:18              
+ServicesCopy              interface  src/types/legacy_types.ts:224:18              
+AboutPageCopy             interface  src/types/legacy_types.ts:233:18              
+TeamPageCopy              interface  src/types/legacy_types.ts:241:18              
+FaqPageCopy               interface  src/types/legacy_types.ts:246:18              
+CareersPageCopy           interface  src/types/legacy_types.ts:251:18              
+IndustriesPageCopy        interface  src/types/legacy_types.ts:258:18              
+MethodologyPageCopy       interface  src/types/legacy_types.ts:263:18              
+PartnersPageCopy          interface  src/types/legacy_types.ts:269:18              
+LegalPageCopy             interface  src/types/legacy_types.ts:274:18              
+AuthPageCopy              interface  src/types/legacy_types.ts:281:18              
+CaseStudiesPageCopy       interface  src/types/legacy_types.ts:296:18              
+EventsPageCopy            interface  src/types/legacy_types.ts:301:18              
+LocationsPageCopy         interface  src/types/legacy_types.ts:307:18              
+InvoiceStatus             type       src/types/revenue.ts:4:13                     
+Duplicate exports (80)
+AdminGuard|default                    src/components/admin/auth/AdminGuard.tsx                
+AdminRealtimeToasts|default           src/components/admin/realtime/AdminRealtimeToasts.tsx   
+Accordion|default                     src/components/admin/ui/Accordion.tsx                   
+Breadcrumb|default                    src/components/admin/ui/Breadcrumb.tsx                  
+DataTable|default                     src/components/admin/ui/DataTable.tsx                   
+Drawer|default                        src/components/admin/ui/Drawer.tsx                      
+EmptyState|default                    src/components/admin/ui/EmptyState.tsx                  
+FormField|default                     src/components/admin/ui/FormField.tsx                   
+Modal|default                         src/components/admin/ui/Modal.tsx                       
+SkeletonList|default                  src/components/admin/ui/Skeleton.tsx                    
+StatCard|default                      src/components/admin/ui/StatCard.tsx                    
+Tabs|default                          src/components/admin/ui/Tabs.tsx                        
+AudioOverview|default                 src/components/blog/AudioOverview.tsx                   
+FAQSection|default                    src/components/blog/FAQSection.tsx                      
+LazyMount|default                     src/components/common/LazyMount.tsx                     
+NotFoundSearch|default                src/components/common/NotFoundSearch.tsx                
+OfflineBanner|default                 src/components/common/OfflineBanner.tsx                 
+CookieBanner|default                  src/components/CookieBanner.tsx                         
+KVKKBadge|default                     src/components/discovery/KVKKBadge.tsx                  
+GrowthCalculator|default              src/components/features/interactive/GrowthCalculator.tsx
+LanguageSwitcher|default              src/components/LanguageSwitcher.tsx                     
+KvkkLayered|default                   src/components/legal/KvkkLayered.tsx                    
+PricingCalculatorWizard|default       src/components/PricingCalculatorWizard.tsx              
+InstallPrompt|default                 src/components/pwa/InstallPrompt.tsx                    
+UpdatePrompt|default                  src/components/pwa/UpdatePrompt.tsx                     
+QuickCheckWizard|default              src/components/QuickCheckWizard.tsx                     
+LocaleRedirect|default                src/components/routing/LocaleRedirect.tsx               
+LocaleRoute|default                   src/components/routing/LocaleRoute.tsx                  
+Certifications|default                src/components/sections/Certifications.tsx              
+LandingContent|default                src/components/sections/LandingContent.tsx              
+EmptyState|default                    src/components/ui/EmptyState.tsx                        
+ErrorState|default                    src/components/ui/ErrorState.tsx                        
+ResponsiveImage|default               src/components/ui/ResponsiveImage.tsx                   
+Skeleton|default                      src/components/ui/Skeleton.tsx                          
+useAdminEvents|default                src/hooks/useAdminEvents.ts                             
+useOnline|default                     src/hooks/useOnline.ts                                  
+STORAGE_KEY_V1_LEGACY|STORAGE_KEY_V1  src/lib/consent.ts                                      
+Helmet|default                        src/lib/seo-helmet.tsx                                  
+AdminAuditLogPage|default             src/pages/admin/AdminAuditLogPage.tsx                   
+AdminBlogEditPage|default             src/pages/admin/AdminBlogEditPage.tsx                   
+AdminCampaignsPage|default            src/pages/admin/AdminCampaignsPage.tsx                  
+AdminCampaignWizardPage|default       src/pages/admin/AdminCampaignWizardPage.tsx             
+AdminCollectionPage|default           src/pages/admin/AdminCollectionPage.tsx                 
+AdminHelpPage|default                 src/pages/admin/AdminHelpPage.tsx                       
+AdminLeadDetailPage|default           src/pages/admin/AdminLeadDetailPage.tsx                 
+AdminMediaLibraryPage|default         src/pages/admin/AdminMediaLibraryPage.tsx               
+AdminOverviewPage|default             src/pages/admin/AdminOverviewPage.tsx                   
+AdminPageEditPage|default             src/pages/admin/AdminPageEditPage.tsx                   
+AdminPagesListPage|default            src/pages/admin/AdminPagesListPage.tsx                  
+AdminProfilePage|default              src/pages/admin/AdminProfilePage.tsx                    
+AdminRBACPage|default                 src/pages/admin/AdminRBACPage.tsx                       
+AdminSecurityPage|default             src/pages/admin/AdminSecurityPage.tsx                   
+AdminServiceEditPage|default          src/pages/admin/AdminServiceEditPage.tsx                
+AdminSessionsPage|default             src/pages/admin/AdminSessionsPage.tsx                   
+AdminSettingsTabsPage|default         src/pages/admin/AdminSettingsTabsPage.tsx               
+AnnualReportPage|default              src/pages/AnnualReportPage.tsx                          
+BookingFeedbackPage|default           src/pages/BookingFeedbackPage.tsx                       
+CaseStudyDetailPage|default           src/pages/CaseStudyDetailPage.tsx                       
+DataRightsPage|default                src/pages/DataRightsPage.tsx                            
+Discovery|default                     src/pages/Discovery.tsx                                 
+DiscoveryCallPage|default             src/pages/DiscoveryCallPage.tsx                         
+DiscoveryPage|default                 src/pages/DiscoveryPage.tsx                             
+FaqPage|default                       src/pages/FaqPage.tsx                                   
+FounderPage|default                   src/pages/FounderPage.tsx                               
+IndustryReportPage|default            src/pages/IndustryReportPage.tsx                        
+NewsletterStatusPage|default          src/pages/NewsletterStatusPage.tsx                      
+NotFoundPage|default                  src/pages/NotFoundPage.tsx                              
+PillarPage|default                    src/pages/PillarPage.tsx                                
+PressKitPage|default                  src/pages/PressKitPage.tsx                              
+PricingCalculatorPage|default         src/pages/PricingCalculatorPage.tsx                     
+PricingPage|default                   src/pages/PricingPage.tsx                               
+QuickCheckPage|default                src/pages/QuickCheckPage.tsx                            
+ServerErrorPage|default               src/pages/ServerErrorPage.tsx                           
+ServiceDetailPage|default             src/pages/ServiceDetailPage.tsx                         
+ServicesPage|default                  src/pages/ServicesPage.tsx                              
+SpeakingPage|default                  src/pages/SpeakingPage.tsx                              
+StatusPage|default                    src/pages/StatusPage.tsx                                
+ThankYouPage|default                  src/pages/ThankYouPage.tsx                              
+VerifyEmailPage|default               src/pages/VerifyEmailPage.tsx                           
+WebinarLandingPage|default            src/pages/WebinarLandingPage.tsx                        
+Configuration hints (10)
+. (root)                       knip.json  Add entry and/or refine project files (104 unused files)
+**/*.d.ts                      knip.json  Remove from ignore                                      
+src/vite-env.d.ts              knip.json  Remove from ignore                                      
+autoprefixer                   knip.json  Remove from ignoreDependencies                          
+postcss                        knip.json  Remove from ignoreDependencies                          
+eslint-plugin-react-refresh    knip.json  Remove from ignoreDependencies                          
+@types/node                    knip.json  Remove from ignoreDependencies                          
+index.tsx                      knip.json  Refine entry pattern (no matches)                       
+App.tsx                        knip.json  Refine entry pattern (no matches)                       
+src/main.tsx                   knip.json  Remove redundant entry pattern                          
