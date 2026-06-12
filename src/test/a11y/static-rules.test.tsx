@@ -44,7 +44,14 @@ async function scan(): Promise<Finding[]> {
   for (const f of files) {
     // Skip test files themselves to avoid recursion noise.
     if (f.includes('/test/') || f.includes('.test.')) continue;
-    const src = await fs.readFile(f, 'utf8');
+    const raw = await fs.readFile(f, 'utf8');
+    // Blank out comments (JSX {/* */}, block, line) so prose mentioning
+    // markup (e.g. "<img>") can't trip the rules. Non-newline chars become
+    // spaces to keep line numbers stable for reported findings.
+    const src = raw
+      .replace(/\{\/\*[\s\S]*?\*\/\}/g, (c) => c.replace(/[^\n]/g, ' '))
+      .replace(/\/\*[\s\S]*?\*\//g, (c) => c.replace(/[^\n]/g, ' '))
+      .replace(/(^|[^:])\/\/[^\n]*/g, (c) => c.replace(/[^\n]/g, ' '));
     const rel = path.relative(path.resolve(__dirname, '../..'), f);
 
     // <img without alt
