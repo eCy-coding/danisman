@@ -318,6 +318,47 @@ liste cache, chat-widget dismiss).
 Gate: server suite 873/873 (auth.test mock'una refreshLimiter eklendi),
 typecheck web+server temiz.
 
+## 12. Humanize Kalibresi — "insan araştırmacı" sesi, AI parmak izi 0 (2026-06-12 gece)
+
+Talep: postlar bir insan araştırmacının kaleminden çıkmış gibi okunsun;
+"yapay zeka bulgularını 0'a indir". eCyPro admin panelinde NLM hattında ne
+kalibre edilir?
+
+Ölçülen AI tell'leri (canlı seçim raporunda): satır-içi atıf numaraları
+`[1]`/`[3-5]`/`[13, 14]` — **39 adet**; "Bu içerik … göstermektedir" klişesi;
+`## Metodoloji — NotebookLM ile sentezlenmiştir` açık ifşası.
+
+Çözüm — **biçim temizliği, olgu DOKUNULMAZ** (Kaynakça = kanıt zinciri kalır;
+yazar gerçek inceleyen insan; post onay zincirinden + sahip rötuşundan geçer):
+- `humanizeMarkdown()` (bridge): atıf numaralarını söker (tüm biçimler +
+  tablo hücresi), AI klişe açılışlarını siler ("Bu rapor…", "Sonuç olarak",
+  "kapsamlı bir şekilde"), kırpılan cümle başını Türkçe-duyarlı büyütür.
+  `core = humanizeMarkdown(body)`; `## Metodoloji` bloğu BODY'den çıkarıldı.
+- İnsan-sesi brief'i: `buildResearchQuery` + `queryReport` (leg-3, honor
+  edilen) "deneyimli insan araştırmacı; metin içinde kaynak numarası YOK;
+  klişe YOK" (TR/EN). İki kat: NLM itaat etmezse humanize garantör.
+- Cerrahi S1 (`firstSentence`): cümle-içi iki-nokta + sarkık enumerasyon
+  kuyruğunu keser ("…incelemek mümkün: 2016-2019:…" → "…incelemek mümkün.").
+- Cerrahi S2 (`extractKeyStats`): "YYYY - YYYY:" kronoloji başlığını veri
+  callout'undan reddeder.
+
+Kanıt:
+- Fixture (atıf + klişe + iki-nokta-liste + yıl-başlığı senaryoları):
+  atıf/NLM/Metodoloji/klişe = 0, çıkarımda sarkık-kuyruk yok, yıl-başlığı
+  veriye sızmıyor (`bare_heading_stat=f`), Kaynakça + sayılar korundu.
+- **Canlı gerçek-NLM koşusu** ("Türkiye'de kadın istihdamı 2010-2025"):
+  brief 88→1222 kr genişledi; deep→fast→query-fallback; PUBLISHED post
+  `len=9803`, `atıf=false nlm=false kaynakça=true tablo=true`. Public sayfa
+  (kare `human-run-1-public-clean.png`): insan-sesli dek, atıf-numarasız
+  çıkarımlar, Önemli Veriler'de gerçek metrik ("Kamu sektöründeki kadınların
+  %30,6'sı, özel sektörde %24,3'ü…"). Okunduğunda makine-imzası yok.
+- Gate: server suite 23/23, typecheck:server temiz. Önceki tüm fazlar
+  (P/K/L/M) DOKUNULMADI. Commit 0a180fd.
+
+**Bütünlük notu:** humanize OLGU/sayı eklemez/silmez; yalnız atıf litter'ı,
+AI klişesi ve araç-ifşası gibi BİÇİMSEL izleri temizler. Kaynakça korunduğu
+için iddialar doğrulanabilir kalır; içerik insan onayından geçer.
+
 ### Profesyonel danışman yayını
 Drift'li eski draft **ARCHIVED** (yayın kirliliği temizliği). Doğru-konu
 draft'a danışman rötuşu: başlık "Türkiye'de Enflasyonun On Yılı
