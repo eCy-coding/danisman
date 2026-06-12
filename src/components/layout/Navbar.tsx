@@ -80,7 +80,17 @@ export const Navbar: React.FC = () => {
   useBodyLock(isOpen);
   useKeyPress('Escape', () => {
     setIsOpen(false);
-    setActiveDropdown(null);
+    // APG disclosure: Esc must return focus to the disclosure trigger,
+    // otherwise keyboard users are dropped at <body>.
+    setActiveDropdown((current) => {
+      if (current) {
+        const trigger = navRef.current?.querySelector<HTMLElement>(
+          `[data-testid="navbar-link-${current}"]`,
+        );
+        trigger?.focus();
+      }
+      return null;
+    });
   });
 
   // BUG-01: panels must never survive a navigation — close on route change.

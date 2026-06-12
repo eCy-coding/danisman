@@ -29,6 +29,19 @@ Spec: `~/Desktop/istemek.md` (istek-services.md) · Plan: approved 2026-06-12
 **Validation script PASS:** 35 members + 4 pillar-only = **39 canonical**; multi-dept ∅; homeless ∅; phantom ∅; menu 9/9 unique; chips 8/8.
 **Artifacts:** services-taxonomy-v2.json · ADR-services-taxonomy-v2.md · ECYPRO_SERVICES_CATEGORIZATION.md (v2).
 
+## SVC Gate-3 (2026-06-12) — design & motion spec
+`docs/reports/services-design-motion-spec.md`: verified tokens (fib 1-55, golden sm-3xl), magic-number plan (duration-500/700→300/400, min-h-[52px]→fib-13, 44px=WCAG keep), full motion budget table w/ reduced-motion path per element, 3D=CSS/GSAP-only (R3F gated; three.js absent — verified).
+
+## SVC Gate-4 (2026-06-12) — single-source data layer (test-first)
+**RED first:** `src/test/services-taxonomy-v2.test.ts` (16 tests) failed on missing registry — evidence: "Test Files 1 failed / no tests" (import error).
+**Implemented:** `src/data/service-taxonomy.ts` (registry: 7 departments + lifecycles + PILLAR_PAGES + isCanonicalServiceSlug + getLifecyclePosition + SERVICES_MEGA_MENU projection) · common.ts MEGA_MENUS.services = projection · schema category enum +insan/risk/buyume · accent map +3 (cyan/rose/teal) · services.ts +14 adopted cards, ma-valuation→/services/company-valuation, DEĞERLEMEokul typo fixed, DEPARTMENTS derived · **company-valuation 16-section content authored** · **RESOLVER FIX (ROOT CAUSE):** ServiceDetailPage registry-first — catalog membership no longer 404s menu pillars/orphans.
+**GREEN:** 44/44 (taxonomy-v2 16 + services-content updated 21→35/4→7 + cluster-d) · typecheck 0 · lint 0 err.
+
+## SVC Gate-5 (2026-06-12) — mega menu APG disclosure
+**RED first:** new `MegaMenu.test.tsx` — 3 fail (12× ARIA menu-role misuse, translucent /98 surface, Esc no focus-return), 5 pass (registry render armor).
+**Implemented:** services panel role=menu/menuitem removed (APG disclosure = plain links) · surface opaque `bg-[#0a0f1c]` (H1 ghosting through /98 killed — owner screenshot overlap) · Navbar Esc now returns focus to trigger. Trigger already had aria-haspopup/expanded/controls + outside-click/route-close (Perspektifler Gate-2 — istemek.md "no a11y" premise was stale at Navbar level).
+**Evidence:** unit 8/8 · NEW `e2e/services-menu.spec.ts` chromium **5/5** — 9 unique targets, 4 menu→detail journeys (no /404), orphan payroll-audit + new company-valuation resolve, junk→404 strict, Esc focus-return · Perspektifler menu.spec regression: 10 pass + 1 known flaky (retry-green).
+
 ---
 
 # PERSPEKTIFLER VERTICAL (closed 2026-06-12)
