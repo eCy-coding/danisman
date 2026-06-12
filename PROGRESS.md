@@ -229,3 +229,11 @@ Until then the fence is enforced procedurally (SCOPE.md discipline).
 - ALTYAPI: taze build alındı (vite ✓; 154-route prerender detached sürüyor); brain/IMPROVE_LESSONS.md oluşturuldu (7 ders: DC nohup deseni, sandbox git-write yasağı, ts-prune güvenilmezliği, pick delete/modify kontrolü, dist tazeliği kanıtı, zsh glob, e2e harness).
 - PENDING: e2e tek-test re-check (prerender bitince) · LHCI host · KVKK PR merge (owner).
 - NEXT: BL-13 (main senkron kararı) → BL-09 faz-2 → BL-06/07.
+
+## IMPROVE-LOOP Oturum-3 — MAIN SENKRONU (DONE 2026-06-12)
+- MERGE 13c25c6: origin/main → branch (behind 6 squash / 290 dosya). 22 conflict cerrahi: üretilmişler theirs; docs union (bu dosya iki-bölüm yapı); kod theirs (main = evrilmiş kanonik: registry-first ServiceDetailPage, taxonomy v2, insightsMenuData); insight-article.test silindi (sayfa #222'de yeniden tasarlandı).
+- İÇERİK KORUMA: 5 Phase-2 slug (organizational-design, cloud-platform-modernization, revenue-growth-strategy, cost-optimization, digital-operations) PILLAR_PAGES'e kaydedildi — registry dışı kalsalar 404'tü (main audit'i bizim içerik olmadan "zero cloud content" demişti; merge ile içerik VAR → kayıt content-true). SERVICE_CONTENT 44, CANONICAL 44 (testler aynalandı).
+- TEST MİGRASYONU (subagent): 3 menü testi v2 sözleşmesine — getMegaChildren→SERVICES_MEGA_MENU projeksiyonu; aria-hidden→trigger aria-expanded (APG); BUG-02 data-seam mock + pozitif dal. 20/20. Tek bilinçli delta: mobil accordion 2-item kürasyon (main ADR'li redesign — owner veto edebilir).
+- ENV KAZASI + DERSLER (L8/L9): DC shell NODE_ENV=production+omit=dev → npm install devDeps prune + 547 sahte fail; ignored-file git add && zincirini kırıp rm'i atlattı (amend ile düzeltildi). Ortam onarıldı (--include=dev).
+- RATCHET KANITI: tsc web+server 0; eslint 0; vitest 149/153 (kalan 4: founder+track-b = main pre-existing; AdminBlog+createForm solo-yeşil → BL-14 flake). Main'in kendi baseline'ına göre canonical+static-rules DÜZELDİ.
+- NEXT: taze build+prerender → e2e:fast re-check (BL-13 kapanış) → BL-14 flake izolasyonu → BL-09 faz-2 → gate-3 Hub (artık #222 zemini içeride).

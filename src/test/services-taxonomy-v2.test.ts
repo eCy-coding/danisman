@@ -61,6 +61,12 @@ const V2_PILLARS = [
   'mergers-acquisitions',
   'ai-analytics',
   'digital-strategy',
+  // Merge 2026-06-12: Phase-2 intent sayfaları (içerikleri service-content'te tam)
+  'organizational-design',
+  'cloud-platform-modernization',
+  'revenue-growth-strategy',
+  'cost-optimization',
+  'digital-operations',
 ];
 const V2_MENU_TARGETS = [
   '/services/strategic-transformation',
@@ -96,9 +102,9 @@ describe('service-taxonomy registry — structure', () => {
     expect(all).toHaveLength(new Set(all).size);
   });
 
-  it('canonical set = 35 members + 4 pillar pages = 39', () => {
+  it('canonical set = 35 members + 9 pillar pages = 44', () => {
     expect(PILLAR_PAGES).toEqual(V2_PILLARS);
-    expect(CANONICAL_SERVICE_SLUGS).toHaveLength(39);
+    expect(CANONICAL_SERVICE_SLUGS).toHaveLength(44);
   });
 
   it('every canonical slug has a content entry (no thin pages, no 404s)', () => {

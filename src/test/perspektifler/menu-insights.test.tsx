@@ -3,15 +3,34 @@
  *
  * BUG-03: panel insights-only olmalı (Sektörler/Hakkımızda grupları YOK).
  * BUG-04: footer "Tüm içgörüleri keşfedin" (services metni değil), link /perspektifler.
- * Link sayısı ≤30. BUG-02: NAV_ITEMS icon taşımaz → boş ikon kutusu basılmamalı.
+ * Link sayısı ≤30. BUG-02: ikon kutusu YALNIZCA gerçek bir ikon varsa basılır.
+ *
+ * merge 2026-06-12: insights paneli artık insightsMenuData (canlı içerik
+ * indeksi) üzerinden render ediliyor; NAV_ITEMS iconName ile gerçek lucide
+ * ikonları taşıyor — BUG-02 guard'ı etiket-only senaryosuyla test edilir.
  */
 
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import React from 'react';
 import { MegaMenu } from '@/components/layout/MegaMenu';
 import { Navbar } from '@/components/layout/Navbar';
+
+// merge 2026-06-12: NAV_ITEMS.icon taşımıyordu → main her öğeye iconName verdi.
+// BUG-02'nin asıl invariantı ("ikon çözülemiyorsa kutu render edilmez") guard'ını
+// sınamak için home öğesini gate-2'deki gibi etiket-only'ye indiriyoruz
+// (veri seam mock'u — bileşen davranışı mock'lanmaz, MEGA_MENUS aynen kalır).
+vi.mock('@/data/copy/common', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@/data/copy/common')>();
+  return {
+    ...actual,
+    NAV_ITEMS: {
+      ...actual.NAV_ITEMS,
+      home: { ...actual.NAV_ITEMS.home, iconName: undefined },
+    },
+  };
+});
 
 const noop = () => {};
 
@@ -82,10 +101,28 @@ describe('Navbar — BUG-02 (boş ikon kutusu)', () => {
         <Navbar />
       </MemoryRouter>,
     );
-    // NAV_ITEMS hiçbir icon taşımıyor → hiçbir item'da ikon chip'i olmamalı.
+    // home mock ile etiket-only (icon yok, iconName yok) → ikon chip'i olmamalı.
     // (BUG-02'den önce her label'dan önce boş bir w-8 h-8 kutu vardı.)
     const homeLink = container.querySelector('[data-testid="navbar-link-home"]');
     expect(homeLink).toBeTruthy();
     expect(homeLink?.querySelector('.w-8.h-8')).toBeNull();
+  });
+
+  it('ikonlu öğeler kutuyu yalnızca gerçek ikonla basar (boş chip YOK)', () => {
+    const { container } = render(
+      <MemoryRouter>
+        <Navbar />
+      </MemoryRouter>,
+    );
+    // merge 2026-06-12: iconName: 'Briefcase' → kutu var VE içi dolu (svg).
+    const servicesLink = container.querySelector('[data-testid="navbar-link-services"]');
+    const box = servicesLink?.querySelector('.w-8.h-8');
+    expect(box).toBeTruthy();
+    expect(box?.querySelector('svg')).toBeTruthy();
+    // Navbar genelinde tek bir BOŞ ikon kutusu bile olmamalı (BUG-02 regresyonu).
+    const boxes = container.querySelectorAll('[data-testid^="navbar-link-"] .w-8.h-8');
+    boxes.forEach((b) => {
+      expect(b.querySelector('svg'), 'boş w-8 h-8 ikon kutusu (BUG-02)').toBeTruthy();
+    });
   });
 });
