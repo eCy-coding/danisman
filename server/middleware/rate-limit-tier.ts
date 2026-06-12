@@ -35,6 +35,7 @@ import type { Request, Response, NextFunction } from 'express';
 import { redis } from '../config/redis';
 import { logger } from '../config/logger';
 import { isRateLimitExempt } from './health-probe';
+import { verifyAccessToken } from './auth';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -65,6 +66,23 @@ export interface TierRateLimitOptions {
 
 interface AuthLikeRequest extends Request {
   user?: { id?: string; role?: string };
+  /** Signature-verified JWT peek, cached so identify/general-skip reuse it. */
+  __jwtPeek?: { id: string; role: string } | null;
+}
+
+/**
+ * The global mount runs BEFORE `authenticate`, so `req.user` is never set
+ * here and every JWT-bearing admin used to fall into the anonymous 60/15min
+ * bucket (the admin/auth tiers were dead code at this layer — calibration
+ * root cause for the 429 storm during normal panel use). Peek = verify the
+ * Bearer signature only; invalid tokens stay anonymous.
+ */
+export function peekJwt(req: AuthLikeRequest): { id: string; role: string } | null {
+  if (req.__jwtPeek !== undefined) return req.__jwtPeek;
+  const h = req.headers.authorization;
+  const token = h?.startsWith('Bearer ') ? h.slice(7) : undefined;
+  req.__jwtPeek = token ? verifyAccessToken(token) : null;
+  return req.__jwtPeek;
 }
 
 // ── Defaults ──────────────────────────────────────────────────────────────────
@@ -148,9 +166,9 @@ async function incrementAtomic(
 
 export function classifyTier(req: AuthLikeRequest): RateLimitTier {
   if (req.headers['x-api-key']) return 'api-key';
-  const role = req.user?.role;
+  const role = req.user?.role ?? peekJwt(req)?.role;
   if (role === 'ADMIN') return 'admin';
-  if (req.user?.id) return 'auth';
+  if (req.user?.id ?? peekJwt(req)?.id) return 'auth';
   return 'anonymous';
 }
 
@@ -159,7 +177,8 @@ export function defaultIdentify(req: AuthLikeRequest, tier: RateLimitTier): stri
     const k = req.headers['x-api-key'];
     return `apikey:${Array.isArray(k) ? k[0] : k}`;
   }
-  if (req.user?.id) return `user:${req.user.id}`;
+  const uid = req.user?.id ?? peekJwt(req)?.id;
+  if (uid) return `user:${uid}`;
   return `ip:${req.ip || req.socket.remoteAddress || 'unknown'}`;
 }
 

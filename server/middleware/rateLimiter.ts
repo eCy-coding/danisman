@@ -202,6 +202,20 @@ export const authLimiter = createRateLimiter({
 });
 
 /**
+ * M3 calibration — /auth/refresh must NOT share the login brute-force
+ * bucket. A refresh carries a 256-bit opaque token (not a guessable
+ * password), and every authenticated tab refreshes on access-token expiry
+ * (~15 min): sharing the 10/15min bucket meant one busy operator session
+ * burned the bucket, the next refresh got 429, and the axios interceptor
+ * treated the failure as session-death → forced logout mid-workflow.
+ */
+export const refreshLimiter = createRateLimiter({
+  windowMs: Number.parseInt(process.env.REFRESH_RATE_LIMIT_WINDOW_MS ?? '', 10) || 15 * 60 * 1000,
+  maxRequests: Number.parseInt(process.env.REFRESH_RATE_LIMIT_MAX ?? '', 10) || 60,
+  message: 'Too many token refresh attempts. Please wait.',
+});
+
+/**
  * BE-5: Contact form — 3 per hour per IP.
  * Legacy newsletter subscribe + NPS feedback + analytics /contact route
  * still rely on this. The /api/v1/contact route uses the stricter

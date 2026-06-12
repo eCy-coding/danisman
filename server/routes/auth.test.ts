@@ -72,6 +72,8 @@ vi.mock('../lib/jwt-blacklist', () => ({
 vi.mock('../middleware/rateLimiter', () => ({
   authLimiter: (_req: express.Request, _res: express.Response, next: express.NextFunction) =>
     next(),
+  refreshLimiter: (_req: express.Request, _res: express.Response, next: express.NextFunction) =>
+    next(),
   contactLimiter: (_req: express.Request, _res: express.Response, next: express.NextFunction) =>
     next(),
   generalLimiter: (_req: express.Request, _res: express.Response, next: express.NextFunction) =>

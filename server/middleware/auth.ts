@@ -20,6 +20,21 @@ export interface AuthRequest extends Request {
   };
 }
 
+/**
+ * Signature-only access-token check (no blacklist round-trip). Built for the
+ * rate-limit layer, which runs BEFORE `authenticate` and only needs a
+ * trustworthy tier/identity hint — never authorization. A revoked-but-valid
+ * token momentarily earning the larger budget is harmless: the route's
+ * `authenticate` still rejects it.
+ */
+export function verifyAccessToken(token: string): { id: string; role: string } | null {
+  try {
+    return jwt.verify(token, _JWT_SECRET) as { id: string; role: string };
+  } catch {
+    return null;
+  }
+}
+
 export const authenticate = async (
   req: AuthRequest,
   res: Response,

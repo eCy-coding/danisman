@@ -28,6 +28,7 @@
  */
 
 import type { Request } from 'express';
+import { verifyAccessToken } from './auth';
 
 const HEALTH_PATHS = new Set<string>([
   '/health',
@@ -111,6 +112,35 @@ export function isResearchBridge(req: Request): boolean {
   return BRIDGE_PATH_PREFIXES.some((p) => path.startsWith(p));
 }
 
+/**
+ * Admin-plane requests carrying a SIGNATURE-VALID ADMIN/EDITOR JWT skip the
+ * generic per-IP bucket (calibration root-fix #2). One operator + the bridge
+ * + anonymous visitors share a single IP on localhost/NAT, so panel clicks
+ * were starving the 100/15min budget mid-workflow ("Durum güncellenemedi"
+ * 429s during the approval chain). These requests still pay the tier
+ * limiter's per-USER admin budget (1000/15min) and full `authenticate`
+ * (incl. blacklist) inside the route — nothing is un-authenticated here.
+ * The peek result is cached on the request for the tier layer to reuse.
+ */
+const ADMIN_PLANE = /^\/api(\/v1)?\/admin\//;
+
+export function isVerifiedAdminPlane(req: Request): boolean {
+  if (!ADMIN_PLANE.test(normalizedPath(req))) return false;
+  const r = req as Request & { __jwtPeek?: { id: string; role: string } | null };
+  if (r.__jwtPeek === undefined) {
+    const h = req.headers.authorization;
+    const token = typeof h === 'string' && h.startsWith('Bearer ') ? h.slice(7) : undefined;
+    r.__jwtPeek = token ? verifyAccessToken(token) : null;
+  }
+  const role = r.__jwtPeek?.role;
+  return role === 'ADMIN' || role === 'EDITOR';
+}
+
 export function isRateLimitExempt(req: Request): boolean {
-  return isHealthProbe(req) || isThirdPartyWebhook(req) || isResearchBridge(req);
+  return (
+    isHealthProbe(req) ||
+    isThirdPartyWebhook(req) ||
+    isResearchBridge(req) ||
+    isVerifiedAdminPlane(req)
+  );
 }

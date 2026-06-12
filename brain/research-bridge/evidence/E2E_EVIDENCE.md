@@ -277,6 +277,47 @@ kapsamlı prompt olarak gitsin; ileri düzey search + kanıta dayalı cevap."
   Bayraklar: stats/apa/tablo/gerçek-rapor = t (tk=f — rapor kendi özet
   yapısını kullandı, kabul).
 
+## 11. Admin Panel Tam Denetimi — M fazları (2026-06-12 akşam)
+
+Talep: "değerlendirmeye gönderdim, nerede takıldı?" + "tüm admin paneli
+kusursuz kalibre et; siteyi tek panelden yönetme boşluklarını çıkar".
+
+**Takılma çözümü:** rapor IN_REVIEW'da bekliyordu (tasarım: zincirin ilk
+durağı); zincir tamamlandı → PUBLISHED, public listede #1. Tıklamaların
+"takılma" hissinin kökü: o sıradaki 429 fırtınası (aşağıda).
+
+**Üç P0 kök-neden (hepsi kod fix'li):**
+1. Tier limiter global mount'ta `authenticate`'ten ÖNCE koşar → `req.user`
+   yok → admin/auth tier'ları ÖLÜ KODDU; JWT'li operatör anonymous-60'a
+   düşüyordu. Fix: `peekJwt` (imza-doğrulamalı Bearer peek, request-cache)
+   → classify/identify gerçek tier+kimlik kullanır.
+2. Admin istekleri genel per-IP kovasında köprü+tarayıcıyla çarpışıyordu.
+   Fix: `isVerifiedAdminPlane` (ADMIN/EDITOR imzalı JWT + /admin path) genel
+   kovadan muaf; tier bütçesi (admin 1000/15dk) + route `authenticate`
+   aynen devrede. Kanıt: admin yanıtında X-RateLimit yok, anonimde 60.
+3. `/auth/refresh` login brute-force kovasındaydı (10/15dk) → token süresi
+   dolan HER sekme yenilemede 429 → axios interceptor'ı bunu oturum-ölümü
+   sayıp LOGOUT basıyordu (panelden atılmaların gerçek kökü). Fix:
+   `refreshLimiter` (60/15dk) + interceptor yalnız 401/403'te logout
+   (429/5xx/ağ = geçici, oturum korunur).
+
+**17 yüzeyli smoke matrisi:** dashboard, contacts, bookings, services,
+blog(MDX 49 post), insights×4, research, newsletter, ai, analytics, users
+UI'da gezildi — console hatası SIFIR, veri uçları 200; sessions/audit-log/
+crm/dev-analytics API-eşdeğeriyle 200 (UI-otomasyon login-flake notuyla).
+Sahte-suçlu dersi: /admin/blog "login'e atıyor" gözlemi tek-değişken
+deneyiyle çürütüldü (token persist sağlam; düşüşlerin tamamı yukarıdaki
+429-kaskadındandı).
+
+**Kalan boşluk haritası → chip'ler:** services admin↔public registry
+senkronu (P1, task_46b5604e) · analytics/interaction 400 + auth/me fan-out
+(P1, task_eeea5f32) · Keystatic/pricing/copy yönetimi (P2, task_81073981)
+· önceki açık chip'ler (tag-picker, sitemap-DB, EN bacağı, CLS+format,
+liste cache, chat-widget dismiss).
+
+Gate: server suite 873/873 (auth.test mock'una refreshLimiter eklendi),
+typecheck web+server temiz.
+
 ### Profesyonel danışman yayını
 Drift'li eski draft **ARCHIVED** (yayın kirliliği temizliği). Doğru-konu
 draft'a danışman rötuşu: başlık "Türkiye'de Enflasyonun On Yılı

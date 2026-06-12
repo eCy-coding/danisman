@@ -161,9 +161,18 @@ apiClient.interceptors.response.use(
       return apiClient(original);
     } catch (refreshErr) {
       processQueue(refreshErr);
-      const { useAppStore } = await import('@/stores/useAppStore');
-      useAppStore.getState().logout();
-      window.location.href = '/admin/login';
+      // Only a DEFINITIVE rejection of the refresh token (401/403) means the
+      // session is dead. A 429 (rate limit), 5xx or network hiccup is
+      // transient — nuking the session on those forced operators back to
+      // login mid-workflow (M3 calibration root cause). Keep the session;
+      // the failed request surfaces its own error and the next expiry
+      // retries the refresh.
+      const st = (refreshErr as { response?: { status?: number } })?.response?.status;
+      if (st === 401 || st === 403) {
+        const { useAppStore } = await import('@/stores/useAppStore');
+        useAppStore.getState().logout();
+        window.location.href = '/admin/login';
+      }
       return Promise.reject(refreshErr);
     } finally {
       isRefreshing = false;

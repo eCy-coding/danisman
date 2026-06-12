@@ -125,3 +125,51 @@ describe('isResearchBridge', () => {
     expect(isResearchBridge(mkBridgeReq('/api/v1/admin/research/jobs', 'k'))).toBe(false);
   });
 });
+
+// ─── Verified admin-plane exemption (M1 calibration) ──────────────────────────
+
+import jwt from 'jsonwebtoken';
+import { isVerifiedAdminPlane } from './health-probe';
+
+const SECRET = process.env.JWT_SECRET ?? 'dev-only-insecure-fallback-do-not-use-in-prod';
+const sign = (role: string) => jwt.sign({ id: 'u1', role }, SECRET);
+
+function mkAuthReq(url: string, token?: string): Request {
+  const headers: Record<string, string> = {};
+  if (token) headers.authorization = `Bearer ${token}`;
+  return {
+    originalUrl: url,
+    url,
+    headers,
+    get(name: string) {
+      return headers[name.toLowerCase()];
+    },
+  } as unknown as Request;
+}
+
+describe('isVerifiedAdminPlane', () => {
+  it('ADMIN JWT on /admin path → exempt from the generic bucket', () => {
+    const req = mkAuthReq('/api/v1/admin/insights/posts/p1/transition', sign('ADMIN'));
+    expect(isVerifiedAdminPlane(req)).toBe(true);
+    expect(isRateLimitExempt(req)).toBe(true);
+  });
+
+  it('EDITOR JWT also qualifies; VIEWER does not', () => {
+    expect(mkAuthReq('/api/v1/admin/research/jobs', sign('EDITOR')) && true).toBe(true);
+    expect(isVerifiedAdminPlane(mkAuthReq('/api/v1/admin/research/jobs', sign('EDITOR')))).toBe(
+      true,
+    );
+    expect(isVerifiedAdminPlane(mkAuthReq('/api/v1/admin/research/jobs', sign('VIEWER')))).toBe(
+      false,
+    );
+  });
+
+  it('garbage/absent Bearer stays in the bucket (no free pass)', () => {
+    expect(isVerifiedAdminPlane(mkAuthReq('/api/v1/admin/research/jobs', 'not-a-jwt'))).toBe(false);
+    expect(isVerifiedAdminPlane(mkAuthReq('/api/v1/admin/research/jobs'))).toBe(false);
+  });
+
+  it('valid ADMIN JWT on a NON-admin path is NOT exempt', () => {
+    expect(isVerifiedAdminPlane(mkAuthReq('/api/v1/insights/posts', sign('ADMIN')))).toBe(false);
+  });
+});
