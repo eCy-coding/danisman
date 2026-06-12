@@ -237,3 +237,12 @@ Until then the fence is enforced procedurally (SCOPE.md discipline).
 - ENV KAZASI + DERSLER (L8/L9): DC shell NODE_ENV=production+omit=dev → npm install devDeps prune + 547 sahte fail; ignored-file git add && zincirini kırıp rm'i atlattı (amend ile düzeltildi). Ortam onarıldı (--include=dev).
 - RATCHET KANITI: tsc web+server 0; eslint 0; vitest 149/153 (kalan 4: founder+track-b = main pre-existing; AdminBlog+createForm solo-yeşil → BL-14 flake). Main'in kendi baseline'ına göre canonical+static-rules DÜZELDİ.
 - NEXT: taze build+prerender → e2e:fast re-check (BL-13 kapanış) → BL-14 flake izolasyonu → BL-09 faz-2 → gate-3 Hub (artık #222 zemini içeride).
+
+## IMPROVE-LOOP Oturum-4 — DOĞRULAMA + ORTAM TEŞHİSİ (DONE 2026-06-12)
+- BL-13 RESOLVED: temiz dist + temiz port'ta e2e sanity **6/6 PASS exit 0** (booking wizard 3/3 tarayıcı). Önceki fail'ler bayat-dist/zombi artefaktı, kod DEĞİL.
+- BL-15 RESOLVED: build prerender 161 fail → **zombi preview process kirliliği** (benim nohup birikimim); temiz ortamda prerender **175/175 ok**, npm run build exit 0. CSS hash mismatch (index.html→cPMSk7sH vs assets→DDfdTX68) de aynı kökten: zombi-kirli build2 tutarsız dist bıraktı; temiz tek build = tutarlı (tek main-DDfdTX68 link + dosya var).
+- BL-09 FAZ-2: knip.json sertleştirildi (kalıcı). Toplu silme İPTAL — knip de ts-prune gibi dynamic-import false-positive veriyor (xterm→server/terminal, mermaid/katex/shiki→vendor lazy chunk). Tool çıktısıyla silme YASAK.
+- BL-14: paralel flake repro OLMADI (admin+createForm birlikte 142/142 pass) → intermittent, izleme.
+- 3 YENİ DERS: L10 (zombi process hijyeni — yanlış-teşhis önler), L11 (knip/ts-prune bu repoda güvenilmez), L12=L8 (NODE_ENV=production env kazası). brain/IMPROVE_LESSONS.md.
+- RATCHET: tsc 0/0 · eslint 0 · vitest 149/153 (4 kalan = main pre-existing + intermittent) · build exit 0 (temiz) · e2e 6/6 · size 100.43/105 kB. Hiçbir metrik kötüleşmedi.
+- PENDING-OWNER: LHCI host · KVKK PR merge. NEXT: gate-3 Hub /perspektifler.

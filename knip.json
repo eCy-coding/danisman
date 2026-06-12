@@ -1,8 +1,23 @@
 {
   "$schema": "https://unpkg.com/knip@5/schema.json",
-  "entry": ["index.html", "index.tsx", "App.tsx", "src/main.tsx", "src/App.tsx", "src/workers/director.worker.ts", "scripts/**/*.ts", "e2e/**/*.ts"],
-  "project": ["src/**/*.{ts,tsx}", "scripts/**/*.{ts,tsx}", "e2e/**/*.{ts,tsx}"],
-  "ignore": ["**/*.d.ts", "src/vite-env.d.ts"],
-  "ignoreDependencies": ["autoprefixer", "postcss", "tailwindcss", "eslint-plugin-react-refresh", "@types/node"],
+  "entry": [
+    "index.html",
+    "src/main.tsx",
+    "src/App.tsx",
+    "src/workers/director.worker.ts",
+    "admin.html",
+    "src/app/keystatic/page.tsx",
+    "src/app/keystatic/admin.tsx",
+    "server/index.ts",
+    "server/mock-server.{js,mjs}",
+    "server/worker.ts",
+    "server/terminal/index.ts",
+    "scripts/**/*.{ts,mjs,js,cjs}",
+    "e2e/**/*.ts",
+    "prisma/seed.ts"
+  ],
+  "project": ["src/**/*.{ts,tsx}", "server/**/*.{ts,js,mjs}", "scripts/**/*.{ts,tsx}", "e2e/**/*.{ts,tsx}"],
+  "ignore": ["**/*.d.ts", "src/vite-env.d.ts", "dist/**", "archive/**", "crowler/**"],
+  "ignoreDependencies": ["autoprefixer", "postcss", "tailwindcss", "eslint-plugin-react-refresh", "@types/node", "lefthook"],
   "ignoreExportsUsedInFile": true
 }
