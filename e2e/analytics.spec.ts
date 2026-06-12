@@ -150,7 +150,7 @@ test.describe('Analytics & Telemetry Audit', () => {
   test('Blog sayfasi yukleme suresi 5sn altinda', async ({ page }) => {
     test.setTimeout(20_000);
     const start = Date.now();
-    await page.goto('/blog', { waitUntil: 'domcontentloaded' });
+    await page.goto('/perspektifler', { waitUntil: 'domcontentloaded' });
     const dur = Date.now() - start;
     expect(dur).toBeLessThan(5_000);
     await expect(page.locator('h1').first()).toBeVisible({ timeout: 5_000 });

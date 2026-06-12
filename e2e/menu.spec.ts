@@ -1,88 +1,153 @@
 /**
- * GATE-2 — Perspektifler mega-menü davranışı (BUG-01..04, BUG-12).
- *
- * - Kapalı-varsayılan: her route'ta sayfa yüklenince panel KAPALI.
- * - Açılma: Perspektifler trigger'ına focus/hover → panel açılır.
- * - Kapanma: ESC, dışarı tık, route değişimi, scroll.
- * - Kapsam: insights-only, ≤30 link, Sektörler/Hakkımızda YOK.
- *
- * Not: panel hover+focus ile açılır (Hizmetler fix'i, commit 8af969d ile aynı desen).
+ * GATE-2 — Perspektifler mega-menu behavior (istek.md v2 §PHASE 2).
+ * Asserts: closed-by-default on 5 routes, all close behaviors, keyboard path,
+ * insights-only scope, ≤30 links, no BUG-02 empty icon artifacts.
  */
-
 import { test, expect, type Page } from '@playwright/test';
 
-const ROUTES = ['/', '/blog', '/case-studies', '/methodology', '/about'];
-const PANEL = 'Perspektifler açılır paneli';
+const ROUTES = ['/', '/case-studies', '/blog', '/methodology', '/about'];
+const PANEL = '[data-testid="mega-menu-insights"]';
+const NAV_LINK = '[data-testid="navbar-link-insights"]';
 
-async function openInsights(page: Page) {
-  const trigger = page.getByTestId('navbar-link-insights');
-  await expect(trigger).toBeVisible();
-  await trigger.hover();
-  await trigger.focus();
-  return page.getByRole('region', { name: PANEL });
+test.use({ viewport: { width: 1366, height: 900 } });
+
+/** Late-mounting layout (UrgencyBanner) shifts the navbar ~30ms after load;
+ *  a stationary cursor then receives mouseleave and the hover-intent timer is
+ *  cancelled. Wait until the nav link's box is stable before hovering. */
+async function waitForStableLayout(page: Page) {
+  await page.waitForLoadState('networkidle');
+  // WebKit opens the Utilities rail's full-screen backdrop on load — dismiss
+  // any stray overlay before measuring (it would also swallow hovers).
+  const utilitiesBackdrop = page.locator('aside[aria-label="Utilities"] div.fixed.inset-0');
+  if (await utilitiesBackdrop.isVisible().catch(() => false)) {
+    await page.keyboard.press('Escape');
+    if (await utilitiesBackdrop.isVisible().catch(() => false)) {
+      await utilitiesBackdrop.click({ position: { x: 683, y: 500 }, force: true });
+    }
+    await utilitiesBackdrop.waitFor({ state: 'hidden', timeout: 3000 }).catch(() => {});
+  }
+  let prev = '';
+  for (let i = 0; i < 20; i++) {
+    const box = await page.locator(NAV_LINK).boundingBox();
+    const sig = box ? `${Math.round(box.x)}:${Math.round(box.y)}` : '';
+    if (sig && sig === prev) return;
+    prev = sig;
+    await page.waitForTimeout(150);
+  }
 }
 
-test.describe('Perspektifler mega-menü', () => {
+async function openInsightsPanel(page: Page) {
+  await waitForStableLayout(page);
+  for (let attempt = 0; attempt < 4; attempt++) {
+    // Park mid-page: the left edge hosts the Utilities rail whose hover opens
+    // a full-screen z-60 backdrop that would swallow the next hover.
+    await page.mouse.move(683, 500);
+    await page.locator(NAV_LINK).hover();
+    try {
+      await expect(page.locator(PANEL)).toBeVisible({ timeout: 1500 });
+      return;
+    } catch {
+      /* layout/hydration race — retry */
+    }
+  }
+  await expect(page.locator(PANEL)).toBeVisible({ timeout: 2000 });
+}
+
+test.describe('GATE-2 mega-menu', () => {
+  test.beforeEach(async ({ page }) => {
+    // Hovering the navbar puts the cursor inside the top-20px exit-intent
+    // zone; the ExitIntentModal's full-screen z-60 backdrop would swallow
+    // every later pointer action. It is once-per-visitor in production —
+    // seed its shown-flag so menu behavior is tested in isolation.
+    await page.addInitScript(() => {
+      window.localStorage.setItem('exit_intent_shown', '1');
+    });
+  });
+
   for (const route of ROUTES) {
-    test(`kapalı-varsayılan: ${route} yüklenince panel kapalı`, async ({ page }) => {
-      await page.setViewportSize({ width: 1440, height: 900 });
+    test(`closed by default on ${route}`, async ({ page }) => {
       await page.goto(route);
-      // Panel aria-hidden (kapalı) → region erişilebilir ağaçta görünmez olmalı.
-      await expect(page.getByRole('region', { name: PANEL })).toHaveCount(0);
+      await expect(page.locator(PANEL)).toBeHidden();
     });
   }
 
-  test('açılır, insights-only ve ≤30 link', async ({ page }) => {
-    await page.setViewportSize({ width: 1440, height: 900 });
+  test('BUG-02: no empty icon boxes before nav labels', async ({ page }) => {
     await page.goto('/');
-    const panel = await openInsights(page);
-    await expect(panel).toBeVisible();
-
-    await expect(panel.getByText('Kategoriler', { exact: true })).toBeVisible();
-    await expect(panel.getByText('Formatlar', { exact: true })).toBeVisible();
-    await expect(panel.getByText('Öne Çıkanlar', { exact: true })).toBeVisible();
-
-    // BUG-03: Sektörler/Hakkımızda grupları yok
-    await expect(panel.getByText('Metodolojimiz')).toHaveCount(0);
-    await expect(panel.getByText('Firmamız')).toHaveCount(0);
-
-    // BUG-04: insights footer
-    await expect(panel.getByText('Tüm içgörüleri keşfedin')).toBeVisible();
-    await expect(panel.getByText('Tüm hizmetlerimizi keşfedin')).toHaveCount(0);
-
-    const links = await panel.locator('a[href]').count();
-    expect(links).toBeLessThanOrEqual(30);
+    const emptyIconBoxes = page.locator('[data-testid^="navbar-link-"] div.w-8:empty');
+    await expect(emptyIconBoxes).toHaveCount(0);
   });
 
-  test('ESC ile kapanır', async ({ page }) => {
+  test('opens on hover-intent, closes on ESC', async ({ page }) => {
     await page.goto('/');
-    const panel = await openInsights(page);
-    await expect(panel).toBeVisible();
+    await openInsightsPanel(page);
     await page.keyboard.press('Escape');
-    await expect(page.getByRole('region', { name: PANEL })).toHaveCount(0);
+    await expect(page.locator(PANEL)).toBeHidden();
   });
 
-  test('dışarı tık ile kapanır', async ({ page }) => {
+  test('closes on outside click', async ({ page }) => {
     await page.goto('/');
-    const panel = await openInsights(page);
-    await expect(panel).toBeVisible();
-    await page.mouse.click(5, 400); // nav dışında bir nokta
-    await expect(page.getByRole('region', { name: PANEL })).toHaveCount(0);
+    await openInsightsPanel(page);
+    await page.mouse.click(20, 600);
+    await expect(page.locator(PANEL)).toBeHidden();
   });
 
-  test('scroll ile kapanır', async ({ page }) => {
+  test('closes on scroll >100px', async ({ page }) => {
     await page.goto('/');
-    const panel = await openInsights(page);
-    await expect(panel).toBeVisible();
-    await page.mouse.wheel(0, 300);
-    await expect(page.getByRole('region', { name: PANEL })).toHaveCount(0);
+    await openInsightsPanel(page);
+    await page.mouse.move(683, 500); // leave the nav so hover re-open cannot fire
+    await page.evaluate(() => window.scrollTo({ top: 400, behavior: 'instant' as ScrollBehavior }));
+    await expect(page.locator(PANEL)).toBeHidden();
   });
 
-  test('route değişiminde kapanır', async ({ page }) => {
+  test('closes on route change (panel link navigation)', async ({ page }) => {
     await page.goto('/');
-    const panel = await openInsights(page);
-    await expect(panel).toBeVisible();
-    await page.goto('/about');
-    await expect(page.getByRole('region', { name: PANEL })).toHaveCount(0);
+    await openInsightsPanel(page);
+    await page.locator(`${PANEL} a`).first().click();
+    await expect(page.locator(PANEL)).toBeHidden();
+    expect(new URL(page.url()).pathname).not.toBe('/');
+  });
+
+  test('keyboard path: focus opens panel, items tabbable', async ({ page }) => {
+    await page.goto('/');
+    await waitForStableLayout(page);
+    await page.locator(NAV_LINK).focus();
+    await expect(page.locator(PANEL)).toBeVisible();
+    await expect(page.locator(NAV_LINK)).toHaveAttribute('aria-expanded', 'true');
+    await expect(page.locator(NAV_LINK)).toHaveAttribute('aria-controls', 'mega-menu-insights');
+    if (test.info().project.name === 'webkit') {
+      // Safari/WebKit does not move focus to links on plain Tab; assert the
+      // panel items are focusable instead of simulating the keypress.
+      await page.locator(`${PANEL} a`).first().focus();
+      const inPanel = await page.evaluate(
+        () => !!document.activeElement?.closest('[data-testid="mega-menu-insights"]'),
+      );
+      expect(inPanel).toBe(true);
+    } else {
+      await page.keyboard.press('Tab');
+      const focusedHref = await page.evaluate(() => document.activeElement?.getAttribute('href'));
+      expect(focusedHref).toBeTruthy();
+    }
+  });
+
+  test('insights-only scope: ≤30 links, no SEKTÖRLER/HAKKIMIZDA groups, hub footer', async ({
+    page,
+  }) => {
+    await page.goto('/');
+    await openInsightsPanel(page);
+    const panel = page.locator(PANEL);
+
+    const linkCount = await panel.locator('a').count();
+    expect(linkCount).toBeLessThanOrEqual(30);
+
+    const text = (await panel.innerText()).toUpperCase();
+    expect(text).not.toContain('SEKTÖRLER');
+    expect(text).not.toContain('HAKKIMIZDA');
+    expect(text).not.toContain('HİZMETLERİMİZİ'); // BUG-04 services wording
+
+    // Locale-agnostic: firefox boots in EN (navigator language detection).
+    await expect(panel.getByText(/Tüm içgörüleri keşfedin|Explore all insights/)).toBeVisible();
+    await expect(panel.getByText(/^(Kategoriler|Categories)$/)).toBeVisible();
+    await expect(panel.getByText(/^(Formatlar|Formats)$/)).toBeVisible();
+    await expect(panel.getByText(/2026 AI (Dönüşüm Raporu|Transformation Report)/)).toBeVisible();
   });
 });

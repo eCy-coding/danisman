@@ -336,6 +336,127 @@ const SERVICE_CONTENT_LIST: ServiceContent[] = [
   },
 
   // ─────────────────────────────────────────────────────────────
+  // S2b — COMPANY VALUATION & QoE (taxonomy v2: ma-valuation kartının
+  // kendi sayfası; önceden mergers-acquisitions şemsiyesine link veriyordu)
+  // ─────────────────────────────────────────────────────────────
+  {
+    slug: 'company-valuation',
+    hero: {
+      title: 'Şirket Değerleme & Kazanç Kalitesi (QoE)',
+      subtitle:
+        'DCF, çarpan analizi ve EBITDA kalite testi; Türk mid-market için özel add-back metodolojisi.',
+      valueProp:
+        'Değerleme tartışmasını duygudan sayıya taşır: savunulabilir bir değer aralığı, alıcı/satıcı masasında pazarlık çapası olur. QoE analizi, EBITDA içindeki tek-seferlik ve owner-spesifik kalemleri ayıklayarak gerçek kazanç gücünü ortaya koyar.',
+      primaryCtaText: 'Değerleme Görüşmesi Talep Et',
+    },
+    problem: {
+      title: 'Değerleme Masasındaki Tipik Sorunlar',
+      painPoints: [
+        'Patron fiyatı ile pazar fiyatı arasında 2-4x makas var; süreç daha başlamadan kilitleniyor.',
+        'EBITDA, owner maaşları ve tek-seferlik gelirlerle şişmiş; alıcı DD aşamasında güveni kaybediyor.',
+        'Sektörel çarpan (multiple) seçimi keyfî; ne alıcı ne satıcı rakamı savunabiliyor.',
+        'Geçmiş finansallar UFRS/VUK farkları yüzünden tutarsız; normalize edilmiş baz yok.',
+        'Banka veya yatırımcıya sunulacak bağımsız ve imzalı bir değerleme dokümanı bulunmuyor.',
+      ],
+    },
+    outcomes: {
+      title: 'Engagement Çıktıları',
+      results: [
+        'Üç metotlu bağımsız değerleme raporu (DCF + comparable + asset-based, ±%10 bant).',
+        'QoE raporu: normalize EBITDA köprüsü (add-back tablosu, tek-seferlik kalemler, owner etkisi).',
+        'Sektörel çarpan benchmark seti (yurt içi + bölgesel emsal işlemler).',
+        'Senaryo matrisi (base / bull / bear) ve değer duyarlılık tablosu.',
+        'Müzakere çapası notu: hangi rakam hangi koşulda savunulur.',
+      ],
+    },
+    methodology: {
+      title: 'Değerleme & QoE Yaklaşımımız',
+      phases: [
+        {
+          name: '1. Finansal Baz Oluşturma',
+          duration: '1 hafta',
+          description:
+            'Son 3-5 yılın mali tabloları, UFRS/VUK mutabakatı, veri odası kurulumu ve eksik veri listesi.',
+        },
+        {
+          name: '2. QoE — Kazanç Kalitesi Analizi',
+          duration: '1-2 hafta',
+          description:
+            'Normalize EBITDA köprüsü: owner maaş/kira düzeltmeleri, tek-seferlik gelir/giderler, muhasebe politika etkileri.',
+        },
+        {
+          name: '3. Değerleme Modellemesi',
+          duration: '2 hafta',
+          description:
+            'DCF (WACC + terminal değer), comparable companies/transactions, asset-based. Üç metodun ağırlıklı bandı.',
+        },
+        {
+          name: '4. Senaryo & Duyarlılık',
+          duration: '1 hafta',
+          description:
+            'Kur, büyüme ve marj varsayımlarına duyarlılık; base/bull/bear değer aralıkları ve kırılım noktaları.',
+        },
+        {
+          name: '5. Rapor & Müzakere Hazırlığı',
+          duration: '1 hafta',
+          description:
+            'İmzalı değerleme raporu, yönetim sunumu ve müzakere çapası notunun teslimi; soru-cevap oturumu.',
+        },
+      ],
+    },
+    deliverables: {
+      title: 'Teslim Edilen Çıktılar',
+      artifacts: [
+        'Bağımsız Değerleme Raporu (PDF, 25-35 sayfa, imzalı)',
+        'QoE / Normalize EBITDA Köprüsü (Excel, formüllü)',
+        'DCF Modeli (Excel, senaryo anahtarlı)',
+        'Sektörel Çarpan Benchmark Tablosu',
+        'Değer Duyarlılık Matrisi (tornado chart)',
+        'Müzakere Çapası Notu (2-3 sayfa, gizli)',
+      ],
+    },
+    timeline: {
+      totalDuration: '5-7 hafta',
+      milestones: [
+        { name: 'Veri odası + finansal baz hazır', week: 'Hafta 1' },
+        { name: 'QoE köprüsü taslağı', week: 'Hafta 2-3' },
+        { name: 'Değerleme modeli v1', week: 'Hafta 4' },
+        { name: 'Senaryo seti + duyarlılık', week: 'Hafta 5' },
+        { name: 'İmzalı rapor teslimi', week: 'Hafta 6-7' },
+      ],
+    },
+    investment: {
+      range: '₺250.000 – ₺600.000 (şirket büyüklüğü ve veri kalitesine göre)',
+      model: 'Sabit fiyat; kapsam yazılı önergede netleşir. Success fee yok — bağımsızlık korunur.',
+      paymentPlan: '%40 başlangıç, %40 model teslimi, %20 imzalı rapor.',
+    },
+    trust: {
+      anonymizedExample:
+        'Bir gıda üretim şirketinin satış öncesi değerlemesi: QoE analizi owner-spesifik giderlerde yıllık ₺18M normalize düzeltme ortaya çıkardı; savunulabilir EBITDA bandı alıcının açılış teklifini %28 yukarı taşıdı.',
+      caseStudySlug: 'ma-advisory-engagement',
+    },
+    faq: {
+      items: [
+        {
+          q: 'Değerleme raporu bankaya/mahkemeye sunulabilir mi?',
+          a: 'Rapor bağımsız metodoloji ve kaynak şeffaflığıyla hazırlanır; banka kredi komiteleri ve arabuluculuk süreçlerinde referans doküman olarak kullanılabilir. SPK lisanslı resmi değerleme gereken hallerde lisanslı kuruluş yönlendirmesi yaparız.',
+        },
+        {
+          q: 'QoE analizi neden ayrı bir çalışma?',
+          a: 'Değerleme çarpanı normalize EBITDA üzerine kurulur. Add-back tartışması kapanış fiyatını doğrudan etkiler; QoE bu tartışmayı veriyle kapatır.',
+        },
+        {
+          q: 'Sadece satış öncesi mi yapılır?',
+          a: 'Hayır — ortak alımı/çıkışı, sermaye artırımı, miras planlaması ve banka refinansmanı için de aynı disiplin uygulanır.',
+        },
+        ...SHARED_FAQ_END('company-valuation'),
+      ],
+    },
+    related: ['mergers-acquisitions', 'due-diligence-suite', 'deal-structuring'],
+    assessment: STANDARD_ASSESSMENT('company-valuation', 'Şirket Değerleme'),
+  },
+
+  // ─────────────────────────────────────────────────────────────
   // S3 — FAMILY BUSINESS
   // ─────────────────────────────────────────────────────────────
   {

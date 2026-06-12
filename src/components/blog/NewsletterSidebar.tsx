@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Mail } from 'lucide-react';
+import { trackEvent } from '@/lib/analytics';
 
 export function NewsletterSidebar() {
   const [email, setEmail] = useState('');
@@ -7,7 +8,11 @@ export function NewsletterSidebar() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (email) setSubmitted(true);
+    if (email) {
+      setSubmitted(true);
+      // Consent-gated; no PII in the payload (KVKK — D-7).
+      trackEvent('Perspektifler', 'newsletter_submit', 'founder-letter');
+    }
   };
 
   return (

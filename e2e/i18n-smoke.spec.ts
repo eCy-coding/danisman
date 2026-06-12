@@ -33,8 +33,8 @@ test.describe('i18n EN smoke', () => {
     const heroTitle = page.getByTestId('pricing-hero-title');
     await expect(heroTitle).toBeVisible();
     await expect(heroTitle).toContainText('Transparent Pricing');
-    // EN CTA badge
-    await expect(page.locator('text=PRICING')).toBeVisible();
+    // EN CTA badge (several PRICING strings on the page — assert the first)
+    await expect(page.locator('text=PRICING').first()).toBeVisible();
   });
 
   test('EN discovery page renders English form labels', async ({ page }) => {
@@ -56,6 +56,7 @@ test.describe('i18n EN smoke', () => {
     await expect(page.locator('text=Kurucu & Baş Stratejist')).toBeVisible();
 
     // Click language toggle
+    await page.locator('[data-testid="utility-dock"] > button').click(); // open merged dock (D-6)
     const toggle = page.getByTestId('language-toggle');
     await toggle.click();
 
@@ -69,6 +70,7 @@ test.describe('i18n EN smoke', () => {
   test('language preference persisted after analytics consent', async ({ page }) => {
     // Global setup seeds analytics consent — localStorage write should happen on changeLanguage
     await page.goto('/tr');
+    await page.locator('[data-testid="utility-dock"] > button').click(); // open merged dock (D-6)
     await page.getByTestId('language-toggle').click();
     // Wait for EN to load
     await page.waitForFunction(() => document.documentElement.getAttribute('lang') === 'en', {

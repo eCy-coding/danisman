@@ -9,7 +9,7 @@
         "http://localhost:4173/pricing",
         "http://localhost:4173/discovery",
         "http://localhost:4173/services",
-        "http://localhost:4173/blog"
+        "http://localhost:4173/perspektifler"
       ],
       "numberOfRuns": 3,
       "settings": {

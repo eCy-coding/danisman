@@ -1,9 +1,23 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Menu, X, ChevronDown, ChevronUp, MessageCircle } from 'lucide-react';
-import { NAV_ITEMS, getMegaChildren } from '@/data/copy/common';
 import { useLocation } from 'react-router-dom';
+import {
+  Menu,
+  X,
+  ChevronDown,
+  ChevronUp,
+  MessageCircle,
+  Home,
+  Briefcase,
+  Factory,
+  Newspaper,
+  Tag,
+  Users,
+  Mail,
+} from 'lucide-react';
+import { NAV_ITEMS } from '@/data/copy/common';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { MegaMenu } from './MegaMenu';
+import { NEWEST_POST_DATE } from './insightsMenuData';
 import { useScrollToSection } from '../common/useScrollToSection';
 import { trackEvent } from '../../lib/analytics';
 import { getCalendlyCta, hasExternalCalendly } from '../../lib/cta/calendly';
@@ -19,9 +33,22 @@ interface NavItem {
   href: string;
   label: MultiLang;
   icon?: React.ReactNode;
+  /** Lucide icon key resolved via NAV_ICON_MAP (BUG-02 "replace with real
+   *  icons" path — data file stays JSX-free, same pattern as MegaMenu). */
+  iconName?: string;
   hasMegaMenu?: boolean;
   children?: NavItem[];
 }
+
+const NAV_ICON_MAP: Record<string, React.ReactNode> = {
+  Home: <Home size={15} />,
+  Briefcase: <Briefcase size={15} />,
+  Factory: <Factory size={15} />,
+  Newspaper: <Newspaper size={15} />,
+  Tag: <Tag size={15} />,
+  Users: <Users size={15} />,
+  Mail: <Mail size={15} />,
+};
 
 export const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -44,6 +71,8 @@ export const Navbar: React.FC = () => {
 
   const scrollToSection = useScrollToSection();
   const dropdownTimeoutRef = useRef<number | null>(null);
+  const dropdownOpenTimeoutRef = useRef<number | null>(null);
+  const dropdownOpenScrollY = useRef(0);
   const navRef = useRef<HTMLElement | null>(null);
   const location = useLocation();
 
@@ -51,32 +80,84 @@ export const Navbar: React.FC = () => {
   useBodyLock(isOpen);
   useKeyPress('Escape', () => {
     setIsOpen(false);
-    setActiveDropdown(null);
+    // APG disclosure: Esc must return focus to the disclosure trigger,
+    // otherwise keyboard users are dropped at <body>.
+    setActiveDropdown((current) => {
+      if (current) {
+        const trigger = navRef.current?.querySelector<HTMLElement>(
+          `[data-testid="navbar-link-${current}"]`,
+        );
+        trigger?.focus();
+      }
+      return null;
+    });
   });
 
-  // BUG-01: mega-menu closed-by-default; close on route change, outside click,
-  // and scroll. (ESC already handled above.) These were the missing listeners
-  // that let the panel stay OPEN over /blog /case-studies /methodology /about.
+  // BUG-01: panels must never survive a navigation — close on route change.
   useEffect(() => {
-    // Route change → always close any open dropdown + mobile drawer.
     setActiveDropdown(null);
     setIsOpen(false);
   }, [location.pathname]);
 
+  // SVC P8 — consent-gated menu telemetry (fires once per panel open).
   useEffect(() => {
-    const onPointerDown = (e: PointerEvent) => {
+    if (activeDropdown) {
+      trackEvent('navigation', 'menu_open', activeDropdown);
+    }
+  }, [activeDropdown]);
+
+  // D-6 float governance: one dismissible "Yeni" badge on the Perspektifler
+  // nav item replaces the SocialProofToast on insights surfaces. Fresh content
+  // = newest post younger than 14 days; visiting the hub dismisses it.
+  const [showYeniBadge, setShowYeniBadge] = useState(false);
+  useEffect(() => {
+    try {
+      const dismissedFor = localStorage.getItem('perspektifler_yeni_seen');
+      const fresh = Date.now() - new Date(NEWEST_POST_DATE).getTime() < 14 * 24 * 3600 * 1000;
+      setShowYeniBadge(fresh && dismissedFor !== NEWEST_POST_DATE);
+    } catch {
+      setShowYeniBadge(false);
+    }
+  }, []);
+  useEffect(() => {
+    if (location.pathname.startsWith('/perspektifler')) {
+      try {
+        localStorage.setItem('perspektifler_yeni_seen', NEWEST_POST_DATE);
+      } catch {
+        /* private mode */
+      }
+      setShowYeniBadge(false);
+    }
+  }, [location.pathname]);
+
+  // BUG-01: close on outside click/tap.
+  useEffect(() => {
+    if (!activeDropdown) return;
+    const onPointerDown = (e: MouseEvent | TouchEvent) => {
       if (navRef.current && !navRef.current.contains(e.target as Node)) {
         setActiveDropdown(null);
       }
     };
-    const onScroll = () => setActiveDropdown(null); // any scroll closes hover menus
-    document.addEventListener('pointerdown', onPointerDown);
-    window.addEventListener('scroll', onScroll, { passive: true });
+    document.addEventListener('mousedown', onPointerDown);
+    document.addEventListener('touchstart', onPointerDown);
     return () => {
-      document.removeEventListener('pointerdown', onPointerDown);
-      window.removeEventListener('scroll', onScroll);
+      document.removeEventListener('mousedown', onPointerDown);
+      document.removeEventListener('touchstart', onPointerDown);
     };
-  }, []);
+  }, [activeDropdown]);
+
+  // BUG-01: close once the reader scrolls >100px away from where the panel opened.
+  useEffect(() => {
+    if (!activeDropdown) return;
+    dropdownOpenScrollY.current = window.scrollY;
+    const onScroll = () => {
+      if (Math.abs(window.scrollY - dropdownOpenScrollY.current) > 100) {
+        setActiveDropdown(null);
+      }
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, [activeDropdown]);
 
   // Active section tracking
   useEffect(() => {
@@ -110,10 +191,20 @@ export const Navbar: React.FC = () => {
 
   const handleDropdownEnter = (id: string) => {
     if (dropdownTimeoutRef.current) clearTimeout(dropdownTimeoutRef.current);
-    setActiveDropdown(id);
+    if (dropdownOpenTimeoutRef.current) clearTimeout(dropdownOpenTimeoutRef.current);
+    if (activeDropdown) {
+      // A panel is already open — switch immediately.
+      setActiveDropdown(id);
+      return;
+    }
+    // Hover-intent: a drive-by cursor must not pop the panel (BUG-01).
+    dropdownOpenTimeoutRef.current = window.setTimeout(() => {
+      setActiveDropdown(id);
+    }, 220);
   };
 
   const handleDropdownLeave = () => {
+    if (dropdownOpenTimeoutRef.current) clearTimeout(dropdownOpenTimeoutRef.current);
     dropdownTimeoutRef.current = window.setTimeout(() => {
       setActiveDropdown(null);
     }, 200); // 200ms delay for better UX
@@ -148,8 +239,7 @@ export const Navbar: React.FC = () => {
         {/* Desktop Menu */}
         <div className="hidden lg:flex items-center space-x-8 xl:space-x-10">
           {(Object.values(NAV_ITEMS) as NavItem[]).map((item) => {
-            // Mega-menü öğeleri children dizisi taşımasa da dropdown sayılır.
-            const isDropdown = (item.children?.length ?? 0) > 0 || !!item.hasMegaMenu;
+            const isDropdown = item.children && item.children.length > 0;
             const isActive = activeSection === item.href.substring(1);
 
             return (
@@ -159,23 +249,13 @@ export const Navbar: React.FC = () => {
                 className="relative h-full flex items-center"
                 onMouseEnter={() => isDropdown && handleDropdownEnter(item.id)}
                 onMouseLeave={() => isDropdown && handleDropdownLeave()}
-                // A11y + cross-browser kararlılık: menü yalnızca hover ile değil,
-                // klavye focus'u ile de açılır. (React onFocus/onBlur focusin/out
-                // semantiğiyle çocuk öğelerden bubble eder.) Bu, klavye
-                // kullanıcıları için erişilebilirliği sağlar ve Firefox dahil tüm
-                // tarayıcılarda mega-menünün deterministik açılmasını mümkün kılar.
-                onFocus={() => isDropdown && handleDropdownEnter(item.id)}
-                onBlur={(e) => {
-                  if (isDropdown && !e.currentTarget.contains(e.relatedTarget as Node | null)) {
-                    handleDropdownLeave();
-                  }
-                }}
               >
                 <a
                   href={item.href}
                   onClick={(e) =>
                     !isDropdown && handleNavClick(e, item.href, item.label[lang] || '')
                   }
+                  onFocus={() => isDropdown && setActiveDropdown(item.id)}
                   data-testid={`navbar-link-${item.id}`}
                   data-active={isActive ? 'true' : 'false'}
                   className={`text-sm font-medium transition-all duration-300 flex items-center gap-1 py-4 tracking-wide outline-none ${
@@ -185,12 +265,14 @@ export const Navbar: React.FC = () => {
                   }`}
                   aria-haspopup={isDropdown}
                   aria-expanded={activeDropdown === item.id}
+                  aria-controls={
+                    isDropdown && item.hasMegaMenu ? `mega-menu-${item.id}` : undefined
+                  }
                   aria-current={isActive ? 'page' : undefined}
                 >
-                  {/* BUG-02: only paint the icon chip when a real icon exists —
-                      NAV_ITEMS carry no `icon`, so the box was an empty square
-                      before every label (and the logo's "Ana Sayfa"). */}
-                  {item.icon ? (
+                  {/* BUG-02 follow-through: real lucide icons via iconName
+                      (boxes render only when an icon actually exists). */}
+                  {(item.icon || (item.iconName && NAV_ICON_MAP[item.iconName])) && (
                     <div
                       className={`
                   w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300
@@ -200,11 +282,20 @@ export const Navbar: React.FC = () => {
                       : 'bg-white/5 text-gray-400 group-hover:bg-white/10 group-hover:text-white'
                   }
                 `}
+                      aria-hidden="true"
                     >
-                      {item.icon}
+                      {item.icon ?? NAV_ICON_MAP[item.iconName as string]}
                     </div>
-                  ) : null}
+                  )}
                   {item.label[lang]}
+                  {item.id === 'insights' && showYeniBadge && (
+                    <span
+                      data-testid="perspektifler-yeni-badge"
+                      className="ml-1 rounded-full bg-secondary/20 border border-secondary/40 text-secondary text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5"
+                    >
+                      Yeni
+                    </span>
+                  )}
                   {isDropdown && (
                     <ChevronDown
                       size={14}
@@ -351,11 +442,7 @@ export const Navbar: React.FC = () => {
       >
         <div className="flex flex-col h-full pt-28 px-8 pb-10 overflow-y-auto">
           {(Object.values(NAV_ITEMS) as NavItem[]).map((item) => {
-            // services: mobil akordeon çocukları MEGA_MENUS'tan türetilir (9 öğe,
-            // masaüstü mega-menüyle birebir). Diğerleri kendi children'ını kullanır.
-            const children =
-              item.id === 'services' ? getMegaChildren('services') : (item.children ?? []);
-            const isDropdown = children.length > 0;
+            const isDropdown = item.children && item.children.length > 0;
             const isExpanded = mobileExpanded === item.id;
 
             return (
@@ -368,7 +455,14 @@ export const Navbar: React.FC = () => {
                       className="flex items-center justify-between w-full text-left text-xl font-sans font-medium text-white py-2 outline-none focus:text-secondary"
                       aria-expanded={isExpanded}
                     >
-                      {item.label[lang]}
+                      <span className="flex items-center gap-3">
+                        {item.iconName && NAV_ICON_MAP[item.iconName] && (
+                          <span className="text-slate-400" aria-hidden="true">
+                            {NAV_ICON_MAP[item.iconName]}
+                          </span>
+                        )}
+                        {item.label[lang]}
+                      </span>
                       {isExpanded ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
                     </button>
 
@@ -376,7 +470,7 @@ export const Navbar: React.FC = () => {
                       className={`overflow-hidden transition-all duration-300 ease-in-out ${isExpanded ? 'max-h-96 opacity-100 mt-2' : 'max-h-0 opacity-0'}`}
                     >
                       <div className="pl-4 space-y-3 border-l-2 border-white/10 ml-1 py-2">
-                        {children.map((child) => (
+                        {item.children!.map((child) => (
                           <a
                             key={child.id}
                             href={child.href}
@@ -395,8 +489,13 @@ export const Navbar: React.FC = () => {
                   <a
                     href={item.href}
                     onClick={(e) => handleNavClick(e, item.href, `Mobile ${item.label[lang]}`)}
-                    className="block text-xl font-sans font-medium text-white hover:text-secondary py-2 outline-none focus:text-secondary"
+                    className="flex items-center gap-3 text-xl font-sans font-medium text-white hover:text-secondary py-2 outline-none focus:text-secondary"
                   >
+                    {item.iconName && NAV_ICON_MAP[item.iconName] && (
+                      <span className="text-slate-400" aria-hidden="true">
+                        {NAV_ICON_MAP[item.iconName]}
+                      </span>
+                    )}
                     {item.label[lang]}
                   </a>
                 )}

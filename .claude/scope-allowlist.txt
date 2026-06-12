@@ -1,11 +1,62 @@
+# Services vertical E2E rebuild — edit allowlist (one glob per line, # = comment)
+# Checked by .claude/hooks/scope_guard.py on Edit/Write. Paths repo-relative.
+# Re-fenced from Perspektifler 2026-06-12: that vertical shipped+deployed 2026-06-11
+# (PROGRESS.md FAZ-2C). New contract: SCOPE.md (Services edition) + SERVICES_SCOPE.md.
+# Spec: ~/Desktop/istemek.md. NOTE: guard infra (.claude/**) deliberately NOT
+# self-listed — fence is fixed for this vertical; changes need owner approval.
+SCOPE.md
+SERVICES_SCOPE.md
+OUT_OF_SCOPE.md
+PROGRESS.md
+brain/SERVICES_TASKS.json
+brain/services/**
+# --- Services pages + components ---
+src/pages/ServicesPage.tsx
+src/pages/ServiceDetailPage.tsx
+src/pages/NotFoundPage.tsx
+src/components/services/**
+src/components/sections/ServicesClusterSection.tsx
+src/components/layout/MegaMenu.tsx
+src/components/layout/Navbar.tsx
+src/components/layout/MobileBottomNav.tsx
+src/components/common/NotFoundSearch.tsx
+# --- Data layer (single source of truth work) ---
+src/data/services.ts
+src/data/service-content.ts
+src/data/service-taxonomy.ts
+src/data/cta-variants.ts
+src/data/copy/common.ts
+src/schemas/service.ts
+# --- i18n + SEO + routing surfaces ---
+src/i18n/localized-slugs.ts
+src/i18n/canonical.ts
+src/lib/structured-data.ts
+src/lib/analytics.ts
+src/App.tsx
+vercel.json
+public/locales/tr/**
+public/locales/en/**
+scripts/generate-sitemap.ts
+scripts/services-taxonomy-audit.mjs
+scripts/services-i18n-parity.mjs
+# --- Tests (fnmatch: * crosses path separators) ---
+src/test/**
+src/*.test.ts
+src/*.test.tsx
+src/*__tests__*
+e2e/**
+tests/**
+playwright.config.ts
+# --- Docs + reports + ADR ---
+docs/adr/**
+docs/reports/**
+docs/ECYPRO_SERVICES_CATEGORIZATION.md
+# SVC Gate-9 fence expansion (evidence: 35-servis katalog büyümesi main chunk +6.37KB brotli;
+# PR #146 stale-budget-realign emsali; PROGRESS.md SVC Gate-9 kaydı)
+.size-limit.json
 # Perspektifler rebuild — scope allowlist (glob patterns). Source of truth: SCOPE.md
 # Expanded only with Phase-0 evidence. Edits outside these globs => OUT_OF_SCOPE.md.
 
-src/components/layout/Navbar.tsx
-src/components/layout/MegaMenu.tsx
-src/components/layout/MobileBottomNav.tsx
-src/data/copy/common.ts
-src/App.tsx
 src/pages/BlogPage.tsx
 src/pages/BlogPostPage.tsx
 src/pages/Insight*.tsx
@@ -19,8 +70,6 @@ src/data/insights-stub-posts.json
 src/data/mockCaseStudies.ts
 src/data/perspektifler/**
 src/i18n/keys/insights*.ts
-src/i18n/canonical.ts
-src/i18n/localized-slugs.ts
 src/components/integrations/LiveChat.tsx
 src/components/chat/SimpleChatWidget.tsx
 src/components/common/SocialProofToast.tsx
@@ -29,25 +78,18 @@ src/components/ui/Toast.tsx
 src/components/CookieBanner.tsx
 src/components/seo/SeoManager.tsx
 src/components/seo/JsonLd.tsx
-src/lib/structured-data.ts
-scripts/generate-sitemap.ts
 scripts/check-taxonomy.*
 scripts/check-links.*
-vercel.json
 e2e/*perspektifler*.spec.ts
 e2e/menu*.spec.ts
 src/test/perspektifler/**
 # planning/docs
-SCOPE.md
 PLAN.md
-PROGRESS.md
-OUT_OF_SCOPE.md
 content-inventory.csv
 CLAUDE.md
 brain/PERSPEKTIFLER_*
 brain/perspektifler-audit/**
 # Perspektifler rebuild — edit allowlist (one glob per line, # = comment)
-# Checked by .claude/hooks/scope_guard.py on Edit/Write. Paths repo-relative.
 brain/PERSPEKTIFLER_TASKS.json
 brain/perspektifler/**
 src/pages/PerspektiflerKategoriPage.tsx
@@ -66,8 +108,6 @@ src/hooks/useInsightsFeed.ts
 src/lib/slugify.ts
 src/lib/perspektifler-search.ts
 src/lib/insights-mock.ts
-src/lib/analytics.ts
-.size-limit.json
 scripts/generate-blog-index.ts
 scripts/generate-rss.ts
 scripts/generate-og-image.ts
@@ -76,11 +116,6 @@ scripts/prerender.mjs
 scripts/check-taxonomy.ts
 scripts/check-links.ts
 scripts/migrate-blog-frontmatter.ts
-public/locales/tr/**
-public/locales/en/**
-tests/**
-e2e/**
-playwright.config.ts
 docs/guides/perspektifler-content-ops.md
 .claude/scope-allowlist.txt
 .claude/hooks/**
@@ -89,9 +124,7 @@ docs/guides/perspektifler-content-ops.md
 src/components/ui/CommandMenu.tsx
 src/components/sections/Insights.tsx
 src/components/layout/Footer.tsx
-src/components/common/NotFoundSearch.tsx
 src/lib/useRouteNamespaces.ts
-src/pages/NotFoundPage.tsx
 src/components/ui/StickyTableOfContents.tsx
 src/components/ui/UtilityDock.tsx
 src/components/ui/ZenToggle.tsx
@@ -113,7 +146,6 @@ src/lib/query-client.ts
 package.json
 brain/research-bridge/**
 # Hatasız-teslim turu (T0 talimatı 2026-06-12): pre-existing CI kırmızılarının kök-neden fix'leri
-src/test/**
 src/pages/track-b-phase-b5.test.tsx
 src/i18n/canonical.test.ts
 src/components/sections/Hero.tsx
@@ -123,6 +155,5 @@ scripts/check-migration-safety.mjs
 src/pages/PricingPage.tsx
 src/components/PricingCalculatorWizard.tsx
 src/pages/services/**
-src/components/services/**
 src/components/pricing/**
 index.html

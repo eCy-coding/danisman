@@ -50,12 +50,10 @@ test.describe('P38-T71: LinkedIn + Social Share Meta (OG)', () => {
     const canonical = await page.locator('link[rel="canonical"]').getAttribute('href');
 
     if (!ogUrl) {
-      test
-        .info()
-        .annotations.push({
-          type: 'note',
-          description: 'og:url eksik — LinkedIn share URL hatalı olur',
-        });
+      test.info().annotations.push({
+        type: 'note',
+        description: 'og:url eksik — LinkedIn share URL hatalı olur',
+      });
       return;
     }
     if (canonical && ogUrl) {
@@ -177,12 +175,10 @@ test.describe('P38-T72: NAP (Name/Address/Phone) Schema Consistency', () => {
     }
 
     if (!hasGeoData) {
-      test
-        .info()
-        .annotations.push({
-          type: 'note',
-          description: 'Organization: areaServed/addressCountry eksik — P39-T85 ile eklenecek',
-        });
+      test.info().annotations.push({
+        type: 'note',
+        description: 'Organization: areaServed/addressCountry eksik — P39-T85 ile eklenecek',
+      });
     }
   });
 });
@@ -194,10 +190,10 @@ test.describe('P38-T73: Guest Post Altyapısı (BlogPosting Schema)', () => {
     await mockSetup(page);
 
     // Blog listesinden ilk post al
-    await page.goto('/blog', { waitUntil: 'domcontentloaded' });
+    await page.goto('/perspektifler', { waitUntil: 'domcontentloaded' });
     await page.waitForTimeout(500);
 
-    const firstPostLink = page.locator('a[href*="/blog/"]').first();
+    const firstPostLink = page.locator('a[href*="/perspektifler/"]').first();
     if (!(await firstPostLink.isVisible().catch(() => false))) {
       test.info().annotations.push({ type: 'note', description: '/blog: post link yok' });
       return;
@@ -229,12 +225,10 @@ test.describe('P38-T73: Guest Post Altyapısı (BlogPosting Schema)', () => {
     }
 
     if (!hasBlogAuthor) {
-      test
-        .info()
-        .annotations.push({
-          type: 'note',
-          description: 'BlogPosting: author schema eksik — guest post SEO zayıf',
-        });
+      test.info().annotations.push({
+        type: 'note',
+        description: 'BlogPosting: author schema eksik — guest post SEO zayıf',
+      });
     }
   });
 
@@ -246,12 +240,10 @@ test.describe('P38-T73: Guest Post Altyapısı (BlogPosting Schema)', () => {
     ];
     const found = candidates.some((c) => fs.existsSync(path.join(ROOT, c)));
     if (!found) {
-      test
-        .info()
-        .annotations.push({
-          type: 'note',
-          description: 'guest-post-targets.md: yok — P38-T73 plan belgesi eksik',
-        });
+      test.info().annotations.push({
+        type: 'note',
+        description: 'guest-post-targets.md: yok — P38-T73 plan belgesi eksik',
+      });
     }
   });
 });
@@ -384,7 +376,7 @@ test.describe('P38-T76: Press Release Distribution', () => {
   }) => {
     test.setTimeout(15000);
     await mockSetup(page);
-    await page.goto('/blog', { waitUntil: 'domcontentloaded' });
+    await page.goto('/perspektifler', { waitUntil: 'domcontentloaded' });
     await page.waitForTimeout(400);
 
     const pressTag = await page
@@ -393,12 +385,10 @@ test.describe('P38-T76: Press Release Distribution', () => {
       .isVisible()
       .catch(() => false);
     if (!pressTag) {
-      test
-        .info()
-        .annotations.push({
-          type: 'note',
-          description: 'Blog: press-release kategori yok — P38-T76 pending',
-        });
+      test.info().annotations.push({
+        type: 'note',
+        description: 'Blog: press-release kategori yok — P38-T76 pending',
+      });
     }
   });
 });
@@ -459,12 +449,10 @@ test.describe('P38-T79: Broken Link Building Campaign', () => {
   test('T79-a: scripts/broken-link-outreach.ts dosyası içerik kaliteli', () => {
     const scriptPath = path.join(ROOT, 'scripts/broken-link-outreach.ts');
     if (!fs.existsSync(scriptPath)) {
-      test
-        .info()
-        .annotations.push({
-          type: 'note',
-          description: 'broken-link-outreach.ts yok — P38-T79 pending',
-        });
+      test.info().annotations.push({
+        type: 'note',
+        description: 'broken-link-outreach.ts yok — P38-T79 pending',
+      });
       return;
     }
     const content = fs.readFileSync(scriptPath, 'utf-8');
@@ -479,12 +467,10 @@ test.describe('P38-T79: Broken Link Building Campaign', () => {
     ];
     const found = candidates.some((c) => fs.existsSync(path.join(ROOT, c)));
     if (!found) {
-      test
-        .info()
-        .annotations.push({
-          type: 'note',
-          description: 'Outreach template dosyası yok — P38-T79 pending',
-        });
+      test.info().annotations.push({
+        type: 'note',
+        description: 'Outreach template dosyası yok — P38-T79 pending',
+      });
     }
   });
 });

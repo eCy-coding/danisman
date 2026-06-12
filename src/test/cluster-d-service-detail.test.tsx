@@ -222,14 +222,20 @@ describe('ServiceDetailLayout — atom-11-1: Hero section', () => {
 });
 
 describe('ServiceDetailLayout — atom-11-5: Related services + Discovery CTA', () => {
-  it('renders Discovery CTA section at bottom', async () => {
+  // SVC P7: the footer now renders the per-service 'value' CTA variant
+  // (cta-variants.ts) instead of static copy.
+  it('renders the per-service CTA variant headline at bottom', async () => {
+    const { getCtaVariants } = await import('../data/cta-variants');
+    const expected = getCtaVariants(MINIMAL_CONTENT.slug).variants.value;
     await renderRealLayout();
-    expect(screen.getByText(/Discovery Call ile başlayalım/i)).toBeTruthy();
+    expect(screen.getByText(expected.headline)).toBeTruthy();
   });
 
-  it('renders "Görüşme Planla" CTA link', async () => {
+  it('renders the CTA variant button label as the /contact link', async () => {
+    const { getCtaVariants } = await import('../data/cta-variants');
+    const expected = getCtaVariants(MINIMAL_CONTENT.slug).variants.value;
     await renderRealLayout();
-    expect(screen.getByText(/Görüşme Planla/i)).toBeTruthy();
+    expect(screen.getByText(new RegExp(expected.buttonLabel))).toBeTruthy();
   });
 
   it('renders engagement footer with /contact link', async () => {

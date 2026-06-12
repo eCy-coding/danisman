@@ -230,7 +230,7 @@ test.describe('Crawler: Kritik UX #2 — istek5.txt Phase 2 (Mobil + Process + F
     await expect(h1).toBeVisible({ timeout: 6_000 });
 
     // Blog listesi → ilk makaleye git
-    const firstPost = page.locator('a[href*="/blog/"]').first();
+    const firstPost = page.locator('a[href*="/perspektifler/"]').first();
     if (await firstPost.isVisible({ timeout: 3_000 }).catch(() => false)) {
       await firstPost.click();
       await page.waitForTimeout(1_500);

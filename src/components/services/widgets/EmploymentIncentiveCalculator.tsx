@@ -95,10 +95,14 @@ export const EmploymentIncentiveCalculator: React.FC = () => {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-semibold text-white mb-2">
+              <label
+                htmlFor="incentive-workforce"
+                className="block text-sm font-semibold text-white mb-2"
+              >
                 Çalışan Sayısı: <span className="text-secondary font-serif">{workforce}</span>
               </label>
               <input
+                id="incentive-workforce"
                 type="range"
                 min="5"
                 max="2000"
@@ -109,13 +113,17 @@ export const EmploymentIncentiveCalculator: React.FC = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-semibold text-white mb-2">
+              <label
+                htmlFor="incentive-salary"
+                className="block text-sm font-semibold text-white mb-2"
+              >
                 Ortalama Brüt Maaş (₺/ay):{' '}
                 <span className="text-secondary font-serif">
                   ₺{avgSalary.toLocaleString('tr-TR')}
                 </span>
               </label>
               <input
+                id="incentive-salary"
                 type="range"
                 min="20000"
                 max="150000"

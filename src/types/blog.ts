@@ -56,6 +56,8 @@ export const BLOG_CATEGORY_META: Record<
   },
 };
 
+export type BlogPostFormat = 'makale' | 'vaka-analizi' | 'rapor' | 'founder-letter';
+
 export interface BlogPost {
   slug: string;
   title: string;
@@ -65,9 +67,22 @@ export interface BlogPost {
   coverImage?: string;
   /** Single primary category for the post (Phase 20 B3). */
   category?: BlogCategory;
-  /** Free-form tags for finer search. */
+  /** URL slug of the category (Perspektifler taxonomy). */
+  categorySlug?: string;
+  /** Canonical tag slugs from the controlled vocabulary (≤5). */
   tags: string[];
   readingTime: string;
+  /** Minutes, computed at build time (200 wpm). */
+  readTimeMin?: number;
+  wordCount?: number;
+  lang?: 'tr' | 'en';
+  format?: BlogPostFormat;
+  /** Editorial hero slot — max 4 posts may set this (enforced at build). */
+  featured?: boolean;
+  /** Links the TR/EN translation pair for hreflang. */
+  pairId?: string;
+  seriesId?: string;
+  updated?: string;
 }
 
 export interface BlogPostIndex {

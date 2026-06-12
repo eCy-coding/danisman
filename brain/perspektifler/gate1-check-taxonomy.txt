@@ -1,0 +1,7 @@
+GATE-1 EVIDENCE (2026-06-11 12:35)
+
+
+✅ GATE-1 PASS · posts=49 · categories=10 · vocab=46/60 · dup-slugs=0 · featured=4/4 · case-studies=6 unified · warns=57
+
+typecheck:web: PASS (tsc --noEmit exit 0)
+vitest: 2 failed | 1132 passed — IDENTICAL to pre-change baseline (canonical.test.ts hreflang tr-prefix + static-rules IMG_NO_ALT, both pre-existing on clean tree, verified via git stash rerun)

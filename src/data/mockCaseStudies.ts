@@ -11,6 +11,10 @@ export const CASE_STUDIES: CaseStudy[] = [
     title: 'Tech Scale-up · Operasyonel Mükemmellik',
     client: 'Anonymized client · Tech Scale-up',
     industry: 'Technology',
+
+    categorySlug: 'yapay-zeka-teknoloji',
+
+    format: 'vaka-analizi',
     result: 'Süreç netliği · ortak dil',
     duration: '6 ay',
     goLive: '2025',
@@ -45,6 +49,10 @@ export const CASE_STUDIES: CaseStudy[] = [
     title: 'Aile Şirketi · Yönetişim & Kuşak Geçişi',
     client: 'Anonymized client · Family Business',
     industry: 'Family Business',
+
+    categorySlug: 'insan-organizasyon',
+
+    format: 'vaka-analizi',
     result: 'Yönetişim modeli kuruldu',
     duration: '9 ay',
     goLive: '2025',
@@ -79,6 +87,10 @@ export const CASE_STUDIES: CaseStudy[] = [
     title: 'Üretim · Lean & Six Sigma Pratiği',
     client: 'Anonymized client · Manufacturing',
     industry: 'Manufacturing',
+
+    categorySlug: 'operasyon',
+
+    format: 'vaka-analizi',
     result: 'Sürdürülebilir verimlilik artışı',
     duration: '8 ay',
     goLive: '2025',
@@ -112,6 +124,10 @@ export const CASE_STUDIES: CaseStudy[] = [
     title: 'M&A Advisory · Due Diligence + PMI',
     client: 'Anonymized client · M&A Advisory',
     industry: 'M&A Advisory',
+
+    categorySlug: 'ma-degerleme',
+
+    format: 'vaka-analizi',
     result: 'Disiplinli müzakere & entegrasyon',
     duration: '5 ay',
     goLive: '2025',
@@ -145,6 +161,10 @@ export const CASE_STUDIES: CaseStudy[] = [
     title: 'Organizasyonel Dönüşüm · Yeni İşletim Modeli',
     client: 'Anonymized client · Mid-cap',
     industry: 'Organizational',
+
+    categorySlug: 'insan-organizasyon',
+
+    format: 'vaka-analizi',
     result: 'Yeni işletim modeli',
     duration: '7 ay',
     goLive: '2025',
@@ -178,6 +198,10 @@ export const CASE_STUDIES: CaseStudy[] = [
     title: 'Kültür Mühendisliği · Ortak Dil Programı',
     client: 'Anonymized client · Mid-cap',
     industry: 'Culture',
+
+    categorySlug: 'insan-organizasyon',
+
+    format: 'vaka-analizi',
     result: 'Ortak dil & değer çerçevesi',
     duration: '4 ay',
     goLive: '2025',

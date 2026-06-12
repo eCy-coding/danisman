@@ -74,11 +74,26 @@ export const UrgencyBanner: React.FC = () => {
   const [countdown, setCountdown] = useState({ h: '00', m: '00', s: '00' });
   const [target] = useState<Date>(() => getNextMonday());
 
-  // Client init
+  // Client init — D-6 (BUG-08): the banner is for RETURNING visitors only and
+  // auto-dismisses after 8s so it never competes with the chat bubble. The
+  // first visit only plants the marker.
   useEffect(() => {
-    setDismissed(checkDismissed());
+    let returning = false;
+    try {
+      returning = localStorage.getItem('ecypro_visited') === '1';
+      localStorage.setItem('ecypro_visited', '1');
+    } catch {
+      /* private mode → treat as first visit */
+    }
+    setDismissed(!returning || checkDismissed());
     setSlots(getSlotsLeft());
   }, []);
+
+  useEffect(() => {
+    if (dismissed) return;
+    const id = window.setTimeout(() => setDismissed(true), 8000);
+    return () => window.clearTimeout(id);
+  }, [dismissed]);
 
   const tick = useCallback(() => {
     const ms = target.getTime() - Date.now();

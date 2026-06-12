@@ -93,7 +93,7 @@ export const CommandMenu = () => {
           className="px-2 py-1.5 text-xs font-medium text-slate-400 mb-2"
         >
           <Command.Item
-            onSelect={() => runCommand(() => navigate('/blog'))}
+            onSelect={() => runCommand(() => navigate('/perspektifler'))}
             className="flex items-center gap-2 px-3 py-2.5 text-sm text-slate-300 rounded-md aria-selected:bg-white/10 aria-selected:text-white cursor-pointer"
           >
             <FileText className="w-4 h-4" />

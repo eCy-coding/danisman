@@ -1,0 +1,188 @@
+{
+  "version": "2.0",
+  "decided": "2026-06-12",
+  "adr": "docs/adr/ADR-services-taxonomy-v2.md",
+  "model": "two-axis: pillars = browse axis (mega menu, 3 sections × 3 content-true items); departments = filter/workflow axis (/services chips + lifecycle clusters)",
+  "invariants": {
+    "chips_max": 8,
+    "facets_max": 2,
+    "clicks_to_any_service_max": 3,
+    "every_slug_exactly_one_canonical_url": true,
+    "no_url_renames_in_v2": true
+  },
+  "canonical_slugs_total": 39,
+  "new_content_entries": [
+    {
+      "slug": "company-valuation",
+      "reason": "ma-valuation catalog card ('Şirket Değerleme & QoE') deep-links to the generic mergers-acquisitions umbrella (services.ts:53); every sibling M&A card has its own page. Authored in P4.",
+      "department": "ma",
+      "lifecycleStep": 1
+    }
+  ],
+  "redirects_301": [],
+  "redirects_note": "v2 only ADDS surfaces (no slug renamed or retired) → empty 301 map. mergers-acquisitions stays alive as the M&A pillar page.",
+  "departments": [
+    {
+      "id": "ma",
+      "status": "existing",
+      "label": { "tr": "M&A", "en": "M&A" },
+      "chip": { "tr": "M&A", "en": "M&A" },
+      "description": {
+        "tr": "Birleşme ve satın alma yaşam döngüsü: değerlemeden entegrasyona",
+        "en": "The M&A lifecycle: from valuation to integration"
+      },
+      "lifecycle": [
+        "company-valuation",
+        "negotiation-loi",
+        "due-diligence-suite",
+        "deal-structuring",
+        "post-merger-integration"
+      ]
+    },
+    {
+      "id": "esg",
+      "status": "existing",
+      "label": { "tr": "ESG", "en": "ESG" },
+      "chip": { "tr": "ESG", "en": "ESG" },
+      "description": {
+        "tr": "Sürdürülebilirlik yolculuğu: stratejiden CSRD raporlamasına",
+        "en": "The sustainability journey: from strategy to CSRD reporting"
+      },
+      "lifecycle": [
+        "esg-strategy",
+        "double-materiality",
+        "carbon-accounting",
+        "esrs-roadmap",
+        "csrd-compliance"
+      ]
+    },
+    {
+      "id": "fintech",
+      "status": "existing",
+      "label": { "tr": "Fintech", "en": "Fintech" },
+      "chip": { "tr": "FİNTECH", "en": "FINTECH" },
+      "description": {
+        "tr": "Regülasyon ve lisans yolculuğu: veri uyumundan kripto varlıklara",
+        "en": "The regulatory and licensing journey: from data compliance to crypto assets"
+      },
+      "lifecycle": [
+        "data-governance",
+        "masak-aml",
+        "spk-casp",
+        "open-banking",
+        "crypto-web3"
+      ]
+    },
+    {
+      "id": "aile",
+      "status": "existing",
+      "label": { "tr": "Aile Şirketi", "en": "Family Business" },
+      "chip": { "tr": "AİLE ŞİRKETİ", "en": "FAMILY BUSINESS" },
+      "description": {
+        "tr": "Nesiller arası süreklilik: anayasadan servet transferine",
+        "en": "Continuity across generations: from constitution to wealth transfer"
+      },
+      "lifecycle": [
+        "family-business",
+        "family-business-governance",
+        "succession-planning",
+        "conflict-resolution",
+        "wealth-transfer",
+        "family-office"
+      ]
+    },
+    {
+      "id": "insan",
+      "status": "NEW (adopts 4 orphans)",
+      "label": { "tr": "İnsan & Organizasyon", "en": "People & Organization" },
+      "chip": { "tr": "İNSAN & ORG.", "en": "PEOPLE & ORG." },
+      "description": {
+        "tr": "Yetenek, organizasyon tasarımı ve istihdam yolculuğu",
+        "en": "The talent, organization design and employment journey"
+      },
+      "lifecycle": [
+        "hr-transformation",
+        "employer-branding",
+        "industrial-relations",
+        "payroll-audit"
+      ]
+    },
+    {
+      "id": "risk",
+      "status": "NEW (adopts 6 orphans)",
+      "label": { "tr": "Risk & Kamu", "en": "Risk & Public Affairs" },
+      "chip": { "tr": "RİSK & KAMU", "en": "RISK & PUBLIC" },
+      "description": {
+        "tr": "Makro riskten kriz yönetimine, regülasyondan kamu ilişkilerine",
+        "en": "From macro risk to crisis management, regulation and public affairs"
+      },
+      "lifecycle": [
+        "macro-risk",
+        "crisis-management",
+        "competition-economics",
+        "government-relations",
+        "global-intelligence",
+        "smart-cities"
+      ]
+    },
+    {
+      "id": "buyume",
+      "status": "NEW (adopts 4 orphans)",
+      "label": { "tr": "Büyüme & Operasyon", "en": "Growth & Operations" },
+      "chip": { "tr": "BÜYÜME & OPS.", "en": "GROWTH & OPS." },
+      "description": {
+        "tr": "Pazara giriş, teşvikler ve operasyonel mükemmellik yolculuğu",
+        "en": "The market entry, incentives and operational excellence journey"
+      },
+      "lifecycle": [
+        "market-entry",
+        "investment-incentives",
+        "neuromarketing",
+        "operational-excellence"
+      ]
+    }
+  ],
+  "orphan_resolution": {
+    "adopted": {
+      "insan": ["hr-transformation", "employer-branding", "industrial-relations", "payroll-audit"],
+      "risk": ["macro-risk", "crisis-management", "competition-economics", "government-relations", "global-intelligence", "smart-cities"],
+      "buyume": ["market-entry", "investment-incentives", "neuromarketing", "operational-excellence"]
+    },
+    "retired_301": [],
+    "evidence": "hero titles extracted from SERVICE_CONTENT 2026-06-12 — each orphan's content matches its assigned department semantically (see PROGRESS.md SVC Gate-2)"
+  },
+  "mega_menu_projection": {
+    "rule": "9 items → 9 unique, content-true targets; zero dead links; zero duplicate hrefs; featured card preserved",
+    "sections": [
+      {
+        "id": "strategy",
+        "title": { "tr": "Strateji", "en": "Strategy" },
+        "items": [
+          { "id": "corporate-strategy", "target": "/services/strategic-transformation", "change": "kept (was dead — fixed by resolver P4)" },
+          { "id": "ma-advisory", "target": "/services/mergers-acquisitions", "change": "kept (only working item today)" },
+          { "id": "org-design", "target": "/services/hr-transformation", "change": "RETARGET from strategic-transformation dupe — content title is literally 'İnsan Kaynakları & Organizasyon Tasarımı'" }
+        ]
+      },
+      {
+        "id": "technology",
+        "title": { "tr": "Teknoloji", "en": "Technology" },
+        "items": [
+          { "id": "ai-data", "target": "/services/ai-analytics", "change": "kept (was dead — fixed by resolver P4)" },
+          { "id": "digital-transformation", "target": "/services/digital-strategy", "change": "kept (was dead — fixed by resolver P4)" },
+          { "id": "data-governance", "target": "/services/data-governance", "change": "REPLACE 'Bulut & Platform' (zero cloud content exists in registry; was a dupe of digital-strategy) with content-true 'Veri Yönetişimi & Uyum'" }
+        ]
+      },
+      {
+        "id": "performance",
+        "title": { "tr": "Performans", "en": "Performance" },
+        "items": [
+          { "id": "revenue-growth", "target": "/services/market-entry", "change": "RETARGET from generic /services — 'pazar penetrasyonu' desc matches market-entry content" },
+          { "id": "cost-transformation", "target": "/services/operational-excellence", "change": "RETARGET from generic /services — Lean/Altı Sigma content" },
+          { "id": "incentives-grants", "target": "/services/investment-incentives", "change": "RELABEL 'Dijital Operasyonlar' → 'Teşvik & Hibe Yönetimi' (otomasyon semantics already covered by digital-strategy item; incentives = direct P&L performance)" }
+        ]
+      }
+    ],
+    "featured": { "target": "/maturity-assessment", "change": "kept" }
+  },
+  "i18n_policy": "service slugs stay EN-canonical (current convention; /hizmetler/* → /services redirect at App.tsx:444); all labels/descriptions bilingual {tr,en} from registry"
+}

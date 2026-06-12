@@ -1,101 +1,117 @@
 /**
- * Phase 6 — MegaMenu render testi (HİZMETLER paneli, TR + EN).
+ * SVC P5 — Services mega menu: APG Disclosure Navigation contract.
  *
- * Ekran görüntüsündeki yapıyı kilitler: 3 kategori (Strateji/Teknoloji/
- * Performans) + 9 hizmet linki + "AI Olgunluk Analizi / Analizi Başlat" CTA
- * (→ /maturity-assessment) + alt bar ("Tümünü gör" → /services).
+ * Panel facts (registry-driven render, unique content-true targets, opaque
+ * surface, no ARIA menu-role misuse) + trigger semantics (aria-expanded /
+ * aria-controls / Esc closes AND returns focus — APG disclosure pattern).
+ * Written test-first; Esc-focus-return + role-removal were RED pre-impl.
  */
-
 import { describe, it, expect } from 'vitest';
-import { render, screen } from '@testing-library/react';
-import React from 'react';
-import { MegaMenu } from '../MegaMenu';
+import { render, screen, fireEvent } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async';
 
-const noop = () => {};
+import { MegaMenu } from '@/components/layout/MegaMenu';
+import { Navbar } from '@/components/layout/Navbar';
+import { SERVICES_MEGA_MENU } from '@/data/service-taxonomy';
 
-function renderMenu(lang: 'tr' | 'en') {
-  return render(
-    <MegaMenu
-      menuId="services"
-      isOpen
-      lang={lang}
-      onClose={noop}
-      onMouseEnter={noop}
-      onMouseLeave={noop}
-    />,
+const renderPanel = (isOpen = true) =>
+  render(
+    <HelmetProvider>
+      <MemoryRouter>
+        <MegaMenu
+          menuId="services"
+          isOpen={isOpen}
+          lang="tr"
+          onClose={() => {}}
+          onMouseEnter={() => {}}
+          onMouseLeave={() => {}}
+        />
+      </MemoryRouter>
+    </HelmetProvider>,
   );
-}
 
-const DEEP_LINKS = [
-  '/services/strategic-transformation',
-  '/services/mergers-acquisitions',
-  '/services/organizational-design',
-  '/services/ai-analytics',
-  '/services/digital-strategy',
-  '/services/cloud-platform-modernization',
-  '/services/revenue-growth-strategy',
-  '/services/cost-optimization',
-  '/services/digital-operations',
-];
+const renderNavbar = () =>
+  render(
+    <HelmetProvider>
+      <MemoryRouter>
+        <Navbar />
+      </MemoryRouter>
+    </HelmetProvider>,
+  );
 
-describe('MegaMenu (services) — TR render', () => {
-  it('3 kategori başlığını gösterir', () => {
-    renderMenu('tr');
-    expect(screen.getByText('Strateji')).toBeTruthy();
-    expect(screen.getByText('Teknoloji')).toBeTruthy();
-    expect(screen.getByText('Performans')).toBeTruthy();
-  });
-
-  it('9 hizmet etiketini gösterir', () => {
-    renderMenu('tr');
-    [
-      'Kurumsal Strateji',
-      'M&A Danışmanlığı',
-      'Organizasyonel Tasarım',
-      'Yapay Zeka & Veri',
-      'Dijital Dönüşüm',
-      'Bulut & Platform',
-      'Gelir Büyümesi',
-      'Maliyet Dönüşümü',
-      'Dijital Operasyonlar',
-    ].forEach((label) => expect(screen.getByText(label), `eksik: ${label}`).toBeTruthy());
-  });
-
-  it('9 öğenin tümü doğru derin-link href taşır', () => {
-    const { container } = renderMenu('tr');
-    for (const href of DEEP_LINKS) {
-      expect(container.querySelector(`a[href="${href}"]`), `eksik link: ${href}`).toBeTruthy();
+describe('MegaMenu services panel — registry render', () => {
+  it('renders all 3 sections and 9 items from the taxonomy registry', () => {
+    renderPanel();
+    for (const section of SERVICES_MEGA_MENU.sections) {
+      expect(screen.getByText(section.title.tr)).toBeTruthy();
+      for (const item of section.items) {
+        expect(screen.getByText(item.label.tr)).toBeTruthy();
+      }
     }
   });
 
-  it('öne çıkan kart + CTA doğru', () => {
-    const { container } = renderMenu('tr');
-    expect(screen.getByText('AI Olgunluk Analizi')).toBeTruthy();
-    expect(screen.getByText('Analizi Başlat')).toBeTruthy();
-    expect(container.querySelector('a[href="/maturity-assessment"]')).toBeTruthy();
+  it('9 links, 9 unique hrefs, zero dead/duplicate targets', () => {
+    renderPanel();
+    const panel = screen.getByTestId('mega-menu-services');
+    const hrefs = Array.from(panel.querySelectorAll('a'))
+      .map((a) => a.getAttribute('href'))
+      .filter((h): h is string => !!h && h.startsWith('/services/'));
+    expect(hrefs).toHaveLength(9);
+    expect(new Set(hrefs).size).toBe(9);
   });
 
-  it('alt bar "Tümünü gör" → /services', () => {
-    const { container } = renderMenu('tr');
-    expect(screen.getByText('Tümünü gör')).toBeTruthy();
-    expect(container.querySelector('a[href="/services"]')).toBeTruthy();
+  it('renders the featured assessment card linking to /maturity-assessment', () => {
+    renderPanel();
+    const panel = screen.getByTestId('mega-menu-services');
+    const featured = Array.from(panel.querySelectorAll('a')).find(
+      (a) => a.getAttribute('href') === '/maturity-assessment',
+    );
+    expect(featured).toBeTruthy();
+  });
+
+  it('is a labelled region whose id matches the trigger aria-controls contract', () => {
+    renderPanel();
+    const panel = screen.getByTestId('mega-menu-services');
+    expect(panel.getAttribute('role')).toBe('region');
+    expect(panel.id).toBe('mega-menu-services');
+    expect(panel.getAttribute('aria-label')).toBeTruthy();
+  });
+
+  it('does NOT misuse ARIA menu roles (APG disclosure = plain link lists)', () => {
+    renderPanel();
+    const panel = screen.getByTestId('mega-menu-services');
+    expect(panel.querySelectorAll('[role="menu"], [role="menuitem"]')).toHaveLength(0);
+  });
+
+  it('panel surface is fully opaque (doctrine: no translucent ghosting under H1)', () => {
+    renderPanel();
+    const panel = screen.getByTestId('mega-menu-services');
+    const surface = panel.querySelector('.rounded-2xl');
+    expect(surface?.className).toContain('bg-[#0a0f1c]');
+    expect(surface?.className).not.toContain('bg-[#0a0f1c]/');
   });
 });
 
-describe('MegaMenu (services) — EN render', () => {
-  it('EN kategori + CTA etiketlerini gösterir', () => {
-    renderMenu('en');
-    expect(screen.getByText('Strategy')).toBeTruthy();
-    expect(screen.getByText('Technology')).toBeTruthy();
-    expect(screen.getByText('Performance')).toBeTruthy();
-    expect(screen.getByText('Start Analysis')).toBeTruthy();
-    expect(screen.getByText('View all')).toBeTruthy();
+describe('Navbar services trigger — disclosure semantics', () => {
+  it('trigger exposes aria-haspopup, aria-controls and toggles aria-expanded on focus', () => {
+    renderNavbar();
+    const trigger = screen.getByTestId('navbar-link-services');
+    expect(trigger.getAttribute('aria-haspopup')).toBe('true');
+    expect(trigger.getAttribute('aria-controls')).toBe('mega-menu-services');
+    expect(trigger.getAttribute('aria-expanded')).toBe('false');
+    fireEvent.focus(trigger);
+    expect(trigger.getAttribute('aria-expanded')).toBe('true');
   });
 
-  it('EN modunda da 9 derin-link korunur', () => {
-    const { container } = renderMenu('en');
-    for (const href of DEEP_LINKS) {
-      expect(container.querySelector(`a[href="${href}"]`), `eksik link: ${href}`).toBeTruthy();
-    }
+  it('Escape closes the panel AND returns focus to the trigger (APG)', () => {
+    renderNavbar();
+    const trigger = screen.getByTestId('navbar-link-services');
+    fireEvent.focus(trigger);
+    expect(trigger.getAttribute('aria-expanded')).toBe('true');
+
+    fireEvent.keyDown(document, { key: 'Escape' });
+    expect(trigger.getAttribute('aria-expanded')).toBe('false');
+    expect(document.activeElement).toBe(trigger);
   });
 });

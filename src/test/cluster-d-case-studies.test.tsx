@@ -30,47 +30,46 @@ vi.mock('@/i18n/canonical', () => ({
   buildCanonical: (path: string) => `https://www.ecypro.com${path}`,
 }));
 
-// CaseStudiesPage now reads getCaseStudies() (real .mdoc loader + mock merge),
-// not the raw CASE_STUDIES export. Mock the loader so the page renders exactly
-// these fixtures regardless of real content/merge.
-vi.mock('@/lib/data', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('@/lib/data')>();
-  return {
-    ...actual,
-    getCaseStudies: () => [
-      {
-        slug: 'sanayi-holding-cikis',
-        title: 'M&A Vaka — Sanayi Holdingi',
-        client: 'Büyük Sanayi Holdingi (Anonim)',
-        industry: 'Sanayi & Üretim',
-        result: '€65M başarılı anlaşma',
-        duration: '8 ay',
-        goLive: '2024-Q3',
-        content: '<p>Detaylı vaka içeriği.</p>',
-      },
-      {
-        slug: 'tekstil-esg-donusum',
-        title: 'ESG Dönüşüm — Tekstil İhracatçısı',
-        client: 'Lider Tekstil İhracatçısı (Anonim)',
-        industry: 'Tekstil & Moda',
-        result: '+42% ESG Skoru',
-        duration: '6 ay',
-        goLive: '2024-Q2',
-        content: '<p>ESG dönüşüm detayları.</p>',
-      },
-      {
-        slug: 'aile-yonetisim',
-        title: 'Aile Şirketi Yönetişim',
-        client: '3. Nesil Aile Şirketi (Anonim)',
-        industry: 'Perakende & Tüketim',
-        result: '%100 Uzlaşı',
-        duration: '5 ay',
-        goLive: '2024-Q1',
-        content: '<p>Yönetişim detayları.</p>',
-      },
-    ],
-  };
-});
+vi.mock('@/data/mockCaseStudies', () => ({
+  CASE_STUDIES: [
+    {
+      slug: 'sanayi-holding-cikis',
+      title: 'M&A Vaka — Sanayi Holdingi',
+      client: 'Büyük Sanayi Holdingi (Anonim)',
+      industry: 'Sanayi & Üretim',
+      categorySlug: 'operasyon',
+      result: '€65M başarılı anlaşma',
+      duration: '8 ay',
+      goLive: '2024-Q3',
+      content: '<p>Detaylı vaka içeriği.</p>',
+      image: null,
+    },
+    {
+      slug: 'tekstil-esg-donusum',
+      title: 'ESG Dönüşüm — Tekstil İhracatçısı',
+      client: 'Lider Tekstil İhracatçısı (Anonim)',
+      industry: 'Tekstil & Moda',
+      categorySlug: 'kamu-esg',
+      result: '+42% ESG Skoru',
+      duration: '6 ay',
+      goLive: '2024-Q2',
+      content: '<p>ESG dönüşüm detayları.</p>',
+      image: null,
+    },
+    {
+      slug: 'aile-yonetisim',
+      title: 'Aile Şirketi Yönetişim',
+      client: '3. Nesil Aile Şirketi (Anonim)',
+      industry: 'Perakende & Tüketim',
+      categorySlug: 'insan-organizasyon',
+      result: '%100 Uzlaşı',
+      duration: '5 ay',
+      goLive: '2024-Q1',
+      content: '<p>Yönetişim detayları.</p>',
+      image: null,
+    },
+  ],
+}));
 
 vi.mock('../components/features/case-studies/CaseStudyCard', () => ({
   CaseStudyCard: ({ study }: { study: { title: string; industry: string } }) => (
@@ -146,7 +145,7 @@ describe('CaseStudiesPage — atom-10-1: Hero + filter', () => {
 
   it('renders filter nav', () => {
     renderPage(<CaseStudiesPage />);
-    const nav = screen.getByRole('navigation', { name: /sektör filtresi/i });
+    const nav = screen.getByRole('navigation', { name: /kategori filtresi/i });
     expect(nav).toBeTruthy();
   });
 
@@ -155,9 +154,9 @@ describe('CaseStudiesPage — atom-10-1: Hero + filter', () => {
     expect(screen.getByText(/Tümü/i)).toBeTruthy();
   });
 
-  it('renders industry filters derived from data', () => {
+  it('renders category filters derived from shared taxonomy', () => {
     renderPage(<CaseStudiesPage />);
-    expect(screen.getByText(/Sanayi & Üretim/i)).toBeTruthy();
+    expect(screen.getByText(/Operasyon \(1\)/i)).toBeTruthy();
   });
 
   it('"Tümü" filter shows count of all studies', () => {
@@ -187,10 +186,10 @@ describe('CaseStudiesPage — atom-10-2: Case grid', () => {
     expect(grid).toBeTruthy();
   });
 
-  it('filtering by industry shows only matching cards', () => {
+  it('filtering by category shows only matching cards', () => {
     renderPage(<CaseStudiesPage />);
-    const industryBtn = screen.getByText(/Tekstil & Moda/i);
-    fireEvent.click(industryBtn);
+    const categoryBtn = screen.getByText(/Kamu & ESG/i);
+    fireEvent.click(categoryBtn);
     expect(screen.getByText('ESG Dönüşüm — Tekstil İhracatçısı')).toBeTruthy();
     expect(screen.queryByText('M&A Vaka — Sanayi Holdingi')).toBeNull();
   });

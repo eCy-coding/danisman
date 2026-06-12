@@ -1,0 +1,2 @@
+    [firefox] › e2e/hub.spec.ts:54:3 › GATE-3 perspektifler hub › URL-state round-trip: filters → URL → fresh context reproduces view 
+  67 passed (1.2m)

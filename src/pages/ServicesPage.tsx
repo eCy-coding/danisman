@@ -9,6 +9,7 @@ import { ServiceCard } from '../components/services/ServiceCard';
 import { ServiceFilter } from '../components/services/ServiceFilter';
 import { DEPARTMENTS, SERVICES } from '@/data/services';
 import { useInterestTracker } from '@/hooks/useInterestTracker';
+import { trackEvent } from '@/lib/analytics';
 import { usePersonalizationStore } from '@/lib/stores/personalizationStore';
 import { useTranslation } from 'react-i18next';
 import { PageWrapper } from '../components/layout/PageWrapper';
@@ -80,7 +81,20 @@ export const ServicesPage: React.FC = () => {
   const lang = ((i18n.language || 'en').startsWith('tr') ? 'tr' : 'en') as 'tr' | 'en';
 
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  // Controlled input value vs debounced query: filtering re-renders 35 cards,
+  // so it must not run per keystroke (motion spec: search debounce ≥150ms).
+  const [searchInput, setSearchInput] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
+  useEffect(() => {
+    const timer = window.setTimeout(() => setSearchQuery(searchInput), 180);
+    return () => window.clearTimeout(timer);
+  }, [searchInput]);
+
+  const handleSelectCategory = (id: string) => {
+    setSelectedCategory(id);
+    // KVKK-safe: department id only, consent gate lives inside trackEvent.
+    trackEvent('services', 'service_filter', id);
+  };
 
   // Personalization — stable tag reference + sliced subscription to avoid
   // refiring trackVisit on every store mutation (see INTEREST_TAGS comment).
@@ -118,6 +132,17 @@ export const ServicesPage: React.FC = () => {
 
     return filtered;
   }, [selectedCategory, searchQuery, scores]);
+
+  // KVKK-safe search telemetry: query LENGTH + hit count only — never the raw
+  // text (it may contain personal data). Fires once per settled (debounced)
+  // query, hence the deliberately narrow dependency list.
+  useEffect(() => {
+    const len = searchQuery.trim().length;
+    if (len >= 3) {
+      trackEvent('services', 'service_search', `len:${len}|hits:${filteredServices.length}`);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchQuery]);
 
   // Fixed cluster display order for grouped view
   const CLUSTER_ORDER = DEPARTMENTS.filter((d) => d.id !== 'all');
@@ -209,8 +234,8 @@ export const ServicesPage: React.FC = () => {
           name: lang === 'tr' ? 'Danışmanlık Hizmetleri' : 'Consulting Services',
           description:
             lang === 'tr'
-              ? 'M&A, ESG, Fintech ve Aile Şirketi kümeleri'
-              : 'M&A, ESG, Fintech, and Family Business clusters',
+              ? 'M&A, ESG, Fintech, Aile Şirketi, İnsan & Organizasyon, Risk & Kamu, Büyüme & Operasyon kümeleri'
+              : 'M&A, ESG, Fintech, Family Business, People & Organization, Risk & Public Affairs, Growth & Operations clusters',
           url: 'https://www.ecypro.com/services',
           itemListElement: SERVICES.map((s, idx) => ({
             '@type': 'ListItem',
@@ -251,7 +276,7 @@ export const ServicesPage: React.FC = () => {
 
           {/* Filter & Search Section */}
           <div className="sticky top-24 z-30 mb-12 space-y-6">
-            {/* Search Bar - Glassmorphism Light */}
+            {/* Search Bar — solid-surface input (doctrine A9: no glassmorphism) */}
             <div className="max-w-2xl mx-auto">
               <div className="relative group">
                 <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-secondary transition-colors duration-300 w-5 h-5 pointer-events-none" />
@@ -262,8 +287,8 @@ export const ServicesPage: React.FC = () => {
                   className="w-full pl-12 pr-6 py-4 bg-white/5 border border-white/10 rounded-2xl
                                              focus:outline-none focus:border-secondary/50 focus:bg-white/10 focus:shadow-glow
                                              text-white placeholder-slate-500 transition-all duration-300 font-sans shadow-lg"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
+                  value={searchInput}
+                  onChange={(e) => setSearchInput(e.target.value)}
                 />
               </div>
             </div>
@@ -272,8 +297,20 @@ export const ServicesPage: React.FC = () => {
             <ServiceFilter
               departments={DEPARTMENTS}
               selectedCategory={selectedCategory}
-              onSelectCategory={setSelectedCategory}
+              onSelectCategory={handleSelectCategory}
             />
+
+            {/* Result count — announced to screen readers on every filter/search change */}
+            <p
+              aria-live="polite"
+              data-testid="services-result-count"
+              data-count={showGrouped ? SERVICES.length : filteredServices.length}
+              className="text-center text-xs tracking-wide text-slate-500"
+            >
+              {showGrouped
+                ? t('result_count_all', { count: SERVICES.length })
+                : t('result_count', { count: filteredServices.length })}
+            </p>
           </div>
 
           {/* Services Grid — P6 — no motion wrapper to prevent Lighthouse PAGE_HUNG.
@@ -338,6 +375,7 @@ export const ServicesPage: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => {
+                      setSearchInput('');
                       setSearchQuery('');
                       setSelectedCategory('all');
                     }}

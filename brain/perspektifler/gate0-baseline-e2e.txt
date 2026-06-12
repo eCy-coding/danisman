@@ -1,0 +1,20 @@
+  ✓ /sektorler/teknoloji-saas  (133.1 kB)  "Teknoloji & SaaS Danışmanlığı | eCyPro"
+  ✓ /guvence  (134.9 kB)  "Güvence & Bağımsızlık | eCyPro"
+  ✓ /araclar/denetim-hazirlik-skoru  (156.7 kB)  "Denetim Hazırlık Skoru | eCyPro Araçlar"
+  ✓ /calismalar  (138.6 kB)  "Vaka Çalışmaları | eCyPro Premium Danışmanlık"
+[prerender] 149/149 ok, 0 fail
+[global-setup] ✅ Setup tamamlandı (393ms)
+
+
+Running 6 tests using 6 workers
+
+  ✓  4 [chromium] › e2e/sanity_check.spec.ts:4:1 › Production Audit: Capture Console Errors (2.2s)
+BROWSER ERROR: [JavaScript Error: "The stylesheet http://localhost:4173/assets/tailwindcss was not loaded because its MIME type, “text/html”, is not “text/css”." {file: "http://localhost:4173/assets/index-ClaH5gP_.css" line: 0}]
+  ✓  5 [firefox] › e2e/sanity_check.spec.ts:4:1 › Production Audit: Capture Console Errors (2.5s)
+  ✓  6 [chromium] › e2e/sanity_check.spec.ts:98:1 › Booking Wizard E2E: submit to mock server (5.3s)
+BROWSER ERROR: Did not parse stylesheet at 'http://localhost:4173/assets/tailwindcss' because non CSS MIME types are not allowed in strict mode.
+  ✓  3 [webkit] › e2e/sanity_check.spec.ts:4:1 › Production Audit: Capture Console Errors (2.6s)
+  ✓  1 [firefox] › e2e/sanity_check.spec.ts:98:1 › Booking Wizard E2E: submit to mock server (7.1s)
+  ✓  2 [webkit] › e2e/sanity_check.spec.ts:98:1 › Booking Wizard E2E: submit to mock server (8.5s)
+
+  6 passed (16.7s)

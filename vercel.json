@@ -11,20 +11,25 @@
       "permanent": false
     },
     {
-      "source": "/insights",
-      "destination": "/blog",
+      "source": "/blog",
+      "destination": "/perspektifler",
       "permanent": true
     },
     {
-      "source": "/insights/:slug",
-      "destination": "/blog/:slug",
+      "source": "/blog/:slug",
+      "destination": "/perspektifler/:slug",
       "permanent": true
     },
-        {
-                "source": "/perspektifler",
-                "destination": "/blog",
-                "permanent": true
-        }
+    {
+      "source": "/insights",
+      "destination": "/perspektifler",
+      "permanent": true
+    },
+    {
+      "source": "/insights/:path*",
+      "destination": "/perspektifler",
+      "permanent": true
+    }
   ],
   "rewrites": [
     {

@@ -1,66 +1,37 @@
-# SCOPE — Perspektifler (Insights) Rebuild
+# SCOPE — Services Vertical E2E Rebuild (micro-focus contract)
 
-> Single source of truth for what this initiative may edit. Expanded ONLY with Phase-0
-> grep/ls evidence. Anything not listed here is OUT OF SCOPE (log to `OUT_OF_SCOPE.md`).
-> Spec: `brain/PERSPEKTIFLER_REBUILD_SPEC.md`. Branch base: `8af969d`.
+Single source of truth for what may be edited during the Services rebuild.
+Spec: `~/Desktop/istemek.md` (istek-services.md). Detail: `SERVICES_SCOPE.md`.
+Enforced by `.claude/hooks/scope_guard.py` against `.claude/scope-allowlist.txt`.
+Expansions require evidence + a PROGRESS.md entry.
 
-## IN SCOPE — verified paths (grep/ls evidence in PLAN.md §0.2)
+> Previous contract (Perspektifler, spec `~/Desktop/istek.md`) CLOSED — shipped,
+> merged and deployed 2026-06-11 (PROGRESS.md FAZ-2C, prod LH 64/97/96/100).
+> Re-fence evidence: owner request 2026-06-12 (istemek.md, approved plan
+> `cerrahi-hassasiyet-ile-k-klere-encapsulated-whistle.md`).
 
-### (a) Header / menu component + styles
-- `src/components/layout/Navbar.tsx` — top nav, renders NAV_ITEMS, mounts MegaMenu
-- `src/components/layout/MegaMenu.tsx` — desktop dropdown panel (services + insights)
-- `src/components/layout/MobileBottomNav.tsx` — mobile nav
-- `src/data/copy/common.ts` — NAV_ITEMS + MEGA_MENUS data (insights panel content)
+## In scope (why)
 
-### (b) Blog / insights routes & templates
-- `src/App.tsx` — route table (lines ~425–538 blog/insights/perspektifler; 695–727 case)
-- `src/pages/BlogPage.tsx`, `src/pages/BlogPostPage.tsx` — current /blog system (MDX)
-- `src/pages/InsightsPage.tsx`, `src/pages/InsightArticle.tsx`,
-  `src/pages/InsightCategory.tsx`, `src/pages/InsightTag.tsx`,
-  `src/pages/InsightSeries.tsx`, `src/pages/InsightAuthor.tsx`,
-  `src/pages/InsightArchive.tsx`, `src/pages/InsightSearch.tsx` — /insights subsystem
-- `src/content/blog/*.mdx` — 36 article sources (frontmatter)
-- `src/data/blog-posts.json` — generated blog index (49 entries)
-- `src/data/insights-stub-posts.json` — insights stub data
+| Area | Paths | Reason |
+|---|---|---|
+| Scope/progress docs | `SCOPE.md`, `SERVICES_SCOPE.md`, `OUT_OF_SCOPE.md`, `PROGRESS.md`, `brain/SERVICES_TASKS.json`, `brain/services/**` | contract + evidence pack |
+| Vertical pages | `src/pages/ServicesPage.tsx`, `src/pages/ServiceDetailPage.tsx` (resolver root-cause), `src/pages/NotFoundPage.tsx` | the vertical itself |
+| Services components | `src/components/services/**`, `src/components/sections/ServicesClusterSection.tsx`, `src/components/common/NotFoundSearch.tsx` | cards/filters/detail layout/illustrations/404 suggestions |
+| Header/menu | `src/components/layout/MegaMenu.tsx`, `src/components/layout/Navbar.tsx`, `src/components/layout/MobileBottomNav.tsx` | APG disclosure rebuild + dedupe; same-data mobile parity |
+| Data layer | `src/data/services.ts`, `src/data/service-content.ts`, `src/data/service-taxonomy.ts` (new), `src/data/cta-variants.ts`, `src/data/copy/common.ts` (MEGA_MENUS.services block only), `src/schemas/service.ts` | taxonomy v2 single source |
+| i18n/SEO | `src/i18n/localized-slugs.ts`, `src/i18n/canonical.ts`, `src/lib/structured-data.ts`, `src/lib/analytics.ts` (additive events only), `public/locales/{tr,en}/**` | parity + JSON-LD + consent-gated events |
+| Routing/platform | `src/App.tsx` (routes block only), `vercel.json` (redirects block only) | resolver routes + 301 map |
+| Build scripts | `scripts/generate-sitemap.ts` (hardcoded list → registry-derived), `scripts/services-taxonomy-audit.mjs` (new), `scripts/services-i18n-parity.mjs` (new) | SEO blast radius + audit gates |
+| Tests | `src/test/**`, `src/**/*.test.{ts,tsx}`, `src/**/__tests__/**`, `e2e/**`, `tests/**`, `playwright.config.ts` (only if a project entry is needed) | test-first gates; deleting tests banned |
+| Docs | `docs/adr/**`, `docs/reports/**`, `docs/ECYPRO_SERVICES_CATEGORIZATION.md` (new v2) | ADR + audit evidence |
 
-### (c) Tag / category data source + rendering
-- `src/content/blog/*.mdx` frontmatter `category:` + `tags:[]` (108 raw tags, 21 raw cats)
-- `src/i18n/keys/insights.ts`, `src/i18n/keys/insights.en.ts` — insights i18n strings
-- (NEW) `src/data/perspektifler/taxonomy.json` — to be created (Phase 1)
-- (NEW) `src/data/perspektifler/merge-map.json` — to be created (Phase 1)
+## Explicitly OUT (see OUT_OF_SCOPE.md for the running log)
 
-### (d) Case-studies category source
-- `src/data/mockCaseStudies.ts` — case studies data + categories
-- `src/pages/CaseStudiesPage.tsx`, `src/pages/CaseStudyDetailPage.tsx`
-- `src/content/case-studies/*`
+Perspektifler/blog/insights, Sektörler, Fiyatlandırma, Hakkımızda, Founder,
+İletişim form logic, server/**, prisma/**, admin pages, CI workflows,
+package.json deps (no new runtime dependencies — three.js/R3F banned without
+written justification), guard infra (`.claude/**` — fence fixed, owner-only).
 
-### (e) Floating widgets (BUG-08)
-- `src/components/integrations/LiveChat.tsx` (mounted App.tsx:1840)
-- `src/components/chat/SimpleChatWidget.tsx` (mounted App.tsx:1845)
-- `src/components/common/SocialProofToast.tsx`
-- `src/components/ui/LanguageToggle.tsx`, `src/components/ui/Toast.tsx`
-- `src/components/CookieBanner.tsx` (mounted App.tsx:1851)
-- (Welcome-Back banner / a11y eye / TR globe — exact files to confirm in Phase 2/7)
-
-### (f) Redirects config
-- `src/App.tsx` (SPA `<Navigate>` — line 441 `/perspektifler`→`/blog` [REVERSED, fix])
-- `vercel.json` (`redirects` array, line 7)
-
-### (g) Sitemap / SEO config
-- `scripts/generate-sitemap.ts` (+ `.js`)
-- `src/components/seo/SeoManager.tsx`, `src/components/seo/JsonLd.tsx`
-- `src/lib/structured-data.ts`
-
-### (h) i18n config
-- `src/i18n/canonical.ts`, `src/i18n/localized-slugs.ts`, `src/i18n/helpers.ts`
-- `src/i18n/keys/insights*.ts`
-
-### Tests (new, this initiative only)
-- `e2e/*perspektifler*.spec.ts`, `e2e/menu*.spec.ts`
-- `src/test/perspektifler/**`, `scripts/check-taxonomy.*`, `scripts/check-links.*`
-
-## OUT OF SCOPE (do not edit)
-Homepage hero/sections, Hizmetler (services) pages, Sektörler, Fiyatlandırma,
-Hakkımızda/İletişim page CONTENT, admin/* CMS pages, server/*, auth, dashboard,
-analytics vendor. Global header touched ONLY for BUG-01/02/03/04/12 + insights panel.
-`/about` page-local layout (BUG-07) is OUT OF SCOPE unless cause is in a GLOBAL style layer.
+---
+## Ek fence: Perspektifler gates (bu branch)
+Bu branch perspektifler gate-0/1/2 + improve-loop içerir; detay PROGRESS.md alt bölümü.

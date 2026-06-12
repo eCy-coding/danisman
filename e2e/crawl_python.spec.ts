@@ -227,7 +227,7 @@ test.describe('Crowler 04: Keyword Density Audit', () => {
     ).toBeGreaterThanOrEqual(50);
 
     // Hiçbir önemli sayfa 0 skorla bitmemeli
-    const zeroes = report.filter((r) => r.seo_score === 0 && !r.url.includes('/blog/'));
+    const zeroes = report.filter((r) => r.seo_score === 0 && !r.url.includes('/perspektifler/'));
     expect(zeroes.length, `Sıfır skoru olan sayfalar: ${zeroes.map((r) => r.url).join(', ')}`).toBe(
       0,
     );

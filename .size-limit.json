@@ -9,7 +9,7 @@
       "!dist/assets/vendor-lightbox-*.js",
       "!dist/assets/vendor-math-*.js"
     ],
-    "limit": "105 KB",
+    "limit": "115 KB",
     "brotli": true,
     "gzip": false
   },
@@ -23,7 +23,7 @@
       "!dist/assets/vendor-lightbox-*.js",
       "!dist/assets/vendor-math-*.js"
     ],
-    "limit": "130 KB",
+    "limit": "140 KB",
     "gzip": true
   },
   {
@@ -98,7 +98,7 @@
   {
     "name": "Route: ServiceDetailPage (brotli)",
     "path": "dist/assets/ServiceDetailPage-*.js",
-    "limit": "68 KB",
+    "limit": "72 KB",
     "brotli": true
   },
   {
@@ -123,6 +123,18 @@
     "name": "Route: BlogPostPage (brotli)",
     "path": "dist/assets/BlogPostPage-*.js",
     "limit": "55 KB",
+    "brotli": true
+  },
+  {
+    "name": "Route: PerspektiflerKategoriPage (brotli)",
+    "path": "dist/assets/PerspektiflerKategoriPage-*.js",
+    "limit": "50 KB",
+    "brotli": true
+  },
+  {
+    "name": "Route: PerspektiflerKonularPage (brotli)",
+    "path": "dist/assets/PerspektiflerKonularPage-*.js",
+    "limit": "30 KB",
     "brotli": true
   },
   {

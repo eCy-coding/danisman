@@ -39,6 +39,10 @@ import { getServiceContent } from '../../data/service-content';
 import { SERVICES } from '../../data/services';
 import { JsonLd } from '../seo/JsonLd';
 import { ServiceIllustration } from './ServiceIllustration';
+import { LifecycleNav } from './LifecycleNav';
+import { DetailSectionNav, type DetailSection } from './DetailSectionNav';
+import { getCtaVariants } from '@/data/cta-variants';
+import { trackCTA } from '@/lib/analytics';
 import { useInView, useCountUp } from '../../lib/animations';
 import { useServiceOverride } from '../../hooks/useServiceOverride';
 import { StrategicMaturityLadder } from './widgets/StrategicMaturityLadder';
@@ -220,6 +224,21 @@ export const ServiceDetailLayout: React.FC<ServiceDetailLayoutProps> = ({
       Boolean(s),
     );
 
+  // SVC P7 — sticky in-page nav: only sections that actually render get a pill.
+  const sectionNavItems = [
+    content?.problem?.painPoints?.length ? { id: 'problem', label: 'Problemler' } : null,
+    content?.outcomes?.results?.length ? { id: 'outcomes', label: 'Sonuçlar' } : null,
+    content?.methodology?.phases?.length ? { id: 'methodology', label: 'Metodoloji' } : null,
+    content?.deliverables?.artifacts?.length ? { id: 'deliverables', label: 'Çıktılar' } : null,
+    content?.timeline?.milestones?.length ? { id: 'timeline', label: 'Takvim & Yatırım' } : null,
+    content?.faq?.items?.length ? { id: 'faq', label: 'SSS' } : null,
+    content?.assessment?.questions?.length ? { id: 'assessment', label: 'Hızlı Teşhis' } : null,
+  ].filter((s): s is DetailSection => Boolean(s));
+
+  // SVC P7 — the 63 authored CTA variants were never consumed; the footer now
+  // renders the per-service 'value' flavor (default copy for uncovered slugs).
+  const ctaVariant = getCtaVariants(content.slug).variants.value;
+
   const serviceSchema = {
     '@context': 'https://schema.org',
     '@type': 'Service',
@@ -301,6 +320,8 @@ export const ServiceDetailLayout: React.FC<ServiceDetailLayoutProps> = ({
                 </p>
               )}
 
+              <LifecycleNav slug={content.slug} className="mb-8" />
+
               <div className="flex flex-wrap gap-4 items-center mb-10">
                 <Link
                   to="/contact"
@@ -342,6 +363,14 @@ export const ServiceDetailLayout: React.FC<ServiceDetailLayoutProps> = ({
           </div>
         </div>
       </section>
+
+      {sectionNavItems.length > 0 && (
+        <div className="px-6 md:px-12">
+          <div className="max-w-7xl mx-auto">
+            <DetailSectionNav sections={sectionNavItems} />
+          </div>
+        </div>
+      )}
 
       {/* ── atom-11-2: Bu hizmet kimin için? — 3 persona card ── */}
       <FadeUpSection>
@@ -413,7 +442,10 @@ export const ServiceDetailLayout: React.FC<ServiceDetailLayoutProps> = ({
       {/* ── Problem ── */}
       {content?.problem?.painPoints?.length ? (
         <FadeUpSection>
-          <section className="py-16 px-6 md:px-12 border-t border-white/5">
+          <section
+            id="problem"
+            className="scroll-mt-36 py-16 px-6 md:px-12 border-t border-white/5"
+          >
             <div className="max-w-6xl mx-auto">
               <div className="mb-10">
                 <div className="text-xs font-bold uppercase tracking-[0.25em] text-secondary mb-3">
@@ -444,7 +476,10 @@ export const ServiceDetailLayout: React.FC<ServiceDetailLayoutProps> = ({
       {/* ── Outcomes (KPI grid) ── */}
       {content?.outcomes?.results?.length ? (
         <FadeUpSection>
-          <section className="py-16 px-6 md:px-12 border-t border-white/5 bg-gradient-to-b from-transparent to-secondary/[0.03]">
+          <section
+            id="outcomes"
+            className="scroll-mt-36 py-16 px-6 md:px-12 border-t border-white/5 bg-gradient-to-b from-transparent to-secondary/[0.03]"
+          >
             <div className="max-w-6xl mx-auto">
               <div className="mb-10">
                 <div className="text-xs font-bold uppercase tracking-[0.25em] text-emerald-400 mb-3">
@@ -489,7 +524,10 @@ export const ServiceDetailLayout: React.FC<ServiceDetailLayoutProps> = ({
       {/* ── Methodology (vertical timeline) ── */}
       {content?.methodology?.phases?.length ? (
         <FadeUpSection>
-          <section className="py-16 px-6 md:px-12 border-t border-white/5">
+          <section
+            id="methodology"
+            className="scroll-mt-36 py-16 px-6 md:px-12 border-t border-white/5"
+          >
             <div className="max-w-5xl mx-auto">
               <div className="mb-10">
                 <div className="text-xs font-bold uppercase tracking-[0.25em] text-secondary mb-3">
@@ -538,7 +576,10 @@ export const ServiceDetailLayout: React.FC<ServiceDetailLayoutProps> = ({
       {/* ── Deliverables ── */}
       {content?.deliverables?.artifacts?.length ? (
         <FadeUpSection>
-          <section className="py-16 px-6 md:px-12 border-t border-white/5 bg-white/[0.02]">
+          <section
+            id="deliverables"
+            className="scroll-mt-36 py-16 px-6 md:px-12 border-t border-white/5 bg-white/[0.02]"
+          >
             <div className="max-w-6xl mx-auto">
               <div className="mb-10">
                 <div className="text-xs font-bold uppercase tracking-[0.25em] text-secondary mb-3">
@@ -569,7 +610,10 @@ export const ServiceDetailLayout: React.FC<ServiceDetailLayoutProps> = ({
       {/* ── Timeline + Investment side-by-side ── */}
       {(content?.timeline?.milestones?.length || content?.investment?.range) && (
         <FadeUpSection>
-          <section className="py-16 px-6 md:px-12 border-t border-white/5">
+          <section
+            id="timeline"
+            className="scroll-mt-36 py-16 px-6 md:px-12 border-t border-white/5"
+          >
             <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-8">
               {content?.timeline?.milestones?.length ? (
                 <div className="bg-white/5 border border-white/10 rounded-2xl p-8">
@@ -673,7 +717,7 @@ export const ServiceDetailLayout: React.FC<ServiceDetailLayoutProps> = ({
       {/* ── FAQ ── */}
       {content?.faq?.items?.length ? (
         <FadeUpSection>
-          <section className="py-16 px-6 md:px-12 border-t border-white/5">
+          <section id="faq" className="scroll-mt-36 py-16 px-6 md:px-12 border-t border-white/5">
             <div className="max-w-4xl mx-auto">
               <div className="mb-10">
                 <div className="text-xs font-bold uppercase tracking-[0.25em] text-secondary mb-3">
@@ -710,7 +754,10 @@ export const ServiceDetailLayout: React.FC<ServiceDetailLayoutProps> = ({
       {/* ── Assessment ── */}
       {content?.assessment?.questions?.length ? (
         <FadeUpSection>
-          <section className="py-16 px-6 md:px-12 border-t border-white/5 bg-white/[0.02]">
+          <section
+            id="assessment"
+            className="scroll-mt-36 py-16 px-6 md:px-12 border-t border-white/5 bg-white/[0.02]"
+          >
             <div className="max-w-4xl mx-auto">
               <div className="mb-8">
                 <div className="text-xs font-bold uppercase tracking-[0.25em] text-secondary mb-3">
@@ -797,18 +844,16 @@ export const ServiceDetailLayout: React.FC<ServiceDetailLayoutProps> = ({
             Engagement Adımı
           </div>
           <h2 className="text-3xl md:text-4xl font-serif font-bold text-white mb-5 text-balance">
-            Discovery Call ile başlayalım
+            {ctaVariant.headline}
           </h2>
-          <p className="text-slate-400 mb-10 leading-relaxed text-lg">
-            45 dakikalık ücretsiz keşif görüşmesi. Engagement uyumunu birlikte değerlendirelim, 5-7
-            gün içinde yazılı önerge paylaşılır.
-          </p>
+          <p className="text-slate-400 mb-10 leading-relaxed text-lg">{ctaVariant.microcopy}</p>
           <div className="flex flex-wrap gap-4 justify-center">
             <Link
               to="/contact"
+              onClick={() => trackCTA(ctaVariant.buttonLabel, 'service-detail-footer')}
               className="inline-flex items-center gap-2 px-8 py-4 min-h-[52px] rounded-xl bg-secondary text-neutral font-semibold hover:bg-secondary/90 transition-all hover:translate-x-0.5 shadow-lg shadow-secondary/20"
             >
-              Görüşme Planla <ArrowRight size={18} />
+              {ctaVariant.buttonLabel} <ArrowRight size={18} />
             </Link>
             <Link
               to="/faq"

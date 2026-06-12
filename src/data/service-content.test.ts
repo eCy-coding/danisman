@@ -91,18 +91,13 @@ describe('service-content — boutique tone compliance', () => {
       'conflict-resolution',
       'family-business-governance',
     ];
-    // Phase 2 — SEO/GEO mega-menü hizmet sayfaları (intent-rich slug'lar)
-    const megaMenuSlugs = [
-      'organizational-design',
-      'cloud-platform-modernization',
-      'revenue-growth-strategy',
-      'cost-optimization',
-      'digital-operations',
-    ];
-    for (const slug of [...originalSlugs, ...catalogSlugs, ...megaMenuSlugs]) {
+    for (const slug of [...originalSlugs, ...catalogSlugs]) {
       expect(SERVICE_CONTENT[slug], `${slug}: missing from SERVICE_CONTENT`).toBeDefined();
     }
-    // 21 original + 17 catalog + 5 mega-menu = 43 total entries
-    expect(Object.keys(SERVICE_CONTENT)).toHaveLength(43);
+    // taxonomy v2: 38 historical + company-valuation (ADR-services-taxonomy-v2)
+    // + merge 2026-06-12: 5 Phase-2 intent sayfası (organizational-design,
+    // cloud-platform-modernization, revenue-growth-strategy, cost-optimization,
+    // digital-operations) PILLAR_PAGES'e kaydedildi → 44.
+    expect(Object.keys(SERVICE_CONTENT)).toHaveLength(44);
   });
 });

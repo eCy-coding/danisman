@@ -21,8 +21,11 @@ import { FadeIn } from '../components/common/FadeIn';
 const PHILOSOPHY_ICONS = ['⚡', '🌉', '🎯'];
 
 export const FounderPage: React.FC = () => {
-  const { t, i18n } = useTranslation('founder');
-  const lang: SupportedLang = i18n.language.startsWith('tr') ? 'tr' : 'en';
+  const { t, i18n, ready } = useTranslation('founder');
+  // i18n.language is undefined until the async detector resolves; the bare
+  // .startsWith threw on first render and the route boundary swallowed the
+  // whole page as "Hizmet Kesintisi" (live /founder was down).
+  const lang: SupportedLang = (i18n.language || 'tr').startsWith('tr') ? 'tr' : 'en';
   const bio300 = FOUNDER_BIOS[lang]?.['300w']?.text ?? FOUNDER_BIOS.tr['300w'].text;
   const founderSchema = buildFounderSchema();
 
@@ -39,7 +42,13 @@ export const FounderPage: React.FC = () => {
     year: string;
     event: string;
   }>;
-  const credentials = t('credentials', { returnObjects: true }) as string[];
+  const credentialsRaw = t('credentials', { returnObjects: true }) as string[];
+  // Before the 'founder' namespace resolves, returnObjects yields the key
+  // string; .map() then crashed the route boundary (live /founder showed
+  // "Hizmet Kesintisi"). Gate on `ready` and keep Array guards as belt+braces.
+  const credentials = Array.isArray(credentialsRaw) ? credentialsRaw : [];
+
+  if (!ready) return null;
 
   return (
     <>

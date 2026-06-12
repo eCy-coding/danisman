@@ -26,18 +26,19 @@ const GENERIC_SAAS = [
   /milisaniyeler/i,
 ];
 
-const CLUSTER_IDS = ['ma', 'esg', 'fintech', 'aile'];
+// taxonomy v2 (ADR-services-taxonomy-v2): 4 original + 3 adopted departments
+const CLUSTER_IDS = ['ma', 'esg', 'fintech', 'aile', 'insan', 'risk', 'buyume'];
 
 // ---------------------------------------------------------------------------
 
 describe('SERVICES catalogue — shape', () => {
-  it('exports exactly 21 services', () => {
-    expect(SERVICES).toHaveLength(21);
+  it('exports exactly 35 services (taxonomy v2: 21 + 14 adopted)', () => {
+    expect(SERVICES).toHaveLength(35);
   });
 
-  it('DEPARTMENTS has exactly 4 clusters (plus "all")', () => {
+  it('DEPARTMENTS has exactly 7 clusters (plus "all")', () => {
     const nonAll = DEPARTMENTS.filter((d) => d.id !== 'all');
-    expect(nonAll).toHaveLength(4);
+    expect(nonAll).toHaveLength(7);
     expect(nonAll.map((d) => d.id).sort()).toEqual([...CLUSTER_IDS].sort());
   });
 

@@ -43,7 +43,7 @@ const ROUTES: ReadonlyArray<{ path: string; label: string }> = [
   { path: '/pricing', label: 'pricing' },
   { path: '/about', label: 'about' },
   { path: '/contact', label: 'contact' },
-  { path: '/blog', label: 'blog' },
+  { path: '/perspektifler', label: 'blog' },
 ];
 
 const VIEWPORTS: ReadonlyArray<{ name: string; width: number; height: number }> = [

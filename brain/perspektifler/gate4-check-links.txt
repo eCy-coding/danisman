@@ -1,0 +1,5 @@
+GATE-4 EVIDENCE (14:05)
+
+✅ GATE-4 PASS · quotas met on 17-article sample · 0 orphans
+✅ GATE-4 PASS · quotas met on 49-article sample · 0 orphans
+rich-results: see gate4-rich-results.txt (PASS, 4-item breadcrumbs w/ category)

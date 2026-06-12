@@ -1,0 +1,8 @@
+--- noropazarlama-tuketici-davranisi-stratejisi ---
+Article: OK
+BreadcrumbList: 4 items ['Anasayfa', 'Perspektifler', 'Pazarlama & CX', 'Nöropazarlama: Bilinçdışı Tüketici Davranışlarını Anlamak ve Strateji Üretmek']
+--- global-pazarlara-acilma ---
+Article: OK
+BreadcrumbList: 4 items ['Anasayfa', 'Perspektifler', 'Pazarlama & CX', 'Global Pazarlara Açılma Stratejileri']
+
+RICH-RESULTS: PASS (longest+shortest)

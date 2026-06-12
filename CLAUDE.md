@@ -162,25 +162,13 @@ Bir kuralı ihlal ettiğini fark edersen:
 3. Kullanıcıya bildir.
 4. Talimat bekle.
 
-## PERSPEKTİFLER WORKING PRINCIPLES (eCyPro v3.6 — kalıcı)
+## Micro-Focus Contract: Perspektifler (kalıcı çalışma prensibi)
 
-> Perspektifler (Insights) rebuild girişimi için bağlayıcı çalışma disiplini.
-> Kaynaklar: `brain/PERSPEKTIFLER_REBUILD_SPEC.md`, `SCOPE.md`, `PLAN.md`,
-> `brain/PERSPEKTIFLER_PLAN.json`. Skill dosyaları salt-okunurdur; doktrin BURADA yaşar.
+Perspektifler (Insights) vertical'ı üzerinde çalışırken aşağıdaki sözleşme geçerlidir:
 
-1. **Kanıt-veya-sessizlik.** Her path/route/selector iddiası grep/ls/cat/node çıktısından
-   gelir. Doğrulanmamış şeyi "inferred/unknown" etiketle; uydurma yok (0 halüsinasyon).
-2. **Her gate kendi aracıyla biter.** Build exit kodu / test koşumu / JSON rapor / screenshot
-   üret ve kanıtı yapıştır. "Looks done" sinyal değil. "flawless" YASAK — yalnızca §10
-   Acceptance Criteria sayılır.
-3. **Simülasyon yok.** Her şey gerçek repoda çalıştırılır. Sandbox Firefox/Lighthouse'u tam
-   koşturamazsa: komutu ver, kullanıcı koşar; jsdom/unit/build gate'leri burada koşar.
-4. **Kullanıcıya soru yok.** Mantıklı default → tek satır gerekçe → devam (R3).
-5. **Yalnızca scope içi.** `SCOPE.md` + `.claude/scope-allowlist.txt` tek kaynak; sadece
-   Phase-0 kanıtıyla genişlet. Scope dışı bağımlılık → `OUT_OF_SCOPE.md` + devam.
-6. **Her gate sonrası:** `PROGRESS.md` güncelle + commit `feat(perspektifler): gate-N — <özet>`.
-   Phase N+1'e Gate N kanıtı olmadan başlama.
-7. **North Star:** 1.000 makale yorgunluk bütçesi — ≤3 tık / ≤2 facet; ekranda ≤12 seçim;
-   tara-önce kartlar; arama birinci sınıf; bugün ~30'da çalışır, 1.000'e lineer ölçeklenir.
-8. **UI/UX/3D/animasyon serbest** (yeni tasarımlar eklenebilir) — ama scope yalnızca
-   Perspektifler vertical'ı.
+- **Spec**: `~/Desktop/istek.md` (v2, canonical English) — tek otorite. "Flawless" yasak kelime; sadece AC-01..12 sayılır.
+- **Scope fence**: `SCOPE.md` + `.claude/scope-allowlist.txt` dışına Edit/Write YASAK (`.claude/hooks/scope_guard.py`). Genişletme = kanıt + `PROGRESS.md` kaydı.
+- **Görev defteri**: `brain/PERSPEKTIFLER_TASKS.json` — her gate'te güncellenir; kanıtlar `brain/perspektifler/`.
+- **Gate disiplini**: Gate-N kanıtı (komut çıktısı) olmadan Phase-N+1 başlamaz. Her gate sonu commit: `feat(perspektifler): gate-N — <özet>`.
+- **Kesintisiz odak**: bu vertical bitmeden başka bölüm/iş yok; engel → `OUT_OF_SCOPE.md` + devam.
+- **Defaults sabit** (istek.md v2 §FIXED DEFAULTS): Option B mimari, zero-dep Türkçe-fold arama, CSS-only motion, consent-gated analytics, ≤2 kalıcı floating widget.

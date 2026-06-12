@@ -48,7 +48,7 @@ const COPY = {
 const SUGGESTIONS: Suggestion[] = [
   {
     icon: BookOpen,
-    to: '/blog',
+    to: '/perspektifler',
     title: { tr: 'Perspektifler', en: 'Perspectives' },
     desc: {
       tr: 'Stratejik içgörüler ve sektör analizleri.',

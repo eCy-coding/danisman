@@ -53,7 +53,7 @@ const PAGES: PageTarget[] = [
   { name: 'ServicesPage', pathname: '/services' },
   { name: 'PricingPage', pathname: '/pricing' },
   { name: 'CaseStudiesPage', pathname: '/case-studies' },
-  { name: 'BlogPage', pathname: '/blog' },
+  { name: 'PerspektiflerHub', pathname: '/perspektifler' },
   { name: 'ContactPage', pathname: '/contact' },
 ];
 
@@ -140,7 +140,9 @@ async function main(): Promise<void> {
           port: chrome.port,
         });
         if (reportRunner?.report) {
-          const reportJson = Array.isArray(reportRunner.report) ? reportRunner.report[0] : reportRunner.report;
+          const reportJson = Array.isArray(reportRunner.report)
+            ? reportRunner.report[0]
+            : reportRunner.report;
           fs.writeFileSync(path.join(reportDir, `${page.name}.json`), reportJson, 'utf8');
         }
 
