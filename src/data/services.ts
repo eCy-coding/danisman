@@ -20,20 +20,34 @@ import {
   TrendingUp,
   Scale,
   GraduationCap,
+  UserCog,
+  Megaphone,
+  Factory,
+  Receipt,
+  LineChart,
+  ShieldAlert,
+  Gavel,
+  Building2,
+  Globe2,
+  MapPin,
+  Rocket,
+  BadgePercent,
+  Brain,
+  Cog,
 } from 'lucide-react';
 
 import { Service } from '../schemas/service';
+import { SERVICE_DEPARTMENTS } from './service-taxonomy';
 
+// Axis-2 projection — chips derive from the taxonomy registry (ADR-services-taxonomy-v2);
+// a second hand-maintained department list can no longer drift.
 export const DEPARTMENTS = [
   { id: 'all', label: { tr: 'HEPSİ', en: 'ALL' } },
-  { id: 'ma', label: { tr: 'M&A', en: 'M&A' } },
-  { id: 'esg', label: { tr: 'ESG', en: 'ESG' } },
-  { id: 'fintech', label: { tr: 'FİNTECH', en: 'FINTECH' } },
-  { id: 'aile', label: { tr: 'AİLE ŞİRKETİ', en: 'FAMILY BUSINESS' } },
+  ...SERVICE_DEPARTMENTS.map((d) => ({ id: d.id, label: d.chip })),
 ];
 
 export const SERVICES: Service[] = [
-  // --- M&A & DEĞERLEMEokul (5 ITEMS) ---
+  // --- M&A & DEĞERLEME (5 ITEMS) ---
   {
     id: 'ma-dd-suite',
     title: 'Due Diligence Suite',
@@ -50,7 +64,7 @@ export const SERVICES: Service[] = [
     description:
       'DCF, çarpan analizi ve EBITDA kalite testi; Türk mid-market için özel add-back metodolojisi ile savunulabilir değerleme.',
     icon: Calculator,
-    link: '/services/mergers-acquisitions',
+    link: '/services/company-valuation',
   },
   {
     id: 'ma-deal-structuring',
@@ -228,5 +242,137 @@ export const SERVICES: Service[] = [
       'Bağımsız yönetim kurulu üyesi seçimi, komite yapısı ve kurumsal yönetim derecelendirmesi; aile şirketinden kurumsal şirkete dönüşüm.',
     icon: GraduationCap,
     link: '/services/family-business-governance',
+  },
+
+  // --- İNSAN & ORGANİZASYON (4 ITEMS — taxonomy v2 adoption) ---
+  {
+    id: 'hr-transformation',
+    title: 'İnsan Kaynakları & Organizasyon Tasarımı',
+    category: 'insan',
+    description:
+      'Yetenek matrisleri, performans yönetim sistemleri ve çevik organizasyon tasarımları ile kurumsal kapasiteyi büyütün.',
+    icon: UserCog,
+    link: '/services/hr-transformation',
+  },
+  {
+    id: 'employer-branding',
+    title: 'Yetenek Yönetimi & İşveren Markası',
+    category: 'insan',
+    description:
+      'Nitelikli işgücünü çekmek ve elde tutmak için stratejik işveren markası ve aday deneyimi tasarımı.',
+    icon: Megaphone,
+    link: '/services/employer-branding',
+  },
+  {
+    id: 'industrial-relations',
+    title: 'Endüstriyel İlişkiler & Sendika',
+    category: 'insan',
+    description:
+      'Toplu iş sözleşmesi müzakereleri, sendikal ilişki yönetimi ve çalışma barışını koruyan protokoller.',
+    icon: Factory,
+    link: '/services/industrial-relations',
+  },
+  {
+    id: 'payroll-audit',
+    title: 'Bordro Denetimi & İstihdam Teşvikleri',
+    category: 'insan',
+    description:
+      'SGK prim teşviklerinden maksimum yararlanma, bordro maliyet optimizasyonu ve uyum denetimi.',
+    icon: Receipt,
+    link: '/services/payroll-audit',
+  },
+
+  // --- RİSK & KAMU (6 ITEMS — taxonomy v2 adoption) ---
+  {
+    id: 'macro-risk',
+    title: 'Makroekonomik Risk & Piyasa Analizi',
+    category: 'risk',
+    description:
+      'Kur, faiz ve enflasyon projeksiyonları ile C-Level stratejik karar desteği ve senaryo planlaması.',
+    icon: LineChart,
+    link: '/services/macro-risk',
+  },
+  {
+    id: 'crisis-management',
+    title: 'Kriz Yönetimi & İş Sürekliliği',
+    category: 'risk',
+    description:
+      'Finansal veya operasyonel kriz anlarında acil eylem planları ve kurumsal dayanıklılık mimarisi.',
+    icon: ShieldAlert,
+    link: '/services/crisis-management',
+  },
+  {
+    id: 'competition-economics',
+    title: 'Rekabet Ekonomisi & Regülasyon',
+    category: 'risk',
+    description:
+      'Antitröst incelemeleri, pazar hakimiyeti analizleri ve regülasyon uyum stratejileri.',
+    icon: Gavel,
+    link: '/services/competition-economics',
+  },
+  {
+    id: 'government-relations',
+    title: 'Kurumsal İlişkiler & Lobicilik (GR)',
+    category: 'risk',
+    description:
+      'Ankara ve Brüksel nezdinde paydaş haritalama, mevzuat takibi ve stratejik kamu ilişkileri.',
+    icon: Building2,
+    link: '/services/government-relations',
+  },
+  {
+    id: 'global-intelligence',
+    title: 'Global Diplomasi & Ticari İstihbarat',
+    category: 'risk',
+    description:
+      'Jeopolitik risk haritaları, ticari istihbarat ve devletlerarası kriz senaryoları ile küresel görüş.',
+    icon: Globe2,
+    link: '/services/global-intelligence',
+  },
+  {
+    id: 'smart-cities',
+    title: 'Akıllı Şehirler & Kamu Politikaları',
+    category: 'risk',
+    description:
+      'Yerel yönetimler için dijital şehircilik stratejileri, etki analizi ve kamu politikası tasarımı.',
+    icon: MapPin,
+    link: '/services/smart-cities',
+  },
+
+  // --- BÜYÜME & OPERASYON (4 ITEMS — taxonomy v2 adoption) ---
+  {
+    id: 'market-entry',
+    title: 'Uluslararası Pazara Giriş & İhracat',
+    category: 'buyume',
+    description:
+      'Hedef pazar araştırması, distribütör ağı kurulumu ve Turquality hazırlık süreçleri ile ihracat büyümesi.',
+    icon: Rocket,
+    link: '/services/market-entry',
+  },
+  {
+    id: 'investment-incentives',
+    title: 'Yatırım Teşvikleri & Hibe Yönetimi',
+    category: 'buyume',
+    description:
+      'Devlet destekleri, Ar-Ge hibeleri ve proje bazlı yatırım teşvik belgeleri ile finansman optimizasyonu.',
+    icon: BadgePercent,
+    link: '/services/investment-incentives',
+  },
+  {
+    id: 'neuromarketing',
+    title: 'Nöropazarlama & Tüketici Deneyimi (CX)',
+    category: 'buyume',
+    description:
+      'Bilinçdışı tüketici davranış analizi ile veri odaklı marka, fiyat ve deneyim kararları.',
+    icon: Brain,
+    link: '/services/neuromarketing',
+  },
+  {
+    id: 'operational-excellence',
+    title: 'Operasyonel Mükemmellik & Tedarik Zinciri',
+    category: 'buyume',
+    description:
+      'Yalın üretim (Lean), Altı Sigma metodolojileri ve uçtan uca lojistik optimizasyonu.',
+    icon: Cog,
+    link: '/services/operational-excellence',
   },
 ];

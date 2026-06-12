@@ -1,3 +1,5 @@
+import { SERVICES_MEGA_MENU } from '../service-taxonomy';
+
 export const NAV_COPY = {
   home: { tr: 'Ana Sayfa', en: 'Home' },
   services: { tr: 'Hizmetler', en: 'Services' },
@@ -113,129 +115,8 @@ export const NAV_ITEMS = {
 };
 
 export const MEGA_MENUS = {
-  services: {
-    sections: [
-      {
-        id: 'strategy',
-        title: { tr: 'Strateji', en: 'Strategy' },
-        items: [
-          {
-            id: 'corporate-strategy',
-            label: { tr: 'Kurumsal Strateji', en: 'Corporate Strategy' },
-            description: {
-              tr: 'Uzun vadeli rekabet avantajı ve büyüme yol haritası',
-              en: 'Long-term competitive advantage and growth roadmap',
-            },
-            href: '/services/strategic-transformation',
-            iconName: 'Target',
-          },
-          {
-            id: 'ma-advisory',
-            label: { tr: 'M&A Danışmanlığı', en: 'M&A Advisory' },
-            description: {
-              tr: 'Birleşme, satın alma ve entegrasyon süreçleri',
-              en: 'Mergers, acquisitions and integration processes',
-            },
-            href: '/services/mergers-acquisitions',
-            iconName: 'Handshake',
-          },
-          {
-            id: 'org-design',
-            label: { tr: 'Organizasyonel Tasarım', en: 'Org Design' },
-            description: {
-              tr: 'Verimli yapılar ve yönetim modelleri',
-              en: 'Efficient structures and governance models',
-            },
-            href: '/services/strategic-transformation',
-            iconName: 'Network',
-          },
-        ],
-      },
-      {
-        id: 'technology',
-        title: { tr: 'Teknoloji', en: 'Technology' },
-        items: [
-          {
-            id: 'ai-data',
-            label: { tr: 'Yapay Zeka & Veri', en: 'AI & Data Strategy' },
-            description: {
-              tr: 'AI olgunluk değerlendirmesi ve uygulama yol haritası',
-              en: 'AI maturity assessment and implementation roadmap',
-            },
-            href: '/services/ai-analytics',
-            iconName: 'Brain',
-          },
-          {
-            id: 'digital-transformation',
-            label: { tr: 'Dijital Dönüşüm', en: 'Digital Transformation' },
-            description: {
-              tr: 'Uçtan uca dijitalleşme ve platform modernizasyonu',
-              en: 'End-to-end digitization and platform modernization',
-            },
-            href: '/services/digital-strategy',
-            iconName: 'Zap',
-          },
-          {
-            id: 'cloud-platform',
-            label: { tr: 'Bulut & Platform', en: 'Cloud & Platform' },
-            description: {
-              tr: 'Ölçeklenebilir bulut mimarisi ve geçiş stratejisi',
-              en: 'Scalable cloud architecture and migration strategy',
-            },
-            href: '/services/digital-strategy',
-            iconName: 'Cloud',
-          },
-        ],
-      },
-      {
-        id: 'performance',
-        title: { tr: 'Performans', en: 'Performance' },
-        items: [
-          {
-            id: 'revenue-growth',
-            label: { tr: 'Gelir Büyümesi', en: 'Revenue Growth' },
-            description: {
-              tr: 'Pazar penetrasyonu ve yeni gelir akışları',
-              en: 'Market penetration and new revenue streams',
-            },
-            href: '/services',
-            iconName: 'TrendingUp',
-          },
-          {
-            id: 'cost-transformation',
-            label: { tr: 'Maliyet Dönüşümü', en: 'Cost Transformation' },
-            description: {
-              tr: 'Operasyonel verimlilik ve maliyet optimizasyonu',
-              en: 'Operational efficiency and cost optimization',
-            },
-            href: '/services',
-            iconName: 'BarChart3',
-          },
-          {
-            id: 'digital-ops',
-            label: { tr: 'Dijital Operasyonlar', en: 'Digital Operations' },
-            description: {
-              tr: 'Otomasyon, süreç mükemmelliği ve lean yönetim',
-              en: 'Automation, process excellence and lean management',
-            },
-            href: '/services',
-            iconName: 'Settings',
-          },
-        ],
-      },
-    ],
-    featured: {
-      tag: { tr: 'Ücretsiz Değerlendirme', en: 'Free Assessment' },
-      title: { tr: 'AI Olgunluk Analizi', en: 'AI Maturity Analysis' },
-      description: {
-        tr: 'Organizasyonunuzun yapay zeka hazırlığını 15 dakikada ölçün. Kişiselleştirilmiş yol haritanızı alın.',
-        en: "Measure your organization's AI readiness in 15 minutes. Get your personalized roadmap.",
-      },
-      href: '/maturity-assessment',
-      cta: { tr: 'Analizi Başlat', en: 'Start Analysis' },
-      gradient: 'from-primary/20 to-secondary/10',
-    },
-  },
+  // Axis-1 projection — single source: src/data/service-taxonomy.ts (ADR-services-taxonomy-v2)
+  services: SERVICES_MEGA_MENU,
   insights: {
     // BUG-03/04: the panel is insights-only now. Columns (Kategoriler /
     // Formatlar / Öne Çıkanlar) are computed live from the content index in

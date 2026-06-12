@@ -15,4 +15,16 @@ export const DOMAIN_ACCENT_MAP: Record<string, { badge: string; glow: string }> 
     badge: 'text-amber-400 bg-amber-900/20 border border-amber-800/40',
     glow: 'group-hover:bg-amber-600/10',
   },
+  insan: {
+    badge: 'text-cyan-400 bg-cyan-900/20 border border-cyan-800/40',
+    glow: 'group-hover:bg-cyan-600/10',
+  },
+  risk: {
+    badge: 'text-rose-400 bg-rose-900/20 border border-rose-800/40',
+    glow: 'group-hover:bg-rose-600/10',
+  },
+  buyume: {
+    badge: 'text-teal-400 bg-teal-900/20 border border-teal-800/40',
+    glow: 'group-hover:bg-teal-600/10',
+  },
 };

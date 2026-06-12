@@ -20,6 +20,8 @@ import {
   Newspaper,
   ClipboardList,
   PenLine,
+  Database,
+  BadgePercent,
 } from 'lucide-react';
 import { MEGA_MENUS } from '@/data/copy/common';
 import { MENU_CATEGORIES, MENU_FORMATS, MENU_PICKS, MENU_HUB_HREF } from './insightsMenuData';
@@ -43,6 +45,8 @@ const ICON_MAP: Record<string, React.ReactNode> = {
   FileText: <FileText size={16} />,
   Compass: <Compass size={16} />,
   Building2: <Building2 size={16} />,
+  Database: <Database size={16} />,
+  BadgePercent: <BadgePercent size={16} />,
 };
 
 const FORMAT_ICON: Record<string, React.ReactNode> = {
