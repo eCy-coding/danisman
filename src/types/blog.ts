@@ -56,7 +56,7 @@ export const BLOG_CATEGORY_META: Record<
   },
 };
 
-export type BlogPostFormat = 'makale' | 'vaka-analizi' | 'rapor' | 'founder-letter';
+export type BlogPostFormat = 'makale' | 'vaka-analizi' | 'rapor' | 'arastirma' | 'founder-letter';
 
 export interface BlogPost {
   slug: string;

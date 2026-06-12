@@ -164,6 +164,18 @@ Until then the fence is enforced procedurally (SCOPE.md discipline).
 **Doğrulama:** i18n-smoke **7/7** · paket 40 pass (tek fail = pre-existing service_hub katalog) · prerender 152/152 · typecheck/lint temiz.
 **Bekleyen (classifier kilidi):** `.claude/settings.json` scope-guard hook wiring — snippet yukarıda, owner yapıştıracak.
 
+## FAZ-3 (2026-06-12) — Perspektifler DB-feed CLS-safe entegrasyon + 'arastirma' formatı
+
+**Allowlist genişletme (sözleşme prosedürü):** kanıt = owner session task 2026-06-12 ("DB kartları CLS mitigasyonu + taxonomy arastirma"); `.claude/scope-allowlist.txt`'e 11 dosyalık Perspektifler bloğu eklendi (taxonomy/types/schemas/lib+test/hook/Feed/BlogCard/BlogPostPage/generate-blog-index/insights-hero.test). Services fence'i aynen duruyor.
+
+**Premise doğrulaması:** "usePublishedPosts var, DB kartları tarih sıralamasıyla ÜSTE girip CLS yaratıyor" iddiası repo'da FALSE — hook ve feed-merge hiç yoktu (grep 0 sonuç); server endpoint (`GET /api/v1/insights/posts`, R12-P6) hazır ama frontend tüketicisi sıfır. İş "CLS fix" değil, sıfırdan CLS-doğru kuruluş.
+
+**CLS kararı (iki seçenek karşılaştırıldı, append seçildi):** skeleton rezervasyonu RED — kart sayısı (0–20) query çözülmeden bilinemez; 0-kart (şu an en olası) durumunda skeleton çökmesi ters CLS + her ziyarette hayalet parıltı; prerender snapshot'ına iskelet sızar. SEÇİLEN: statik grid + pagination SONRASINA ayrı "Yeni Yayınlananlar" bölümü append + kartlarda 'Yeni' rozeti — append mevcut hiçbir elemanı kımıldatmaz (CLS yalnız yer değiştiren mevcut elemanları sayar; tek aday fold-altı footer), sayıdan bağımsız deterministik.
+
+**Yapılan:** `dbPostsToFeedItems` (map+dedupe+sort; framework-free lib) · `usePublishedPosts` (apiClient `/insights/posts`, `IS_SIMULATION_MODE`'da disabled, staleTime 5dk, retry 1) · Feed append bloğu + zero-state koşulu (statik 0 ∧ DB 0) · 'arastirma' → PostFormat/FORMATS/BlogPostFormat/z.enum/generator-validation/FORMAT_LABEL/FORMAT_META (Microscope ikonu) · BlogCard `isNew` rozeti · 7 yeni unit test (map/dedupe/sort/fallback/?format=arastirma round-trip). `?format=` URL sözleşmesi kırılmadı (parseHubFilter passthrough — testli). insights-hero.test wrapper'ına QueryClientProvider (feed artık query çağırıyor).
+
+**Bilinen residual (OUT_OF_SCOPE):** DB post detay sayfası YOK — BlogPostPage statik MDX-only; DB kartı tıklanırsa "Makele Bulunamadı". Owner ilk publish'ten önce detay render gerekli (react-markdown kurulu, kullanım kararı owner'da).
+
 ## FAZ-2C (2026-06-12)
 **Nav ikonları (BUG-02 replace yolu):** 7 lucide ikon (Home/Briefcase/Factory/Newspaper/Tag/Users/Mail) — data JSX-free iconName + Navbar NAV_ICON_MAP; mobil dahil; canlı 7/7 doğrulandı.
 **Prerender prebuilt akışı:** watchdog(60s)×2 (kilit yapısal bitti) + PRERENDER_FORCE_LOCAL (vercel build altında lokal chromium) → 152/152, `.vercel/output` 152 statik sayfa → `deploy --prebuilt --prod` → **canlı statik title'lar** (curl kanıtı). Title-shell/SEO-meta sorunu üretimde kapandı.

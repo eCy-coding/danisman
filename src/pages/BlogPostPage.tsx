@@ -38,6 +38,7 @@ const FORMAT_LABEL: Record<string, string> = {
   makale: 'Makale',
   'vaka-analizi': 'Vaka Analizi',
   rapor: 'Rapor',
+  arastirma: 'Araştırma',
   'founder-letter': 'Founder Letter',
 };
 

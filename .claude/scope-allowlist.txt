@@ -54,3 +54,17 @@ docs/ECYPRO_SERVICES_CATEGORIZATION.md
 # SVC Gate-9 fence expansion (evidence: 35-servis katalog büyümesi main chunk +6.37KB brotli;
 # PR #146 stale-budget-realign emsali; PROGRESS.md SVC Gate-9 kaydı)
 .size-limit.json
+# --- Perspektifler DB-feed CLS + 'arastirma' format (owner request 2026-06-12) ---
+# Evidence: owner session task — DB published cards CLS-safe append + taxonomy format.
+# PROGRESS.md FAZ-3 entry documents the expansion.
+src/data/taxonomy.ts
+src/types/blog.ts
+src/schemas/blog.ts
+src/lib/perspektifler.ts
+src/lib/perspektifler.test.ts
+src/hooks/usePublishedPosts.ts
+src/components/blog/PerspektiflerFeed.tsx
+src/components/blog/BlogCard.tsx
+src/pages/BlogPostPage.tsx
+scripts/generate-blog-index.ts
+src/test/blog/insights-hero.test.tsx

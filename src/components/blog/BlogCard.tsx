@@ -7,6 +7,7 @@ import {
   Newspaper,
   ClipboardList,
   BarChart3,
+  Microscope,
   PenLine,
 } from 'lucide-react';
 import { BlogCategory, BLOG_CATEGORY_META } from '../../types/blog';
@@ -28,6 +29,8 @@ interface CardPost {
 interface BlogCardProps {
   post: CardPost;
   index: number;
+  /** DB-published cards appended post-hydration get a 'Yeni' badge. */
+  isNew?: boolean;
 }
 
 interface MetaItemProps {
@@ -40,6 +43,7 @@ const FORMAT_META: Record<string, { icon: React.ElementType; label: string }> = 
   makale: { icon: Newspaper, label: 'Makale' },
   'vaka-analizi': { icon: ClipboardList, label: 'Vaka Analizi' },
   rapor: { icon: BarChart3, label: 'Rapor' },
+  arastirma: { icon: Microscope, label: 'Araştırma' },
   'founder-letter': { icon: PenLine, label: 'Founder Letter' },
 };
 
@@ -50,7 +54,7 @@ const MetaItem = ({ icon: Icon, text, className }: MetaItemProps) => (
   </span>
 );
 
-const BlogCard: React.FC<BlogCardProps> = ({ post, index }) => {
+const BlogCard: React.FC<BlogCardProps> = ({ post, index, isNew }) => {
   const href = post.href ?? `/perspektifler/${post.slug}`;
   const format = post.format ? FORMAT_META[post.format] : undefined;
 
@@ -77,6 +81,11 @@ const BlogCard: React.FC<BlogCardProps> = ({ post, index }) => {
           <div className="absolute inset-0 bg-linear-to-t from-[#0a0f1c] to-transparent opacity-80" />
 
           <div className="absolute top-4 left-4 flex gap-2 flex-wrap max-w-[85%]">
+            {isNew && (
+              <span className="border border-yellow-400/60 bg-yellow-500/20 text-yellow-100 text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded">
+                Yeni
+              </span>
+            )}
             {post.category && (
               <span
                 className={`border text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded ${BLOG_CATEGORY_META[post.category as BlogCategory]?.bg ?? 'bg-white/10'} ${BLOG_CATEGORY_META[post.category as BlogCategory]?.border ?? 'border-white/20'} ${BLOG_CATEGORY_META[post.category as BlogCategory]?.color ?? 'text-white/90'}`}

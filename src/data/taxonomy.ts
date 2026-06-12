@@ -59,12 +59,13 @@ export const CATEGORY_MERGE_MAP: Record<string, BlogCategory> = {
   'İnsan Kaynakları': 'İnsan & Organizasyon',
 };
 
-export type PostFormat = 'makale' | 'vaka-analizi' | 'rapor' | 'founder-letter';
+export type PostFormat = 'makale' | 'vaka-analizi' | 'rapor' | 'arastirma' | 'founder-letter';
 
 export const FORMATS: { slug: PostFormat; label: string; labelEn: string }[] = [
   { slug: 'makale', label: 'Makale', labelEn: 'Article' },
   { slug: 'vaka-analizi', label: 'Vaka Analizi', labelEn: 'Case Study' },
   { slug: 'rapor', label: 'Rapor', labelEn: 'Report' },
+  { slug: 'arastirma', label: 'Araştırma', labelEn: 'Research' },
   { slug: 'founder-letter', label: 'Founder Letter', labelEn: 'Founder Letter' },
 ];
 

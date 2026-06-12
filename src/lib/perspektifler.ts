@@ -67,6 +67,67 @@ const caseStudyItems: FeedItem[] = CASE_STUDIES.map((cs) => ({
 
 export const ALL_ITEMS: FeedItem[] = [...posts, ...caseStudyItems];
 
+/**
+ * Published BlogPost row from GET /api/v1/insights/posts (admin pipeline →
+ * Neon). Only the fields the feed consumes; the endpoint returns more.
+ */
+export interface DbPublishedPost {
+  slug: string;
+  titleTr: string;
+  excerptTr: string;
+  publishedAt: string | null;
+  createdAt: string;
+  coverImageUrl: string;
+  readingTimeMin: number;
+  primaryDomain: string;
+  author?: { displayName: string } | null;
+}
+
+/** Prisma Domain enum → shared category slug (same closed set as CATEGORIES). */
+const DOMAIN_TO_CATEGORY: Record<string, string> = {
+  M_A: 'ma-degerleme',
+  ESG: 'kamu-esg',
+  FINTECH: 'finans-ekonomi',
+  AILE_SIRKETI: 'insan-organizasyon',
+};
+
+/**
+ * DB-published posts join the feed as `arastirma` format items, appended
+ * AFTER the static grid (CLS decision: appending never moves existing
+ * elements; a skeleton reservation can't know the card count pre-query).
+ * Slug collisions dedupe in favour of the static corpus — a DB post promoted
+ * to a content file must not render twice.
+ */
+export function dbPostsToFeedItems(
+  rows: DbPublishedPost[],
+  existing: FeedItem[] = ALL_ITEMS,
+): FeedItem[] {
+  const taken = new Set(existing.map((i) => i.slug));
+  return rows
+    .filter((r) => r.slug.trim().length > 0 && !taken.has(r.slug))
+    .map((r) => {
+      const categorySlug = DOMAIN_TO_CATEGORY[r.primaryDomain] ?? 'strateji';
+      return {
+        slug: r.slug,
+        title: r.titleTr,
+        excerpt: r.excerptTr,
+        date: r.publishedAt ?? r.createdAt,
+        author: r.author?.displayName ?? 'eCyPro',
+        coverImage: r.coverImageUrl || undefined,
+        category: CATEGORY_BY_SLUG[categorySlug]?.label ?? 'Strateji',
+        categorySlug,
+        tags: [],
+        readingTime: `${r.readingTimeMin} dk okuma`,
+        readTimeMin: r.readingTimeMin,
+        lang: 'tr',
+        format: 'arastirma',
+        featured: false,
+        href: `/perspektifler/${r.slug}`,
+      } satisfies FeedItem;
+    })
+    .sort((a, b) => b.date.localeCompare(a.date));
+}
+
 /** Curated hero layer: featured posts (max 4), newest first. */
 export function getFeatured(): { lead: FeedItem | null; secondary: FeedItem[] } {
   const featured = posts

@@ -25,7 +25,7 @@ export const BlogPostSchema = z.object({
   readTimeMin: z.number().int().positive().optional(),
   wordCount: z.number().int().nonnegative().optional(),
   lang: z.enum(['tr', 'en']).optional(),
-  format: z.enum(['makale', 'vaka-analizi', 'rapor', 'founder-letter']).optional(),
+  format: z.enum(['makale', 'vaka-analizi', 'rapor', 'arastirma', 'founder-letter']).optional(),
   pairId: z.string().optional(),
   seriesId: z.string().optional(),
   updated: z.string().optional(),

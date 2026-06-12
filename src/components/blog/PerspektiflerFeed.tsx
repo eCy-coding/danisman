@@ -16,6 +16,7 @@ import {
   PAGE_SIZE,
   type HubFilter,
 } from '@/lib/perspektifler';
+import { usePublishedPosts } from '@/hooks/usePublishedPosts';
 import { trackEvent } from '@/lib/analytics';
 
 interface FeedProps {
@@ -34,6 +35,18 @@ export const PerspektiflerFeed: React.FC<FeedProps> = ({ lockedCategory }) => {
   }, [searchParams, lockedCategory]);
 
   const results = useMemo(() => filterItems(filter), [filter]);
+
+  // Admin-pipeline (DB) posts resolve post-hydration. CLS decision: they are
+  // APPENDED as a separate section after the static grid + pagination instead
+  // of merging into the date sort — merging would prepend fresh posts and
+  // shift every prerendered card; a skeleton reservation can't know the card
+  // count (0–20) before the query resolves and collapses when it's 0.
+  const { data: dbItems = [], isLoading: dbLoading } = usePublishedPosts();
+  const dbVisible = useMemo(
+    () => filterItems(filter, dbItems).slice(0, PAGE_SIZE),
+    [filter, dbItems],
+  );
+
   const options = useMemo(() => facetOptions(filter), [filter]);
   const chips = useMemo(() => topTopics(filter), [filter]);
   const visible = visibleWindow(results, filter.page);
@@ -220,7 +233,9 @@ export const PerspektiflerFeed: React.FC<FeedProps> = ({ lockedCategory }) => {
             )}
           </div>
         </>
-      ) : (
+      ) : dbVisible.length > 0 || dbLoading ? null : (
+        // dbLoading guard: with zero static hits the zero-state would flash
+        // for the in-flight query window, then vanish when DB cards land.
         <div role="status" className="text-center text-slate-400 py-16">
           <p className="mb-4">Bu filtreyle eşleşen içgörü bulunamadı.</p>
           <p className="text-sm">
@@ -241,6 +256,33 @@ export const PerspektiflerFeed: React.FC<FeedProps> = ({ lockedCategory }) => {
             ))}
           </p>
         </div>
+      )}
+
+      {/* DB-published posts (admin pipeline). Appended at the very end so no
+          prerendered element ever moves when the query resolves (CLS ≈ 0). */}
+      {dbVisible.length > 0 && (
+        <section aria-labelledby="db-published-heading" className="mt-16">
+          <h2
+            id="db-published-heading"
+            className="text-golden-lg font-serif text-white mb-8 flex items-center gap-3"
+          >
+            Yeni Yayınlananlar
+            <span className="rounded-full border border-yellow-400/60 bg-yellow-500/20 text-yellow-100 text-[10px] font-bold uppercase tracking-wider px-2 py-1">
+              Yeni
+            </span>
+          </h2>
+          <div
+            data-testid="db-published-grid"
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+            role="list"
+          >
+            {dbVisible.map((post, index) => (
+              <div role="listitem" key={post.slug}>
+                <BlogCard post={post} index={index} isNew />
+              </div>
+            ))}
+          </div>
+        </section>
       )}
     </div>
   );

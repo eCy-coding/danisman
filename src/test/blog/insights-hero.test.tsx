@@ -3,6 +3,7 @@ import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 vi.mock('../../components/blog/BlogList', () => ({
   default: () => <div data-testid="blog-list-stub" />,
@@ -13,11 +14,16 @@ vi.mock('../../components/layout/Footer', () => ({ Footer: () => <footer /> }));
 import BlogPage from '../../pages/BlogPage';
 
 function renderBlog() {
+  // Provider required: usePublishedPosts inside the feed calls useQuery,
+  // which throws without a QueryClient.
+  const qc = new QueryClient({ defaultOptions: { queries: { retry: false } } });
   return render(
     <HelmetProvider>
-      <MemoryRouter>
-        <BlogPage />
-      </MemoryRouter>
+      <QueryClientProvider client={qc}>
+        <MemoryRouter>
+          <BlogPage />
+        </MemoryRouter>
+      </QueryClientProvider>
     </HelmetProvider>,
   );
 }

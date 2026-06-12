@@ -39,7 +39,7 @@ interface BlogPostMetadata {
   readTimeMin: number;
   wordCount: number;
   lang: 'tr' | 'en';
-  format: 'makale' | 'vaka-analizi' | 'rapor' | 'founder-letter';
+  format: 'makale' | 'vaka-analizi' | 'rapor' | 'arastirma' | 'founder-letter';
   featured: boolean;
   pairId?: string;
   seriesId?: string;
@@ -145,7 +145,7 @@ const generateBlogIndex = () => {
     }
 
     const format = (data.format as BlogPostMetadata['format']) || 'makale';
-    if (!['makale', 'vaka-analizi', 'rapor', 'founder-letter'].includes(format)) {
+    if (!['makale', 'vaka-analizi', 'rapor', 'arastirma', 'founder-letter'].includes(format)) {
       errors.push(`${filename}: invalid format "${format}"`);
     }
 
