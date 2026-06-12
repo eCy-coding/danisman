@@ -84,6 +84,9 @@ Spec: `~/Desktop/istemek.md` (istek-services.md) · Plan: approved 2026-06-12
 **Canlı matris:** 5 eski-404 rota (strategic-transformation, ai-analytics, digital-strategy, payroll-audit, **company-valuation**) → **200 + statik title** · /services 200 · sitemap 156 satır = 39 slug × 4 hreflang · canlı görseller brain/services/live-*.png (menü yeni hedeflerle, lifecycle visualizer, yeni sayfa).
 **Tam kayıt:** brain/services/DEPLOY_EVIDENCE.md. Rollback: `vercel rollback <qhnxj3jse-url>`.
 
+## SVC FIX-1 (2026-06-12) — site-geneli CSS çökmesi (canlıda yakalandı, kök neden çözüldü)
+Owner bozulma bildirdi (/perspektifler screenshot). Systematic debugging (10 deney): suçlu **index.html P33-T03 ham /index.css çift-dahili** — Vite HTML-linked CSS'i Tailwind'den geçirmez → ham `@layer utilities…base` belge-genel katman sırasını ters kurdu, base utilities'i ezdi (h1 16px, padding 0); ayrıca literal `@import 'tailwindcss'` = /assets/tailwindcss 404'ünün kaynağı. **Fix:** blok silindi + e2e CSS-integrity sentinel (3 tarayıcı). Kanıt: lokal+canlı h1 60px, deploy `a4fw5gmog` aliased, prerender 170/170, LIVE-FIXED görselleri. Branch: fix/css-layer-order-raw-index-css → PR.
+
 ---
 
 # PERSPEKTIFLER VERTICAL (closed 2026-06-12)

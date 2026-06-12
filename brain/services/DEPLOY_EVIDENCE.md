@@ -44,3 +44,10 @@ Görseller: `live-mega-menu-open.png` (yeni hedefler menüde) · `live-services-
 
 ## Owner kuyruğu (deploy sonrası)
 Search Console sitemap yeniden gönder (39 servis URL — 17 eski 404 recrawl) · visual snapshot re-baseline · npm audit CI · gitleaks tarihsel 24 kayıt.
+
+## FIX-1 (2026-06-12) — site-geneli CSS çökmesi kök neden + canlı düzeltme
+**Belirti:** tüm sitede utilities çökmesi (h1 16px, padding 0 — owner /perspektifler screenshot'ı).
+**Kök neden (10-deneylik systematic debugging, CDP mühürlü):** index.html P33-T03 bloğu index.css'i HTML'den HAM (Tailwind pipeline'sız) ikinci kez yüklüyordu → asset'te literal `@import 'tailwindcss'` (= /assets/tailwindcss 404) + ham `@layer utilities…base` sırası belge-genel katman önceliğini ters kurup base'in `h1{font-size:inherit}`'ine TÜM utilities'i ezdirdi.
+**Fix:** blok kaldırıldı (index.css zaten main.tsx'ten derlenmiş geliyor; non-blocking p28 postbuild derlenmiş asset'te). Sentinel e2e: services-menu "CSS integrity" (ham link + h1≥36 + chip padding, 3 tarayıcı).
+**Kanıt:** lokal h1 16→60px, e2e 7/7, ham asset dist'ten silindi · VB3 prerender 170/170 · deploy `a4fw5gmog` Aliased ecypro.com · CANLI probe h1=60px, chip 10px 20px, rawLink=0 · LIVE-FIXED-{home,services,perspektifler}.png.
+**Ortam notu:** VB2 koşusu 43 prerender fail verdi (port 4179 preview'i ara süreç temizliğinde öldü — ERR_CONNECTION_REFUSED); temiz tekrar 170/170.
