@@ -535,8 +535,8 @@ export default defineConfig(({ mode }) => {
             ],
             // Data + validation utilities
             utils: ['dayjs', 'axios', 'zod', 'zustand'],
-            // Markdown rendering (blog/MDX)
-            markdown: ['react-markdown', 'marked'],
+            // Markdown rendering (blog/MDX + DB-post runtime renderer)
+            markdown: ['react-markdown', 'marked', 'remark-gfm'],
             // Charts (recharts ~150KB) — LandingPage ROI + admin dashboard shared
             charts: ['recharts'],
             // Web Vitals monitoring

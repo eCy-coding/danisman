@@ -92,3 +92,59 @@ describe('perspektifler hub state (GATE-3)', () => {
     expect(cs.every((i) => i.categorySlug.length > 0)).toBe(true);
   });
 });
+
+// ─── DB-post merge (NotebookLM pipeline → hub feed) ──────────────────────────
+
+import type { FeedItem } from './perspektifler';
+import { mapToFeedItem } from '@/hooks/usePublishedPosts';
+
+const DB_ROW = {
+  slug: 'nlm-arastirma-yazisi',
+  titleTr: 'NotebookLM Araştırma Yazısı',
+  excerptTr: 'Aile şirketlerinde kuşak çatışması üzerine sentez.',
+  coverImageUrl: '/insights-covers/aile-sirketi-1.webp',
+  readingTimeMin: 4,
+  publishedAt: '2026-06-12T12:54:44.000Z',
+  primaryDomain: 'AILE_SIRKETI',
+  author: { displayName: 'Emre Can Yalçın' },
+  category: null,
+};
+
+describe('published DB posts merge into the hub feed', () => {
+  it('mapToFeedItem maps domain → taxonomy category and rapor format', () => {
+    const item = mapToFeedItem(DB_ROW);
+    expect(item.categorySlug).toBe('insan-organizasyon');
+    expect(item.format).toBe('rapor');
+    expect(item.href).toBe('/perspektifler/nlm-arastirma-yazisi');
+    expect(item.readTimeMin).toBe(4);
+    expect(item.coverImage).toBe('/insights-covers/aile-sirketi-1.webp');
+  });
+
+  it('merged corpus filters/sorts and counts facets including DB items', () => {
+    const db = mapToFeedItem(DB_ROW);
+    const merged: FeedItem[] = [...ALL_ITEMS, db];
+    const f: HubFilter = { sirala: 'yeni', page: 1 };
+
+    const results = filterItems(f, merged);
+    expect(results.some((i) => i.slug === db.slug)).toBe(true);
+
+    const raporOnly = filterItems({ ...f, format: 'rapor' }, merged);
+    expect(raporOnly.some((i) => i.slug === db.slug)).toBe(true);
+
+    const opts = facetOptions(f, merged);
+    const raporFacet = opts.formatlar.find((o) => o.value === 'rapor');
+    const raporStatic = facetOptions(f).formatlar.find((o) => o.value === 'rapor');
+    expect((raporFacet?.count ?? 0) - (raporStatic?.count ?? 0)).toBe(1);
+  });
+
+  it('static slugs win on collision (dedupe contract)', () => {
+    const staticSlug = ALL_ITEMS[0].slug;
+    const clash = { ...mapToFeedItem(DB_ROW), slug: staticSlug, title: 'DB GÖLGE' };
+    const staticSlugs = new Set(ALL_ITEMS.map((i) => i.slug));
+    const merged = [...ALL_ITEMS, clash].filter(
+      (i, idx) => idx < ALL_ITEMS.length || !staticSlugs.has(i.slug),
+    );
+    expect(merged.filter((i) => i.slug === staticSlug)).toHaveLength(1);
+    expect(merged.find((i) => i.slug === staticSlug)?.title).not.toBe('DB GÖLGE');
+  });
+});

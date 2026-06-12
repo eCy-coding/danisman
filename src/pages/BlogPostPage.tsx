@@ -31,6 +31,7 @@ import { buildCanonical } from '@/i18n/canonical';
 import { relatedItems, seriesSiblings } from '@/lib/perspektifler';
 import { CATEGORY_BY_LABEL } from '@/data/taxonomy';
 import { NewsletterSidebar } from '../components/blog/NewsletterSidebar';
+import PublishedPostPage from '../components/blog/PublishedPostPage';
 
 const blogPosts = getBlogPosts();
 
@@ -103,17 +104,11 @@ const BlogPostPage: React.FC = () => {
     };
   }, [Content, slug]);
 
+  // Not in the static MDX index → try the published-posts API (NotebookLM
+  // pipeline content lives only in the DB). Static slugs always win; the DB
+  // page owns its own loading/404 states so there is no 404 flash here.
   if (!post) {
-    return (
-      <div className="min-h-screen bg-neutral flex items-center justify-center text-white">
-        <div className="text-center">
-          <h1 className="text-3xl font-serif mb-4">Makele Bulunamadı</h1>
-          <Link to="/perspektifler" className="text-blue-400 hover:text-blue-300">
-            Blog'a Dön
-          </Link>
-        </div>
-      </div>
-    );
+    return <PublishedPostPage slug={slug ?? ''} />;
   }
 
   const categoryDef = post.category ? CATEGORY_BY_LABEL[post.category] : undefined;

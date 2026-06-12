@@ -13,9 +13,11 @@ import {
   topTopics,
   visibleWindow,
   getFeatured,
+  ALL_ITEMS,
   PAGE_SIZE,
   type HubFilter,
 } from '@/lib/perspektifler';
+import { usePublishedPosts } from '@/hooks/usePublishedPosts';
 import { trackEvent } from '@/lib/analytics';
 
 interface FeedProps {
@@ -33,9 +35,18 @@ export const PerspektiflerFeed: React.FC<FeedProps> = ({ lockedCategory }) => {
     return lockedCategory ? { ...f, kategori: lockedCategory } : f;
   }, [searchParams, lockedCategory]);
 
-  const results = useMemo(() => filterItems(filter), [filter]);
-  const options = useMemo(() => facetOptions(filter), [filter]);
-  const chips = useMemo(() => topTopics(filter), [filter]);
+  // Published DB posts (NotebookLM pipeline) join the static corpus; static
+  // slugs win on collision so the curated MDX library stays authoritative.
+  const dbItems = usePublishedPosts();
+  const allItems = useMemo(() => {
+    if (dbItems.length === 0) return ALL_ITEMS;
+    const staticSlugs = new Set(ALL_ITEMS.map((i) => i.slug));
+    return [...ALL_ITEMS, ...dbItems.filter((i) => !staticSlugs.has(i.slug))];
+  }, [dbItems]);
+
+  const results = useMemo(() => filterItems(filter, allItems), [filter, allItems]);
+  const options = useMemo(() => facetOptions(filter, allItems), [filter, allItems]);
+  const chips = useMemo(() => topTopics(filter, 12, allItems), [filter, allItems]);
   const visible = visibleWindow(results, filter.page);
   const hasMore = results.length > filter.page * PAGE_SIZE;
   const totalPages = Math.max(1, Math.ceil(results.length / PAGE_SIZE));

@@ -83,6 +83,16 @@ export function researchSlug(title: string): string {
   return slug.length >= 3 ? slug : `arastirma-${slug}`.slice(0, 180);
 }
 
+// SEO meta title: ≤60 chars, cut on a word boundary (mid-word truncation
+// reads broken in SERPs). Exported for tests.
+export function clampMetaTitle(title: string): string {
+  const t = title.trim();
+  if (t.length <= 60) return t;
+  const cut = t.slice(0, 60);
+  const lastSpace = cut.lastIndexOf(' ');
+  return (lastSpace > 30 ? cut.slice(0, lastSpace) : cut).trim();
+}
+
 function buildBody(draft: DraftPayload): string {
   const sources = draft.sources ?? [];
   if (sources.length === 0) return draft.bodyTrMdx;
@@ -278,8 +288,22 @@ adminResearchRouter.patch('/bridge/jobs/:id', bridgeAuth, async (req, res): Prom
     }
 
     const body = buildBody(draft);
+    // Rich-draft mapping: bridge-provided values win, then env, then default.
     const coverImageUrl =
-      process.env.RESEARCH_DEFAULT_COVER_URL ?? 'https://ecypro.com/og-default.jpg';
+      draft.coverImageUrl ??
+      process.env.RESEARCH_DEFAULT_COVER_URL ??
+      'https://ecypro.com/og-default.jpg';
+    const coverImageAlt = draft.coverImageAlt ?? `${draft.titleTr} — NotebookLM araştırma görseli`;
+    const metaTitleTr = draft.metaTitleTr ?? clampMetaTitle(draft.titleTr);
+    // Auto-file under the domain's first category; absent seed → uncategorised
+    // (the editor dropdown assigns one later).
+    const category = await prisma.insightCategory
+      .findFirst({
+        where: { domain: job.primaryDomain },
+        orderBy: { displayOrder: 'asc' },
+        select: { id: true },
+      })
+      .catch(() => null);
 
     const base = researchSlug(draft.titleTr);
     let post: { id: string } | null = null;
@@ -298,8 +322,11 @@ adminResearchRouter.patch('/bridge/jobs/:id', bridgeAuth, async (req, res): Prom
             subDomain: 'notebooklm-research',
             topic: job.topic.slice(0, 100),
             authorId: author.id,
+            ...(category ? { categoryId: category.id } : {}),
             coverImageUrl,
-            coverImageAlt: `${draft.titleTr} — NotebookLM araştırma görseli`,
+            coverImageAlt,
+            ogImageUrl: coverImageUrl,
+            metaTitleTr,
             metaDescTr: draft.metaDescTr,
             readingTimeMin: readingTime(body),
           },

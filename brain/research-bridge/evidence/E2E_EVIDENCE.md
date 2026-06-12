@@ -142,3 +142,40 @@ research_status raporsuz biter → grace → studio_create/studio_status/
 download_artifact (fixture gerçek dosya yazar) → draft gövdesi "Fixture
 Studio Raporu" (`has_template=f, has_studio=t`). İki kez koşuldu (helper v1
 + yanıt-doğrulamalı v2), ikisi de PASS.
+
+## 8. Zengin Yayın Hattı — global-standart draft → public sitede render (2026-06-12)
+
+Talep: araştırma çıktısı "global standartlarda post" olarak editörde otomatik
+oluşsun; onay sonrası web sayfasının ilgili bölümünde kusursuz görünsün.
+Beş fazla kapatıldı (P1-P5), canlı koşuyla kanıtlandı (P6, kareler
+`rich-run-1..5*.png`):
+
+**Otomasyon standardı (bridge buildDraft v2 + server eşleme):** italik
+dek/standfirst → `## Önemli Çıkarımlar` (3-5 madde, rapordan türetilir) →
+raporun kendi bölüm hiyerarşisi (H1'ler demote) → `## Metodoloji`
+(kaynak sayısı, mod, tarih, insan-onayı şeffaflığı) → `## Kaynaklar`.
+SEO: `metaTitleTr` ≤60 kelime-sınırı clamp (canlıda 49/60), `metaDescTr`
+160/160; kapak: 4 domain × 2 deterministik webp (programatik SVG→sharp,
+8-13KB; `scripts/generate-insight-covers.mjs` ile yeniden üretilebilir) +
+`ogImageUrl` ayna + ≤125 kr alt; `categoryId` domain-lookup (null-safe).
+
+**Canlı koşu:** "Aile şirketlerinde yapay zekâ destekli kurumsallaşma…"
+(deep→fast fallback yine code 8; studio sentez onTick'le aktı) → DONE →
+draft `len=9873`, dek+çıkarımlar+metodoloji+kaynaklar ✓, kapak
+`/insights-covers/aile-sirketi-1.webp` ✓ → editör SEO sekmesi OTOMASYONLA
+dolu (kare rich-run-2) → onay zinciri UI'dan PUBLISHED → **public**:
+`/perspektifler` hub kartı (İnsan & Organizasyon · Rapor · 6 dk · nesil-ağacı
+kapağı; kare rich-run-3) + `/perspektifler/<slug>` detay sayfası
+react-markdown ile render (hero + çıkarımlar + blockquote; kareler
+rich-run-4/5); anonim detay API 200; liste ucu select-daraltılmış
+(`hasBody:false`, 10 alan).
+
+**Gate'ler:** server suite 23/23 · web unit 24/24 (published-post 2 +
+perspektifler 13 dahil) · typecheck web+server temiz · fixture A/B PASS.
+
+**Koşuda yakalanan + düzeltilen:** (a) form_input login parolasını React
+state'ine geçirmedi → 401; gerçek klavye olaylarıyla çözüldü (UI otomasyon
+notu); (b) 5 sn'lik poll re-render'ı click-type arasında focus düşürdü →
+form akışları tek atomik batch + koordinatla; (c) API süreci P5'ten önce
+başladığından select-daraltma yüklü değildi → restart sonrası doğrulandı
+(tsx watch'sız dev API'de kod değişimi = restart şart, işletim notu).

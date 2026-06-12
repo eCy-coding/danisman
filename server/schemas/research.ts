@@ -36,6 +36,15 @@ export const DraftPayloadSchema = z.object({
   excerptTr: z.string().min(20).max(500),
   bodyTrMdx: z.string().min(100),
   metaDescTr: z.string().max(160).optional(),
+  // Rich-draft additions (all optional: pre-v2 bridges keep working).
+  metaTitleTr: z.string().max(60).optional(),
+  // Cover may be a site-relative path (/insights-covers/…) or absolute URL.
+  coverImageUrl: z
+    .string()
+    .max(500)
+    .regex(/^(https?:\/\/|\/)/, 'coverImageUrl: absolute URL veya / ile başlayan yol')
+    .optional(),
+  coverImageAlt: z.string().max(300).optional(),
   sources: z
     .array(
       z.object({

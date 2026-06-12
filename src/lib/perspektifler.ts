@@ -156,28 +156,31 @@ export interface FacetOption {
 }
 
 /** Counts respect every OTHER active facet; zero-count options are dropped. */
-export function facetOptions(f: HubFilter): {
+export function facetOptions(
+  f: HubFilter,
+  items: FeedItem[] = ALL_ITEMS,
+): {
   kategoriler: FacetOption[];
   formatlar: FacetOption[];
   yillar: FacetOption[];
 } {
   const without = (key: keyof HubFilter): HubFilter => ({ ...f, [key]: undefined, page: 1 });
 
-  const catBase = filterItems(without('kategori'));
+  const catBase = filterItems(without('kategori'), items);
   const kategoriler = CATEGORIES.map((c) => ({
     value: c.slug,
     label: c.label,
     count: catBase.filter((i) => i.categorySlug === c.slug).length,
   })).filter((o) => o.count > 0);
 
-  const fmtBase = filterItems(without('format'));
+  const fmtBase = filterItems(without('format'), items);
   const formatlar = FORMATS.map((fm) => ({
     value: fm.slug,
     label: fm.label,
     count: fmtBase.filter((i) => i.format === fm.slug).length,
   })).filter((o) => o.count > 0);
 
-  const yilBase = filterItems(without('yil'));
+  const yilBase = filterItems(without('yil'), items);
   const yearSet = new Map<string, number>();
   for (const i of yilBase) {
     const y = i.date.slice(0, 4);
@@ -191,8 +194,8 @@ export function facetOptions(f: HubFilter): {
 }
 
 /** Top-N most used topics across the current category context (chips ≤12). */
-export function topTopics(f: HubFilter, limit = 12): FacetOption[] {
-  const base = filterItems({ ...f, konu: undefined, page: 1 });
+export function topTopics(f: HubFilter, limit = 12, items: FeedItem[] = ALL_ITEMS): FacetOption[] {
+  const base = filterItems({ ...f, konu: undefined, page: 1 }, items);
   const use = new Map<string, number>();
   for (const i of base) for (const t of i.tags) use.set(t, (use.get(t) ?? 0) + 1);
   return [...use.entries()]

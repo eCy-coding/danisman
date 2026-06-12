@@ -15,10 +15,19 @@ const EMPTY_REPORT = process.env.FAKE_EMPTY_REPORT === '1';
 const STUDIO_REPORT_TEXT = [
   '# Fixture Studio Raporu',
   '',
-  'Bu rapor, research_status rapor metni üretmediğinde köprünün Studio',
-  'fallback bacağıyla gerçek içerik sentezlediğini kanıtlamak için fixture',
-  'tarafından üretilmiştir. Yüz karakterden uzundur ve Zod şemasını geçer;',
-  'köprü bu gövdeyi taslak makale olarak admin paneline teslim eder.',
+  'Bu rapor, köprünün zengin draft şablonunu uçtan uca kanıtlamak için fixture tarafından üretilmiştir. Dek bu ilk paragraftan türetilir ve yüz karakterden uzun bir açılış cümlesi içerir.',
+  '',
+  '## Stratejik Görünüm',
+  '',
+  'Aile işletmelerinde dijital dönüşüm artık bir tercih değil hayatta kalma koşuludur. Bu bölüm fixture senaryosunda ilk çıkarım cümlesini sağlar ve yeterince uzundur.',
+  '',
+  '## Yapay Zekâ Entegrasyonu',
+  '',
+  'Yapay zekâ araçları kurumsallaşma sürecindeki öznel kararları veriye bağlayarak kuşak çatışmasını azaltır. İkinci çıkarım bu cümleden gelir.',
+  '',
+  '## Halefiyet Planlaması',
+  '',
+  'Halefiyet planı olmayan şirketlerde nesil geçişi krizle sonuçlanma eğilimindedir. Üçüncü çıkarım cümlesi de budur.',
 ].join('\n');
 
 let buf = '';

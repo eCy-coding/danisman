@@ -25,6 +25,7 @@ const db = vi.hoisted(() => ({
   auditLog: { create: vi.fn().mockResolvedValue({ id: 'audit-1' }) },
   author: { findFirst: vi.fn() },
   blogPost: { create: vi.fn() },
+  insightCategory: { findFirst: vi.fn() },
 }));
 
 vi.mock('../config/db', () => ({ prisma: db }));
@@ -62,7 +63,7 @@ vi.mock('../middleware/api-key-auth', () => ({
   },
 }));
 
-import { adminResearchRouter, researchSlug } from './admin-research';
+import { adminResearchRouter, clampMetaTitle, researchSlug } from './admin-research';
 
 function makeApp() {
   const app = express();
@@ -102,6 +103,8 @@ const DRAFT = {
 beforeEach(() => {
   vi.clearAllMocks();
   db.auditLog.create.mockResolvedValue({ id: 'audit-1' });
+  // Default: no category seed — DONE mapping must stay null-safe.
+  db.insightCategory.findFirst.mockResolvedValue(null);
 });
 
 // ─── JWT plane ────────────────────────────────────────────────────────────────
@@ -327,6 +330,69 @@ describe('PATCH /bridge/jobs/:id', () => {
     expect(db.blogPost.create).toHaveBeenCalledTimes(2);
     const secondSlug = db.blogPost.create.mock.calls[1][0].data.slug;
     expect(secondSlug).toMatch(/^fintech-regulasyonunda-2026-gorunumu-/);
+  });
+
+  it('DONE maps rich fields: bridge cover wins, ogImage mirrors, metaTitle clamps', async () => {
+    db.researchJob.findUnique.mockResolvedValue({ ...JOB, status: 'DRAFTING' });
+    db.author.findFirst.mockResolvedValueOnce({ id: 'author-1' });
+    db.insightCategory.findFirst.mockResolvedValue({ id: 'cat-fintech' });
+    db.blogPost.create.mockResolvedValue({ id: 'post-3' });
+    db.researchJob.update.mockResolvedValue({ ...JOB, status: 'DONE', postId: 'post-3' });
+
+    const res = await request(makeApp())
+      .patch('/api/v1/admin/research/bridge/jobs/job-1')
+      .set('x-test-bridge', 'ok')
+      .send({
+        status: 'DONE',
+        draft: {
+          ...DRAFT,
+          metaTitleTr: 'Kısa SEO başlığı',
+          coverImageUrl: '/insights-covers/fintech-2.webp',
+          coverImageAlt: 'Fintech ağ deseni — koyu zeminde amber devre motifi',
+        },
+      });
+
+    expect(res.status).toBe(200);
+    const data = db.blogPost.create.mock.calls[0][0].data;
+    expect(data).toMatchObject({
+      coverImageUrl: '/insights-covers/fintech-2.webp',
+      ogImageUrl: '/insights-covers/fintech-2.webp',
+      coverImageAlt: 'Fintech ağ deseni — koyu zeminde amber devre motifi',
+      metaTitleTr: 'Kısa SEO başlığı',
+      categoryId: 'cat-fintech',
+    });
+    expect(db.insightCategory.findFirst).toHaveBeenCalledWith(
+      expect.objectContaining({ where: { domain: 'FINTECH' } }),
+    );
+  });
+
+  it('DONE legacy payload (no rich fields) → defaults + derived metaTitle, no categoryId', async () => {
+    db.researchJob.findUnique.mockResolvedValue({ ...JOB, status: 'DRAFTING' });
+    db.author.findFirst.mockResolvedValueOnce({ id: 'author-1' });
+    db.blogPost.create.mockResolvedValue({ id: 'post-4' });
+    db.researchJob.update.mockResolvedValue({ ...JOB, status: 'DONE', postId: 'post-4' });
+
+    const res = await request(makeApp())
+      .patch('/api/v1/admin/research/bridge/jobs/job-1')
+      .set('x-test-bridge', 'ok')
+      .send({ status: 'DONE', draft: DRAFT });
+
+    expect(res.status).toBe(200);
+    const data = db.blogPost.create.mock.calls[0][0].data;
+    expect(data.coverImageUrl).toBe('https://ecypro.com/og-default.jpg');
+    expect(data.ogImageUrl).toBe(data.coverImageUrl);
+    expect(data.metaTitleTr).toBe(clampMetaTitle(DRAFT.titleTr));
+    expect(data.metaTitleTr.length).toBeLessThanOrEqual(60);
+    expect(data).not.toHaveProperty('categoryId');
+  });
+
+  it('clampMetaTitle cuts on a word boundary at ≤60 chars', () => {
+    const long = 'Aile İşletmelerinde Dönüşüm, Yapay Zekâ ve Gelecek Stratejileri: Brifing Belgesi';
+    const clamped = clampMetaTitle(long);
+    expect(clamped.length).toBeLessThanOrEqual(60);
+    expect(clamped.endsWith(' ')).toBe(false);
+    expect(long.charAt(clamped.length)).toMatch(/[\s:,]/);
+    expect(clampMetaTitle('Kısa başlık')).toBe('Kısa başlık');
   });
 
   it('DONE with no Author rows → 422', async () => {

@@ -24,11 +24,24 @@ export const publicInsightsPostsRouter = Router();
 // GET /api/v1/insights/posts — recent PUBLISHED list (homepage feed fallback)
 publicInsightsPostsRouter.get('/', async (req: Request, res: Response): Promise<void> => {
   const limit = Math.min(Number.parseInt((req.query.limit as string) ?? '20', 10) || 20, 50);
+  // Feed-card payload only — bodyTrMdx alone dwarfs everything else and the
+  // hub never renders it (the detail endpoint serves the full article).
   const posts = await prisma.blogPost.findMany({
     where: { status: 'PUBLISHED' },
     orderBy: { publishedAt: 'desc' },
     take: limit,
-    include: { author: { select: { displayName: true, slug: true, avatarUrl: true } } },
+    select: {
+      slug: true,
+      titleTr: true,
+      excerptTr: true,
+      coverImageUrl: true,
+      coverImageAlt: true,
+      readingTimeMin: true,
+      publishedAt: true,
+      primaryDomain: true,
+      author: { select: { displayName: true, slug: true, avatarUrl: true } },
+      category: { select: { slug: true, nameTr: true } },
+    },
   });
   res.json({ data: posts, meta: { count: posts.length } });
 });

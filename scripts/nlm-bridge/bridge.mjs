@@ -306,26 +306,130 @@ async function studioReport(mcp, notebookId, language, log, onTick) {
   return trimmed.length >= 100 ? trimmed : null;
 }
 
-/** Build the draft payload purely from NotebookLM outputs. */
-function buildDraft(job, report, reportTitle, sources) {
+// ─── Global-standard draft template ──────────────────────────────────────────
+// Encodes the consulting-grade article anatomy (researched standards): italic
+// dek/standfirst → "Önemli Çıkarımlar" key-takeaways block → the report's own
+// section hierarchy (H1s demoted; the title lives in its own field) →
+// "Metodoloji" transparency block. The server appends "## Kaynaklar" last.
+
+/** ≤60-char SEO title, cut on a word boundary (mirrors server clampMetaTitle). */
+function clampMetaTitle(title) {
+  const t = title.trim();
+  if (t.length <= 60) return t;
+  const cut = t.slice(0, 60);
+  const lastSpace = cut.lastIndexOf(' ');
+  return (lastSpace > 30 ? cut.slice(0, lastSpace) : cut).trim();
+}
+
+/** First sentence of a block, ≤140 chars on a word boundary. */
+function firstSentence(text) {
+  const flat = text.replace(/\s+/g, ' ').trim();
+  const m = flat.match(/^.+?[.!?](?=\s|$)/);
+  const s = (m ? m[0] : flat).trim();
+  if (s.length <= 140) return s;
+  const cut = s.slice(0, 140);
+  return `${cut.slice(0, Math.max(cut.lastIndexOf(' '), 100)).trim()}…`;
+}
+
+/**
+ * 3-5 key takeaways: prefer an existing summary-like section's bullets,
+ * otherwise the first sentence of each ## section.
+ */
+function extractTakeaways(body) {
+  const sections = body.split(/\n(?=##\s)/);
+  const summary = sections.find((s) =>
+    /^##\s*(önemli|temel|key|sonuç|özet|çıkarım|yönetici)/i.test(s.trim()),
+  );
+  if (summary) {
+    const bullets = [...summary.matchAll(/^[-*]\s+(.{20,})$/gm)].map((m) => firstSentence(m[1]));
+    if (bullets.length >= 3) return bullets.slice(0, 5);
+  }
+  const firsts = sections
+    .filter((s) => s.trim().startsWith('##'))
+    .map((s) => s.replace(/^##.*\n+/, ''))
+    .map((s) => firstSentence(s))
+    .filter((s) => s.length >= 30);
+  return firsts.length >= 3 ? firsts.slice(0, 5) : [];
+}
+
+// Domain → cover library file root (public/insights-covers, P2 assets).
+const DOMAIN_COVERS = {
+  M_A: { slug: 'm-a', label: 'Birleşme & satın alma' },
+  ESG: { slug: 'esg', label: 'Sürdürülebilirlik' },
+  FINTECH: { slug: 'fintech', label: 'Fintech' },
+  AILE_SIRKETI: { slug: 'aile-sirketi', label: 'Aile şirketi' },
+};
+
+function pickCover(job) {
+  const entry = DOMAIN_COVERS[job.primaryDomain];
+  if (!entry) return null;
+  const hash = [...String(job.id)].reduce((a, c) => a + c.charCodeAt(0), 0);
+  return { url: `/insights-covers/${entry.slug}-${(hash % 2) + 1}.webp`, label: entry.label };
+}
+
+const MODE_LABELS = { deep: 'derin (deep)', fast: 'hızlı (fast)' };
+
+/** Build the rich draft payload purely from NotebookLM outputs. */
+function buildDraft(job, report, reportTitle, sources, meta = {}) {
   const titleTr = (reportTitle || job.topic).trim().slice(0, 200);
-  const body = (report || '').trim();
+  const raw = (report || '').trim();
+
+  // The title renders from its own field — drop a leading H1 and demote any
+  // stray H1s so the article keeps a single-H1 document outline.
+  const body = raw
+    .replace(/^#\s+[^\n]+\n+/, '')
+    .replace(/^#\s+/gm, '## ')
+    .trim();
+
   const firstPara =
     body
       .split(/\n{2,}/)
       .map((p) => p.replace(/^#+\s*/gm, '').trim())
       .find((p) => p.length >= 40) ?? '';
-  const excerptBase = firstPara || `${job.topic} üzerine NotebookLM derin araştırma özeti.`;
-  const excerptTr = excerptBase.replace(/\s+/g, ' ').slice(0, 480).padEnd(20, '.');
-  const bodyTrMdx =
+  const dekBase = firstPara || `${job.topic} üzerine NotebookLM derin araştırma özeti.`;
+  const dek = (() => {
+    const flat = dekBase.replace(/\s+/g, ' ').trim();
+    if (flat.length <= 280) return flat;
+    const cut = flat.slice(0, 280);
+    return `${cut.slice(0, Math.max(cut.lastIndexOf('. ') + 1, cut.lastIndexOf(' '))).trim()}`;
+  })();
+  const excerptTr = dek.slice(0, 480).padEnd(20, '.');
+
+  const takeaways = body.length >= 100 ? extractTakeaways(body) : [];
+  const takeawaysBlock =
+    takeaways.length > 0
+      ? `## Önemli Çıkarımlar\n\n${takeaways.map((t) => `- ${t}`).join('\n')}\n\n`
+      : '';
+
+  const modeLabel = MODE_LABELS[meta.mode] ?? meta.mode ?? 'hızlı (fast)';
+  const dateIso = new Date().toISOString().slice(0, 10);
+  const methodology =
+    `## Metodoloji\n\n` +
+    `Bu içerik, ${meta.sourceCount ?? sources.length} kaynaklı NotebookLM ${modeLabel} ` +
+    `araştırmasından ${dateIso} tarihinde sentezlenmiştir. Kaynak listesi yazının ` +
+    `sonundadır; içerik yayın öncesi insan editör onayından geçer.`;
+
+  const core =
     body.length >= 100
       ? body
-      : `# ${titleTr}\n\nNotebookLM araştırması bu konu için ${sources.length} kaynak topladı; rapor metni üretilmedi (fast mode sınırı). Kaynaklar aşağıdadır.\n`;
+      : `NotebookLM araştırması bu konu için ${sources.length} kaynak topladı; rapor metni üretilmedi (fast mode sınırı). Kaynaklar aşağıdadır.`;
+
+  const bodyTrMdx = `*${dek}*\n\n${takeawaysBlock}${core}\n\n${methodology}\n`;
+
+  const cover = pickCover(job);
+
   return {
     titleTr: titleTr.length >= 5 ? titleTr : `${titleTr} — araştırma`,
     excerptTr,
     bodyTrMdx,
     metaDescTr: excerptTr.slice(0, 160),
+    metaTitleTr: clampMetaTitle(titleTr),
+    ...(cover
+      ? {
+          coverImageUrl: cover.url,
+          coverImageAlt: `${cover.label} temalı soyut illüstrasyon — ${titleTr}`.slice(0, 125),
+        }
+      : {}),
     sources,
   };
 }
@@ -438,7 +542,10 @@ async function processJob(mcp, job) {
   const reportTitle =
     (report.split('\n').find((l) => l.startsWith('#')) || '').replace(/^#+\s*/, '') || null;
   const sources = cleanSources(status.sources);
-  const draft = buildDraft(job, report, reportTitle, sources);
+  const draft = buildDraft(job, report, reportTitle, sources, {
+    sourceCount: count ?? undefined,
+    mode: effectiveMode,
+  });
 
   await patchJob(job.id, {
     status: 'DONE',
