@@ -395,6 +395,95 @@ describe('PATCH /bridge/jobs/:id', () => {
     expect(clampMetaTitle('Kısa başlık')).toBe('Kısa başlık');
   });
 
+  // ─── EN leg (BRIDGE_EN): bilingual draft mapping ───────────────────────────
+
+  const EN_FIELDS = {
+    titleEn: 'Fintech Regulation Outlook 2026',
+    excerptEn: 'A NotebookLM-synthesised summary of the 2026 regulatory landscape in Turkey.',
+    bodyEnMdx: 'y'.repeat(150),
+  };
+
+  it('DONE with EN trio → language BOTH, EN columns, slugEn + derived EN meta', async () => {
+    db.researchJob.findUnique.mockResolvedValue({ ...JOB, status: 'DRAFTING' });
+    db.author.findFirst.mockResolvedValueOnce({ id: 'author-1' });
+    db.blogPost.create.mockResolvedValue({ id: 'post-5' });
+    db.researchJob.update.mockResolvedValue({ ...JOB, status: 'DONE', postId: 'post-5' });
+
+    const res = await request(makeApp())
+      .patch('/api/v1/admin/research/bridge/jobs/job-1')
+      .set('x-test-bridge', 'ok')
+      .send({ status: 'DONE', draft: { ...DRAFT, ...EN_FIELDS } });
+
+    expect(res.status).toBe(200);
+    const data = db.blogPost.create.mock.calls[0][0].data;
+    expect(data).toMatchObject({
+      language: 'BOTH',
+      titleEn: EN_FIELDS.titleEn,
+      excerptEn: EN_FIELDS.excerptEn,
+      slugEn: 'fintech-regulation-outlook-2026',
+      metaTitleEn: clampMetaTitle(EN_FIELDS.titleEn),
+      metaDescEn: EN_FIELDS.excerptEn.slice(0, 160),
+    });
+    expect(data.bodyEnMdx).toContain('## Sources');
+    expect(data.bodyEnMdx).toContain('[BDDK raporu](https://example.com/bddk)');
+    // TR surface untouched by the EN leg.
+    expect(data.bodyTrMdx).toContain('## Kaynaklar');
+  });
+
+  it('DONE with partial EN fields → 400 (all-or-none)', async () => {
+    db.researchJob.findUnique.mockResolvedValue({ ...JOB, status: 'DRAFTING' });
+    const res = await request(makeApp())
+      .patch('/api/v1/admin/research/bridge/jobs/job-1')
+      .set('x-test-bridge', 'ok')
+      .send({ status: 'DONE', draft: { ...DRAFT, titleEn: EN_FIELDS.titleEn } });
+    expect(res.status).toBe(400);
+    expect(db.blogPost.create).not.toHaveBeenCalled();
+  });
+
+  it('DONE TR-only draft stays TR_ONLY without EN columns (regression)', async () => {
+    db.researchJob.findUnique.mockResolvedValue({ ...JOB, status: 'DRAFTING' });
+    db.author.findFirst.mockResolvedValueOnce({ id: 'author-1' });
+    db.blogPost.create.mockResolvedValue({ id: 'post-6' });
+    db.researchJob.update.mockResolvedValue({ ...JOB, status: 'DONE', postId: 'post-6' });
+
+    const res = await request(makeApp())
+      .patch('/api/v1/admin/research/bridge/jobs/job-1')
+      .set('x-test-bridge', 'ok')
+      .send({ status: 'DONE', draft: DRAFT });
+
+    expect(res.status).toBe(200);
+    const data = db.blogPost.create.mock.calls[0][0].data;
+    expect(data.language).toBe('TR_ONLY');
+    expect(data.titleEn).toBeUndefined();
+    expect(data.slugEn).toBeUndefined();
+    expect(data.bodyEnMdx).toBeUndefined();
+    expect(data.metaTitleEn).toBeUndefined();
+    expect(data.metaDescEn).toBeUndefined();
+  });
+
+  it('DONE with EN trio retries BOTH slugs with the same suffix on P2002', async () => {
+    db.researchJob.findUnique.mockResolvedValue({ ...JOB, status: 'DRAFTING' });
+    db.author.findFirst.mockResolvedValueOnce({ id: 'author-1' });
+    const { Prisma } = await import('@prisma/client');
+    const collision = new Prisma.PrismaClientKnownRequestError('dup', {
+      code: 'P2002',
+      clientVersion: 'test',
+    });
+    db.blogPost.create.mockRejectedValueOnce(collision).mockResolvedValueOnce({ id: 'post-7' });
+    db.researchJob.update.mockResolvedValue({ ...JOB, status: 'DONE', postId: 'post-7' });
+
+    const res = await request(makeApp())
+      .patch('/api/v1/admin/research/bridge/jobs/job-1')
+      .set('x-test-bridge', 'ok')
+      .send({ status: 'DONE', draft: { ...DRAFT, ...EN_FIELDS } });
+
+    expect(res.status).toBe(200);
+    const second = db.blogPost.create.mock.calls[1][0].data;
+    expect(second.slug).toMatch(/^fintech-regulasyonunda-2026-gorunumu-/);
+    expect(second.slugEn).toMatch(/^fintech-regulation-outlook-2026-/);
+    expect(second.slug.split('-').pop()).toBe(second.slugEn.split('-').pop());
+  });
+
   it('DONE with no Author rows → 422', async () => {
     db.researchJob.findUnique.mockResolvedValue({ ...JOB, status: 'DRAFTING' });
     db.author.findFirst.mockResolvedValue(null);

@@ -82,6 +82,7 @@
     "doc": "typedoc",
     "db:push": "npx prisma db push",
     "nlm:bridge": "node scripts/nlm-bridge/bridge.mjs",
+    "nlm:selftest": "node scripts/nlm-bridge/selftest.mjs",
     "db:studio": "npx prisma studio",
     "db:generate": "npx prisma generate",
     "postinstall": "npx prisma generate",

@@ -17,6 +17,11 @@
  *   NLM_NOTEBOOK_ID       optional fixed notebook (else find/create by title)
  *   BRIDGE_POLL_MS        default 15000
  *   BRIDGE_ONCE           "1" → process at most one job then exit (tests)
+ *   BRIDGE_EN             "1" → opt-in EN leg: synthesise a SECOND Studio
+ *                         report in English and ship titleEn/excerptEn/
+ *                         bodyEnMdx (server stores language BOTH). Off by
+ *                         default — each synthesis costs minutes + NotebookLM
+ *                         quota per job.
  *
  * Encoded NotebookLM gotchas (proven, see eCyPro-memory RUNBOOK):
  *   - research_status's task_id may differ from research_start's → use status's.
@@ -40,6 +45,7 @@ const POLL_MS = Number(process.env.BRIDGE_POLL_MS ?? 15000);
 // Wait between report grace re-polls (fixture runs shrink this to ~200ms).
 const GRACE_MS = Number(process.env.RESEARCH_GRACE_MS ?? 15000);
 const ONCE = process.env.BRIDGE_ONCE === '1';
+const EN_LEG = process.env.BRIDGE_EN === '1';
 const NOTEBOOK_TITLE = 'eCyPro Content Studio';
 
 if (!KEY) {
@@ -283,7 +289,10 @@ async function studioReport(mcp, notebookId, language, log, onTick) {
     return null;
   }
 
-  const outPath = join(tmpdir(), `bridge-report-${notebookId.slice(0, 8)}-${Date.now()}.md`);
+  const outPath = join(
+    tmpdir(),
+    `bridge-report-${notebookId.slice(0, 8)}-${language}-${Date.now()}.md`,
+  );
   const dl = await mcp
     .tool(
       'download_artifact',
@@ -352,6 +361,29 @@ function extractTakeaways(body) {
   return firsts.length >= 3 ? firsts.slice(0, 5) : [];
 }
 
+/** Drop the leading H1 (the title renders from its own field), demote stray
+ *  H1s to keep a single-H1 outline, surface the first ≥40-char paragraph. */
+function articleParts(raw) {
+  const body = raw
+    .replace(/^#\s+[^\n]+\n+/, '')
+    .replace(/^#\s+/gm, '## ')
+    .trim();
+  const firstPara =
+    body
+      .split(/\n{2,}/)
+      .map((p) => p.replace(/^#+\s*/gm, '').trim())
+      .find((p) => p.length >= 40) ?? '';
+  return { body, firstPara };
+}
+
+/** ≤280-char italic standfirst, cut on a sentence/word boundary. */
+function dekFrom(base) {
+  const flat = base.replace(/\s+/g, ' ').trim();
+  if (flat.length <= 280) return flat;
+  const cut = flat.slice(0, 280);
+  return `${cut.slice(0, Math.max(cut.lastIndexOf('. ') + 1, cut.lastIndexOf(' '))).trim()}`;
+}
+
 // Domain → cover library file root (public/insights-covers, P2 assets).
 const DOMAIN_COVERS = {
   M_A: { slug: 'm-a', label: 'Birleşme & satın alma' },
@@ -374,25 +406,8 @@ function buildDraft(job, report, reportTitle, sources, meta = {}) {
   const titleTr = (reportTitle || job.topic).trim().slice(0, 200);
   const raw = (report || '').trim();
 
-  // The title renders from its own field — drop a leading H1 and demote any
-  // stray H1s so the article keeps a single-H1 document outline.
-  const body = raw
-    .replace(/^#\s+[^\n]+\n+/, '')
-    .replace(/^#\s+/gm, '## ')
-    .trim();
-
-  const firstPara =
-    body
-      .split(/\n{2,}/)
-      .map((p) => p.replace(/^#+\s*/gm, '').trim())
-      .find((p) => p.length >= 40) ?? '';
-  const dekBase = firstPara || `${job.topic} üzerine NotebookLM derin araştırma özeti.`;
-  const dek = (() => {
-    const flat = dekBase.replace(/\s+/g, ' ').trim();
-    if (flat.length <= 280) return flat;
-    const cut = flat.slice(0, 280);
-    return `${cut.slice(0, Math.max(cut.lastIndexOf('. ') + 1, cut.lastIndexOf(' '))).trim()}`;
-  })();
+  const { body, firstPara } = articleParts(raw);
+  const dek = dekFrom(firstPara || `${job.topic} üzerine NotebookLM derin araştırma özeti.`);
   const excerptTr = dek.slice(0, 480).padEnd(20, '.');
 
   const takeaways = body.length >= 100 ? extractTakeaways(body) : [];
@@ -431,6 +446,44 @@ function buildDraft(job, report, reportTitle, sources, meta = {}) {
         }
       : {}),
     sources,
+  };
+}
+
+/**
+ * EN leg (BRIDGE_EN=1): derive titleEn/excerptEn/bodyEnMdx from the second
+ * Studio report. Returns null when the report is too thin — the draft then
+ * ships TR-only and the server keeps language TR_ONLY (EN is best-effort,
+ * never job-fatal). Mirrors buildDraft's anatomy with English labels.
+ */
+function buildEnglishLeg(report, job, meta = {}) {
+  const raw = (report || '').trim();
+  const { body, firstPara } = articleParts(raw);
+  if (body.length < 100) return null;
+
+  // No H1 → no trustworthy English title (job.topic is Turkish); best-effort
+  // doctrine says drop the leg rather than ship a TR title on the EN surface.
+  const h1 = (raw.match(/^#\s+(.+)$/m)?.[1] ?? '').trim();
+  if (!h1) return null;
+  const titleEn = h1.slice(0, 200);
+  const dek = dekFrom(firstPara || `A NotebookLM research brief on ${job.topic}.`);
+  const excerptEn = dek.slice(0, 480).padEnd(20, '.');
+
+  const takeaways = extractTakeaways(body);
+  const takeawaysBlock =
+    takeaways.length > 0
+      ? `## Key Takeaways\n\n${takeaways.map((t) => `- ${t}`).join('\n')}\n\n`
+      : '';
+  const dateIso = new Date().toISOString().slice(0, 10);
+  const methodology =
+    `## Methodology\n\n` +
+    `This article was synthesised on ${dateIso} from a NotebookLM ${meta.mode ?? 'fast'} ` +
+    `research run over ${meta.sourceCount ?? '?'} sources. The source list appears at the ` +
+    `end; every draft passes human editorial review before publication.`;
+
+  return {
+    titleEn: titleEn.length >= 5 ? titleEn : `${titleEn} — research brief`,
+    excerptEn,
+    bodyEnMdx: `*${dek}*\n\n${takeawaysBlock}${body}\n\n${methodology}\n`,
   };
 }
 
@@ -547,15 +600,38 @@ async function processJob(mcp, job) {
     mode: effectiveMode,
   });
 
+  // EN leg: a SECOND Studio synthesis in English (opt-in via BRIDGE_EN=1;
+  // skipped for lang:'en' jobs — their primary report already is English).
+  // Best-effort: a failed/thin EN report ships the draft TR-only instead of
+  // failing the job.
+  let finalDraft = draft;
+  if (EN_LEG && job.lang !== 'en') {
+    await stage('DRAFTING', 'İkinci rapor: EN sentezi başlatılıyor (BRIDGE_EN)');
+    const enReport = await studioReport(mcp, notebookId, 'en', log, (detail) =>
+      stage('DRAFTING', `EN: ${detail}`),
+    );
+    const enLeg = enReport
+      ? buildEnglishLeg(enReport, job, { sourceCount: count ?? undefined, mode: effectiveMode })
+      : null;
+    if (enLeg) {
+      finalDraft = { ...draft, ...enLeg };
+    } else {
+      log(`job ${job.id}: EN leg produced no usable report — delivering TR-only`);
+      await stage('DRAFTING', 'EN sentezi üretilemedi — draft TR olarak teslim edilecek');
+    }
+  }
+
   await patchJob(job.id, {
     status: 'DONE',
     stageDetail: 'Draft teslim edildi — admin editöründe düzenlenebilir',
     sourceCount: count ?? undefined,
     reportTitle: reportTitle ?? undefined,
     notebookId,
-    draft,
+    draft: finalDraft,
   });
-  log(`job ${job.id} DONE → draft "${draft.titleTr.slice(0, 60)}"`);
+  log(
+    `job ${job.id} DONE → draft "${finalDraft.titleTr.slice(0, 60)}"${finalDraft.bodyEnMdx ? ' +EN' : ''}`,
+  );
 
   // Best-effort breadcrumb back into the notebook (single attempt).
   try {
