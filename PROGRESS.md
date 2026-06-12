@@ -72,6 +72,12 @@ Spec: `~/Desktop/istemek.md` (istek-services.md) · Plan: approved 2026-06-12
 **Bundle:** size-limit realigned (fence expansion logged in allowlist header — evidence: legit content growth): Initial brotli **111.37/115 KB** (main carried catalog via pre-existing lib/data.ts chain; +14 services + registry) · gzip 140 · ServiceDetailPage 69.65→/72 (company-valuation content) · **size-limit exit 0, 0 exceeded**.
 **publish-check equivalence:** lint+typecheck+test+build+e2e:fast individually green above (same commands the slash chain runs).
 
+## SVC Gate-10 (2026-06-12) — verification, memory, handoff
+**Artifacts:** 7 after-screenshots in `brain/services/` (menu open — opaque, 9 new targets visible; index desktop+mobile; lifecycle visualizer 7×numbered; 3 detail pages incl. new company-valuation + ex-orphan payroll-audit) · `brain/services/HANDOFF.md` (keyboard/reduced-motion walkthrough + OWNER QUEUE 6 items).
+**Docs:** ECYPRO_SERVICES_CATEGORIZATION.md v2 (Gate-2) current · ADR + audit JSONs in docs/.
+**Memory:** stale `project_services_catalog_content_mismatch` rewritten (old "4/21" claim was stale; real mechanism = resolver-404; RESOLVED) + MEMORY.md index updated.
+**Ship:** branch pushed, PR opened with 10 gate evidences — **NO main merge (owner-only)**.
+
 ---
 
 # PERSPEKTIFLER VERTICAL (closed 2026-06-12)
