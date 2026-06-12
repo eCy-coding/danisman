@@ -203,12 +203,13 @@
     }
     </script>
 
-    <!-- P33-T03: Non-blocking stylesheet — print media trick defers parse until after FCP.
-         noscript fallback ensures CSS loads for bots/old browsers.
-         NOTE: App Shell inline styles above-fold render before CSS parses. -->
-    <link rel="preload" href="/index.css" as="style" />
-    <link rel="stylesheet" href="/index.css" media="print" onload="this.media='all'" />
-    <noscript><link rel="stylesheet" href="/index.css" /></noscript>
+    <!-- CSS entry: /index.css is imported from src/main.tsx so it compiles through
+         the Tailwind/PostCSS pipeline. Do NOT <link> it here directly — Vite copies
+         html-linked CSS as a raw asset (unprocessed @theme/@apply) whose early
+         @layer statements lock the cascade order wrong (base > utilities), killing
+         every margin/text-color utility site-wide. Non-blocking loading (P33-T03)
+         is preserved by the P32 nonBlockingCssPlugin (vite.config.ts) and
+         scripts/p28-css-nonblocking.mjs, which rewrite the Vite-injected links. -->
     <!-- S13-R8-B3: preload hint for the above-fold founder avatar. AVIF first;
          browsers that don't support AVIF will skip (no penalty) and the <picture>
          element's WebP/JPG sources cover them on demand. -->
