@@ -8,6 +8,8 @@
   "search_placeholder": "Hizmetlerde arayın...",
   "filter_clear": "Filtreleri Temizle",
   "no_results": "Sonuç bulunamadı:",
+  "result_count": "{{count}} hizmet listeleniyor",
+  "result_count_all": "{{count}} hizmet · 7 uzmanlık kümesi",
   "roi_calculator": {
     "title": "Potansiyelinizi Hesaplayın",
     "desc": "Dijital dönüşümün değerini şimdiden görün."

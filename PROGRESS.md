@@ -42,6 +42,13 @@ Spec: `~/Desktop/istemek.md` (istek-services.md) · Plan: approved 2026-06-12
 **Implemented:** services panel role=menu/menuitem removed (APG disclosure = plain links) · surface opaque `bg-[#0a0f1c]` (H1 ghosting through /98 killed — owner screenshot overlap) · Navbar Esc now returns focus to trigger. Trigger already had aria-haspopup/expanded/controls + outside-click/route-close (Perspektifler Gate-2 — istemek.md "no a11y" premise was stale at Navbar level).
 **Evidence:** unit 8/8 · NEW `e2e/services-menu.spec.ts` chromium **5/5** — 9 unique targets, 4 menu→detail journeys (no /404), orphan payroll-audit + new company-valuation resolve, junk→404 strict, Esc focus-return · Perspektifler menu.spec regression: 10 pass + 1 known flaky (retry-green).
 
+## SVC Gate-6 (2026-06-12) — /services index v2
+**New finding fixed:** ServicesClusterSection was a THIRD hand-maintained list with dead hrefs (`/services/esg-reporting` → 404) — rewritten as **registry-driven lifecycle visualizer** (7 numbered workflows, 35 step links, drift-proof).
+**RED first:** services-page-v2.test.tsx 5 fail / 2 pass.
+**Implemented:** debounced search 180ms (input/query split — 35-card re-render off the keystroke path) · aria-live + data-count result counter (i18n keys result_count/_all tr+en) · ServiceFilter aria-pressed · "Glassmorphism Light" comment renamed (solid-surface doctrine) · ItemList JSON-LD desc → 7 clusters · clear resets both states · ServiceCard v2: lifecycle "Adım N/M" badge, pointer-fine 3D tilt ≤6° (rAF, transform-only, reduced-motion off), motion budget 500/700→300/400, blob geometry → fib tokens (w-fib-34), line-clamp-3 scan-first.
+**Premise fix:** e2e services-filter.spec asserted an "economics"-era catalog + an i18n string the page never rendered — the historical "pre-existing service_hub fail". Spec rewritten to v2 registry (8 chips, 7 clusters, data-count, lifecycle journey link).
+**Evidence:** unit 49/49 (5 files: taxonomy-v2 + page-v2 + content + cluster-d + atom-2 updated) · e2e services-filter 5/5 + services-menu 5/5 chromium · typecheck 0 · lint 0 err.
+
 ---
 
 # PERSPEKTIFLER VERTICAL (closed 2026-06-12)
