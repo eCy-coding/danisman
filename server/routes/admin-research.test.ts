@@ -300,8 +300,10 @@ describe('PATCH /bridge/jobs/:id', () => {
       subDomain: 'notebooklm-research',
       authorId: 'author-1',
     });
-    expect(createArg.data.bodyTrMdx).toContain('## Kaynaklar');
-    expect(createArg.data.bodyTrMdx).toContain('[BDDK raporu](https://example.com/bddk)');
+    expect(createArg.data.bodyTrMdx).toContain('## Kaynakça');
+    // APA web-source form: Title. (t.y.). *site*. Erişim: <date>, <url>
+    expect(createArg.data.bodyTrMdx).toContain('BDDK raporu. (t.y.). *example.com*. Erişim:');
+    expect(createArg.data.bodyTrMdx).toContain('https://example.com/bddk');
     expect(db.researchJob.update).toHaveBeenCalledWith(
       expect.objectContaining({
         data: expect.objectContaining({ postId: 'post-1', status: 'DONE' }),

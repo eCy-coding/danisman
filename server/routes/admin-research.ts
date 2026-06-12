@@ -93,11 +93,33 @@ export function clampMetaTitle(title: string): string {
   return (lastSpace > 30 ? cut.slice(0, lastSpace) : cut).trim();
 }
 
+// APA 7 web-source approximation (calibration: "akademisyen standartları").
+// NotebookLM source metadata carries title+url only — no author/year — so we
+// use the title-first form: Title. (t.y.). *Site*. Erişim: <date>, <url>.
+// "t.y." = tarih yok (TR equivalent of n.d.).
+function apaSourceLine(s: { title: string; url?: string }, accessDate: string): string {
+  if (!s.url) return `${s.title}. (t.y.).`;
+  let host = '';
+  try {
+    host = new URL(s.url).hostname.replace(/^www\./, '');
+  } catch {
+    host = '';
+  }
+  const site = host ? ` *${host}*.` : '';
+  const title = s.title.replace(/\.+$/, '');
+  return `${title}. (t.y.).${site} Erişim: ${accessDate}, ${s.url}`;
+}
+
 function buildBody(draft: DraftPayload): string {
   const sources = draft.sources ?? [];
   if (sources.length === 0) return draft.bodyTrMdx;
-  const lines = sources.map((s) => (s.url ? `- [${s.title}](${s.url})` : `- ${s.title}`));
-  return `${draft.bodyTrMdx}\n\n## Kaynaklar\n\n${lines.join('\n')}\n`;
+  const accessDate = new Date().toLocaleDateString('tr-TR', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  });
+  const lines = sources.map((s) => apaSourceLine(s, accessDate));
+  return `${draft.bodyTrMdx}\n\n## Kaynakça\n\n${lines.join('\n\n')}\n`;
 }
 
 function readingTime(body: string): number {

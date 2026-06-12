@@ -215,6 +215,48 @@ Kök fix'ler:
    Calendly webhook emsali) + health-probe suite 21/21.
 3. **Bridge 429 backoff**: claim 429 `retryAfter`'ına uyur.
 
+## 10. Akademik Kalibre — APA + veriler/istatistikler + tablo zenginliği (2026-06-12)
+
+Talep: postlar "bir Profesör tarafından akademisyen standartlarında, APA
+formatında, ama hiç bilmeyen birinin de anlayacağı" nitelikte gelsin;
+veriler/istatistikler/kanıtlar öne çıksın; içerik görsel zenginleşsin;
+bilgi kirliliği olmasın.
+
+Kalibre noktaları (kod):
+- **Araştırma brief'i** (`buildResearchQuery`, bridge): pipeline'ın steer
+  edilebilir tek yüzeyi research QUERY'si — konu, "resmi istatistik +
+  birincil kaynak (TÜİK/TCMB/OECD/IMF/Dünya Bankası/hakemli) öncelikli;
+  somut sayılar + yıllara göre kıyas; veriler elverdiğinde karşılaştırma
+  TABLOSU; her teknik terim ilk geçişte tek cümleyle tanımlanır; kısa net
+  paragraflar" yönergesine sarılır (TR/EN). İzole notebook'ta kaynak seti
+  brief-şekilli olduğundan Studio sentezi de bu karakteri taşır.
+- **APA Kaynakça** (server `apaSourceLine`): NLM meta'sı title+url verdiği
+  için başlık-önce APA-web formu — `Başlık. (t.y.). *site.com*. Erişim:
+  12 Haziran 2026, URL`; bölüm adı "## Kaynakça". Metodoloji metni APA'ya
+  işaret eder.
+- **Önemli Veriler bloğu** (`extractKeyStats`, bridge): rapordan en
+  veri-yoğun 3-4 cümle (%, puan, milyar, yıl-kıyas regex'i) blockquote
+  callout'ta — sitede mavi vurgu barıyla görsel zenginlik; veri yoksa blok
+  sessizce atlanır (kirlilik yok).
+- **Sanitize v2**: satır-içi blockquote artıkları (`" > — İsim >`) temizlenir,
+  alıntı atfı korunur; dek kelime-kesiminde `…` imi.
+
+Kanıtlar:
+- Fixture (gerçek API + fake-mcp): `stats=t, stat_quote=t, apa_hdr=t,
+  apa_line=t` (4/4); mid-`>` senaryosunda çıkarım bullet'ı temiz
+  ("…değildir." — Fixture Uzmanı …), suite 23/23.
+- CANLI koşu "Türkiye'de gıda enflasyonu 2020-2025…": izole notebook
+  `[mvya13]`, 2dk20sn DONE, 10.276 kr; bayraklar stats/apa/apa_line/
+  TABLO/tema = 5/5. Önemli Veriler içeriği GERÇEK istatistik: TCMB 2025
+  tahmin revizesi %27→%32; Türkiye gıda enflasyonu %28,3 (OECD ort. %3,8,
+  Aralık 2025) — OECD birincisi; politika faizi %50. Gövdede NLM'in
+  ürettiği "TCMB Enflasyon Tahmin Aralıkları (%)" karşılaştırma TABLOSU
+  sitede remark-gfm ile şık render (kare acad-run-2); kümülatif gıda
+  fiyatı %720 vs OECD %41,5 (≈17 kat) kıyası kalın terim-açıklamalarıyla.
+  Kaynakça örneği (DB): "Türkiye'de gıda fiyatları neden yüksek? (t.y.).
+  *dunyabank…*. Erişim: 12 Haziran 2026, https://…". Danışman rötuşu +
+  zincir → PUBLISHED → anonim API 200. Kareler: acad-run-1/2.
+
 ### Profesyonel danışman yayını
 Drift'li eski draft **ARCHIVED** (yayın kirliliği temizliği). Doğru-konu
 draft'a danışman rötuşu: başlık "Türkiye'de Enflasyonun On Yılı

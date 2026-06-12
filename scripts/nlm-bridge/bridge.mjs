@@ -338,12 +338,18 @@ function clampMetaTitle(title) {
  * table debris and half-clauses ending in `…: 1.` into the takeaways block.
  */
 function sanitizeInline(text) {
-  return text
-    .replace(/^[\s>*•-]+/, '')
-    .replace(/\*\*|__/g, '')
-    .replace(/[*`_]/g, '')
-    .replace(/\s+/g, ' ')
-    .trim();
+  return (
+    text
+      .replace(/^[\s>*•-]+/, '')
+      .replace(/\*\*|__/g, '')
+      .replace(/[*`_]/g, '')
+      // Mid-sentence blockquote markers survive when a multi-line quote is
+      // flattened into one bullet ("…küçülttük." > — Fatih Karahan >…).
+      .replace(/\s>\s/g, ' ')
+      .replace(/\s>+$/g, '')
+      .replace(/\s+/g, ' ')
+      .trim()
+  );
 }
 
 /** First sentence of a block, ≤140 chars on a word boundary. */
@@ -396,7 +402,31 @@ function extractTakeaways(body) {
   return firsts.length >= 3 ? firsts.slice(0, 5) : [];
 }
 
-// Domain → cover library file root (public/insights-covers, P2 assets).
+/**
+ * "Veriler, istatistikler, kanıtlar" calibration: surface the report's most
+ * data-dense sentences as a compact callout right after the takeaways. The
+ * public prose theme renders blockquotes with a blue accent bar — visual
+ * richness without images. Skips silently when the report carries no
+ * usable figures (no noise).
+ */
+function extractKeyStats(body, limit = 4) {
+  const NUM = /%\s?\d|\d+(?:[.,]\d+)?\s*(?:%|puan|milyar|milyon|bin|kat|TL|dolar|euro|USD|EUR)|\b(19|20)\d{2}\b.*\b\d/i;
+  const seen = new Set();
+  const out = [];
+  for (const rawLine of body.split('\n')) {
+    if (isTableDebris(rawLine) || /^#{1,6}\s/.test(rawLine)) continue;
+    for (const sentence of sanitizeInline(rawLine).split(/(?<=[.!?])\s+/)) {
+      const s = sentence.trim();
+      if (s.length < 40 || s.length > 200 || !NUM.test(s)) continue;
+      const key = s.slice(0, 60);
+      if (seen.has(key)) continue;
+      seen.add(key);
+      out.push(s.endsWith('.') || s.endsWith('!') || s.endsWith('?') ? s : `${s}.`);
+      if (out.length >= limit) return out;
+    }
+  }
+  return out;
+}
 const DOMAIN_COVERS = {
   M_A: { slug: 'm-a', label: 'Birleşme & satın alma' },
   ESG: { slug: 'esg', label: 'Sürdürülebilirlik' },
@@ -412,6 +442,36 @@ function pickCover(job) {
 }
 
 const MODE_LABELS = { deep: 'derin (deep)', fast: 'hızlı (fast)' };
+
+/**
+ * Academic-yet-accessible research brief (calibration). The research QUERY is
+ * the one steerable surface in the pipeline: it shapes BOTH source selection
+ * and the synthesised report (Studio report artifacts ignore custom_prompt,
+ * but an isolated notebook only ever contains brief-shaped sources, so the
+ * synthesis inherits the brief's character). Keep it tight — over-long
+ * queries dilute retrieval.
+ */
+function buildResearchQuery(job) {
+  const t = job.topic.trim();
+  if ((job.lang || 'tr') === 'en') {
+    return (
+      `TOPIC: ${t}. Research this with academic rigor: prioritise official statistics ` +
+      `and primary sources (national statistics offices, central banks, OECD, IMF, ` +
+      `World Bank, peer-reviewed work). The report must include: concrete figures and ` +
+      `year-over-year comparisons; at least one comparison table where data allows; ` +
+      `plain-language explanations a non-expert can follow (define each technical term ` +
+      `in one sentence on first use); short, clear paragraphs.`
+    );
+  }
+  return (
+    `KONU: ${t}. Bu konuyu akademik titizlikle araştır: resmi istatistikler ve birincil ` +
+    `kaynaklar öncelikli (TÜİK, TCMB, ilgili bakanlıklar, OECD, IMF, Dünya Bankası, ` +
+    `hakemli yayınlar). Rapor şunları içermeli: somut sayısal veriler ve yıllara göre ` +
+    `karşılaştırmalar; veriler elverdiğinde en az bir karşılaştırma TABLOSU; hiç ` +
+    `bilmeyen birinin anlayacağı sade Türkçe (her teknik terim ilk geçtiğinde tek ` +
+    `cümleyle tanımlanır); kısa, net, açık paragraflar.`
+  );
+}
 
 /** Build the rich draft payload purely from NotebookLM outputs. */
 function buildDraft(job, report, reportTitle, sources, meta = {}) {
@@ -435,7 +495,10 @@ function buildDraft(job, report, reportTitle, sources, meta = {}) {
     const flat = dekBase.replace(/\s+/g, ' ').trim();
     if (flat.length <= 280) return flat;
     const cut = flat.slice(0, 280);
-    return `${cut.slice(0, Math.max(cut.lastIndexOf('. ') + 1, cut.lastIndexOf(' '))).trim()}`;
+    const atSentence = cut.lastIndexOf('. ');
+    if (atSentence > 120) return cut.slice(0, atSentence + 1).trim();
+    // Word-boundary cut reads truncated without a marker.
+    return `${cut.slice(0, cut.lastIndexOf(' ')).trim()}…`;
   })();
   const excerptTr = dek.slice(0, 480).padEnd(20, '.');
 
@@ -445,20 +508,27 @@ function buildDraft(job, report, reportTitle, sources, meta = {}) {
       ? `## Önemli Çıkarımlar\n\n${takeaways.map((t) => `- ${t}`).join('\n')}\n\n`
       : '';
 
+  // Data callout — blockquote renders with the blue accent bar on the site.
+  const stats = body.length >= 100 ? extractKeyStats(body) : [];
+  const statsBlock =
+    stats.length >= 2
+      ? `## Önemli Veriler\n\n${stats.map((s) => `> ${s}`).join('\n>\n')}\n\n`
+      : '';
+
   const modeLabel = MODE_LABELS[meta.mode] ?? meta.mode ?? 'hızlı (fast)';
   const dateIso = new Date().toISOString().slice(0, 10);
   const methodology =
     `## Metodoloji\n\n` +
     `Bu içerik, ${meta.sourceCount ?? sources.length} kaynaklı NotebookLM ${modeLabel} ` +
-    `araştırmasından ${dateIso} tarihinde sentezlenmiştir. Kaynak listesi yazının ` +
-    `sonundadır; içerik yayın öncesi insan editör onayından geçer.`;
+    `araştırmasından ${dateIso} tarihinde sentezlenmiştir. Kaynakça APA biçiminde ` +
+    `yazının sonundadır; içerik yayın öncesi insan editör onayından geçer.`;
 
   const core =
     body.length >= 100
       ? body
       : `NotebookLM araştırması bu konu için ${sources.length} kaynak topladı; rapor metni üretilmedi (fast mode sınırı). Kaynaklar aşağıdadır.`;
 
-  const bodyTrMdx = `*${dek}*\n\n${takeawaysBlock}${core}\n\n${methodology}\n`;
+  const bodyTrMdx = `*${dek}*\n\n${takeawaysBlock}${statsBlock}${core}\n\n${methodology}\n`;
 
   const cover = pickCover(job);
 
@@ -489,9 +559,10 @@ async function processJob(mcp, job) {
   // "try fast"). Falling back keeps the job alive instead of FAILED — the
   // stage line tells the operator which mode actually ran.
   let effectiveMode = job.mode === 'deep' ? 'deep' : 'fast';
+  const researchQuery = buildResearchQuery(job);
   let started = await mcp.tool('research_start', {
     notebook_id: notebookId,
-    query: job.topic,
+    query: researchQuery,
     mode: effectiveMode,
   });
   const startErr = () => JSON.stringify(started).slice(0, 300);
@@ -503,7 +574,7 @@ async function processJob(mcp, job) {
       log(`job ${job.id}: deep → fast fallback (code 8)`);
       started = await mcp.tool('research_start', {
         notebook_id: notebookId,
-        query: job.topic,
+        query: researchQuery,
         mode: 'fast',
       });
     }
