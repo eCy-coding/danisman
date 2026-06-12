@@ -30,6 +30,29 @@ const STUDIO_REPORT_TEXT = [
   'Halefiyet planı olmayan şirketlerde nesil geçişi krizle sonuçlanma eğilimindedir. Üçüncü çıkarım cümlesi de budur.',
 ].join('\n');
 
+// EN leg (BRIDGE_EN=1): studio_create with language:'en' yields a SECOND
+// artifact whose download writes this English report.
+const STUDIO_REPORT_TEXT_EN = [
+  '# Fixture Studio Report (EN)',
+  '',
+  'This English report exists to prove the bilingual leg of the research bridge end to end. The standfirst derives from this opening paragraph, which is comfortably longer than one hundred characters.',
+  '',
+  '## Strategic Outlook',
+  '',
+  'Digital transformation in family businesses is no longer optional but a survival requirement for the coming decade. This sentence feeds the first key takeaway.',
+  '',
+  '## AI Integration',
+  '',
+  'Artificial intelligence tools reduce generational conflict by anchoring subjective governance decisions to verifiable data. The second takeaway comes from this sentence.',
+  '',
+  '## Succession Planning',
+  '',
+  'Companies without a succession plan tend to face crisis-driven generational transitions instead of orderly handovers. This is the third takeaway sentence.',
+].join('\n');
+
+const ART_TR = 'fake-art-1';
+const ART_EN = 'fake-art-en-1';
+
 let buf = '';
 process.stdin.on('data', (c) => {
   buf += c.toString('utf8');
@@ -92,18 +115,20 @@ function handle(line) {
         ],
       });
     case 'studio_create':
-      return ok(id, { status: 'success', artifact_id: 'fake-art-1' });
+      return ok(id, { status: 'success', artifact_id: a.language === 'en' ? ART_EN : ART_TR });
     case 'studio_status':
       return ok(id, {
         artifacts: [
-          { id: 'fake-art-1', type: 'report', status: 'completed', title: 'Fixture Studio Raporu' },
+          { id: ART_TR, type: 'report', status: 'completed', title: 'Fixture Studio Raporu' },
+          { id: ART_EN, type: 'report', status: 'completed', title: 'Fixture Studio Report (EN)' },
         ],
       });
     case 'download_artifact':
       // The real tool writes the artifact to output_path; the bridge then
-      // reads that file. Mirror the contract.
+      // reads that file. Mirror the contract, per-language artifact.
       try {
-        writeFileSync(String(a.output_path), STUDIO_REPORT_TEXT, 'utf8');
+        const text = a.artifact_id === ART_EN ? STUDIO_REPORT_TEXT_EN : STUDIO_REPORT_TEXT;
+        writeFileSync(String(a.output_path), text, 'utf8');
         return ok(id, { status: 'success', path: a.output_path });
       } catch (err) {
         return ok(id, { status: 'error', error: String(err) });

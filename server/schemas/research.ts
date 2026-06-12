@@ -31,30 +31,51 @@ export const BridgeSettableStatus = z.enum([
   'FAILED',
 ]);
 
-export const DraftPayloadSchema = z.object({
-  titleTr: z.string().min(5).max(200),
-  excerptTr: z.string().min(20).max(500),
-  bodyTrMdx: z.string().min(100),
-  metaDescTr: z.string().max(160).optional(),
-  // Rich-draft additions (all optional: pre-v2 bridges keep working).
-  metaTitleTr: z.string().max(60).optional(),
-  // Cover may be a site-relative path (/insights-covers/…) or absolute URL.
-  coverImageUrl: z
-    .string()
-    .max(500)
-    .regex(/^(https?:\/\/|\/)/, 'coverImageUrl: absolute URL veya / ile başlayan yol')
-    .optional(),
-  coverImageAlt: z.string().max(300).optional(),
-  sources: z
-    .array(
-      z.object({
-        title: z.string().min(1).max(300),
-        url: z.string().url().optional(),
-      }),
-    )
-    .max(100)
-    .default([]),
-});
+export const DraftPayloadSchema = z
+  .object({
+    titleTr: z.string().min(5).max(200),
+    excerptTr: z.string().min(20).max(500),
+    bodyTrMdx: z.string().min(100),
+    metaDescTr: z.string().max(160).optional(),
+    // Rich-draft additions (all optional: pre-v2 bridges keep working).
+    metaTitleTr: z.string().max(60).optional(),
+    // EN leg (bridge BRIDGE_EN=1): a SECOND NotebookLM report synthesised in
+    // English. Optional so TR-only bridges keep working; on delivery the post
+    // becomes language BOTH.
+    titleEn: z.string().min(5).max(200).optional(),
+    excerptEn: z.string().min(20).max(500).optional(),
+    bodyEnMdx: z.string().min(100).optional(),
+    // Cover may be a site-relative path (/insights-covers/…) or absolute URL.
+    coverImageUrl: z
+      .string()
+      .max(500)
+      .regex(/^(https?:\/\/|\/)/, 'coverImageUrl: absolute URL veya / ile başlayan yol')
+      .optional(),
+    coverImageAlt: z.string().max(300).optional(),
+    sources: z
+      .array(
+        z.object({
+          title: z.string().min(1).max(300),
+          url: z.string().url().optional(),
+        }),
+      )
+      .max(100)
+      .default([]),
+  })
+  // A partial EN pair would render a broken EN surface (e.g. EN body under a
+  // TR title) — the trio ships together or not at all.
+  .refine(
+    (draft) => {
+      const set = [draft.titleEn, draft.excerptEn, draft.bodyEnMdx].filter(
+        (v) => v !== undefined,
+      ).length;
+      return set === 0 || set === 3;
+    },
+    {
+      message: 'EN alanları (titleEn, excerptEn, bodyEnMdx) ya birlikte ya hiç gönderilir',
+      path: ['bodyEnMdx'],
+    },
+  );
 
 export const BridgePatchSchema = z.object({
   status: BridgeSettableStatus.optional(),

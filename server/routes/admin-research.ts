@@ -93,11 +93,11 @@ export function clampMetaTitle(title: string): string {
   return (lastSpace > 30 ? cut.slice(0, lastSpace) : cut).trim();
 }
 
-function buildBody(draft: DraftPayload): string {
-  const sources = draft.sources ?? [];
-  if (sources.length === 0) return draft.bodyTrMdx;
-  const lines = sources.map((s) => (s.url ? `- [${s.title}](${s.url})` : `- ${s.title}`));
-  return `${draft.bodyTrMdx}\n\n## Kaynaklar\n\n${lines.join('\n')}\n`;
+function withSources(body: string, sources: DraftPayload['sources'], heading: string): string {
+  const list = sources ?? [];
+  if (list.length === 0) return body;
+  const lines = list.map((s) => (s.url ? `- [${s.title}](${s.url})` : `- ${s.title}`));
+  return `${body}\n\n## ${heading}\n\n${lines.join('\n')}\n`;
 }
 
 function readingTime(body: string): number {
@@ -287,7 +287,17 @@ adminResearchRouter.patch('/bridge/jobs/:id', bridgeAuth, async (req, res): Prom
       return;
     }
 
-    const body = buildBody(draft);
+    const body = withSources(draft.bodyTrMdx, draft.sources, 'Kaynaklar');
+    // EN leg: the schema refine guarantees all-or-none; the triple check here
+    // narrows the optionals for strict TS. Present trio → language BOTH.
+    const enLeg =
+      draft.titleEn !== undefined && draft.excerptEn !== undefined && draft.bodyEnMdx !== undefined
+        ? {
+            titleEn: draft.titleEn,
+            excerptEn: draft.excerptEn,
+            bodyEnMdx: withSources(draft.bodyEnMdx, draft.sources, 'Sources'),
+          }
+        : null;
     // Rich-draft mapping: bridge-provided values win, then env, then default.
     const coverImageUrl =
       draft.coverImageUrl ??
@@ -306,18 +316,32 @@ adminResearchRouter.patch('/bridge/jobs/:id', bridgeAuth, async (req, res): Prom
       .catch(() => null);
 
     const base = researchSlug(draft.titleTr);
+    const baseEn = enLeg ? researchSlug(enLeg.titleEn) : null;
     let post: { id: string } | null = null;
     for (let attempt = 0; attempt < 3 && !post; attempt += 1) {
-      const slug = attempt === 0 ? base : `${base}-${Date.now().toString(36)}`;
+      // Same suffix for both slug columns: a P2002 on EITHER unique index
+      // retries the pair together, so they stay visually paired.
+      const suffix = Date.now().toString(36);
+      const slug = attempt === 0 ? base : `${base}-${suffix}`;
       try {
         post = await prisma.blogPost.create({
           data: {
             slug,
             type: 'ANALYSIS',
-            language: 'TR_ONLY',
+            language: enLeg ? 'BOTH' : 'TR_ONLY',
             titleTr: draft.titleTr,
             excerptTr: draft.excerptTr,
             bodyTrMdx: body,
+            ...(enLeg && baseEn
+              ? {
+                  slugEn: attempt === 0 ? baseEn : `${baseEn}-${suffix}`,
+                  titleEn: enLeg.titleEn,
+                  excerptEn: enLeg.excerptEn,
+                  bodyEnMdx: enLeg.bodyEnMdx,
+                  metaTitleEn: clampMetaTitle(enLeg.titleEn),
+                  metaDescEn: enLeg.excerptEn.slice(0, 160),
+                }
+              : {}),
             primaryDomain: job.primaryDomain,
             subDomain: 'notebooklm-research',
             topic: job.topic.slice(0, 100),
