@@ -1,0 +1,27 @@
+{
+  "snapshot": "2026-06-12T12:05:00Z",
+  "branch": "fix/project-gaps-2026-06-08",
+  "head": "2c25c07",
+  "environment": "cowork-sandbox (node_modules 1161 pkg; Chrome/Playwright/SSH yok)",
+  "metrics": {
+    "eslint_errors": { "value": 0, "cmd": "npx eslint . --quiet", "status": "verified" },
+    "tsc_web_errors": { "value": 0, "cmd": "npx tsc --noEmit", "status": "verified" },
+    "tsc_server_errors": { "value": 0, "cmd": "npx tsc -p tsconfig.server.json --noEmit", "status": "verified" },
+    "vitest_unit": { "value": "pass (exit 0)", "cmd": "npx vitest --run", "status": "verified", "note": "stderr noise: useInsightArticle relative-URL fetch (BL-08)" },
+    "size_initial_js_brotli_kb": { "value": 100.43, "limit": 105, "cmd": "npx size-limit", "status": "CACHED (stale dist 50M)" },
+    "size_initial_js_gzip_kb": { "value": 123.67, "limit": 130, "status": "CACHED" },
+    "lighthouse": { "value": null, "cmd": "npm run lh:audit", "status": "PENDING-OWNER (Chrome host-only)" },
+    "e2e_playwright": { "value": null, "cmd": "npm run test:e2e:fast", "status": "PENDING-OWNER (browser host-only)" },
+    "audit_seo": { "value": null, "cmd": "npm run audit:seo", "status": "not-run-this-session" },
+    "todo_fixme_count": { "value": 2, "status": "verified" },
+    "ts_ignore_count": { "value": 9, "status": "verified" },
+    "eslint_disable_count": { "value": 76, "status": "verified" },
+    "any_annotation_count": { "value": 5, "status": "verified" },
+    "console_log_nontest": { "value": 13, "status": "verified", "note": "logger wrapper + script bağlamı dahil" },
+    "tracked_bak_files": { "value": 2, "status": "verified" },
+    "images_over_300kb": { "value": 0, "status": "verified" },
+    "lazy_chunks": { "value": 140, "routes": 174, "status": "verified" },
+    "test_files_total": { "value": 395, "src_unit": 157, "status": "verified" }
+  },
+  "ratchet_rule": "her metrik sonraki oturumda = veya daha iyi; kötüleşme = rollback"
+}

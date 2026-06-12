@@ -1,0 +1,19 @@
+{
+  "updated": "2026-06-12T12:05:00Z",
+  "scoring": "Score=(Impact 1-5 × Confidence 0-1)/Effort 1-5; ratchet-risk −1",
+  "items": [
+    { "id": "BL-03", "title": "index.lock sil + 6 commit push (GIT_AUDIT P0)", "flag": "🔴", "impact": 5, "confidence": 1.0, "effort": 1, "score": 5.0, "owner_gate": true, "evidence": "test -f .git/index.lock → VAR; git log @{u}..HEAD → 6", "action": "host: rm -f ~/Desktop/ecypro/.git/index.lock* && bash READY_TO_PUSH.command && git push origin fix/project-gaps-2026-06-08" },
+    { "id": "BL-01", "title": "index.css çift yükleme fix'i (research-bridge portu)", "flag": "🔴", "impact": 4, "confidence": 1.0, "effort": 1, "score": 4.0, "evidence": "index.html:209-210 /index.css link + src/main.tsx:11 import '../index.css' — aynı CSS 2× yükleniyor; fix feat/research-bridge'te (2026-06-12)", "action": "branch merge/cherry-pick veya index.html linklerini kaldır (Vite bundle tek kaynak); LCP/FCP kazancı" },
+    { "id": "BL-08", "title": "useInsightArticle test ortamı ERR_INVALID_URL gürültüsü", "flag": "🟡", "impact": 2, "confidence": 0.9, "effort": 1, "score": 1.8, "evidence": "vitest stderr: input '/api/insights/posts/' — jsdom'da relative fetch", "action": "test setup'ta absolute base/MSW handler" },
+    { "id": "BL-02", "title": "Tracked .bak ×2 temizliği", "flag": "🔴", "impact": 1, "confidence": 1.0, "effort": 1, "score": 1.0, "evidence": "git ls-files: useFounderLetter.ts.bak, view-as-context.tsx.bak", "action": "git rm — lock açılınca" },
+    { "id": "BL-05", "title": "@ts-ignore/@ts-expect-error 9 → 0", "flag": "🟡", "impact": 2, "confidence": 0.8, "effort": 2, "score": 0.8, "action": "her birini kök sebebiyle çöz; expect-error + açıklama zorunlu" },
+    { "id": "BL-10", "title": "TODO ×2 kapat (HomeServicePreview i18n, search.ts P18)", "flag": "🟡", "impact": 2, "confidence": 0.8, "effort": 2, "score": 0.8, "evidence": "grep TODO tam liste flag-map'te" },
+    { "id": "BL-09", "title": "Gerçek dead-code analizi (knip, host)", "flag": "🟡", "impact": 3, "confidence": 0.5, "effort": 2, "score": 0.75, "evidence": "ts-prune 410 aday FALSE-POSITIVE'li (MEGA_MENUS 13× kullanımda) — güvenilmez", "action": "host: npx knip — alias-aware; sonuç bu backlog'a işlenir" },
+    { "id": "BL-06", "title": "App.tsx 1858 satır — route manifest bölme", "flag": "🟡", "impact": 3, "confidence": 0.7, "effort": 3, "score": 0.7, "action": "route grupları ayrı manifest dosyalarına; davranış değişikliği yok (test-first)" },
+    { "id": "BL-07", "title": "service-content.ts 4750 satır — veri katmanına taşı", "flag": "🟡", "impact": 3, "confidence": 0.6, "effort": 3, "score": 0.6, "action": "JSON/route-chunk; initial bundle'dan çıkar" },
+    { "id": "BL-11", "title": "storage/types.ts grep-binary algısı (kontrol karakteri)", "flag": "🟡", "impact": 1, "confidence": 0.6, "effort": 1, "score": 0.6, "evidence": "file→data ama içerik geçerli TS (UTF-8 TR yorum); tsc geçiyor", "action": "kozmetik: gizli karakteri bul/temizle" },
+    { "id": "BL-04", "title": "eslint-disable 76 → kademeli azaltma", "flag": "🟡", "impact": 2, "confidence": 0.7, "effort": 3, "score": 0.47, "action": "oturum başına −10 hedef; ratchet floor güncellenir" },
+    { "id": "BL-12", "title": "Admin sayfaları 900-1082 satır — bileşen bölme", "flag": "🟡", "impact": 2, "confidence": 0.6, "effort": 3, "score": 0.4 }
+  ],
+  "next_selected": "BL-01 (BL-03 owner-gate kapanınca uygulanır; kod mutasyonu lock açılana dek ertelendi — Complete-or-Revert L4)"
+}
