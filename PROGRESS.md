@@ -49,6 +49,13 @@ Spec: `~/Desktop/istemek.md` (istek-services.md) · Plan: approved 2026-06-12
 **Premise fix:** e2e services-filter.spec asserted an "economics"-era catalog + an i18n string the page never rendered — the historical "pre-existing service_hub fail". Spec rewritten to v2 registry (8 chips, 7 clusters, data-count, lifecycle journey link).
 **Evidence:** unit 49/49 (5 files: taxonomy-v2 + page-v2 + content + cluster-d + atom-2 updated) · e2e services-filter 5/5 + services-menu 5/5 chromium · typecheck 0 · lint 0 err.
 
+## SVC Gate-7 (2026-06-12) — /services/:slug detail v2
+**RED first:** services-detail-v2.test.tsx — imports failed (LifecycleNav/DetailSectionNav/getCtaVariants absent).
+**Implemented:** `LifecycleNav` (dept chip + "İş akışında adım N/M" + prev/next step links; pillar pages render nothing) · `DetailSectionNav` (sticky pill anchors, single IntersectionObserver scrollspy, sections computed from content presence) · section ids + scroll-mt-36 on 7 sections · **CTA variants finally wired** — footer renders per-service 'value' flavor (`getCtaVariants` wrapper +isDefault; 63 authored variants were dead code; default copy for uncovered slugs) · `ServiceIllustration`: FALLBACK_ART glyph (15+ slugs had `return null`) + lazy-GSAP entrance (≤400ms, transform/opacity, stagger) + 3s idle float, `gsap.matchMedia('(prefers-reduced-motion: no-preference)')` static fallback.
+**Updated (not deleted):** cluster-d footer assertions → variant contract.
+**Evidence:** unit 48/48 (4 services suites) · e2e services-menu extended 6/6 chromium (lifecycle 1/5 + next href + #methodology anchor inViewport + pillar no-nav) · typecheck 0.
+**Deliberate skip:** layout-wide below-fold React.lazy split — detail pages are content-light vs index; budget = no regression (P9 measures).
+
 ---
 
 # PERSPEKTIFLER VERTICAL (closed 2026-06-12)

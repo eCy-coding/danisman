@@ -62,6 +62,24 @@ test.describe('SVC GATE-5 services mega menu', () => {
     await expect(page).toHaveURL(/\/404$/);
   });
 
+  test('detail v2 surfaces: lifecycle nav, section pills, variant CTA', async ({ page }) => {
+    await page.goto('/services/company-valuation');
+    // Lifecycle position + next-step navigation (M&A step 1/5 → negotiation-loi).
+    await expect(page.getByTestId('lifecycle-position')).toHaveText(/1\/5/);
+    await expect(page.getByTestId('lifecycle-next')).toHaveAttribute(
+      'href',
+      '/services/negotiation-loi',
+    );
+    // Sticky in-page section nav with working anchors.
+    const nav = page.getByTestId('detail-section-nav');
+    await expect(nav).toBeVisible();
+    await nav.locator('a[href="#methodology"]').click();
+    await expect(page.locator('#methodology')).toBeInViewport();
+    // Pillar page renders WITHOUT lifecycle nav (umbrella, not a step).
+    await page.goto('/services/mergers-acquisitions');
+    await expect(page.getByTestId('lifecycle-nav')).toHaveCount(0);
+  });
+
   test('Escape closes the panel and returns focus to the trigger (APG)', async ({ page }) => {
     await page.goto('/');
     const trigger = page.getByTestId('navbar-link-services');
