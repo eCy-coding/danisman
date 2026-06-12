@@ -257,6 +257,26 @@ Kanıtlar:
   *dunyabank…*. Erişim: 12 Haziran 2026, https://…". Danışman rötuşu +
   zincir → PUBLISHED → anonim API 200. Kareler: acad-run-1/2.
 
+### §10 ek — Brief Expander v2 + üç bacaklı rapor garantisi (aynı gün)
+
+Talep: "admin'e yazdığım kısa istek, NotebookLM'e en ayrıntısına kadar
+kapsamlı prompt olarak gitsin; ileri düzey search + kanıta dayalı cevap."
+- `buildResearchQuery` v2: yıl aralığı algılama ("2000'den bugüne" →
+  2000–2026), normatif niyet ("nasıl olmalı" → öneri boyutu), 5-6
+  ARAŞTIRMA BOYUTU (kronoloji/sayılar/yasal çerçeve/uluslararası
+  kıyas/tartışmalar/öneriler), KANIT KURALI, ÇIKTI iskeleti (~1300 kr).
+- Studio rate-limit gerçeği: "Wait a few minutes" saatlik kota — 30→90→150sn
+  eskalasyonlu backoff (onTick UI'da aktı) + **leg-3 `notebook_query`
+  fallback'i** (ayrı uç/kota; aynı izole notebook). Canlıda studio 4/4
+  reddetti, query bacağı 8.015 kr GERÇEK rapor sentezledi.
+- Kanıt (seçim koşusu cmqb5vtax…): Yönetici Özeti (terimler ilk geçişte
+  tanımlı), 3 dönemli kronoloji (1923-46/1946-2017/2017-…), İKİ markdown
+  TABLO (referandum Evet oranları %68,95/%57,88/%51,41; seçim sonuçları),
+  numaralı kaynak atıfları [1]-[21], baraj %10→%7 gibi somut veriler,
+  uluslararası izleme eleştirileri; Önemli Veriler + APA Kaynakça dolu.
+  Bayraklar: stats/apa/tablo/gerçek-rapor = t (tk=f — rapor kendi özet
+  yapısını kullandı, kabul).
+
 ### Profesyonel danışman yayını
 Drift'li eski draft **ARCHIVED** (yayın kirliliği temizliği). Doğru-konu
 draft'a danışman rötuşu: başlık "Türkiye'de Enflasyonun On Yılı

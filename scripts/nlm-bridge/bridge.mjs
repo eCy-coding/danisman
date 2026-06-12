@@ -247,10 +247,21 @@ async function studioReport(mcp, notebookId, language, log, onTick) {
         120_000,
       )
       .catch((err) => ({ status: 'error', error: String(err.message).slice(0, 200) }));
+  // Google's rate limit says "wait a few minutes" — a single 30s retry lost
+  // a live run to the template fallback. Escalating backoff for rate-limit
+  // rejections; one quick retry for anything else.
+  const isRateLimited = (r) => /rate limit|wait a few minutes/i.test(JSON.stringify(r ?? ''));
   let created = await createOnce();
-  if (created?.status !== 'success' || !created?.artifact_id) {
-    log(`studio_create attempt 1 rejected: ${JSON.stringify(created).slice(0, 200)} — retrying`);
-    await sleep(30_000);
+  for (const waitMs of [30_000, 90_000, 150_000]) {
+    if (created?.status === 'success' && created?.artifact_id) break;
+    const rl = isRateLimited(created);
+    log(
+      `studio_create rejected (${rl ? 'rate-limited' : 'error'}): ` +
+        `${JSON.stringify(created).slice(0, 160)} — retry in ${waitMs / 1000}s`,
+    );
+    if (!rl && waitMs > 30_000) break; // non-rate-limit errors get one retry only
+    if (onTick) await onTick(`Studio kota bekleniyor (${waitMs / 1000} sn)`).catch(() => {});
+    await sleep(waitMs);
     created = await createOnce();
   }
   if (created?.status !== 'success' || !created?.artifact_id) {
@@ -444,33 +455,88 @@ function pickCover(job) {
 const MODE_LABELS = { deep: 'derin (deep)', fast: 'hızlı (fast)' };
 
 /**
- * Academic-yet-accessible research brief (calibration). The research QUERY is
- * the one steerable surface in the pipeline: it shapes BOTH source selection
- * and the synthesised report (Studio report artifacts ignore custom_prompt,
- * but an isolated notebook only ever contains brief-shaped sources, so the
- * synthesis inherits the brief's character). Keep it tight — over-long
- * queries dilute retrieval.
+ * Brief expander v2 (calibration: "kısa konu → en ayrıntısına kadar kapsamlı
+ * prompt"). The research QUERY is the one steerable surface in the pipeline:
+ * it shapes BOTH source selection and the synthesised report (Studio report
+ * artifacts ignore custom_prompt, but an isolated notebook only ever contains
+ * brief-shaped sources, so the synthesis inherits the brief's character).
+ *
+ * Deterministic expansion — no LLM in the bridge: detect a year range
+ * ("2000'den bugüne" → 2000–<now>), detect normative intent ("nasıl
+ * olmalı/ne yapılmalı"), then wrap the raw topic in research dimensions, an
+ * evidence rule and an output skeleton. Capped ≈1400 chars: longer queries
+ * dilute retrieval.
  */
 function buildResearchQuery(job) {
   const t = job.topic.trim();
+  const now = new Date().getFullYear();
+
+  const years = [...t.matchAll(/\b(19|20)\d{2}\b/g)].map((m) => Number(m[0]));
+  const toPresent = /bugüne|günümüze|to (the )?present|to date/i.test(t);
+  const from = years.length ? Math.min(...years) : null;
+  const to = years.length > 1 && !toPresent ? Math.max(...years) : toPresent || years.length ? now : null;
+  const period = from ? `${from}–${to ?? now} dönemi` : null;
+
+  const normative = /nasıl olmalı|ne yapılmalı|öneri|reform|how should|what should/i.test(t);
+
   if ((job.lang || 'tr') === 'en') {
     return (
-      `TOPIC: ${t}. Research this with academic rigor: prioritise official statistics ` +
-      `and primary sources (national statistics offices, central banks, OECD, IMF, ` +
-      `World Bank, peer-reviewed work). The report must include: concrete figures and ` +
-      `year-over-year comparisons; at least one comparison table where data allows; ` +
-      `plain-language explanations a non-expert can follow (define each technical term ` +
-      `in one sentence on first use); short, clear paragraphs.`
+      `RESEARCH TASK: ${t}.${period ? ` Period: ${from}–${to ?? now}.` : ''} Treat this as a ` +
+      `comprehensive evidence-based study. DIMENSIONS: (1) chronology of key events and ` +
+      `turning points; (2) hard numbers — official statistics, rates, year-over-year ` +
+      `comparisons; (3) the legal/institutional framework and how it changed; (4) ` +
+      `international comparison (OECD/EU peers, international standards bodies); ` +
+      `(5) main debates and criticisms${normative ? '; (6) evidence-based recommendations measured against international standards' : ''}. ` +
+      `EVIDENCE RULE: every major claim must rest on a source; prioritise primary/official ` +
+      `sources, international observers' reports and peer-reviewed work. OUTPUT: executive ` +
+      `summary → period-by-period chronology → data TABLES where numbers allow → comparative ` +
+      `analysis${normative ? ' → recommendations' : ''}; plain language, each technical term defined in one sentence on first use.`
     );
   }
   return (
-    `KONU: ${t}. Bu konuyu akademik titizlikle araştır: resmi istatistikler ve birincil ` +
-    `kaynaklar öncelikli (TÜİK, TCMB, ilgili bakanlıklar, OECD, IMF, Dünya Bankası, ` +
-    `hakemli yayınlar). Rapor şunları içermeli: somut sayısal veriler ve yıllara göre ` +
-    `karşılaştırmalar; veriler elverdiğinde en az bir karşılaştırma TABLOSU; hiç ` +
-    `bilmeyen birinin anlayacağı sade Türkçe (her teknik terim ilk geçtiğinde tek ` +
-    `cümleyle tanımlanır); kısa, net, açık paragraflar.`
+    `ARAŞTIRMA GÖREVİ: ${t}.${period ? ` Dönem: ${period}.` : ''} Bunu kapsamlı, kanıta dayalı ` +
+    `bir inceleme olarak ele al. BOYUTLAR: (1) kilit olayların ve dönüm noktalarının ` +
+    `kronolojisi; (2) somut sayılar — resmi istatistikler, oranlar, yıllara göre ` +
+    `karşılaştırmalar; (3) yasal/kurumsal çerçeve ve geçirdiği değişiklikler; (4) ` +
+    `uluslararası karşılaştırma (OECD/AB örnekleri, uluslararası standart ve gözlem ` +
+    `kuruluşları); (5) başlıca tartışmalar ve eleştiriler` +
+    `${normative ? '; (6) uluslararası standartlarla ölçülmüş kanıta dayalı öneriler' : ''}. ` +
+    `KANIT KURALI: her ana iddia bir kaynağa dayansın; birincil/resmi kaynaklar, ` +
+    `uluslararası gözlem raporları ve hakemli yayınlar öncelikli. ÇIKTI: yönetici özeti → ` +
+    `dönem dönem kronoloji → veriler elverdiğinde TABLO → karşılaştırmalı analiz` +
+    `${normative ? ' → öneriler' : ''}; sade Türkçe, her teknik terim ilk geçtiğinde tek ` +
+    `cümleyle tanımlanır.`
   );
+}
+
+/**
+ * Report guarantee, leg 3: when the Studio report quota is exhausted
+ * (hourly "Wait a few minutes" rate limit), ask the notebook CHAT to write
+ * the report — a separate endpoint with its own quota. Same isolated
+ * notebook, so the synthesis still only sees this job's sources.
+ */
+async function queryReport(mcp, notebookId, job, log) {
+  const prompt =
+    (job.lang || 'tr') === 'en'
+      ? 'Using ALL loaded sources, write a comprehensive report in markdown (## headings). ' +
+        'Structure: executive summary; period-by-period chronology; hard numbers (rates, ' +
+        'year-over-year comparisons) with a markdown TABLE where data allows; comparative ' +
+        'analysis; evidence-based recommendations. Plain language; define each technical ' +
+        'term in one sentence on first use.'
+      : 'Yüklü kaynakların TAMAMINA dayanarak markdown biçiminde (## başlıklarla) kapsamlı ' +
+        'bir rapor yaz. Yapı: yönetici özeti; dönem dönem kronoloji; somut sayılar (oranlar, ' +
+        'yıllara göre kıyaslar) ve veriler elverdiğinde markdown TABLO; karşılaştırmalı ' +
+        'analiz; kanıta dayalı öneriler. Sade Türkçe; her teknik terimi ilk geçişte tek ' +
+        'cümleyle tanımla.';
+  const r = await mcp
+    .tool('notebook_query', { notebook_id: notebookId, query: prompt, timeout: 180 }, 200_000)
+    .catch((err) => ({ status: 'error', error: String(err.message).slice(0, 200) }));
+  const text = String(r?.answer ?? r?.response ?? r?.text ?? r?.result ?? '').trim();
+  if (r?.status === 'error' || text.length < 300) {
+    log(`notebook_query fallback failed: ${JSON.stringify(r).slice(0, 160)}`);
+    return null;
+  }
+  return text;
 }
 
 /** Build the rich draft payload purely from NotebookLM outputs. */
@@ -560,6 +626,7 @@ async function processJob(mcp, job) {
   // stage line tells the operator which mode actually ran.
   let effectiveMode = job.mode === 'deep' ? 'deep' : 'fast';
   const researchQuery = buildResearchQuery(job);
+  log(`research brief: ${researchQuery.length} chars (topic ${job.topic.length})`);
   let started = await mcp.tool('research_start', {
     notebook_id: notebookId,
     query: researchQuery,
@@ -645,6 +712,13 @@ async function processJob(mcp, job) {
     if (synthesised) {
       report = synthesised;
       reportVia = 'studio-fallback';
+    } else {
+      await stage('DRAFTING', 'Studio kotalı — rapor notebook sohbetinden isteniyor');
+      const queried = await queryReport(mcp, notebookId, job, log);
+      if (queried) {
+        report = queried;
+        reportVia = 'query-fallback';
+      }
     }
   }
 
