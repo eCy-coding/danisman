@@ -22,6 +22,13 @@ Spec: `~/Desktop/istemek.md` (istek-services.md) · Plan: approved 2026-06-12
 **i18n:** route-level pair services↔hizmetler exists; per-service slugs EN-canonical (0 localized pairs) — convention kept.
 **Baseline tests:** services-content + cluster-d 28/28 PASS. MegaMenu a11y baseline: hover-only, no aria-expanded/controls, no Esc, no arrows, no test file (static fact, axe runtime pass in P5).
 
+## SVC Gate-2 (2026-06-12) — taxonomy v2 + ADR
+**Decision (evidence = hero-title extraction from SERVICE_CONTENT):** two-axis IA. Axis-1 pillars (menu, 9/9 unique content-true targets); Axis-2 departments: 4 existing + **3 NEW adopting ALL 14 orphans** — insan(4: hr-transformation, employer-branding, industrial-relations, payroll-audit) · risk(6: macro-risk, crisis-management, competition-economics, government-relations, global-intelligence, smart-cities) · buyume(4: market-entry, investment-incentives, neuromarketing, operational-excellence). **Zero retirements → empty 301 map** (v2 only adds).
+**Menu changes:** org-design → hr-transformation (content title literally "İK & Organizasyon Tasarımı") · "Bulut & Platform" → "Veri Yönetişimi & Uyum"/data-governance (zero cloud content exists) · Performans 3× generic /services → market-entry / operational-excellence / investment-incentives ("Dijital Operasyonlar" relabeled "Teşvik & Hibe Yönetimi").
+**ma-valuation:** own `company-valuation` content entry authored in P4 (card currently deep-links M&A umbrella, services.ts:53).
+**Validation script PASS:** 35 members + 4 pillar-only = **39 canonical**; multi-dept ∅; homeless ∅; phantom ∅; menu 9/9 unique; chips 8/8.
+**Artifacts:** services-taxonomy-v2.json · ADR-services-taxonomy-v2.md · ECYPRO_SERVICES_CATEGORIZATION.md (v2).
+
 ---
 
 # PERSPEKTIFLER VERTICAL (closed 2026-06-12)
