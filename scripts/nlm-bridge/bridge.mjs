@@ -372,6 +372,13 @@ function firstSentence(text) {
   // thought — cut at the colon instead.
   const colonList = s.match(/^(.{30,}?)[:;]\s*\d*\.?\s*$/);
   if (colonList) s = `${colonList[1].trim()}.`;
+  // Same defect mid-sentence: a colon ≥30 chars in, trailing a dangling
+  // enumeration with no sentence break ("…incelemek mümkün: 2016-2019: …").
+  // Keep the lead clause, drop the run-on tail.
+  const colon = s.indexOf(':');
+  if (colon >= 30 && s.length - colon > 25 && !/[.!?]/.test(s.slice(colon, colon + 70))) {
+    s = `${s.slice(0, colon).trim()}.`;
+  }
   if (s.length <= 140) return s;
   const cut = s.slice(0, 140);
   return `${cut.slice(0, Math.max(cut.lastIndexOf(' '), 100)).trim()}…`;
@@ -380,6 +387,39 @@ function firstSentence(text) {
 /** Lines that are table rows / separators carry no prose value. */
 function isTableDebris(line) {
   return line.includes('|') || /^[-=\s]+$/.test(line);
+}
+
+/**
+ * Humanize pass (calibration: "AI parmak izini sıfıra indir"). NotebookLM's
+ * synthesis reads machine-authored mainly because of three tells; strip the
+ * FORM, never the FACTS:
+ *   1. inline citation markers — [1], [3-5], [13, 14], cell-trailing [17].
+ *      The notebook's #1 fingerprint. The Kaynakça list (server-appended)
+ *      preserves the evidence trail; numbers in prose just have to go.
+ *   2. AI throat-clearing — "Bu rapor … göstermektedir", "Sonuç olarak,",
+ *      "Özetle,", "kapsamlı bir şekilde".
+ * Numbers, dates, claims and table structure are untouched — humanizing is
+ * copyediting, not rewriting.
+ */
+function humanizeMarkdown(text) {
+  return (
+    text
+      // Citation markers in any form: [12]  [3-5]  [13, 14]  (with leading space)
+      .replace(/\s?\[\d+(?:\s*[-–,]\s*\d+)*\]/g, '')
+      // Throat-clearing openers at the start of a line OR sentence.
+      .replace(/(^|\n|[.!?]\s+)Bu (rapor|belge|içerik|çalışma|analiz)[^.\n]*?,\s*/gi, '$1')
+      .replace(/\b(Sonuç olarak|Özetle|Genel olarak|Nihayetinde),\s*/g, '')
+      .replace(/\bkapsamlı bir şekilde\s*/gi, '')
+      // Cleanup artefacts left by the removals.
+      .replace(/[ \t]+([.,;:])/g, '$1')
+      .replace(/[ \t]{2,}/g, ' ')
+      .replace(/\(\s*\)/g, '')
+      .replace(/\n{3,}/g, '\n\n')
+      // Re-capitalise a sentence start left lowercase by a stripped opener
+      // ("Sonuç olarak, durum…" → "Durum…"). Turkish-aware (i → İ).
+      .replace(/(^|[.!?]\s+|\n)([a-zçğıöşü])/g, (_m, pre, ch) => pre + ch.toLocaleUpperCase('tr'))
+      .trim()
+  );
 }
 
 /**
@@ -429,6 +469,10 @@ function extractKeyStats(body, limit = 4) {
     for (const sentence of sanitizeInline(rawLine).split(/(?<=[.!?])\s+/)) {
       const s = sentence.trim();
       if (s.length < 40 || s.length > 200 || !NUM.test(s)) continue;
+      // A "YYYY - YYYY: Label" chronology heading trips NUM on its years but
+      // carries no metric — it is structure, not data. Keep it out of the
+      // data callout.
+      if (/^\d{4}\s*[-–]\s*\d{4}\s*:/.test(s)) continue;
       const key = s.slice(0, 60);
       if (seen.has(key)) continue;
       seen.add(key);
@@ -452,7 +496,6 @@ function pickCover(job) {
   return { url: `/insights-covers/${entry.slug}-${(hash % 2) + 1}.webp`, label: entry.label };
 }
 
-const MODE_LABELS = { deep: 'derin (deep)', fast: 'hızlı (fast)' };
 
 /**
  * Brief expander v2 (calibration: "kısa konu → en ayrıntısına kadar kapsamlı
@@ -490,7 +533,11 @@ function buildResearchQuery(job) {
       `EVIDENCE RULE: every major claim must rest on a source; prioritise primary/official ` +
       `sources, international observers' reports and peer-reviewed work. OUTPUT: executive ` +
       `summary → period-by-period chronology → data TABLES where numbers allow → comparative ` +
-      `analysis${normative ? ' → recommendations' : ''}; plain language, each technical term defined in one sentence on first use.`
+      `analysis${normative ? ' → recommendations' : ''}; plain language, each technical term defined in one sentence on first use. ` +
+      `VOICE: write like an experienced human researcher/analyst — natural flow, varied ` +
+      `sentence length, first-person authority. Do NOT use inline citation numbers ([1], ` +
+      `[2-3]) in the prose; sources belong only in a list at the very end. Avoid AI ` +
+      `boilerplate openers/closers ("This report …", "In conclusion", "comprehensively").`
     );
   }
   return (
@@ -505,7 +552,10 @@ function buildResearchQuery(job) {
     `uluslararası gözlem raporları ve hakemli yayınlar öncelikli. ÇIKTI: yönetici özeti → ` +
     `dönem dönem kronoloji → veriler elverdiğinde TABLO → karşılaştırmalı analiz` +
     `${normative ? ' → öneriler' : ''}; sade Türkçe, her teknik terim ilk geçtiğinde tek ` +
-    `cümleyle tanımlanır.`
+    `cümleyle tanımlanır. ÜSLUP: deneyimli bir insan araştırmacı/analist gibi yaz — doğal ` +
+    `akış, değişken cümle uzunluğu, birinci elden otorite. Metin İÇİNDE kaynak NUMARASI ` +
+    `([1], [2-3]) KULLANMA; kaynaklar yalnız en sondaki listede yer alır. "Bu rapor…", ` +
+    `"Sonuç olarak", "kapsamlı bir şekilde" gibi yapay zekâ klişesi açılış/kapanış YOK.`
   );
 }
 
@@ -518,16 +568,22 @@ function buildResearchQuery(job) {
 async function queryReport(mcp, notebookId, job, log) {
   const prompt =
     (job.lang || 'tr') === 'en'
-      ? 'Using ALL loaded sources, write a comprehensive report in markdown (## headings). ' +
-        'Structure: executive summary; period-by-period chronology; hard numbers (rates, ' +
-        'year-over-year comparisons) with a markdown TABLE where data allows; comparative ' +
-        'analysis; evidence-based recommendations. Plain language; define each technical ' +
-        'term in one sentence on first use.'
-      : 'Yüklü kaynakların TAMAMINA dayanarak markdown biçiminde (## başlıklarla) kapsamlı ' +
-        'bir rapor yaz. Yapı: yönetici özeti; dönem dönem kronoloji; somut sayılar (oranlar, ' +
+      ? 'Using ALL loaded sources, write a report in markdown (## headings) like an ' +
+        'experienced human researcher — natural flow, varied sentence length, first-person ' +
+        'authority. Structure: executive summary; period-by-period chronology; hard numbers ' +
+        '(rates, year-over-year comparisons) with a markdown TABLE where data allows; ' +
+        'comparative analysis; evidence-based recommendations. Plain language; define each ' +
+        'technical term in one sentence on first use. Do NOT put citation numbers ([1], ' +
+        '[2-3]) in the prose — sources go only in a final list. No AI boilerplate ("This ' +
+        'report …", "In conclusion", "comprehensively").'
+      : 'Yüklü kaynakların TAMAMINA dayanarak markdown biçiminde (## başlıklarla), deneyimli ' +
+        'bir insan araştırmacı gibi yaz — doğal akış, değişken cümle uzunluğu, birinci elden ' +
+        'otorite. Yapı: yönetici özeti; dönem dönem kronoloji; somut sayılar (oranlar, ' +
         'yıllara göre kıyaslar) ve veriler elverdiğinde markdown TABLO; karşılaştırmalı ' +
         'analiz; kanıta dayalı öneriler. Sade Türkçe; her teknik terimi ilk geçişte tek ' +
-        'cümleyle tanımla.';
+        'cümleyle tanımla. Metin İÇİNDE kaynak NUMARASI ([1], [2-3]) KULLANMA — kaynaklar ' +
+        'yalnız en sondaki listede. "Bu rapor…", "Sonuç olarak", "kapsamlı bir şekilde" gibi ' +
+        'yapay zekâ klişesi YOK.';
   const r = await mcp
     .tool('notebook_query', { notebook_id: notebookId, query: prompt, timeout: 180 }, 200_000)
     .catch((err) => ({ status: 'error', error: String(err.message).slice(0, 200) }));
@@ -545,11 +601,14 @@ function buildDraft(job, report, reportTitle, sources, meta = {}) {
   const raw = (report || '').trim();
 
   // The title renders from its own field — drop a leading H1 and demote any
-  // stray H1s so the article keeps a single-H1 document outline.
-  const body = raw
-    .replace(/^#\s+[^\n]+\n+/, '')
-    .replace(/^#\s+/gm, '## ')
-    .trim();
+  // stray H1s so the article keeps a single-H1 document outline. Humanize
+  // first so citation markers never reach the dek/takeaways/stats extractors.
+  const body = humanizeMarkdown(
+    raw
+      .replace(/^#\s+[^\n]+\n+/, '')
+      .replace(/^#\s+/gm, '## ')
+      .trim(),
+  );
 
   const firstPara =
     body
@@ -581,20 +640,15 @@ function buildDraft(job, report, reportTitle, sources, meta = {}) {
       ? `## Önemli Veriler\n\n${stats.map((s) => `> ${s}`).join('\n>\n')}\n\n`
       : '';
 
-  const modeLabel = MODE_LABELS[meta.mode] ?? meta.mode ?? 'hızlı (fast)';
-  const dateIso = new Date().toISOString().slice(0, 10);
-  const methodology =
-    `## Metodoloji\n\n` +
-    `Bu içerik, ${meta.sourceCount ?? sources.length} kaynaklı NotebookLM ${modeLabel} ` +
-    `araştırmasından ${dateIso} tarihinde sentezlenmiştir. Kaynakça APA biçiminde ` +
-    `yazının sonundadır; içerik yayın öncesi insan editör onayından geçer.`;
-
+  // No "## Metodoloji" block: it named the AI pipeline outright ("NotebookLM
+  // … sentezlenmiştir") — the loudest provenance tell. The Kaynakça (server)
+  // keeps the evidence trail; a human researcher cites sources, not tools.
   const core =
     body.length >= 100
       ? body
-      : `NotebookLM araştırması bu konu için ${sources.length} kaynak topladı; rapor metni üretilmedi (fast mode sınırı). Kaynaklar aşağıdadır.`;
+      : `Bu konuda ${sources.length} kaynak derlendi; tam metin bu kez üretilemedi. Kaynaklar aşağıdadır.`;
 
-  const bodyTrMdx = `*${dek}*\n\n${takeawaysBlock}${statsBlock}${core}\n\n${methodology}\n`;
+  const bodyTrMdx = `*${dek}*\n\n${takeawaysBlock}${statsBlock}${core}\n`;
 
   const cover = pickCover(job);
 
