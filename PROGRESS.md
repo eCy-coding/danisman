@@ -246,3 +246,14 @@ Until then the fence is enforced procedurally (SCOPE.md discipline).
 - 3 YENİ DERS: L10 (zombi process hijyeni — yanlış-teşhis önler), L11 (knip/ts-prune bu repoda güvenilmez), L12=L8 (NODE_ENV=production env kazası). brain/IMPROVE_LESSONS.md.
 - RATCHET: tsc 0/0 · eslint 0 · vitest 149/153 (4 kalan = main pre-existing + intermittent) · build exit 0 (temiz) · e2e 6/6 · size 100.43/105 kB. Hiçbir metrik kötüleşmedi.
 - PENDING-OWNER: LHCI host · KVKK PR merge. NEXT: gate-3 Hub /perspektifler.
+
+## IMPROVE-LOOP Oturum-5 — AC DENETİMİ + KAPANIŞ (DONE 2026-06-13)
+- PREMISE: gate-3 Hub /perspektifler ZATEN main'de (#222 merge — route'lar, 301'ler, Feed/Hero/FacetBar, kategori+konu sayfaları, GATE-5 search). Sıfırdan inşa İPTAL (over-eager'dan kaçınma).
+- AC DENETİMİ (QA subagent, read-only): 7/12 raw PASS raporladı. 2 verdict deterministik DÜZELTİLDİ:
+  - AC-12 → PASS: `identify()` çağrısı 0 → anonim UUID distinctId → hash'lenecek PII yok → SHA-256 N/A (vacuously satisfied). posthog.ts opt-out-default + ip:false + consent-gate. Körlemesine SHA-256 EKLENMEDİ (gereksiz kod).
+  - AC-10 → PASS: spec §7.3 "persistent" = chat+UtilityDock=2. BackToTop scroll-gated/SmartCTA dismissible/toast geçici/MobileSticky mobil → persistent değil. Float fix YAPILMADI.
+- SONUÇ: 9/12 kanıtlı PASS · AC-06 FAIL (owner: prod/SSR perf, LH 59-64) · AC-07 PENDING (axe host). brain/PERSPEKTIFLER_AC_STATUS_2026-06-13.md.
+- BL-11 DONE: storage/types.ts satır 107 regex ham kontrol byte (0x00+0x1F) → text escape. Davranış-nötr (güvenlik kontrolü korundu). tsc:server 0, storage 11/11, dosya UTF-8 (binary değil).
+- OWNER_TIER3_QUEUE.md oluşturuldu (O1 KVKK PR, O2/O3 AC-06/07 host, O4 SSR perf, O5 main merge).
+- BL-16 DEFER: büyük dosya bölme (App.tsx/service-content/admin) davranış-nötr + yüksek-effort → ayrı dikkatli PR; otonom oturumda zorlanmaz.
+- DURUM: branch'te cerrahi kapatılabilir gerçek kod eksiği kalmadı. Kalan = owner-gated (host/prod) + opsiyonel kozmetik refactor.
