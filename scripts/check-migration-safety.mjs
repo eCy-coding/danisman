@@ -197,7 +197,21 @@ function arg(name) {
 
 function main() {
   const since = arg('since');
-  const files = listMigrationFiles(since);
+  // --files= : PR-diff mode. Scans ONLY the given comma-separated migration
+  // .sql paths (repo-relative). An empty value means "this PR introduces no
+  // migration files" → nothing to scan. Risk patterns/classes are identical
+  // to the watermark mode; this only narrows WHICH files are evaluated, so
+  // historical class-C migrations on main can't redden unrelated PRs.
+  const filesArg = arg('files');
+  const files =
+    filesArg !== null
+      ? filesArg
+          .split(',')
+          .map((s) => s.trim())
+          .filter(Boolean)
+          .map((p) => path.resolve(ROOT, p))
+          .filter((p) => fs.existsSync(p) && p.endsWith('.sql'))
+      : listMigrationFiles(since);
   const report = [];
   let worstClass = 'A';
 

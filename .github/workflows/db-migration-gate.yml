@@ -18,6 +18,10 @@ name: db-migration-gate
 
 on:
   pull_request:
+    # `labeled`/`unlabeled` dahil: operatör `migration:approved` etiketini
+    # eklediğinde gate otomatik yeniden değerlendirilsin (önceden yeni commit
+    # veya manuel re-run gerekiyordu).
+    types: [opened, synchronize, reopened, labeled, unlabeled]
     paths:
       - 'prisma/schema.prisma'
       - 'prisma/migrations/**'
@@ -80,20 +84,43 @@ jobs:
     needs: validate-schema
     steps:
       - uses: actions/checkout@v4
+        with:
+          # PR-diff modu merge-base ister; shallow clone üç-nokta diff'i bozar.
+          fetch-depth: 0
 
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
 
+      # Gate'in birimi PR'IN GETİRDİĞİ DDL'dir. Watermark'lı tarama main'deki
+      # tarihsel class-C migration'ları da görüyordu ve şemaya dokunan her
+      # PR'ı kızartıyordu (false positive). Pattern/sınıf seti değişmedi —
+      # yalnız kapsam PR-diff'e indirildi.
+      - name: Collect migrations introduced by this PR
+        id: prfiles
+        run: |
+          git fetch origin "${{ github.base_ref }}" --quiet
+          files=$(git diff --name-only "origin/${{ github.base_ref }}...HEAD" -- 'prisma/migrations/**/*.sql' | paste -sd, -)
+          echo "files=${files}" >> "$GITHUB_OUTPUT"
+          echo "PR migration files: ${files:-<none>}"
+
       - name: Detect risky DDL
         id: safety
         run: |
           set +e
-          node scripts/check-migration-safety.mjs --since=20260516200000 | tee safety.json
+          FILES="${{ steps.prfiles.outputs.files }}"
+          if [ -z "$FILES" ]; then
+            echo "No new migration .sql files in this PR — schema-only/additive change, nothing to scan."
+            node scripts/check-migration-safety.mjs --files= | tee safety.json
+            echo "d_exit=0" >> "$GITHUB_OUTPUT"
+            echo "c_exit=0" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          node scripts/check-migration-safety.mjs --files="$FILES" | tee safety.json
           # Re-run in strict mode to set the exit code separately.
-          STRICT=1 MIGRATION_SAFETY_THRESHOLD=D node scripts/check-migration-safety.mjs --since=20260516200000
+          STRICT=1 MIGRATION_SAFETY_THRESHOLD=D node scripts/check-migration-safety.mjs --files="$FILES"
           d_exit=$?
-          STRICT=1 MIGRATION_SAFETY_THRESHOLD=C node scripts/check-migration-safety.mjs --since=20260516200000
+          STRICT=1 MIGRATION_SAFETY_THRESHOLD=C node scripts/check-migration-safety.mjs --files="$FILES"
           c_exit=$?
           echo "d_exit=$d_exit" >> "$GITHUB_OUTPUT"
           echo "c_exit=$c_exit" >> "$GITHUB_OUTPUT"
