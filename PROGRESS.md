@@ -37,3 +37,12 @@
 - DECISION: kategori/format/öne-çıkan linkleri kanonik /perspektifler/* hedefler (Phase 3/4'te
   resolve olur). /blog hero watermark çakışması (BUG-12 kalanı) Phase 3 hub'da ele alınır.
 - NEXT: Phase 3 — Hub /perspektifler (301 /blog→/perspektifler, hero+facet+arama+Load More).
+
+## IMPROVE-LOOP Oturum-1 (DONE 2026-06-12)
+- ALTYAPI: .git/index.lock ×70 temizlendi (host); dirty-tree triyajı (husky sızıntısı + regen churn restore); docs commit 0932c8b.
+- BL-01 DONE (6c78597): a6dd95a cherry-pick — çift yüklenen ham index.css kaldırıldı (@layer/preflight ezilmesi kökü) + Pricing/ServiceCard/BlogPage a11y. PerspektiflerFeed.tsx pick'ten çıkarıldı (delete/modify: dosya bu branch'te yok; hub Phase 3'te kendi feed'ini kurar).
+- BL-02 DONE (82a3a81): tracked .bak ×2 rm. BL-08 DONE (00214d1): insight-article testine konvansiyonel 404 fetch stub — kök: route-param'sız 3 render + mock'suz fetch (jsdom'da fetch=undici, relative URL reddi). ERR_INVALID_URL 0.
+- EVIDENCE: tsc web+server 0; eslint 0; vitest 157 dosya yeşil (12 shard, 1191 pass/15 pre-existing skip) + hedefli 40/40 + pricing PASS; size 100.43/105 kB (CACHED dist).
+- RECLASS: BL-05 @ts-expect-error 9/9 açıklamalı-haklı → 🟢 düşük öncelik. ts-prune 410 adayı güvenilmez (false-positive kanıtlı) → BL-09 knip host.
+- PENDING-OWNER: LHCI host koşumu (BL-01 etkisi ölçümü), full e2e host, KVKK PR merge.
+- NEXT: BL-10 (TODO×2) → BL-09 (knip) → BL-06/07 (App.tsx + service-content bölme).
