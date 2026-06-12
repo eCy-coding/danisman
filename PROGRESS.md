@@ -78,6 +78,12 @@ Spec: `~/Desktop/istemek.md` (istek-services.md) · Plan: approved 2026-06-12
 **Memory:** stale `project_services_catalog_content_mismatch` rewritten (old "4/21" claim was stale; real mechanism = resolver-404; RESOLVED) + MEMORY.md index updated.
 **Ship:** branch pushed, PR opened with 10 gate evidences — **NO main merge (owner-only)**.
 
+## SVC DEPLOY (2026-06-12, owner emri: "canlıya al, kesintisiz teslim et")
+**Merge:** PR #227 squash → main @ `6d6fe20`. CI 23 fail = Gate-0 pre-existing baseline (kanıt: run 27391822844 log — aynı 4 dosya/aynı sayılar); lint 0 error.
+**Prebuilt akış (FAZ-2C):** `PRERENDER_FORCE_LOCAL=1 vercel build --prod` → **prerender 170/170, 0 fail**, output'ta 40 servis sayfası → `vercel deploy --prebuilt --prod` → `ijpr94dre` Ready, **Aliased ecypro.com**; merge-tetikli prerender'sız auto-deploy (`qhnxj3jse`) alias'ı kaybetti, re-assert gerekmedi.
+**Canlı matris:** 5 eski-404 rota (strategic-transformation, ai-analytics, digital-strategy, payroll-audit, **company-valuation**) → **200 + statik title** · /services 200 · sitemap 156 satır = 39 slug × 4 hreflang · canlı görseller brain/services/live-*.png (menü yeni hedeflerle, lifecycle visualizer, yeni sayfa).
+**Tam kayıt:** brain/services/DEPLOY_EVIDENCE.md. Rollback: `vercel rollback <qhnxj3jse-url>`.
+
 ---
 
 # PERSPEKTIFLER VERTICAL (closed 2026-06-12)
