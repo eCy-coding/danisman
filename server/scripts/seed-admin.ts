@@ -19,6 +19,8 @@
 
 import crypto from 'node:crypto';
 import { PrismaClient } from '@prisma/client';
+import { Pool } from 'pg';
+import { PrismaPg } from '@prisma/adapter-pg';
 
 // ─── Password hashing (mirrors server/controllers/authController.ts) ──
 const SALT_LENGTH = 32;
@@ -55,7 +57,10 @@ async function main() {
     process.exit(1);
   }
 
-  const prisma = new PrismaClient();
+  // Prisma 7 driver-adapter: a bare `new PrismaClient()` fails (P1013) —
+  // mirror server/config/db.ts and connect through pg + PrismaPg.
+  const pool = new Pool({ connectionString: process.env.DATABASE_URL, max: 2 });
+  const prisma = new PrismaClient({ adapter: new PrismaPg(pool) });
 
   try {
     const passwordHash = await hashPassword(password);
@@ -91,6 +96,7 @@ async function main() {
     process.exit(1);
   } finally {
     await prisma.$disconnect();
+    await pool.end();
   }
 }
 

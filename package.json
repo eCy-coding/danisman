@@ -94,6 +94,7 @@
     "deploy:docker": "bash scripts/deploy.sh docker",
     "deploy:frontend": "bash scripts/deploy.sh frontend",
     "db:seed": "npx tsx scripts/seed.ts",
+    "admin:set": "npx tsx server/scripts/seed-admin.ts",
     "build:worker": "npx tsc -p tsconfig.server.json --outDir dist/",
     "claude:install": "bash scripts/install-claude-code.sh",
     "claude:doctor": "bash scripts/claude-doctor.sh",
