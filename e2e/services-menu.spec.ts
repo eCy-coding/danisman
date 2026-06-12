@@ -82,6 +82,28 @@ test.describe('SVC GATE-5 services mega menu', () => {
     await expect(page.getByTestId('lifecycle-nav')).toHaveCount(0);
   });
 
+  test('CSS integrity sentinel — compiled utilities must win (SVC FIX-1)', async ({ page }) => {
+    // Guards the raw-/index.css double-include class of bug: an unprocessed
+    // stylesheet (literal @import 'tailwindcss') flipped the cascade-layer
+    // order so `base` beat `utilities` site-wide (h1 collapsed to 16px,
+    // paddings to 0). If any raw link or layer flip returns, this fails.
+    await page.goto('/services');
+    await expect(page.locator('link[href="/index.css"]')).toHaveCount(0);
+    await expect(page.getByTestId('services-filter-all')).toBeVisible();
+    const probe = await page.evaluate(() => {
+      const h1 = [...document.querySelectorAll('h1')].find((h) =>
+        /Danışmanlık|Consulting/.test(h.textContent ?? ''),
+      );
+      const chip = document.querySelector('[data-testid="services-filter-all"]');
+      return {
+        h1Px: parseFloat(getComputedStyle(h1!).fontSize),
+        chipPad: getComputedStyle(chip!).paddingLeft,
+      };
+    });
+    expect(probe.h1Px).toBeGreaterThanOrEqual(36);
+    expect(probe.chipPad).not.toBe('0px');
+  });
+
   test('Escape closes the panel and returns focus to the trigger (APG)', async ({ page }) => {
     await page.goto('/');
     const trigger = page.getByTestId('navbar-link-services');

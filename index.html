@@ -203,12 +203,14 @@
     }
     </script>
 
-    <!-- P33-T03: Non-blocking stylesheet — print media trick defers parse until after FCP.
-         noscript fallback ensures CSS loads for bots/old browsers.
-         NOTE: App Shell inline styles above-fold render before CSS parses. -->
-    <link rel="preload" href="/index.css" as="style" />
-    <link rel="stylesheet" href="/index.css" media="print" onload="this.media='all'" />
-    <noscript><link rel="stylesheet" href="/index.css" /></noscript>
+    <!-- SVC FIX-1: P33-T03 raw /index.css links REMOVED. index.css is already
+         compiled into the main bundle via src/main.tsx; the HTML-linked copy
+         shipped UNPROCESSED (literal @import 'tailwindcss' → /assets/tailwindcss
+         404) and its raw `@layer utilities … @layer base` order made `base`
+         beat `utilities` document-wide, collapsing every utility class
+         (h1 16px, paddings 0). Non-blocking CSS is handled post-build by
+         scripts/p28-css-nonblocking.mjs on the COMPILED asset. -->
+
     <!-- S13-R8-B3: preload hint for the above-fold founder avatar. AVIF first;
          browsers that don't support AVIF will skip (no penalty) and the <picture>
          element's WebP/JPG sources cover them on demand. -->
