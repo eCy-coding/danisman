@@ -28,6 +28,17 @@ const STUDIO_REPORT_TEXT = [
   '## Halefiyet Planlaması',
   '',
   'Halefiyet planı olmayan şirketlerde nesil geçişi krizle sonuçlanma eğilimindedir. Üçüncü çıkarım cümlesi de budur.',
+  '',
+  '## Kirli Markdown Senaryosu',
+  '',
+  '| Adım | İşlem | İçerik |',
+  '| --- | --- | --- |',
+  '| 1 | Analiz | Veri |',
+  '> **"Yetki çizelgesinde neyi yapay zekâya vereceğinize göre değişebilir; birçok şeyi otomatikleştirmek imkânsız değildir."** Bu blockquote satırı sanitize testidir ve tablo satırlarından sonra gelir.',
+  '',
+  '## Liste Tuzağı',
+  '',
+  'Analiz edilen kaynaklar, dönüşümde üç ana zorluk alanını öne çıkarmaktadır: 1. Kültürel direnç her zaman ilk sıradadır ve ayrıntısı aşağıdadır.',
 ].join('\n');
 
 let buf = '';

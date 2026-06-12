@@ -191,15 +191,25 @@ class McpClient {
 
 // ─── NotebookLM pipeline ──────────────────────────────────────────────────────
 
-async function ensureNotebook(mcp) {
+/**
+ * One notebook PER JOB (calibration root-fix). A shared notebook accumulates
+ * every past job's sources, and the Studio report fallback synthesises the
+ * WHOLE notebook — a fresh "enflasyon" job came back titled "Aile
+ * İşletmelerinde Yapay Zekâ…" (topic drift, report ignores custom_prompt).
+ * Isolation makes drift impossible; NLM_NOTEBOOK_ID still pins a fixed
+ * notebook when explicitly configured.
+ */
+async function ensureNotebook(mcp, job) {
   if (FIXED_NOTEBOOK) return FIXED_NOTEBOOK;
-  const list = await mcp.tool('notebook_list', { max_results: 100 });
-  const found = (list?.notebooks ?? []).find((n) => n.title === NOTEBOOK_TITLE);
-  if (found) return found.id;
-  const created = await mcp.tool('notebook_create', { title: NOTEBOOK_TITLE });
+  const topicSlug = String(job?.topic ?? '')
+    .slice(0, 40)
+    .replace(/\s+/g, ' ')
+    .trim();
+  const title = `${NOTEBOOK_TITLE} — ${topicSlug} [${String(job?.id ?? '').slice(-6)}]`;
+  const created = await mcp.tool('notebook_create', { title });
   const id = created?.notebook_id ?? created?.notebook?.id ?? created?.id;
   if (!id) throw new Error('notebook_create returned no id');
-  log('created notebook', id);
+  log(`created isolated notebook ${id} — "${title}"`);
   return id;
 }
 
@@ -321,14 +331,38 @@ function clampMetaTitle(title) {
   return (lastSpace > 30 ? cut.slice(0, lastSpace) : cut).trim();
 }
 
+/**
+ * Strip markdown furniture from a line destined for a takeaway/dek slot:
+ * leading quote/list markers, bold/italic/backtick wrappers, stray pipes.
+ * Calibration finding: raw report lines leaked `> **"…`, `| Adım | İşlem |`
+ * table debris and half-clauses ending in `…: 1.` into the takeaways block.
+ */
+function sanitizeInline(text) {
+  return text
+    .replace(/^[\s>*•-]+/, '')
+    .replace(/\*\*|__/g, '')
+    .replace(/[*`_]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
 /** First sentence of a block, ≤140 chars on a word boundary. */
 function firstSentence(text) {
-  const flat = text.replace(/\s+/g, ' ').trim();
+  const flat = sanitizeInline(text);
   const m = flat.match(/^.+?[.!?](?=\s|$)/);
-  const s = (m ? m[0] : flat).trim();
+  let s = (m ? m[0] : flat).trim();
+  // A sentence that ends introducing a list ("…şunlardır: 1.") is half a
+  // thought — cut at the colon instead.
+  const colonList = s.match(/^(.{30,}?)[:;]\s*\d*\.?\s*$/);
+  if (colonList) s = `${colonList[1].trim()}.`;
   if (s.length <= 140) return s;
   const cut = s.slice(0, 140);
   return `${cut.slice(0, Math.max(cut.lastIndexOf(' '), 100)).trim()}…`;
+}
+
+/** Lines that are table rows / separators carry no prose value. */
+function isTableDebris(line) {
+  return line.includes('|') || /^[-=\s]+$/.test(line);
 }
 
 /**
@@ -341,12 +375,22 @@ function extractTakeaways(body) {
     /^##\s*(önemli|temel|key|sonuç|özet|çıkarım|yönetici)/i.test(s.trim()),
   );
   if (summary) {
-    const bullets = [...summary.matchAll(/^[-*]\s+(.{20,})$/gm)].map((m) => firstSentence(m[1]));
+    const bullets = [...summary.matchAll(/^[-*]\s+(.{20,})$/gm)]
+      .map((m) => m[1])
+      .filter((b) => !isTableDebris(b))
+      .map((b) => firstSentence(b))
+      .filter((b) => b.length >= 30);
     if (bullets.length >= 3) return bullets.slice(0, 5);
   }
   const firsts = sections
     .filter((s) => s.trim().startsWith('##'))
     .map((s) => s.replace(/^##.*\n+/, ''))
+    .map((s) =>
+      s
+        .split('\n')
+        .filter((l) => !isTableDebris(l))
+        .join('\n'),
+    )
     .map((s) => firstSentence(s))
     .filter((s) => s.length >= 30);
   return firsts.length >= 3 ? firsts.slice(0, 5) : [];
@@ -384,7 +428,7 @@ function buildDraft(job, report, reportTitle, sources, meta = {}) {
   const firstPara =
     body
       .split(/\n{2,}/)
-      .map((p) => p.replace(/^#+\s*/gm, '').trim())
+      .map((p) => sanitizeInline(p.replace(/^#+\s*/gm, '')))
       .find((p) => p.length >= 40) ?? '';
   const dekBase = firstPara || `${job.topic} üzerine NotebookLM derin araştırma özeti.`;
   const dek = (() => {
@@ -438,7 +482,7 @@ async function processJob(mcp, job) {
   const stage = (status, stageDetail, extra = {}) =>
     patchJob(job.id, { status, stageDetail, ...extra });
 
-  const notebookId = await ensureNotebook(mcp);
+  const notebookId = await ensureNotebook(mcp, job);
   await stage('RESEARCHING', 'NotebookLM Deep Research başlatılıyor', { notebookId });
 
   // Google intermittently rejects DEEP research with code 8 (quota/transient,
@@ -604,8 +648,13 @@ async function main() {
       const res = await claimJob();
       job = res?.data ?? null;
     } catch (err) {
-      log('claim failed:', String(err.message).slice(0, 200));
-      await sleep(POLL_MS);
+      const msg = String(err.message);
+      log('claim failed:', msg.slice(0, 200));
+      // 429 carries a retryAfter budget — honor it instead of hammering the
+      // limiter every POLL_MS (calibration finding: per-IP general limiter
+      // counts the bridge alongside the browser on localhost).
+      const retryAfter = msg.includes('429') ? Number(msg.match(/"retryAfter":(\d+)/)?.[1]) : NaN;
+      await sleep(Number.isFinite(retryAfter) ? (retryAfter + 1) * 1000 : POLL_MS);
       continue;
     }
     if (!job) {

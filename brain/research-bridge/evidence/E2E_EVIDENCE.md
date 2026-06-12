@@ -179,3 +179,48 @@ notu); (b) 5 sn'lik poll re-render'ı click-type arasında focus düşürdü →
 form akışları tek atomik batch + koordinatla; (c) API süreci P5'ten önce
 başladığından select-daraltma yüklü değildi → restart sonrası doğrulandı
 (tsx watch'sız dev API'de kod değişimi = restart şart, işletim notu).
+
+## 9. Kalibrasyon Turu — sahibin hesabıyla kullanıcı-sürüşlü canlı test (2026-06-12)
+
+Kurulum: `emrecnyn@gmail.com` dev DB'de ADMIN (kimlik notu repo-dışı
+`~/.ecypro-tokens.env`); yığın **:3002**'ye taşındı çünkü :3001'i BAŞKA
+worktree'nin API'si tutuyordu (`lsof` cwd kanıtı — önceki 401'lerin gerçek
+kaynağı; yeni infra-gotcha README'de).
+
+### Ön-sıkılaştırma (K1-K5, kullanıcı sürüşünden önce)
+- Director pazarlama toast'ları `/admin`'de bastırıldı (kök: kendi
+  personalization sistemimiz; popup "Taslak Kaydet"i örtüyordu) + 2 test.
+- Bridge `sanitizeInline`: takeaway/dek'ten `> **` kalıntısı, `| tablo |`
+  satırları, "…şunlardır: 1." yarım cümleleri temizlenir — kirli-markdown
+  fixture'ıyla DB-assert PASS.
+- Research poll 5s→15s (tek sekme, env'siz limiter bütçesine sığar).
+- Toplu gate: typecheck'ler ✓, server 883 (1 paralellik-flake izole PASS),
+  web 327 ✓.
+
+### Kullanıcı-sürüşlü koşu + İKİ kök-neden daha
+Kullanıcı kendi görevini verdi: "türkiyede 2015-2025 yılları arasında
+enflasyon" (deep). Job DONE — ama draft "Aile İşletmelerinde Yapay Zekâ…"
+çıktı: **KONU SAPMASI** (paylaşılan tek notebook'ta önceki 60 kaynak;
+Studio fallback TÜM notebook'u sentezler, report custom_prompt yoksayar).
+Aynı pencerede köprü claim'leri **429** yemeye başladı (per-IP genel
+limiter, localhost'ta tarayıcıyla aynı kova — çifte sayım).
+
+Kök fix'ler:
+1. **Notebook izolasyonu**: her job kendi notebook'u
+   (`eCyPro Content Studio — <konu40> [<id6>]`); `NLM_NOTEBOOK_ID` ile
+   sabitleme korunur. Kanıt: yeni koşuda `created isolated notebook …
+   [6mwkj2]`, sourceCount 10 (70 değil), draft teması ENFLASYON.
+2. **Limiter çifte-sayım**: `isResearchBridge` muafiyeti (dar: bridge path
+   + x-api-key varlığı; auth apiKeyAuth'ta, tier 600/15dk bütçesi devrede —
+   Calendly webhook emsali) + health-probe suite 21/21.
+3. **Bridge 429 backoff**: claim 429 `retryAfter`'ına uyur.
+
+### Profesyonel danışman yayını
+Drift'li eski draft **ARCHIVED** (yayın kirliliği temizliği). Doğru-konu
+draft'a danışman rötuşu: başlık "Türkiye'de Enflasyonun On Yılı
+(2015-2025): Endüstriyel Kapasite, Kur Politikaları ve Ekonomik Direnç"
+(+uyumlu metaTitle). Onay zinciri UI'dan → **PUBLISHED 15:34** → anonim
+API 200 (author Emre Can Yalçın) → hub'da FİNANS & EKONOMİ·RAPOR kartı
+(amber trend kapağı) → detay sayfası render. Admin ekranlarının hiçbirinde
+pazarlama popup'ı görünmedi (K1 canlı kanıt). 429 sayısı: 0.
+Kareler: `calib-run-1..4*.png`.

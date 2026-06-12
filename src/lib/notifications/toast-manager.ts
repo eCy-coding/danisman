@@ -115,6 +115,11 @@ function getVariantAction(variant: string): { label: string; onClick: () => void
  * Batch process Director actions → toasts
  */
 export function processDirectorActions(actions: Action[]): void {
+  // Marketing toasts have no business inside the admin panel — and worse,
+  // the bottom-right popup covers the editor's "Taslak Kaydet" button and
+  // swallows clicks (calibration finding). Director scheduling itself is
+  // untouched; only this presentation layer is suppressed.
+  if (window.location.pathname.startsWith('/admin')) return;
   let delay = 0;
   for (const action of actions) {
     if (action.type === 'NOTIFY') {

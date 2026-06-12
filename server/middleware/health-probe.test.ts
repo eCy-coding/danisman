@@ -86,3 +86,42 @@ describe('isHealthProbe — User-Agent matching', () => {
     expect(isHealthProbe(mkReq({ url: '/api/v1/bookings' }))).toBe(false);
   });
 });
+
+// ─── Research-bridge exemption (calibration root-fix) ─────────────────────────
+
+import { isResearchBridge, isRateLimitExempt } from './health-probe';
+
+function mkBridgeReq(url: string, apiKey?: string): Request {
+  const headers: Record<string, string> = {};
+  if (apiKey) headers['x-api-key'] = apiKey;
+  return {
+    originalUrl: url,
+    url,
+    headers,
+    get(name: string) {
+      return headers[name.toLowerCase()];
+    },
+  } as unknown as Request;
+}
+
+describe('isResearchBridge', () => {
+  it('matches bridge claim path WITH x-api-key', () => {
+    const req = mkBridgeReq('/api/v1/admin/research/bridge/claim', 'k');
+    expect(isResearchBridge(req)).toBe(true);
+    expect(isRateLimitExempt(req)).toBe(true);
+  });
+
+  it('matches bridge job patch path with query string', () => {
+    expect(isResearchBridge(mkBridgeReq('/api/v1/admin/research/bridge/jobs/j1?x=1', 'k'))).toBe(
+      true,
+    );
+  });
+
+  it('does NOT match without x-api-key (browser hitting the path)', () => {
+    expect(isResearchBridge(mkBridgeReq('/api/v1/admin/research/bridge/claim'))).toBe(false);
+  });
+
+  it('does NOT match admin jobs plane even with a key', () => {
+    expect(isResearchBridge(mkBridgeReq('/api/v1/admin/research/jobs', 'k'))).toBe(false);
+  });
+});

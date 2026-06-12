@@ -94,6 +94,23 @@ export function isThirdPartyWebhook(req: Request): boolean {
   return WEBHOOK_PATHS.has(normalizedPath(req));
 }
 
+// Research-bridge plane (calibration root-fix). The local NotebookLM worker
+// polls claim/patch every 15s with an ApiKey; on localhost it shares the
+// browser's IP, so the per-IP general bucket double-counts it and starves
+// BOTH (bridge claims hit 429 mid-job). The bridge already pays the
+// stricter `tierRateLimiter` api-key budget (600/15min) and full ApiKey
+// auth inside the route — exempting it from the generic IP bucket removes
+// the double count without weakening anything. Narrow on purpose: exact
+// path prefix AND an x-api-key header present (validity enforced by
+// apiKeyAuth; an invalid key still dies at auth).
+const BRIDGE_PATH_PREFIXES = ['/api/v1/admin/research/bridge', '/api/admin/research/bridge'];
+
+export function isResearchBridge(req: Request): boolean {
+  if (!req.headers['x-api-key']) return false;
+  const path = normalizedPath(req);
+  return BRIDGE_PATH_PREFIXES.some((p) => path.startsWith(p));
+}
+
 export function isRateLimitExempt(req: Request): boolean {
-  return isHealthProbe(req) || isThirdPartyWebhook(req);
+  return isHealthProbe(req) || isThirdPartyWebhook(req) || isResearchBridge(req);
 }

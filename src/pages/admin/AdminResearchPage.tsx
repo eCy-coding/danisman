@@ -127,7 +127,10 @@ export default function AdminResearchPage() {
       apiClient
         .get('/admin/research/jobs', { params: { limit: '50' } })
         .then((r) => r.data as JobsListResponse),
-    refetchInterval: 5000,
+    // 15s matches the bridge claim cadence AND keeps one open tab inside the
+    // default general rate-limit budget (100 req/15min) — 5s starved the
+    // limiter unless RATE_LIMIT_* env overrides were set (calibration fix).
+    refetchInterval: 15000,
   });
 
   const jobs = data?.data?.items ?? [];
