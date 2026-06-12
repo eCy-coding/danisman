@@ -57,19 +57,27 @@ jobs:
           sed -i 's/__FILL_ME__/ci-stub/g' .env.production
 
       - name: Build production bundle
+        # SKIP_PRERENDER — the visual spec screenshots the hydrated SPA via
+        # vite preview; the 170-route static prerender added ~7 min and pushed
+        # the job past its 15-min budget (every run died as "canceled").
         run: npm run build
         env:
           NODE_ENV: production
+          SKIP_PRERENDER: '1'
 
       - name: Check for visual baseline
         id: baseline
         run: |
-          if [ -d "e2e/snapshots/visual.spec.ts-snapshots" ] && \
-             [ "$(ls -A e2e/snapshots/visual.spec.ts-snapshots 2>/dev/null)" ]; then
+          # Match the runner platform — committed baselines are *-darwin.png
+          # (generated on macOS); Playwright on this ubuntu runner resolves
+          # *-linux.png and treats a platform mismatch as missing snapshots,
+          # which would hard-fail every test instead of taking the designed
+          # no-op path below.
+          if ls e2e/snapshots/visual.spec.ts-snapshots/*-linux.png >/dev/null 2>&1; then
             echo "exists=true" >> "$GITHUB_OUTPUT"
           else
             echo "exists=false" >> "$GITHUB_OUTPUT"
-            echo "::warning::Visual baseline not yet committed. Run \`npx playwright test e2e/visual.spec.ts --update-snapshots\` locally, commit the PNGs, and re-run."
+            echo "::warning::No linux visual baseline committed (darwin-only). Generate linux PNGs (e.g. via a --update-snapshots artifact run or docker) and commit them to activate this gate."
           fi
 
       - name: Run visual regression suite

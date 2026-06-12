@@ -10,10 +10,12 @@
  * Why a postbuild step?
  *   Vite injects render-blocking `<link rel="stylesheet" crossorigin href=…>`
  *   entries for every CSS chunk it emits (client-*, main-*, route chunks).
- *   The existing `media="print" onload="this.media='all'"` trick in
- *   index.html only covers the SOURCE `/index.css` import — Vite-emitted
- *   chunk CSS bypasses it. Lighthouse P27 flagged 601ms + 301ms
- *   render-block from these two stylesheets alone.
+ *   Together with the P32 nonBlockingCssPlugin (vite.config.ts, build-time
+ *   transformIndexHtml) this is the safety net that keeps every emitted
+ *   stylesheet non-blocking. NOTE: do not hand-<link> /index.css in
+ *   index.html — it ships as a raw unprocessed asset and inverts the
+ *   Tailwind cascade layer order (see comment in index.html). Lighthouse
+ *   P27 flagged 601ms + 301ms render-block before this step existed.
  *
  * Runs after `vite build` (and after generate-sitemap/rss) in `postbuild`.
  */

@@ -78,6 +78,8 @@ vi.mock('react-i18next', () => ({
       return (FOUNDER_TR[k] as string) ?? k;
     },
     i18n: { language: 'tr' },
+    // FounderPage gates render on `ready` since #223 — mock must provide it
+    ready: true,
   }),
   initReactI18next: { type: '3rdParty', init: () => {} },
 }));

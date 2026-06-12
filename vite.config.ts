@@ -165,7 +165,7 @@ const nonBlockingCssPlugin = {
       /<link rel="stylesheet"((?:(?! media=)[^>])*?)\shref="([^"]+)"([^>]*)>/g,
       (match, before, href, after) => {
         // Skip links that already carry an explicit media attribute
-        // (these are intentional, e.g. our index.css print-onload trick).
+        // (intentional hand-authored print-onload tricks stay untouched).
         if (/\smedia=/.test(match)) return match;
         const attrs = `${before}${after}`.trim();
         return (
@@ -275,9 +275,9 @@ export default defineConfig(({ mode }) => {
             // from precache → runtime CacheFirst. These are lazy-loaded via
             // requestIdleCallback and don't affect initial paint. Saves ~504K
             // from SW install payload → faster first-visit on slow 3G.
-            // Critical CSS
+            // Critical CSS (raw index-*.css asset no longer emitted — /index.css
+            // compiles into main-*.css via the src/main.tsx import)
             'assets/main-*.css',
-            'assets/index-*.css',
             // App Shell fonts (Inter 400/700 — above-fold)
             'fonts/inter-latin-400-normal.woff2',
             'fonts/inter-latin-700-normal.woff2',
