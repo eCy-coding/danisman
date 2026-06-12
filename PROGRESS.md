@@ -1,4 +1,22 @@
-# PROGRESS — Perspektifler rebuild decision log
+# PROGRESS — vertical rebuild decision log
+
+---
+
+# SERVICES VERTICAL (2026-06-12 → )
+
+Spec: `~/Desktop/istemek.md` (istek-services.md) · Plan: approved 2026-06-12
+(`cerrahi-hassasiyet-ile-k-klere-encapsulated-whistle.md`) · Branch: `claude/competent-burnell-270d4d` (worktree)
+
+## SVC Gate-0 (2026-06-12)
+**Env:** node v24.8.0 · npm 11.6.0 · `npm install` exit 0 (audit warnings noted, not chased — out of scope).
+**Baseline (BEFORE any edit, recorded not fixed):** lint **0 errors** / 3 warnings (ThemeContext, view-as-context — out of scope) · typecheck **GREEN** (web+server; old "lenis RED" memory stale) · vitest `--run`: **23 failed / 1026 passed / 15 skipped (141 files, 4 failing files: canonical.test.ts, track-b-phase-b5.test.tsx, a11y/static-rules.test.tsx, founder-page.test.tsx — ALL pre-existing, out of services scope)**.
+**Scope re-fence:** Perspektifler contract CLOSED (shipped 2026-06-11) → allowlist + SCOPE.md rewritten for Services vertical. Evidence: owner request istemek.md + approved plan. Guard infra (`.claude/**`) deliberately dropped from allowlist (classifier: no self-modification) — fence is fixed.
+**Premise corrections vs istemek.md ground truth (verified by 3 Explore agents + direct reads):** content registry **38** slugs (not 43) · MegaMenu.tsx **302** lines (not 169), **no** aria-expanded/controls/Esc/arrows, **no test file** · menu 9 visible items → only **4 unique hrefs** (strategic-transformation ×2, digital-strategy ×2, /services ×3) · `docs/ECYPRO_SERVICES_CATEGORIZATION.md` does **not** exist · orphans = **14** · dangling = 0 · catalog↔content = **21/21** (old memory "4/21" STALE).
+**ROOT CAUSE (user's 404 screenshot):** `ServiceDetailPage.tsx:27-28` resolves ONLY via `SERVICES` catalog (21) → menu pillar slugs (strategic-transformation, ai-analytics, digital-strategy) + 14 content orphans all hard-404. Sitemap (`generate-sitemap.ts:132-154`, hardcoded 21) ships **17 URLs that 404** (14 orphans + 3 menu-only) to Google.
+
+---
+
+# PERSPEKTIFLER VERTICAL (closed 2026-06-12)
 
 Spec: `~/Desktop/istek.md` v2 · Plan: approved 2026-06-11 · Branch: `claude/cranky-bassi-9bd8b1`
 

@@ -1,31 +1,33 @@
-# SCOPE — Perspektifler Vertical Rebuild (micro-focus contract)
+# SCOPE — Services Vertical E2E Rebuild (micro-focus contract)
 
-Single source of truth for what may be edited during the Perspektifler rebuild.
-Spec: `~/Desktop/istek.md` (v2). Task ledger: `brain/PERSPEKTIFLER_TASKS.json`.
+Single source of truth for what may be edited during the Services rebuild.
+Spec: `~/Desktop/istemek.md` (istek-services.md). Detail: `SERVICES_SCOPE.md`.
 Enforced by `.claude/hooks/scope_guard.py` against `.claude/scope-allowlist.txt`.
 Expansions require evidence + a PROGRESS.md entry.
+
+> Previous contract (Perspektifler, spec `~/Desktop/istek.md`) CLOSED — shipped,
+> merged and deployed 2026-06-11 (PROGRESS.md FAZ-2C, prod LH 64/97/96/100).
+> Re-fence evidence: owner request 2026-06-12 (istemek.md, approved plan
+> `cerrahi-hassasiyet-ile-k-klere-encapsulated-whistle.md`).
 
 ## In scope (why)
 
 | Area | Paths | Reason |
 |---|---|---|
-| Scope/progress docs | `SCOPE.md`, `OUT_OF_SCOPE.md`, `PROGRESS.md`, `brain/PERSPEKTIFLER_TASKS.json`, `brain/perspektifler/**`, `CLAUDE.md` | contract + evidence pack |
-| Hub + article pages | `src/pages/BlogPage.tsx`, `src/pages/BlogPostPage.tsx`, `src/pages/PerspektiflerKategoriPage.tsx` (new), `src/pages/PerspektiflerKonularPage.tsx` (new), `src/pages/CaseStudiesPage.tsx`, `src/pages/CaseStudyDetailPage.tsx` | the vertical itself + BUG-11 unification |
-| Dead prototype | `src/pages/insights/**`, `src/components/insights/**`, `src/lib/insights-mock.ts`, `src/data/insights-stub-posts.json`, `src/types/insights.ts`, `src/hooks/useInsightsFeed.ts` | harvest then delete (Gate-6) |
-| Blog components | `src/components/blog/**` | hub cards/facets/capsule |
-| Header/menu | `src/components/layout/Navbar.tsx`, `src/components/layout/MegaMenu.tsx` | BUG-01/02/03/04/12 only — minimal diff |
-| Floating widgets | `src/components/common/SocialProofToast.tsx`, `src/components/common/UrgencyBanner.tsx`, a11y/lang widget files (locate, then add here) | BUG-08 governance |
-| Data layer | `src/data/taxonomy.ts` (new), `src/data/copy/common.ts` (MEGA_MENUS.insights block only), `src/data/blog-posts.json` (generated), `src/data/search-index.json` (generated), `src/data/mockCaseStudies.ts`, `src/types/blog.ts`, `src/content/blog/*.mdx` (frontmatter only) | taxonomy + panel content |
-| Libs | `src/lib/slugify.ts` (new), `src/lib/perspektifler-search.ts` (new), `src/lib/analytics.ts` (additive events only) | search + folding + events |
-| Routing/platform | `src/App.tsx` (routes block only), `vercel.json` (redirects block only), `.size-limit.json` | atomic flip |
-| Build scripts | `scripts/generate-blog-index.ts`, `scripts/generate-sitemap.ts`, `scripts/generate-rss.ts`, `scripts/generate-og-image*.{ts,mjs}`, `scripts/prerender.mjs`, `scripts/check-taxonomy.ts` (new), `scripts/check-links.ts` (new), `scripts/migrate-blog-frontmatter.ts` (new, one-shot) | index emit + SEO blast radius |
-| i18n strings | `public/locales/tr/**`, `public/locales/en/**` | hub/category/menu UI strings |
-| Tests | `tests/**`, `playwright.config.ts` (only if a project entry is needed) | gates + migrating /blog specs |
-| Docs | `docs/guides/perspektifler-content-ops.md` (new) | content-ops runbook |
-| Guard infra | `.claude/scope-allowlist.txt`, `.claude/hooks/**`, `.claude/settings.json` (hooks block only) | the fence itself |
+| Scope/progress docs | `SCOPE.md`, `SERVICES_SCOPE.md`, `OUT_OF_SCOPE.md`, `PROGRESS.md`, `brain/SERVICES_TASKS.json`, `brain/services/**` | contract + evidence pack |
+| Vertical pages | `src/pages/ServicesPage.tsx`, `src/pages/ServiceDetailPage.tsx` (resolver root-cause), `src/pages/NotFoundPage.tsx` | the vertical itself |
+| Services components | `src/components/services/**`, `src/components/sections/ServicesClusterSection.tsx`, `src/components/common/NotFoundSearch.tsx` | cards/filters/detail layout/illustrations/404 suggestions |
+| Header/menu | `src/components/layout/MegaMenu.tsx`, `src/components/layout/Navbar.tsx`, `src/components/layout/MobileBottomNav.tsx` | APG disclosure rebuild + dedupe; same-data mobile parity |
+| Data layer | `src/data/services.ts`, `src/data/service-content.ts`, `src/data/service-taxonomy.ts` (new), `src/data/cta-variants.ts`, `src/data/copy/common.ts` (MEGA_MENUS.services block only), `src/schemas/service.ts` | taxonomy v2 single source |
+| i18n/SEO | `src/i18n/localized-slugs.ts`, `src/i18n/canonical.ts`, `src/lib/structured-data.ts`, `src/lib/analytics.ts` (additive events only), `public/locales/{tr,en}/**` | parity + JSON-LD + consent-gated events |
+| Routing/platform | `src/App.tsx` (routes block only), `vercel.json` (redirects block only) | resolver routes + 301 map |
+| Build scripts | `scripts/generate-sitemap.ts` (hardcoded list → registry-derived), `scripts/services-taxonomy-audit.mjs` (new), `scripts/services-i18n-parity.mjs` (new) | SEO blast radius + audit gates |
+| Tests | `src/test/**`, `src/**/*.test.{ts,tsx}`, `src/**/__tests__/**`, `e2e/**`, `tests/**`, `playwright.config.ts` (only if a project entry is needed) | test-first gates; deleting tests banned |
+| Docs | `docs/adr/**`, `docs/reports/**`, `docs/ECYPRO_SERVICES_CATEGORIZATION.md` (new v2) | ADR + audit evidence |
 
 ## Explicitly OUT (see OUT_OF_SCOPE.md for the running log)
 
-Homepage, Hizmetler, Sektörler, Fiyatlandırma, Hakkımızda (/about content),
-İletişim, server/**, prisma/**, admin pages, CI workflows, package.json deps
-(no new runtime dependencies), any other vertical.
+Perspektifler/blog/insights, Sektörler, Fiyatlandırma, Hakkımızda, Founder,
+İletişim form logic, server/**, prisma/**, admin pages, CI workflows,
+package.json deps (no new runtime dependencies — three.js/R3F banned without
+written justification), guard infra (`.claude/**` — fence fixed, owner-only).

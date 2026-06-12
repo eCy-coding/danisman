@@ -1,73 +1,53 @@
-# Perspektifler rebuild — edit allowlist (one glob per line, # = comment)
+# Services vertical E2E rebuild — edit allowlist (one glob per line, # = comment)
 # Checked by .claude/hooks/scope_guard.py on Edit/Write. Paths repo-relative.
+# Re-fenced from Perspektifler 2026-06-12: that vertical shipped+deployed 2026-06-11
+# (PROGRESS.md FAZ-2C). New contract: SCOPE.md (Services edition) + SERVICES_SCOPE.md.
+# Spec: ~/Desktop/istemek.md. NOTE: guard infra (.claude/**) deliberately NOT
+# self-listed — fence is fixed for this vertical; changes need owner approval.
 SCOPE.md
+SERVICES_SCOPE.md
 OUT_OF_SCOPE.md
 PROGRESS.md
-CLAUDE.md
-content-inventory.csv
-brain/PERSPEKTIFLER_TASKS.json
-brain/perspektifler/**
-src/pages/BlogPage.tsx
-src/pages/BlogPostPage.tsx
-src/pages/PerspektiflerKategoriPage.tsx
-src/pages/PerspektiflerKonularPage.tsx
-src/pages/CaseStudiesPage.tsx
-src/pages/CaseStudyDetailPage.tsx
-src/pages/insights/**
-src/components/features/case-studies/**
-src/components/insights/**
-src/components/blog/**
-src/components/layout/Navbar.tsx
+brain/SERVICES_TASKS.json
+brain/services/**
+# --- Services pages + components ---
+src/pages/ServicesPage.tsx
+src/pages/ServiceDetailPage.tsx
+src/pages/NotFoundPage.tsx
+src/components/services/**
+src/components/sections/ServicesClusterSection.tsx
 src/components/layout/MegaMenu.tsx
-src/components/common/SocialProofToast.tsx
-src/components/common/UrgencyBanner.tsx
-src/data/taxonomy.ts
-src/data/pillar-content.ts
+src/components/layout/Navbar.tsx
+src/components/layout/MobileBottomNav.tsx
+src/components/common/NotFoundSearch.tsx
+# --- Data layer (single source of truth work) ---
+src/data/services.ts
+src/data/service-content.ts
+src/data/service-taxonomy.ts
+src/data/cta-variants.ts
 src/data/copy/common.ts
-src/data/blog-posts.json
-src/data/search-index.json
-src/data/mockCaseStudies.ts
-src/types/blog.ts
-src/types/insights.ts
-src/hooks/useInsightsFeed.ts
-src/content/blog/**
-src/lib/slugify.ts
-src/lib/perspektifler-search.ts
-src/lib/insights-mock.ts
+src/schemas/service.ts
+# --- i18n + SEO + routing surfaces ---
+src/i18n/localized-slugs.ts
+src/i18n/canonical.ts
+src/lib/structured-data.ts
 src/lib/analytics.ts
 src/App.tsx
 vercel.json
-.size-limit.json
-scripts/generate-blog-index.ts
-scripts/generate-sitemap.ts
-scripts/generate-rss.ts
-scripts/generate-og-image.ts
-scripts/generate-og-images.mjs
-scripts/prerender.mjs
-scripts/check-taxonomy.ts
-scripts/check-links.ts
-scripts/migrate-blog-frontmatter.ts
 public/locales/tr/**
 public/locales/en/**
-tests/**
+scripts/generate-sitemap.ts
+scripts/services-taxonomy-audit.mjs
+scripts/services-i18n-parity.mjs
+# --- Tests (fnmatch: * crosses path separators) ---
+src/test/**
+src/*.test.ts
+src/*.test.tsx
+src/*__tests__*
 e2e/**
+tests/**
 playwright.config.ts
-docs/guides/perspektifler-content-ops.md
-.claude/scope-allowlist.txt
-.claude/hooks/**
-.claude/settings.json
-# GATE-3 link sweep: no internal click may land on a 301 (PROGRESS.md)
-src/components/ui/CommandMenu.tsx
-src/components/sections/Insights.tsx
-src/components/layout/Footer.tsx
-src/components/common/NotFoundSearch.tsx
-src/lib/useRouteNamespaces.ts
-src/pages/NotFoundPage.tsx
-src/components/ui/StickyTableOfContents.tsx
-src/components/ui/UtilityDock.tsx
-src/components/ui/ZenToggle.tsx
-src/components/ui/LanguageToggle.tsx
-# FAZ-2 owner kalemleri (explicit izin 2026-06-11)
-src/pages/FounderPage.tsx
-.github/workflows/**
-lighthouserc.json
+# --- Docs + reports + ADR ---
+docs/adr/**
+docs/reports/**
+docs/ECYPRO_SERVICES_CATEGORIZATION.md
