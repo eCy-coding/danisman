@@ -52,9 +52,11 @@ export const PricingQuiz: React.FC<Props> = ({ onResult }) => {
         <p className="text-2xl font-semibold text-amber-400 mb-6">{tier.priceLabel}</p>
         <p className="text-slate-400 text-sm mb-8">{tier.minTerm}</p>
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
+          {/* text-neutral!: preflight `a { color: inherit }` wins on anchors (layer-order
+              inversion) — important restores black-on-amber, same axe contrast fix as PricingPage. */}
           <a
             href={tier.ctaHref}
-            className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-amber-500 text-neutral font-bold hover:bg-amber-400 transition-colors"
+            className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-amber-500 text-neutral! font-bold hover:bg-amber-400 transition-colors"
             data-testid="quiz-cta"
           >
             <span>{tier.cta}</span>
@@ -98,6 +100,7 @@ export const PricingQuiz: React.FC<Props> = ({ onResult }) => {
             animate={{ width: `${progress}%` }}
             transition={{ duration: 0.3 }}
             role="progressbar"
+            aria-label="Hesaplama ilerlemesi"
             aria-valuenow={current}
             aria-valuemin={0}
             aria-valuemax={QUIZ_QUESTIONS.length}

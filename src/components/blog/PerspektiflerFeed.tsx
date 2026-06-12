@@ -140,7 +140,9 @@ export const PerspektiflerFeed: React.FC<FeedProps> = ({ lockedCategory }) => {
                         : 'border-white/10 bg-white/5 text-slate-400 hover:border-white/20'
                     }`}
                   >
-                    {chip.label} <span className="tabular-nums opacity-60">{chip.count}</span>
+                    {chip.label}{' '}
+                    {/* a11y: inherit (slate-400 @ opacity) hit 4.34:1 — explicit slate-300 clears 4.5 in both chip states. */}
+                    <span className="tabular-nums text-slate-300">{chip.count}</span>
                   </button>
                 </li>
               );
@@ -209,7 +211,7 @@ export const PerspektiflerFeed: React.FC<FeedProps> = ({ lockedCategory }) => {
                       <a
                         href={`?${serializeHubFilter({ ...filter, page: n }).toString()}`}
                         aria-current={n === filter.page ? 'page' : undefined}
-                        className={`px-2 py-1 rounded hover:text-white ${n === filter.page ? 'text-white border border-white/20' : ''}`}
+                        className={`inline-block min-w-6 px-2 py-1.5 text-center rounded hover:text-white ${n === filter.page ? 'text-white border border-white/20' : ''}`}
                       >
                         {n}
                       </a>

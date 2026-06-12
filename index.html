@@ -203,12 +203,12 @@
     }
     </script>
 
-    <!-- P33-T03: Non-blocking stylesheet — print media trick defers parse until after FCP.
-         noscript fallback ensures CSS loads for bots/old browsers.
-         NOTE: App Shell inline styles above-fold render before CSS parses. -->
-    <link rel="preload" href="/index.css" as="style" />
-    <link rel="stylesheet" href="/index.css" media="print" onload="this.media='all'" />
-    <noscript><link rel="stylesheet" href="/index.css" /></noscript>
+    <!-- P33-T03 raw /index.css print-trick REMOVED: main.tsx already imports
+         index.css (Vite compiles it) and scripts/p28-css-nonblocking.mjs makes
+         the emitted chunks non-blocking. The extra raw copy loaded SECOND,
+         re-declaring @layer order so preflight (a{color:inherit}, *{padding:0})
+         overrode utilities site-wide — the root cause behind 25 target-size and
+         multiple color-contrast axe failures (verified A/B by blocking it). -->
     <!-- S13-R8-B3: preload hint for the above-fold founder avatar. AVIF first;
          browsers that don't support AVIF will skip (no penalty) and the <picture>
          element's WebP/JPG sources cover them on demand. -->

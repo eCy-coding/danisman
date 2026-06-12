@@ -91,3 +91,10 @@ src/i18n/canonical.test.ts
 src/components/sections/Hero.tsx
 package-lock.json
 scripts/check-migration-safety.mjs
+# LHCI a11y 0.95 gate'i için gerçek ihlal düzeltmeleri (pricing/services/perspektifler)
+src/pages/PricingPage.tsx
+src/components/PricingCalculatorWizard.tsx
+src/pages/services/**
+src/components/services/**
+src/components/pricing/**
+index.html
