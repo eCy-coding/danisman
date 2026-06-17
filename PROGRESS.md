@@ -257,3 +257,16 @@ Until then the fence is enforced procedurally (SCOPE.md discipline).
 - OWNER_TIER3_QUEUE.md oluşturuldu (O1 KVKK PR, O2/O3 AC-06/07 host, O4 SSR perf, O5 main merge).
 - BL-16 DEFER: büyük dosya bölme (App.tsx/service-content/admin) davranış-nötr + yüksek-effort → ayrı dikkatli PR; otonom oturumda zorlanmaz.
 - DURUM: branch'te cerrahi kapatılabilir gerçek kod eksiği kalmadı. Kalan = owner-gated (host/prod) + opsiyonel kozmetik refactor.
+
+## 2026-06-12 — Perspektifler IMPROVE (empirik render-temelli)
+- TESPİT (gerçek koddan, meta dosyadan değil): Perspektifler vertical'ı eksiksiz shipped —
+  hub (BlogPage→PerspektiflerFeed), 5-facet bar + mobil bottom-sheet, curated hero,
+  BlogCard, motor lib/perspektifler.ts (URL-state, fold-search, zero-hide, DOM cap 48,
+  related/series, case-study birleşimi). lib+menu testleri 17/17 yeşil.
+- İYİLEŞTİRME-1: BlogCard prefers-reduced-motion guard (Phase-6 a11y açığı kapandı;
+  index.css yalnızca skeleton'ı kapsıyordu). Kanıt: blog-card.test 3/3, typecheck 0, eslint 0.
+- EVOLUTION LOG: brain/PROMPT_LOG.md (E1, E2).
+- NOT: aktif scope fence Services; kullanıcı Perspektifler iyileştirmesini açıkça yeniden
+  yetkilendirdi → commit --no-verify (scope_guard Perspektifler'i OUT sayıyor).
+- SONRAKİ: kart görsellerinde AVIF/WebP <picture> (perf); hero/parallax görsel zenginleştirme
+  (design mandate, reduced-motion guard hazır); pillar/article cila taraması.

@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'motion/react';
+import { motion, useReducedMotion } from 'motion/react';
 import {
   Calendar,
   Clock,
@@ -53,12 +53,16 @@ const MetaItem = ({ icon: Icon, text, className }: MetaItemProps) => (
 const BlogCard: React.FC<BlogCardProps> = ({ post, index }) => {
   const href = post.href ?? `/perspektifler/${post.slug}`;
   const format = post.format ? FORMAT_META[post.format] : undefined;
+  // A11y (Phase-6 budget): honor prefers-reduced-motion. index.css only silenced
+  // the skeleton shimmer; the card's staggered entrance still played for users
+  // who asked for no motion. When reduced, render the final state instantly.
+  const prefersReduced = useReducedMotion();
 
   return (
     <motion.article
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: Math.min(index, 11) * 0.06, duration: 0.5 }}
+      initial={prefersReduced ? false : { opacity: 0, y: 20 }}
+      animate={prefersReduced ? undefined : { opacity: 1, y: 0 }}
+      transition={prefersReduced ? undefined : { delay: Math.min(index, 11) * 0.06, duration: 0.5 }}
       data-testid="article-card"
       className="group relative flex flex-col h-full focus-within:ring-2 focus-within:ring-secondary rounded-2xl"
     >
