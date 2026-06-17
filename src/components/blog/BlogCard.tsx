@@ -23,6 +23,18 @@ interface CardPost {
   format?: string;
   /** Card-wide link target; defaults to the Perspektifler article URL. */
   href?: string;
+  /** True when sibling .avif/.webp derivatives exist (set by the cover-optimize
+   *  build step). Gates <source> emission so we never ship 404 sources. */
+  coverOptimized?: boolean;
+}
+
+// Every `/images/*` cover currently 404s (the public/images dir is absent), so
+// 36 cards rendered broken thumbnails. Fall back to a real shipped asset.
+const FALLBACK_COVER = '/og-default.jpg';
+const stripExt = (s: string) => s.replace(/\.(jpe?g|png|webp|avif)$/i, '');
+function resolveCover(src?: string): string {
+  if (!src || src.startsWith('/images/')) return FALLBACK_COVER;
+  return src;
 }
 
 interface BlogCardProps {
@@ -68,16 +80,47 @@ const BlogCard: React.FC<BlogCardProps> = ({ post, index }) => {
     >
       <div className="absolute -inset-0.5 bg-linear-to-r from-blue-600 to-yellow-500 rounded-2xl opacity-20 group-hover:opacity-100 blur transition duration-500"></div>
       <div className="relative flex-1 flex flex-col h-full bg-[#0a0f1c] rounded-xl border border-white/5 overflow-hidden">
-        {/* Image Container — 16:9, lazy */}
+        {/* Image Container — 16:9, lazy, AVIF/WebP via <picture> (≤40KB target).
+            Sources are gated on coverOptimized so missing derivatives never 404. */}
         <div className="relative aspect-video overflow-hidden">
-          <img
-            src={post.coverImage}
-            alt=""
-            width={800}
-            height={450}
-            className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
-            loading="lazy"
-          />
+          {(() => {
+            const cover = resolveCover(post.coverImage);
+            const isRaster = /\.(jpe?g|png)$/i.test(cover);
+            const base = stripExt(cover);
+            const withSources = isRaster && post.coverOptimized === true;
+            return (
+              <picture>
+                {withSources && (
+                  <source
+                    type="image/avif"
+                    srcSet={`${base}.avif 1x, ${base}@2x.avif 2x`}
+                    sizes="(min-width:1024px) 33vw, (min-width:768px) 50vw, 100vw"
+                  />
+                )}
+                {withSources && (
+                  <source
+                    type="image/webp"
+                    srcSet={`${base}.webp 1x, ${base}@2x.webp 2x`}
+                    sizes="(min-width:1024px) 33vw, (min-width:768px) 50vw, 100vw"
+                  />
+                )}
+                <img
+                  src={cover}
+                  alt=""
+                  width={800}
+                  height={450}
+                  sizes="(min-width:1024px) 33vw, (min-width:768px) 50vw, 100vw"
+                  className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
+                  loading="lazy"
+                  decoding="async"
+                  onError={(e) => {
+                    const img = e.currentTarget;
+                    if (!img.src.endsWith(FALLBACK_COVER)) img.src = FALLBACK_COVER;
+                  }}
+                />
+              </picture>
+            );
+          })()}
           <div className="absolute inset-0 bg-linear-to-t from-[#0a0f1c] to-transparent opacity-80" />
 
           <div className="absolute top-4 left-4 flex gap-2 flex-wrap max-w-[85%]">

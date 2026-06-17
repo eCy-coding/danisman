@@ -270,3 +270,10 @@ Until then the fence is enforced procedurally (SCOPE.md discipline).
   yetkilendirdi → commit --no-verify (scope_guard Perspektifler'i OUT sayıyor).
 - SONRAKİ: kart görsellerinde AVIF/WebP <picture> (perf); hero/parallax görsel zenginleştirme
   (design mandate, reduced-motion guard hazır); pillar/article cila taraması.
+
+## 2026-06-12 — IMPROVE #2 + #3
+- #2 BlogCard <picture>+AVIF/WebP+srcset (gated) + kırık /images kapak → /og-default.jpg.
+  Kanıt: blog-card 5/5, typecheck 0, eslint 0. (commit lock → kullanıcı commit'leyecek)
+- #3 Hero design: saf-CSS aurora (blue+gold+indigo) + gold pill eyebrow + Playfair gradient
+  H1 + gold hairline + kontrast↑ subtitle. LCP-güvenli (animasyon yok). Kanıt: insights-hero
+  4/4 + 16/16 combined, typecheck 0, eslint 0.

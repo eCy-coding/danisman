@@ -48,11 +48,36 @@ describe('BlogCard — alanlar + reduced-motion', () => {
     expect(container.querySelector('a[href="/perspektifler/ornek-makale"]')).toBeTruthy();
   });
 
-  it('16:9 görsel lazy yüklenir', () => {
+  it('16:9 görsel lazy + async decode, <picture> ile sarılı', () => {
     const { container } = renderCard();
+    expect(container.querySelector('picture')).toBeTruthy();
     const img = container.querySelector('img');
     expect(img?.getAttribute('loading')).toBe('lazy');
+    expect(img?.getAttribute('decoding')).toBe('async');
     expect(img?.getAttribute('width')).toBe('800');
     expect(img?.getAttribute('height')).toBe('450');
+  });
+
+  it("kırık /images/* kapağı gerçek default asset'e düşer (/og-default.jpg)", () => {
+    const { container } = render(
+      <MemoryRouter>
+        <BlogCard post={{ ...post, coverImage: '/images/blog-default.jpg' }} index={0} />
+      </MemoryRouter>,
+    );
+    const img = container.querySelector('img');
+    expect(img?.getAttribute('src')).toBe('/og-default.jpg');
+  });
+
+  it('optimized raster kapakta AVIF + WebP <source> emit edilir', () => {
+    const { container } = render(
+      <MemoryRouter>
+        <BlogCard
+          post={{ ...post, coverImage: '/brand/blog-covers/x.jpg', coverOptimized: true }}
+          index={0}
+        />
+      </MemoryRouter>,
+    );
+    expect(container.querySelector('source[type="image/avif"]')).toBeTruthy();
+    expect(container.querySelector('source[type="image/webp"]')).toBeTruthy();
   });
 });

@@ -36,3 +36,25 @@ Kaynak spec: `brain/PERSPEKTIFLER_REBUILD_SPEC.md`. Disiplin: kanıt-veya-sessiz
      prefers-reduced-motion) reddeder.
   5. Global a11y alternatifi: ileride `index.css`'e genel reduced-motion (transform/anim
      kill) kuralı düşünülebilir — ama global (scope dışı), owner onayıyla.
+
+## 2026-06-12 · E3 — Kart görseli <picture>/AVIF + kırık kapak fix (#2)
+- ÖĞRENİLEN: `/images/` klasörü repoda YOK → 36 kartın kapağı (`/images/blog-default.jpg`)
+  fiilen kırık. sharp kurulu değil + yeni bağımlılık scope-dışı → sandbox'ta AVIF üretilemez.
+- YAPILDI: BlogCard `<picture>` + AVIF/WebP `<source>` (coverOptimized gate → türev yoksa
+  emit YOK, 0 kırık source) + srcset/sizes + decoding=async + onError→/og-default.jpg +
+  `/images/*` kapaklarını /og-default.jpg'e düşüren resolveCover. Kanıt: blog-card 5/5.
+- MASTER PROMPT'A EKLE:
+  6. Görsel optimizasyonunda "türev var mı?" gate'i şart — yoksa <source> 404 = kırık görsel;
+     progressive-enhancement (coverOptimized flag) + onError fallback ile asla kırma.
+  7. Asset varlığını ENVANTERLE doğrula (ls public/...): "shipped" sanılan kapaklar eksik olabilir.
+
+## 2026-06-12 · E4 — Hero design zenginleştirme (#3)
+- YAPILDI: Perspektifler hub hero'su saf-CSS aurora (blue+gold+indigo blur katmanları +
+  bg-grid mask), gold pill eyebrow (TR-tutarlı "Strateji & Yapay Zeka İçgörüleri"),
+  Playfair H1 + blue→white→amber gradient + gold hairline, subtitle slate-300 (kontrast↑).
+  LCP-güvenli: animasyon YOK (saf CSS, 0 runtime); reduced-motion sorunu doğmaz.
+- VARSAYIM: "zengin hero = motion/3D gerekir" YANLIŞ — statik katmanlı CSS gradient hem
+  premium hem LCP-dostu. Infinite animasyon LCP/INP riski; bilinçli kaçınıldı.
+- MASTER PROMPT'A EKLE:
+  8. Hero/above-the-fold görselde infinite animasyondan kaçın (LCP/INP bütçesi); statik
+     katmanlı CSS aurora tercih et. Motion gerekirse one-shot + reduced-motion guard.
