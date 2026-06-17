@@ -31,3 +31,14 @@ Her kayıt: ne oldu · kök neden · KURAL (bir daha yapma).
 ## M6 — Gizli regresyon: bileşene yeni hook eklemek eski test mock'larını kırar
 - Olan: #1'de `BlogCard`'a `useReducedMotion` eklendi. `motion/react`'i eksik mock'layan `insights-article-grid.test.tsx` "No useReducedMotion export" ile kırıldı (harness onarılınca görünür oldu).
 - KURAL: Bir bileşene yeni bir `motion/react` API'si (hook/öğe) eklediğinde, o bileşeni render eden TÜM testlerin mock'larını tara (grep `vi.mock('motion/react'` + eksik export) ve güncelle. Tek bileşen testini değil, render eden tüm testleri çapraz koş.
+
+## M7 — Sayfa, layout içindeyken kendi Navbar/Footer'ını render ediyordu
+- Olan: `/perspektifler` (BlogPage) zaten `<MainLayout>` (Navbar+Footer sağlar) altında olmasına rağmen kendi `<Navbar/>` + `<Footer/>`'ını da render ediyordu → gerçek-render tanısında `footers:2`, `navs:5`. Ekran görüntüsünde çift footer.
+- Kök neden: Sayfa, route-level layout sözleşmesini bilmeden chrome'u tekrar mount etti.
+- ÇÖZÜM: BlogPage'ten Navbar+Footer kaldırıldı (footers 2→1, navs 5→4). Doğrulama: gerçek-render tanısı + 21 test PASS.
+- KURAL: Bir route `<MainLayout>`/Outlet altındaysa sayfa ASLA Navbar/Footer/`<main>` render etmez. Yeni sayfa eklerken layout sözleşmesini kontrol et; gerçek-render tanısıyla footer/nav/main sayısını doğrula (1/1/1 olmalı).
+
+## SEO/GEO FINDING (açık — karar bekliyor, repo-geneli)
+- `/perspektifler` gerçek-render JSON-LD: Organization+ProfessionalService ×2, FAQPage ×2, Person ×2 (duplike). Kaynak: iki şema sistemi örtüşüyor — global `components/seo/SchemaOrg.tsx` (data-seo-id upsert ile kendi içinde dedup) + `common/SEO.tsx` Organization fallback + `lib/seo/insightsStructuredData.ts` (Organization/Person/BreadcrumbList). Ayrı data-seo-id'ler olduğu için dedup çalışmıyor.
+- Etki: Google duplike Organization/FAQPage'i yok sayabilir/flag'leyebilir (GEO/SEO kalite). DÜZELTİLDİ DEĞİL — tüm siteyi (shipped) etkileyen şema mimarisi refaktörü; kullanıcı kararı + ayrı bir guard'lı tur gerektirir.
+- DÜZELTİLEN SEO (contained): og:title/og:description artık sayfaya-özel (önceden genel anasayfa), og:image SVG → raster `og-image.jpg`, twitter:* eklendi.
