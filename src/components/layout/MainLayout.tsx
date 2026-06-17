@@ -37,7 +37,11 @@ export const MainLayout: React.FC = () => {
           Title/desc/canonical artık her sayfanın kendi <SEO />'su ile yönetiliyor. */}
       {/* P45: <UrgencyBanner /> kaldırıldı — sahte kıtlık göstergesi. */}
       <GeoBanner />
-      <Navbar />
+      {/* A11y: banner landmark — Navbar tek başına <nav>'dı, sayfada <header>
+          landmark'ı yoktu (render tanısı: headers:0). */}
+      <header>
+        <Navbar />
+      </header>
       <main className="grow pt-24" role="main" id="main-content">
         <Outlet />
       </main>

@@ -42,3 +42,10 @@ Her kayıt: ne oldu · kök neden · KURAL (bir daha yapma).
 - `/perspektifler` gerçek-render JSON-LD: Organization+ProfessionalService ×2, FAQPage ×2, Person ×2 (duplike). Kaynak: iki şema sistemi örtüşüyor — global `components/seo/SchemaOrg.tsx` (data-seo-id upsert ile kendi içinde dedup) + `common/SEO.tsx` Organization fallback + `lib/seo/insightsStructuredData.ts` (Organization/Person/BreadcrumbList). Ayrı data-seo-id'ler olduğu için dedup çalışmıyor.
 - Etki: Google duplike Organization/FAQPage'i yok sayabilir/flag'leyebilir (GEO/SEO kalite). DÜZELTİLDİ DEĞİL — tüm siteyi (shipped) etkileyen şema mimarisi refaktörü; kullanıcı kararı + ayrı bir guard'lı tur gerektirir.
 - DÜZELTİLEN SEO (contained): og:title/og:description artık sayfaya-özel (önceden genel anasayfa), og:image SVG → raster `og-image.jpg`, twitter:* eklendi.
+
+## M8 — "Duplike JSON-LD" aslında prerender-skip artefaktıydı (yanlış refaktörden dönüldü)
+- Olan: `/perspektifler` gerçek-render'da Org/Person/FAQPage ×2 görünüyordu; neredeyse global şema mimarisini (SchemaOrg + SEO.tsx + insightsStructuredData) refaktör edecektim (riskli, shipped siteyi etkilerdi).
+- Ampirik kanıt (M1 ruhu): render'daki 10 script = 4× `data-seo-id="schema-org-*"` (SchemaOrg, deduped) + 6× `data-seo-id=NONE`. `dist/index.html` (anasayfa) tam da o 6 baked ld+json'u içeriyor. Yerel build'lerde prerender browser yokluğundan SKIP ettiği için `vite preview`, /perspektifler'e **anasayfa shell'ini SPA-fallback** veriyor → anasayfa şemaları + client SchemaOrg = sahte duplikasyon.
+- Sonuç: Gerçek prod (CI'da browser var → /perspektifler kendi HTML'ine prerender edilir) bu sızıntıyı taşımaz. Şema mimarisi SAĞLAM; refaktör HATA olurdu.
+- KURAL: Bir route'un SEO/JSON-LD'sini `vite preview` ile ölçerken, o route'un GERÇEKTEN prerender edildiğini doğrula (dist/<route>/index.html var mı?). Yoksa anasayfa shell'ini ölçüyorsundur. Per-route ölçüm öncesi prerender'ın koştuğundan emin ol.
+- Aksiyon: Playwright chromium kuruldu → prerender'lı rebuild → /perspektifler kendi HTML'iyle temiz ölçüm.
