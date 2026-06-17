@@ -58,3 +58,8 @@ Kaynak spec: `brain/PERSPEKTIFLER_REBUILD_SPEC.md`. Disiplin: kanıt-veya-sessiz
 - MASTER PROMPT'A EKLE:
   8. Hero/above-the-fold görselde infinite animasyondan kaçın (LCP/INP bütçesi); statik
      katmanlı CSS aurora tercih et. Motion gerekirse one-shot + reduced-motion guard.
+
+## E5 — Harness onarımı vertical'ı gerçek-yeşil yaptı (council + çapraz test)
+- Ne oldu: Component test harness'i repo-geneli kırıktı (M4/M5). Council (3 uzman) + gerçek-makine çapraz testle kök neden bulundu: shell `NODE_ENV=production` → React prod build (act yok). Fix: `vitest.config` test.env=NODE_ENV:test + sahte act polyfill kaldır (commit d028105).
+- Sonuç: Perspektifler vertical tam test yüzeyi gerçek makinede **12 dosya / 59 test PASS** (lib hub-state + search GATE-5 + blog/insights/perspektifler component'leri). Tam suite ~747 fail → 21 fail (hepsi pre-existing, Perspektifler dışı).
+- Master prompt'a eklenecek madde: "Test 'yeşil' iddiası SADECE gerçek makinede (sandbox değil) geçerlidir; `NODE_ENV`/build-condition'ı çapraz-test ile doğrula. Council önerilerini tek tek empirik ele, tahmini fix bırakma. Kalıcı bir harness-probe testi tut."
