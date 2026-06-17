@@ -9,6 +9,14 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: './src/vitest-setup.ts',
     css: true,
+    // COUNCIL FIX (M5 — bkz brain/MISTAKES_LOG.md): Asıl kök neden — shell'de
+    // `NODE_ENV=production` export edilmiş; React CJS bunu görüp PRODUCTION build
+    // yüklüyordu (gerçek `act` yok) → testing-library render() BOŞ DOM / "React.act
+    // is not a function". Test koşumunu shell'den bağımsız `test`e sabitliyoruz.
+    // Gerçek makinede doğrulandı: cluster-d 17/17 FAIL → PASS.
+    env: {
+      NODE_ENV: 'test',
+    },
     include: ['**/*.{test,spec}.{ts,tsx}'],
     exclude: [
       '**/node_modules/**',

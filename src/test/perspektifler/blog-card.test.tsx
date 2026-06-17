@@ -7,10 +7,21 @@ import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import React from 'react';
 
-// Reduced-motion AÇIK senaryosu: useReducedMotion → true (a11y dalını sına).
-vi.mock('motion/react', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('motion/react')>();
-  return { ...actual, useReducedMotion: () => true };
+// Reduced-motion AÇIK senaryosu + jsdom-güvenli motion mock.
+// NOT (M2): importOriginal ile gerçek motion jsdom'da BOŞ render ediyordu.
+// Repodaki kanıtlı pattern: motion.* öğelerini düz forwardRef DOM'a indir.
+vi.mock('motion/react', () => {
+  const mk = (Tag: string) =>
+    React.forwardRef(
+      ({ children, ...props }: React.HTMLAttributes<HTMLElement>, ref: React.Ref<HTMLElement>) =>
+        React.createElement(Tag, { ref, ...props }, children),
+    );
+  return {
+    motion: { article: mk('article'), div: mk('div'), section: mk('section'), span: mk('span') },
+    AnimatePresence: ({ children }: { children?: React.ReactNode }) => children,
+    useReducedMotion: () => true,
+    useInView: () => true,
+  };
 });
 
 import BlogCard from '@/components/blog/BlogCard';

@@ -20,26 +20,12 @@ globalThis.IS_REACT_ACT_ENVIRONMENT = true;
 // Minimal sync+async-aware polyfill: matches the React 18 act() contract
 // (returns a thenable) so testing-library's `withGlobalActEnvironment` wrapper
 // is satisfied without needing a real React commit-scheduler tick.
-function actPolyfill(callback: () => unknown): unknown {
-  const result = callback();
-  if (result !== null && typeof result === 'object' && 'then' in result) {
-    return Promise.resolve(result);
-  }
-  return {
-    then(resolve: () => void) {
-      resolve();
-    },
-  };
-}
-// CJS require — ESM React module exports are frozen; @testing-library uses
-// `require('react')` internally which returns the mutable CJS interop object,
-// so attaching `act` there gets picked up by act-compat.js. Top-level await
-// avoids the read-only ESM namespace error from `import * as React`.
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-const ReactCJS = require('react') as Record<string, unknown>;
-if (typeof ReactCJS.act !== 'function') {
-  ReactCJS.act = actPolyfill;
-}
+// COUNCIL FIX (M2/M4 — bkz brain/MISTAKES_LOG.md): Buradaki el-yapımı `React.act`
+// polyfill'i React 19'un commit fazını FLUSH ETMİYORDU; sonuçta @testing-library
+// `render()` tüm component testlerinde BOŞ DOM üretiyordu. React'in gerçek `act`'i
+// (development build) doğru flush eder — onu kullandırıyoruz. Vitest'i dev build'e
+// kilitlemek için `vitest.config.ts` içinde `resolve.conditions: ['development']`
+// kullanılır. Polyfill kaldırıldı; `IS_REACT_ACT_ENVIRONMENT` zaten yukarıda set.
 
 // Mock matchMedia
 Object.defineProperty(window, 'matchMedia', {

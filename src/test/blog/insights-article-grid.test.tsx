@@ -40,12 +40,21 @@ vi.mock('../../lib/data', () => ({
     },
   ],
 }));
-vi.mock('motion/react', () => ({
-  motion: {
-    article: ({ children, ...rest }: React.HTMLAttributes<HTMLElement>) =>
-      React.createElement('article', rest, children),
-  },
-}));
+// NOT (M5): BlogCard #1'de `useReducedMotion` kullanmaya başladı; eski mock onu
+// export etmediği için "No useReducedMotion export" hatası veriyordu. Eklendi.
+vi.mock('motion/react', () => {
+  const mk = (Tag: string) =>
+    React.forwardRef(
+      ({ children, ...props }: React.HTMLAttributes<HTMLElement>, ref: React.Ref<HTMLElement>) =>
+        React.createElement(Tag, { ref, ...props }, children),
+    );
+  return {
+    motion: { article: mk('article'), div: mk('div'), section: mk('section'), span: mk('span') },
+    AnimatePresence: ({ children }: { children?: React.ReactNode }) => children,
+    useReducedMotion: () => false,
+    useInView: () => true,
+  };
+});
 
 import BlogList from '../../components/blog/BlogList';
 
