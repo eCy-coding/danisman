@@ -49,3 +49,9 @@ Her kayıt: ne oldu · kök neden · KURAL (bir daha yapma).
 - Sonuç: Gerçek prod (CI'da browser var → /perspektifler kendi HTML'ine prerender edilir) bu sızıntıyı taşımaz. Şema mimarisi SAĞLAM; refaktör HATA olurdu.
 - KURAL: Bir route'un SEO/JSON-LD'sini `vite preview` ile ölçerken, o route'un GERÇEKTEN prerender edildiğini doğrula (dist/<route>/index.html var mı?). Yoksa anasayfa shell'ini ölçüyorsundur. Per-route ölçüm öncesi prerender'ın koştuğundan emin ol.
 - Aksiyon: Playwright chromium kuruldu → prerender'lı rebuild → /perspektifler kendi HTML'iyle temiz ölçüm.
+
+## M9 — M8'deki çıkarımım YANLIŞTI: prod GERÇEKTEN duplike şema taşıyor
+- Olan: M8'de "duplike JSON-LD sadece yerel prerender-skip artefaktı, prod temiz, şema mimarisi sağlam, refaktör gereksiz" demiştim. **Bu yanlış.**
+- Gerçek veri (kullanıcının canlı çektiği `ecypro.com/perspektifler` ham prerender HTML'i, 266KB): 12 ld+json bloğu — Organization+ProfessionalService ×2, FAQPage ×2, Person ×2, Organization ×2, WebSite ×2, Service ×1, BreadcrumbList ×1. Yani PROD'da duplikasyon VAR (hatta yerelden fazla).
+- Kök neden (revize): prerender, base index template'inin baked şemaları + route'un kendi enjekte ettiklerini birlikte basıyor → her route template'in setini + kendi setini miras alıyor = sistemik duplikasyon. Yerel SPA-fallback açıklaması yalnızca yerel 10'u açıklıyordu; prod'un 12'sini açıklamıyor.
+- KURAL: Dolaylı kanıttan ("dist/index.html şunu içeriyor") "prod temizdir" SONUCU ÇIKARMA. Prod iddiasını ancak prod'un gerçek (render/served) çıktısıyla doğrula. Çıkarımı "kesin" diye sunmak = yanlış yönlendirme. Bu duplikasyon GERÇEK bir prod SEO/GEO defekti — düzeltilmeli (M8 "non-issue" kararı geçersiz).
