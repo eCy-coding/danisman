@@ -167,7 +167,7 @@
          P43: 70e4761 merge conflict resolved — fake placeholder addr/phone
          JSON-LD discarded; SeoManager (react-helmet-async) is single
          source-of-truth for dynamic JSON-LD per route. -->
-    <script type="application/ld+json">
+    <script type="application/ld+json" data-seo-id="schema-org-professional-service">
     {
       "@context": "https://schema.org",
       "@type": ["Organization", "ProfessionalService"],
@@ -398,7 +398,7 @@
     <!-- P7 Round B: Structured Data (schema.org) at body-end so head parse
          doesn't carry the ~4KB JSON-LD overhead on Slow 4G. Crawler-readable
          identically to head placement (Google JSON-LD docs: location-agnostic). -->
-    <script type="application/ld+json">
+    <script type="application/ld+json" data-seo-id="page-default">
       {
         "@context": "https://schema.org",
         "@type": "Organization",
@@ -422,7 +422,7 @@
         ]
       }
     </script>
-    <script type="application/ld+json">
+    <script type="application/ld+json" data-seo-id="schema-website">
       {
         "@context": "https://schema.org",
         "@type": "WebSite",
@@ -439,7 +439,7 @@
         }
       }
     </script>
-    <script type="application/ld+json">
+    <script type="application/ld+json" data-seo-id="schema-breadcrumb-default">
       {
         "@context": "https://schema.org",
         "@type": "BreadcrumbList",
@@ -453,7 +453,7 @@
     </script>
     <!-- P46 M4: Person schema (founder) — Knowledge Graph'a Emre Can Yalçın
          girişi sağlar, Organization → founder bağlantısını güçlendirir. -->
-    <script type="application/ld+json">
+    <script type="application/ld+json" data-seo-id="schema-org-person">
       {
         "@context": "https://schema.org",
         "@type": "Person",
@@ -475,7 +475,7 @@
         ]
       }
     </script>
-    <script type="application/ld+json">
+    <script type="application/ld+json" data-seo-id="schema-org-faq">
       {
         "@context": "https://schema.org",
         "@type": "FAQPage",
