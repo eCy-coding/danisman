@@ -74,6 +74,7 @@ export const LandingPage: React.FC = () => {
         image="https://www.ecypro.com/og/home.png"
       />
       <JsonLd
+        id="schema-website"
         data={{
           '@context': 'https://schema.org',
           '@type': 'WebSite',

@@ -12,10 +12,25 @@ import React from 'react';
 // Repodaki kanıtlı pattern: motion.* öğelerini düz forwardRef DOM'a indir.
 vi.mock('motion/react', () => {
   const mk = (Tag: string) =>
-    React.forwardRef(
-      ({ children, ...props }: React.HTMLAttributes<HTMLElement>, ref: React.Ref<HTMLElement>) =>
-        React.createElement(Tag, { ref, ...props }, children),
-    );
+    React.forwardRef((props: Record<string, unknown>, ref: React.Ref<HTMLElement>) => {
+      // framer-only prop'ları DOM'a sızdırma (yoksa `initial={false}` uyarısı çıkar)
+      const {
+        children,
+        initial: _i,
+        animate: _a,
+        exit: _e,
+        transition: _t,
+        whileHover: _wh,
+        whileTap: _wt,
+        whileInView: _wv,
+        viewport: _vp,
+        variants: _v,
+        layout: _l,
+        ...rest
+      } = props as { children?: React.ReactNode } & Record<string, unknown>;
+      void _i; void _a; void _e; void _t; void _wh; void _wt; void _wv; void _vp; void _v; void _l;
+      return React.createElement(Tag, { ref, ...rest }, children as React.ReactNode);
+    });
   return {
     motion: { article: mk('article'), div: mk('div'), section: mk('section'), span: mk('span') },
     AnimatePresence: ({ children }: { children?: React.ReactNode }) => children,

@@ -23,9 +23,10 @@ globalThis.IS_REACT_ACT_ENVIRONMENT = true;
 // COUNCIL FIX (M2/M4 — bkz brain/MISTAKES_LOG.md): Buradaki el-yapımı `React.act`
 // polyfill'i React 19'un commit fazını FLUSH ETMİYORDU; sonuçta @testing-library
 // `render()` tüm component testlerinde BOŞ DOM üretiyordu. React'in gerçek `act`'i
-// (development build) doğru flush eder — onu kullandırıyoruz. Vitest'i dev build'e
-// kilitlemek için `vitest.config.ts` içinde `resolve.conditions: ['development']`
-// kullanılır. Polyfill kaldırıldı; `IS_REACT_ACT_ENVIRONMENT` zaten yukarıda set.
+// (development build) doğru flush eder — onu kullandırıyoruz. React dev build'inin
+// yüklenmesi için `vitest.config.ts` içinde `test.env = { NODE_ENV: 'test' }` ile
+// shell'den bağımsız sabitlenir (M5). Polyfill kaldırıldı; `IS_REACT_ACT_ENVIRONMENT`
+// zaten yukarıda set.
 
 // Mock matchMedia
 Object.defineProperty(window, 'matchMedia', {
