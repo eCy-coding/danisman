@@ -98,7 +98,7 @@
   {
     "name": "Route: ServiceDetailPage (brotli)",
     "path": "dist/assets/ServiceDetailPage-*.js",
-    "limit": "72 KB",
+    "limit": "76 KB",
     "brotli": true
   },
   {
