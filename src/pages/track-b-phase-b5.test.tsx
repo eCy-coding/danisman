@@ -78,6 +78,11 @@ vi.mock('react-i18next', () => ({
       return (FOUNDER_TR[k] as string) ?? k;
     },
     i18n: { language: 'tr' },
+    // FounderPage gates render on `ready` (post-de8c982 crash fix: i18n.language
+    // is undefined until the async detector resolves, and returnObjects yields
+    // the raw key before the 'founder' namespace loads). Omitting `ready: true`
+    // here makes the component bail out with `return null` on every render.
+    ready: true,
   }),
   initReactI18next: { type: '3rdParty', init: () => {} },
 }));

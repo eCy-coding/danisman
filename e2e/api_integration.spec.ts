@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { MOCK_URL } from './mock-url';
 
 /**
  * EcyPro — API Health & Integration Tests
@@ -7,7 +8,7 @@ import { test, expect } from '@playwright/test';
  * return correct response formats.
  */
 
-const API_BASE = process.env.VITE_API_URL || 'http://localhost:3099/api';
+const API_BASE = process.env.VITE_API_URL || `${MOCK_URL}/api`;
 
 test.describe('API Health & Integration', () => {
   test('Health check endpoint returns ok', async ({ request }) => {

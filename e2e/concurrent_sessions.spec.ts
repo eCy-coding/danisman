@@ -14,8 +14,9 @@
  */
 
 import { test, expect } from '@playwright/test';
+import { MOCK_URL } from './mock-url';
 
-const MOCK_API = 'http://localhost:3099';
+const MOCK_API = MOCK_URL;
 
 const CREDENTIALS = { email: 'concurrent@ecypro.com', password: 'Test1234!' };
 

@@ -23,9 +23,10 @@
  *   npx playwright test e2e/crawl_security_headers.spec.ts --project=chromium
  */
 import { test, expect, type Page } from '@playwright/test';
+import { MOCK_URL, MOCK_HOST } from './mock-url';
 
 const BASE_URL = 'http://localhost:4173';
-const API_URL = 'http://localhost:3099';
+const API_URL = MOCK_URL;
 
 async function setupMocks(page: Page): Promise<void> {
   await page.route('**/ingest.sentry.io/**', (r) => r.fulfill({ status: 200 }));
@@ -147,7 +148,7 @@ test.describe('Crawler: Security Headers — P35 (T45-T50)', () => {
       .catch(() => null);
 
     if (!res) {
-      console.warn('⚠ API CORS test: sunucu erişilemiyor (localhost:3099)');
+      console.warn(`⚠ API CORS test: sunucu erişilemiyor (${MOCK_HOST})`);
       return;
     }
 
@@ -202,7 +203,7 @@ test.describe('Crawler: Security Headers — P35 (T45-T50)', () => {
     const allDown = statuses.every((s) => s === 0);
 
     if (allDown) {
-      console.warn('⚠ P35-T47: API sunucu (localhost:3099) erişilemiyor — rate limit test skip');
+      console.warn(`⚠ P35-T47: API sunucu (${MOCK_HOST}) erişilemiyor — rate limit test skip`);
       return; // API down — test atlama
     }
 

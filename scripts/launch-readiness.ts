@@ -128,12 +128,12 @@ async function main(): Promise<number> {
   const EP_TOTAL = 3;
 
   // www may serve 200 directly or 308 (canonical redirect) — both healthy.
-  const www = await httpCheck('https://www.ecypro.com', [200, 304, 308]);
+  const www = await httpCheck('https://ecypro.com', [200, 304, 308]);
   if (www.ok) {
     epPass++;
-    log('pass', `www.ecypro.com → ${www.code} OK`);
+    log('pass', `ecypro.com → ${www.code} OK`);
   } else {
-    log('fail', `www.ecypro.com → ${www.code}`);
+    log('fail', `ecypro.com → ${www.code}`);
   }
 
   // Server exposes /api/health (server/index.ts:166), not /health.

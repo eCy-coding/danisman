@@ -52,5 +52,5 @@
 
   <!-- Footer band -->
   <text x="100" y="565" font-family="Inter, system-ui, sans-serif" font-size="20" font-weight="500" fill="#94A3B8">eCyverse · Organizasyonel Dönüşüm · Stratejik Danışmanlık</text>
-  <text x="100" y="595" font-family="Inter, system-ui, sans-serif" font-size="16" font-weight="400" fill="#64748B">www.ecypro.com</text>
+  <text x="100" y="595" font-family="Inter, system-ui, sans-serif" font-size="16" font-weight="400" fill="#64748B">ecypro.com</text>
 </svg>

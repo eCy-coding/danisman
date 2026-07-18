@@ -111,7 +111,7 @@ LOG_LEVEL=info
 
 # ─── Frontend ─────────────────────────────────────────────────────────────────
 VITE_API_URL=http://localhost:3001/api
-VITE_PROD_URL=https://www.ecypro.com
+VITE_PROD_URL=https://ecypro.com
 
 # ─── Redis (opsiyonel) ────────────────────────────────────────────────────────
 REDIS_URL=redis://localhost:6379

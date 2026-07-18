@@ -42,6 +42,10 @@ vi.mock('react-i18next', () => ({
     t: (k: string, opts?: Record<string, unknown>) =>
       opts?.returnObjects ? [] : (TR_DICT[k] ?? k),
     i18n: { language: 'tr' },
+    // FounderPage.tsx:51 gates render on `ready` (incident fix guarding
+    // returnObjects-before-namespace-load crash) — omitting it here made
+    // the page render null in every test.
+    ready: true,
   }),
   initReactI18next: { type: '3rdParty', init: () => {} },
 }));

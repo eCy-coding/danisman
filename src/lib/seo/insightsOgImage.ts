@@ -2,7 +2,7 @@
 // Actual image generation happens at build time via scripts/generate-og-image.mjs.
 // This module provides URL helpers consumed by React meta tag components.
 
-const BASE_URL = 'https://www.ecypro.com';
+const BASE_URL = 'https://ecypro.com';
 
 export function buildInsightsOgImageUrl(slug: string): string {
   return `${BASE_URL}/og/insights/${slug}.png`;

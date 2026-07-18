@@ -29,7 +29,7 @@ export interface InsightSeriesSEO {
   authorName: string;
 }
 
-const BASE_URL = 'https://www.ecypro.com';
+const BASE_URL = 'https://ecypro.com';
 
 export function buildArticleJsonLd(post: InsightPostSEO, locale: 'tr' | 'en'): string {
   const headline = locale === 'en' && post.titleEn ? post.titleEn : post.titleTr;

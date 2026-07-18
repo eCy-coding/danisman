@@ -75,5 +75,10 @@
     "desc": "Haftalık stratejik analiz ve piyasa görüşü",
     "cta": "Abone Ol",
     "kvkk": "KVKK opt-in · İstediğiniz zaman çıkın"
+  },
+  "article": {
+    "notFoundTitle": "Makale Bulunamadı",
+    "backToHub": "Perspektifler'e Dön",
+    "trOnlyNotice": "Bu yazı şu anda yalnızca Türkçe olarak mevcuttur."
   }
 }

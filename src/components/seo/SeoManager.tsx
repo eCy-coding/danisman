@@ -14,6 +14,17 @@ interface SeoManagerProps {
   noIndex?: boolean;
 }
 
+// EN article-parity mechanism: paired Perspektifler articles use DISTINCT
+// slugs per language, so the generic path-based hreflang below (same slug,
+// swap /tr↔/en) is WRONG for them. BlogPostPage owns hreflang for its own
+// route via buildArticleAlternates() (src/i18n/canonical.ts) — SeoManager
+// must not also emit its (conflicting) generic alternates there, or the two
+// would race/duplicate in <head>. /kategori and /konular are hub-style
+// pages with identical slugs per locale, so the generic form is still
+// correct for them and is deliberately excluded from this pattern.
+const ARTICLE_ROUTE_PATTERN =
+  /^\/(?:(?:tr|en)\/)?perspektifler\/(?!kategori(?:\/|$)|konular(?:\/|$))[^/]+\/?$/;
+
 export const SeoManager: React.FC<SeoManagerProps> = ({
   title,
   description,
@@ -45,6 +56,10 @@ export const SeoManager: React.FC<SeoManagerProps> = ({
   // P39-T01: Path-based hreflang (RFC 5646) — tek merkezi util'den.
   // Doğrudan <Helmet> child olarak verilir; IIFE/Fragment ile sarmalanırsa
   // shim flatten edemez. x-default artık locale-stripped değil → /tr prefix'li.
+  // EN article-parity: skip on paired-article routes (see
+  // ARTICLE_ROUTE_PATTERN above) — BlogPostPage emits its own pair-aware
+  // hreflang there via buildArticleAlternates().
+  const isArticleRoute = ARTICLE_ROUTE_PATTERN.test(canonicalPath);
   const alternates = buildAlternateLinks(canonicalPath);
   const hreflangTr = alternates.find((a) => a.hrefLang === 'tr-TR')!.href;
   const hreflangEn = alternates.find((a) => a.hrefLang === 'en')!.href;
@@ -57,10 +72,13 @@ export const SeoManager: React.FC<SeoManagerProps> = ({
       {finalDescription && <meta name="description" content={finalDescription} />}
       {noIndex && <meta name="robots" content="noindex,nofollow" />}
 
-      {/* P39-T01: Path-based hreflang — direct children (shim flatten gereği) */}
-      <link rel="alternate" hrefLang="tr-TR" href={hreflangTr} />
-      <link rel="alternate" hrefLang="en" href={hreflangEn} />
-      <link rel="alternate" hrefLang="x-default" href={hreflangDefault} />
+      {/* P39-T01: Path-based hreflang — direct children (shim flatten gereği,
+          bu yüzden Fragment'e SARILMAZ — her biri ayrı koşullu child).
+          EN article-parity: omitted on paired-article routes; see
+          ARTICLE_ROUTE_PATTERN + isArticleRoute above. */}
+      {!isArticleRoute && <link rel="alternate" hrefLang="tr-TR" href={hreflangTr} />}
+      {!isArticleRoute && <link rel="alternate" hrefLang="en" href={hreflangEn} />}
+      {!isArticleRoute && <link rel="alternate" hrefLang="x-default" href={hreflangDefault} />}
 
       {/* Locale-agnostik OG/Twitter varsayılanları (path'e bağlı olanlar
           per-page <SEO />'da). */}

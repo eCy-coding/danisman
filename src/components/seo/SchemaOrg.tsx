@@ -28,7 +28,7 @@ function upsertJsonLd(id: string, data: Record<string, unknown>): void {
 export const SchemaOrg: React.FC = () => {
   const { language } = useTranslation();
 
-  const baseUrl = 'https://www.ecypro.com';
+  const baseUrl = 'https://ecypro.com';
   const logoUrl = `${baseUrl}/pwa-512x512.png`;
 
   // 1. ProfessionalService Schema (The Core Identity)
@@ -88,6 +88,7 @@ export const SchemaOrg: React.FC = () => {
   const serviceSchema = {
     '@context': 'https://schema.org',
     '@type': 'Service',
+    name: 'eCyPro Management Consulting',
     serviceType: 'Management Consulting',
     provider: {
       '@type': 'ProfessionalService',

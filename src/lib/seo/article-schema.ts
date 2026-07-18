@@ -38,17 +38,17 @@ export function buildArticleSchema(input: ArticleInput) {
     dateModified: input.modifiedAt ?? input.publishedAt,
     author: {
       '@type': 'Person',
-      '@id': 'https://www.ecypro.com/#founder',
+      '@id': 'https://ecypro.com/#founder',
       name: input.author,
-      url: input.authorUrl ?? 'https://www.ecypro.com/about',
+      url: input.authorUrl ?? 'https://ecypro.com/about',
     },
     publisher: {
       '@type': 'Organization',
-      '@id': 'https://www.ecypro.com/#organization',
+      '@id': 'https://ecypro.com/#organization',
       name: 'eCyPro Premium Consulting',
       logo: {
         '@type': 'ImageObject',
-        url: 'https://www.ecypro.com/pwa-512x512.png',
+        url: 'https://ecypro.com/pwa-512x512.png',
         width: 512,
         height: 512,
       },

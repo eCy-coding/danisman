@@ -15,11 +15,48 @@
 
 import crypto from 'node:crypto';
 import { Router, Request, Response, NextFunction } from 'express';
-import { authenticate, requireRole } from '../middleware/auth';
+import { authenticate, requireRole, AuthRequest } from '../middleware/auth';
 import { redis } from '../config/redis';
+import { prisma } from '../config/db';
+import { logger } from '../config/logger';
+import { hashIp } from '../lib/crypto/hashIp';
 
 const router = Router();
 const adminOnly = [authenticate, requireRole('ADMIN')] as const;
+
+// Public-site content changes an admin makes — accountability trail for
+// who changed what, when. Fire-and-forget: an audit-write hiccup must
+// never turn an already-successful mutation into a 500.
+function writeAudit(
+  req: AuthRequest,
+  action: string,
+  targetType: string,
+  targetId: string,
+  data?: Record<string, unknown>,
+): void {
+  try {
+    prisma.auditLog
+      .create({
+        data: {
+          adminId: req.user?.id ?? 'system',
+          actorRole: req.user?.role ?? 'ANONYMOUS',
+          actorIpHash: hashIp(req.ip),
+          action,
+          targetType,
+          targetId,
+          newValue: data as never,
+        },
+      })
+      .catch((err: unknown) => {
+        logger.error('[admin-collections] audit write failed', { action, targetId, err });
+      });
+  } catch (syncErr: unknown) {
+    logger.error('[admin-collections] audit write threw synchronously', {
+      action,
+      err: syncErr,
+    });
+  }
+}
 
 const ALLOWED = new Set([
   'testimonials',
@@ -54,7 +91,7 @@ router.get('/:type', ...adminOnly, async (req: Request, res: Response, next: Nex
   }
 });
 
-router.post('/:type', ...adminOnly, async (req: Request, res: Response, next: NextFunction) => {
+router.post('/:type', ...adminOnly, async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const type = req.params.type;
     if (!type || !ALLOWED.has(type))
@@ -62,6 +99,7 @@ router.post('/:type', ...adminOnly, async (req: Request, res: Response, next: Ne
     const id = crypto.randomUUID();
     const item = { id, createdAt: Date.now(), ...(req.body as Record<string, unknown>) };
     await redis.hset(KEY(type), id, JSON.stringify(item));
+    writeAudit(req, 'COLLECTION_ITEM_CREATED', type, id);
     res.status(201).json({ status: 'ok', data: item });
   } catch (err) {
     next(err);
@@ -85,7 +123,7 @@ router.get('/:type/:id', ...adminOnly, async (req: Request, res: Response, next:
 router.patch(
   '/:type/:id',
   ...adminOnly,
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
       const type = req.params.type;
       const id = req.params.id;
@@ -100,6 +138,7 @@ router.patch(
         updatedAt: Date.now(),
       };
       await redis.hset(KEY(type), id, JSON.stringify(merged));
+      writeAudit(req, 'COLLECTION_ITEM_UPDATED', type, id);
       res.json({ status: 'ok', data: merged });
     } catch (err) {
       next(err);
@@ -110,13 +149,14 @@ router.patch(
 router.delete(
   '/:type/:id',
   ...adminOnly,
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
       const type = req.params.type;
       const id = req.params.id;
       if (!type || !id || !ALLOWED.has(type))
         return res.status(400).json({ status: 'error', message: 'invalid request' });
       await redis.hdel(KEY(type), id);
+      writeAudit(req, 'COLLECTION_ITEM_DELETED', type, id);
       res.status(204).end();
     } catch (err) {
       next(err);

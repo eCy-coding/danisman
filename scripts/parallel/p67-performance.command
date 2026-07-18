@@ -22,16 +22,16 @@ TS=$(date +%Y%m%d-%H%M%S)
 SUMMARY="outputs/P67_lighthouse_${TS}.md"
 
 URLS=(
-  "https://www.ecypro.com/"
-  "https://www.ecypro.com/services"
-  "https://www.ecypro.com/services/strategic-transformation"
-  "https://www.ecypro.com/blog"
-  "https://www.ecypro.com/blog/aile-anayasasi-5-maddelik-cekirdek"
-  "https://www.ecypro.com/pillar/stratejik-donusum"
-  "https://www.ecypro.com/annual-report/2025"
-  "https://www.ecypro.com/contact"
-  "https://www.ecypro.com/about"
-  "https://www.ecypro.com/admin/login"
+  "https://ecypro.com/"
+  "https://ecypro.com/services"
+  "https://ecypro.com/services/strategic-transformation"
+  "https://ecypro.com/blog"
+  "https://ecypro.com/blog/aile-anayasasi-5-maddelik-cekirdek"
+  "https://ecypro.com/pillar/stratejik-donusum"
+  "https://ecypro.com/annual-report/2025"
+  "https://ecypro.com/contact"
+  "https://ecypro.com/about"
+  "https://ecypro.com/admin/login"
 )
 
 # --- 1) Lighthouse CLI kontrol ---

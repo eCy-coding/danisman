@@ -15,11 +15,9 @@
  * Sandbox build'a etki YOK — sadece manuel run.
  */
 
- 
-
-const SITEMAP_URL = 'https://www.ecypro.com/sitemap.xml';
+const SITEMAP_URL = 'https://ecypro.com/sitemap.xml';
 const INDEXNOW_API = 'https://api.indexnow.org/indexnow';
-const SITE_HOST = 'www.ecypro.com';
+const SITE_HOST = 'ecypro.com';
 const KEY = process.env.INDEXNOW_KEY ?? '';
 const KEY_LOCATION = process.env.INDEXNOW_KEY_LOCATION ?? `https://${SITE_HOST}/${KEY}.txt`;
 const SINCE_DAYS = parseInt(process.env.INDEXNOW_SINCE_DAYS ?? '7', 10);

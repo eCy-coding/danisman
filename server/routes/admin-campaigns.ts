@@ -18,10 +18,11 @@
 import crypto from 'node:crypto';
 import { Router, Request, Response, NextFunction } from 'express';
 import { z } from 'zod';
-import { authenticate, requireRole } from '../middleware/auth';
+import { authenticate, requireRole, AuthRequest } from '../middleware/auth';
 import { logger } from '../config/logger';
 import { redis } from '../config/redis';
 import { prisma } from '../config/db';
+import { hashIp } from '../lib/crypto/hashIp';
 import {
   enrollSubscriber,
   getQueueDepth,
@@ -31,6 +32,39 @@ import {
 
 const router = Router();
 const adminOnly = [authenticate, requireRole('ADMIN')] as const;
+
+// KVKK m.10/12 accountability — a sent campaign touches every consenting
+// subscriber's personal data (email). Fire-and-forget: an audit-write
+// hiccup must never turn an already-successful mutation into a 500.
+function writeAudit(
+  req: AuthRequest,
+  action: string,
+  targetId: string | null,
+  data?: Record<string, unknown>,
+): void {
+  try {
+    prisma.auditLog
+      .create({
+        data: {
+          adminId: req.user?.id ?? 'system',
+          actorRole: req.user?.role ?? 'ANONYMOUS',
+          actorIpHash: hashIp(req.ip),
+          action,
+          targetType: 'Campaign',
+          targetId,
+          newValue: data as never,
+        },
+      })
+      .catch((err: unknown) => {
+        logger.error('[admin-campaigns] audit write failed', { action, targetId, err });
+      });
+  } catch (syncErr: unknown) {
+    logger.error('[admin-campaigns] audit write threw synchronously', {
+      action,
+      err: syncErr,
+    });
+  }
+}
 
 const CAMPAIGN_KEY = (id: string) => `campaign:${id}`;
 const CAMPAIGN_INDEX_KEY = 'campaign:index'; // sorted set by createdAt
@@ -97,7 +131,7 @@ router.get('/', ...adminOnly, async (req: Request, res: Response, next: NextFunc
 
 // ── POST / ────────────────────────────────────────────────────────────────
 
-router.post('/', ...adminOnly, async (req: Request, res: Response, next: NextFunction) => {
+router.post('/', ...adminOnly, async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const data = createSchema.parse(req.body);
     const campaign: CampaignRecord = {
@@ -114,6 +148,7 @@ router.post('/', ...adminOnly, async (req: Request, res: Response, next: NextFun
     };
     await saveCampaign(campaign);
     logger.info('[admin-campaigns] created', { id: campaign.id, subject: data.subject });
+    writeAudit(req, 'CAMPAIGN_CREATED', campaign.id, { subject: data.subject });
     res.status(201).json({ status: 'ok', data: campaign });
   } catch (err) {
     next(err);
@@ -152,66 +187,71 @@ router.get('/:id', ...adminOnly, async (req: Request, res: Response, next: NextF
 
 // ── POST /:id/send ────────────────────────────────────────────────────────
 
-router.post('/:id/send', ...adminOnly, async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const id = req.params.id;
-    if (!id) return res.status(400).json({ status: 'error', message: 'id required' });
-    const c = await loadCampaign(id);
-    if (!c) return res.status(404).json({ status: 'error', message: 'not_found' });
-    if (c.status !== 'draft') {
-      return res.status(409).json({ status: 'error', message: `already ${c.status}` });
-    }
-
-    const where: { unsubscribedAt: null; consent?: boolean; source?: string } = {
-      unsubscribedAt: null,
-    };
-    if (c.audienceFilter.consentOnly) where.consent = true;
-    if (c.audienceFilter.source) where.source = c.audienceFilter.source;
-
-    const subscribers = await prisma.newsletterSubscriber.findMany({
-      where,
-      select: { id: true, email: true },
-    });
-
-    let enrolled = 0;
-    for (const s of subscribers) {
-      const firstName = s.email.split('@')[0] ?? 'orada';
-      const result = await enrollSubscriber({
-        subscriberId: s.id,
-        email: s.email,
-        firstName,
-        sequenceKey: 'newsletter-welcome-tr',
-      });
-      if (result.ok) enrolled += result.scheduled;
-    }
-
-    c.status = 'queued';
-    c.queuedAt = Date.now();
-    c.sentCount = enrolled;
-    await saveCampaign(c);
-    logger.info('[admin-campaigns] queued', { id, recipients: subscribers.length });
-
-    // P44-T07 Round-6 — adminEventBus emit so the Newsletter Kampanyalar
-    // dashboard's campaign ticker updates without polling. The bridge in
-    // admin-analytics-stream.ts maps `campaign.sent` to the wire-format
-    // `campaign_sent` event.
+router.post(
+  '/:id/send',
+  ...adminOnly,
+  async (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
-      const { adminEventBus } = await import('../lib/event-bus');
-      adminEventBus.publish('campaign.sent', {
-        id,
-        subject: c.subject,
-        recipientCount: subscribers.length,
-        enrolled,
-      });
-    } catch {
-      /* never block campaign queueing on bus publish */
-    }
+      const id = req.params.id;
+      if (!id) return res.status(400).json({ status: 'error', message: 'id required' });
+      const c = await loadCampaign(id);
+      if (!c) return res.status(404).json({ status: 'error', message: 'not_found' });
+      if (c.status !== 'draft') {
+        return res.status(409).json({ status: 'error', message: `already ${c.status}` });
+      }
 
-    res.json({ status: 'ok', data: { id, recipients: subscribers.length, enrolled } });
-  } catch (err) {
-    next(err);
-  }
-});
+      const where: { unsubscribedAt: null; consent?: boolean; source?: string } = {
+        unsubscribedAt: null,
+      };
+      if (c.audienceFilter.consentOnly) where.consent = true;
+      if (c.audienceFilter.source) where.source = c.audienceFilter.source;
+
+      const subscribers = await prisma.newsletterSubscriber.findMany({
+        where,
+        select: { id: true, email: true },
+      });
+
+      let enrolled = 0;
+      for (const s of subscribers) {
+        const firstName = s.email.split('@')[0] ?? 'orada';
+        const result = await enrollSubscriber({
+          subscriberId: s.id,
+          email: s.email,
+          firstName,
+          sequenceKey: 'newsletter-welcome-tr',
+        });
+        if (result.ok) enrolled += result.scheduled;
+      }
+
+      c.status = 'queued';
+      c.queuedAt = Date.now();
+      c.sentCount = enrolled;
+      await saveCampaign(c);
+      logger.info('[admin-campaigns] queued', { id, recipients: subscribers.length });
+
+      // P44-T07 Round-6 — adminEventBus emit so the Newsletter Kampanyalar
+      // dashboard's campaign ticker updates without polling. The bridge in
+      // admin-analytics-stream.ts maps `campaign.sent` to the wire-format
+      // `campaign_sent` event.
+      try {
+        const { adminEventBus } = await import('../lib/event-bus');
+        adminEventBus.publish('campaign.sent', {
+          id,
+          subject: c.subject,
+          recipientCount: subscribers.length,
+          enrolled,
+        });
+      } catch {
+        /* never block campaign queueing on bus publish */
+      }
+
+      writeAudit(req, 'CAMPAIGN_SENT', id, { recipients: subscribers.length, enrolled });
+      res.json({ status: 'ok', data: { id, recipients: subscribers.length, enrolled } });
+    } catch (err) {
+      next(err);
+    }
+  },
+);
 
 // ── POST /test ─────────────────────────────────────────────────────────────
 
@@ -221,7 +261,7 @@ const testSchema = z.object({
   body: z.string().min(1).max(50_000),
 });
 
-router.post('/test', ...adminOnly, async (req: Request, res: Response, next: NextFunction) => {
+router.post('/test', ...adminOnly, async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const data = testSchema.parse(req.body);
     const { sendDripEmail } = await import('../utils/drip-smtp');
@@ -231,6 +271,7 @@ router.post('/test', ...adminOnly, async (req: Request, res: Response, next: Nex
       html: `<div style="font-family:system-ui;color:#0f172a;padding:16px"><p style="font-size:11px;color:#64748b">Test gönderimi</p>${data.body.replace(/\n/g, '<br/>')}</div>`,
       text: data.body,
     });
+    writeAudit(req, 'CAMPAIGN_TEST_SENT', null);
     res.status(204).end();
   } catch (err) {
     next(err);

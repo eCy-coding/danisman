@@ -197,7 +197,7 @@ export const ServicesPage: React.FC = () => {
         />
         <meta property="og:type" content="website" />
         <meta property="og:url" content={buildCanonical('/services', lang)} />
-        <meta property="og:image" content="https://www.ecypro.com/og/services.png" />
+        <meta property="og:image" content="https://ecypro.com/og/services.png" />
         <meta name="robots" content="index, follow, max-image-preview:large" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta
@@ -216,14 +216,14 @@ export const ServicesPage: React.FC = () => {
               : 'KVKK compliance, EU regulatory, strategic management, digital transformation.'
           }
         />
-        <meta name="twitter:image" content="https://www.ecypro.com/og/services.png" />
+        <meta name="twitter:image" content="https://ecypro.com/og/services.png" />
       </Helmet>
       <JsonLd
         data={buildBreadcrumbSchema([
-          { name: lang === 'tr' ? 'Anasayfa' : 'Home', url: 'https://www.ecypro.com/' },
+          { name: lang === 'tr' ? 'Anasayfa' : 'Home', url: 'https://ecypro.com/' },
           {
             name: lang === 'tr' ? 'Hizmetler' : 'Services',
-            url: 'https://www.ecypro.com/services',
+            url: 'https://ecypro.com/services',
           },
         ])}
       />
@@ -236,13 +236,13 @@ export const ServicesPage: React.FC = () => {
             lang === 'tr'
               ? 'M&A, ESG, Fintech, Aile Şirketi, İnsan & Organizasyon, Risk & Kamu, Büyüme & Operasyon kümeleri'
               : 'M&A, ESG, Fintech, Family Business, People & Organization, Risk & Public Affairs, Growth & Operations clusters',
-          url: 'https://www.ecypro.com/services',
+          url: 'https://ecypro.com/services',
           itemListElement: SERVICES.map((s, idx) => ({
             '@type': 'ListItem',
             position: idx + 1,
             name: s.title,
             description: s.description,
-            url: `https://www.ecypro.com${s.link}`,
+            url: `https://ecypro.com${s.link}`,
           })),
         }}
       />

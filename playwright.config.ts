@@ -10,6 +10,11 @@ const CONSENT_SEED = JSON.stringify({
   preferences: { essential: true, analytics: true, marketing: true },
 });
 
+// Mock-server port — override with E2E_MOCK_PORT when 3099 is held by a
+// foreign process on this machine. Default MUST stay 3099 (CI + other
+// machines rely on it going unset).
+const MOCK_PORT = process.env.E2E_MOCK_PORT ?? '3099';
+
 export default defineConfig({
   testDir: './e2e',
   testIgnore: '*bash_commands.test.ts',
@@ -55,8 +60,8 @@ export default defineConfig({
       timeout: 120000,
     },
     {
-      command: 'MOCK_PORT=3099 MOCK_CAL_SECRET=e2e-test-webhook-secret node server/mock-server.mjs',
-      url: 'http://localhost:3099/__health',
+      command: `MOCK_PORT=${MOCK_PORT} MOCK_CAL_SECRET=e2e-test-webhook-secret node server/mock-server.mjs`,
+      url: `http://localhost:${MOCK_PORT}/__health`,
       reuseExistingServer: !process.env.CI,
       timeout: 10000,
     },
@@ -64,7 +69,13 @@ export default defineConfig({
   projects: [
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      // PW_BROWSER_CHANNEL=chrome → run against system Chrome (zero-download
+      // escape hatch for machines where the bundled-chromium download is
+      // broken). Unset (CI default) keeps the pinned Playwright chromium.
+      use: {
+        ...devices['Desktop Chrome'],
+        ...(process.env.PW_BROWSER_CHANNEL ? { channel: process.env.PW_BROWSER_CHANNEL } : {}),
+      },
     },
     {
       name: 'firefox',

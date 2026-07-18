@@ -17,7 +17,7 @@ import { join, relative } from 'path';
 const ROOT = join(import.meta.dirname ?? process.cwd(), '..');
 const DIST_DIR = join(ROOT, 'dist');
 const ROBOTS = join(ROOT, 'public', 'robots.txt');
-const PROD_ORIGIN = process.env.VITE_PROD_URL ?? 'https://www.ecypro.com';
+const PROD_ORIGIN = process.env.VITE_PROD_URL ?? 'https://ecypro.com';
 
 interface AuditResult {
   file: string;

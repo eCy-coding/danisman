@@ -66,7 +66,7 @@ export const SektorlerIlacPage: React.FC = () => {
     '@context': 'https://schema.org',
     '@type': 'Service',
     name: lang === 'tr' ? 'İlaç & Sağlık Sektörü Danışmanlığı' : 'Pharma & Healthcare Consulting',
-    url: 'https://www.ecypro.com/sektorler/ilac-saglik',
+    url: 'https://ecypro.com/sektorler/ilac-saglik',
     description:
       lang === 'tr'
         ? 'GMP uyumu, SGK süreç optimizasyonu ve dijital sağlık stratejisi ile ilaç ve sağlık şirketlerine değer yaratıyoruz.'
@@ -74,7 +74,7 @@ export const SektorlerIlacPage: React.FC = () => {
     provider: {
       '@type': 'Organization',
       name: 'eCyPro Premium Consulting',
-      url: 'https://www.ecypro.com',
+      url: 'https://ecypro.com',
     },
     areaServed: { '@type': 'Country', name: 'Türkiye', identifier: 'TR' },
     serviceType: 'Management Consulting',
@@ -97,14 +97,14 @@ export const SektorlerIlacPage: React.FC = () => {
       />
       <JsonLd
         data={buildBreadcrumbSchema([
-          { name: lang === 'tr' ? 'Anasayfa' : 'Home', url: 'https://www.ecypro.com/' },
+          { name: lang === 'tr' ? 'Anasayfa' : 'Home', url: 'https://ecypro.com/' },
           {
             name: lang === 'tr' ? 'Sektörler' : 'Industries',
-            url: 'https://www.ecypro.com/sektorler',
+            url: 'https://ecypro.com/sektorler',
           },
           {
             name: lang === 'tr' ? 'İlaç & Sağlık' : 'Pharma & Healthcare',
-            url: 'https://www.ecypro.com/sektorler/ilac-saglik',
+            url: 'https://ecypro.com/sektorler/ilac-saglik',
           },
         ])}
       />

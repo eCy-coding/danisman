@@ -21,7 +21,7 @@ const REPORT = ANNUAL_REPORT_2025;
 
 const TITLE = `${REPORT.year} Yıllık Raporu | eCyPro Premium Consulting`;
 const DESCRIPTION = `${REPORT.headline} — anonimleştirilmiş engagement portföyü, sektör dağılımı, methodoloji metrikleri.`;
-const URL = `https://www.ecypro.com/annual-report/${REPORT.year}`;
+const URL = `https://ecypro.com/annual-report/${REPORT.year}`;
 
 export const AnnualReportPage: React.FC = () => {
   return (
@@ -36,12 +36,12 @@ export const AnnualReportPage: React.FC = () => {
           author: {
             '@type': 'Organization',
             name: 'eCyPro Premium Consulting',
-            url: 'https://www.ecypro.com',
+            url: 'https://ecypro.com',
           },
           publisher: {
             '@type': 'Organization',
             name: 'eCyPro Premium Consulting',
-            url: 'https://www.ecypro.com',
+            url: 'https://ecypro.com',
           },
           headline: REPORT.headline,
           description: DESCRIPTION,

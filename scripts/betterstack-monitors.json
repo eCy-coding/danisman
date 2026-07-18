@@ -3,7 +3,7 @@
     {
       "name": "eCyPro Frontend",
       "monitor_type": "status",
-      "url": "https://www.ecypro.com",
+      "url": "https://ecypro.com",
       "check_frequency": 60,
       "expected_status_codes": [200],
       "regions": ["eu"],

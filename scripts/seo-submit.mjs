@@ -16,7 +16,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 
-const HOST = 'www.ecypro.com';
+const HOST = 'ecypro.com';
 const KEY_LOCATION = `https://${HOST}/${process.env.INDEXNOW_KEY ?? 'REPLACE_WITH_REAL_INDEXNOW_KEY_32_CHARS'}.txt`;
 const ENDPOINT = 'https://api.indexnow.org/IndexNow';
 

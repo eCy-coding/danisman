@@ -12,9 +12,10 @@
 
 import { Router, Request, Response, NextFunction } from 'express';
 import { z } from 'zod';
-import { authenticate, requireRole } from '../middleware/auth';
+import { authenticate, requireRole, AuthRequest } from '../middleware/auth';
 import { prisma } from '../config/db';
 import { logger } from '../config/logger';
+import { hashIp } from '../lib/crypto/hashIp';
 import {
   createAdayInNotion,
   listAdaylarFromNotion,
@@ -25,6 +26,39 @@ import { getSseManager } from '../lib/realtime/sse-manager';
 
 const router = Router();
 const adminOnly = [authenticate, requireRole('ADMIN')] as const;
+
+// KVKK m.10/12 accountability — lead records hold personal data (name,
+// email, company). Fire-and-forget: an audit-write hiccup must never turn
+// an already-successful mutation into a 500 for the operator.
+function writeAudit(
+  req: AuthRequest,
+  action: string,
+  targetId: string,
+  data?: Record<string, unknown>,
+): void {
+  try {
+    prisma.auditLog
+      .create({
+        data: {
+          adminId: req.user?.id ?? 'system',
+          actorRole: req.user?.role ?? 'ANONYMOUS',
+          actorIpHash: hashIp(req.ip),
+          action,
+          targetType: 'Lead',
+          targetId,
+          newValue: data as never,
+        },
+      })
+      .catch((err: unknown) => {
+        logger.error('[admin-leads] audit write failed', { action, targetId, err });
+      });
+  } catch (syncErr: unknown) {
+    logger.error('[admin-leads] audit write threw synchronously', {
+      action,
+      err: syncErr,
+    });
+  }
+}
 
 // ── Validation schema ─────────────────────────────────────────────────────────
 
@@ -67,7 +101,7 @@ function notionErrorToHttp(err: NotionLeadsError): { status: number; message: st
 router.post(
   '/',
   ...adminOnly,
-  async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
     const parsed = AdayCreateSchema.safeParse(req.body);
     if (!parsed.success) {
       const issues = parsed.error?.issues ?? [];
@@ -118,6 +152,11 @@ router.post(
       } catch {
         // never block lead create on bus publish
       }
+
+      writeAudit(req, 'LEAD_CREATED', result.id, {
+        company: parsed.data.company,
+        source: parsed.data.source,
+      });
 
       res.status(201).json({ status: 'success', data: result });
     } catch (err) {
@@ -178,7 +217,7 @@ const AdayUpdateSchema = z.object({
 router.patch(
   '/:id',
   ...adminOnly,
-  async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
     const id = req.params['id'] ?? '';
     if (!id) {
       res.status(400).json({ status: 'error', message: 'Aday id gerekli' });
@@ -206,6 +245,7 @@ router.patch(
       }
 
       logger.info('[admin-leads] patched', { id, fields: Object.keys(parsed.data) });
+      writeAudit(req, 'LEAD_UPDATED', id, { fields: Object.keys(parsed.data) });
       res.json({ status: 'success', data: { id, ...parsed.data } });
     } catch (err) {
       if (err instanceof NotionLeadsError) {

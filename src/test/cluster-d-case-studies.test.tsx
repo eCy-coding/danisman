@@ -27,7 +27,7 @@ vi.mock('@/lib/i18n', () => ({
 }));
 
 vi.mock('@/i18n/canonical', () => ({
-  buildCanonical: (path: string) => `https://www.ecypro.com${path}`,
+  buildCanonical: (path: string) => `https://ecypro.com${path}`,
 }));
 
 vi.mock('@/data/mockCaseStudies', () => ({

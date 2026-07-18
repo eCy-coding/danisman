@@ -27,7 +27,7 @@ vi.mock('@/components/services/ServiceDetailLayout', () => ({
 vi.mock('@/components/seo/JsonLd', () => ({ JsonLd: () => null }));
 vi.mock('@/lib/i18n', () => ({ useTranslation: () => ({ language: 'tr' }) }));
 vi.mock('@/i18n/canonical', () => ({
-  buildCanonical: (p: string) => `https://www.ecypro.com${p}`,
+  buildCanonical: (p: string) => `https://ecypro.com${p}`,
 }));
 
 function renderAt(slug: string) {

@@ -26,7 +26,12 @@ export interface FeedItem {
   featured: boolean;
   /** Hub-relative article URL. */
   href: string;
+  /** EN article-parity mechanism: links opposite-lang siblings. */
+  pairId?: string;
 }
+
+/** EN article-parity mechanism (istek.md v2): the hub is served per-locale. */
+export type FeedLang = 'tr' | 'en';
 
 export interface HubFilter {
   kategori?: string;
@@ -67,13 +72,32 @@ const caseStudyItems: FeedItem[] = CASE_STUDIES.map((cs) => ({
 
 export const ALL_ITEMS: FeedItem[] = [...posts, ...caseStudyItems];
 
-/** Curated hero layer: featured posts (max 4), newest first. */
-export function getFeatured(): { lead: FeedItem | null; secondary: FeedItem[] } {
-  const featured = posts
-    .filter((p) => p.featured)
-    .sort((a, b) => b.date.localeCompare(a.date))
-    .slice(0, 4);
-  return { lead: featured[0] ?? null, secondary: featured.slice(1) };
+/**
+ * EN article-parity mechanism (istek.md v2): lang-aware base item list.
+ *   - 'tr' → TR posts only (+ case studies, which are lang-agnostic today).
+ *   - 'en' → EN posts + TR-only posts (those with no EN pair sibling) so the
+ *     /en hub is never empty while EN content is still sparse/nonexistent.
+ * Today's corpus has zero pairId values, so itemsForLang('en') === all items
+ * (nothing is excluded) until EN articles ship.
+ */
+export function itemsForLang(lang: FeedLang, items: FeedItem[] = ALL_ITEMS): FeedItem[] {
+  if (lang === 'tr') return items.filter((i) => i.lang !== 'en');
+  const pairIdsWithEnMember = new Set(
+    items.filter((i) => i.lang === 'en' && i.pairId).map((i) => i.pairId),
+  );
+  return items.filter((i) => i.lang === 'en' || !(i.pairId && pairIdsWithEnMember.has(i.pairId)));
+}
+
+/** Curated hero layer: featured posts (max 4), newest first.
+ *  When `lang` is given, same-lang featured posts are preferred; cross-lang
+ *  featured posts fill any remaining slots (EN article-parity mechanism). */
+export function getFeatured(lang?: FeedLang): { lead: FeedItem | null; secondary: FeedItem[] } {
+  const featuredAll = posts.filter((p) => p.featured).sort((a, b) => b.date.localeCompare(a.date));
+  const ordered = lang
+    ? [...featuredAll.filter((p) => p.lang === lang), ...featuredAll.filter((p) => p.lang !== lang)]
+    : featuredAll;
+  const top = ordered.slice(0, 4);
+  return { lead: top[0] ?? null, secondary: top.slice(1) };
 }
 
 /** Legacy param migration: ?cat=<TR label> / ?tag=<raw tag> from the old /blog. */
@@ -134,8 +158,13 @@ function matchesExceptPage(item: FeedItem, f: HubFilter): boolean {
   return true;
 }
 
-export function filterItems(f: HubFilter, items: FeedItem[] = ALL_ITEMS): FeedItem[] {
-  const out = items.filter((i) => matchesExceptPage(i, f));
+export function filterItems(
+  f: HubFilter,
+  items: FeedItem[] = ALL_ITEMS,
+  lang?: FeedLang,
+): FeedItem[] {
+  const base = lang ? itemsForLang(lang, items) : items;
+  const out = base.filter((i) => matchesExceptPage(i, f));
   if (f.sirala === 'eski') out.sort((a, b) => a.date.localeCompare(b.date));
   else if (f.sirala === 'az') out.sort((a, b) => a.title.localeCompare(b.title, 'tr'));
   else out.sort((a, b) => b.date.localeCompare(a.date));
@@ -156,28 +185,31 @@ export interface FacetOption {
 }
 
 /** Counts respect every OTHER active facet; zero-count options are dropped. */
-export function facetOptions(f: HubFilter): {
+export function facetOptions(
+  f: HubFilter,
+  lang?: FeedLang,
+): {
   kategoriler: FacetOption[];
   formatlar: FacetOption[];
   yillar: FacetOption[];
 } {
   const without = (key: keyof HubFilter): HubFilter => ({ ...f, [key]: undefined, page: 1 });
 
-  const catBase = filterItems(without('kategori'));
+  const catBase = filterItems(without('kategori'), ALL_ITEMS, lang);
   const kategoriler = CATEGORIES.map((c) => ({
     value: c.slug,
     label: c.label,
     count: catBase.filter((i) => i.categorySlug === c.slug).length,
   })).filter((o) => o.count > 0);
 
-  const fmtBase = filterItems(without('format'));
+  const fmtBase = filterItems(without('format'), ALL_ITEMS, lang);
   const formatlar = FORMATS.map((fm) => ({
     value: fm.slug,
     label: fm.label,
     count: fmtBase.filter((i) => i.format === fm.slug).length,
   })).filter((o) => o.count > 0);
 
-  const yilBase = filterItems(without('yil'));
+  const yilBase = filterItems(without('yil'), ALL_ITEMS, lang);
   const yearSet = new Map<string, number>();
   for (const i of yilBase) {
     const y = i.date.slice(0, 4);
@@ -191,8 +223,8 @@ export function facetOptions(f: HubFilter): {
 }
 
 /** Top-N most used topics across the current category context (chips ≤12). */
-export function topTopics(f: HubFilter, limit = 12): FacetOption[] {
-  const base = filterItems({ ...f, konu: undefined, page: 1 });
+export function topTopics(f: HubFilter, limit = 12, lang?: FeedLang): FacetOption[] {
+  const base = filterItems({ ...f, konu: undefined, page: 1 }, ALL_ITEMS, lang);
   const use = new Map<string, number>();
   for (const i of base) for (const t of i.tags) use.set(t, (use.get(t) ?? 0) + 1);
   return [...use.entries()]
@@ -207,7 +239,9 @@ export function topTopics(f: HubFilter, limit = 12): FacetOption[] {
 }
 
 /** Tag-overlap related articles (mirrors scripts/check-links.ts contract):
- *  overlap desc → same-category → newest-any fill, always 3 when corpus allows. */
+ *  overlap desc → same-lang → same-category → newest-any fill, always 3 when
+ *  corpus allows. Same-lang is a *preference* tie-breaker (EN article-parity
+ *  mechanism) — cross-lang items still fill remaining slots, never excluded. */
 export function relatedItems(slug: string, limit = 3): FeedItem[] {
   const source = posts.find((p) => p.slug === slug);
   if (!source) return [];
@@ -216,10 +250,15 @@ export function relatedItems(slug: string, limit = 3): FeedItem[] {
     .map((p) => ({
       p,
       overlap: p.tags.filter((t) => source.tags.includes(t)).length,
+      sameLang: p.lang === source.lang ? 1 : 0,
       sameCat: p.categorySlug === source.categorySlug ? 1 : 0,
     }))
     .sort(
-      (a, b) => b.overlap - a.overlap || b.sameCat - a.sameCat || b.p.date.localeCompare(a.p.date),
+      (a, b) =>
+        b.overlap - a.overlap ||
+        b.sameLang - a.sameLang ||
+        b.sameCat - a.sameCat ||
+        b.p.date.localeCompare(a.p.date),
     );
   const cluster = scored.filter((s) => s.overlap > 0 || s.sameCat > 0).map((s) => s.p);
   if (cluster.length >= limit) return cluster.slice(0, limit);
@@ -227,11 +266,18 @@ export function relatedItems(slug: string, limit = 3): FeedItem[] {
   return [...cluster, ...fill].slice(0, limit);
 }
 
-/** Series siblings sorted by date (prev/next nav when series_id is set). */
-export function seriesSiblings(seriesId: string): FeedItem[] {
-  return posts
+/** Series siblings sorted by date (prev/next nav when series_id is set).
+ *  When `preferredLang` is given, siblings in that lang are returned when
+ *  any exist; otherwise falls back to the full cross-lang series (EN
+ *  article-parity mechanism — a series is never empty just because it has
+ *  no same-lang entries yet). */
+export function seriesSiblings(seriesId: string, preferredLang?: FeedLang): FeedItem[] {
+  const all = posts
     .filter((p) => (p as FeedItem & { seriesId?: string }).seriesId === seriesId)
     .sort((a, b) => a.date.localeCompare(b.date));
+  if (!preferredLang) return all;
+  const sameLang = all.filter((p) => p.lang === preferredLang);
+  return sameLang.length > 0 ? sameLang : all;
 }
 
 /** GATE-5 ranked search: title hits ×3, tag hits ×2, excerpt/category ×1. */

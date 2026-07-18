@@ -50,7 +50,7 @@ export const GuvencePage: React.FC = () => {
     '@context': 'https://schema.org',
     '@type': 'AboutPage',
     name: lang === 'tr' ? 'eCyPro Güvence & Bağımsızlık' : 'eCyPro Trust & Independence',
-    url: 'https://www.ecypro.com/guvence',
+    url: 'https://ecypro.com/guvence',
     description:
       lang === 'tr'
         ? 'KVKK uyumu, bağımsız denetim taahhüdü ve çıkar çatışması politikası.'
@@ -58,7 +58,7 @@ export const GuvencePage: React.FC = () => {
     publisher: {
       '@type': 'Organization',
       name: 'eCyPro Premium Consulting',
-      url: 'https://www.ecypro.com',
+      url: 'https://ecypro.com',
     },
   };
 
@@ -75,8 +75,8 @@ export const GuvencePage: React.FC = () => {
       />
       <JsonLd
         data={buildBreadcrumbSchema([
-          { name: lang === 'tr' ? 'Anasayfa' : 'Home', url: 'https://www.ecypro.com/' },
-          { name: lang === 'tr' ? 'Güvence' : 'Trust', url: 'https://www.ecypro.com/guvence' },
+          { name: lang === 'tr' ? 'Anasayfa' : 'Home', url: 'https://ecypro.com/' },
+          { name: lang === 'tr' ? 'Güvence' : 'Trust', url: 'https://ecypro.com/guvence' },
         ])}
       />
       <JsonLd data={aboutJsonLd} />

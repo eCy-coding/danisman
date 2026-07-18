@@ -19,7 +19,7 @@
  */
 
 import React, { useState } from 'react';
-import { Helmet } from 'react-helmet-async';
+import { JsonLd } from '@/components/seo/JsonLd';
 import { ChevronDown } from 'lucide-react';
 
 export interface FAQItem {
@@ -69,9 +69,10 @@ export const FAQSection: React.FC<FAQSectionProps> = ({
 
   return (
     <>
-      <Helmet>
-        <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
-      </Helmet>
+      {/* Raw Helmet <script> stacked a hydration copy on top of the
+          prerender-baked one (FAQPage ×2/×3 in the JSON-LD audit); JsonLd
+          adopts the sitewide schema-org-faq block instead. */}
+      <JsonLd id="schema-org-faq" data={jsonLd} />
 
       <section className={`my-12 ${className}`} aria-labelledby="faq-heading">
         <h2

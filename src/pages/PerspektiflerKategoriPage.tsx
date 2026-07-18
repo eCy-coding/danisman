@@ -7,10 +7,13 @@ import BlogCard from '@/components/blog/BlogCard';
 import { PerspektiflerFeed } from '@/components/blog/PerspektiflerFeed';
 import { CATEGORY_BY_SLUG } from '@/data/taxonomy';
 import { PILLAR_INTROS, getStartHere } from '@/data/pillar-content';
+import { useTranslation } from '@/lib/i18n';
+import { buildCanonical } from '@/i18n/canonical';
 
 /** Category pillar page (istek.md v2 §PHASE 4): intro → "Buradan başlayın"
  *  curated picks → chronological grid with the category pre-locked. */
 const PerspektiflerKategoriPage: React.FC = () => {
+  const { language } = useTranslation();
   const { slug = '' } = useParams();
   const category = CATEGORY_BY_SLUG[slug];
   const startHere = useMemo(() => (category ? getStartHere(slug) : []), [category, slug]);
@@ -28,7 +31,9 @@ const PerspektiflerKategoriPage: React.FC = () => {
           name="description"
           content={intro?.seo ?? `${category.label} üzerine eCyPro içgörüleri.`}
         />
-        <link rel="canonical" href={`https://www.ecypro.com/perspektifler/kategori/${slug}`} />
+        {/* Canonical-collapse fix: hardcoded apex literal ezildi — diğer
+            sayfalardaki gibi locale-aware buildCanonical üzerinden. */}
+        <link rel="canonical" href={buildCanonical(`/perspektifler/kategori/${slug}`, language)} />
       </Helmet>
       <Navbar />
 

@@ -26,7 +26,7 @@ interface SEOProps {
  * doğrudan güncellemektedir. Helmet dependency kaldırılmıştır.
  */
 
-const SITE_URL = 'https://www.ecypro.com';
+const SITE_URL = 'https://ecypro.com';
 
 function upsertMeta(
   selector: string,
@@ -72,7 +72,7 @@ export const SEO: React.FC<SEOProps> = ({
   description,
   canonical,
   type = 'website',
-  image = 'https://www.ecypro.com/og-image.svg',
+  image = 'https://ecypro.com/og-image.jpg',
   jsonLd,
   noIndex = false,
 }) => {
@@ -99,7 +99,7 @@ export const SEO: React.FC<SEOProps> = ({
       : 'Your strategic partner for global growth and digital transformation. Management, events, and digital solutions.';
 
   const finalDescription = description || siteDescription;
-  // Locale-aware canonical: always https://www.ecypro.com/{locale}{path}.
+  // Locale-aware canonical: always https://ecypro.com/{locale}{path}.
   // Eski davranış canonical'ı locale-stripped bırakıyordu → Google duplicate
   // content riski. buildCanonical /:locale prefix'i garanti eder.
   const finalCanonical = buildCanonical(canonical ?? '/', language);
@@ -112,7 +112,7 @@ export const SEO: React.FC<SEOProps> = ({
     () => ({
       '@context': 'https://schema.org',
       '@type': 'Organization',
-      '@id': 'https://www.ecypro.com/#organization',
+      '@id': 'https://ecypro.com/#organization',
       name: 'eCyPro',
       url: SITE_URL,
       logo: `${SITE_URL}/logo.png`,
@@ -163,14 +163,18 @@ export const SEO: React.FC<SEOProps> = ({
     // S13-R3-S5 — explicit OG image dimensions + type + alt. LinkedIn and
     // Facebook fall back to a crawl-time fetch when dimensions are missing
     // (or rejects SVG entirely), often producing empty / wrong-shape link
-    // previews. The pinned PNG card is 1200×630.
+    // previews. The pinned default card (og-image.jpg) is 1200×630.
     upsertMeta('meta[property="og:image:width"]', 'property', 'og:image:width', '1200');
     upsertMeta('meta[property="og:image:height"]', 'property', 'og:image:height', '630');
     upsertMeta(
       'meta[property="og:image:type"]',
       'property',
       'og:image:type',
-      image.endsWith('.svg') ? 'image/svg+xml' : 'image/png',
+      image.endsWith('.svg')
+        ? 'image/svg+xml'
+        : image.endsWith('.jpg') || image.endsWith('.jpeg')
+          ? 'image/jpeg'
+          : 'image/png',
     );
     upsertMeta('meta[property="og:image:alt"]', 'property', 'og:image:alt', finalTitle);
 

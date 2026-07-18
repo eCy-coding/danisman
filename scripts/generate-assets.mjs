@@ -153,7 +153,7 @@ async function ogTemplate(title, subtitle) {
     <text x="80" y="240" font-family="Inter, sans-serif" font-size="58" font-weight="700" fill="${BRAND.foreground}">${escape(title)}</text>
     <text x="80" y="320" font-family="Inter, sans-serif" font-size="32" font-weight="400" fill="#9AA0A6">${escape(subtitle)}</text>
     <text x="80" y="560" font-family="Inter, sans-serif" font-size="24" font-weight="600" fill="${BRAND.accent}">eCyPro Premium Consulting</text>
-    <text x="80" y="595" font-family="Inter, sans-serif" font-size="18" font-weight="400" fill="#7C8389">www.ecypro.com</text>
+    <text x="80" y="595" font-family="Inter, sans-serif" font-size="18" font-weight="400" fill="#7C8389">ecypro.com</text>
   </svg>`;
   return s(Buffer.from(svg)).png({ compressionLevel: 9 }).toBuffer();
 }

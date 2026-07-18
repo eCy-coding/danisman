@@ -50,7 +50,7 @@ export function buildOrganizationSchema(): Record<string, unknown> {
       width: 512,
       height: 512,
     },
-    image: `${SITE_URL}/og-image.png`,
+    image: `${SITE_URL}/og-image.jpg`,
     description:
       'Stratejik danışmanlık, operasyonel verimlilik ve dijital dönüşüm için premium konsültasyon hizmetleri.',
     foundingDate: '2024',
@@ -279,6 +279,7 @@ export function buildCaseStudySchema(input: CaseStudySchemaInput): Record<string
     image: input.image,
     inLanguage: input.language ?? 'tr',
     about: { '@type': 'Organization', name: input.client },
+    author: { '@type': 'Person', name: 'Emre Can Yalçın', url: `${SITE_URL}/founder` },
     publisher: {
       '@type': 'Organization',
       '@id': ORG_ID,

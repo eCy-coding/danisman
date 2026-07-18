@@ -8,12 +8,12 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '../..');
 
 const REQUIRED_URLS = [
-  'https://www.ecypro.com/',
-  'https://www.ecypro.com/founder',
-  'https://www.ecypro.com/pricing',
-  'https://www.ecypro.com/discovery',
-  'https://www.ecypro.com/services',
-  'https://www.ecypro.com/perspektifler',
+  'https://ecypro.com/',
+  'https://ecypro.com/founder',
+  'https://ecypro.com/pricing',
+  'https://ecypro.com/discovery',
+  'https://ecypro.com/services',
+  'https://ecypro.com/perspektifler',
 ];
 
 describe('lighthouserc.json', () => {

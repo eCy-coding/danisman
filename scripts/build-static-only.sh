@@ -73,7 +73,7 @@ cat <<EOF
    2. public_html/ klasörüne git
    3. Mevcut içerik varsa: backup_$TS.zip olarak indir, sonra sil
    4. outputs/$(basename "$ZIP_PATH") upload + Extract
-   5. Smoke test: curl -sS -I https://www.ecypro.com/
+   5. Smoke test: curl -sS -I https://ecypro.com/
 
 📋 DNS (yeni domain ise, ~5-30 dk propagation):
    - A record:   @   → Hostinger shared IP (hpanel'de gösterilir)

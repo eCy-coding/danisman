@@ -27,7 +27,10 @@ vi.mock('../../components/seo/JsonLd', () => ({ JsonLd: () => null }));
 vi.mock('@/lib/i18n', () => ({
   useTranslation: () => ({ language: 'tr', t: (k: string) => k }),
 }));
-vi.mock('@/i18n/canonical', () => ({ buildCanonical: () => '/blog/test-slug' }));
+vi.mock('@/i18n/canonical', () => ({
+  buildCanonical: () => '/blog/test-slug',
+  buildArticleAlternates: () => [],
+}));
 vi.mock('@/components/layout/Navbar', () => ({ Navbar: () => <nav /> }));
 vi.mock('../../components/layout/Footer', () => ({ Footer: () => <footer /> }));
 vi.mock('../../components/ui/VoicePlayer', () => ({ VoicePlayer: () => null }));

@@ -72,7 +72,7 @@ export const SektorlerImalatPage: React.FC = () => {
     '@context': 'https://schema.org',
     '@type': 'Service',
     name: lang === 'tr' ? 'İmalat Sanayi Danışmanlığı' : 'Manufacturing Sector Consulting',
-    url: 'https://www.ecypro.com/sektorler/imalat-sanayi',
+    url: 'https://ecypro.com/sektorler/imalat-sanayi',
     description:
       lang === 'tr'
         ? 'Lean dönüşümü, tedarik zinciri optimizasyonu ve endüstri 4.0 hazırlığı ile üretim şirketlerine değer yaratıyoruz.'
@@ -80,7 +80,7 @@ export const SektorlerImalatPage: React.FC = () => {
     provider: {
       '@type': 'Organization',
       name: 'eCyPro Premium Consulting',
-      url: 'https://www.ecypro.com',
+      url: 'https://ecypro.com',
     },
     areaServed: { '@type': 'Country', name: 'Türkiye', identifier: 'TR' },
     serviceType: 'Management Consulting',
@@ -103,14 +103,14 @@ export const SektorlerImalatPage: React.FC = () => {
       />
       <JsonLd
         data={buildBreadcrumbSchema([
-          { name: lang === 'tr' ? 'Anasayfa' : 'Home', url: 'https://www.ecypro.com/' },
+          { name: lang === 'tr' ? 'Anasayfa' : 'Home', url: 'https://ecypro.com/' },
           {
             name: lang === 'tr' ? 'Sektörler' : 'Industries',
-            url: 'https://www.ecypro.com/sektorler',
+            url: 'https://ecypro.com/sektorler',
           },
           {
             name: lang === 'tr' ? 'İmalat Sanayi' : 'Manufacturing',
-            url: 'https://www.ecypro.com/sektorler/imalat-sanayi',
+            url: 'https://ecypro.com/sektorler/imalat-sanayi',
           },
         ])}
       />

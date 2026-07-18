@@ -2,6 +2,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { PerspektiflerFeed } from '../components/blog/PerspektiflerFeed';
+import { useTranslation } from '@/lib/i18n';
+import { buildCanonical } from '@/i18n/canonical';
 // NOT (M7): Navbar + Footer MainLayout tarafından sağlanır. Sayfa kendi içinde
 // tekrar render ETMEMELİ — aksi halde çift footer + duplike Organization/Person/
 // FAQPage JSON-LD oluşuyordu (gerçek-render tanısıyla yakalandı).
@@ -9,6 +11,7 @@ import { PerspektiflerFeed } from '../components/blog/PerspektiflerFeed';
 /** Perspektifler hub — one H1 system (BUG-06): nav, URL and H1 all say
  *  "Perspektifler". Curated hero + search + facets live in the feed. */
 const BlogPage: React.FC = () => {
+  const { language } = useTranslation();
   return (
     <div className="min-h-screen bg-[#050810] text-slate-300 font-sans selection:bg-blue-500/30 selection:text-white">
       <Helmet>
@@ -17,25 +20,33 @@ const BlogPage: React.FC = () => {
           name="description"
           content="Strateji, yapay zeka, finans ve organizasyon üzerine eCyPro içgörüleri: makaleler, vaka analizleri ve founder letter."
         />
-        <link rel="canonical" href="https://www.ecypro.com/perspektifler" />
+        {/* Canonical-collapse fix: hardcoded apex literal ezildi — diğer
+            sayfalardaki gibi locale-aware buildCanonical üzerinden. */}
+        <link rel="canonical" href={buildCanonical('/perspektifler', language)} />
         {/* SEO/GEO: sayfaya-özel OpenGraph + Twitter (önceden genel anasayfa
             og'si geliyordu) + raster og:image (SVG sosyal/LLM önizlemede çoğu
             yerde render edilmiyor). */}
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://www.ecypro.com/perspektifler" />
-        <meta property="og:title" content="Perspektifler — Strateji & Yapay Zeka İçgörüleri | eCyPro" />
+        <meta property="og:url" content="https://ecypro.com/perspektifler" />
+        <meta
+          property="og:title"
+          content="Perspektifler — Strateji & Yapay Zeka İçgörüleri | eCyPro"
+        />
         <meta
           property="og:description"
           content="Strateji, yapay zeka, finans ve organizasyon üzerine eCyPro içgörüleri: makaleler, vaka analizleri ve founder letter."
         />
-        <meta property="og:image" content="https://www.ecypro.com/og-image.jpg" />
+        <meta property="og:image" content="https://ecypro.com/og-image.jpg" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Perspektifler — Strateji & Yapay Zeka İçgörüleri | eCyPro" />
+        <meta
+          name="twitter:title"
+          content="Perspektifler — Strateji & Yapay Zeka İçgörüleri | eCyPro"
+        />
         <meta
           name="twitter:description"
           content="Strateji, yapay zeka, finans ve organizasyon üzerine eCyPro içgörüleri."
         />
-        <meta name="twitter:image" content="https://www.ecypro.com/og-image.jpg" />
+        <meta name="twitter:image" content="https://ecypro.com/og-image.jpg" />
       </Helmet>
 
       <div className="pt-32 pb-24 relative overflow-hidden">
@@ -63,8 +74,7 @@ const BlogPage: React.FC = () => {
             <div className="mx-auto mb-6 h-px w-24 bg-linear-to-r from-transparent via-amber-400/60 to-transparent" />
             <p className="text-lg text-slate-300 leading-relaxed text-pretty">
               Geleceği şekillendiren teknolojiler ve yönetim stratejileri üzerine uzman
-              analizlerimiz.{' '}
-              {/* a11y link-in-text-block: inline link needs a non-color cue. */}
+              analizlerimiz. {/* a11y link-in-text-block: inline link needs a non-color cue. */}
               <Link
                 to="/services"
                 className="text-secondary underline underline-offset-4 hover:text-amber-300 transition-colors"

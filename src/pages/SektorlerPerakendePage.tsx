@@ -69,7 +69,7 @@ export const SektorlerPerakendePage: React.FC = () => {
     '@context': 'https://schema.org',
     '@type': 'Service',
     name: lang === 'tr' ? 'Perakende & E-Ticaret Danışmanlığı' : 'Retail & E-Commerce Consulting',
-    url: 'https://www.ecypro.com/sektorler/perakende-e-ticaret',
+    url: 'https://ecypro.com/sektorler/perakende-e-ticaret',
     description:
       lang === 'tr'
         ? 'Omnichannel strateji, CX dönüşümü ve veri odaklı büyüme ile perakende ve e-ticaret şirketlerine değer yaratıyoruz.'
@@ -77,7 +77,7 @@ export const SektorlerPerakendePage: React.FC = () => {
     provider: {
       '@type': 'Organization',
       name: 'eCyPro Premium Consulting',
-      url: 'https://www.ecypro.com',
+      url: 'https://ecypro.com',
     },
     areaServed: { '@type': 'Country', name: 'Türkiye', identifier: 'TR' },
     serviceType: 'Management Consulting',
@@ -100,14 +100,14 @@ export const SektorlerPerakendePage: React.FC = () => {
       />
       <JsonLd
         data={buildBreadcrumbSchema([
-          { name: lang === 'tr' ? 'Anasayfa' : 'Home', url: 'https://www.ecypro.com/' },
+          { name: lang === 'tr' ? 'Anasayfa' : 'Home', url: 'https://ecypro.com/' },
           {
             name: lang === 'tr' ? 'Sektörler' : 'Industries',
-            url: 'https://www.ecypro.com/sektorler',
+            url: 'https://ecypro.com/sektorler',
           },
           {
             name: lang === 'tr' ? 'Perakende & E-Ticaret' : 'Retail & E-Commerce',
-            url: 'https://www.ecypro.com/sektorler/perakende-e-ticaret',
+            url: 'https://ecypro.com/sektorler/perakende-e-ticaret',
           },
         ])}
       />

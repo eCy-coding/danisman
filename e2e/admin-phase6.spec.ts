@@ -11,9 +11,10 @@
  */
 
 import { test, expect, type Page } from '@playwright/test';
+import { MOCK_URL } from './mock-url';
 
 const BASE_URL = process.env.PREVIEW_URL ?? 'http://localhost:4173';
-const API_URL = process.env.API_URL ?? 'http://localhost:3099';
+const API_URL = process.env.API_URL ?? MOCK_URL;
 
 const MOCK_ADMIN_JWT =
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' +

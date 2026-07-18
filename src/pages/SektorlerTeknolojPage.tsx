@@ -72,7 +72,7 @@ export const SektorlerTeknolojPage: React.FC = () => {
     '@context': 'https://schema.org',
     '@type': 'Service',
     name: lang === 'tr' ? 'Teknoloji & SaaS Danışmanlığı' : 'Tech & SaaS Consulting',
-    url: 'https://www.ecypro.com/sektorler/teknoloji-saas',
+    url: 'https://ecypro.com/sektorler/teknoloji-saas',
     description:
       lang === 'tr'
         ? 'GTM stratejisi, enterprise satış altyapısı ve SaaS metriklerle teknoloji şirketlerini kurumsal ölçeğe taşıyoruz.'
@@ -80,7 +80,7 @@ export const SektorlerTeknolojPage: React.FC = () => {
     provider: {
       '@type': 'Organization',
       name: 'eCyPro Premium Consulting',
-      url: 'https://www.ecypro.com',
+      url: 'https://ecypro.com',
     },
     areaServed: { '@type': 'Country', name: 'Türkiye', identifier: 'TR' },
     serviceType: 'Management Consulting',
@@ -103,14 +103,14 @@ export const SektorlerTeknolojPage: React.FC = () => {
       />
       <JsonLd
         data={buildBreadcrumbSchema([
-          { name: lang === 'tr' ? 'Anasayfa' : 'Home', url: 'https://www.ecypro.com/' },
+          { name: lang === 'tr' ? 'Anasayfa' : 'Home', url: 'https://ecypro.com/' },
           {
             name: lang === 'tr' ? 'Sektörler' : 'Industries',
-            url: 'https://www.ecypro.com/sektorler',
+            url: 'https://ecypro.com/sektorler',
           },
           {
             name: lang === 'tr' ? 'Teknoloji & SaaS' : 'Tech & SaaS',
-            url: 'https://www.ecypro.com/sektorler/teknoloji-saas',
+            url: 'https://ecypro.com/sektorler/teknoloji-saas',
           },
         ])}
       />

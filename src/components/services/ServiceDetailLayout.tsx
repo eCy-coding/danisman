@@ -242,11 +242,12 @@ export const ServiceDetailLayout: React.FC<ServiceDetailLayoutProps> = ({
   const serviceSchema = {
     '@context': 'https://schema.org',
     '@type': 'Service',
+    name: title,
     serviceType: title,
     provider: {
       '@type': 'Organization',
       name: 'eCyPro Premium Consulting',
-      url: 'https://www.ecypro.com',
+      url: 'https://ecypro.com',
     },
     areaServed: { '@type': 'Country', name: 'Turkey' },
     description: valueProp || subtitle,
@@ -279,8 +280,11 @@ export const ServiceDetailLayout: React.FC<ServiceDetailLayoutProps> = ({
 
   return (
     <div className="min-h-screen bg-neutral text-slate-300">
-      <JsonLd data={serviceSchema} />
-      {faqSchema && <JsonLd data={faqSchema} />}
+      {/* Route schemas ADOPT the sitewide blocks (same data-seo-id) instead of
+          appending: id-less JsonLd left one baked copy + one hydration copy on
+          every detail page (audit: Service name-less ×44, FAQPage dup ×17). */}
+      <JsonLd id="schema-org-service" data={serviceSchema} />
+      {faqSchema && <JsonLd id="schema-org-faq" data={faqSchema} />}
 
       {/* ── Hero (2-column with illustration) ── */}
       <section className="relative pt-32 pb-16 px-6 md:px-12 overflow-hidden">

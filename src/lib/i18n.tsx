@@ -37,9 +37,14 @@ interface I18nContextType {
  * Drop-in replacement for the previous context-based hook.
  * Reads/writes language through i18next which already persists to
  * localStorage (`i18nextLng`) per `i18n-react` configuration.
+ *
+ * Optional `ns` param (default `'translation'`, unchanged behavior for every
+ * existing no-arg call site) lets callers scope `t()` to another namespace —
+ * e.g. `useTranslation('insights')` — without bypassing this wrapper to call
+ * `react-i18next` directly.
  */
-export const useTranslation = (): I18nContextType => {
-  const { t, i18n: i18nInstance } = useReactI18nTranslation('translation');
+export const useTranslation = (ns: string | string[] = 'translation'): I18nContextType => {
+  const { t, i18n: i18nInstance } = useReactI18nTranslation(ns);
   const language = ((i18nInstance.language ?? 'tr').split('-')[0] as Language) || 'tr';
 
   const toggleLanguage = () => {

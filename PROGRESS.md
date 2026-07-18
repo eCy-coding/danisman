@@ -2,6 +2,49 @@
 
 ---
 
+# FULL-SITE QUALITY OVERHAUL (2026-07-18 → )
+
+Spec: owner request 2026-07-18 (canonical English translation + plan:
+`~/.claude/plans/bu-iste-imi-tek-anlama-enumerated-teacup.md`, approved).
+Branch: `claude/ecypro-web-build-9cb3fc` (worktree wonderful-curran-e35351).
+
+## FSQ Gate-0 (2026-07-18)
+**Scope re-fence:** Services contract CLOSED (taxonomy v2 shipped PR #227, live
+2026-06-12) → SCOPE.md rewritten for Full-Site Quality Overhaul. Evidence:
+owner T0 prompt (full-site audit + delivery) + approved plan. Guard infra
+(`.claude/**`) untouched (owner-only).
+**Live-prod evidence (curl 2026-07-18):** homepage = empty JS shell (no meta
+description / canonical in raw HTML; hreflang only x-default→www) · sitemap
+3×175 URLs all www while prod 308s www→apex · homepage JSON-LD 6 blocks incl.
+Person ×2 duplicate (M9 open) · og:image SVG · api.ecypro.com/health 404.
+**CI health:** GH Actions ALIVE (E2E smoke prod success, IndexNow success;
+Lighthouse CI failure = known perf gap; A11y CI + Schema Validator cancelled
+at 15m/10m — to investigate). Old "runner/billing kills all workflows" premise
+STALE.
+**Premise checks:** `crisis-management` present in src/data/service-taxonomy.ts
+→ OUT_OF_SCOPE "4/21 catalog gap" claim STALE (matches SVC Gate-0 finding
+21/21). Baselines to be re-measured fresh below.
+**Fresh baselines (2026-07-18, node_modules via npm ci exit 0):**
+- typecheck (web+server): **GREEN**.
+- lint: **0 errors / 3 warnings** → DEPLOY_NOTES "294 err/115 warn" claim STALE.
+- vitest: **21 failed / 1127 passed / 15 skipped (2 failing files of 155)** —
+  one is `src/test/pages/founder-page.test.tsx` (page renders empty body).
+- npm audit: dev 39 vulns (2 critical, 6 high incl. ws via @lhci/lighthouse);
+  prod-only 19 (2 high: react-router/react-router-dom <7.15.x).
+**ROOT CAUSE — prod stale:** CI on main RED for last 5 push runs (jobs
+"Security — npm audit" + "Lint, Type-Check & Test") → Deploy workflow SKIPPED
+since 2026-06-12 → live site = manual alias deploy of PR #227 era; main's
+JSON-LD dedup commits (8064662, 5090e0d) NEVER deployed. Fixing audit + the 2
+vitest files unblocks the whole deploy chain.
+**Prerender root cause (confirmed in code):** `scripts/prerender.mjs:155-160`
+opt-out design — runs on plain local build, skips iff `VERCEL=1` (or
+PRERENDER=0/SKIP_PRERENDER=1) unless `PRERENDER_FORCE_LOCAL=1`. deploy.yml
+runs `vercel build` (sets VERCEL=1) with no force flag and no chromium install
+→ prod HTML is an empty shell. Fix = deploy.yml env + `npx playwright install
+--with-deps chromium` step.
+
+---
+
 # SERVICES VERTICAL (2026-06-12 → )
 
 Spec: `~/Desktop/istemek.md` (istek-services.md) · Plan: approved 2026-06-12

@@ -156,7 +156,7 @@ const PILLARS: Pillar[] = [
   },
 ];
 
-const SITE_URL = 'https://www.ecypro.com';
+const SITE_URL = 'https://ecypro.com';
 
 export const PillarPage: React.FC = () => {
   const { language } = useTranslation();

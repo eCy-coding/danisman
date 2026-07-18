@@ -21,8 +21,9 @@
 
 import { test, expect } from '@playwright/test';
 import crypto from 'crypto';
+import { MOCK_URL } from './mock-url';
 
-const MOCK_API = 'http://localhost:3099';
+const MOCK_API = MOCK_URL;
 const WEBHOOK_SECRET = 'e2e-test-webhook-secret';
 
 function signPayload(body: unknown): string {

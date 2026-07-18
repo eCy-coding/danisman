@@ -66,15 +66,15 @@ export const ServiceDetailPage: React.FC = () => {
         <meta property="og:description" content={fallbackDescription} />
         <meta property="og:type" content="website" />
         <meta property="og:url" content={serviceUrl} />
-        <meta property="og:image" content="https://www.ecypro.com/og-image.svg" />
+        <meta property="og:image" content="https://ecypro.com/og-image.svg" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={`${fallbackTitle} | eCyPro Premium Consulting`} />
         <meta name="twitter:description" content={fallbackDescription} />
       </Helmet>
       <JsonLd
         data={buildBreadcrumbSchema([
-          { name: 'Anasayfa', url: 'https://www.ecypro.com/' },
-          { name: 'Hizmetler', url: 'https://www.ecypro.com/services' },
+          { name: 'Anasayfa', url: 'https://ecypro.com/' },
+          { name: 'Hizmetler', url: 'https://ecypro.com/services' },
           { name: fallbackTitle, url: serviceUrl },
         ])}
       />

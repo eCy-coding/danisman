@@ -60,7 +60,7 @@ export const FounderPage: React.FC = () => {
         <meta property="og:description" content={t('meta.description')} />
         <meta property="og:type" content="profile" />
         <meta property="og:url" content={buildCanonical('/founder', lang)} />
-        <meta property="og:image" content="https://www.ecypro.com/og/founder.png" />
+        <meta property="og:image" content="https://ecypro.com/og/founder.png" />
         <meta name="robots" content="index, follow, max-image-preview:large" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Emre Can Yalçın — Kurucu & Baş Stratejist | eCyPro" />
@@ -68,7 +68,7 @@ export const FounderPage: React.FC = () => {
           name="twitter:description"
           content="10+ yıl danışmanlık, 120+ stratejik karar. Big4 metodolojisi boutique çevikliğiyle."
         />
-        <meta name="twitter:image" content="https://www.ecypro.com/og/founder.png" />
+        <meta name="twitter:image" content="https://ecypro.com/og/founder.png" />
       </Helmet>
       <JsonLd data={founderSchema} />
       <JsonLd
@@ -76,12 +76,12 @@ export const FounderPage: React.FC = () => {
           '@context': 'https://schema.org',
           '@type': 'BreadcrumbList',
           itemListElement: [
-            { '@type': 'ListItem', position: 1, name: 'Anasayfa', item: 'https://www.ecypro.com/' },
+            { '@type': 'ListItem', position: 1, name: 'Anasayfa', item: 'https://ecypro.com/' },
             {
               '@type': 'ListItem',
               position: 2,
               name: 'Kurucu',
-              item: 'https://www.ecypro.com/founder',
+              item: 'https://ecypro.com/founder',
             },
           ],
         }}

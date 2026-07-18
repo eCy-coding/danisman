@@ -18,6 +18,7 @@ import {
   MAX_FEATURED,
 } from '../src/data/taxonomy';
 import { foldForSearch } from '../src/lib/slugify';
+import { validatePairReciprocity } from '../src/lib/blog-pair-validation';
 
 const CONTENT_DIR = path.join(process.cwd(), 'src/content/blog');
 const OUTPUT_FILE = path.join(process.cwd(), 'src/data/blog-posts.json');
@@ -121,6 +122,9 @@ const generateBlogIndex = () => {
   const files = fs.readdirSync(CONTENT_DIR).filter((file) => file.endsWith('.mdx'));
 
   const posts: BlogPostMetadata[] = [];
+  // slug → frontmatter status, used only for pair-reciprocity validation below
+  // (not part of the public BlogPostMetadata shape written to blog-posts.json).
+  const postStatusBySlug = new Map<string, string>();
 
   for (const filename of files) {
     const filePath = path.join(CONTENT_DIR, filename);
@@ -151,6 +155,8 @@ const generateBlogIndex = () => {
 
     const wordCount = countWords(body);
     const readTimeMin = Math.max(1, Math.round(wordCount / WPM));
+    const lang: 'tr' | 'en' = data.lang === 'en' ? 'en' : 'tr';
+    const status: string = data.status || 'published';
 
     posts.push({
       slug,
@@ -163,21 +169,31 @@ const generateBlogIndex = () => {
       category: category ?? 'Strateji',
       categorySlug: categoryDef?.slug ?? 'strateji',
       tags,
-      readingTime: `${readTimeMin} dk okuma`,
+      // EN article-parity: EN posts get an English reading-time label.
+      readingTime: lang === 'en' ? `${readTimeMin} min read` : `${readTimeMin} dk okuma`,
       readTimeMin,
       wordCount,
-      lang: (data.lang as 'tr' | 'en') || 'tr',
+      lang,
       format,
       featured: data.featured === true || data.featured === 'true',
       pairId: data.pair_id || undefined,
       seriesId: data.series_id || undefined,
     });
+    postStatusBySlug.set(slug, status);
   }
 
   const featuredCount = posts.filter((p) => p.featured).length;
   if (featuredCount > MAX_FEATURED) {
     errors.push(`featured=${featuredCount} exceeds max ${MAX_FEATURED}`);
   }
+
+  // EN article-parity — pair reciprocity (istek.md v2 EN mechanism). See
+  // src/lib/blog-pair-validation.ts for the (unit-tested) rule set. Today's
+  // corpus has zero pair_id values, so this is a no-op until EN articles
+  // ship (must not break the current TR-only build).
+  const pairValidation = validatePairReciprocity(posts, postStatusBySlug);
+  for (const w of pairValidation.warnings) console.warn(`⚠️  ${w}`);
+  errors.push(...pairValidation.errors);
 
   if (errors.length) {
     console.error(`❌ Taxonomy violations (${errors.length}):`);

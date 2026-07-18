@@ -61,13 +61,13 @@ export const SektorlerPage: React.FC = () => {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
     name: lang === 'tr' ? 'eCyPro Sektör Çözümleri' : 'eCyPro Sector Solutions',
-    url: 'https://www.ecypro.com/sektorler',
+    url: 'https://ecypro.com/sektorler',
     numberOfItems: SECTORS.length,
     itemListElement: SECTORS.map((s, i) => ({
       '@type': 'ListItem',
       position: i + 1,
       name: s.title[lang],
-      url: `https://www.ecypro.com/sektorler/${s.slug}`,
+      url: `https://ecypro.com/sektorler/${s.slug}`,
     })),
   };
 
@@ -88,10 +88,10 @@ export const SektorlerPage: React.FC = () => {
       />
       <JsonLd
         data={buildBreadcrumbSchema([
-          { name: lang === 'tr' ? 'Anasayfa' : 'Home', url: 'https://www.ecypro.com/' },
+          { name: lang === 'tr' ? 'Anasayfa' : 'Home', url: 'https://ecypro.com/' },
           {
             name: lang === 'tr' ? 'Sektörler' : 'Industries',
-            url: 'https://www.ecypro.com/sektorler',
+            url: 'https://ecypro.com/sektorler',
           },
         ])}
       />

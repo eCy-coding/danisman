@@ -25,8 +25,9 @@
  */
 
 import { test, expect } from '@playwright/test';
+import { MOCK_URL } from './mock-url';
 
-const API_URL = 'http://localhost:3099';
+const API_URL = MOCK_URL;
 const BASE_URL = 'http://localhost:4173';
 
 test.describe('Crawler: API Security Deep — Pane 10 (OWASP Top 10)', () => {

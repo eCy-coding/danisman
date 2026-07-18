@@ -7,10 +7,14 @@ import {
   visibleWindow,
   topTopics,
   getFeatured,
+  itemsForLang,
+  relatedItems,
+  seriesSiblings,
   ALL_ITEMS,
   PAGE_SIZE,
   DOM_CARD_CAP,
   type HubFilter,
+  type FeedItem,
 } from './perspektifler';
 
 describe('perspektifler hub state (GATE-3)', () => {
@@ -90,5 +94,97 @@ describe('perspektifler hub state (GATE-3)', () => {
     const cs = ALL_ITEMS.filter((i) => i.format === 'vaka-analizi');
     expect(cs.length).toBeGreaterThanOrEqual(6);
     expect(cs.every((i) => i.categorySlug.length > 0)).toBe(true);
+  });
+});
+
+describe('EN article-parity mechanism (istek.md v2)', () => {
+  // Synthetic fixture — today's real corpus has zero pairId/en posts, so
+  // these tests exercise the mechanism directly rather than relying on
+  // future content.
+  const fixture: FeedItem[] = [
+    {
+      slug: 'tr-only',
+      title: 'TR Only',
+      excerpt: '',
+      date: '2026-01-01T00:00:00.000Z',
+      author: 'A',
+      category: 'Strateji',
+      categorySlug: 'strateji',
+      tags: [],
+      readingTime: '5 dk okuma',
+      readTimeMin: 5,
+      lang: 'tr',
+      format: 'makale',
+      featured: false,
+      href: '/perspektifler/tr-only',
+    },
+    {
+      slug: 'paired-tr',
+      title: 'Paired TR',
+      excerpt: '',
+      date: '2026-01-02T00:00:00.000Z',
+      author: 'A',
+      category: 'Strateji',
+      categorySlug: 'strateji',
+      tags: [],
+      readingTime: '5 dk okuma',
+      readTimeMin: 5,
+      lang: 'tr',
+      format: 'makale',
+      featured: false,
+      href: '/perspektifler/paired-tr',
+      pairId: 'pair-1',
+    },
+    {
+      slug: 'paired-en',
+      title: 'Paired EN',
+      excerpt: '',
+      date: '2026-01-03T00:00:00.000Z',
+      author: 'A',
+      category: 'Strateji',
+      categorySlug: 'strateji',
+      tags: [],
+      readingTime: '5 min read',
+      readTimeMin: 5,
+      lang: 'en',
+      format: 'makale',
+      featured: false,
+      href: '/perspektifler/paired-en',
+      pairId: 'pair-1',
+    },
+  ];
+
+  it("itemsForLang('tr') excludes en posts", () => {
+    const out = itemsForLang('tr', fixture);
+    expect(out.map((i) => i.slug).sort()).toEqual(['paired-tr', 'tr-only']);
+  });
+
+  it("itemsForLang('en') = EN posts + TR-only posts (paired TR sibling excluded)", () => {
+    const out = itemsForLang('en', fixture);
+    expect(out.map((i) => i.slug).sort()).toEqual(['paired-en', 'tr-only']);
+  });
+
+  it("itemsForLang('en') never empty when corpus has zero pairId (today's reality)", () => {
+    const allTr: FeedItem[] = fixture.filter((i) => i.lang === 'tr' && !i.pairId);
+    const out = itemsForLang('en', allTr);
+    expect(out.length).toBe(allTr.length);
+  });
+
+  it('getFeatured(lang) accepts an optional lang without throwing (real corpus is TR-only today)', () => {
+    expect(() => getFeatured('tr')).not.toThrow();
+    expect(() => getFeatured('en')).not.toThrow();
+    const { lead: leadTr } = getFeatured('tr');
+    const { lead: leadEn } = getFeatured('en');
+    expect(leadTr === null || typeof leadTr.slug === 'string').toBe(true);
+    expect(leadEn === null || typeof leadEn.slug === 'string').toBe(true);
+  });
+
+  it('relatedItems/seriesSiblings accept the new params without regressing on the real corpus', () => {
+    const [first] = ALL_ITEMS;
+    if (first) {
+      expect(relatedItems(first.slug, 3).length).toBeLessThanOrEqual(3);
+    }
+    expect(seriesSiblings('nonexistent-series')).toEqual([]);
+    expect(seriesSiblings('nonexistent-series', 'en')).toEqual([]);
   });
 });

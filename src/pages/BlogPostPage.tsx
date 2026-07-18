@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { createPortal } from 'react-dom';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, Navigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { MDXProvider } from '@mdx-js/react';
 import { Calendar, Clock, ChevronRight, PenLine } from 'lucide-react';
@@ -27,7 +27,7 @@ import { getBlogPosts } from '../lib/data';
 import { BlogPost } from '../schemas/blog';
 import { buildArticleSchema, buildBreadcrumbSchema } from '../lib/structured-data';
 import { useTranslation } from '@/lib/i18n';
-import { buildCanonical } from '@/i18n/canonical';
+import { buildCanonical, buildArticleAlternates } from '@/i18n/canonical';
 import { relatedItems, seriesSiblings } from '@/lib/perspektifler';
 import { CATEGORY_BY_LABEL } from '@/data/taxonomy';
 import { NewsletterSidebar } from '../components/blog/NewsletterSidebar';
@@ -66,6 +66,9 @@ const FounderInlineCta: React.FC = () => (
 
 const BlogPostPage: React.FC = () => {
   const { language } = useTranslation();
+  // EN article-parity mechanism: scoped to 'insights' ns for the TR-only
+  // notice + not-found copy (public/locales/{tr,en}/insights.json#article).
+  const { t } = useTranslation('insights');
   const { slug } = useParams<{ slug: string }>();
   const [Content, setContent] = useState<React.ComponentType | null>(null);
   const [ctaHost, setCtaHost] = useState<HTMLElement | null>(null);
@@ -107,7 +110,7 @@ const BlogPostPage: React.FC = () => {
     return (
       <div className="min-h-screen bg-neutral flex items-center justify-center text-white">
         <div className="text-center">
-          <h1 className="text-3xl font-serif mb-4">Makele Bulunamadı</h1>
+          <h1 className="text-3xl font-serif mb-4">Makale Bulunamadı</h1>
           <Link to="/perspektifler" className="text-blue-400 hover:text-blue-300">
             Blog'a Dön
           </Link>
@@ -116,9 +119,39 @@ const BlogPostPage: React.FC = () => {
     );
   }
 
+  // EN article-parity mechanism (istek.md v2): paired articles live at
+  // DISTINCT slugs (flat src/content/blog/*.mdx, linked via pair_id).
+  const postLang: 'tr' | 'en' = post.lang === 'en' ? 'en' : 'tr';
+  const pairSibling = post.pairId
+    ? (blogPosts as BlogPost[]).find(
+        (p) => p.pairId === post.pairId && p.lang && p.lang !== postLang,
+      )
+    : undefined;
+
+  // UI is in English, this URL resolves to the TR half of a pair that DOES
+  // have an EN sibling → send the reader to the EN sibling's own slug
+  // (never a locale-prefix swap on the same slug — the slugs differ).
+  if (language === 'en' && postLang === 'tr' && pairSibling?.lang === 'en') {
+    return <Navigate to={`/perspektifler/${pairSibling.slug}`} replace />;
+  }
+
+  // UI is in English but this TR post has no EN sibling yet — render the TR
+  // content with a small notice instead of a dead/empty EN page.
+  const showTrOnlyNotice = language === 'en' && postLang === 'tr' && !pairSibling;
+
+  const trSlug = postLang === 'en' ? (pairSibling?.slug ?? null) : post.slug;
+  const enSlug = postLang === 'en' ? post.slug : (pairSibling?.slug ?? null);
+  const articleAlternates = buildArticleAlternates(trSlug, enSlug);
+  // seo-helmet.tsx's HelmetChild type rejects an inline `.map()` array as a
+  // single child (it only flattens siblings, not a nested array) — render
+  // each alternate as its own optional child instead (mirrors SeoManager).
+  const trAlternate = articleAlternates.find((a) => a.hrefLang === 'tr-TR');
+  const enAlternate = articleAlternates.find((a) => a.hrefLang === 'en');
+  const defaultAlternate = articleAlternates.find((a) => a.hrefLang === 'x-default');
+
   const categoryDef = post.category ? CATEGORY_BY_LABEL[post.category] : undefined;
   const related = relatedItems(post.slug);
-  const siblings = post.seriesId ? seriesSiblings(post.seriesId) : [];
+  const siblings = post.seriesId ? seriesSiblings(post.seriesId, postLang) : [];
   const seriesIndex = siblings.findIndex((s) => s.slug === post.slug);
   const prevInSeries = seriesIndex > 0 ? siblings[seriesIndex - 1] : undefined;
   const nextInSeries =
@@ -131,6 +164,15 @@ const BlogPostPage: React.FC = () => {
         <title>{post.title} | eCyPro Perspektifler</title>
         <meta name="description" content={post.excerpt} />
         <link rel="canonical" href={buildCanonical(`/perspektifler/${post.slug}`, language)} />
+        {/* EN article-parity mechanism: pair-aware hreflang (distinct slugs
+            per lang) — SeoManager deliberately skips its generic path-based
+            alternates on this route (see SeoManager ARTICLE_ROUTE_PATTERN)
+            so this is the single source of truth here, not a duplicate. */}
+        {trAlternate && <link rel="alternate" hrefLang="tr-TR" href={trAlternate.href} />}
+        {enAlternate && <link rel="alternate" hrefLang="en" href={enAlternate.href} />}
+        {defaultAlternate && (
+          <link rel="alternate" hrefLang="x-default" href={defaultAlternate.href} />
+        )}
         <meta property="og:title" content={`${post.title} | eCyPro Perspektifler`} />
         <meta property="og:description" content={post.excerpt} />
         <meta property="og:type" content="article" />
@@ -146,7 +188,7 @@ const BlogPostPage: React.FC = () => {
 
       <JsonLd
         data={buildArticleSchema({
-          url: `https://www.ecypro.com/perspektifler/${post.slug}`,
+          url: `https://ecypro.com/perspektifler/${post.slug}`,
           title: post.title,
           description: post.excerpt,
           image: post.coverImage,
@@ -157,17 +199,17 @@ const BlogPostPage: React.FC = () => {
       />
       <JsonLd
         data={buildBreadcrumbSchema([
-          { name: 'Anasayfa', url: 'https://www.ecypro.com/' },
-          { name: 'Perspektifler', url: 'https://www.ecypro.com/perspektifler' },
+          { name: 'Anasayfa', url: 'https://ecypro.com/' },
+          { name: 'Perspektifler', url: 'https://ecypro.com/perspektifler' },
           ...(categoryDef
             ? [
                 {
                   name: categoryDef.label,
-                  url: `https://www.ecypro.com/perspektifler/kategori/${categoryDef.slug}`,
+                  url: `https://ecypro.com/perspektifler/kategori/${categoryDef.slug}`,
                 },
               ]
             : []),
-          { name: post.title, url: `https://www.ecypro.com/perspektifler/${post.slug}` },
+          { name: post.title, url: `https://ecypro.com/perspektifler/${post.slug}` },
         ])}
       />
 
@@ -206,6 +248,19 @@ const BlogPostPage: React.FC = () => {
                 </ol>
               </nav>
 
+              {/* EN article-parity mechanism: this TR article has no EN
+                  sibling yet — flag it instead of silently rendering TR
+                  copy on an English-locale page (istek.md v2). */}
+              {showTrOnlyNotice && (
+                <div
+                  data-testid="tr-only-notice"
+                  role="note"
+                  className="mb-8 rounded-lg border border-amber-400/25 bg-amber-400/5 px-4 py-3 text-sm text-amber-200"
+                >
+                  {t('article.trOnlyNotice')}
+                </div>
+              )}
+
               <motion.article
                 ref={articleRef}
                 initial={{ opacity: 0, y: 20 }}
@@ -235,11 +290,14 @@ const BlogPostPage: React.FC = () => {
                     )}
                     <span className="flex items-center gap-1.5">
                       <Calendar className="w-4 h-4" />{' '}
-                      {new Date(post.date).toLocaleDateString('tr-TR', {
-                        day: 'numeric',
-                        month: 'long',
-                        year: 'numeric',
-                      })}
+                      {new Date(post.date).toLocaleDateString(
+                        language === 'en' ? 'en-GB' : 'tr-TR',
+                        {
+                          day: 'numeric',
+                          month: 'long',
+                          year: 'numeric',
+                        },
+                      )}
                     </span>
                     <span className="flex items-center gap-1.5">
                       <Clock className="w-4 h-4" /> {post.readingTime}
@@ -280,7 +338,7 @@ const BlogPostPage: React.FC = () => {
                       durationSec={post.audioDurationSec}
                       description={post.audioDescription}
                       publishedAt={post.date}
-                      canonicalUrl={`https://www.ecypro.com/perspektifler/${post.slug}`}
+                      canonicalUrl={`https://ecypro.com/perspektifler/${post.slug}`}
                     />
                   </div>
                 )}
@@ -333,7 +391,7 @@ const BlogPostPage: React.FC = () => {
                 <div className="mt-16 pt-8 border-t border-white/10 space-y-8">
                   <div className="flex justify-between items-center">
                     <ShareButtons
-                      url={`https://www.ecypro.com/perspektifler/${post.slug}`}
+                      url={`https://ecypro.com/perspektifler/${post.slug}`}
                       title={post.title}
                     />
                   </div>

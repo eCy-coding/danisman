@@ -20,9 +20,10 @@
 import { test, expect, type APIRequestContext } from '@playwright/test';
 import fs from 'fs';
 import path from 'path';
+import { MOCK_URL } from './mock-url';
 
 const BASE_URL = 'http://localhost:4173';
-const API_URL = 'http://localhost:3099';
+const API_URL = MOCK_URL;
 const ROOT = process.cwd();
 
 const fileExists = (p: string) => fs.existsSync(path.join(ROOT, p));

@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
-import { startLenis, stopLenis } from '@/lib/motion/lenis-config';
 import { Navbar } from './Navbar';
 import { Footer } from './Footer';
 // P46 C2: SeoHead layout seviyesinden kaldırıldı — generic title flush per-page'i eziyordu.
@@ -23,9 +22,44 @@ import { SkipLinks } from '../common/SkipLinks';
 import { MobileStickyCTA } from '../common/MobileStickyCTA';
 
 export const MainLayout: React.FC = () => {
+  // Perf: 'lenis' (+ its GSAP ScrollTrigger wiring) is a scroll-feel
+  // enhancement, not needed for first paint/LCP. Statically importing
+  // startLenis/stopLenis pulled the whole lenis-config module — and the
+  // 'lenis' package — into the initial bundle graph even though startLenis()
+  // often bails immediately (reduced-motion / coarse-mobile guards inside
+  // lenis-config.ts). Dynamic-import it, deferred to browser idle, so it
+  // ships in its own chunk fetched after the critical path is done.
   useEffect(() => {
-    startLenis();
-    return stopLenis;
+    let cancelled = false;
+    let idleId: number | null = null;
+    let timeoutId: ReturnType<typeof setTimeout> | null = null;
+    let stopFn: (() => void) | null = null;
+
+    const load = () => {
+      import('@/lib/motion/lenis-config').then(({ startLenis, stopLenis }) => {
+        if (cancelled) return;
+        startLenis();
+        stopFn = stopLenis;
+      });
+    };
+
+    if (typeof window.requestIdleCallback === 'function') {
+      idleId = window.requestIdleCallback(load, { timeout: 2000 });
+    } else {
+      // Safari (no requestIdleCallback) fallback.
+      timeoutId = setTimeout(load, 200);
+    }
+
+    return () => {
+      cancelled = true;
+      if (idleId !== null && typeof window.cancelIdleCallback === 'function') {
+        window.cancelIdleCallback(idleId);
+      }
+      if (timeoutId !== null) {
+        clearTimeout(timeoutId);
+      }
+      stopFn?.();
+    };
   }, []);
 
   return (

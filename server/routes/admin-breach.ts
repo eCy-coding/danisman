@@ -17,9 +17,44 @@ import { authenticate, AuthRequest } from '../middleware/auth';
 import { requirePermission } from '../middleware/requirePermission';
 import { prisma } from '../config/db';
 import { logger } from '../config/logger';
+import { hashIp } from '../lib/crypto/hashIp';
 
 const router = Router();
 const adminOnly = [authenticate, requirePermission('breach.report')] as const;
+
+// KVKK m.12/5 accountability — every breach-record mutation must leave an
+// AuditLog row (Kurul-facing regulators expect a trail for exactly this
+// record type). Fire-and-forget: an audit-write hiccup must never turn an
+// already-successful mutation into a 500 for the operator.
+function writeAudit(
+  req: AuthRequest,
+  action: string,
+  targetId: string,
+  data?: Record<string, unknown>,
+): void {
+  try {
+    prisma.auditLog
+      .create({
+        data: {
+          adminId: req.user?.id ?? 'system',
+          actorRole: req.user?.role ?? 'ANONYMOUS',
+          actorIpHash: hashIp(req.ip),
+          action,
+          targetType: 'BreachIncident',
+          targetId,
+          newValue: data as never,
+        },
+      })
+      .catch((err: unknown) => {
+        logger.error('[admin-breach] audit write failed', { action, targetId, err });
+      });
+  } catch (syncErr: unknown) {
+    logger.error('[admin-breach] audit write threw synchronously', {
+      action,
+      err: syncErr,
+    });
+  }
+}
 
 // ─── Validation schemas ──────────────────────────────────────────────────────
 
@@ -106,6 +141,11 @@ router.post('/', ...adminOnly, async (req: AuthRequest, res: Response) => {
     });
 
     logger.info('breach_incident_created', { id: incident.id, actor: req.user?.id });
+    writeAudit(req, 'BREACH_REPORTED', incident.id, {
+      detectionSource,
+      affectedSubjectsCount,
+      notificationDeadline: notificationDeadline.toISOString(),
+    });
     res.status(201).json({ status: 'ok', incident });
   } catch (err) {
     logger.error('breach_incident_create_error', { err });
@@ -164,6 +204,7 @@ router.patch('/:id/status', ...adminOnly, async (req: AuthRequest, res: Response
       status: incident.status,
       actor: req.user?.id,
     });
+    writeAudit(req, 'BREACH_STATUS_UPDATED', incident.id, { status: incident.status });
     res.json({ status: 'ok', incident });
   } catch (err) {
     logger.error('breach_status_update_error', { err });
@@ -202,6 +243,9 @@ router.post('/:id/report-to-kurul', ...adminOnly, async (req: AuthRequest, res: 
     });
 
     logger.info('breach_reported_to_kurul', { id: incident.id, actor: req.user?.id });
+    writeAudit(req, 'BREACH_REPORTED_TO_KURUL', incident.id, {
+      reportedAt: incident.reportedAt,
+    });
     res.json({ status: 'ok', incident });
   } catch (err) {
     logger.error('breach_report_to_kurul_error', { err });
