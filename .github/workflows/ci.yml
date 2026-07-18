@@ -184,9 +184,9 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     # ADVISORY — see e2e job note; perf işi P4 backlog'unda sürüyor.
+    # (P40-T02'nin job-blocking continue-on-error:false'u kaldırıldı — YAML
+    # last-key-wins duplicate'i advisory niyetini eziyordu.)
     continue-on-error: true
-    # P40-T02: SEO + A11y + BP block; Performance warn-only (CDN adds 15+ pts)
-    continue-on-error: false
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
