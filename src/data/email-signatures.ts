@@ -12,7 +12,7 @@
  *   - team: Future team member fallback template
  */
 
-const SITE = 'https://www.ecypro.com';
+const SITE = 'https://ecypro.com';
 const FOUNDER_LINKEDIN =
   typeof import.meta !== 'undefined' && import.meta.env?.VITE_FOUNDER_LINKEDIN
     ? String(import.meta.env.VITE_FOUNDER_LINKEDIN).trim()

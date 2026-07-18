@@ -71,13 +71,13 @@ export const PricingPage: React.FC = () => {
         <meta property="og:title" content={t('meta.title')} />
         <meta property="og:description" content={t('hero.subtitle')} />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://www.ecypro.com/pricing" />
-        <meta property="og:image" content="https://www.ecypro.com/og/pricing.png" />
+        <meta property="og:url" content="https://ecypro.com/pricing" />
+        <meta property="og:image" content="https://ecypro.com/og/pricing.png" />
         <meta name="robots" content="index, follow, max-image-preview:large" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={t('meta.title')} />
         <meta property="twitter:description" content={t('hero.subtitle')} />
-        <meta name="twitter:image" content="https://www.ecypro.com/og/pricing.png" />
+        <meta name="twitter:image" content="https://ecypro.com/og/pricing.png" />
       </Helmet>
 
       <JsonLd
@@ -87,8 +87,8 @@ export const PricingPage: React.FC = () => {
       />
       <JsonLd
         data={buildBreadcrumbSchema([
-          { name: 'Anasayfa', url: 'https://www.ecypro.com/' },
-          { name: 'Fiyatlandırma', url: 'https://www.ecypro.com/pricing' },
+          { name: 'Anasayfa', url: 'https://ecypro.com/' },
+          { name: 'Fiyatlandırma', url: 'https://ecypro.com/pricing' },
         ])}
       />
       <JsonLd
@@ -99,7 +99,7 @@ export const PricingPage: React.FC = () => {
           provider: {
             '@type': 'ProfessionalService',
             name: 'eCyPro Premium Consulting',
-            url: 'https://www.ecypro.com',
+            url: 'https://ecypro.com',
           },
           hasOfferCatalog: {
             '@type': 'OfferCatalog',
@@ -113,7 +113,7 @@ export const PricingPage: React.FC = () => {
                 price: tier.priceLabel,
                 priceCurrency: 'USD',
               },
-              url: `https://www.ecypro.com/pricing`,
+              url: `https://ecypro.com/pricing`,
             })),
           },
         }}

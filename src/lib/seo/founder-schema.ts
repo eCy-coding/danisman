@@ -19,16 +19,16 @@ export function buildFounderSchema() {
   return {
     '@context': 'https://schema.org',
     '@type': 'Person',
-    '@id': 'https://www.ecypro.com/#founder',
+    '@id': 'https://ecypro.com/#founder',
     name: 'Emre Can Yalçın',
     givenName: 'Emre Can',
     familyName: 'Yalçın',
     jobTitle: 'Founder & Chief Strategist',
     description:
       'Founder of eCyPro Premium Consulting and the eCyverse ecosystem. Strategic management advisory, organizational transformation, and culture engineering practitioner.',
-    worksFor: { '@id': 'https://www.ecypro.com/#organization' },
-    url: 'https://www.ecypro.com/founder',
-    image: 'https://www.ecypro.com/founder.jpg',
+    worksFor: { '@id': 'https://ecypro.com/#organization' },
+    url: 'https://ecypro.com/founder',
+    image: 'https://ecypro.com/founder.jpg',
     ...(sameAs.length ? { sameAs } : {}),
     knowsAbout: [
       'Strategic Management',

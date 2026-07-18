@@ -7,7 +7,7 @@ const __dirname = path.dirname(__filename);
 
 const BLOG_DATA_PATH = path.resolve(__dirname, '../src/data/blog-posts.json');
 const OUTPUT_DIR = path.resolve(__dirname, '../public');
-const SITE_URL = 'https://www.ecypro.com';
+const SITE_URL = 'https://ecypro.com';
 
 const escapeXml = (unsafe: string) => {
   return unsafe.replace(/[<>&'"]/g, (c) => {

@@ -96,15 +96,17 @@ export const Discovery: React.FC = () => {
       <Helmet>
         <title>{t('discovery.meta_title')}</title>
         <meta name="description" content={t('discovery.meta_description')} />
-        <link rel="canonical" href={buildCanonical('/discovery', 'tr')} />
+        {/* Duplicate-content fix: /discovery 308-redirects to /discovery-call in
+            prod (vercel.json), so this page's canonical points at the live URL. */}
+        <link rel="canonical" href={buildCanonical('/discovery-call', 'tr')} />
         <meta property="og:title" content="Tanışma Toplantısı Talebi — eCyPro Premium Consulting" />
         <meta
           property="og:description"
           content="30 dakika ücretsiz keşif görüşmesi. M&A, ESG, stratejik dönüşüm veya Aile Şirketi yönetişimi için taahhütsüz ilk değerlendirme."
         />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content={buildCanonical('/discovery', 'tr')} />
-        <meta property="og:image" content="https://www.ecypro.com/og/discovery.png" />
+        <meta property="og:url" content={buildCanonical('/discovery-call', 'tr')} />
+        <meta property="og:image" content="https://ecypro.com/og/discovery.png" />
         <meta name="robots" content="index, follow, max-image-preview:large" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Tanışma Toplantısı Talebi | eCyPro" />
@@ -112,7 +114,7 @@ export const Discovery: React.FC = () => {
           name="twitter:description"
           content="30 dakika ücretsiz keşif görüşmesi. Taahhütsüz stratejik değerlendirme."
         />
-        <meta name="twitter:image" content="https://www.ecypro.com/og/discovery.png" />
+        <meta name="twitter:image" content="https://ecypro.com/og/discovery.png" />
       </Helmet>
       <JsonLd
         data={{
@@ -121,11 +123,11 @@ export const Discovery: React.FC = () => {
           name: 'Tanışma Toplantısı Talebi',
           description:
             '30 dakika ücretsiz keşif görüşmesi. M&A, ESG, stratejik dönüşüm veya Aile Şirketi yönetişimi.',
-          url: 'https://www.ecypro.com/discovery',
+          url: 'https://ecypro.com/discovery',
           provider: {
             '@type': 'ProfessionalService',
             name: 'eCyPro Premium Consulting',
-            url: 'https://www.ecypro.com',
+            url: 'https://ecypro.com',
           },
         }}
       />
@@ -134,12 +136,12 @@ export const Discovery: React.FC = () => {
           '@context': 'https://schema.org',
           '@type': 'BreadcrumbList',
           itemListElement: [
-            { '@type': 'ListItem', position: 1, name: 'Anasayfa', item: 'https://www.ecypro.com/' },
+            { '@type': 'ListItem', position: 1, name: 'Anasayfa', item: 'https://ecypro.com/' },
             {
               '@type': 'ListItem',
               position: 2,
               name: 'Tanışma Toplantısı',
-              item: 'https://www.ecypro.com/discovery',
+              item: 'https://ecypro.com/discovery',
             },
           ],
         }}

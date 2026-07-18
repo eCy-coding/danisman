@@ -27,8 +27,8 @@ echo -e "${C}    Interval: 60sn · Log: ${LOG_FILE} · Durdur: CTRL+C${N}"
 echo ""
 
 API="https://ecypro-api.onrender.com/api/v1/health"
-SITE="https://www.ecypro.com"
-ADMIN="https://www.ecypro.com/admin/login"
+SITE="https://ecypro.com"
+ADMIN="https://ecypro.com/admin/login"
 
 check_url() {
   local url="$1"

@@ -71,16 +71,16 @@ export const LandingPage: React.FC = () => {
         title={title}
         description={description}
         canonical="/"
-        image="https://www.ecypro.com/og/home.png"
+        image="https://ecypro.com/og/home.png"
       />
       <JsonLd
         id="schema-website"
         data={{
           '@context': 'https://schema.org',
           '@type': 'WebSite',
-          '@id': 'https://www.ecypro.com/#website',
+          '@id': 'https://ecypro.com/#website',
           name: 'eCyPro Premium Consulting',
-          url: 'https://www.ecypro.com',
+          url: 'https://ecypro.com',
           description:
             lang === 'tr'
               ? 'Stratejik danışmanlık, KVKK ve AB regülasyon uyumu, operasyonel verimlilik.'
@@ -89,11 +89,11 @@ export const LandingPage: React.FC = () => {
             '@type': 'SearchAction',
             target: {
               '@type': 'EntryPoint',
-              urlTemplate: 'https://www.ecypro.com/insights?q={search_term_string}',
+              urlTemplate: 'https://ecypro.com/insights?q={search_term_string}',
             },
             'query-input': 'required name=search_term_string',
           },
-          publisher: { '@id': 'https://www.ecypro.com/#organization' },
+          publisher: { '@id': 'https://ecypro.com/#organization' },
         }}
       />
       {/*

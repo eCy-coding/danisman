@@ -72,7 +72,7 @@ export const SektorlerFinansalPage: React.FC = () => {
     '@context': 'https://schema.org',
     '@type': 'Service',
     name: lang === 'tr' ? 'Finansal Hizmetler Danışmanlığı' : 'Financial Services Consulting',
-    url: 'https://www.ecypro.com/sektorler/finansal-hizmetler',
+    url: 'https://ecypro.com/sektorler/finansal-hizmetler',
     description:
       lang === 'tr'
         ? 'BDDK/SPK uyumu, entegre risk yönetimi ve dijital bankacılık stratejisi ile finansal kurumları geleceğe taşıyoruz.'
@@ -80,7 +80,7 @@ export const SektorlerFinansalPage: React.FC = () => {
     provider: {
       '@type': 'Organization',
       name: 'eCyPro Premium Consulting',
-      url: 'https://www.ecypro.com',
+      url: 'https://ecypro.com',
     },
     areaServed: { '@type': 'Country', name: 'Türkiye', identifier: 'TR' },
     serviceType: 'Management Consulting',
@@ -103,14 +103,14 @@ export const SektorlerFinansalPage: React.FC = () => {
       />
       <JsonLd
         data={buildBreadcrumbSchema([
-          { name: lang === 'tr' ? 'Anasayfa' : 'Home', url: 'https://www.ecypro.com/' },
+          { name: lang === 'tr' ? 'Anasayfa' : 'Home', url: 'https://ecypro.com/' },
           {
             name: lang === 'tr' ? 'Sektörler' : 'Industries',
-            url: 'https://www.ecypro.com/sektorler',
+            url: 'https://ecypro.com/sektorler',
           },
           {
             name: lang === 'tr' ? 'Finansal Hizmetler' : 'Financial Services',
-            url: 'https://www.ecypro.com/sektorler/finansal-hizmetler',
+            url: 'https://ecypro.com/sektorler/finansal-hizmetler',
           },
         ])}
       />

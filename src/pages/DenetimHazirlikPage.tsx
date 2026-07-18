@@ -278,7 +278,7 @@ export const DenetimHazirlikPage: React.FC = () => {
     '@context': 'https://schema.org',
     '@type': 'WebApplication',
     name: lang === 'tr' ? 'Denetim Hazırlık Skoru Hesaplayıcı' : 'Audit Readiness Score Calculator',
-    url: 'https://www.ecypro.com/araclar/denetim-hazirlik-skoru',
+    url: 'https://ecypro.com/araclar/denetim-hazirlik-skoru',
     description:
       lang === 'tr'
         ? '12 soruda şirketinizin denetim hazırlık seviyesini ölçün. Yönetişim, finansal kapanış, KVKK ve BT kontrolleri.'
@@ -289,7 +289,7 @@ export const DenetimHazirlikPage: React.FC = () => {
     provider: {
       '@type': 'Organization',
       name: 'eCyPro Premium Consulting',
-      url: 'https://www.ecypro.com',
+      url: 'https://ecypro.com',
     },
   };
 
@@ -310,11 +310,11 @@ export const DenetimHazirlikPage: React.FC = () => {
       />
       <JsonLd
         data={buildBreadcrumbSchema([
-          { name: lang === 'tr' ? 'Anasayfa' : 'Home', url: 'https://www.ecypro.com/' },
-          { name: lang === 'tr' ? 'Araçlar' : 'Tools', url: 'https://www.ecypro.com/araclar' },
+          { name: lang === 'tr' ? 'Anasayfa' : 'Home', url: 'https://ecypro.com/' },
+          { name: lang === 'tr' ? 'Araçlar' : 'Tools', url: 'https://ecypro.com/araclar' },
           {
             name: lang === 'tr' ? 'Denetim Hazırlık Skoru' : 'Audit Readiness Score',
-            url: 'https://www.ecypro.com/araclar/denetim-hazirlik-skoru',
+            url: 'https://ecypro.com/araclar/denetim-hazirlik-skoru',
           },
         ])}
       />

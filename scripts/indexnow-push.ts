@@ -20,7 +20,7 @@ import { join } from 'path';
 
 const ROOT = join(import.meta.dirname ?? process.cwd(), '..');
 const SITEMAP_PATH = join(ROOT, 'public', 'sitemap.xml');
-const HOST = process.env.VITE_PROD_URL?.replace(/^https?:\/\//, '') ?? 'www.ecypro.com';
+const HOST = process.env.VITE_PROD_URL?.replace(/^https?:\/\//, '') ?? 'ecypro.com';
 const KEY = process.env.INDEXNOW_KEY;
 const API_ENDPOINT = 'https://api.indexnow.org/indexnow';
 

@@ -38,7 +38,7 @@ function LegalDocumentSchema({ name, dateModified }: { name: string; dateModifie
     publisher: {
       '@type': 'Organization',
       name: 'eCyPro Premium Consulting',
-      url: 'https://www.ecypro.com',
+      url: 'https://ecypro.com',
     },
   };
   return (

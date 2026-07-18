@@ -246,7 +246,7 @@ export const ServiceDetailLayout: React.FC<ServiceDetailLayoutProps> = ({
     provider: {
       '@type': 'Organization',
       name: 'eCyPro Premium Consulting',
-      url: 'https://www.ecypro.com',
+      url: 'https://ecypro.com',
     },
     areaServed: { '@type': 'Country', name: 'Turkey' },
     description: valueProp || subtitle,

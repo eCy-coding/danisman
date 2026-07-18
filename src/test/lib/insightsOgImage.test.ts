@@ -4,7 +4,7 @@ import { buildInsightsOgImageUrl, buildOgImageMetaTags } from '../../lib/seo/ins
 describe('insightsOgImage', () => {
   test('buildInsightsOgImageUrl returns correct URL format', () => {
     const url = buildInsightsOgImageUrl('m-a-due-diligence-checklist');
-    expect(url).toBe('https://www.ecypro.com/og/insights/m-a-due-diligence-checklist.png');
+    expect(url).toBe('https://ecypro.com/og/insights/m-a-due-diligence-checklist.png');
   });
 
   test('buildOgImageMetaTags returns og:image and twitter:card', () => {

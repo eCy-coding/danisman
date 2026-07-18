@@ -6,10 +6,10 @@ import type { Language } from '@/lib/i18n';
  * Önceki davranış: per-page canonical URL'ler locale-stripped + bazıları
  * non-www idi (örn. `https://ecypro.com/services`). Google `/tr/services` ve
  * `/en/services`'i aynı sayfa olarak görüp duplicate content riski yaratıyordu.
- * Bu util tek doğru pattern'i dayatır: `https://www.ecypro.com/{locale}{path}`.
+ * Bu util tek doğru pattern'i dayatır: `https://ecypro.com/{locale}{path}`.
  */
 
-const SITE_URL = 'https://www.ecypro.com';
+const SITE_URL = 'https://ecypro.com';
 
 function stripLocale(pathname: string): string {
   return pathname.replace(/^\/(tr|en)(?=\/|$)/, '') || '/';

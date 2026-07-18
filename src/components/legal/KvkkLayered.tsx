@@ -175,7 +175,7 @@ export const KvkkLayered: React.FC<KvkkLayeredProps> = ({
                   {lang === 'tr' ? '1. Veri Sorumlusu' : '1. Data Controller'}
                 </h3>
                 <p>
-                  eCyPro Premium Consulting — info@ecypro.com — https://www.ecypro.com.{' '}
+                  eCyPro Premium Consulting — info@ecypro.com — https://ecypro.com.{' '}
                   {lang === 'tr'
                     ? 'eCyverse Holding ekosisteminin premium consulting kolu.'
                     : 'The premium consulting arm of the eCyverse Holding ecosystem.'}

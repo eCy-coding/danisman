@@ -1,6 +1,6 @@
 Contact: mailto:security@ecypro.com
 Expires: 2027-06-08T09:00:00.000Z
 Preferred-Languages: tr, en
-Canonical: https://www.ecypro.com/.well-known/security.txt
-Policy: https://www.ecypro.com/legal/security-policy
-Acknowledgments: https://www.ecypro.com/security/acknowledgments
+Canonical: https://ecypro.com/.well-known/security.txt
+Policy: https://ecypro.com/legal/security-policy
+Acknowledgments: https://ecypro.com/security/acknowledgments

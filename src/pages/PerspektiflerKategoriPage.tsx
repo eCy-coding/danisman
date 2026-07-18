@@ -28,7 +28,7 @@ const PerspektiflerKategoriPage: React.FC = () => {
           name="description"
           content={intro?.seo ?? `${category.label} üzerine eCyPro içgörüleri.`}
         />
-        <link rel="canonical" href={`https://www.ecypro.com/perspektifler/kategori/${slug}`} />
+        <link rel="canonical" href={`https://ecypro.com/perspektifler/kategori/${slug}`} />
       </Helmet>
       <Navbar />
 

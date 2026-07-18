@@ -50,7 +50,7 @@ export function buildOrganizationSchema(): Record<string, unknown> {
       width: 512,
       height: 512,
     },
-    image: `${SITE_URL}/og-image.png`,
+    image: `${SITE_URL}/og-image.jpg`,
     description:
       'Stratejik danışmanlık, operasyonel verimlilik ve dijital dönüşüm için premium konsültasyon hizmetleri.',
     foundingDate: '2024',

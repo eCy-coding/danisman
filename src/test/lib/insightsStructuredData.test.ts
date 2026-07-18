@@ -18,7 +18,7 @@ const samplePost: InsightPostSEO = {
   subDomain: 'due-diligence',
   authorName: 'Emre Can Yalçın',
   authorSlug: 'emre-can-yalcin',
-  coverImageUrl: 'https://www.ecypro.com/images/cover.jpg',
+  coverImageUrl: 'https://ecypro.com/images/cover.jpg',
   publishedAt: '2026-05-01T09:00:00Z',
   updatedAt: '2026-05-02T09:00:00Z',
   readingTimeMin: 8,
@@ -65,9 +65,9 @@ describe('buildArticleJsonLd', () => {
 
 describe('buildBreadcrumbJsonLd', () => {
   const items = [
-    { name: 'Ana Sayfa', url: 'https://www.ecypro.com' },
-    { name: 'Perspektif', url: 'https://www.ecypro.com/insights' },
-    { name: 'M&A', url: 'https://www.ecypro.com/insights/m-a' },
+    { name: 'Ana Sayfa', url: 'https://ecypro.com' },
+    { name: 'Perspektif', url: 'https://ecypro.com/insights' },
+    { name: 'M&A', url: 'https://ecypro.com/insights/m-a' },
   ];
 
   test('returns valid BreadcrumbList JSON-LD', () => {
@@ -85,7 +85,7 @@ describe('buildBreadcrumbJsonLd', () => {
 
   test('includes item URL when href provided', () => {
     const parsed = JSON.parse(buildBreadcrumbJsonLd(items));
-    expect(parsed.itemListElement[1].item).toBe('https://www.ecypro.com/insights');
+    expect(parsed.itemListElement[1].item).toBe('https://ecypro.com/insights');
   });
 });
 
@@ -93,7 +93,7 @@ describe('buildSeriesJsonLd', () => {
   const series: InsightSeriesSEO = {
     slug: 'aile-sirketi-serisi',
     titleTr: 'Aile Şirketi Serisi',
-    coverImageUrl: 'https://www.ecypro.com/images/series-cover.jpg',
+    coverImageUrl: 'https://ecypro.com/images/series-cover.jpg',
     authorName: 'Emre Can Yalçın',
     parts: [
       { slug: 'part-1', titleTr: 'Bölüm 1', order: 1, publishedAt: '2026-05-01T09:00:00Z' },

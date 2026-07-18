@@ -30,7 +30,7 @@ export function buildBreadcrumbListSchema(steps: BreadcrumbStep[]) {
 export function autoBreadcrumbFromPath(
   pathname: string,
   labels: Record<string, string> = {},
-  baseUrl: string = 'https://www.ecypro.com',
+  baseUrl: string = 'https://ecypro.com',
 ): BreadcrumbStep[] {
   const segments = pathname.split('/').filter(Boolean);
   const steps: BreadcrumbStep[] = [{ name: 'Anasayfa', url: `${baseUrl}/` }];

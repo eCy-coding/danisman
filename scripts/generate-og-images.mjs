@@ -111,7 +111,7 @@ function buildSvg(page) {
   <!-- Domain -->
   <text x="89" y="500"
     font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="20" font-weight="400"
-    fill="${SLATE}" letter-spacing="2">www.ecypro.com</text>
+    fill="${SLATE}" letter-spacing="2">ecypro.com</text>
 </svg>`;
 }
 

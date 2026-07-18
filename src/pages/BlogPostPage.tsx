@@ -146,7 +146,7 @@ const BlogPostPage: React.FC = () => {
 
       <JsonLd
         data={buildArticleSchema({
-          url: `https://www.ecypro.com/perspektifler/${post.slug}`,
+          url: `https://ecypro.com/perspektifler/${post.slug}`,
           title: post.title,
           description: post.excerpt,
           image: post.coverImage,
@@ -157,17 +157,17 @@ const BlogPostPage: React.FC = () => {
       />
       <JsonLd
         data={buildBreadcrumbSchema([
-          { name: 'Anasayfa', url: 'https://www.ecypro.com/' },
-          { name: 'Perspektifler', url: 'https://www.ecypro.com/perspektifler' },
+          { name: 'Anasayfa', url: 'https://ecypro.com/' },
+          { name: 'Perspektifler', url: 'https://ecypro.com/perspektifler' },
           ...(categoryDef
             ? [
                 {
                   name: categoryDef.label,
-                  url: `https://www.ecypro.com/perspektifler/kategori/${categoryDef.slug}`,
+                  url: `https://ecypro.com/perspektifler/kategori/${categoryDef.slug}`,
                 },
               ]
             : []),
-          { name: post.title, url: `https://www.ecypro.com/perspektifler/${post.slug}` },
+          { name: post.title, url: `https://ecypro.com/perspektifler/${post.slug}` },
         ])}
       />
 
@@ -280,7 +280,7 @@ const BlogPostPage: React.FC = () => {
                       durationSec={post.audioDurationSec}
                       description={post.audioDescription}
                       publishedAt={post.date}
-                      canonicalUrl={`https://www.ecypro.com/perspektifler/${post.slug}`}
+                      canonicalUrl={`https://ecypro.com/perspektifler/${post.slug}`}
                     />
                   </div>
                 )}
@@ -333,7 +333,7 @@ const BlogPostPage: React.FC = () => {
                 <div className="mt-16 pt-8 border-t border-white/10 space-y-8">
                   <div className="flex justify-between items-center">
                     <ShareButtons
-                      url={`https://www.ecypro.com/perspektifler/${post.slug}`}
+                      url={`https://ecypro.com/perspektifler/${post.slug}`}
                       title={post.title}
                     />
                   </div>

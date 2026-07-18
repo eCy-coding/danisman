@@ -122,7 +122,7 @@ export const CalismalarPage: React.FC = () => {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
     name: lang === 'tr' ? 'eCyPro Vaka Çalışmaları' : 'eCyPro Case Studies',
-    url: 'https://www.ecypro.com/calismalar',
+    url: 'https://ecypro.com/calismalar',
     numberOfItems: visible.length,
     itemListElement: visible.map((c, i) => ({
       '@type': 'ListItem',
@@ -149,10 +149,10 @@ export const CalismalarPage: React.FC = () => {
       />
       <JsonLd
         data={buildBreadcrumbSchema([
-          { name: lang === 'tr' ? 'Anasayfa' : 'Home', url: 'https://www.ecypro.com/' },
+          { name: lang === 'tr' ? 'Anasayfa' : 'Home', url: 'https://ecypro.com/' },
           {
             name: lang === 'tr' ? 'Çalışmalar' : 'Case Studies',
-            url: 'https://www.ecypro.com/calismalar',
+            url: 'https://ecypro.com/calismalar',
           },
         ])}
       />

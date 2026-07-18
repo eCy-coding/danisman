@@ -8,7 +8,7 @@
  *     → provider WebSite (@id /#website)
  */
 
-const SITE_URL = 'https://www.ecypro.com';
+const SITE_URL = 'https://ecypro.com';
 
 export function buildOrganizationSchema() {
   return {

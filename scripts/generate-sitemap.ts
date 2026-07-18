@@ -91,7 +91,7 @@ const COMPETITOR_GAP_ROUTES: Array<{ path: string; changefreq: string; priority:
   { path: 'calismalar', changefreq: 'weekly', priority: '0.7' },
 ];
 
-const BASE_URL = 'https://www.ecypro.com';
+const BASE_URL = 'https://ecypro.com';
 
 async function generateSitemap() {
   console.log('🗺️  Generating Sitemap...');

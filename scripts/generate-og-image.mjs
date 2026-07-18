@@ -102,7 +102,7 @@ const SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="${WIDTH}" height="${
       font-weight="400"
       fill="${PRIMARY}"
       opacity="0.65"
-    >Global standartlarda kurumsal danışmanlık · www.ecypro.com</text>
+    >Global standartlarda kurumsal danışmanlık · ecypro.com</text>
   </g>
 
   <!-- Top-right tag -->

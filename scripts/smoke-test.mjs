@@ -3,7 +3,7 @@
  * smoke-test.mjs — Fetch-based production smoke test for eCyPro.
  *
  * Usage:
- *   node scripts/smoke-test.mjs                          # default https://www.ecypro.com
+ *   node scripts/smoke-test.mjs                          # default https://ecypro.com
  *   node scripts/smoke-test.mjs --url http://localhost:4173
  *   npm run smoke -- --url https://staging.ecypro.com
  *
@@ -26,7 +26,7 @@ function getArg(name, fallback) {
   const i = argv.indexOf(`--${name}`);
   return i >= 0 && argv[i + 1] ? argv[i + 1] : fallback;
 }
-const BASE = getArg('url', 'https://www.ecypro.com').replace(/\/+$/, '');
+const BASE = getArg('url', 'https://ecypro.com').replace(/\/+$/, '');
 const TIMEOUT_MS = Number(getArg('timeout', '8000'));
 
 // ---------------- spec ----------------
