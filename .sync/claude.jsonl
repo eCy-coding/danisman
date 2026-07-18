@@ -1173,3 +1173,203 @@
 {"ts": "2026-07-18T10:24:05.865935Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "npm run gen:blog 2>&1 | tail -3; echo \"GEN_BLOG_EXIT=$?\"; npx tsx scripts/gener\u2026"}
 {"ts": "2026-07-18T10:24:05.918602Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "npx vitest run 2>&1 | tail -25"}
 {"ts": "2026-07-18T10:24:35.151967Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "git status --short | grep -v \"^ M .sync\\|og/\\|admin.html\\|prerender.mjs\"; echo \u2026"}
+{"ts": "2026-07-18T10:25:31.381439Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "git add -A && git commit -m \"feat(i18n): EN makale paritesi mekanizmas\u0131 \u2014 pair_\u2026"}
+{"ts": "2026-07-18T10:25:46.180248Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "git push 2>&1 | tail -1"}
+{"ts": "2026-07-18T10:26:25.129805Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "find /Users/emrecnyngmail.com/Desktop/ecypro/.claude/worktrees/wonderful-curran\u2026"}
+{"ts": "2026-07-18T10:26:31.690482Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -rn \"founder.avif\\|founder\\.\\(webp\\|jpg\\|jpeg\\|png\\)\" /Users/emrecnyngmail\u2026"}
+{"ts": "2026-07-18T10:26:47.781152Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -rn \"lenis-config\\|from 'lenis'\\|from \\\"lenis\\\"\" /Users/emrecnyngmail.com/\u2026"}
+{"ts": "2026-07-18T10:26:48.558143Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -rn \"^import\\|App\\.tsx\" /Users/emrecnyngmail.com/Desktop/ecypro/.claude/wo\u2026"}
+{"ts": "2026-07-18T10:26:56.000362Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -rn \"page-transition\" /Users/emrecnyngmail.com/Desktop/ecypro/.claude/work\u2026"}
+{"ts": "2026-07-18T10:27:01.093447Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -rn \"from '@/lib/motion'\\|from \\\"@/lib/motion\\\"\\|from '\\.\\./\\.\\./lib/motio\u2026"}
+{"ts": "2026-07-18T10:27:33.579734Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "ls src/content/blog/ | head -50"}
+{"ts": "2026-07-18T10:27:36.282273Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -rn \"font-serif-display\\|Playfair\" /Users/emrecnyngmail.com/Desktop/ecypro\u2026"}
+{"ts": "2026-07-18T10:27:36.587202Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -rl \"lang: 'en'\" src/content/blog | head -20"}
+{"ts": "2026-07-18T10:27:37.381894Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -rln \"playfair\" /Users/emrecnyngmail.com/Desktop/ecypro/.claude/worktrees/\u2026"}
+{"ts": "2026-07-18T10:27:37.507952Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -rn \"pair_id\" src/content/blog | head -20 && echo \"---\" && grep -rn \"readi\u2026"}
+{"ts": "2026-07-18T10:27:37.807692Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -rl \"pair_id\" src/content/blog/ 2>/dev/null | head -5"}
+{"ts": "2026-07-18T10:27:38.184099Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -rn \"pair_id\" --include=\"*.ts\" --include=\"*.tsx\" --include=\"*.mjs\" --inclu\u2026"}
+{"ts": "2026-07-18T10:27:38.528910Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -n \"gen:blog\" package.json"}
+{"ts": "2026-07-18T10:27:38.621626Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "cat package.json | grep -A2 '\"gen:blog\"'"}
+{"ts": "2026-07-18T10:27:39.815012Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "find . -path ./node_modules -prune -o -iname \"*blog*schema*\" -print -o -iname \"\u2026"}
+{"ts": "2026-07-18T10:27:40.206214Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -rn \"gen:blog\" package.json"}
+{"ts": "2026-07-18T10:27:41.603345Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -rn \"pair_id\" --include=\"*.mdx\" --include=\"*.ts\" --include=\"*.tsx\" --inclu\u2026"}
+{"ts": "2026-07-18T10:27:41.992795Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "wc -l /Users/emrecnyngmail.com/Desktop/ecypro/.claude/worktrees/wonderful-curra\u2026"}
+{"ts": "2026-07-18T10:27:42.164593Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -rl \"lang: 'en'\" src/content/blog/ | head -20"}
+{"ts": "2026-07-18T10:27:42.207717Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -rl \"pair_id\" src/content/blog/ 2>/dev/null; echo \"---\"; grep -rl \"reading\u2026"}
+{"ts": "2026-07-18T10:27:42.297690Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "cat package.json | grep -A2 '\"gen:blog\"' && echo \"---find script---\" && find . \u2026"}
+{"ts": "2026-07-18T10:27:42.565560Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "find . -path ./node_modules -prune -o -iname \"*gen-blog*\" -print -o -iname \"*ge\u2026"}
+{"ts": "2026-07-18T10:27:42.682570Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -rln \"readingTime\" --include=\"*.mdx\" src/content/blog 2>/dev/null | head -\u2026"}
+{"ts": "2026-07-18T10:27:42.869202Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -rln \"pair_id\" src/content/blog/ scripts/ src/ 2>/dev/null"}
+{"ts": "2026-07-18T10:27:42.941662Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "cat package.json | grep -A3 '\"gen:blog\"'"}
+{"ts": "2026-07-18T10:27:43.112486Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -n \"playfair\\|fontsource\" /Users/emrecnyngmail.com/Desktop/ecypro/.claude/\u2026"}
+{"ts": "2026-07-18T10:27:43.540819Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "ls /Users/emrecnyngmail.com/Desktop/ecypro/.claude/worktrees/wonderful-curran-e\u2026"}
+{"ts": "2026-07-18T10:27:43.774317Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -rln \"pair_id\" src/content/blog | head -20"}
+{"ts": "2026-07-18T10:27:44.890730Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "cat /Users/emrecnyngmail.com/Desktop/ecypro/.claude/worktrees/wonderful-curran-\u2026"}
+{"ts": "2026-07-18T10:27:47.182542Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -rn \"pair_id\" scripts/ src/ 2>/dev/null"}
+{"ts": "2026-07-18T10:27:48.030932Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -n \"readingTime\" src/content/blog/aile-anayasasi-5-maddelik-cekirdek.mdx s\u2026"}
+{"ts": "2026-07-18T10:27:49.883105Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -rl \"pair_id\" src/content/blog/ | head -20"}
+{"ts": "2026-07-18T10:27:50.680442Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -rn \"gen:blog\" package.json; find . -maxdepth 3 -iname \"*gen-blog*\" -o -in\u2026"}
+{"ts": "2026-07-18T10:27:50.785713Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -n \"M&A\\|De\u011ferleme\\|Finans\" /Users/emrecnyngmail.com/Desktop/ecypro/.claud\u2026"}
+{"ts": "2026-07-18T10:27:51.649606Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -n \"Kamu & ESG\\|karbon-yonetimi\\|CATEGORY_BY_LABEL\\|TAG_BY_SLUG\" /Users/em\u2026"}
+{"ts": "2026-07-18T10:27:51.708166Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "sed -n '1,260p' scripts/generate-blog-index.ts"}
+{"ts": "2026-07-18T10:27:52.434290Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -h \"^readingTime\" src/content/blog/*.mdx | sort | uniq -c"}
+{"ts": "2026-07-18T10:27:53.567498Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -n \"assetFileNames\\|fonts\\|woff\" /Users/emrecnyngmail.com/Desktop/ecypro/.\u2026"}
+{"ts": "2026-07-18T10:27:53.898606Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -rn \"readingTime\" src/ --include=\"*.ts\" --include=\"*.tsx\" | grep -v \"blog-\u2026"}
+{"ts": "2026-07-18T10:27:54.127048Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -l \"readingTime:\" /Users/emrecnyngmail.com/Desktop/ecypro/.claude/worktree\u2026"}
+{"ts": "2026-07-18T10:27:54.524120Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "cat src/lib/blog-pair-validation.ts"}
+{"ts": "2026-07-18T10:27:54.728901Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -n \"Kamu\" /Users/emrecnyngmail.com/Desktop/ecypro/.claude/worktrees/wonder\u2026"}
+{"ts": "2026-07-18T10:27:55.264965Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -rln \"lang: 'en'\" /Users/emrecnyngmail.com/Desktop/ecypro/.claude/worktree\u2026"}
+{"ts": "2026-07-18T10:27:56.232396Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -n \"CATEGORY_BY_LABEL\\|CATEGORY_MERGE_MAP\\|labelEn\" /Users/emrecnyngmail.c\u2026"}
+{"ts": "2026-07-18T10:27:56.769211Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -n \"Kamu & ESG\\|'esg'\\|ab-regulasyonu\" /Users/emrecnyngmail.com/Desktop/ec\u2026"}
+{"ts": "2026-07-18T10:27:57.100849Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -rn \"pair_id\" /Users/emrecnyngmail.com/Desktop/ecypro/.claude/worktrees/wo\u2026"}
+{"ts": "2026-07-18T10:27:59.223580Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -rln \"lang: 'en'\" src/content/blog/*.mdx 2>/dev/null; echo \"---\"; grep -n \u2026"}
+{"ts": "2026-07-18T10:27:59.324310Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "head -15 /Users/emrecnyngmail.com/Desktop/ecypro/.claude/worktrees/wonderful-cu\u2026"}
+{"ts": "2026-07-18T10:28:00.529719Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "sed -n '1,200p' /Users/emrecnyngmail.com/Desktop/ecypro/.claude/worktrees/wonde\u2026"}
+{"ts": "2026-07-18T10:28:03.556640Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -n \"Finans\" src/data/taxonomy.ts | head -20"}
+{"ts": "2026-07-18T10:28:05.010233Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -n \"Yapay Zeka & Teknoloji\\|dijital-donusum\\|kurumsallasma\\|operasyonel-ve\u2026"}
+{"ts": "2026-07-18T10:28:05.070076Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -n \"^import\\|<[A-Z]\" /Users/emrecnyngmail.com/Desktop/ecypro/.claude/workt\u2026"}
+{"ts": "2026-07-18T10:28:05.281586Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -rn \"readingTime\" src/pages/ src/components/ src/lib/ 2>/dev/null | grep -\u2026"}
+{"ts": "2026-07-18T10:28:05.778177Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -rn \"readingTime\" src --include=\"*.ts\" --include=\"*.tsx\" | grep -v \"/conte\u2026"}
+{"ts": "2026-07-18T10:28:05.880318Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -n \"WPM\\s*=\" scripts/generate-blog-index.ts; grep -n \"countWords\" scripts/\u2026"}
+{"ts": "2026-07-18T10:28:09.242638Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -rn \"readingTime\" /Users/emrecnyngmail.com/Desktop/ecypro/.claude/worktree\u2026"}
+{"ts": "2026-07-18T10:28:09.925702Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "awk 'BEGIN{p=0} /^---$/{c++; next} c>=2{print}' src/content/blog/ma-degerleme-d\u2026"}
+{"ts": "2026-07-18T10:28:10.485566Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -rn \"readingTime\\|frontmatter\" src/content/blog/*.mdx 2>/dev/null | grep -\u2026"}
+{"ts": "2026-07-18T10:28:10.605236Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "sed -n '1,60p' src/components/blog/FAQSection.tsx 2>/dev/null; echo \"---BlogHea\u2026"}
+{"ts": "2026-07-18T10:28:14.848117Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "ls -la /Users/emrecnyngmail.com/Desktop/ecypro/.claude/worktrees/wonderful-curr\u2026"}
+{"ts": "2026-07-18T10:28:18.226876Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -n \"Kamu & ESG\\|veri-koruma\\|ab-regulasyonu\" /Users/emrecnyngmail.com/Desk\u2026"}
+{"ts": "2026-07-18T10:28:18.739369Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -n \"<BlogHeader\" /Users/emrecnyngmail.com/Desktop/ecypro/.claude/worktrees\u2026"}
+{"ts": "2026-07-18T10:28:19.937854Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "awk 'BEGIN{c=0} /^---$/{c++; next} c>=2{print}' src/content/blog/measuring-ai-i\u2026"}
+{"ts": "2026-07-18T10:28:22.496501Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -rln \"Kamu.*ESG\\|kamu-esg\\|resolveTag\\b\" /Users/emrecnyngmail.com/Desktop/\u2026"}
+{"ts": "2026-07-18T10:28:24.983840Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -l \"lang: 'en'\" src/content/blog/*.mdx"}
+{"ts": "2026-07-18T10:28:26.530100Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "npm run gen:blog 2>&1 | tail -40"}
+{"ts": "2026-07-18T10:28:28.101771Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "sed -n '1,20p' /Users/emrecnyngmail.com/Desktop/ecypro/.claude/worktrees/wonder\u2026"}
+{"ts": "2026-07-18T10:28:28.456428Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -n \"FAQSection\\|title=\" src/content/blog/csrd-compliance-2026-action-plan.\u2026"}
+{"ts": "2026-07-18T10:28:29.583459Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "npm run gen:blog; echo \"EXIT:$?\""}
+{"ts": "2026-07-18T10:28:29.843966Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -A2 \"unicode-range\" /Users/emrecnyngmail.com/Desktop/ecypro/.claude/worktr\u2026"}
+{"ts": "2026-07-18T10:28:30.700637Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -n \"const lang\\|useTranslation\\|i18n.language\\|lang =\" /Users/emrecnyngmai\u2026"}
+{"ts": "2026-07-18T10:28:35.376671Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -n \"Yapay Zeka & Teknoloji\\|'yapay-zeka'\\|'surec-optimizasyonu'\\|'uretken-\u2026"}
+{"ts": "2026-07-18T10:28:35.608807Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "cat /Users/emrecnyngmail.com/Desktop/ecypro/.claude/worktrees/wonderful-curran-\u2026"}
+{"ts": "2026-07-18T10:28:37.743983Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "awk 'BEGIN{c=0} /^---$/{n++; next} n>=2{print}' src/content/blog/macroeconomic-\u2026"}
+{"ts": "2026-07-18T10:28:38.907741Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -n \"readingTime\" src/content/blog/csrd-compliance-2026-action-plan.mdx"}
+{"ts": "2026-07-18T10:28:42.659207Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -n \"coverImage\" /Users/emrecnyngmail.com/Desktop/ecypro/.claude/worktrees/\u2026"}
+{"ts": "2026-07-18T10:28:48.548304Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "awk 'BEGIN{c=0} /^---$/{n++; next} n>=2{print}' src/content/blog/csrd-complianc\u2026"}
+{"ts": "2026-07-18T10:28:49.987145Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -rn \"KVKK\" /Users/emrecnyngmail.com/Desktop/ecypro/.claude/worktrees/wonde\u2026"}
+{"ts": "2026-07-18T10:28:51.210978Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "awk 'BEGIN{c=0} /^---$/{n++; next} n>=2{print}' src/content/blog/makroekonomik-\u2026"}
+{"ts": "2026-07-18T10:28:52.959535Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -rn \"serif-display\\|Playfair\" /Users/emrecnyngmail.com/Desktop/ecypro/.cla\u2026"}
+{"ts": "2026-07-18T10:28:55.940475Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -rn \"serif-display\" /Users/emrecnyngmail.com/Desktop/ecypro/.claude/worktr\u2026"}
+{"ts": "2026-07-18T10:28:56.441984Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "awk 'BEGIN{n=0} /^---$/{n++; next} n>=2{print}' src/content/blog/csrd-uyumunda-\u2026"}
+{"ts": "2026-07-18T10:28:56.662643Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -rl \"lang: 'en'\" src/content/blog/*.mdx"}
+{"ts": "2026-07-18T10:28:57.514649Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -n \"booking\\|/en/\\|pair_id\" src/content/blog/*.mdx | grep -v \"ma-degerleme\u2026"}
+{"ts": "2026-07-18T10:28:58.497934Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -rn \"font-serif-display\\|serif-display\" /Users/emrecnyngmail.com/Desktop/e\u2026"}
+{"ts": "2026-07-18T10:29:01.529043Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "sed -n '1,60p' /Users/emrecnyngmail.com/Desktop/ecypro/.claude/worktrees/wonder\u2026"}
+{"ts": "2026-07-18T10:29:02.772529Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -n \"serif-display\\|Playfair\\|font-family\" /Users/emrecnyngmail.com/Desktop\u2026"}
+{"ts": "2026-07-18T10:29:03.448567Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "awk '/^---$/{c++; next} c>=2' src/content/blog/yapay-zeka-ile-is-sureclerini-op\u2026"}
+{"ts": "2026-07-18T10:29:09.174493Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "cd src/content/blog for f in kvkk-uyum-sureci-adim-adim.mdx net-zero-eylem-plan\u2026"}
+{"ts": "2026-07-18T10:29:11.112867Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "for f in src/content/blog/*.mdx; do lang=$(grep -m1 \"^lang:\" \"$f\" | sed \"s/lang\u2026"}
+{"ts": "2026-07-18T10:29:14.392383Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "cd src/content/blog awk 'BEGIN{n=0} /^---$/{n++; next} n>=2{print}' measuring-a\u2026"}
+{"ts": "2026-07-18T10:29:17.894415Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -n \"MAX_FEATURED\" /Users/emrecnyngmail.com/Desktop/ecypro/.claude/worktree\u2026"}
+{"ts": "2026-07-18T10:29:17.985942Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "awk '/^---$/{c++; next} c>=2' src/content/blog/carbon-accounting-scope-1-2-3-fi\u2026"}
+{"ts": "2026-07-18T10:29:20.448416Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "awk 'BEGIN{n=0} /^---$/{n++; next} n>=2{print}' src/content/blog/measuring-ai-i\u2026"}
+{"ts": "2026-07-18T10:29:23.386845Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "awk 'BEGIN{c=0} /^---$/{c++; next} c>=2' src/content/blog/esg-strategy-corporat\u2026"}
+{"ts": "2026-07-18T10:29:25.815353Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "npm run gen:blog; echo \"EXIT:$?\""}
+{"ts": "2026-07-18T10:29:26.030374Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "npm run gen:blog 2>&1 | tail -60; echo \"EXIT:$?\""}
+{"ts": "2026-07-18T10:29:30.160407Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -n \"pair_id\\|lang:\" src/content/blog/macroeconomic-risk-management-2026.md\u2026"}
+{"ts": "2026-07-18T10:29:30.178516Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "git status --short | head -30"}
+{"ts": "2026-07-18T10:29:31.117069Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "npm run gen:blog; echo \"REAL_EXIT:$?\""}
+{"ts": "2026-07-18T10:29:31.704836Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "npm run gen:blog 2>&1 | tail -60"}
+{"ts": "2026-07-18T10:29:34.860168Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -n \"pair_id\" src/content/blog/makroekonomik-risk-yonetimi-2026.mdx src/con\u2026"}
+{"ts": "2026-07-18T10:29:36.108213Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "git status --short; echo \"---\"; git log --oneline -3 -- src/content/blog/macroe\u2026"}
+{"ts": "2026-07-18T10:29:36.183321Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "npm run gen:blog 2>&1 | tail -40"}
+{"ts": "2026-07-18T10:29:36.402623Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "git status --short"}
+{"ts": "2026-07-18T10:29:36.459297Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -n \"pair_id\\|lang:\\|status:\" src/content/blog/macroeconomic-risk-managemen\u2026"}
+{"ts": "2026-07-18T10:29:36.602408Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -rln \"makroekonomik-risk-yonetimi-2026\" src/content/blog/"}
+{"ts": "2026-07-18T10:29:41.073410Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "ls /Users/emrecnyngmail.com/Desktop/ecypro/.claude/worktrees/wonderful-curran-e\u2026"}
+{"ts": "2026-07-18T10:29:43.206229Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -rl \"makroekonomik-risk-yonetimi-2026\" src/content/blog/*.mdx 2>/dev/null \u2026"}
+{"ts": "2026-07-18T10:29:44.127751Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "awk '/^---$/{c++; next} c>=2' src/content/blog/optimizing-business-processes-wi\u2026"}
+{"ts": "2026-07-18T10:29:44.904344Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -n \"pair_id\\|lang:\\|status:\" /Users/emrecnyngmail.com/Desktop/ecypro/.clau\u2026"}
+{"ts": "2026-07-18T10:29:52.456140Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "sed -n '1,140p' /Users/emrecnyngmail.com/Desktop/ecypro/.claude/worktrees/wonde\u2026"}
+{"ts": "2026-07-18T10:29:53.286644Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -n \"pair_id\\|^lang:\" src/content/blog/csrd-compliance-2026-action-plan.mdx\u2026"}
+{"ts": "2026-07-18T10:29:54.992075Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "git status --short src/content/blog/ | head -20"}
+{"ts": "2026-07-18T10:29:58.032713Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "for i in 1 2 3; do npm run gen:blog 2>&1 | tail -6; echo \"---EXIT:$? run$i---\";\u2026"}
+{"ts": "2026-07-18T10:29:58.758018Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "git log --oneline -3 -- src/content/blog/gdpr-vs-kvkk-key-differences.mdx; echo\u2026"}
+{"ts": "2026-07-18T10:29:59.019961Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "sed -n '1,15p' /Users/emrecnyngmail.com/Desktop/ecypro/.claude/worktrees/wonder\u2026"}
+{"ts": "2026-07-18T10:29:59.800981Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "ls src/content/blog/ | grep -i gdpr echo \"---TR---\" grep -n \"^lang:\\|^status:\\|\u2026"}
+{"ts": "2026-07-18T10:30:01.735615Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "node -e \" const fs=require('fs'); const c=fs.readFileSync('src/content/blog/gdp\u2026"}
+{"ts": "2026-07-18T10:30:04.516842Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "git status --short | head -30 echo \"---\" tail -5 src/content/blog/kvkk-uyum-sur\u2026"}
+{"ts": "2026-07-18T10:30:05.648084Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -n \"pair_id\\|lang:\\|status:\" src/content/blog/gdpr-kvkk-farklari.mdx src/c\u2026"}
+{"ts": "2026-07-18T10:30:07.007936Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -n \"pair_id\\|lang:\\|status:\" src/content/blog/makroekonomik-risk-yonetimi-\u2026"}
+{"ts": "2026-07-18T10:30:07.716733Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "npm run gen:blog > /tmp/genblog.log 2>&1; echo \"REAL_EXIT:$?\"; cat /tmp/genblog\u2026"}
+{"ts": "2026-07-18T10:30:07.799903Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -n \"pair_id\" /Users/emrecnyngmail.com/Desktop/ecypro/.claude/worktrees/won\u2026"}
+{"ts": "2026-07-18T10:30:08.510996Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -n \"readingTime\" src/content/blog/macroeconomic-risk-management-2026.mdx s\u2026"}
+{"ts": "2026-07-18T10:30:09.574128Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "npm run gen:blog 2>&1 | tail -20"}
+{"ts": "2026-07-18T10:30:10.344518Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "git stash -u && npm run gen:blog 2>&1 | tail -20; git stash pop"}
+{"ts": "2026-07-18T10:30:17.505765Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "node -e \" const fs = require('fs'); const content = fs.readFileSync('src/conten\u2026"}
+{"ts": "2026-07-18T10:30:17.562729Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "npm run gen:blog 2>&1 | tail -60"}
+{"ts": "2026-07-18T10:30:20.497246Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "npm run gen:blog 2>&1; echo \"EXIT:$?\""}
+{"ts": "2026-07-18T10:30:23.865125Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "git status --porcelain | head -20"}
+{"ts": "2026-07-18T10:30:24.216070Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -n \"pair_id\\|status:\" src/content/blog/data-governance-kvkk-gdpr-complianc\u2026"}
+{"ts": "2026-07-18T10:30:25.213733Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -rln \"MainLayout\" /Users/emrecnyngmail.com/Desktop/ecypro/.claude/worktree\u2026"}
+{"ts": "2026-07-18T10:30:27.178152Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "pwd && node -e \" const fs = require('fs'); const content = fs.readFileSync('src\u2026"}
+{"ts": "2026-07-18T10:30:28.101426Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "awk 'BEGIN{c=0} /^---$/{c++; next} c>=2{print}' src/content/blog/macroeconomic-\u2026"}
+{"ts": "2026-07-18T10:30:28.453235Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -n \"MainLayout\" /Users/emrecnyngmail.com/Desktop/ecypro/.claude/worktrees/\u2026"}
+{"ts": "2026-07-18T10:30:31.138857Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "node -e \" const posts = require('./src/data/blog-posts.json'); const p = posts.\u2026"}
+{"ts": "2026-07-18T10:30:31.779554Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "for i in 1 2 3; do echo \"=== run $i ===\"; npm run gen:blog 2>&1 | grep -i \"karb\u2026"}
+{"ts": "2026-07-18T10:30:38.379636Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "npx vitest run src/test 2>&1 | tail -6"}
+{"ts": "2026-07-18T10:30:38.589527Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "echo \"=== TR file frontmatter ===\"; sed -n '1,12p' src/content/blog/dijital-don\u2026"}
+{"ts": "2026-07-18T10:30:39.057950Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "npm run gen:blog 2>&1 | tail -40"}
+{"ts": "2026-07-18T10:30:39.152573Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "python3 -c \" import json data = json.load(open('src/data/blog-posts.json')) for\u2026"}
+{"ts": "2026-07-18T10:30:39.466788Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "npx vitest run src/lib/motion/motion.test.ts src/pages/track-b-phase-b5.test.ts\u2026"}
+{"ts": "2026-07-18T10:30:39.560939Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "npm run gen:blog > /tmp/genblog_out.txt 2>&1; echo \"EXIT:$?\"; grep -i \"kvkk\" /t\u2026"}
+{"ts": "2026-07-18T10:30:40.311215Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "npm run gen:blog"}
+{"ts": "2026-07-18T10:30:44.636902Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "python3 - <<'EOF' tr_excerpt = \"McKinsey & Company'nin kapsaml\u0131 ara\u015ft\u0131rmas\u0131, M&\u2026"}
+{"ts": "2026-07-18T10:30:45.448499Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "git status --short"}
+{"ts": "2026-07-18T10:30:46.739098Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "git status --short src/content/blog/karbon-muhasebesi-scope-1-2-3-ilk-adimlar.m\u2026"}
+{"ts": "2026-07-18T10:30:48.416578Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "python3 -c \" import json data = json.load(open('/Users/emrecnyngmail.com/Deskto\u2026"}
+{"ts": "2026-07-18T10:30:50.795410Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -n \"^pair_id\" src/content/blog/gdpr-kvkk-farklari.mdx 2>/dev/null echo \"ex\u2026"}
+{"ts": "2026-07-18T10:30:55.860186Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "npm run typecheck 2>&1 | tail -60"}
+{"ts": "2026-07-18T10:31:04.202908Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "npm run lint 2>&1 | tail -60"}
+{"ts": "2026-07-18T10:31:07.059672Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "sed -n '1,14p' /Users/emrecnyngmail.com/Desktop/ecypro/.claude/worktrees/wonder\u2026"}
+{"ts": "2026-07-18T10:31:07.613906Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "git diff --stat src/content/blog/makroekonomik-risk-yonetimi-2026.mdx && echo \"\u2026"}
+{"ts": "2026-07-18T10:31:08.358801Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -c \"pair_id\" /Users/emrecnyngmail.com/Desktop/ecypro/.claude/worktrees/won\u2026"}
+{"ts": "2026-07-18T10:31:09.141808Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -rn \"from '@/lib/motion/lenis-config'\\|from '\\./lenis-config'\" /Users/emre\u2026"}
+{"ts": "2026-07-18T10:31:14.078623Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "node -e \" const posts = require('./src/data/blog-posts.json'); const en = posts\u2026"}
+{"ts": "2026-07-18T10:31:15.996843Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "awk 'BEGIN{c=0} /^---$/{c++; next} c>=2{print}' src/content/blog/ma-valuation-d\u2026"}
+{"ts": "2026-07-18T10:31:17.767095Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -rln \"PageTransition\\|navigateWithTransition\" /Users/emrecnyngmail.com/Des\u2026"}
+{"ts": "2026-07-18T10:31:19.116098Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "git status --short -- src/content/blog/yapay-zeka-ile-is-sureclerini-optimize-e\u2026"}
+{"ts": "2026-07-18T10:31:25.316420Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "npm run gen:blog 2>&1 | tail -40; echo \"EXIT:$?\""}
+{"ts": "2026-07-18T10:31:26.269263Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "git status --short"}
+{"ts": "2026-07-18T10:31:31.266776Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -n \"pair_id\" src/content/blog/how-to-build-a-digital-transformation-strate\u2026"}
+{"ts": "2026-07-18T10:31:32.967246Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "node -e \" const fs=require('fs'); const c=fs.readFileSync('src/content/blog/ver\u2026"}
+{"ts": "2026-07-18T10:31:42.582018Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "git diff -- src/content/blog/ma-degerleme-due-diligence-rehberi.mdx"}
+{"ts": "2026-07-18T10:31:44.795126Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -rn \"pair_id: 'veri-yonetisimi-kvkk-gdpr-uyum'\" src/content/blog/*.mdx"}
+{"ts": "2026-07-18T10:31:51.072045Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "python3 -c \" import json d=json.load(open('src/data/blog-posts.json')) for p in\u2026"}
+{"ts": "2026-07-18T10:31:54.356668Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "node -e \" const {execSync}=require('child_process'); process.chdir('src/content\u2026"}
+{"ts": "2026-07-18T10:32:02.367648Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "npm run gen:blog 2>&1"}
+{"ts": "2026-07-18T10:32:07.815193Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "git add src/components/layout/MainLayout.tsx index.html && git commit -m \"perf(\u2026"}
+{"ts": "2026-07-18T10:32:11.873213Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "git status --porcelain -- src/content/blog/veri-yonetisimi-kvkk-gdpr-uyum.mdx s\u2026"}
+{"ts": "2026-07-18T10:32:12.112928Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "git diff -- src/content/blog/gdpr-kvkk-farklari.mdx"}
+{"ts": "2026-07-18T10:32:18.810043Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "find dist -name \"index.html\" -newer dist/assets 2>/dev/null | wc -l; find dist \u2026"}
+{"ts": "2026-07-18T10:32:25.571821Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "node -e \" const posts = require('./src/data/blog-posts.json'); const mine = pos\u2026"}
+{"ts": "2026-07-18T10:32:33.446849Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "cat \"/private/tmp/claude-501/-Users-emrecnyngmail-com-Desktop-ecypro--claude-wo\u2026"}
+{"ts": "2026-07-18T10:33:16.669611Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "kill 25727 26146 70440 2>/dev/null; sleep 1; lsof -i :4179 2>/dev/null | wc -l"}
+{"ts": "2026-07-18T10:33:30.400681Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "node scripts/prerender.mjs 2>&1 | tail -8"}
+{"ts": "2026-07-18T10:33:37.975290Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "git push 2>&1 | tail -1"}
+{"ts": "2026-07-18T10:33:48.832485Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "npm run gen:blog 2>&1; echo \"EXIT_CODE=$?\""}
+{"ts": "2026-07-18T10:34:04.665074Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "node -e \" const { chromium } = require('playwright'); chromium.launch({ headles\u2026"}
+{"ts": "2026-07-18T10:34:48.463452Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "npm run gen:blog 2>&1 | tail -30; echo \"EXIT: ${PIPESTATUS[0]}\""}
+{"ts": "2026-07-18T10:34:54.261437Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "npm run gen:blog > /dev/null 2>&1; echo \"EXIT: $?\""}
+{"ts": "2026-07-18T10:36:28.529173Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "npm run gen:blog 2>&1; echo \"EXIT: $?\""}
+{"ts": "2026-07-18T10:36:30.841200Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "npm run gen:blog 2>&1 | tail -30; echo \"EXIT=${PIPESTATUS[0]}\""}
+{"ts": "2026-07-18T10:36:32.034523Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "npm run gen:blog 2>&1; echo \"EXIT_CODE=$?\""}
+{"ts": "2026-07-18T10:36:34.946188Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "npm run gen:blog >/dev/null 2>&1; echo \"EXIT=$?\""}
+{"ts": "2026-07-18T10:36:46.056702Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "npm run gen:blog 2>&1 | tail -30; echo \"EXIT: ${PIPESTATUS[0]}\""}
+{"ts": "2026-07-18T10:36:54.542038Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "npm run gen:blog >/dev/null 2>&1; echo \"EXIT: $?\""}
+{"ts": "2026-07-18T10:37:03.806730Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "echo \"=== remaining wrong figures in EN file (should be none) ===\" && grep -nE \u2026"}
+{"ts": "2026-07-18T10:38:39.231516Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "npm run gen:blog; echo \"EXIT_CODE=$?\""}
+{"ts": "2026-07-18T10:39:51.906062Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "sed -n '1,40p' src/content/blog/measuring-ai-investment-roi.mdx"}
+{"ts": "2026-07-18T10:39:52.230079Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "sed -n '1,40p' src/content/blog/ai-yatirim-roi-hesaplama.mdx"}
+{"ts": "2026-07-18T10:40:00.798946Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "npm run gen:blog; echo \"EXIT_CODE:$?\""}
+{"ts": "2026-07-18T10:40:04.040282Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -n \"pair\" scripts/generate-blog-index.ts | head -50"}
+{"ts": "2026-07-18T10:40:11.925417Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -n \"errors\" scripts/generate-blog-index.ts | sed -n '1,60p'"}
+{"ts": "2026-07-18T10:44:19.321820Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "npm run gen:blog 2>&1 | tail -3; npx vitest run 2>&1 | tail -3"}
+{"ts": "2026-07-18T10:44:54.754453Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "npx vitest run 2>&1 | grep -E \"Test Files|Tests\""}

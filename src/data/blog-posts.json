@@ -58,7 +58,51 @@
     "wordCount": 739,
     "lang": "tr",
     "format": "makale",
-    "featured": true
+    "featured": true,
+    "pairId": "gdpr-kvkk-farklari"
+  },
+  {
+    "slug": "gdpr-vs-kvkk-key-differences",
+    "title": "GDPR vs. KVKK: A Comparative Analysis for Turkish Companies",
+    "excerpt": "The key differences between GDPR and KVKK: penalty calculation, scope, data subject rights, and cross-border data transfer. A practical guide for Turkish companies doing business with the EU.",
+    "date": "2026-05-29T00:00:00.000Z",
+    "author": "eCyPro Consulting",
+    "coverImage": "/images/blog-default.jpg",
+    "category": "Kamu & ESG",
+    "categorySlug": "kamu-esg",
+    "tags": [
+      "veri-koruma",
+      "ab-regulasyonu"
+    ],
+    "readingTime": "6 min read",
+    "readTimeMin": 6,
+    "wordCount": 1107,
+    "lang": "en",
+    "format": "makale",
+    "featured": false,
+    "pairId": "gdpr-kvkk-farklari"
+  },
+  {
+    "slug": "kvkk-compliance-process-step-by-step",
+    "title": "The KVKK Compliance Process: A Step-by-Step Corporate Guide (2026)",
+    "excerpt": "How should an organization launch a KVKK compliance program? A seven-step corporate guide to mandatory documentation, KVKK penalties, and common pitfalls.",
+    "date": "2026-05-29T00:00:00.000Z",
+    "author": "eCyPro Consulting",
+    "coverImage": "/images/blog-default.jpg",
+    "category": "Kamu & ESG",
+    "categorySlug": "kamu-esg",
+    "tags": [
+      "veri-koruma",
+      "regulasyon-uyum",
+      "kurumsallasma"
+    ],
+    "readingTime": "6 min read",
+    "readTimeMin": 6,
+    "wordCount": 1272,
+    "lang": "en",
+    "format": "makale",
+    "featured": false,
+    "pairId": "kvkk-uyum-sureci-adim-adim"
   },
   {
     "slug": "kvkk-uyum-sureci-adim-adim",
@@ -79,7 +123,8 @@
     "wordCount": 745,
     "lang": "tr",
     "format": "makale",
-    "featured": false
+    "featured": false,
+    "pairId": "kvkk-uyum-sureci-adim-adim"
   },
   {
     "slug": "proje-yonetimi-best-practices",
@@ -104,6 +149,26 @@
     "featured": true
   },
   {
+    "slug": "carbon-accounting-scope-1-2-3-first-steps",
+    "title": "Carbon Accounting: First Steps for Scope 1–3",
+    "excerpt": "The first steps a company should take across the Scope 1, 2, and 3 categories when building a carbon accounting function from scratch, with practical data-collection guidance.",
+    "date": "2026-05-28T00:00:00.000Z",
+    "author": "Mehmet Çelik",
+    "coverImage": "/brand/blog-covers/karbon-scope-123.svg",
+    "category": "Kamu & ESG",
+    "categorySlug": "kamu-esg",
+    "tags": [
+      "karbon-yonetimi"
+    ],
+    "readingTime": "5 min read",
+    "readTimeMin": 5,
+    "wordCount": 994,
+    "lang": "en",
+    "format": "makale",
+    "featured": false,
+    "pairId": "karbon-muhasebesi-scope-1-2-3-ilk-adimlar"
+  },
+  {
     "slug": "karbon-muhasebesi-scope-1-2-3-ilk-adimlar",
     "title": "Karbon Muhasebesi: Scope 1-2-3 İçin İlk Adımlar",
     "excerpt": "Karbon emisyonu hesabını sıfırdan kurmak isteyen bir şirketin Scope 1, 2 ve 3 kategorilerinde atması gereken ilk adımlar. Pratik veri toplama önerileriyle.",
@@ -120,7 +185,8 @@
     "wordCount": 693,
     "lang": "tr",
     "format": "makale",
-    "featured": false
+    "featured": false,
+    "pairId": "karbon-muhasebesi-scope-1-2-3-ilk-adimlar"
   },
   {
     "slug": "gpt-tabanli-musteri-hizmetleri-roi",
@@ -385,6 +451,27 @@
     "featured": false
   },
   {
+    "slug": "csrd-compliance-2026-action-plan",
+    "title": "CSRD Compliance: A 2026 Action Plan",
+    "excerpt": "A step-by-step action plan for Turkish companies expected to align with the EU Corporate Sustainability Reporting Directive (CSRD) by 2026.",
+    "date": "2026-05-10T00:00:00.000Z",
+    "author": "Mehmet Çelik",
+    "coverImage": "/brand/blog-covers/csrd-2026.svg",
+    "category": "Kamu & ESG",
+    "categorySlug": "kamu-esg",
+    "tags": [
+      "esg",
+      "ab-regulasyonu"
+    ],
+    "readingTime": "5 min read",
+    "readTimeMin": 5,
+    "wordCount": 922,
+    "lang": "en",
+    "format": "makale",
+    "featured": false,
+    "pairId": "csrd-uyumunda-2026-hareket-plani"
+  },
+  {
     "slug": "csrd-uyumunda-2026-hareket-plani",
     "title": "CSRD Uyumunda 2026 Hareket Planı",
     "excerpt": "Avrupa CSRD (Corporate Sustainability Reporting Directive) regülasyonuna 2026'da uyum sağlaması beklenen Türk şirketleri için adım adım hareket planı.",
@@ -402,7 +489,26 @@
     "wordCount": 688,
     "lang": "tr",
     "format": "makale",
-    "featured": false
+    "featured": false,
+    "pairId": "csrd-uyumunda-2026-hareket-plani"
+  },
+  {
+    "slug": "data-governance-kvkk-gdpr-compliance",
+    "title": "Data Governance and KVKK/GDPR Compliance: A Corporate Data Strategy Framework",
+    "excerpt": "In 2024, Türkiye's Personal Data Protection Authority (KVKK) imposed more than 550 million Turkish lira in administrative fines for infringements of the personal-data law. In Europe…",
+    "date": "2026-05-10T00:00:00.000Z",
+    "author": "eCyPro Analiz Ekibi",
+    "coverImage": "/images/blog-default.jpg",
+    "category": "Yapay Zeka & Teknoloji",
+    "categorySlug": "yapay-zeka-teknoloji",
+    "tags": [],
+    "readingTime": "6 min read",
+    "readTimeMin": 6,
+    "wordCount": 1204,
+    "lang": "en",
+    "format": "makale",
+    "featured": false,
+    "pairId": "veri-yonetisimi-kvkk-gdpr-uyum"
   },
   {
     "slug": "endustriyel-iliskiler-toplu-sozlesme-stratejisi",
@@ -422,6 +528,24 @@
     "featured": false
   },
   {
+    "slug": "esg-strategy-corporate-sustainability",
+    "title": "ESG Strategy and Corporate Sustainability: A C-Suite Guide for 2026",
+    "excerpt": "ESG (Environmental, Social, Governance) criteria have risen to the top of the corporate governance agenda over the past decade. This guide offers executives an evidence-based, actionable framework for embedding ESG strategy into the corporate value chain.",
+    "date": "2026-05-10T00:00:00.000Z",
+    "author": "eCyPro Analiz Ekibi",
+    "coverImage": "/images/blog-default.jpg",
+    "category": "Kamu & ESG",
+    "categorySlug": "kamu-esg",
+    "tags": [],
+    "readingTime": "6 min read",
+    "readTimeMin": 6,
+    "wordCount": 1154,
+    "lang": "en",
+    "format": "makale",
+    "featured": false,
+    "pairId": "esg-strateji-kurumsal-surdurulebilirlik"
+  },
+  {
     "slug": "esg-strateji-kurumsal-surdurulebilirlik",
     "title": "ESG Stratejisi ve Kurumsal Sürdürülebilirlik: C-Suite Rehberi 2026",
     "excerpt": "ESG (Environmental, Social, Governance — Çevresel, Sosyal, Yönetişim) kriterleri, son on yılda kurumsal yönetim gündeminin en üst sıralarına yerleşmiştir.…",
@@ -433,10 +557,11 @@
     "tags": [],
     "readingTime": "5 dk okuma",
     "readTimeMin": 5,
-    "wordCount": 1062,
+    "wordCount": 1064,
     "lang": "tr",
     "format": "makale",
-    "featured": false
+    "featured": false,
+    "pairId": "esg-strateji-kurumsal-surdurulebilirlik"
   },
   {
     "slug": "lean-ai-operational-excellence",
@@ -470,7 +595,44 @@
     "wordCount": 992,
     "lang": "tr",
     "format": "makale",
-    "featured": false
+    "featured": false,
+    "pairId": "ma-degerleme-due-diligence-rehberi"
+  },
+  {
+    "slug": "ma-valuation-due-diligence-guide",
+    "title": "M&A Due Diligence: Valuation Methodology for Corporate Mergers and Acquisitions",
+    "excerpt": "McKinsey & Company's comprehensive research finds that nearly 70% of M&A transactions fail to achieve the revenue synergies projected by the acquirer's management (Christofferson et…",
+    "date": "2026-05-10T00:00:00.000Z",
+    "author": "eCyPro Consulting",
+    "coverImage": "/images/blog-default.jpg",
+    "category": "M&A & Değerleme",
+    "categorySlug": "ma-degerleme",
+    "tags": [],
+    "readingTime": "5 min read",
+    "readTimeMin": 5,
+    "wordCount": 1080,
+    "lang": "en",
+    "format": "makale",
+    "featured": false,
+    "pairId": "ma-degerleme-due-diligence-rehberi"
+  },
+  {
+    "slug": "macroeconomic-risk-management-2026",
+    "title": "Macroeconomic Risk Management: Corporate Strategy Under Currency, Inflation, and Interest-Rate Pressure",
+    "excerpt": "Between 2024 and 2026, the global economic environment presents corporate leaders with an unusual degree of uncertainty: structural inflation persistence in the United States…",
+    "date": "2026-05-10T00:00:00.000Z",
+    "author": "eCyPro Analiz Ekibi",
+    "coverImage": "/images/blog-default.jpg",
+    "category": "Finans & Ekonomi",
+    "categorySlug": "finans-ekonomi",
+    "tags": [],
+    "readingTime": "5 min read",
+    "readTimeMin": 5,
+    "wordCount": 1064,
+    "lang": "en",
+    "format": "makale",
+    "featured": false,
+    "pairId": "makroekonomik-risk-yonetimi-2026"
   },
   {
     "slug": "makroekonomik-risk-yonetimi-2026",
@@ -487,7 +649,8 @@
     "wordCount": 909,
     "lang": "tr",
     "format": "makale",
-    "featured": false
+    "featured": false,
+    "pairId": "makroekonomik-risk-yonetimi-2026"
   },
   {
     "slug": "net-zero-eylem-plani",
@@ -572,7 +735,8 @@
     "wordCount": 945,
     "lang": "tr",
     "format": "makale",
-    "featured": false
+    "featured": false,
+    "pairId": "veri-yonetisimi-kvkk-gdpr-uyum"
   },
   {
     "slug": "stratejik-planlama-rehberi",
@@ -702,7 +866,30 @@
     "wordCount": 707,
     "lang": "tr",
     "format": "makale",
-    "featured": false
+    "featured": false,
+    "pairId": "dijital-donusum-stratejisi-nasil-olusturulur"
+  },
+  {
+    "slug": "how-to-build-a-digital-transformation-strategy",
+    "title": "How to Build a Digital Transformation Strategy: A Seven-Step Corporate Guide",
+    "excerpt": "Five mistakes to avoid when building a corporate digital transformation strategy, and the seven critical steps of a successful transformation.",
+    "date": "2026-05-05T00:00:00.000Z",
+    "author": "eCyPro Consulting",
+    "coverImage": "/images/blog-default.jpg",
+    "category": "Yapay Zeka & Teknoloji",
+    "categorySlug": "yapay-zeka-teknoloji",
+    "tags": [
+      "dijital-donusum",
+      "kurumsallasma",
+      "operasyonel-verimlilik"
+    ],
+    "readingTime": "4 min read",
+    "readTimeMin": 4,
+    "wordCount": 884,
+    "lang": "en",
+    "format": "makale",
+    "featured": false,
+    "pairId": "dijital-donusum-stratejisi-nasil-olusturulur"
   },
   {
     "slug": "kpi-belirleme-ve-olcme-yontemleri",
@@ -807,6 +994,28 @@
     "featured": false
   },
   {
+    "slug": "optimizing-business-processes-with-ai",
+    "title": "Optimizing Business Processes with AI: An Enterprise Guide for 2026",
+    "excerpt": "The real ROI of generative AI in business processes, common implementation pitfalls, and a five-stage framework for enterprise AI transformation.",
+    "date": "2026-05-01T00:00:00.000Z",
+    "author": "eCyPro Consulting",
+    "coverImage": "/images/blog-default.jpg",
+    "category": "Yapay Zeka & Teknoloji",
+    "categorySlug": "yapay-zeka-teknoloji",
+    "tags": [
+      "yapay-zeka",
+      "surec-optimizasyonu",
+      "uretken-ai"
+    ],
+    "readingTime": "6 min read",
+    "readTimeMin": 6,
+    "wordCount": 1205,
+    "lang": "en",
+    "format": "makale",
+    "featured": false,
+    "pairId": "yapay-zeka-ile-is-sureclerini-optimize-etme"
+  },
+  {
     "slug": "yapay-zeka-ile-is-sureclerini-optimize-etme",
     "title": "Yapay Zeka ile İş Süreçlerini Optimize Etme: Kurumsal Rehber 2026",
     "excerpt": "Üretici yapay zekanın iş süreçlerindeki gerçek ROI'si, uygulama tuzakları ve kurumsal AI dönüşümü için 5 aşamalı çerçeve.",
@@ -825,7 +1034,8 @@
     "wordCount": 877,
     "lang": "tr",
     "format": "makale",
-    "featured": false
+    "featured": false,
+    "pairId": "yapay-zeka-ile-is-sureclerini-optimize-etme"
   },
   {
     "slug": "organizasyonel-degisim-yonetimi",
@@ -868,7 +1078,8 @@
     "wordCount": 305,
     "lang": "tr",
     "format": "makale",
-    "featured": false
+    "featured": false,
+    "pairId": "ai-yatirim-roi-hesaplama"
   },
   {
     "slug": "measuring-ai-investment-roi",
@@ -890,7 +1101,8 @@
     "wordCount": 303,
     "lang": "en",
     "format": "makale",
-    "featured": false
+    "featured": false,
+    "pairId": "ai-yatirim-roi-hesaplama"
   },
   {
     "slug": "stratejik-dijital-donusum-2026",

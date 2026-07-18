@@ -1,0 +1,140 @@
+---
+title: 'GDPR vs. KVKK: A Comparative Analysis for Turkish Companies'
+excerpt: 'The key differences between GDPR and KVKK: penalty calculation, scope, data subject rights, and cross-border data transfer. A practical guide for Turkish companies doing business with the EU.'
+date: '2026-05-29'
+author: 'eCyPro Consulting'
+category: 'Kamu & ESG'
+tags: ['veri-koruma', 'ab-regulasyonu']
+format: 'makale'
+readingTime: '5 min read'
+lang: 'en'
+status: 'published'
+pair_id: 'gdpr-kvkk-farklari'
+---
+
+import { FAQSection } from '../../components/blog/FAQSection';
+
+# GDPR and KVKK: Key Differences
+
+Turkish companies doing business with the EU must operate under two distinct data-protection regimes at once: Türkiye's Law on the Protection of Personal Data (Kişisel Verilerin Korunması Kanunu, generally abbreviated KVKK) and the EU's General Data Protection Regulation (GDPR). The two frameworks are structurally similar, but the differences between them are consequential enough to shape operational decisions. This guide sets out a practical comparison to support those decisions.
+
+## Baseline Comparison
+
+| Dimension | KVKK (Türkiye) | GDPR (EU) |
+|------|-----------|-----------|
+| Entry into force | 2016 | 2018 |
+| Supervisory authority | The Personal Data Protection Authority (Kişisel Verileri Koruma Kurumu) | Varies by member state (Germany: BfDI; France: CNIL) |
+| Scope | Data controllers based in Türkiye | Any organization processing the personal data of individuals in the EU |
+| Maximum penalty | Up to TRY 17,092,242 (2026 band; revalued annually) | 4% of global annual turnover, or EUR 20 million |
+| DPO requirement | No (recommended) | Yes, under certain conditions |
+| Breach notification | 72 hours | 72 hours |
+| Data portability | Limited | Comprehensive |
+
+## Scope: Which Companies Must Comply With Both?
+
+### KVKK Only
+
+Firms operating in Türkiye that do not process the personal data of EU citizens.
+
+### GDPR Only
+
+EU-headquartered companies with no representative presence in Türkiye.
+
+### Both
+
+- Turkish firms with partnership or vendor relationships with EU companies
+- Multinational companies maintaining an office in Türkiye
+- Turkish e-commerce platforms offering products or services to EU citizens
+- Turkish subsidiaries of EU companies that employ staff in Türkiye
+
+## Critical Differences: A Closer Look
+
+### 1. Penalty Calculation
+
+**KVKK:** fixed-amount fines.
+- Each category of violation carries its own penalty band
+- The bands were substantially increased in 2026
+- Multiple violations may be penalized cumulatively
+
+**GDPR:** turnover-based penalties, applied on two tiers.
+- Lower-tier violations: up to 2% of annual global turnover, or EUR 10 million
+- Upper-tier violations: up to 4% of annual global turnover, or EUR 20 million
+
+**Practical implication:** for a small Turkish company, exposure under KVKK is comparatively modest, but the same company selling into the EU market can face materially heavier exposure under GDPR.
+
+### 2. Legitimate Interest as a Legal Basis
+
+**KVKK:** legitimate interest is construed narrowly; consent and contractual necessity remain the preferred legal bases for processing personal data.
+
+**GDPR:** legitimate interest is applied more broadly, and is routinely relied on for direct marketing, fraud prevention, and the management of employee data.
+
+**Effect:** processing activities governed by KVKK will often call for more extensive collection of explicit consent than an equivalent activity governed by GDPR.
+
+### 3. Data Portability
+
+**KVKK:** the law provides no data-portability right equivalent to the GDPR's. Article 11 gives data subjects the right to learn the third parties to whom their data has been transferred, but it imposes no requirement that data be delivered in a structured, machine-readable format.
+
+**GDPR:** data must be delivered in a structured, commonly used, machine-readable format (for example, JSON or CSV), including a right to have the data transmitted directly to an alternative provider.
+
+### 4. Processing Children's Data
+
+**KVKK:** the specific rule remains unsettled. Parental consent is, in principle, required for the processing of data belonging to minors under 18, but no standardized regime currently governs this.
+
+**GDPR:** parental or guardian consent is required for children under 16, though member states may lower this threshold to as low as 13. This distinction matters in particular for digital services.
+
+### 5. Cross-Border Data Transfer
+
+**KVKK:**
+- Transfers to countries deemed to offer an adequate level of protection are unrestricted, though no such list currently exists
+- Transfers to other countries require either Board authorization or an undertaking between the parties
+
+**GDPR:**
+- Transfers to countries covered by an adequacy decision are unrestricted, and such a list does exist
+- Standard Contractual Clauses (SCCs) are the most commonly used transfer mechanism
+- Binding Corporate Rules (BCRs) are available for multinational corporate groups
+
+> **Note:** Türkiye has not yet been recognized by the EU as providing an adequate level of protection. Transfers of data from Türkiye to the EU should therefore rely on SCCs.
+
+## How to Comply With Both Regimes at Once
+
+The reassuring news is that a system built to satisfy GDPR will, in large part, also satisfy KVKK.
+
+**A GDPR-first strategy:**
+1. Establish GDPR compliance first, as the more comprehensive standard.
+2. Layer the KVKK-specific requirements on top:
+   - Registration in VERBİS (Veri Sorumluları Sicili Bilgi Sistemi, the Turkish Data Controllers' Registry), specific to Türkiye
+   - The KVKK-format disclosure notice (aydınlatma metni)
+   - A Turkish-language application form for data subject requests
+
+**Caution:** meeting GDPR does not automatically satisfy KVKK. VERBİS registration, Turkish-language documentation, and oversight by the Turkish Data Protection Board (Kurul) have no equivalent under GDPR.
+
+## Türkiye's EU Adequacy Process
+
+Türkiye has not received an EU adequacy decision. It continues to reform its data-protection framework toward closer alignment with the GDPR, but as of 2026 no adequacy decision has been granted. Should one eventually be granted:
+- The requirement to rely on SCCs for transfers from Türkiye to the EU would fall away
+- Data sharing with EU companies would become considerably more straightforward
+- Turkish technology companies would gain faster access to the EU market
+
+---
+
+<FAQSection
+  title="Frequently Asked Questions"
+  items={[
+    {
+      question: "If I sell services to a customer in the EU, am I required to comply with GDPR?",
+      answer: "Yes. Under GDPR's extraterritorial scope, any organization that offers goods or services to individuals in the EU, or monitors their behavior, is subject to GDPR regardless of where it is headquartered."
+    },
+    {
+      question: "What happens if KVKK and GDPR are both violated at the same time?",
+      answer: "Each jurisdiction enforces its own penalty. The Turkish Data Protection Board can act under KVKK, and an EU supervisory authority can act separately under GDPR. In practice, a multinational violation can end up on both authorities' dockets."
+    },
+    {
+      question: "What are SCCs (Standard Contractual Clauses)?",
+      answer: "Standard contract templates issued by the European Commission, used for data transfers from Türkiye to the EU. The current version is the 2021 SCCs, which comprise four modules; the two most relevant here are controller-to-controller and controller-to-processor."
+    },
+    {
+      question: "As a Turkish company, am I required to appoint a DPO?",
+      answer: "Not mandatory under KVKK, though it is recommended for organizations processing data at scale. Under GDPR, appointing a DPO is mandatory if you are a public authority, engage in large-scale profiling, or process special-category data."
+    }
+  ]}
+/>
