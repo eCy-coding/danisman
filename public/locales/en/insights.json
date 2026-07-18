@@ -75,5 +75,10 @@
     "desc": "Weekly strategic analysis and market perspectives",
     "cta": "Subscribe",
     "kvkk": "GDPR compliant · Unsubscribe anytime"
+  },
+  "article": {
+    "notFoundTitle": "Article Not Found",
+    "backToHub": "Back to Perspektifler",
+    "trOnlyNotice": "This article is available in Turkish only."
   }
 }

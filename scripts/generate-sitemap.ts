@@ -2,6 +2,12 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { CANONICAL_SERVICE_SLUGS } from '../src/data/service-taxonomy';
+import {
+  groupArticlesForSitemap,
+  apexArticleUrls,
+  localeArticleUrls,
+  type SitemapArticleEntry,
+} from '../src/lib/sitemap-article-urls';
 
 // Define static routes
 // NOTE: P15 — privacy/data-rights ve status sitemap'in tek noktasında declare edilir.
@@ -108,27 +114,41 @@ async function generateSitemap() {
     (m) => m[1] as string,
   );
 
-  // Read blog-posts.json (MDX-backed posts) and merge with generated slugs (deduped).
+  // Read blog-posts.json (MDX-backed posts, lang + pairId aware — EN
+  // article-parity mechanism) and merge with generated slugs (deduped).
+  // Legacy generated slugs carry no lang/pairId → treated as TR, unpaired.
   const blogDataPath = path.resolve(__dirname, '../src/data/blog-posts.json');
-  let mdxBlogSlugs: string[] = [];
+  let mdxBlogEntries: SitemapArticleEntry[] = [];
   if (fs.existsSync(blogDataPath)) {
-    const blogPosts = JSON.parse(fs.readFileSync(blogDataPath, 'utf-8')) as { slug: string }[];
-    mdxBlogSlugs = blogPosts.map((p) => p.slug);
+    const blogPosts = JSON.parse(fs.readFileSync(blogDataPath, 'utf-8')) as {
+      slug: string;
+      lang?: string;
+      pairId?: string;
+    }[];
+    mdxBlogEntries = blogPosts.map((p) => ({
+      slug: p.slug,
+      lang: p.lang === 'en' ? 'en' : 'tr',
+      pairId: p.pairId,
+    }));
   }
-  const blogSlugs = Array.from(
-    new Set([
-      ...mdxBlogSlugs,
-      ...generatedSlugs.filter(
-        (s) =>
-          /^[a-z0-9-]+$/.test(s) &&
-          !s.startsWith('global-retail') &&
-          !s.startsWith('fintech-') &&
-          !s.startsWith('vertical-saas') &&
-          !s.startsWith('industrial-') &&
-          !s.startsWith('hospital-'),
-      ),
-    ]),
-  );
+  const mdxSlugSet = new Set(mdxBlogEntries.map((p) => p.slug));
+  const legacyGeneratedEntries: SitemapArticleEntry[] = generatedSlugs
+    .filter(
+      (s) =>
+        /^[a-z0-9-]+$/.test(s) &&
+        !mdxSlugSet.has(s) &&
+        !s.startsWith('global-retail') &&
+        !s.startsWith('fintech-') &&
+        !s.startsWith('vertical-saas') &&
+        !s.startsWith('industrial-') &&
+        !s.startsWith('hospital-'),
+    )
+    .map((slug) => ({ slug, lang: 'tr' as const }));
+
+  // EN article-parity mechanism (istek.md v2): all pair/lang URL rules live
+  // in src/lib/sitemap-article-urls.ts (unit-tested); this script only
+  // renders the derived paths into XML.
+  const articleGroups = groupArticlesForSitemap([...mdxBlogEntries, ...legacyGeneratedEntries]);
 
   // SVC P8 (ADR-services-taxonomy-v2): derived from the taxonomy registry —
   // the old hardcoded 21-slug list shipped 17 URLs that hard-404'd in prod.
@@ -171,9 +191,25 @@ async function generateSitemap() {
     xml += buildUrl(route, 'weekly', route === '' ? '1.0' : '0.8');
   });
 
-  // Add Perspektifler articles (MDX + generated; deduped via Set in `blogSlugs`).
-  blogSlugs.forEach((slug) => {
-    xml += buildUrl(`perspektifler/${slug}`, 'monthly', '0.7');
+  // Add Perspektifler articles — pair-aware (EN article-parity): paired
+  // articles collapse into ONE entry whose hreflang links point at each
+  // sibling's OWN slug; unpaired posts emit only the hreflang side that
+  // actually exists (no phantom /en mirror for TR-only posts).
+  apexArticleUrls(articleGroups).forEach((a) => {
+    const trLink = a.trPath
+      ? `\n    <xhtml:link rel="alternate" hreflang="tr-TR" href="${BASE_URL}/${a.trPath}" />`
+      : '';
+    const enLink = a.enPath
+      ? `\n    <xhtml:link rel="alternate" hreflang="en" href="${BASE_URL}/${a.enPath}" />`
+      : '';
+    xml += `
+  <url>
+    <loc>${BASE_URL}/${a.loc}</loc>${trLink}${enLink}
+    <xhtml:link rel="alternate" hreflang="x-default" href="${BASE_URL}/${a.loc}" />
+    <lastmod>${buildDate}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>`;
   });
 
   // Add Case Study detail pages (slugs imported from mockCaseStudies → single source of truth)
@@ -218,16 +254,13 @@ async function generateSitemap() {
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:xhtml="http://www.w3.org/1999/xhtml">`;
 
+    // Non-blog routes are locale-symmetric (same slug in both languages) —
+    // the generic /tr↔/en swap below is correct for them.
     const allPaths: { path: string; changefreq: string; priority: string }[] = [
       ...STATIC_ROUTES.map((r) => ({
         path: r,
         changefreq: 'weekly',
         priority: r === '' ? '1.0' : '0.8',
-      })),
-      ...blogSlugs.map((s) => ({
-        path: `perspektifler/${s}`,
-        changefreq: 'monthly',
-        priority: '0.7',
       })),
       ...caseSlugs.map((s) => ({
         path: `case-studies/${s}`,
@@ -260,18 +293,39 @@ async function generateSitemap() {
       })
       .join('');
 
-    return `${xmlLocaleHeader}${urls}
+    // Perspektifler articles — pair-aware (EN article-parity): a locale's
+    // sitemap lists ONLY posts that exist in that language (TR-only posts'
+    // /en/... URLs stay OUT of sitemap-en.xml); the opposite-lang hreflang
+    // link uses the sibling's OWN slug and is omitted when unpaired.
+    const blogUrls = localeArticleUrls(articleGroups, locale)
+      .map((a) => {
+        const selfUrl = `${BASE_URL}/${a.selfPath}`;
+        const otherLink = a.otherPath
+          ? `\n    <xhtml:link rel="alternate" hreflang="${hreflangOther}" href="${BASE_URL}/${a.otherPath}" />`
+          : '';
+        return `
+  <url>
+    <loc>${selfUrl}</loc>
+    <xhtml:link rel="alternate" hreflang="${hreflangSelf}" href="${selfUrl}" />${otherLink}
+    <xhtml:link rel="alternate" hreflang="x-default" href="${BASE_URL}/${a.defaultPath}" />
+    <lastmod>${buildDate}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>`;
+      })
+      .join('');
+
+    return `${xmlLocaleHeader}${urls}${blogUrls}
 </urlset>`;
   };
 
   const trSitemap = buildLocaleSitemap('tr');
   const enSitemap = buildLocaleSitemap('en');
-  const totalUrls =
-    STATIC_ROUTES.length +
-    blogSlugs.length +
-    caseSlugs.length +
-    serviceSlugs.length +
-    COMPETITOR_GAP_ROUTES.length;
+  const nonBlogUrls =
+    STATIC_ROUTES.length + caseSlugs.length + serviceSlugs.length + COMPETITOR_GAP_ROUTES.length;
+  const totalUrls = nonBlogUrls + articleGroups.length;
+  const trUrls = nonBlogUrls + localeArticleUrls(articleGroups, 'tr').length;
+  const enUrls = nonBlogUrls + localeArticleUrls(articleGroups, 'en').length;
   const now = new Date().toISOString().split('T')[0];
 
   // Sitemap index — points to all 3 sitemaps
@@ -315,9 +369,7 @@ Sitemap: ${BASE_URL}/sitemap-en.xml
   fs.writeFileSync(path.join(publicDir, 'robots.txt'), robots);
 
   console.log(`✅ Sitemap generated at public/sitemap.xml with ${totalUrls} URLs.`);
-  console.log(
-    `✅ Locale sitemaps: sitemap-tr.xml (${totalUrls} TR) + sitemap-en.xml (${totalUrls} EN).`,
-  );
+  console.log(`✅ Locale sitemaps: sitemap-tr.xml (${trUrls} TR) + sitemap-en.xml (${enUrls} EN).`);
   console.log(`✅ Sitemap index: sitemap-index.xml → 3 child sitemaps.`);
 }
 

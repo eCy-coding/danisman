@@ -3,9 +3,9 @@
 <channel>
     <title>eCyPro Premium Consulting Blog</title>
     <link>https://ecypro.com</link>
-    <description>Insights on Strategic Management, Digital Transformation, and Corporate Leadership.</description>
+    <description>Strateji, dijital dönüşüm ve kurumsal liderlik üzerine eCyPro içgörüleri.</description>
     <language>tr</language>
-    <lastBuildDate>Sat, 18 Jul 2026 07:39:40 GMT</lastBuildDate>
+    <lastBuildDate>Sat, 18 Jul 2026 10:22:19 GMT</lastBuildDate>
     <atom:link href="https://ecypro.com/rss.xml" rel="self" type="application/rss+xml" />
 
     <item>
@@ -366,14 +366,6 @@
         <guid>https://ecypro.com/perspektifler/ai-yatirim-roi-hesaplama</guid>
         <pubDate>Tue, 10 Feb 2026 00:00:00 GMT</pubDate>
         <description>AI projelerinin gerçek finansal etkisini ölçmek için kanıtlanmış bir çerçeve. Maliyet, fayda ve risk analizi ile net değer hesabı.</description>
-        <author>info@ecypro.com (Dr. Emre Can)</author>
-    </item>
-    <item>
-        <title>Measuring AI Investment ROI: The CFO Framework</title>
-        <link>https://ecypro.com/perspektifler/measuring-ai-investment-roi</link>
-        <guid>https://ecypro.com/perspektifler/measuring-ai-investment-roi</guid>
-        <pubDate>Tue, 10 Feb 2026 00:00:00 GMT</pubDate>
-        <description>A proven framework to quantify the real financial impact of AI projects. Cost-benefit analysis, risk quantification, and net value calculation.</description>
         <author>info@ecypro.com (Dr. Emre Can)</author>
     </item>
     <item>

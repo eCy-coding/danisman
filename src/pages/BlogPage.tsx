@@ -2,6 +2,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { PerspektiflerFeed } from '../components/blog/PerspektiflerFeed';
+import { useTranslation } from '@/lib/i18n';
+import { buildCanonical } from '@/i18n/canonical';
 // NOT (M7): Navbar + Footer MainLayout tarafından sağlanır. Sayfa kendi içinde
 // tekrar render ETMEMELİ — aksi halde çift footer + duplike Organization/Person/
 // FAQPage JSON-LD oluşuyordu (gerçek-render tanısıyla yakalandı).
@@ -9,6 +11,7 @@ import { PerspektiflerFeed } from '../components/blog/PerspektiflerFeed';
 /** Perspektifler hub — one H1 system (BUG-06): nav, URL and H1 all say
  *  "Perspektifler". Curated hero + search + facets live in the feed. */
 const BlogPage: React.FC = () => {
+  const { language } = useTranslation();
   return (
     <div className="min-h-screen bg-[#050810] text-slate-300 font-sans selection:bg-blue-500/30 selection:text-white">
       <Helmet>
@@ -17,7 +20,9 @@ const BlogPage: React.FC = () => {
           name="description"
           content="Strateji, yapay zeka, finans ve organizasyon üzerine eCyPro içgörüleri: makaleler, vaka analizleri ve founder letter."
         />
-        <link rel="canonical" href="https://ecypro.com/perspektifler" />
+        {/* Canonical-collapse fix: hardcoded apex literal ezildi — diğer
+            sayfalardaki gibi locale-aware buildCanonical üzerinden. */}
+        <link rel="canonical" href={buildCanonical('/perspektifler', language)} />
         {/* SEO/GEO: sayfaya-özel OpenGraph + Twitter (önceden genel anasayfa
             og'si geliyordu) + raster og:image (SVG sosyal/LLM önizlemede çoğu
             yerde render edilmiyor). */}
