@@ -66,11 +66,20 @@ jobs:
       # shell as the production HTML. Installing deps + the pinned Playwright
       # Chromium here, and forcing prerender to run locally on THIS runner
       # (not inside Vercel's builder) below, keeps per-route SEO HTML intact.
+      # Browser binaries are ~150MB; cache keyed on the playwright-core version
+      # so a deploy only re-downloads when the pinned Playwright changes.
+      - name: Cache Playwright browsers
+        if: ${{ steps.guard.outputs.configured == 'true' }}
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+
       - name: Install deps + Playwright Chromium (prerender runs on this runner)
         if: ${{ steps.guard.outputs.configured == 'true' }}
         run: |
           npm ci
-          npx playwright install --with-deps chromium
+          npx playwright install --with-deps chromium chromium-headless-shell
 
       - name: Pull, build & deploy (production)
         if: ${{ steps.guard.outputs.configured == 'true' }}
