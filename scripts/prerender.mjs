@@ -65,14 +65,20 @@ function getRoutes() {
   const fromEnv = process.env.PRERENDER_ROUTES?.split(',').map((s) => s.trim()).filter(Boolean);
   if (fromEnv?.length) return fromEnv;
 
-  // Read sitemap.xml — same source as crawlers will follow.
-  const sitemapPath = path.join(distDir, 'sitemap.xml');
-  if (!fs.existsSync(sitemapPath)) {
-    console.warn('[prerender] sitemap.xml not found, defaulting to homepage only');
+  // Read ALL sitemaps crawlers will follow — canonical URLs are
+  // locale-prefixed (/tr/*, /en/*) and live in sitemap-tr/-en, so reading
+  // only sitemap.xml left every canonical target as an unprerendered shell.
+  const sitemapFiles = ['sitemap.xml', 'sitemap-tr.xml', 'sitemap-en.xml']
+    .map((f) => path.join(distDir, f))
+    .filter((f) => fs.existsSync(f));
+  if (sitemapFiles.length === 0) {
+    console.warn('[prerender] no sitemap found, defaulting to homepage only');
     return ['/'];
   }
-  const xml = fs.readFileSync(sitemapPath, 'utf-8');
-  const locs = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
+  const locs = sitemapFiles.flatMap((f) => {
+    const xml = fs.readFileSync(f, 'utf-8');
+    return [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
+  });
   return locs
     .map((loc) => {
       try {
