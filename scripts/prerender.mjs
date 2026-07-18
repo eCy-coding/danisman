@@ -141,7 +141,15 @@ async function launchBrowser() {
       stdio: 'inherit',
     });
     if (r.status !== 0) console.error(`[prerender] self-install exited ${r.status}`);
-    return chromium.launch();
+    try {
+      return await chromium.launch();
+    } catch (err2) {
+      // Last-resort: system Chrome (channel). Zero-download, present on dev
+      // Macs and on GitHub ubuntu runners — makes local prerender immune to
+      // the download/extraction fragility entirely.
+      console.warn('[prerender] bundled chromium still unavailable — falling back to system Chrome');
+      return chromium.launch({ channel: 'chrome' });
+    }
   }
 }
 
