@@ -59,12 +59,28 @@ jobs:
         if: ${{ steps.guard.outputs.configured == 'true' }}
         run: npm i -g vercel@latest
 
+      # `vercel build` sets VERCEL=1, which scripts/prerender.mjs treats as an
+      # opt-out signal (Vercel's own build container can't sustain a headless
+      # Chromium through a full route crawl — see prerender.mjs comments).
+      # Left alone, `vercel build` on this runner would ship an empty SPA
+      # shell as the production HTML. Installing deps + the pinned Playwright
+      # Chromium here, and forcing prerender to run locally on THIS runner
+      # (not inside Vercel's builder) below, keeps per-route SEO HTML intact.
+      - name: Install deps + Playwright Chromium (prerender runs on this runner)
+        if: ${{ steps.guard.outputs.configured == 'true' }}
+        run: |
+          npm ci
+          npx playwright install --with-deps chromium
+
       - name: Pull, build & deploy (production)
         if: ${{ steps.guard.outputs.configured == 'true' }}
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+          # Force prerender to run via local Playwright instead of skipping
+          # (VERCEL=1) or selecting the Vercel-only @sparticuz/chromium binary.
+          PRERENDER_FORCE_LOCAL: '1'
         run: |
           vercel pull --yes --environment=production --token="$VERCEL_TOKEN"
           vercel build --prod --token="$VERCEL_TOKEN"
