@@ -1,11 +1,26 @@
-# SCOPE — Services Vertical E2E Rebuild (micro-focus contract)
+# SCOPE — Full-Site Quality Overhaul (micro-focus contract)
 
-Single source of truth for what may be edited during the Services rebuild.
-Spec: `~/Desktop/istemek.md` (istek-services.md). Detail: `SERVICES_SCOPE.md`.
-Enforced by `.claude/hooks/scope_guard.py` against `.claude/scope-allowlist.txt`.
+Single source of truth for what may be edited during the current contract.
+Spec: owner request 2026-07-18 + approved plan
+`~/.claude/plans/bu-iste-imi-tek-anlama-enumerated-teacup.md`.
 Expansions require evidence + a PROGRESS.md entry.
 
-> Previous contract (Perspektifler, spec `~/Desktop/istek.md`) CLOSED — shipped,
+## Active contract: Full-Site Quality Overhaul (owner request 2026-07-18)
+
+Owner (T0) explicitly requested a full-site audit + delivery: SEO-crawlable HTML
+(prerender re-enable), canonical host unification (www→apex, aligned to live
+308 behavior), JSON-LD dedup (MISTAKES_LOG M9), all quality gates green
+(vitest/lint/e2e), Lighthouse Perf ≥85 / A11y ≥95, EN content parity start.
+In scope: `src/**`, `scripts/**`, `public/**`, `index.html`, `e2e/**`,
+`.github/workflows/deploy.yml` (prerender env only), `vercel.json`, docs.
+Still OUT: `server/**`, `prisma/**`, admin behavior changes, new runtime deps
+without written justification, `.claude/**` guard infra (owner-only).
+
+> Previous contract (Services Vertical E2E Rebuild, spec `~/Desktop/istemek.md`)
+> CLOSED — taxonomy v2 shipped via PR #227, live on ecypro.com 2026-06-12
+> (prebuilt prerender 170/170).
+
+> Prior contract (Perspektifler, spec `~/Desktop/istek.md`) CLOSED — shipped,
 > merged and deployed 2026-06-11 (PROGRESS.md FAZ-2C, prod LH 64/97/96/100).
 > Re-fence evidence: owner request 2026-06-12 (istemek.md, approved plan
 > `cerrahi-hassasiyet-ile-k-klere-encapsulated-whistle.md`).
