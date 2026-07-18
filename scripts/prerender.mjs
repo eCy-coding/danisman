@@ -25,16 +25,37 @@
  *   PRERENDER=1 npm run build           # vite build + prerender
  *   PRERENDER=1 PRERENDER_ROUTES=/,/services npm run build  # subset
  */
-import { spawn } from 'node:child_process';
+import { spawn, spawnSync } from 'node:child_process';
 import fs from 'node:fs';
+import net from 'node:net';
+import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { setTimeout as wait } from 'node:timers/promises';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const distDir = path.resolve(__dirname, '..', 'dist');
-const port = Number(process.env.PRERENDER_PORT ?? 4179);
-const baseUrl = `http://127.0.0.1:${port}`;
+// Reassigned in main(): an orphaned preview server (e.g. from a killed prior
+// run) holding the base port must never wedge the whole prerender again —
+// we probe and slide to the first free port instead of failing on strictPort.
+let port = Number(process.env.PRERENDER_PORT ?? 4179);
+let baseUrl = `http://127.0.0.1:${port}`;
+
+function probePortFree(p) {
+  return new Promise((resolve) => {
+    const srv = net.createServer();
+    srv.once('error', () => resolve(false));
+    srv.once('listening', () => srv.close(() => resolve(true)));
+    srv.listen(p, '127.0.0.1');
+  });
+}
+
+async function findFreePort(start, tries = 10) {
+  for (let p = start; p < start + tries; p += 1) {
+    if (await probePortFree(p)) return p;
+  }
+  throw new Error(`no free port in ${start}..${start + tries - 1}`);
+}
 
 // Vercel sets VERCEL=1 in its build environment.
 const ON_VERCEL = process.env.VERCEL === '1' && process.env.PRERENDER_FORCE_LOCAL !== '1';
@@ -100,8 +121,48 @@ async function launchBrowser() {
     });
   }
   // Local: use full Playwright (bundled chromium, no extra deps).
+  // Self-healing: a missing browser binary (fresh worktree, interrupted
+  // download) triggers exactly one automatic install attempt before the
+  // failure propagates — so FORCE_LOCAL/CI still fails loud, but a clean
+  // machine no longer silently ships a shell or needs manual setup.
   const { chromium } = await import('playwright');
-  return chromium.launch();
+  try {
+    return await chromium.launch();
+  } catch (err) {
+    const msg = String(err?.message ?? err);
+    if (!/Executable doesn't exist/i.test(msg)) throw err;
+    console.warn('[prerender] chromium binary missing — one-shot self-install…');
+    clearStaleBrowserLock();
+    const cli = path.resolve(__dirname, '..', 'node_modules', 'playwright-core', 'cli.js');
+    const r = spawnSync(process.execPath, [cli, 'install', 'chromium', 'chromium-headless-shell'], {
+      stdio: 'inherit',
+      timeout: 900_000,
+    });
+    if (r.status !== 0) console.error(`[prerender] self-install exited ${r.status}`);
+    return chromium.launch();
+  }
+}
+
+/** A crashed/killed installer leaves __dirlock behind; every later install
+ *  then prints a "wait or remove lock" banner and exits 0 WITHOUT installing
+ *  (observed 2026-07-18: three runs burned on this). A lock older than 10
+ *  minutes cannot belong to a live install — move it aside. */
+function clearStaleBrowserLock() {
+  const browsersDir =
+    process.env.PLAYWRIGHT_BROWSERS_PATH ||
+    (process.platform === 'darwin'
+      ? path.join(os.homedir(), 'Library', 'Caches', 'ms-playwright')
+      : path.join(os.homedir(), '.cache', 'ms-playwright'));
+  const lock = path.join(browsersDir, '__dirlock');
+  try {
+    const st = fs.statSync(lock);
+    if (Date.now() - st.mtimeMs > 10 * 60 * 1000) {
+      fs.renameSync(lock, `${lock}.stale-${Date.now()}`);
+      console.warn('[prerender] moved stale playwright __dirlock aside');
+    }
+  } catch {
+    /* no lock — nothing to clear */
+  }
 }
 
 /** Hard per-route watchdog: page.goto/content can wedge past their own
@@ -169,6 +230,12 @@ async function main() {
     process.exit(1);
   }
 
+  const requestedPort = port;
+  port = await findFreePort(requestedPort);
+  baseUrl = `http://127.0.0.1:${port}`;
+  if (port !== requestedPort) {
+    console.warn(`[prerender] port ${requestedPort} busy (orphaned server?) — using ${port}`);
+  }
   console.log('[prerender] starting preview server on', baseUrl);
   console.log(`[prerender] chromium source: ${ON_VERCEL ? '@sparticuz/chromium' : 'playwright (local)'}`);
   const server = await startPreviewServer();
