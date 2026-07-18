@@ -134,9 +134,11 @@ async function launchBrowser() {
     console.warn('[prerender] chromium binary missing — one-shot self-install…');
     clearStaleBrowserLock();
     const cli = path.resolve(__dirname, '..', 'node_modules', 'playwright-core', 'cli.js');
+    // No timeout: a loaded machine can take >15 min to download+extract; a
+    // killed extraction leaves a truncated binary that test -x still "passes"
+    // (observed 2026-07-18) — worse than waiting.
     const r = spawnSync(process.execPath, [cli, 'install', 'chromium', 'chromium-headless-shell'], {
       stdio: 'inherit',
-      timeout: 900_000,
     });
     if (r.status !== 0) console.error(`[prerender] self-install exited ${r.status}`);
     return chromium.launch();
