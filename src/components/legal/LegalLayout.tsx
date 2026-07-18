@@ -9,6 +9,7 @@
 
 import React, { useRef, type ReactNode } from 'react';
 import { Helmet } from 'react-helmet-async';
+import { JsonLd } from '@/components/seo/JsonLd';
 import { FadeIn } from '@/components/common/FadeIn';
 import { Breadcrumb } from '@/components/common/Breadcrumb';
 import { StickyTableOfContents } from '@/components/ui/StickyTableOfContents';
@@ -41,11 +42,10 @@ function LegalDocumentSchema({ name, dateModified }: { name: string; dateModifie
       url: 'https://ecypro.com',
     },
   };
-  return (
-    <Helmet>
-      <script type="application/ld+json">{JSON.stringify(data)}</script>
-    </Helmet>
-  );
+  // Raw Helmet <script> bypassed the data-seo-id upsert convention: prerender
+  // bakes Helmet's copy into the static HTML, hydration injects a second one
+  // (M9-class WebPage ×2 on every legal page). JsonLd adopts instead.
+  return <JsonLd id="page-legal-webpage" data={data} />;
 }
 
 export const LegalLayout: React.FC<LegalLayoutProps> = ({

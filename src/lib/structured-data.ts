@@ -279,6 +279,7 @@ export function buildCaseStudySchema(input: CaseStudySchemaInput): Record<string
     image: input.image,
     inLanguage: input.language ?? 'tr',
     about: { '@type': 'Organization', name: input.client },
+    author: { '@type': 'Person', name: 'Emre Can Yalçın', url: `${SITE_URL}/founder` },
     publisher: {
       '@type': 'Organization',
       '@id': ORG_ID,

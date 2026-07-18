@@ -39,6 +39,7 @@ export const CaseStudyDetailPage: React.FC = () => {
       </Helmet>
 
       <JsonLd
+        id="page-case-study-article"
         data={buildCaseStudySchema({
           url: `https://ecypro.com/case-studies/${study.slug}`,
           title: study.title,
@@ -50,6 +51,7 @@ export const CaseStudyDetailPage: React.FC = () => {
         })}
       />
       <JsonLd
+        id="schema-breadcrumb-default"
         data={buildBreadcrumbSchema([
           { name: 'Anasayfa', url: 'https://ecypro.com/' },
           { name: 'Case Studies', url: 'https://ecypro.com/case-studies' },
