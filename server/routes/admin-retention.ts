@@ -15,6 +15,7 @@ import { Router, Response } from 'express';
 import { randomUUID } from 'crypto';
 import { authenticate, AuthRequest } from '../middleware/auth';
 import { requirePermission } from '../middleware/requirePermission';
+import { hashIp } from '../lib/crypto/hashIp';
 import { prisma } from '../config/db';
 import { logger } from '../config/logger';
 import { RETENTION_POLICIES_SEED } from '../../src/constants/ropa-template';
@@ -163,7 +164,8 @@ router.post(
             enforcedAt: now.toISOString(),
             enforcedBy: req.user?.id ?? 'system',
           },
-          ip: req.ip ?? null,
+          actorRole: req.user?.role ?? 'ANONYMOUS',
+          actorIpHash: hashIp(req.ip),
           userAgent: req.headers['user-agent'] ?? null,
         },
       });

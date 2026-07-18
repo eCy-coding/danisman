@@ -166,6 +166,12 @@ describe('admin-retention routes', () => {
         data: expect.objectContaining({ action: 'RETENTION_ENFORCED' }),
       }),
     );
+
+    // KVKK m.4: raw IP must never be written — actorIpHash + actorRole instead
+    const auditData = prismaMock.auditLog.create.mock.calls[0][0].data;
+    expect(auditData).not.toHaveProperty('ip');
+    expect(auditData.actorIpHash).toMatch(/^[0-9a-f]{32}$/);
+    expect(auditData.actorRole).toBe('ADMIN');
   });
 
   // Test 5: GET /audit-readiness filters by KVKK-relevant actions
