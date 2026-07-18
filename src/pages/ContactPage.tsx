@@ -87,12 +87,12 @@ export const ContactPage: React.FC = () => {
             {/* Contact Info */}
             <div className="space-y-12">
               <div>
-                <h1 className="text-4xl md:text-5xl font-bold mb-6 text-white leading-tight">
+                <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white leading-tight">
                   {t('contact.title') || 'Projelerinizi'} <br />
                   <span className="text-secondary">
                     {t('contact.subtitle') || 'Hayata Geçirelim'}
                   </span>
-                </h1>
+                </h2>
                 <p className="text-lg text-slate-400 font-light leading-relaxed">
                   {t('contact.intro') ||
                     'Bizimle iletişime geçerek işinizi bir sonraki seviyeye taşıyacak stratejileri belirleyin.'}
