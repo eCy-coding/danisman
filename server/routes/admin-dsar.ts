@@ -13,8 +13,41 @@ import { authenticate, AuthRequest } from '../middleware/auth';
 import { requirePermission } from '../middleware/requirePermission';
 import { prisma } from '../config/db';
 import { logger } from '../config/logger';
+import { hashIp } from '../lib/crypto/hashIp';
 
 const router = Router();
+
+/**
+ * Mirror each DSAR mutation into the central AuditLog: the KVKK
+ * audit-readiness report (admin-retention.ts) only reads AuditLog rows with
+ * a 'DSAR_' action prefix, so without this row DSAR activity is invisible
+ * to the regulator-facing report. DSARAuditEntry stays the detailed
+ * per-request history; this is the accountability index entry.
+ *
+ * Fire-and-forget by convention (see auditMiddleware): a failed audit write
+ * must never fail the DSAR mutation. `details` must stay PII-free — no
+ * requester email/name (KVKK m.4; audit-readiness payload leaves the DB).
+ */
+function writeCentralAudit(
+  req: AuthRequest,
+  entry: { action: `DSAR_${string}`; targetId: string; details?: Prisma.InputJsonValue },
+): void {
+  prisma.auditLog
+    .create({
+      data: {
+        adminId: req.user?.id ?? 'system',
+        actorRole: req.user?.role ?? 'ANONYMOUS',
+        actorIpHash: hashIp(req.ip),
+        action: entry.action,
+        targetType: 'DSARRequest',
+        targetId: entry.targetId,
+        newValue: entry.details,
+      },
+    })
+    .catch((err: unknown) => {
+      logger.error('[admin-dsar] central audit write failed', { action: entry.action, err });
+    });
+}
 
 // ─── Validation schemas ─────────────────────────────────────────────────────
 
@@ -89,6 +122,12 @@ router.post(
             slaDeadline: slaDeadline.toISOString(),
           },
         },
+      });
+
+      writeCentralAudit(req, {
+        action: 'DSAR_CREATED',
+        targetId: dsar.id,
+        details: { requestType, slaDeadline: slaDeadline.toISOString() },
       });
 
       logger.info(`[admin-dsar] Created DSAR ${dsar.id} for ${requesterEmail}`);
@@ -193,13 +232,21 @@ router.patch(
         data: updateData,
       });
 
+      const dsarAction = extendSLA ? 'SLA_EXTENDED' : status ? 'STATUS_CHANGED' : 'ASSIGNED';
+
       await prisma.dSARAuditEntry.create({
         data: {
           dsarId: id!,
           actorId: req.user?.id ?? 'system',
-          action: extendSLA ? 'SLA_EXTENDED' : status ? 'STATUS_CHANGED' : 'ASSIGNED',
+          action: dsarAction,
           details: auditDetails as Prisma.InputJsonValue,
         },
+      });
+
+      writeCentralAudit(req, {
+        action: `DSAR_${dsarAction}`,
+        targetId: id!,
+        details: auditDetails as Prisma.InputJsonValue,
       });
 
       logger.info(`[admin-dsar] Updated DSAR ${id}`, auditDetails);
@@ -253,6 +300,15 @@ router.post(
             respondedAt: respondedAt.toISOString(),
             responseLength: responseText.length,
           } as Prisma.InputJsonValue,
+        },
+      });
+
+      writeCentralAudit(req, {
+        action: 'DSAR_RESPONDED',
+        targetId: id!,
+        details: {
+          respondedAt: respondedAt.toISOString(),
+          responseLength: responseText.length,
         },
       });
 

@@ -29,6 +29,9 @@ const { prismaMock } = vi.hoisted(() => ({
     dSARAuditEntry: {
       create: vi.fn(),
     },
+    auditLog: {
+      create: vi.fn(),
+    },
   },
 }));
 
@@ -53,6 +56,7 @@ vi.mock('../middleware/auth', () => ({
 }));
 
 import dsarRoutes from './admin-dsar';
+import { KVKK_RELEVANT_ACTIONS } from './admin-retention';
 import { errorHandler } from '../middleware/error';
 
 // ── App factory ───────────────────────────────────────────────────────────────
@@ -63,6 +67,13 @@ function makeApp() {
   app.use('/api/admin/dsar', dsarRoutes);
   app.use(errorHandler);
   return app;
+}
+
+// writeCentralAudit chains .catch on the returned promise — the mock must
+// resolve by default or the fire-and-forget call throws synchronously.
+function resetMocks() {
+  vi.clearAllMocks();
+  prismaMock.auditLog.create.mockResolvedValue({ id: 'central-audit-1' });
 }
 
 // ── Fixtures ──────────────────────────────────────────────────────────────────
@@ -108,7 +119,7 @@ describe('GET /api/admin/dsar', () => {
   let app: express.Express;
 
   beforeEach(() => {
-    vi.clearAllMocks();
+    resetMocks();
     app = makeApp();
   });
 
@@ -129,7 +140,7 @@ describe('POST /api/admin/dsar', () => {
   let app: express.Express;
 
   beforeEach(() => {
-    vi.clearAllMocks();
+    resetMocks();
     app = makeApp();
   });
 
@@ -151,6 +162,19 @@ describe('POST /api/admin/dsar', () => {
     expect(res.body.status).toBe('ok');
     expect(res.body.dsar.id).toBe('dsar-id-1');
     expect(prismaMock.dSARAuditEntry.create).toHaveBeenCalledOnce();
+
+    // Central AuditLog mirror — audit-readiness report reads this table only
+    expect(prismaMock.auditLog.create).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining({
+          action: 'DSAR_CREATED',
+          targetType: 'DSARRequest',
+          targetId: 'dsar-id-1',
+          adminId: 'test-admin-id',
+          actorRole: 'ADMIN',
+        }),
+      }),
+    );
   });
 
   // ── 4. POST invalid → 400 ─────────────────────────────────────────────────
@@ -173,7 +197,7 @@ describe('PATCH /api/admin/dsar/:id', () => {
   let app: express.Express;
 
   beforeEach(() => {
-    vi.clearAllMocks();
+    resetMocks();
     app = makeApp();
   });
 
@@ -190,6 +214,11 @@ describe('PATCH /api/admin/dsar/:id', () => {
     expect(res.status).toBe(200);
     expect(res.body.dsar.status).toBe('UNDER_REVIEW');
     expect(prismaMock.dSARAuditEntry.create).toHaveBeenCalledOnce();
+    expect(prismaMock.auditLog.create).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining({ action: 'DSAR_STATUS_CHANGED', targetId: 'dsar-id-1' }),
+      }),
+    );
   });
 
   // ── 6. PATCH extend SLA first time → 200 ────────────────────────────────────
@@ -212,6 +241,11 @@ describe('PATCH /api/admin/dsar/:id', () => {
     expect(prismaMock.dSARRequest.update).toHaveBeenCalledWith(
       expect.objectContaining({
         data: expect.objectContaining({ extendedOnce: true }),
+      }),
+    );
+    expect(prismaMock.auditLog.create).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining({ action: 'DSAR_SLA_EXTENDED' }),
       }),
     );
   });
@@ -238,7 +272,7 @@ describe('POST /api/admin/dsar/:id/respond', () => {
   let app: express.Express;
 
   beforeEach(() => {
-    vi.clearAllMocks();
+    resetMocks();
     app = makeApp();
   });
 
@@ -268,5 +302,108 @@ describe('POST /api/admin/dsar/:id/respond', () => {
       }),
     );
     expect(prismaMock.dSARAuditEntry.create).toHaveBeenCalledOnce();
+    expect(prismaMock.auditLog.create).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining({ action: 'DSAR_RESPONDED', targetId: 'dsar-id-1' }),
+      }),
+    );
+  });
+});
+
+// ── 9. KVKK audit-readiness visibility contract ──────────────────────────────
+//
+// The regulator-facing GET /api/admin/retention/audit-readiness report reads
+// ONLY prisma.auditLog, filtered by KVKK_RELEVANT_ACTIONS prefixes. These
+// tests pin the contract: every DSAR mutation must land in that table with an
+// action the report's prefix filter matches — otherwise DSAR activity is
+// invisible to the report even though DSARAuditEntry rows exist.
+
+describe('Central AuditLog contract (audit-readiness visibility)', () => {
+  let app: express.Express;
+
+  beforeEach(() => {
+    resetMocks();
+    app = makeApp();
+  });
+
+  async function runAllMutations() {
+    prismaMock.dSARRequest.create.mockResolvedValue(fakeDSAR);
+    prismaMock.dSARRequest.findUnique.mockResolvedValue(fakeDSAR);
+    prismaMock.dSARRequest.update.mockResolvedValue(fakeDSAR);
+    prismaMock.dSARAuditEntry.create.mockResolvedValue({ id: 'audit-x' });
+
+    await request(app).post('/api/admin/dsar').set('Authorization', 'Bearer valid').send({
+      requesterEmail: 'ilgili@ornek.com',
+      requesterName: 'İlgili Kişi',
+      requestType: 'ACCESS',
+    });
+    await request(app)
+      .patch('/api/admin/dsar/dsar-id-1')
+      .set('Authorization', 'Bearer valid')
+      .send({ status: 'UNDER_REVIEW' });
+    await request(app)
+      .patch('/api/admin/dsar/dsar-id-1')
+      .set('Authorization', 'Bearer valid')
+      .send({ extendSLA: true });
+    await request(app)
+      .patch('/api/admin/dsar/dsar-id-1')
+      .set('Authorization', 'Bearer valid')
+      .send({ assignedTo: 'admin-2' });
+    await request(app)
+      .post('/api/admin/dsar/dsar-id-1/respond')
+      .set('Authorization', 'Bearer valid')
+      .send({ responseText: 'Yanıt.' });
+
+    return prismaMock.auditLog.create.mock.calls.map(
+      (call) => (call[0] as { data: Record<string, unknown> }).data,
+    );
+  }
+
+  it('every DSAR mutation writes a central AuditLog row the audit-readiness prefix filter matches', async () => {
+    const rows = await runAllMutations();
+
+    expect(rows.map((r) => r.action)).toEqual([
+      'DSAR_CREATED',
+      'DSAR_STATUS_CHANGED',
+      'DSAR_SLA_EXTENDED',
+      'DSAR_ASSIGNED',
+      'DSAR_RESPONDED',
+    ]);
+    for (const row of rows) {
+      expect(KVKK_RELEVANT_ACTIONS.some((prefix) => String(row.action).startsWith(prefix))).toBe(
+        true,
+      );
+      expect(row.targetType).toBe('DSARRequest');
+    }
+  });
+
+  it('keeps requester PII out of the central audit row (KVKK m.4)', async () => {
+    const rows = await runAllMutations();
+
+    for (const row of rows) {
+      const serialized = JSON.stringify(row);
+      expect(serialized).not.toContain('ilgili@ornek.com');
+      expect(serialized).not.toContain('İlgili Kişi');
+      // Raw IP must never be written — only actorIpHash
+      expect(row.ip).toBeUndefined();
+    }
+  });
+
+  it('does not fail the mutation when the central audit write rejects (fire-and-forget)', async () => {
+    prismaMock.auditLog.create.mockRejectedValue(new Error('db down'));
+    prismaMock.dSARRequest.create.mockResolvedValue(fakeDSAR);
+    prismaMock.dSARAuditEntry.create.mockResolvedValue({ id: 'audit-x' });
+
+    const res = await request(app)
+      .post('/api/admin/dsar')
+      .set('Authorization', 'Bearer valid')
+      .send({
+        requesterEmail: 'ilgili@ornek.com',
+        requesterName: 'İlgili Kişi',
+        requestType: 'ACCESS',
+      });
+
+    expect(res.status).toBe(201);
+    expect(res.body.status).toBe('ok');
   });
 });

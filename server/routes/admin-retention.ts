@@ -22,8 +22,10 @@ import { RETENTION_POLICIES_SEED } from '../../src/constants/ropa-template';
 const router = Router();
 const adminOnly = [authenticate, requirePermission('ropa.edit')] as const;
 
-// KVKK-relevant action prefixes used in audit-readiness filter
-const KVKK_RELEVANT_ACTIONS = [
+// KVKK-relevant action prefixes used in audit-readiness filter.
+// Exported so route tests can assert their central-audit actions stay
+// visible to this report (see admin-dsar.test.ts contract test).
+export const KVKK_RELEVANT_ACTIONS = [
   'RETENTION_ENFORCED',
   'DSAR_',
   'BREACH_',
