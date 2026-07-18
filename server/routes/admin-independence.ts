@@ -16,9 +16,43 @@ import { authenticate, AuthRequest } from '../middleware/auth';
 import { requirePermission } from '../middleware/requirePermission';
 import { prisma } from '../config/db';
 import { logger } from '../config/logger';
+import { hashIp } from '../lib/crypto/hashIp';
 
 const router = Router();
 const adminOnly = [authenticate, requirePermission('dsar.manage')] as const;
+
+// KVKK m.16 accountability — bağımsızlık beyanları are a Kurul-facing
+// record. Fire-and-forget: an audit-write hiccup must never turn an
+// already-successful mutation into a 500 for the operator.
+function writeAudit(
+  req: AuthRequest,
+  action: string,
+  targetId: string,
+  data?: Record<string, unknown>,
+): void {
+  try {
+    prisma.auditLog
+      .create({
+        data: {
+          adminId: req.user?.id ?? 'system',
+          actorRole: req.user?.role ?? 'ANONYMOUS',
+          actorIpHash: hashIp(req.ip),
+          action,
+          targetType: 'IndependenceCheck',
+          targetId,
+          newValue: data as never,
+        },
+      })
+      .catch((err: unknown) => {
+        logger.error('[admin-independence] audit write failed', { action, targetId, err });
+      });
+  } catch (syncErr: unknown) {
+    logger.error('[admin-independence] audit write threw synchronously', {
+      action,
+      err: syncErr,
+    });
+  }
+}
 
 // ─── Big4 conflict detection ──────────────────────────────────────────────────
 
@@ -105,6 +139,11 @@ router.post('/', ...adminOnly, async (req: AuthRequest, res: Response): Promise<
       logger.info('independence check created', { clientId, checkId: check.id });
     }
 
+    writeAudit(req, 'INDEPENDENCE_CHECK_CREATED', check.id, {
+      clientId,
+      auditFirmConflicts,
+      pureAdvisoryConfirmed,
+    });
     res.status(201).json({ status: 'ok', data: check });
   } catch (err) {
     logger.error('independence check create error', { err });

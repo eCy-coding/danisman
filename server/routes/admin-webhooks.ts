@@ -21,6 +21,7 @@ import { prisma } from '../config/db';
 import { logger } from '../config/logger';
 import { authenticate, type AuthRequest } from '../middleware/auth';
 import { enqueue } from '../queues';
+import { hashIp } from '../lib/crypto/hashIp';
 
 const router = Router();
 
@@ -33,6 +34,40 @@ function generateSecret(): string {
 
 function isAdmin(req: AuthRequest): boolean {
   return req.user?.role === 'ADMIN';
+}
+
+// Webhook subscriptions carry destination URLs + HMAC secrets — business
+// config an operator changes. Fire-and-forget: an audit-write hiccup must
+// never turn an already-successful mutation into a 500.
+function writeAudit(
+  req: AuthRequest,
+  action: string,
+  targetType: string,
+  targetId: string | undefined,
+  data?: Record<string, unknown>,
+): void {
+  try {
+    prisma.auditLog
+      .create({
+        data: {
+          adminId: req.user?.id ?? 'system',
+          actorRole: req.user?.role ?? 'ANONYMOUS',
+          actorIpHash: hashIp(req.ip),
+          action,
+          targetType,
+          targetId,
+          newValue: data as never,
+        },
+      })
+      .catch((err: unknown) => {
+        logger.error('[admin-webhooks] audit write failed', { action, targetId, err });
+      });
+  } catch (syncErr: unknown) {
+    logger.error('[admin-webhooks] audit write threw synchronously', {
+      action,
+      err: syncErr,
+    });
+  }
 }
 
 router.post('/', async (req: AuthRequest, res: Response) => {
@@ -68,6 +103,10 @@ router.post('/', async (req: AuthRequest, res: Response) => {
     },
   });
   logger.info('[admin-webhooks] subscription created', { id: sub.id, userId: ownerId });
+  writeAudit(req, 'WEBHOOK_SUBSCRIPTION_CREATED', 'WebhookSubscription', sub.id, {
+    url: sub.url,
+    userId: ownerId,
+  });
   // Return the secret ONCE — client must persist it locally.
   res.status(201).json({
     status: 'ok',
@@ -179,6 +218,9 @@ router.post('/:id/retry/:deliveryId', async (req: AuthRequest, res: Response) =>
     deliveryId: delivery.id,
     mode: result.mode,
   });
+  writeAudit(req, 'WEBHOOK_DELIVERY_RETRIED', 'WebhookDelivery', delivery.id, {
+    subscriptionId: delivery.subscriptionId,
+  });
   res.json({ status: 'ok', delivery: delivery.id, mode: result.mode });
 });
 
@@ -229,6 +271,9 @@ router.patch('/:id', async (req: AuthRequest, res: Response) => {
       updatedAt: true,
     },
   });
+  writeAudit(req, 'WEBHOOK_SUBSCRIPTION_UPDATED', 'WebhookSubscription', sub.id, {
+    fields: Object.keys(data),
+  });
   res.json({ status: 'ok', subscription: sub });
 });
 
@@ -251,6 +296,7 @@ router.delete('/:id', async (req: AuthRequest, res: Response) => {
     return;
   }
   await prisma.webhookSubscription.delete({ where: { id: req.params.id } });
+  writeAudit(req, 'WEBHOOK_SUBSCRIPTION_DELETED', 'WebhookSubscription', req.params.id);
   res.json({ status: 'ok' });
 });
 

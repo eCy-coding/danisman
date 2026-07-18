@@ -9,10 +9,44 @@ import { logger } from '../config/logger';
 import { authenticate, AuthRequest } from '../middleware/auth';
 import { requirePermission } from '../middleware/require-permission';
 import { moderateCommentSchema } from '../schemas/comments.zod';
+import { hashIp } from '../lib/crypto/hashIp';
 
 const router = Router();
 
 router.use(authenticate);
+
+// Moderation + hard-delete of user-submitted comments (personal data:
+// authorName + bodyMd). Fire-and-forget: an audit-write hiccup must never
+// turn an already-successful mutation into a 500.
+function writeAudit(
+  req: AuthRequest,
+  action: string,
+  targetId: string,
+  data?: Record<string, unknown>,
+): void {
+  try {
+    prisma.auditLog
+      .create({
+        data: {
+          adminId: req.user?.id ?? 'system',
+          actorRole: req.user?.role ?? 'ANONYMOUS',
+          actorIpHash: hashIp(req.ip),
+          action,
+          targetType: 'Comment',
+          targetId,
+          newValue: data as never,
+        },
+      })
+      .catch((err: unknown) => {
+        logger.error('[admin-comments] audit write failed', { action, targetId, err });
+      });
+  } catch (syncErr: unknown) {
+    logger.error('[admin-comments] audit write threw synchronously', {
+      action,
+      err: syncErr,
+    });
+  }
+}
 
 // ─── GET moderation queue ─────────────────────────────────────────────────────
 
@@ -70,6 +104,7 @@ router.patch(
       to: parsed.data.status,
       by: req.user?.id,
     });
+    writeAudit(req, 'COMMENT_MODERATED', id!, { from: existing.status, to: parsed.data.status });
 
     res.json({ status: 'ok', data: updated });
   },
@@ -80,8 +115,8 @@ router.patch(
 router.delete(
   '/insights/comments/:id',
   requirePermission('insights.comments.delete'),
-  async (_req: AuthRequest, res: Response): Promise<void> => {
-    const { id } = _req.params;
+  async (req: AuthRequest, res: Response): Promise<void> => {
+    const { id } = req.params;
 
     const existing = await prisma.comment.findUnique({ where: { id }, select: { id: true } });
     if (!existing) {
@@ -90,6 +125,7 @@ router.delete(
     }
 
     await prisma.comment.delete({ where: { id } });
+    writeAudit(req, 'COMMENT_DELETED', id!);
     res.json({ status: 'ok', data: { deleted: 1 } });
   },
 );

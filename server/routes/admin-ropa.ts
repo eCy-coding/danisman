@@ -14,13 +14,49 @@
 
 import { Router, Request, Response, NextFunction } from 'express';
 import { z } from 'zod';
-import { authenticate } from '../middleware/auth';
+import { authenticate, AuthRequest } from '../middleware/auth';
 import { requirePermission } from '../middleware/requirePermission';
 import { prisma } from '../config/db';
+import { logger } from '../config/logger';
+import { hashIp } from '../lib/crypto/hashIp';
 import { ROPA_TEMPLATES } from '../../src/constants/ropa-template';
 
 const router = Router();
 const adminOnly = [authenticate, requirePermission('ropa.edit')] as const;
+
+// KVKK m.16 accountability — İşleme Envanteri (ROPA) is a Kurul-facing
+// document; every mutation must leave an AuditLog row. Fire-and-forget: a
+// write hiccup here must never turn an already-successful mutation into a
+// 500 for the operator.
+function writeAudit(
+  req: AuthRequest,
+  action: string,
+  targetId: string | null,
+  data?: Record<string, unknown>,
+): void {
+  try {
+    prisma.auditLog
+      .create({
+        data: {
+          adminId: req.user?.id ?? 'system',
+          actorRole: req.user?.role ?? 'ANONYMOUS',
+          actorIpHash: hashIp(req.ip),
+          action,
+          targetType: 'ROPAProcess',
+          targetId,
+          newValue: data as never,
+        },
+      })
+      .catch((err: unknown) => {
+        logger.error('[admin-ropa] audit write failed', { action, targetId, err });
+      });
+  } catch (syncErr: unknown) {
+    logger.error('[admin-ropa] audit write threw synchronously', {
+      action,
+      err: syncErr,
+    });
+  }
+}
 
 const ROPAStatusValues = ['ACTIVE', 'DEPRECATED', 'UNDER_REVIEW'] as const;
 
@@ -60,7 +96,7 @@ router.get('/:processId', ...adminOnly, async (req: Request, res: Response, next
 
 // ─── POST /api/admin/ropa/seed ───────────────────────────────────────────────
 
-router.post('/seed', ...adminOnly, async (_req: Request, res: Response, next: NextFunction) => {
+router.post('/seed', ...adminOnly, async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const now = new Date();
     const nextReviewDue = new Date(now);
@@ -99,6 +135,7 @@ router.post('/seed', ...adminOnly, async (_req: Request, res: Response, next: Ne
       ),
     );
 
+    writeAudit(req, 'ROPA_SEEDED', null, { seeded: results.length });
     res.json({ status: 'ok', data: { seeded: results.length } });
   } catch (err) {
     next(err);
@@ -110,7 +147,7 @@ router.post('/seed', ...adminOnly, async (_req: Request, res: Response, next: Ne
 router.patch(
   '/:processId/approve',
   ...adminOnly,
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
       const now = new Date();
       const nextReviewDue = new Date(now);
@@ -124,6 +161,7 @@ router.patch(
           nextReviewDue,
         },
       });
+      writeAudit(req, 'ROPA_APPROVED', record.processId, { dpoApproved: true });
       res.json({ status: 'ok', data: record });
     } catch (err) {
       next(err);
@@ -136,7 +174,7 @@ router.patch(
 router.patch(
   '/:processId/status',
   ...adminOnly,
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
       const parsed = patchStatusSchema.safeParse(req.body);
       if (!parsed.success) {
@@ -148,6 +186,7 @@ router.patch(
         where: { processId: req.params['processId'] },
         data: { status: parsed.data.status },
       });
+      writeAudit(req, 'ROPA_STATUS_UPDATED', record.processId, { status: record.status });
       res.json({ status: 'ok', data: record });
     } catch (err) {
       next(err);

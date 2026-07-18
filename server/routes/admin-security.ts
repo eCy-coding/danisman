@@ -8,13 +8,43 @@
  */
 
 import { Router, Request, Response, NextFunction } from 'express';
-import { authenticate, requireRole } from '../middleware/auth';
+import { authenticate, requireRole, AuthRequest } from '../middleware/auth';
 import { prisma } from '../config/db';
 import { redis } from '../config/redis';
+import { logger } from '../config/logger';
+import { hashIp } from '../lib/crypto/hashIp';
 
 const router = Router();
 const adminOnly = [authenticate, requireRole('ADMIN')] as const;
 const IP_KEY = 'admin:ip-whitelist';
+
+// KVKK m.12 data-security accountability — API-key revocation and admin
+// IP-whitelist changes directly gate who can reach personal data. Every
+// mutation must leave an AuditLog row. Fire-and-forget: an audit-write
+// hiccup must never turn an already-successful mutation into a 500.
+function writeAudit(req: AuthRequest, action: string, targetType: string, targetId: string): void {
+  try {
+    prisma.auditLog
+      .create({
+        data: {
+          adminId: req.user?.id ?? 'system',
+          actorRole: req.user?.role ?? 'ANONYMOUS',
+          actorIpHash: hashIp(req.ip),
+          action,
+          targetType,
+          targetId,
+        },
+      })
+      .catch((err: unknown) => {
+        logger.error('[admin-security] audit write failed', { action, targetId, err });
+      });
+  } catch (syncErr: unknown) {
+    logger.error('[admin-security] audit write threw synchronously', {
+      action,
+      err: syncErr,
+    });
+  }
+}
 
 router.get('/api-keys', ...adminOnly, async (_req: Request, res: Response, next: NextFunction) => {
   try {
@@ -40,11 +70,12 @@ router.get('/api-keys', ...adminOnly, async (_req: Request, res: Response, next:
 router.delete(
   '/api-keys/:id',
   ...adminOnly,
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
       const id = req.params.id;
       if (!id) return res.status(400).json({ status: 'error', message: 'id required' });
       await prisma.apiKey.update({ where: { id }, data: { revokedAt: new Date() } });
+      writeAudit(req, 'API_KEY_REVOKED', 'ApiKey', id);
       res.status(204).end();
     } catch (err) {
       next(err);
@@ -68,12 +99,13 @@ router.get(
 router.post(
   '/ip-whitelist',
   ...adminOnly,
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
       const ip = String((req.body as { ip?: string }).ip ?? '').trim();
       if (!ip || !/^[0-9a-fA-F.:/]+$/.test(ip))
         return res.status(400).json({ status: 'error', message: 'invalid ip' });
       await redis.sadd(IP_KEY, ip);
+      writeAudit(req, 'IP_WHITELIST_ADDED', 'IpWhitelist', ip);
       res.status(201).json({ status: 'ok', data: { ip } });
     } catch (err) {
       next(err);
@@ -84,11 +116,12 @@ router.post(
 router.delete(
   '/ip-whitelist/:ip',
   ...adminOnly,
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
       const ip = req.params.ip;
       if (!ip) return res.status(400).json({ status: 'error', message: 'ip required' });
       await redis.srem(IP_KEY, ip);
+      writeAudit(req, 'IP_WHITELIST_REMOVED', 'IpWhitelist', ip);
       res.status(204).end();
     } catch (err) {
       next(err);
