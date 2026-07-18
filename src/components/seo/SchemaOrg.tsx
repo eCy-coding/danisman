@@ -88,6 +88,7 @@ export const SchemaOrg: React.FC = () => {
   const serviceSchema = {
     '@context': 'https://schema.org',
     '@type': 'Service',
+    name: 'eCyPro Management Consulting',
     serviceType: 'Management Consulting',
     provider: {
       '@type': 'ProfessionalService',
