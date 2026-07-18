@@ -22,6 +22,7 @@
  */
 
 import { test, expect, type Page } from '@playwright/test';
+import { MOCK_URL } from './mock-url';
 
 const HOME_PATH = '/';
 
@@ -29,7 +30,7 @@ const HOME_PATH = '/';
 async function stubBackends(page: Page): Promise<void> {
   // Local mock-server (booking, geo, health) — see playwright.config.ts.
   await page.route('http://localhost:3001/**', (route) => route.fulfill({ status: 200, json: {} }));
-  await page.route('http://localhost:3099/**', (route) => route.fulfill({ status: 200, json: {} }));
+  await page.route(`${MOCK_URL}/**`, (route) => route.fulfill({ status: 200, json: {} }));
   // Production API host — never hit from CI.
   await page.route('https://api.ecypro.com/**', (route) =>
     route.fulfill({ status: 200, json: { success: true } }),

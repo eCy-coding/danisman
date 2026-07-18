@@ -1504,3 +1504,40 @@
 {"ts": "2026-07-18T19:42:08.960569Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -c \"Helmet\" src/components/blog/FAQSection.tsx; sed -n '260,290p' src/lib/\u2026"}
 {"ts": "2026-07-18T19:42:37.734872Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -n \"Helmet\" src/components/blog/FAQSection.tsx"}
 {"ts": "2026-07-18T19:43:32.718653Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "npm run typecheck 2>&1 | tail -1; echo \"TC:$?\"; npx vitest run 2>&1 | grep -E \"\u2026"}
+{"ts": "2026-07-18T19:44:07.689100Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "git add -A && git commit -m \"fix(seo): JSON-LD audit 4 s\u0131n\u0131f k\u00f6k fix \u2014 id'siz i\u2026"}
+{"ts": "2026-07-18T19:44:20.671792Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "npm run build 2>&1 | tail -20"}
+{"ts": "2026-07-18T20:07:45.193813Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "OUT=\"/private/tmp/claude-501/-Users-emrecnyngmail-com-Desktop-ecypro--claude-wo\u2026"}
+{"ts": "2026-07-18T20:08:08.719519Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "npm run size 2>&1 | tail -12"}
+{"ts": "2026-07-18T20:08:23.857520Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "npm run size 2>&1 | grep -B4 \"exceeded\\|FAIL\" | head -20; npm run size >/dev/nu\u2026"}
+{"ts": "2026-07-18T20:08:37.221305Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "npm run size 2>&1 | grep -A4 \"ServiceDetailPage\" | head -8; python3 -c \"import \u2026"}
+{"ts": "2026-07-18T20:08:54.121264Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "git diff main -- src/components/services/ServiceDetailLayout.tsx src/pages/Serv\u2026"}
+{"ts": "2026-07-18T20:09:22.287352Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "npm run size >/dev/null 2>&1; echo \"SIZE_EXIT:$?\"; git add .size-limit.json && \u2026"}
+{"ts": "2026-07-18T20:09:30.756139Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "npm run lh:audit 2>&1 | tail -30"}
+{"ts": "2026-07-18T20:10:38.143172Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "tail -30 \"/private/tmp/claude-501/-Users-emrecnyngmail-com-Desktop-ecypro--clau\u2026"}
+{"ts": "2026-07-18T20:10:47.953261Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "lsof -i :4173 2>/dev/null | head -3; curl -s -o /dev/null -w \"4173: %{http_code\u2026"}
+{"ts": "2026-07-18T20:11:10.931175Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "npx vite preview --port 4173 --host 127.0.0.1 --strictPort >/tmp/claude-501/pre\u2026"}
+{"ts": "2026-07-18T20:13:27.177362Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "tail -14 \"/private/tmp/claude-501/-Users-emrecnyngmail-com-Desktop-ecypro--clau\u2026"}
+{"ts": "2026-07-18T20:13:43.673609Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -A20 \"LandingPage\\|## \" docs/PERFORMANCE_REPORT.md | grep -E \"LCP|TBT|CLS|\u2026"}
+{"ts": "2026-07-18T20:14:10.384411Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "pkill -f \"Google Chrome for Testing\" 2>/dev/null; sleep 2; uptime; curl -s -o /\u2026"}
+{"ts": "2026-07-18T20:14:29.436896Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "npx playwright test --project=chromium 2>&1 | tail -20"}
+{"ts": "2026-07-18T20:14:46.362307Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "tail -20 \"/private/tmp/claude-501/-Users-emrecnyngmail-com-Desktop-ecypro--clau\u2026"}
+{"ts": "2026-07-18T20:15:04.047325Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -n -B2 -A6 \"chromium'\" playwright.config.ts | head -18; sed -n '76,86p' e2\u2026"}
+{"ts": "2026-07-18T20:15:31.909840Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -n -B2 -A8 \"webServer\" playwright.config.ts | head -30"}
+{"ts": "2026-07-18T20:15:54.975799Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "lsof -i :3099 2>/dev/null | tail -2; ps -p $(lsof -ti :3099 2>/dev/null | head \u2026"}
+{"ts": "2026-07-18T20:16:07.634030Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "lsof -nP -i :3099 -sTCP:LISTEN | tail -2; PID=$(lsof -nP -ti :3099 -sTCP:LISTEN\u2026"}
+{"ts": "2026-07-18T20:16:22.955959Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -rn \"3099\" playwright.config.ts e2e/ scripts/ package.json 2>/dev/null | g\u2026"}
+{"ts": "2026-07-18T20:17:18.366313Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -rln \"3099\" e2e/ package.json scripts/ server/mock-server.mjs playwright.c\u2026"}
+{"ts": "2026-07-18T20:17:22.631383Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "ls /Users/emrecnyngmail.com/Desktop/ecypro/.claude/worktrees/wonderful-curran-e\u2026"}
+{"ts": "2026-07-18T20:17:25.014025Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "ls -la /Users/emrecnyngmail.com/Desktop/ecypro/.claude/worktrees/wonderful-curr\u2026"}
+{"ts": "2026-07-18T20:17:37.196203Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -n \"3099\" e2e/*.spec.ts e2e/global-setup.ts"}
+{"ts": "2026-07-18T20:18:01.815822Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "for f in e2e/admin-phase6.spec.ts e2e/admin-view-as.spec.ts e2e/api_integration\u2026"}
+{"ts": "2026-07-18T20:18:14.142798Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "sed -n '375,395p' e2e/crawl_error_pages.spec.ts; echo \"---security---\"; sed -n \u2026"}
+{"ts": "2026-07-18T20:18:27.782498Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "for f in crawl_admin_rbac crawl_api_security crawl_admin_crm crawl_analytics_de\u2026"}
+{"ts": "2026-07-18T20:18:34.541466Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "echo \"=== crawl_db_integration ===\"; grep -n \"^import\\|3099\" e2e/crawl_db_integ\u2026"}
+{"ts": "2026-07-18T20:20:01.236763Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -n \"MOCK_HOST\\|localhost:3099\" e2e/comprehensive_audit.spec.ts"}
+{"ts": "2026-07-18T20:20:25.440802Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "cd /Users/emrecnyngmail.com/Desktop/ecypro/.claude/worktrees/wonderful-curran-e\u2026"}
+{"ts": "2026-07-18T20:21:17.643492Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "cd /Users/emrecnyngmail.com/Desktop/ecypro/.claude/worktrees/wonderful-curran-e\u2026"}
+{"ts": "2026-07-18T20:22:41.140776Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "grep -n \"^import\" /Users/emrecnyngmail.com/Desktop/ecypro/.claude/worktrees/won\u2026"}
+{"ts": "2026-07-18T20:23:52.443057Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "cd /Users/emrecnyngmail.com/Desktop/ecypro/.claude/worktrees/wonderful-curran-e\u2026"}
+{"ts": "2026-07-18T20:24:07.289877Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "npm run typecheck 2>&1 | tail -40"}
+{"ts": "2026-07-18T20:24:29.685972Z", "actor": "claude", "action": "tool:Bash", "scope": "hook", "ref": "", "summary": "cd /Users/emrecnyngmail.com/Desktop/ecypro/.claude/worktrees/wonderful-curran-e\u2026"}

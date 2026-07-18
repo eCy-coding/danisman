@@ -12,9 +12,10 @@
  */
 
 import { chromium, type FullConfig } from '@playwright/test';
+import { MOCK_URL } from './mock-url';
 
 const PREVIEW_URL = 'http://localhost:4173';
-const MOCK_API_URL = 'http://localhost:3099/__health';
+const MOCK_API_URL = `${MOCK_URL}/__health`;
 const MAX_WAIT_MS = 60_000;
 const POLL_MS = 1_000;
 
@@ -77,7 +78,10 @@ export default async function globalSetup(_config: FullConfig): Promise<void> {
 
   // 4. Cache warming (sadece local'de, CI'de yavaşlatır)
   if (!isCI) {
-    const browser = await chromium.launch({ headless: true });
+    const browser = await chromium.launch({
+      headless: true,
+      ...(process.env.PW_BROWSER_CHANNEL ? { channel: process.env.PW_BROWSER_CHANNEL } : {}),
+    });
     const context = await browser.newContext({
       ignoreHTTPSErrors: true,
       serviceWorkers: 'block',

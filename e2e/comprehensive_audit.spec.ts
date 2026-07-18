@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { MOCK_HOST } from './mock-url';
 
 // Benign error patterns expected in local/preview environments
 const BENIGN_CONSOLE_PATTERNS = [
@@ -20,7 +21,7 @@ const BENIGN_CONSOLE_PATTERNS = [
   'i18next',
   'the server responded with a status of 4',
   'ecypro.com',
-  'localhost:3099',
+  MOCK_HOST,
   'A server with the specified hostname could not be found',
   'width(-1) and height(-1)', // Recharts dimension warning for hidden containers
   'should be greater than 0', // Recharts chart size warning
@@ -46,7 +47,7 @@ const BENIGN_CONSOLE_PATTERNS = [
 const BENIGN_NETWORK_PATTERNS = [
   'ecypro.com',
   'sentry.io',
-  'localhost:3099',
+  MOCK_HOST,
   '/sw.js',
   '/workbox-',
   '/manifest',

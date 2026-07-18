@@ -19,6 +19,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as dotenv from 'dotenv';
 import { fileURLToPath } from 'url';
+import { MOCK_URL } from './mock-url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -38,7 +39,7 @@ function loadEnv(): Record<string, string> {
 }
 
 const ENV = loadEnv();
-const API = 'http://localhost:3099/api';
+const API = `${MOCK_URL}/api`;
 
 // ─── Prisma Schema Doğrulama ─────────────────────────────────────────────────
 test.describe('P1 — Prisma Schema Bütünlük Testi', () => {
@@ -125,24 +126,20 @@ test.describe('P2 — Migration Dosya Kontrolü', () => {
   test('prisma/migrations/ klasörü mevcut (opsiyonel)', () => {
     const migDir = path.join(ROOT, 'prisma/migrations');
     if (!fs.existsSync(migDir)) {
-      test
-        .info()
-        .annotations.push({
-          type: 'note',
-          description: 'migrations/ yok — prisma db push ile senkronize edilmiş olabilir',
-        });
+      test.info().annotations.push({
+        type: 'note',
+        description: 'migrations/ yok — prisma db push ile senkronize edilmiş olabilir',
+      });
     }
   });
 
   test('En az 1 migration dosyası mevcut', () => {
     const migDir = path.join(ROOT, 'prisma/migrations');
     if (!fs.existsSync(migDir)) {
-      test
-        .info()
-        .annotations.push({
-          type: 'note',
-          description: 'migrations/ yok — prisma migrate dev ile oluşturulabilir',
-        });
+      test.info().annotations.push({
+        type: 'note',
+        description: 'migrations/ yok — prisma migrate dev ile oluşturulabilir',
+      });
       return;
     }
     const migs = fs.readdirSync(migDir).filter((f) => !f.startsWith('.'));
@@ -152,12 +149,10 @@ test.describe('P2 — Migration Dosya Kontrolü', () => {
   test('migration_lock.toml mevcut', () => {
     const lockFile = path.join(ROOT, 'prisma/migrations/migration_lock.toml');
     if (!fs.existsSync(lockFile)) {
-      test
-        .info()
-        .annotations.push({
-          type: 'note',
-          description: 'migration_lock.toml yok — prisma migrate dev sonrası oluşur',
-        });
+      test.info().annotations.push({
+        type: 'note',
+        description: 'migration_lock.toml yok — prisma migrate dev sonrası oluşur',
+      });
       return;
     }
     const content = fs.readFileSync(lockFile, 'utf-8');

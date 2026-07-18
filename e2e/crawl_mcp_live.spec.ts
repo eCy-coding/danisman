@@ -21,6 +21,7 @@ import * as os from 'os';
 import * as path from 'path';
 import * as dotenv from 'dotenv';
 import { fileURLToPath } from 'url';
+import { MOCK_URL } from './mock-url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -42,7 +43,7 @@ function readFile(rel: string): string {
 }
 
 const ENV = loadEnv();
-const API = process.env.VITE_API_URL ?? 'http://localhost:3099/api';
+const API = process.env.VITE_API_URL ?? `${MOCK_URL}/api`;
 
 const MCP_CONFIG_PATH = path.join(os.homedir(), '.codeium', 'mcp_config.json');
 
@@ -301,24 +302,20 @@ test.describe('shadcn-ui MCP Entegrasyonu', () => {
     const uiDir = path.join(ROOT, 'src/components/ui');
     const exists = fs.existsSync(uiDir);
     if (!exists) {
-      test
-        .info()
-        .annotations.push({
-          type: 'note',
-          description: 'src/components/ui/ yok — shadcn MCP ile component eklenebilir',
-        });
+      test.info().annotations.push({
+        type: 'note',
+        description: 'src/components/ui/ yok — shadcn MCP ile component eklenebilir',
+      });
     }
   });
 
   test('Tailwind v4 config mevcut', () => {
     const src = readFile('vite.config.ts');
     const hasTailwind = src.includes('tailwind') || src.includes('Tailwind');
-    test
-      .info()
-      .annotations.push({
-        type: 'tailwind',
-        description: hasTailwind ? '✅ Tailwind kullanılıyor' : '⚠️ Tailwind import bulunamadı',
-      });
+    test.info().annotations.push({
+      type: 'tailwind',
+      description: hasTailwind ? '✅ Tailwind kullanılıyor' : '⚠️ Tailwind import bulunamadı',
+    });
     expect(hasTailwind, 'Tailwind bulunamadı').toBe(true);
   });
 });

@@ -22,6 +22,7 @@
  */
 
 import { test, expect, type Page } from '@playwright/test';
+import { MOCK_HOST } from './mock-url';
 
 const BASE_URL = 'http://localhost:4173';
 
@@ -382,7 +383,7 @@ test.describe('Crawler: Error Pages & Graceful Degradation — Phase 1+5', () =>
       'Extension',
       'workbox',
       'ERR_NAME_NOT_RESOLVED',
-      'localhost:3099',
+      MOCK_HOST,
       'localhost:4001',
       'Service Worker',
       'Third-party',

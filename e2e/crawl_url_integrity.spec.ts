@@ -19,13 +19,14 @@ import { test, expect } from '@playwright/test';
 import * as fs from 'fs';
 import * as path from 'path';
 import { fileURLToPath } from 'url';
+import { MOCK_URL } from './mock-url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const ROOT = path.resolve(__dirname, '..');
 
 const BASE = 'http://localhost:4173';
-const API = 'http://localhost:3099/api';
+const API = `${MOCK_URL}/api`;
 
 // ─── Yardımcı: hızlı sayfa doğrulama ─────────────────────────────────────────
 async function _checkPage(
@@ -556,7 +557,7 @@ test.describe("U11 — API URL'leri", () => {
   test('GET /__health → 200 (Playwright webServer probe)', async ({ request }) => {
     let res;
     try {
-      res = await request.get('http://localhost:3099/__health', { timeout: 3000 });
+      res = await request.get(`${MOCK_URL}/__health`, { timeout: 3000 });
     } catch {
       test.info().annotations.push({ type: 'skip', description: 'API çalışmıyor' });
       return;

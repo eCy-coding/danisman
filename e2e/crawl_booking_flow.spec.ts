@@ -20,9 +20,10 @@
 import { test, expect, type Page } from '@playwright/test';
 import fs from 'fs';
 import path from 'path';
+import { MOCK_URL } from './mock-url';
 
 const BASE_URL = 'http://localhost:4173';
-const API_URL = 'http://localhost:3099';
+const API_URL = MOCK_URL;
 const ROOT = process.cwd();
 
 const mockSetup = async (page: Page) => {
@@ -76,12 +77,10 @@ test.describe('P37-T61: Cal.com Booking API', () => {
     }
 
     if (!opened) {
-      test
-        .info()
-        .annotations.push({
-          type: 'note',
-          description: 'Booking trigger bulunamadı — homepage CTA eksik (P37-T66)',
-        });
+      test.info().annotations.push({
+        type: 'note',
+        description: 'Booking trigger bulunamadı — homepage CTA eksik (P37-T66)',
+      });
       return;
     }
 
@@ -109,12 +108,10 @@ test.describe('P37-T62: Email Confirmation (Resend)', () => {
     ];
     const found = candidates.some((c) => fs.existsSync(path.join(ROOT, c)));
     if (!found) {
-      test
-        .info()
-        .annotations.push({
-          type: 'note',
-          description: 'server/lib/email.ts: Resend entegrasyon dosyası yok — P37-T62 pending',
-        });
+      test.info().annotations.push({
+        type: 'note',
+        description: 'server/lib/email.ts: Resend entegrasyon dosyası yok — P37-T62 pending',
+      });
     }
     // Soft — future feature
   });
@@ -125,12 +122,10 @@ test.describe('P37-T62: Email Confirmation (Resend)', () => {
     const content = fs.readFileSync(envExample, 'utf-8');
     const hasResend = content.includes('RESEND_API_KEY');
     if (!hasResend) {
-      test
-        .info()
-        .annotations.push({
-          type: 'note',
-          description: '.env.example: RESEND_API_KEY eksik — entegrasyon.txt sync gerekiyor',
-        });
+      test.info().annotations.push({
+        type: 'note',
+        description: '.env.example: RESEND_API_KEY eksik — entegrasyon.txt sync gerekiyor',
+      });
     }
   });
 
@@ -143,12 +138,10 @@ test.describe('P37-T62: Email Confirmation (Resend)', () => {
     const deps = { ...pkg.dependencies, ...pkg.devDependencies };
     const hasResend = 'resend' in deps || '@react-email/components' in deps || 'nodemailer' in deps;
     if (!hasResend) {
-      test
-        .info()
-        .annotations.push({
-          type: 'note',
-          description: 'Email library (resend/nodemailer/@react-email) yok — P37-T62 pending',
-        });
+      test.info().annotations.push({
+        type: 'note',
+        description: 'Email library (resend/nodemailer/@react-email) yok — P37-T62 pending',
+      });
     }
   });
 });
@@ -190,12 +183,10 @@ test.describe('P37-T64: Reminder Email Cron Job', () => {
       schema.includes('reminder1hSent') ||
       schema.includes('reminderSent');
     if (!hasFlags) {
-      test
-        .info()
-        .annotations.push({
-          type: 'note',
-          description: 'Prisma: reminder flags yok — P37-T64 pending',
-        });
+      test.info().annotations.push({
+        type: 'note',
+        description: 'Prisma: reminder flags yok — P37-T64 pending',
+      });
     }
   });
 
@@ -231,12 +222,10 @@ test.describe('P37-T65: Reschedule/Cancel Flow', () => {
       .catch(() => false);
 
     if (is404 || currentUrl.includes('404')) {
-      test
-        .info()
-        .annotations.push({
-          type: 'note',
-          description: '/booking/manage: route implement edilmemiş — P37-T65 pending',
-        });
+      test.info().annotations.push({
+        type: 'note',
+        description: '/booking/manage: route implement edilmemiş — P37-T65 pending',
+      });
     } else {
       const title = await page.title();
       expect(title.length, '/booking/manage: title boş').toBeGreaterThan(0);
@@ -290,12 +279,10 @@ test.describe('P37-T66: Available Slots Calendar Widget', () => {
     }
 
     if (!clicked) {
-      test
-        .info()
-        .annotations.push({
-          type: 'note',
-          description: 'Booking CTA bulunamadı — widget test skip',
-        });
+      test.info().annotations.push({
+        type: 'note',
+        description: 'Booking CTA bulunamadı — widget test skip',
+      });
       return;
     }
 
@@ -309,12 +296,10 @@ test.describe('P37-T66: Available Slots Calendar Widget', () => {
       .catch(() => false);
 
     if (!hasCalendar) {
-      test
-        .info()
-        .annotations.push({
-          type: 'note',
-          description: 'Booking calendar widget: görünmüyor — soft pass',
-        });
+      test.info().annotations.push({
+        type: 'note',
+        description: 'Booking calendar widget: görünmüyor — soft pass',
+      });
     }
   });
 
@@ -329,12 +314,10 @@ test.describe('P37-T66: Available Slots Calendar Widget', () => {
       'react-datepicker' in deps ||
       'flatpickr' in deps;
     if (!hasDatePicker) {
-      test
-        .info()
-        .annotations.push({
-          type: 'note',
-          description: 'Date picker kütüphanesi yok — P37-T66 pending',
-        });
+      test.info().annotations.push({
+        type: 'note',
+        description: 'Date picker kütüphanesi yok — P37-T66 pending',
+      });
     }
   });
 });
@@ -349,12 +332,10 @@ test.describe('P37-T67: Timezone-Aware Booking Display', () => {
     const deps = { ...pkg.dependencies, ...pkg.devDependencies };
     const hasTz = 'date-fns-tz' in deps || 'luxon' in deps || 'dayjs' in deps;
     if (!hasTz) {
-      test
-        .info()
-        .annotations.push({
-          type: 'note',
-          description: 'TZ kütüphanesi (date-fns-tz/luxon) yok — P37-T67 pending',
-        });
+      test.info().annotations.push({
+        type: 'note',
+        description: 'TZ kütüphanesi (date-fns-tz/luxon) yok — P37-T67 pending',
+      });
     }
   });
 
@@ -397,12 +378,10 @@ test.describe('P37-T68: Cal.com Webhook DB Sync', () => {
     ];
     const found = candidates.some((c) => fs.existsSync(path.join(ROOT, c)));
     if (!found) {
-      test
-        .info()
-        .annotations.push({
-          type: 'note',
-          description: 'Webhook route dosyası yok — P37-T68 pending',
-        });
+      test.info().annotations.push({
+        type: 'note',
+        description: 'Webhook route dosyası yok — P37-T68 pending',
+      });
     }
   });
 });
@@ -435,12 +414,10 @@ test.describe('P37-T69: Booking Analytics Report', () => {
     ];
     const found = candidates.some((c) => fs.existsSync(path.join(ROOT, c)));
     if (!found) {
-      test
-        .info()
-        .annotations.push({
-          type: 'note',
-          description: 'AdminAnalyticsPage: yok — P37-T69 pending',
-        });
+      test.info().annotations.push({
+        type: 'note',
+        description: 'AdminAnalyticsPage: yok — P37-T69 pending',
+      });
     }
   });
 });
@@ -482,12 +459,10 @@ test.describe('P37-T70: Post-Booking NPS Feedback', () => {
     if (status !== 404) {
       expect(status, 'nps-summary: anonim 2xx').toBeGreaterThanOrEqual(400);
     } else {
-      test
-        .info()
-        .annotations.push({
-          type: 'note',
-          description: '/api/feedback/nps-summary: 404 (P37-T70 pending)',
-        });
+      test.info().annotations.push({
+        type: 'note',
+        description: '/api/feedback/nps-summary: 404 (P37-T70 pending)',
+      });
     }
   });
 });
