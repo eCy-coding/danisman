@@ -233,6 +233,14 @@ main().catch((err) => {
     process.exit(1);
   }
 
+  // PRERENDER_FORCE_LOCAL=1 = the prebuilt-deploy path (CI runner). A missing
+  // browser binary there means the install step broke — shipping would mean a
+  // silent SEO-shell regression (exactly how prod regressed before). Fail loud.
+  if (process.env.PRERENDER_FORCE_LOCAL === '1') {
+    console.error('[prerender] FATAL with PRERENDER_FORCE_LOCAL=1 — refusing graceful skip:', msg);
+    process.exit(1);
+  }
+
   // Local only: graceful skip when no browser binary (fast iteration, stripped envs).
   const transient = [
     'browserType.launch',
