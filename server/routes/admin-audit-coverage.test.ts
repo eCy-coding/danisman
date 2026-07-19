@@ -6,9 +6,10 @@
  * security-critical API-key + IP-whitelist changes) had zero AuditLog
  * trail, despite KVKK m.10/12 requiring accountability for exactly these
  * kinds of admin actions. This test is a *static* regression shield: it
- * reads every `server/routes/admin-*.ts` file and asserts that any file
- * declaring a mutation handler (POST/PATCH/PUT/DELETE) also references
- * one of the two accepted audit mechanisms in this codebase:
+ * reads every admin route file (`server/routes/admin.ts` and
+ * `admin-*.ts`) and asserts that any file declaring a mutation handler
+ * (POST/PATCH/PUT/DELETE) also references one of the two accepted audit
+ * mechanisms in this codebase:
  *
  *   1. `auditMiddleware(...)` from server/middleware/audit.ts (composed
  *      directly on the router — e.g. admin-rbac.ts), or
@@ -17,12 +18,18 @@
  *
  * This is a coarse, file-level check (does the file participate in the
  * audit pattern at all), not a per-handler line-level check — it exists
- * to catch the *systemic* gap (a whole new admin-*.ts route file shipped
- * with zero audit trail), not to enforce that literally every single
- * mutation is individually audited. New admin-*.ts route files with
- * mutations MUST wire up one of the two mechanisms above or be added to
- * the ALLOWLIST below with a written justification — silent gaps here
- * are exactly the KVKK accountability failure this test exists to catch.
+ * to catch the *systemic* gap (a whole new admin route file shipped with
+ * zero audit trail), not to enforce that literally every single mutation
+ * is individually audited. New admin route files with mutations MUST wire
+ * up one of the two mechanisms above or be added to the ALLOWLIST below
+ * with a written justification — silent gaps here are exactly the KVKK
+ * accountability failure this test exists to catch.
+ *
+ * KNOWN LIMIT — file-level, not handler-level: a file passes as soon as it
+ * contains one audit reference, so individual unaudited handlers inside an
+ * already-participating file are NOT caught. `admin.ts` (14 mutation
+ * handlers / 4 auditLog refs) and `admin-insights.ts` (14 / 2) are the two
+ * known cases. Closing that needs per-handler analysis, tracked separately.
  */
 
 import { describe, it, expect } from 'vitest';
@@ -59,26 +66,19 @@ const ALLOWLIST: AllowlistEntry[] = [
       'so there is no state change for an AuditLog row to describe. The action is already ' +
       'observable via adminEventBus "audit.action" + logger.info.',
   },
-  {
-    file: 'admin-dsar.ts',
-    justification:
-      'DSAR requests use a resource-scoped audit trail (prisma.dSARAuditEntry, 7 refs) ' +
-      'instead of the central AuditLog table — every POST/PATCH mutation here already ' +
-      'writes a DSARAuditEntry row keyed by dsarId. This is a pre-existing, deliberate ' +
-      'per-resource pattern (see admin-dsar.ts model comments) and out of scope for the ' +
-      "central-AuditLog sweep that added this test. Follow-up: retention.ts's " +
-      '/audit-readiness endpoint filters the central AuditLog for a "DSAR_" action prefix ' +
-      'that no code currently writes — DSAR entries are therefore invisible to that KVKK ' +
-      'report today. Tracked separately; not fixed here to avoid scope creep on this pass.',
-  },
 ];
 
 function isTestFile(name: string): boolean {
   return name.endsWith('.test.ts');
 }
 
+// `admin.ts` (the largest admin route file) does not carry the `admin-`
+// prefix, so an `admin-`-only match silently excluded it from the shield —
+// the exact blind spot this test exists to prevent. Match the whole admin
+// route surface: `admin.ts` plus every `admin-*.ts`.
 function isAdminRouteFile(name: string): boolean {
-  return name.startsWith('admin-') && name.endsWith('.ts') && !isTestFile(name);
+  if (!name.endsWith('.ts') || isTestFile(name)) return false;
+  return name === 'admin.ts' || name.startsWith('admin-');
 }
 
 describe('admin-audit-coverage — KVKK accountability regression shield', () => {
@@ -86,11 +86,21 @@ describe('admin-audit-coverage — KVKK accountability regression shield', () =>
 
   // Sanity check on the harness itself — if this ever drops to 0, the
   // glob/dir logic broke and the whole test is vacuously true.
-  it('discovers admin-*.ts route files to scan', () => {
+  it('discovers admin route files to scan', () => {
     expect(files.length).toBeGreaterThan(10);
   });
 
-  it('every admin-*.ts route file with a POST/PATCH/PUT/DELETE handler references an audit mechanism, unless allowlisted', () => {
+  // Pins the 2026-07 blind spot: the discovery filter used to require an
+  // `admin-` prefix, which silently excluded `admin.ts` — the largest admin
+  // route file (14 mutation handlers) — from the shield entirely. A shield
+  // that skips a mutation-heavy file is worse than no shield: it reports
+  // green. Narrowing the filter back must fail here, loudly.
+  it('scans admin.ts itself, not only the admin-* prefixed files', () => {
+    expect(files).toContain('admin.ts');
+    expect(files.some((f) => f.startsWith('admin-'))).toBe(true);
+  });
+
+  it('every admin route file with a POST/PATCH/PUT/DELETE handler references an audit mechanism, unless allowlisted', () => {
     const allowlistedFiles = new Set(ALLOWLIST.map((e) => e.file));
     const failures: string[] = [];
 
@@ -109,7 +119,7 @@ describe('admin-audit-coverage — KVKK accountability regression shield', () =>
 
     expect(
       failures,
-      `The following admin-*.ts files declare a mutation handler (POST/PATCH/PUT/DELETE) ` +
+      `The following admin route files declare a mutation handler (POST/PATCH/PUT/DELETE) ` +
         `but reference neither auditMiddleware nor prisma.auditLog.create, and are not in ` +
         `the ALLOWLIST above: ${failures.join(', ')}. Every admin mutation must leave a ` +
         `KVKK-accountability trail (m.10/12) — wire up one of the two audit mechanisms, or ` +
