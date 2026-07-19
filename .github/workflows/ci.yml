@@ -123,6 +123,8 @@ jobs:
     name: E2E Tests
     needs: build
     runs-on: ubuntu-latest
+    # 6h-cancel yerine yutulabilir timeout-failure (advisory sözleşmesi).
+    timeout-minutes: 45
     # ADVISORY (2026-07-19): the full 1600-test suite has NEVER been green in
     # CI (0 successful "CI" workflow runs in repo history), which kept the
     # Deploy workflow's `CI success` trigger permanently dark — prod ships
@@ -159,6 +161,8 @@ jobs:
     name: A11y Audit
     needs: build
     runs-on: ubuntu-latest
+    # 6h-cancel yerine yutulabilir timeout-failure (advisory sözleşmesi).
+    timeout-minutes: 45
     # ADVISORY — see e2e job note; unit-level axe suites in `quality` still gate.
     continue-on-error: true
     steps:
@@ -189,6 +193,8 @@ jobs:
     name: Lighthouse Budget
     needs: build
     runs-on: ubuntu-latest
+    # 6h-cancel yerine yutulabilir timeout-failure (advisory sözleşmesi).
+    timeout-minutes: 45
     # ADVISORY — see e2e job note; perf işi P4 backlog'unda sürüyor.
     # (P40-T02'nin job-blocking continue-on-error:false'u kaldırıldı — YAML
     # last-key-wins duplicate'i advisory niyetini eziyordu.)
@@ -201,6 +207,10 @@ jobs:
           cache: 'npm'
       - run: npm ci
       - name: Build
+        # Yalnız vite bundle gerekiyor (preview için); prerender burada da
+        # 6h asılmanın gerçek kaynağıydı.
+        env:
+          SKIP_PRERENDER: '1'
         run: npm run build
       - name: Start preview server
         run: |
