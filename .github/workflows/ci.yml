@@ -92,6 +92,12 @@ jobs:
           cache: 'npm'
       - run: npm ci
       - name: Build (with Sentry source-map upload when token present)
+        # SKIP_PRERENDER: 480-route prerender + self-healing browser install
+        # blew the 6h job limit here (run 29662540206 cancelled). The REAL
+        # prerender runs in deploy.yml with cached browsers; this job only
+        # needs the vite bundle for artifact/e2e/a11y consumers.
+        env:
+          SKIP_PRERENDER: '1'
         run: npm run build
       - name: Sentry release (explicit sentry-cli)
         if: env.SENTRY_AUTH_TOKEN != ''
