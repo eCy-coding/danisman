@@ -37,6 +37,12 @@ vi.mock('../config/logger', () => ({
   logger: { info: vi.fn(), error: vi.fn(), warn: vi.fn() },
 }));
 
+// Security hardening — see the matching comment in admin-rbac.test.ts: the
+// PATCH /matrix route now carries `rbacChangeLimiter`, which talks to a REAL
+// Redis if one is reachable, and its window persists ACROSS test runs. Force
+// the in-memory fallback so this file stays hermetic.
+vi.mock('../config/redis', () => ({ redis: { status: 'end' } }));
+
 vi.mock('../middleware/auth', async (importOriginal) => {
   const orig = await importOriginal<typeof import('../middleware/auth')>();
   return {

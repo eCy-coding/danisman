@@ -31,3 +31,6 @@ export type { EmptyStateProps } from './EmptyState';
 
 export { Breadcrumb } from './Breadcrumb';
 export type { BreadcrumbItem } from './Breadcrumb';
+
+export { ErrorState, AdminQueryState, getErrorMessage } from './AdminStateBlock';
+export type { ErrorStateProps, AdminQueryStateProps } from './AdminStateBlock';

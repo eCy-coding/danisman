@@ -10,6 +10,7 @@ import { useAdminShortcuts, ALL_SHORTCUTS } from '../../../hooks/useAdminShortcu
 import { X, Keyboard, Menu } from 'lucide-react';
 // R7-P2.2 — global SSE → toast bridge for the 5 admin bus channels.
 import { AdminRealtimeToasts } from '../realtime/AdminRealtimeToasts';
+import { ViewAsProvider } from '../../../lib/view-as-context';
 
 const ShortcutsHelpModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
   const byCategory = ALL_SHORTCUTS.reduce<Record<string, typeof ALL_SHORTCUTS>>((acc, s) => {
@@ -84,55 +85,61 @@ export const AdminLayout: React.FC = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-neutral text-slate-200 font-sans selection:bg-secondary/30 selection:text-white">
-      {/* Mobile header — only visible below md breakpoint */}
-      <header className="md:hidden flex items-center justify-between px-4 py-3 border-b border-white/5 bg-surface sticky top-0 z-40">
-        <button
-          type="button"
-          aria-label="Menüyü Aç"
-          aria-expanded={sidebarOpen}
-          aria-controls="admin-sidebar"
-          data-testid="hamburger-btn"
-          onClick={() => setSidebarOpen(true)}
-          className="p-2 rounded-lg hover:bg-white/5 text-slate-300"
-        >
-          <Menu size={20} aria-hidden="true" />
-        </button>
-        <span className="text-sm font-semibold text-white">eCyPro Admin</span>
-        <div className="w-9" />
-      </header>
+    // ViewAsProvider wraps the whole admin tree: /admin/rbac renders
+    // ViewAsBanner + ViewAsLauncher, both of which call useViewAs() — which
+    // throws when no provider is above them. The provider existed but was
+    // never mounted, so that page crashed for every real user.
+    <ViewAsProvider>
+      <div className="min-h-screen bg-neutral text-slate-200 font-sans selection:bg-secondary/30 selection:text-white">
+        {/* Mobile header — only visible below md breakpoint */}
+        <header className="md:hidden flex items-center justify-between px-4 py-3 border-b border-white/5 bg-surface sticky top-0 z-40">
+          <button
+            type="button"
+            aria-label="Menüyü Aç"
+            aria-expanded={sidebarOpen}
+            aria-controls="admin-sidebar"
+            data-testid="hamburger-btn"
+            onClick={() => setSidebarOpen(true)}
+            className="p-2 rounded-lg hover:bg-white/5 text-slate-300"
+          >
+            <Menu size={20} aria-hidden="true" />
+          </button>
+          <span className="text-sm font-semibold text-white">eCyPro Admin</span>
+          <div className="w-9" />
+        </header>
 
-      {/* Mobile sidebar overlay */}
-      {sidebarOpen && (
+        {/* Mobile sidebar overlay */}
+        {sidebarOpen && (
+          <div
+            className="md:hidden fixed inset-0 z-50 bg-black/60"
+            aria-hidden="true"
+            onClick={() => setSidebarOpen(false)}
+            data-testid="sidebar-overlay"
+          />
+        )}
+
+        {/* Sidebar — always visible on desktop, drawer on mobile */}
         <div
-          className="md:hidden fixed inset-0 z-50 bg-black/60"
-          aria-hidden="true"
-          onClick={() => setSidebarOpen(false)}
-          data-testid="sidebar-overlay"
-        />
-      )}
-
-      {/* Sidebar — always visible on desktop, drawer on mobile */}
-      <div
-        id="admin-sidebar"
-        className={[
-          'fixed top-0 left-0 h-full z-50 transition-transform duration-200',
-          'md:translate-x-0',
-          sidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0',
-        ].join(' ')}
-      >
-        <AdminSidebar />
-      </div>
-
-      <main className="md:ml-64 min-h-screen p-4 md:p-8 bg-[url('/bg-grid.svg')] bg-fixed">
-        <div className="max-w-6xl mx-auto">
-          <Outlet />
+          id="admin-sidebar"
+          className={[
+            'fixed top-0 left-0 h-full z-50 transition-transform duration-200',
+            'md:translate-x-0',
+            sidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0',
+          ].join(' ')}
+        >
+          <AdminSidebar />
         </div>
-      </main>
-      {helpModalOpen && <ShortcutsHelpModal onClose={() => setHelpModalOpen(false)} />}
-      {/* R7-P2.2 — real-time SSE bridge → admin toasts. Mounted once at layout
+
+        <main className="md:ml-64 min-h-screen p-4 md:p-8 bg-[url('/bg-grid.svg')] bg-fixed">
+          <div className="max-w-6xl mx-auto">
+            <Outlet />
+          </div>
+        </main>
+        {helpModalOpen && <ShortcutsHelpModal onClose={() => setHelpModalOpen(false)} />}
+        {/* R7-P2.2 — real-time SSE bridge → admin toasts. Mounted once at layout
           level so a single connection handles all admin pages. */}
-      <AdminRealtimeToasts />
-    </div>
+        <AdminRealtimeToasts />
+      </div>
+    </ViewAsProvider>
   );
 };

@@ -82,6 +82,7 @@ import adminAnalyticsStreamRoutes from './admin-analytics-stream';
 import adminEsgRoutes from './admin-esg';
 import adminFintechComplianceRoutes from './admin-fintech-compliance';
 import adminSuccessionRoutes from './admin-succession';
+import { csrfProtection } from '../middleware/csrf';
 import { openApiSpec } from '../config/openapi';
 import { redis } from '../config/redis';
 import { prisma } from '../config/db';
@@ -529,6 +530,21 @@ router.use('/analytics', analyticsRoutes);
 router.use('/newsletter', newsletterRoutes);
 router.use('/newsletter', newsletterLifecycleRoutes);
 router.use('/ai', aiRoutes);
+// Security hardening — CSRF double-submit check for every state-changing
+// admin request. Mounted once at the `/admin` prefix (Express strips the
+// matched prefix before invoking a plain middleware — verified against
+// node_modules/router/index.js — so `req.path` inside csrfProtection sees
+// paths relative to `/admin`, e.g. `/queues/...`) rather than repeated in
+// every admin-*.ts route file.
+//
+// Exemption: `/queues` (Bull-Board dashboard, mounted below). Bull-Board is
+// a third-party Express sub-app whose own rendered UI issues its own
+// fetch/XHR calls directly against its internal routes — those requests
+// never pass through our axios `apiClient` interceptor, so they can never
+// carry an `X-CSRF-Token` header. That surface is already covered by its
+// own three-layer defense (JWT+ADMIN role, optional IP allowlist, Origin
+// guard) — see admin-queues.ts's header comment.
+router.use('/admin', csrfProtection({ exempt: ['/queues'] }));
 router.use('/admin', adminRoutes);
 // P18 BE Track 2 / Aşama 3 — Bull-Board queue dashboard. Mounted at
 // `/admin/queues` so the public path is `/api/admin/queues/*`. Auth +

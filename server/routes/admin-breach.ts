@@ -18,9 +18,18 @@ import { requirePermission } from '../middleware/requirePermission';
 import { prisma } from '../config/db';
 import { logger } from '../config/logger';
 import { hashIp } from '../lib/crypto/hashIp';
+import { adminMutationLimiter, ADMIN_MUTATION_LIMITS } from '../middleware/rate-limit-tier';
 
 const router = Router();
 const adminOnly = [authenticate, requirePermission('breach.report')] as const;
+
+// Security hardening — rare, regulator-facing action; shared bucket across
+// "create" and "report to Kurul" since both are the same class of action.
+// See rate-limit-tier.ts for rationale.
+const breachReportLimiter = adminMutationLimiter(
+  'admin:breach-report',
+  ADMIN_MUTATION_LIMITS.BREACH_REPORT,
+);
 
 // KVKK m.12/5 accountability — every breach-record mutation must leave an
 // AuditLog row (Kurul-facing regulators expect a trail for exactly this
@@ -109,7 +118,7 @@ formunun yerini tutmaz. Kurul'un güncel formu kullanılmalıdır.`;
 
 // ─── POST /api/admin/breach ──────────────────────────────────────────────────
 
-router.post('/', ...adminOnly, async (req: AuthRequest, res: Response) => {
+router.post('/', ...adminOnly, breachReportLimiter, async (req: AuthRequest, res: Response) => {
   const parsed = createBreachSchema.safeParse(req.body);
   if (!parsed.success) {
     res.status(400).json({ status: 'error', issues: parsed.error.issues });
@@ -214,43 +223,48 @@ router.patch('/:id/status', ...adminOnly, async (req: AuthRequest, res: Response
 
 // ─── POST /api/admin/breach/:id/report-to-kurul ─────────────────────────────
 
-router.post('/:id/report-to-kurul', ...adminOnly, async (req: AuthRequest, res: Response) => {
-  try {
-    const existing = await prisma.breachIncident.findUnique({
-      where: { id: req.params['id'] },
-    });
+router.post(
+  '/:id/report-to-kurul',
+  ...adminOnly,
+  breachReportLimiter,
+  async (req: AuthRequest, res: Response) => {
+    try {
+      const existing = await prisma.breachIncident.findUnique({
+        where: { id: req.params['id'] },
+      });
 
-    if (!existing) {
-      res.status(404).json({ status: 'error', message: 'İhlal kaydı bulunamadı.' });
-      return;
+      if (!existing) {
+        res.status(404).json({ status: 'error', message: 'İhlal kaydı bulunamadı.' });
+        return;
+      }
+
+      if (existing.reportedToKurul) {
+        res.status(409).json({ status: 'error', message: "Bu ihlal zaten Kurul'a bildirildi." });
+        return;
+      }
+
+      const kurulFormDraft = generateKurulDraft(existing);
+
+      const incident = await prisma.breachIncident.update({
+        where: { id: req.params['id'] },
+        data: {
+          reportedToKurul: true,
+          reportedAt: new Date(),
+          kurulFormDraft,
+          status: 'REPORTED',
+        },
+      });
+
+      logger.info('breach_reported_to_kurul', { id: incident.id, actor: req.user?.id });
+      writeAudit(req, 'BREACH_REPORTED_TO_KURUL', incident.id, {
+        reportedAt: incident.reportedAt,
+      });
+      res.json({ status: 'ok', incident });
+    } catch (err) {
+      logger.error('breach_report_to_kurul_error', { err });
+      res.status(500).json({ status: 'error', message: 'Kurul bildirimi kaydedilemedi.' });
     }
-
-    if (existing.reportedToKurul) {
-      res.status(409).json({ status: 'error', message: "Bu ihlal zaten Kurul'a bildirildi." });
-      return;
-    }
-
-    const kurulFormDraft = generateKurulDraft(existing);
-
-    const incident = await prisma.breachIncident.update({
-      where: { id: req.params['id'] },
-      data: {
-        reportedToKurul: true,
-        reportedAt: new Date(),
-        kurulFormDraft,
-        status: 'REPORTED',
-      },
-    });
-
-    logger.info('breach_reported_to_kurul', { id: incident.id, actor: req.user?.id });
-    writeAudit(req, 'BREACH_REPORTED_TO_KURUL', incident.id, {
-      reportedAt: incident.reportedAt,
-    });
-    res.json({ status: 'ok', incident });
-  } catch (err) {
-    logger.error('breach_report_to_kurul_error', { err });
-    res.status(500).json({ status: 'error', message: 'Kurul bildirimi kaydedilemedi.' });
-  }
-});
+  },
+);
 
 export default router;

@@ -111,7 +111,8 @@ const columns: Column<PageItem>[] = [
   },
   {
     key: 'edit',
-    label: '',
+    label: 'Eylemler',
+    srOnlyLabel: true,
     align: 'right',
     render: (r) => (
       <Link

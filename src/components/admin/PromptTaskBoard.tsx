@@ -77,6 +77,7 @@ export const PromptTaskBoard: React.FC = () => {
           <select
             value={projectId}
             onChange={(e) => setProjectId(Number(e.target.value))}
+            aria-label="Proje seç"
             className="bg-black/50 border border-white/10 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-secondary"
             disabled={isRunning}
           >

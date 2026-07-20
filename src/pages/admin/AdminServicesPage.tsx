@@ -96,12 +96,14 @@ export const AdminServicesPage: React.FC = () => {
                       <div className="flex justify-end gap-2 opacity-60 group-hover:opacity-100 transition-opacity">
                         <button
                           type="button"
+                          aria-label={`${service.title} düzenle`}
                           className="p-2 hover:text-white hover:bg-white/10 rounded-lg transition-colors text-slate-400"
                         >
                           <Edit size={16} />
                         </button>
                         <button
                           type="button"
+                          aria-label={`${service.title} sil`}
                           className="p-2 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors text-slate-400"
                         >
                           <Trash2 size={16} />

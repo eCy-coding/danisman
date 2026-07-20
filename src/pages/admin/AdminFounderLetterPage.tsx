@@ -23,7 +23,7 @@ export const AdminFounderLetterPage: React.FC = () => {
     );
 
   return (
-    <main className="p-fib-6">
+    <div className="p-fib-6">
       <h1 className="text-golden-lg font-bold mb-fib-7">Founder Letter Merkezi</h1>
       <p className="text-sm opacity-60 mb-fib-8">
         Emre Can Yalçın aylık bülten yönetimi — Taslak, zamanlama, yayın, arşiv
@@ -125,6 +125,6 @@ export const AdminFounderLetterPage: React.FC = () => {
           </button>
         </div>
       )}
-    </main>
+    </div>
   );
 };

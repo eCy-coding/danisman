@@ -35,6 +35,18 @@ vi.mock('../config/logger', () => ({
   logger: { info: vi.fn(), error: vi.fn(), warn: vi.fn() },
 }));
 
+// Security hardening — admin-rbac.ts now mounts `rbacChangeLimiter`
+// (rate-limit-tier.ts) on PATCH /matrix. Without this mock, the limiter
+// talks to a REAL Redis if one happens to be reachable from the test
+// environment, and its 15-minute window counter persists ACROSS test runs
+// (observed directly: repeated local re-runs during development tripped a
+// real 429 after the file's own request count was well under budget,
+// because the real Redis key from a PRIOR run was still live). Forcing the
+// in-memory fallback here matches the existing convention in
+// admin-breach.test.ts / admin-dsar.test.ts / dsar-comments.test.ts and
+// makes this file hermetic again.
+vi.mock('../config/redis', () => ({ redis: { status: 'end' } }));
+
 vi.mock('../middleware/auth', async (importOriginal) => {
   const orig = await importOriginal<typeof import('../middleware/auth')>();
   return {

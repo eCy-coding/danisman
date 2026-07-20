@@ -11,7 +11,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { UploadCloud, Image as ImageIcon, Trash2 } from 'lucide-react';
 import { apiClient } from '../../lib/api';
-import { Breadcrumb, EmptyState, ConfirmDialog } from '../../components/admin/ui';
+import { Breadcrumb, EmptyState, ConfirmDialog, AdminQueryState } from '../../components/admin/ui';
 
 interface MediaItem {
   id: string;
@@ -97,6 +97,7 @@ export const AdminMediaLibraryPage: React.FC = () => {
           type="file"
           ref={fileInput}
           className="sr-only"
+          aria-label="Medya dosyası yükle"
           accept="image/*"
           onChange={(e) => {
             const f = e.target.files?.[0];
@@ -119,15 +120,21 @@ export const AdminMediaLibraryPage: React.FC = () => {
         <p className="text-xs text-slate-500 mt-1">JPG/PNG/WebP/AVIF · max 10MB</p>
       </div>
 
-      {list.isLoading ? (
-        <p className="text-slate-400">Yükleniyor…</p>
-      ) : items.length === 0 ? (
-        <EmptyState
-          title="Henüz görsel yok"
-          description="İlk görseli yüklemek için yukarıdaki düğmeyi kullanın."
-          icon={<ImageIcon size={24} />}
-        />
-      ) : (
+      <AdminQueryState
+        isLoading={list.isLoading}
+        isError={list.isError}
+        error={list.error}
+        isEmpty={items.length === 0}
+        onRetry={() => void list.refetch()}
+        empty={
+          <EmptyState
+            title="Henüz görsel yok"
+            description="İlk görseli yüklemek için yukarıdaki düğmeyi kullanın."
+            icon={<ImageIcon size={24} />}
+          />
+        }
+        errorTitle="Medya listesi yüklenemedi"
+      >
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
           {items.map((m) => (
             <article
@@ -154,7 +161,7 @@ export const AdminMediaLibraryPage: React.FC = () => {
             </article>
           ))}
         </div>
-      )}
+      </AdminQueryState>
 
       <ConfirmDialog
         open={!!confirmDel}

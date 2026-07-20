@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { adminFetch } from '../../lib/admin-fetch';
+import { ErrorState, EmptyState } from '../../components/admin/ui';
 
 type Regulator = 'SPK' | 'MASAK' | 'KVKK' | 'TCMB' | 'BDDK';
 type ComplianceItemStatus =
@@ -40,11 +41,17 @@ const RISK_COLOR = (score: number): string => {
 export const AdminFintechCompliancePage: React.FC = () => {
   const [regulatorFilter, setRegulatorFilter] = useState<Regulator | 'ALL'>('ALL');
 
-  const { data: items = [], isLoading } = useQuery<ComplianceItem[]>({
+  const {
+    data: items = [],
+    isLoading,
+    isError,
+    error,
+    refetch,
+  } = useQuery<ComplianceItem[]>({
     queryKey: ['fintech-compliance'],
     queryFn: async () => {
       const res = await adminFetch('/api/admin/fintech/compliance');
-      if (!res.ok) throw new Error('Failed to fetch compliance items');
+      if (!res.ok) throw new Error('Uyumluluk kalemleri yüklenemedi (HTTP ' + res.status + ')');
       const json = (await res.json()) as { data: ComplianceItem[] };
       return json.data;
     },
@@ -78,8 +85,19 @@ export const AdminFintechCompliancePage: React.FC = () => {
       </div>
     );
 
+  if (isError)
+    return (
+      <div className="p-fib-6">
+        <ErrorState
+          title="Uyumluluk verileri yüklenemedi"
+          description={error instanceof Error ? error.message : undefined}
+          onRetry={() => void refetch()}
+        />
+      </div>
+    );
+
   return (
-    <main className="p-fib-6">
+    <div className="p-fib-6">
       <h1 className="text-golden-lg font-bold mb-fib-7">Fintech Uyumluluk Panosu</h1>
       <p className="text-sm opacity-60 mb-fib-8">
         SPK + MASAK + KVKK + TCMB + BDDK — 5 regülatör, anlık durum, risk skoru, son tarih
@@ -97,7 +115,7 @@ export const AdminFintechCompliancePage: React.FC = () => {
             className="rounded-lg bg-surface-700 p-fib-5 text-center"
             aria-label={`${s.regulator} uyumluluk kartı`}
           >
-            <h3 className="font-bold text-sm mb-1">{s.regulator}</h3>
+            <h2 className="font-bold text-sm mb-1">{s.regulator}</h2>
             <p className="text-xs opacity-60 mb-2">{REGULATOR_DESCRIPTIONS[s.regulator]}</p>
             <p className="text-lg font-bold">
               {s.approvedItems}/{s.totalItems}
@@ -131,45 +149,58 @@ export const AdminFintechCompliancePage: React.FC = () => {
       </div>
 
       {/* Risk Heatmap */}
-      <div data-testid="risk-heatmap" aria-label="Risk Isı Haritası" className="space-y-2 mb-fib-8">
-        {filtered.map((item) => {
-          const daysLeft = item.dueDate
-            ? Math.ceil((new Date(item.dueDate).getTime() - today.getTime()) / 86400000)
-            : null;
-          return (
-            <div
-              key={item.id}
-              className="flex items-center gap-4 p-3 rounded"
-              style={{ borderLeft: `4px solid ${RISK_COLOR(item.riskScore)}` }}
-            >
-              <span
-                className="w-16 text-xs font-bold"
-                style={{ color: RISK_COLOR(item.riskScore) }}
+      {items.length === 0 ? (
+        <EmptyState
+          title="Henüz uyumluluk kalemi yok"
+          description="SPK/MASAK/KVKK/TCMB/BDDK kalemleri eklendiğinde burada listelenecek."
+        />
+      ) : filtered.length === 0 ? (
+        <p className="text-sm opacity-60 py-fib-6">Bu regülatör için kalem yok.</p>
+      ) : (
+        <div
+          data-testid="risk-heatmap"
+          aria-label="Risk Isı Haritası"
+          className="space-y-2 mb-fib-8"
+        >
+          {filtered.map((item) => {
+            const daysLeft = item.dueDate
+              ? Math.ceil((new Date(item.dueDate).getTime() - today.getTime()) / 86400000)
+              : null;
+            return (
+              <div
+                key={item.id}
+                className="flex items-center gap-4 p-3 rounded"
+                style={{ borderLeft: `4px solid ${RISK_COLOR(item.riskScore)}` }}
               >
-                {item.regulator}
-              </span>
-              <span className="flex-1 text-sm">{item.category}</span>
-              <span className="text-xs opacity-60">{item.status}</span>
-              <span
-                className="text-xs font-mono w-8 text-right"
-                style={{ color: RISK_COLOR(item.riskScore) }}
-                aria-label={`Risk skoru: ${item.riskScore}`}
-              >
-                {item.riskScore}
-              </span>
-              {daysLeft !== null && (
                 <span
-                  className="text-xs w-20 text-right"
-                  style={{ color: daysLeft < 30 ? '#ef4444' : '#f59e0b' }}
-                  aria-label={`Son tarih: ${daysLeft} gün`}
+                  className="w-16 text-xs font-bold"
+                  style={{ color: RISK_COLOR(item.riskScore) }}
                 >
-                  {daysLeft}g kaldı
+                  {item.regulator}
                 </span>
-              )}
-            </div>
-          );
-        })}
-      </div>
+                <span className="flex-1 text-sm">{item.category}</span>
+                <span className="text-xs opacity-60">{item.status}</span>
+                <span
+                  className="text-xs font-mono w-8 text-right"
+                  style={{ color: RISK_COLOR(item.riskScore) }}
+                  aria-label={`Risk skoru: ${item.riskScore}`}
+                >
+                  {item.riskScore}
+                </span>
+                {daysLeft !== null && (
+                  <span
+                    className="text-xs w-20 text-right"
+                    style={{ color: daysLeft < 30 ? '#ef4444' : '#f59e0b' }}
+                    aria-label={`Son tarih: ${daysLeft} gün`}
+                  >
+                    {daysLeft}g kaldı
+                  </span>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      )}
 
       {/* Deadline countdown */}
       <section>
@@ -194,6 +225,6 @@ export const AdminFintechCompliancePage: React.FC = () => {
             ))}
         </ul>
       </section>
-    </main>
+    </div>
   );
 };

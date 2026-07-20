@@ -192,7 +192,8 @@ export const AdminCollectionPage: React.FC = () => {
     }));
     cols.push({
       key: 'actions',
-      label: '',
+      label: 'Eylemler',
+      srOnlyLabel: true,
       align: 'right',
       render: (r) => (
         <div className="inline-flex gap-2">

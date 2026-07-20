@@ -45,7 +45,26 @@ const envSchema = z.object({
   SENTRY_DSN: z.string().url().optional(),
 
   // ── Optional knobs ──────────────────────────────────────
-  JWT_EXPIRES_IN: z.string().default('7d'),
+  // Security hardening — this now actually drives the access-token TTL
+  // (server/lib/refresh-token.ts ACCESS_TOKEN_EXPIRES_IN). Previously this
+  // field existed in the schema but was dead code: authController.ts signed
+  // with a hardcoded '15m' constant and never read this value. Default kept
+  // at '15m' (NOT the '7d' originally here, and NOT a wider '12h') because
+  // 15 minutes was already the live production value and demonstrably more
+  // defensible for an admin panel — the refresh-token flow (7d, rotation +
+  // reuse detection) already covers session longevity. Owner may override
+  // via env if a different balance is desired.
+  JWT_EXPIRES_IN: z
+    .string()
+    .regex(/^[0-9]+(s|m|h|d)$/, 'JWT_EXPIRES_IN must look like "15m", "12h", "7d"')
+    .default('15m'),
+  // Security hardening — CSRF double-submit cookie domain (see
+  // server/middleware/csrf.ts). Must be a shared parent domain (e.g.
+  // ".ecypro.com") so JS on the SPA origin (ecypro.com / www.ecypro.com) can
+  // read a cookie issued by the API origin (api.ecypro.com). Falls back to
+  // ".ecypro.com" in production with a warning when unset; unset in dev
+  // (host-only cookie, fine for localhost).
+  CSRF_COOKIE_DOMAIN: z.string().min(1).optional(),
   TRUST_PROXY: z.string().default('1'),
   LOG_LEVEL: z.enum(['error', 'warn', 'info', 'http', 'verbose', 'debug', 'silly']).default('info'),
 

@@ -3,7 +3,8 @@
  *
  * Stateful refresh token with rotation-on-use and reuse-detection:
  *
- *   - Access token:  15 minutes (short-lived)
+ *   - Access token:  15 minutes by default (short-lived, env-configurable —
+ *     see JWT_EXPIRES_IN below)
  *   - Refresh token: 7 days (long-lived, stored DB hashed)
  *
  * Rotation strategy:
@@ -18,9 +19,17 @@
 import crypto from 'crypto';
 import { prisma } from '../config/db';
 import { logger } from '../config/logger';
+import { env } from '../config/env';
 import { blacklistToken } from './jwt-blacklist';
 
-export const ACCESS_TOKEN_EXPIRES_IN = '15m';
+// Security hardening — was a hardcoded '15m' constant; now reads
+// JWT_EXPIRES_IN (default '15m', validated in config/env.ts) so the owner
+// can tune access-token TTL per environment without a code change. Default
+// intentionally NOT widened to a longer value — 15m was already the live
+// production behavior and is more defensible for an admin panel than a
+// longer default would be; the refresh-token flow below already covers
+// session longevity via rotation + reuse detection.
+export const ACCESS_TOKEN_EXPIRES_IN = env.JWT_EXPIRES_IN;
 export const REFRESH_TOKEN_EXPIRES_DAYS = 7;
 
 /**

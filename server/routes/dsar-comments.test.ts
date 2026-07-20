@@ -13,6 +13,8 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import request from 'supertest';
 import express from 'express';
+import { withCsrf } from '../test-utils/csrf';
+import { CSRF_COOKIE_DOMAIN_ENV_VAR } from '../middleware/csrf';
 
 // ── Hoisted mocks ────────────────────────────────────────────────────────────
 
@@ -139,10 +141,9 @@ describe('DELETE /api/v1/dsar/comments', () => {
   it('erases comments and returns 200 with the deleted count when admin', async () => {
     prismaMock.comment.deleteMany.mockResolvedValue({ count: 3 });
 
-    const res = await request(app)
-      .delete('/api/v1/dsar/comments')
-      .query({ email: TEST_EMAIL })
-      .set('x-test-role', 'ADMIN');
+    const res = await withCsrf(
+      request(app).delete('/api/v1/dsar/comments').query({ email: TEST_EMAIL }),
+    ).set('x-test-role', 'ADMIN');
 
     expect(res.status).toBe(200);
     expect(res.body.status).toBe('ok');
@@ -153,10 +154,9 @@ describe('DELETE /api/v1/dsar/comments', () => {
   });
 
   it('returns 403 for a non-admin user (erasure is admin-only)', async () => {
-    const res = await request(app)
-      .delete('/api/v1/dsar/comments')
-      .query({ email: TEST_EMAIL })
-      .set('x-test-role', 'USER');
+    const res = await withCsrf(
+      request(app).delete('/api/v1/dsar/comments').query({ email: TEST_EMAIL }),
+    ).set('x-test-role', 'USER');
 
     expect(res.status).toBe(403);
     expect(res.body.status).toBe('error');
@@ -164,10 +164,59 @@ describe('DELETE /api/v1/dsar/comments', () => {
   });
 
   it('returns 400 when the email query parameter is missing', async () => {
-    const res = await request(app).delete('/api/v1/dsar/comments').set('x-test-role', 'ADMIN');
+    const res = await withCsrf(request(app).delete('/api/v1/dsar/comments')).set(
+      'x-test-role',
+      'ADMIN',
+    );
 
     expect(res.status).toBe(400);
     expect(res.body.status).toBe('error');
     expect(prismaMock.comment.deleteMany).not.toHaveBeenCalled();
+  });
+
+  // CSRF enforcement is gated on CSRF_COOKIE_DOMAIN (see csrf.ts module
+  // header) — unset by default (server/test-utils/setup.ts doesn't set it),
+  // matching every preview deployment. A request with no CSRF header at all
+  // must still succeed in that mode; a PRESENT-but-wrong token is always
+  // rejected regardless of mode.
+  it('proceeds without a CSRF header/cookie when CSRF_COOKIE_DOMAIN is unset (default)', async () => {
+    prismaMock.comment.deleteMany.mockResolvedValue({ count: 3 });
+
+    const res = await request(app)
+      .delete('/api/v1/dsar/comments')
+      .query({ email: TEST_EMAIL })
+      .set('x-test-role', 'ADMIN');
+
+    expect(res.status).toBe(200);
+    expect(res.body.data.deleted).toBe(3);
+  });
+
+  it('still rejects a PRESENT but mismatched CSRF header even with enforcement off', async () => {
+    const res = await request(app)
+      .delete('/api/v1/dsar/comments')
+      .query({ email: TEST_EMAIL })
+      .set('x-test-role', 'ADMIN')
+      .set('Cookie', 'ecypro_csrf=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
+      .set('X-CSRF-Token', 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb');
+
+    expect(res.status).toBe(403);
+    expect(res.body.code).toBe('CSRF_TOKEN_INVALID');
+    expect(prismaMock.comment.deleteMany).not.toHaveBeenCalled();
+  });
+
+  it('rejects a missing CSRF header when CSRF_COOKIE_DOMAIN is explicitly set (enforcement on)', async () => {
+    process.env[CSRF_COOKIE_DOMAIN_ENV_VAR] = '.ecypro.com';
+    try {
+      const res = await request(app)
+        .delete('/api/v1/dsar/comments')
+        .query({ email: TEST_EMAIL })
+        .set('x-test-role', 'ADMIN');
+
+      expect(res.status).toBe(403);
+      expect(res.body.code).toBe('CSRF_TOKEN_INVALID');
+      expect(prismaMock.comment.deleteMany).not.toHaveBeenCalled();
+    } finally {
+      delete process.env[CSRF_COOKIE_DOMAIN_ENV_VAR];
+    }
   });
 });

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { adminFetch } from '../../lib/admin-fetch';
+import { ErrorState, EmptyState } from '../../components/admin/ui';
 
 type SuccessionStatus = 'ASSESSMENT' | 'PLANNING' | 'EXECUTION' | 'COMPLETED';
 type MilestoneStatus = 'PENDING' | 'IN_PROGRESS' | 'COMPLETED' | 'DELAYED';
@@ -48,11 +49,17 @@ const MILESTONE_STATUS_LABELS: Record<MilestoneStatus, string> = {
 };
 
 export const AdminSuccessionPage: React.FC = () => {
-  const { data: roadmaps = [], isLoading } = useQuery<SuccessionRoadmap[]>({
+  const {
+    data: roadmaps = [],
+    isLoading,
+    isError,
+    error,
+    refetch,
+  } = useQuery<SuccessionRoadmap[]>({
     queryKey: ['succession-roadmaps'],
     queryFn: async () => {
       const res = await adminFetch('/api/admin/succession-roadmaps');
-      if (!res.ok) throw new Error('Failed to fetch succession roadmaps');
+      if (!res.ok) throw new Error('Veraset planları yüklenemedi (HTTP ' + res.status + ')');
       const json = (await res.json()) as { data: SuccessionRoadmap[] };
       return json.data;
     },
@@ -67,43 +74,61 @@ export const AdminSuccessionPage: React.FC = () => {
       </div>
     );
 
+  if (isError)
+    return (
+      <div className="p-fib-6">
+        <ErrorState
+          title="Veraset planları yüklenemedi"
+          description={error instanceof Error ? error.message : undefined}
+          onRetry={() => void refetch()}
+        />
+      </div>
+    );
+
   return (
-    <main className="p-fib-6">
+    <div className="p-fib-6">
       <h1 className="text-golden-lg font-bold mb-fib-7">Veraset Planı Yönetimi</h1>
       <p className="text-sm opacity-60 mb-fib-8">
         Aile şirketi kuşak geçişi — Süreç yönetimi, KPI takibi, milestone izleme
       </p>
 
-      <div className="grid grid-cols-1 gap-fib-6 mb-fib-8">
-        {roadmaps.map((roadmap) => (
-          <article
-            key={roadmap.id}
-            aria-label={`${roadmap.clientName} veraset planı`}
-            className="rounded-lg bg-surface-700 p-fib-6"
-          >
-            <div className="flex items-center justify-between mb-fib-5">
-              <h2 className="font-semibold">{roadmap.clientName}</h2>
-              <span
-                className="px-2 py-0.5 rounded text-xs font-medium text-white"
-                style={{ backgroundColor: STATUS_COLORS[roadmap.status] }}
-              >
-                {roadmap.status}
-              </span>
-            </div>
-            <p className="text-sm opacity-70 mb-fib-5">
-              {roadmap.generationFrom}. Kuşak → {roadmap.generationTo}. Kuşak
-              {roadmap.estimatedYear && ` (Hedef: ${roadmap.estimatedYear})`}
-            </p>
-            <button
-              type="button"
-              className="text-sm underline text-blue-400"
-              onClick={() => setSelected(roadmap)}
+      {roadmaps.length === 0 ? (
+        <EmptyState
+          title="Henüz veraset planı yok"
+          description="Bir aile şirketi için kuşak geçiş planı oluşturulduğunda burada listelenecek."
+        />
+      ) : (
+        <div className="grid grid-cols-1 gap-fib-6 mb-fib-8">
+          {roadmaps.map((roadmap) => (
+            <article
+              key={roadmap.id}
+              aria-label={`${roadmap.clientName} veraset planı`}
+              className="rounded-lg bg-surface-700 p-fib-6"
             >
-              Detayları Gör
-            </button>
-          </article>
-        ))}
-      </div>
+              <div className="flex items-center justify-between mb-fib-5">
+                <h2 className="font-semibold">{roadmap.clientName}</h2>
+                <span
+                  className="px-2 py-0.5 rounded text-xs font-medium text-white"
+                  style={{ backgroundColor: STATUS_COLORS[roadmap.status] }}
+                >
+                  {roadmap.status}
+                </span>
+              </div>
+              <p className="text-sm opacity-70 mb-fib-5">
+                {roadmap.generationFrom}. Kuşak → {roadmap.generationTo}. Kuşak
+                {roadmap.estimatedYear && ` (Hedef: ${roadmap.estimatedYear})`}
+              </p>
+              <button
+                type="button"
+                className="text-sm underline text-blue-400"
+                onClick={() => setSelected(roadmap)}
+              >
+                Detayları Gör
+              </button>
+            </article>
+          ))}
+        </div>
+      )}
 
       {selected && (
         <div
@@ -151,6 +176,6 @@ export const AdminSuccessionPage: React.FC = () => {
           </section>
         </div>
       )}
-    </main>
+    </div>
   );
 };

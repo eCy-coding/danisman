@@ -4,6 +4,7 @@ import express from 'express';
 import commentsRouter from '../routes/comments';
 import adminCommentsRouter from '../routes/admin-comments';
 import dsarRouter from '../routes/dsar-comments';
+import { withCsrf } from '../test-utils/csrf';
 
 // ── Mocks ──────────────────────────────────────────────────────────────────────
 
@@ -226,7 +227,9 @@ describe('Comments API', () => {
 
     it('DELETE /dsar/comments erases all user comments', async () => {
       vi.mocked(prisma.comment.deleteMany).mockResolvedValue({ count: 3 } as never);
-      const res = await request(app).delete('/api/v1/dsar/comments?email=test@example.com');
+      const res = await withCsrf(
+        request(app).delete('/api/v1/dsar/comments?email=test@example.com'),
+      );
       expect(res.status).toBe(200);
       expect(res.body.data.deleted).toBe(3);
     });

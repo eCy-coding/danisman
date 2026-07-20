@@ -8,10 +8,10 @@ export function AdminLeadsPage() {
       <Helmet>
         <title>Aday Yönetimi — eCyPro Admin</title>
       </Helmet>
-      <main>
+      <div>
         <h1>Aday Kayıt</h1>
         <LeadCaptureForm />
-      </main>
+      </div>
     </>
   );
 }

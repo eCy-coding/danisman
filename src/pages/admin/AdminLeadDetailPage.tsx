@@ -19,6 +19,8 @@ import {
   fieldClassName,
   StatCard,
   EmptyState,
+  ErrorState,
+  getErrorMessage,
 } from '../../components/admin/ui';
 
 interface Contact {
@@ -127,6 +129,12 @@ export const AdminLeadDetailPage: React.FC = () => {
 
       {contact.isLoading ? (
         <p className="text-slate-400">Yükleniyor…</p>
+      ) : contact.isError ? (
+        <ErrorState
+          title="Lead yüklenemedi"
+          description={getErrorMessage(contact.error)}
+          onRetry={() => void contact.refetch()}
+        />
       ) : !c ? (
         <EmptyState
           title="Lead bulunamadı"
@@ -185,6 +193,12 @@ export const AdminLeadDetailPage: React.FC = () => {
               <div className="space-y-3 mb-4">
                 {notes.isLoading ? (
                   <p className="text-slate-500 text-sm">Yükleniyor…</p>
+                ) : notes.isError ? (
+                  <ErrorState
+                    title="Notlar yüklenemedi"
+                    description={getErrorMessage(notes.error)}
+                    onRetry={() => void notes.refetch()}
+                  />
                 ) : n.length === 0 ? (
                   <p className="text-slate-500 text-sm">Henüz not yok.</p>
                 ) : (
@@ -218,7 +232,11 @@ export const AdminLeadDetailPage: React.FC = () => {
           </article>
 
           <aside className="space-y-3">
-            <StatCard label="Skor (stub)" value="—" hint="P57.6'da scoring genişletme" />
+            <StatCard
+              label="Skor"
+              value="—"
+              hint="Otomatik lead skorlama henüz bu sayfada aktif değil (P57.6)"
+            />
             <StatCard label="Etkileşim" value={n.length} hint="not sayısı" />
             <StatCard
               label="Durum"

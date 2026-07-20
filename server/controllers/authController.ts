@@ -7,6 +7,7 @@ import { HttpError } from '../middleware/error';
 import { blacklistToken } from '../lib/jwt-blacklist';
 import { sendEmailVerification } from '../lib/email';
 import { checkPasswordBreached } from '../lib/hibp';
+import { issueCsrfCookie } from '../middleware/csrf';
 import {
   ACCESS_TOKEN_EXPIRES_IN,
   REFRESH_TOKEN_EXPIRES_DAYS,
@@ -168,6 +169,12 @@ export const login = async (req: Request, res: Response, next: NextFunction): Pr
       });
     }
 
+    // Security hardening — issue the admin CSRF double-submit cookie at
+    // session-establish. See server/middleware/csrf.ts for the full
+    // threat-model writeup (this app has no auth cookies, so this is
+    // defense-in-depth on top of the Origin guard, not the primary control).
+    issueCsrfCookie(res);
+
     res.json({
       status: 'success',
       data: { token: accessToken, refreshToken: refreshRaw, user: sanitizeUser(user) },
@@ -258,6 +265,8 @@ export const register = async (req: Request, res: Response, next: NextFunction):
         /* mailer fallback already logs; never throw out of signup */
       });
 
+    issueCsrfCookie(res);
+
     res.status(201).json({
       status: 'success',
       data: { token: accessToken, refreshToken: refreshRaw, user: sanitizeUser(user) },
@@ -317,6 +326,11 @@ export const refresh = async (req: Request, res: Response, next: NextFunction): 
       req.ip ?? undefined,
       req.headers['user-agent'] ?? undefined,
     );
+
+    // Reissue the CSRF cookie too — a session that lives on purely via
+    // refresh-token rotation (no re-login for days) must not silently
+    // outlive the cookie's maxAge and start 403ing admin mutations.
+    issueCsrfCookie(res);
 
     res.json({
       status: 'success',

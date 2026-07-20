@@ -20,7 +20,10 @@ export const EmptyState: React.FC<EmptyStateProps> = ({ title, description, icon
       <div className="w-16 h-16 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 mb-4">
         {icon ?? <Inbox size={24} aria-hidden="true" />}
       </div>
-      <h3 className="text-base font-semibold text-white mb-1">{title}</h3>
+      {/* h2 — EmptyState is almost always the direct content section under a
+          page's h1 title; h3 here skipped a level on most call sites
+          (axe heading-order). */}
+      <h2 className="text-base font-semibold text-white mb-1">{title}</h2>
       {description && <p className="text-sm text-slate-400 max-w-md mb-5">{description}</p>}
       {action}
     </div>
