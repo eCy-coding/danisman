@@ -2,6 +2,7 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { SkeletonList } from '../../components/admin/ui/Skeleton';
 import { useQuery } from '@tanstack/react-query';
 import { adminFetch } from '../../lib/admin-fetch';
+import { ErrorState, EmptyState } from '../../components/admin/ui';
 
 type ESGPillar = 'ENVIRONMENTAL' | 'SOCIAL' | 'GOVERNANCE';
 
@@ -33,11 +34,17 @@ const PILLAR_COLORS: Record<ESGPillar, string> = {
 export const AdminESGPage: React.FC = () => {
   const [activePillar, setActivePillar] = useState<ESGPillar | 'ALL'>('ALL');
 
-  const { data: datapoints = [], isLoading: dpLoading } = useQuery<ESGDatapoint[]>({
+  const {
+    data: datapoints = [],
+    isLoading: dpLoading,
+    isError: dpIsError,
+    error: dpError,
+    refetch: refetchDatapoints,
+  } = useQuery<ESGDatapoint[]>({
     queryKey: ['esg-datapoints'],
     queryFn: async () => {
       const res = await adminFetch('/api/admin/esg/datapoints');
-      if (!res.ok) throw new Error('Failed to fetch ESG datapoints');
+      if (!res.ok) throw new Error('ESG veri noktaları yüklenemedi (HTTP ' + res.status + ')');
       const json = (await res.json()) as { data: ESGDatapoint[] };
       return json.data;
     },
@@ -85,6 +92,18 @@ export const AdminESGPage: React.FC = () => {
     return (
       <main className="p-fib-6">
         <SkeletonList count={10} withAvatar={false} />
+      </main>
+    );
+  }
+
+  if (dpIsError) {
+    return (
+      <main className="p-fib-6">
+        <ErrorState
+          title="ESG veri kümesi yüklenemedi"
+          description={dpError instanceof Error ? dpError.message : undefined}
+          onRetry={() => void refetchDatapoints()}
+        />
       </main>
     );
   }
@@ -162,31 +181,40 @@ export const AdminESGPage: React.FC = () => {
       </div>
 
       {/* R7-P3.4: filtered list with "load more" pagination (50 rows page) */}
-      <ul aria-label="ESRS Veri Noktaları" className="space-y-1">
-        {filtered.slice(0, visibleCount).map((dp) => (
-          <li
-            key={dp.id}
-            className="flex items-center gap-4 text-sm py-1 border-b border-surface-600"
-          >
-            <span className="font-mono text-xs w-20 opacity-80">{dp.esrsCode}</span>
-            <span
-              className="w-2 h-2 rounded-full flex-shrink-0"
-              style={{ backgroundColor: PILLAR_COLORS[dp.pillar] }}
-              aria-label={dp.pillar}
-            />
-            <span className="flex-1">{dp.metricName}</span>
-            {dp.unit && <span className="text-xs opacity-50">{dp.unit}</span>}
-            {dp.isDoubleMaterial && (
-              <span className="text-xs bg-purple-900 text-purple-300 px-1 rounded">
-                Çift Materyel
-              </span>
-            )}
-            {dp.isMandatory && (
-              <span className="text-xs bg-blue-900 text-blue-300 px-1 rounded">Zorunlu</span>
-            )}
-          </li>
-        ))}
-      </ul>
+      {datapoints.length === 0 ? (
+        <EmptyState
+          title="ESG veri kümesi henüz yüklenmedi"
+          description="ESRS veri noktası kataloğu henüz seed edilmemiş."
+        />
+      ) : filtered.length === 0 ? (
+        <p className="text-sm opacity-60 py-fib-6">Filtreyle eşleşen veri noktası yok.</p>
+      ) : (
+        <ul aria-label="ESRS Veri Noktaları" className="space-y-1">
+          {filtered.slice(0, visibleCount).map((dp) => (
+            <li
+              key={dp.id}
+              className="flex items-center gap-4 text-sm py-1 border-b border-surface-600"
+            >
+              <span className="font-mono text-xs w-20 opacity-80">{dp.esrsCode}</span>
+              <span
+                className="w-2 h-2 rounded-full flex-shrink-0"
+                style={{ backgroundColor: PILLAR_COLORS[dp.pillar] }}
+                aria-label={dp.pillar}
+              />
+              <span className="flex-1">{dp.metricName}</span>
+              {dp.unit && <span className="text-xs opacity-50">{dp.unit}</span>}
+              {dp.isDoubleMaterial && (
+                <span className="text-xs bg-purple-900 text-purple-300 px-1 rounded">
+                  Çift Materyel
+                </span>
+              )}
+              {dp.isMandatory && (
+                <span className="text-xs bg-blue-900 text-blue-300 px-1 rounded">Zorunlu</span>
+              )}
+            </li>
+          ))}
+        </ul>
+      )}
       {filtered.length > visibleCount && (
         <div className="mt-fib-6 flex items-center justify-between text-sm">
           <span className="opacity-50">

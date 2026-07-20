@@ -1,15 +1,10 @@
 import React, { useState, useCallback } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import {
-  AreaChart,
-  Area,
-  BarChart,
-  Bar,
   LineChart,
   Line,
   XAxis,
   YAxis,
-  CartesianGrid,
   Tooltip,
   ResponsiveContainer,
   Cell,
@@ -35,6 +30,7 @@ import {
 import { motion } from 'motion/react';
 import { apiClient } from '../../lib/api';
 import { useSSE, type DashboardMetrics } from '../../hooks/useSSE';
+import { AdminQueryState, EmptyState } from '../../components/admin/ui';
 
 interface StatsData {
   unreadContacts: number;
@@ -80,7 +76,7 @@ const STATUS_COLORS: Record<string, string> = {
 };
 
 const BookingAnalyticsWidget: React.FC = () => {
-  const { data, isLoading } = useQuery<BookingAnalyticsData>({
+  const { data, isLoading, isError, error, refetch } = useQuery<BookingAnalyticsData>({
     queryKey: ['admin-booking-analytics'],
     queryFn: () => apiClient.get<BookingAnalyticsData>('/bookings/analytics').then((r) => r.data),
     staleTime: 60_000,
@@ -101,159 +97,147 @@ const BookingAnalyticsWidget: React.FC = () => {
         <span className="text-xs text-slate-500 ml-auto">Son 90 gün trend</span>
       </div>
 
-      {isLoading ? (
-        <div className="text-slate-500 text-sm text-center py-6">Yükleniyor...</div>
-      ) : !analytics ? (
-        <div className="text-slate-500 text-sm text-center py-6">Veri yok</div>
-      ) : (
-        <>
-          {/* KPI row */}
-          <div className="grid grid-cols-3 gap-3">
-            {[
-              {
-                label: 'Toplam',
-                value: analytics.summary.total,
-                icon: Calendar,
-                color: 'text-slate-400',
-              },
-              {
-                label: 'Tamamlandı',
-                value: analytics.summary.completed,
-                icon: CheckCircle,
-                color: 'text-green-400',
-              },
-              {
-                label: 'İptal Oranı',
-                value: `%${analytics.summary.cancelRate}`,
-                icon: XCircle,
-                color: 'text-red-400',
-              },
-            ].map(({ label, value, icon: Icon, color }) => (
-              <div key={label} className="bg-white/3 rounded-xl p-3 text-center">
-                <Icon size={14} className={`${color} mx-auto mb-1`} />
-                <p className="text-lg font-bold text-white">{value}</p>
-                <p className="text-[10px] text-slate-500">{label}</p>
-              </div>
-            ))}
-          </div>
-
-          {/* Trend sparkline */}
-          {analytics.trend.length > 0 && (
-            <div>
-              <p className="text-xs text-slate-500 mb-2">Günlük booking trendi</p>
-              <ResponsiveContainer width="100%" height={80}>
-                <LineChart
-                  data={analytics.trend}
-                  margin={{ top: 2, bottom: 2, left: -35, right: 5 }}
-                >
-                  <XAxis
-                    dataKey="day"
-                    tick={{ fontSize: 9, fill: '#475569' }}
-                    tickLine={false}
-                    axisLine={false}
-                    tickFormatter={(d) => d.slice(5)}
-                    interval={Math.floor(analytics.trend.length / 4)}
-                  />
-                  <YAxis
-                    tick={{ fontSize: 9, fill: '#475569' }}
-                    tickLine={false}
-                    axisLine={false}
-                    allowDecimals={false}
-                  />
-                  <Tooltip
-                    contentStyle={{
-                      background: '#0f172a',
-                      border: '1px solid rgba(255,255,255,0.08)',
-                      borderRadius: 6,
-                      fontSize: 11,
-                    }}
-                    labelFormatter={(d) => String(d)}
-                  />
-                  <Line
-                    type="monotone"
-                    dataKey="count"
-                    stroke="#2563eb"
-                    strokeWidth={1.5}
-                    dot={false}
-                    name="Bookings"
-                  />
-                </LineChart>
-              </ResponsiveContainer>
+      <AdminQueryState
+        isLoading={isLoading}
+        isError={isError}
+        error={error}
+        isEmpty={!analytics}
+        onRetry={() => void refetch()}
+        loading={<div className="text-slate-500 text-sm text-center py-6">Yükleniyor...</div>}
+        emptyTitle="Veri yok"
+      >
+        {analytics && (
+          <>
+            {/* KPI row */}
+            <div className="grid grid-cols-3 gap-3">
+              {[
+                {
+                  label: 'Toplam',
+                  value: analytics.summary.total,
+                  icon: Calendar,
+                  color: 'text-slate-400',
+                },
+                {
+                  label: 'Tamamlandı',
+                  value: analytics.summary.completed,
+                  icon: CheckCircle,
+                  color: 'text-green-400',
+                },
+                {
+                  label: 'İptal Oranı',
+                  value: `%${analytics.summary.cancelRate}`,
+                  icon: XCircle,
+                  color: 'text-red-400',
+                },
+              ].map(({ label, value, icon: Icon, color }) => (
+                <div key={label} className="bg-white/3 rounded-xl p-3 text-center">
+                  <Icon size={14} className={`${color} mx-auto mb-1`} />
+                  <p className="text-lg font-bold text-white">{value}</p>
+                  <p className="text-[10px] text-slate-500">{label}</p>
+                </div>
+              ))}
             </div>
-          )}
 
-          {/* Status pie (last 30d) */}
-          {pieData.length > 0 && (
-            <div>
-              <p className="text-xs text-slate-500 mb-2">Son 30 gün — durum dağılımı</p>
-              <ResponsiveContainer width="100%" height={120}>
-                <PieChart>
-                  <Pie
-                    data={pieData}
-                    dataKey="value"
-                    nameKey="name"
-                    cx="40%"
-                    cy="50%"
-                    outerRadius={50}
-                    paddingAngle={2}
+            {/* Trend sparkline */}
+            {analytics.trend.length > 0 && (
+              <div>
+                <p className="text-xs text-slate-500 mb-2">Günlük booking trendi</p>
+                <ResponsiveContainer width="100%" height={80}>
+                  <LineChart
+                    data={analytics.trend}
+                    margin={{ top: 2, bottom: 2, left: -35, right: 5 }}
                   >
-                    {pieData.map((entry) => (
-                      <Cell key={entry.name} fill={STATUS_COLORS[entry.name] ?? '#64748b'} />
-                    ))}
-                  </Pie>
-                  <Legend
-                    layout="vertical"
-                    align="right"
-                    verticalAlign="middle"
-                    formatter={(v: string) => (
-                      <span style={{ fontSize: 10, color: '#94a3b8' }}>{v}</span>
-                    )}
-                    wrapperStyle={{ fontSize: 10 }}
-                  />
-                  <Tooltip
-                    contentStyle={{
-                      background: '#0f172a',
-                      border: '1px solid rgba(255,255,255,0.08)',
-                      borderRadius: 6,
-                      fontSize: 11,
-                    }}
-                  />
-                </PieChart>
-              </ResponsiveContainer>
-            </div>
-          )}
+                    <XAxis
+                      dataKey="day"
+                      tick={{ fontSize: 9, fill: '#475569' }}
+                      tickLine={false}
+                      axisLine={false}
+                      tickFormatter={(d) => d.slice(5)}
+                      interval={Math.floor(analytics.trend.length / 4)}
+                    />
+                    <YAxis
+                      tick={{ fontSize: 9, fill: '#475569' }}
+                      tickLine={false}
+                      axisLine={false}
+                      allowDecimals={false}
+                    />
+                    <Tooltip
+                      contentStyle={{
+                        background: '#0f172a',
+                        border: '1px solid rgba(255,255,255,0.08)',
+                        borderRadius: 6,
+                        fontSize: 11,
+                      }}
+                      labelFormatter={(d) => String(d)}
+                    />
+                    <Line
+                      type="monotone"
+                      dataKey="count"
+                      stroke="#2563eb"
+                      strokeWidth={1.5}
+                      dot={false}
+                      name="Bookings"
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
+            )}
 
-          {/* No-show alert */}
-          {analytics.summary.noShowRate > 20 && (
-            <div className="flex items-center gap-2 text-xs text-amber-400 bg-amber-500/8 border border-amber-500/20 rounded-lg px-3 py-2">
-              <AlertCircle size={13} />
-              No-show oranı yüksek (%{analytics.summary.noShowRate}) — reminder e-postası aktif mi?
-            </div>
-          )}
-        </>
-      )}
+            {/* Status pie (last 30d) */}
+            {pieData.length > 0 && (
+              <div>
+                <p className="text-xs text-slate-500 mb-2">Son 30 gün — durum dağılımı</p>
+                <ResponsiveContainer width="100%" height={120}>
+                  <PieChart>
+                    <Pie
+                      data={pieData}
+                      dataKey="value"
+                      nameKey="name"
+                      cx="40%"
+                      cy="50%"
+                      outerRadius={50}
+                      paddingAngle={2}
+                    >
+                      {pieData.map((entry) => (
+                        <Cell key={entry.name} fill={STATUS_COLORS[entry.name] ?? '#64748b'} />
+                      ))}
+                    </Pie>
+                    <Legend
+                      layout="vertical"
+                      align="right"
+                      verticalAlign="middle"
+                      formatter={(v: string) => (
+                        <span style={{ fontSize: 10, color: '#94a3b8' }}>{v}</span>
+                      )}
+                      wrapperStyle={{ fontSize: 10 }}
+                    />
+                    <Tooltip
+                      contentStyle={{
+                        background: '#0f172a',
+                        border: '1px solid rgba(255,255,255,0.08)',
+                        borderRadius: 6,
+                        fontSize: 11,
+                      }}
+                    />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
+            )}
+
+            {/* No-show alert */}
+            {analytics.summary.noShowRate > 20 && (
+              <div className="flex items-center gap-2 text-xs text-amber-400 bg-amber-500/8 border border-amber-500/20 rounded-lg px-3 py-2">
+                <AlertCircle size={13} />
+                No-show oranı yüksek (%{analytics.summary.noShowRate}) — reminder e-postası aktif
+                mi?
+              </div>
+            )}
+          </>
+        )}
+      </AdminQueryState>
     </div>
   );
 };
-
-// Simulated weekly trend (replace with real GA4 API in Phase 34-T03)
-const MOCK_TREND = [
-  { day: 'Pzt', visits: 312, conversions: 8 },
-  { day: 'Sal', visits: 285, conversions: 5 },
-  { day: 'Çar', visits: 401, conversions: 12 },
-  { day: 'Per', visits: 367, conversions: 9 },
-  { day: 'Cum', visits: 430, conversions: 15 },
-  { day: 'Cmt', visits: 198, conversions: 4 },
-  { day: 'Paz', visits: 145, conversions: 3 },
-];
-
-const MOCK_SOURCES = [
-  { source: 'Organic', value: 45 },
-  { source: 'Direct', value: 28 },
-  { source: 'Social', value: 15 },
-  { source: 'Referral', value: 8 },
-  { source: 'Email', value: 4 },
-];
 
 interface KPICardProps {
   label: string;
@@ -321,7 +305,14 @@ export const AdminAnalyticsPage: React.FC = () => {
 
   const { isConnected, reconnect } = useSSE({ onMetrics: handleMetrics });
 
-  const { data, isLoading, refetch, isFetching } = useQuery<ApiStatsResponse>({
+  const {
+    data,
+    isLoading,
+    isError: statsIsError,
+    error: statsError,
+    refetch,
+    isFetching,
+  } = useQuery<ApiStatsResponse>({
     queryKey: ['admin-analytics-stats'],
     queryFn: () => apiClient.get<ApiStatsResponse>('/admin/stats').then((r) => r.data),
     refetchInterval: isConnected ? 60_000 : 30_000,
@@ -403,139 +394,69 @@ export const AdminAnalyticsPage: React.FC = () => {
       )}
 
       {/* KPI Grid */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <KPICard
-          label="Unread Contacts"
-          value={isLoading ? '…' : (stats?.unreadContacts ?? 0)}
-          icon={Mail}
-          color="bg-red-500/10 text-red-400"
-          sub={`${stats?.totalContacts ?? 0} total`}
-        />
-        <KPICard
-          label="Active Subscribers"
-          value={isLoading ? '…' : (stats?.activeSubscribers ?? 0)}
-          icon={Users}
-          color="bg-blue-500/10 text-blue-400"
-        />
-        <KPICard
-          label="Pending Bookings"
-          value={isLoading ? '…' : (stats?.pendingBookings ?? 0)}
-          icon={Calendar}
-          color="bg-yellow-500/10 text-yellow-400"
-        />
-        <KPICard
-          label="Weekly Interactions"
-          value={isLoading ? '…' : (stats?.weeklyInteractions ?? 0)}
-          icon={Eye}
-          color="bg-green-500/10 text-green-400"
-          sub="Last 7 days"
-        />
-      </div>
+      <AdminQueryState
+        isLoading={isLoading}
+        isError={statsIsError}
+        error={statsError}
+        onRetry={() => void refetch()}
+        errorTitle="İstatistikler yüklenemedi"
+      >
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <KPICard
+            label="Unread Contacts"
+            value={stats?.unreadContacts ?? 0}
+            icon={Mail}
+            color="bg-red-500/10 text-red-400"
+            sub={`${stats?.totalContacts ?? 0} total`}
+          />
+          <KPICard
+            label="Active Subscribers"
+            value={stats?.activeSubscribers ?? 0}
+            icon={Users}
+            color="bg-blue-500/10 text-blue-400"
+          />
+          <KPICard
+            label="Pending Bookings"
+            value={stats?.pendingBookings ?? 0}
+            icon={Calendar}
+            color="bg-yellow-500/10 text-yellow-400"
+          />
+          <KPICard
+            label="Weekly Interactions"
+            value={stats?.weeklyInteractions ?? 0}
+            icon={Eye}
+            color="bg-green-500/10 text-green-400"
+            sub="Last 7 days"
+          />
+        </div>
+      </AdminQueryState>
 
-      {/* Charts */}
+      {/* Charts — GA4 Data API not wired yet (AP3: no fake traffic numbers).
+          Real lead-trend + lead-source data already lives on the Operatör
+          Panosu (/admin) via /admin/dashboard/charts; this panel is
+          specifically GA4 *site traffic*, which has no backend endpoint. */}
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
-        {/* Traffic trend */}
         <div className="xl:col-span-2 bg-white/3 border border-white/5 rounded-2xl p-6">
           <h3 className="text-sm font-semibold text-white mb-4">Weekly Visits &amp; Conversions</h3>
-          <ResponsiveContainer width="100%" height={200}>
-            <AreaChart data={MOCK_TREND} margin={{ top: 5, right: 10, bottom: 5, left: -30 }}>
-              <defs>
-                <linearGradient id="visitGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#2563eb" stopOpacity={0.3} />
-                  <stop offset="95%" stopColor="#2563eb" stopOpacity={0} />
-                </linearGradient>
-                <linearGradient id="convGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#10b981" stopOpacity={0.3} />
-                  <stop offset="95%" stopColor="#10b981" stopOpacity={0} />
-                </linearGradient>
-              </defs>
-              <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
-              <XAxis
-                dataKey="day"
-                tick={{ fontSize: 11, fill: '#64748b' }}
-                axisLine={false}
-                tickLine={false}
-              />
-              <YAxis tick={{ fontSize: 11, fill: '#64748b' }} axisLine={false} tickLine={false} />
-              <Tooltip
-                contentStyle={{
-                  background: '#0f172a',
-                  border: '1px solid rgba(255,255,255,0.08)',
-                  borderRadius: 8,
-                  color: '#e2e8f0',
-                }}
-              />
-              <Area
-                type="monotone"
-                dataKey="visits"
-                stroke="#2563eb"
-                fill="url(#visitGrad)"
-                strokeWidth={2}
-                dot={false}
-                name="Visits"
-              />
-              <Area
-                type="monotone"
-                dataKey="conversions"
-                stroke="#10b981"
-                fill="url(#convGrad)"
-                strokeWidth={2}
-                dot={false}
-                name="Conversions"
-              />
-            </AreaChart>
-          </ResponsiveContainer>
-          <p className="text-xs text-slate-500 mt-2 text-center">
-            Connect GA4 API for real-time data (P34-T03)
-          </p>
+          <EmptyState
+            icon={<BarChart3 size={24} />}
+            title="GA4 bağlantısı yapılandırılmamış"
+            description="Gerçek zamanlı trafik verisi için GA4 Data API entegrasyonu gereklidir. VITE_GA_TRACKING_ID env değişkenini ayarlayın."
+          />
         </div>
 
-        {/* Traffic sources */}
         <div className="bg-white/3 border border-white/5 rounded-2xl p-6">
           <h3 className="text-sm font-semibold text-white mb-4">Traffic Sources</h3>
-          <ResponsiveContainer width="100%" height={200}>
-            <BarChart data={MOCK_SOURCES} layout="vertical" margin={{ left: 20, right: 10 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" horizontal={false} />
-              <XAxis
-                type="number"
-                tick={{ fontSize: 10, fill: '#64748b' }}
-                axisLine={false}
-                tickLine={false}
-              />
-              <YAxis
-                dataKey="source"
-                type="category"
-                tick={{ fontSize: 11, fill: '#64748b' }}
-                axisLine={false}
-                tickLine={false}
-                width={60}
-              />
-              <Tooltip
-                contentStyle={{
-                  background: '#0f172a',
-                  border: '1px solid rgba(255,255,255,0.08)',
-                  borderRadius: 8,
-                  color: '#e2e8f0',
-                }}
-              />
-              <Bar dataKey="value" fill="#2563eb" radius={[0, 4, 4, 0]} name="% Share" />
-            </BarChart>
-          </ResponsiveContainer>
+          <EmptyState
+            icon={<BarChart3 size={24} />}
+            title="GA4 bağlantısı yapılandırılmamış"
+            description="Kaynak dağılımı GA4 bağlandığında burada görünecek."
+          />
         </div>
       </div>
 
       {/* P37-T09: Booking Analytics Widget */}
       <BookingAnalyticsWidget />
-
-      {/* GA4 Integration Notice */}
-      <div className="bg-blue-500/5 border border-blue-500/20 rounded-2xl p-4 text-sm text-blue-300">
-        <strong>📊 GA4 Integration:</strong> Gerçek zamanlı trafik verisi için GA4 Data API
-        entegrasyonu gereklidir.
-        <code className="ml-2 text-xs bg-blue-500/10 px-1.5 py-0.5 rounded font-mono">
-          VITE_GA_TRACKING_ID
-        </code>{' '}
-        env değişkenini ayarlayın.
-      </div>
     </div>
   );
 };
