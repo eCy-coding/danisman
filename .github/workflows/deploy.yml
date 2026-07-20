@@ -33,10 +33,15 @@ jobs:
   deploy-frontend:
     name: Deploy Frontend (Vercel)
     runs-on: ubuntu-latest
-    # 480-route prerender is minutes-long by design; cap it so a wedged
-    # browser fails loud in ~2h instead of burning the 6h job limit (a 6h
-    # cancellation also skips every downstream signal).
-    timeout-minutes: 120
+    # Measured: ~2h for the full 471-route prerender on a 2-core runner even
+    # with in-process concurrency (the work is CPU-bound, so more pages per
+    # browser only timeshares the same two cores). 180 keeps a wedged browser
+    # from burning the 6h job limit — where a *cancellation* would also skip
+    # every downstream signal — while leaving real runs headroom. Cutting the
+    # wall-clock properly needs sharding across matrix runners; tracked as a
+    # follow-up, deliberately not attempted while the pipeline was being
+    # brought back to life.
+    timeout-minutes: 180
     # Only on a green CI run, and only when Vercel is configured.
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
