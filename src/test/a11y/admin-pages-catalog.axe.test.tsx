@@ -626,7 +626,11 @@ describe.each(PAGES)('Admin a11y factory — $name', (entry) => {
     entry.configure?.();
   });
 
-  it('renders and passes axe-core with 0 violations', async () => {
+  // Rendering a full admin page and running a complete axe pass over its DOM
+  // legitimately exceeds Vitest's 5s default — the heaviest pages measured
+  // 7–29s on CI hardware. The assertion is unchanged; only the clock is
+  // realistic for what this test actually does.
+  it('renders and passes axe-core with 0 violations', { timeout: 60_000 }, async () => {
     const loader = pageModules[entry.modulePath];
     if (!loader) {
       throw new Error(`No module found for glob key ${entry.modulePath}`);
