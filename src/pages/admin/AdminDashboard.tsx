@@ -207,7 +207,7 @@ export const AdminDashboard: React.FC = () => {
           animate={{ opacity: 1 }}
           className="bg-[#0A101F]/80 border border-white/5 rounded-2xl p-6"
         >
-          <h3 className="text-lg font-serif text-white mb-4">Top Pages (Live)</h3>
+          <h2 className="text-lg font-serif text-white mb-4">Top Pages (Live)</h2>
           <div className="space-y-3">
             {metrics.topPages.slice(0, 5).map((page, i) => (
               <div key={page.page} className="flex items-center gap-4">
@@ -226,7 +226,7 @@ export const AdminDashboard: React.FC = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Main Chart */}
         <div className="lg:col-span-2 bg-[#0A101F]/80 border border-white/5 rounded-2xl p-6">
-          <h3 className="text-lg font-serif text-white mb-6">Traffic Analysis</h3>
+          <h2 className="text-lg font-serif text-white mb-6">Traffic Analysis</h2>
           <div className="h-75 w-full">
             <ResponsiveContainer width="100%" height="100%" minWidth={1} minHeight={1}>
               <AreaChart data={DEFAULT_TRAFFIC_DATA}>
@@ -268,7 +268,7 @@ export const AdminDashboard: React.FC = () => {
 
         {/* Side Chart */}
         <div className="bg-[#0A101F]/80 border border-white/5 rounded-2xl p-6">
-          <h3 className="text-lg font-serif text-white mb-6">Service Demand</h3>
+          <h2 className="text-lg font-serif text-white mb-6">Service Demand</h2>
           <div className="h-75 w-full">
             <ResponsiveContainer width="100%" height="100%" minWidth={1} minHeight={1}>
               <BarChart data={SERVICE_PERFORMANCE} layout="vertical">
@@ -358,7 +358,7 @@ const NPSSummaryWidget: React.FC = () => {
     <div className="bg-[#0A101F]/80 border border-white/5 rounded-2xl p-6">
       <div className="flex items-center gap-2 mb-4">
         <Star size={16} className="text-amber-400 fill-amber-400" />
-        <h3 className="text-sm font-semibold text-white">NPS Skoru</h3>
+        <h2 className="text-sm font-semibold text-white">NPS Skoru</h2>
         <span className="text-xs text-slate-500 ml-auto">Son görüşmeler</span>
       </div>
       {isLoading ? (
@@ -441,7 +441,7 @@ const LeadTierWidget: React.FC = () => {
     <div className="bg-[#0A101F]/80 border border-white/5 rounded-2xl p-6">
       <div className="flex items-center gap-2 mb-4">
         <Users size={16} className="text-secondary" />
-        <h3 className="text-sm font-semibold text-white">Lead Kalitesi</h3>
+        <h2 className="text-sm font-semibold text-white">Lead Kalitesi</h2>
         <span className="text-xs text-slate-500 ml-auto">{contacts.length} toplam</span>
       </div>
       {contacts.length === 0 ? (

@@ -76,17 +76,17 @@ export const AdminSuccessionPage: React.FC = () => {
 
   if (isError)
     return (
-      <main className="p-fib-6">
+      <div className="p-fib-6">
         <ErrorState
           title="Veraset planları yüklenemedi"
           description={error instanceof Error ? error.message : undefined}
           onRetry={() => void refetch()}
         />
-      </main>
+      </div>
     );
 
   return (
-    <main className="p-fib-6">
+    <div className="p-fib-6">
       <h1 className="text-golden-lg font-bold mb-fib-7">Veraset Planı Yönetimi</h1>
       <p className="text-sm opacity-60 mb-fib-8">
         Aile şirketi kuşak geçişi — Süreç yönetimi, KPI takibi, milestone izleme
@@ -176,6 +176,6 @@ export const AdminSuccessionPage: React.FC = () => {
           </section>
         </div>
       )}
-    </main>
+    </div>
   );
 };

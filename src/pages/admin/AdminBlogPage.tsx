@@ -135,7 +135,7 @@ export const AdminBlogPage: React.FC = () => {
             exit={prefersReduced ? undefined : { opacity: 0, height: 0 }}
             className="bg-white/3 border border-white/5 rounded-2xl p-6 space-y-4 overflow-hidden"
           >
-            <h3 className="text-white font-semibold">New Blog Post</h3>
+            <h2 className="text-white font-semibold">New Blog Post</h2>
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label htmlFor="blog-post-title" className="text-xs text-slate-400 mb-1.5 block">
@@ -233,7 +233,7 @@ export const AdminBlogPage: React.FC = () => {
                     <Clock size={10} /> {post.readTime}
                   </span>
                 </div>
-                <h3 className="text-white font-medium text-sm leading-snug">{post.title}</h3>
+                <h2 className="text-white font-medium text-sm leading-snug">{post.title}</h2>
                 <p className="text-slate-400 text-xs mt-1 line-clamp-1">{post.excerpt}</p>
                 <div className="flex items-center gap-2 mt-1.5">
                   <Tag size={9} className="text-slate-600" />

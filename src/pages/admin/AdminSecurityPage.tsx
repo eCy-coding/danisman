@@ -164,7 +164,8 @@ export const AdminSecurityPage: React.FC = () => {
                     ...apiKeyColumns,
                     {
                       key: 'actions',
-                      label: '',
+                      label: 'Eylemler',
+                      srOnlyLabel: true,
                       align: 'right',
                       render: (r) =>
                         r.revokedAt ? null : (

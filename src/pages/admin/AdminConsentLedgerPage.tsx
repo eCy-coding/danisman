@@ -191,6 +191,7 @@ export const AdminConsentLedgerPage: React.FC = () => {
         <select
           value={consentFilter}
           onChange={handleFilterChange}
+          aria-label="Rıza durumuna göre filtrele"
           className="bg-zinc-800 border border-zinc-700 rounded-lg px-fib-4 py-fib-3 text-sm text-zinc-100 focus:outline-none focus:border-indigo-500"
         >
           <option value="all">Tümü</option>

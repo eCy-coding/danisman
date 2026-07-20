@@ -24,9 +24,9 @@ function KanbanColumn({ stage, deals, onStageChange }: KanbanColumnProps) {
       )}
     >
       <div className="flex items-center justify-between mb-fib-4">
-        <h3 className="text-xs font-semibold text-zinc-400 uppercase tracking-wide">
+        <h2 className="text-xs font-semibold text-zinc-400 uppercase tracking-wide">
           {DEAL_STAGE_LABELS[stage]}
-        </h3>
+        </h2>
         <span className="text-xs text-zinc-600 bg-zinc-800 rounded px-fib-2">{deals.length}</span>
       </div>
       <div className="flex flex-col gap-fib-3">

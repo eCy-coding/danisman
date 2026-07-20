@@ -90,26 +90,26 @@ export const AdminESGPage: React.FC = () => {
     // R8-P3 — canonical skeleton loader replaces "Yükleniyor…" text. Reserves
     // the layout so the user's eye isn't jolted when 61 rows pop in.
     return (
-      <main className="p-fib-6">
+      <div className="p-fib-6">
         <SkeletonList count={10} withAvatar={false} />
-      </main>
+      </div>
     );
   }
 
   if (dpIsError) {
     return (
-      <main className="p-fib-6">
+      <div className="p-fib-6">
         <ErrorState
           title="ESG veri kümesi yüklenemedi"
           description={dpError instanceof Error ? dpError.message : undefined}
           onRetry={() => void refetchDatapoints()}
         />
-      </main>
+      </div>
     );
   }
 
   return (
-    <main className="p-fib-6">
+    <div className="p-fib-6">
       <h1 className="text-golden-lg font-bold mb-fib-7">ESG ESRS Taxonomy Explorer</h1>
       <p className="text-sm opacity-60 mb-fib-8">
         CSRD ESRS 1000+ veri noktası — Çift materyalite matrix + taksonomik gezgin
@@ -229,6 +229,6 @@ export const AdminESGPage: React.FC = () => {
           </button>
         </div>
       )}
-    </main>
+    </div>
   );
 };

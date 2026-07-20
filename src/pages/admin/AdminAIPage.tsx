@@ -107,9 +107,9 @@ const ContentGenerator: React.FC = () => {
           <Sparkles size={18} className="text-secondary" />
         </div>
         <div>
-          <h3 className="text-lg font-serif text-white" data-testid="generator-title">
+          <h2 className="text-lg font-serif text-white" data-testid="generator-title">
             Content Generator
-          </h3>
+          </h2>
           <p className="text-xs text-slate-500">AI-powered premium consulting content</p>
         </div>
       </div>

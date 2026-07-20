@@ -97,6 +97,7 @@ export const AdminMediaLibraryPage: React.FC = () => {
           type="file"
           ref={fileInput}
           className="sr-only"
+          aria-label="Medya dosyası yükle"
           accept="image/*"
           onChange={(e) => {
             const f = e.target.files?.[0];

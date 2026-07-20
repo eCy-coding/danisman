@@ -93,7 +93,7 @@ const BookingAnalyticsWidget: React.FC = () => {
     <div className="bg-white/3 border border-white/5 rounded-2xl p-6 space-y-5">
       <div className="flex items-center gap-2">
         <Calendar size={16} className="text-secondary" />
-        <h3 className="text-sm font-semibold text-white">Booking Analytics</h3>
+        <h2 className="text-sm font-semibold text-white">Booking Analytics</h2>
         <span className="text-xs text-slate-500 ml-auto">Son 90 gün trend</span>
       </div>
 
@@ -437,7 +437,7 @@ export const AdminAnalyticsPage: React.FC = () => {
           specifically GA4 *site traffic*, which has no backend endpoint. */}
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
         <div className="xl:col-span-2 bg-white/3 border border-white/5 rounded-2xl p-6">
-          <h3 className="text-sm font-semibold text-white mb-4">Weekly Visits &amp; Conversions</h3>
+          <h2 className="text-sm font-semibold text-white mb-4">Weekly Visits &amp; Conversions</h2>
           <EmptyState
             icon={<BarChart3 size={24} />}
             title="GA4 bağlantısı yapılandırılmamış"
@@ -446,7 +446,7 @@ export const AdminAnalyticsPage: React.FC = () => {
         </div>
 
         <div className="bg-white/3 border border-white/5 rounded-2xl p-6">
-          <h3 className="text-sm font-semibold text-white mb-4">Traffic Sources</h3>
+          <h2 className="text-sm font-semibold text-white mb-4">Traffic Sources</h2>
           <EmptyState
             icon={<BarChart3 size={24} />}
             title="GA4 bağlantısı yapılandırılmamış"

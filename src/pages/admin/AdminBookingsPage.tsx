@@ -164,27 +164,32 @@ export const AdminBookingsPage: React.FC = () => {
         ))}
       </div>
 
-      {/* R8-P4 — temporal scope tabs */}
-      <div className="flex gap-2" role="tablist" aria-label="Görüşme Zaman Kapsamı">
-        {(['all', 'upcoming', 'past'] as const).map((s) => {
-          const label = s === 'all' ? 'Tümü' : s === 'upcoming' ? 'Yaklaşan' : 'Geçmiş';
-          return (
-            <button
-              key={s}
-              type="button"
-              role="tab"
-              aria-selected={scope === s}
-              onClick={() => setScope(s)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition border ${
-                scope === s
-                  ? 'bg-blue-500/25 border-blue-400 text-blue-100'
-                  : 'border-white/10 text-slate-400 hover:bg-white/5'
-              }`}
-            >
-              {label}
-            </button>
-          );
-        })}
+      {/* R8-P4 — temporal scope tabs. Sort-direction button lives in its own
+          flex item, not as a tablist child — role="tablist" requires every
+          direct child to be role="tab" (axe aria-required-children); mixing
+          in an unroled sibling button broke that. */}
+      <div className="flex gap-2">
+        <div className="flex gap-2" role="tablist" aria-label="Görüşme Zaman Kapsamı">
+          {(['all', 'upcoming', 'past'] as const).map((s) => {
+            const label = s === 'all' ? 'Tümü' : s === 'upcoming' ? 'Yaklaşan' : 'Geçmiş';
+            return (
+              <button
+                key={s}
+                type="button"
+                role="tab"
+                aria-selected={scope === s}
+                onClick={() => setScope(s)}
+                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition border ${
+                  scope === s
+                    ? 'bg-blue-500/25 border-blue-400 text-blue-100'
+                    : 'border-white/10 text-slate-400 hover:bg-white/5'
+                }`}
+              >
+                {label}
+              </button>
+            );
+          })}
+        </div>
         <button
           type="button"
           onClick={() => setSortDir((d) => (d === 'desc' ? 'asc' : 'desc'))}
@@ -219,6 +224,7 @@ export const AdminBookingsPage: React.FC = () => {
           <select
             value={filterStatus}
             onChange={(e) => setFilterStatus(e.target.value as Status | 'all')}
+            aria-label="Durum filtrele"
             className="bg-white/4 border border-white/10 rounded-xl pl-9 pr-8 py-2.5 text-sm text-white outline-none focus:border-primary/50 appearance-none cursor-pointer"
           >
             <option value="all">Tüm Durumlar</option>

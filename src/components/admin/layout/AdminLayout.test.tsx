@@ -21,6 +21,7 @@ vi.mock('react-router-dom', async (importActual) => {
 });
 
 import { AdminLayout } from './AdminLayout';
+import { ViewAsProvider, useViewAs } from '../../../lib/view-as-context';
 
 const renderLayout = () =>
   render(
@@ -49,5 +50,33 @@ describe('M8 — Mobile responsive layout', () => {
     const overlay = screen.getByTestId('sidebar-overlay');
     fireEvent.click(overlay);
     expect(screen.queryByTestId('sidebar-overlay')).toBeNull();
+  });
+});
+
+describe('ViewAs context availability', () => {
+  it('provides the ViewAs context to admin routes', () => {
+    // Regression: ViewAsProvider existed but was never mounted, so
+    // /admin/rbac (ViewAsBanner + ViewAsLauncher → useViewAs()) threw
+    // "must be used inside <ViewAsProvider>" for every real user.
+    const Probe = () => {
+      const { isViewAsMode } = useViewAs();
+      return <span data-testid="viewas-probe">{String(isViewAsMode)}</span>;
+    };
+
+    render(
+      <MemoryRouter>
+        <ViewAsProvider>
+          <Probe />
+        </ViewAsProvider>
+      </MemoryRouter>,
+    );
+
+    expect(screen.getByTestId('viewas-probe').textContent).toBe('false');
+  });
+
+  it('AdminLayout mounts ViewAsProvider so consumers never throw', () => {
+    const spy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    expect(() => renderLayout()).not.toThrow();
+    spy.mockRestore();
   });
 });

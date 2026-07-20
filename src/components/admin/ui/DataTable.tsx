@@ -25,6 +25,13 @@ export interface Column<T> {
   align?: 'left' | 'center' | 'right';
   className?: string;
   hideOnMobile?: boolean;
+  /**
+   * Renders `label` visually hidden (screen-reader only) instead of as
+   * visible header text. For action-only columns that intentionally show a
+   * blank header cell — keeps the accessible name axe's `empty-table-header`
+   * rule requires without adding unwanted visible text.
+   */
+  srOnlyLabel?: boolean;
 }
 
 export interface BulkAction {
@@ -200,6 +207,8 @@ export function DataTable<T>({
                         <ChevronsUpDown size={12} aria-hidden="true" />
                       )}
                     </button>
+                  ) : c.srOnlyLabel ? (
+                    <span className="sr-only">{c.label}</span>
                   ) : (
                     c.label
                   )}

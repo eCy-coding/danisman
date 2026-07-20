@@ -72,7 +72,10 @@ export const ErrorState: React.FC<ErrorStateProps> = ({
     <div className="w-16 h-16 rounded-full bg-red-500/10 border border-red-500/20 flex items-center justify-center text-red-400 mb-4">
       <AlertTriangle size={24} aria-hidden="true" />
     </div>
-    <h3 className="text-base font-semibold text-white mb-1">{title}</h3>
+    {/* h2 — ErrorState is almost always the direct content section under a
+        page's h1 title; h3 here skipped a level on most call sites
+        (axe heading-order), mirrors the same fix in EmptyState.tsx. */}
+    <h2 className="text-base font-semibold text-white mb-1">{title}</h2>
     {description && <p className="text-sm text-slate-400 max-w-md mb-5">{description}</p>}
     {onRetry && (
       <button

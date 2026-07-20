@@ -387,7 +387,7 @@ export function AdminInsightsPage() {
         <title>Perspektif Editorial Dashboard — eCyPro Admin</title>
       </Helmet>
 
-      <main className="p-6 space-y-6" aria-label="Perspektif Editorial Dashboard">
+      <div className="p-6 space-y-6">
         <div className="flex items-center justify-between">
           <h1 className="text-xl font-semibold text-neutral-100">Perspektif Dashboard</h1>
           <button
@@ -402,8 +402,15 @@ export function AdminInsightsPage() {
           </button>
         </div>
 
-        {/* Tab navigation */}
-        <nav
+        {/* Tab navigation — role="tablist" so the role="tab" children below
+            satisfy axe's aria-required-parent (a bare landmark doesn't
+            count). Plain <div>, not <nav>: eslint-plugin-jsx-a11y disallows
+            assigning a widget role like tablist to a structural/landmark
+            element (no-noninteractive-element-to-interactive-role), and a
+            tablist is a widget, not a navigation landmark, so <div> is the
+            semantically correct element here anyway. */}
+        <div
+          role="tablist"
           aria-label="Dashboard sekmeleri"
           className="flex gap-1 border-b border-neutral-800 overflow-x-auto"
         >
@@ -425,7 +432,7 @@ export function AdminInsightsPage() {
               {label}
             </button>
           ))}
-        </nav>
+        </div>
 
         {/* Panel content */}
         {isError && (
@@ -463,7 +470,7 @@ export function AdminInsightsPage() {
         <p className="text-xs text-neutral-600 text-right">
           Toplam sekme: {TAB_COUNT} · Recharts v2 · TanStack Query
         </p>
-      </main>
+      </div>
     </>
   );
 }

@@ -87,17 +87,17 @@ export const AdminFintechCompliancePage: React.FC = () => {
 
   if (isError)
     return (
-      <main className="p-fib-6">
+      <div className="p-fib-6">
         <ErrorState
           title="Uyumluluk verileri yüklenemedi"
           description={error instanceof Error ? error.message : undefined}
           onRetry={() => void refetch()}
         />
-      </main>
+      </div>
     );
 
   return (
-    <main className="p-fib-6">
+    <div className="p-fib-6">
       <h1 className="text-golden-lg font-bold mb-fib-7">Fintech Uyumluluk Panosu</h1>
       <p className="text-sm opacity-60 mb-fib-8">
         SPK + MASAK + KVKK + TCMB + BDDK — 5 regülatör, anlık durum, risk skoru, son tarih
@@ -115,7 +115,7 @@ export const AdminFintechCompliancePage: React.FC = () => {
             className="rounded-lg bg-surface-700 p-fib-5 text-center"
             aria-label={`${s.regulator} uyumluluk kartı`}
           >
-            <h3 className="font-bold text-sm mb-1">{s.regulator}</h3>
+            <h2 className="font-bold text-sm mb-1">{s.regulator}</h2>
             <p className="text-xs opacity-60 mb-2">{REGULATOR_DESCRIPTIONS[s.regulator]}</p>
             <p className="text-lg font-bold">
               {s.approvedItems}/{s.totalItems}
@@ -225,6 +225,6 @@ export const AdminFintechCompliancePage: React.FC = () => {
             ))}
         </ul>
       </section>
-    </main>
+    </div>
   );
 };
