@@ -3,6 +3,7 @@ import path from 'path';
 import { createRequire } from 'module';
 import { defineConfig, ViteDevServer } from 'vite';
 import mdx from '@mdx-js/rollup';
+import { stripMdxFrontmatter } from './src/lib/mdx-frontmatter';
 import react from '@vitejs/plugin-react';
 import viteCompression from 'vite-plugin-compression';
 import { visualizer } from 'rollup-plugin-visualizer';
@@ -214,6 +215,20 @@ export default defineConfig(({ mode }) => {
       nonBlockingCssPlugin,
       // P46 C5: providerImportSource ile MDXProvider'dan components map'i alır.
       // Olmadan MDX h1 → h2 demote çalışmıyordu (BlogPostPage'de 2 H1 vardı).
+      // Must run BEFORE mdx(): the MDX plugin has no frontmatter support
+      // configured, so without this every article rendered its own YAML block
+      // ("title: '…' excerpt: '…'") as visible body copy. Frontmatter stays the
+      // source of truth for scripts/generate-blog-index.ts, which reads the raw
+      // file — stripping it from the runtime module loses nothing.
+      {
+        name: 'ecypro:strip-mdx-frontmatter',
+        enforce: 'pre' as const,
+        transform(code: string, id: string) {
+          if (!id.endsWith('.mdx')) return null;
+          const { code: out, stripped } = stripMdxFrontmatter(code);
+          return stripped ? { code: out, map: null } : null;
+        },
+      },
       mdx({ providerImportSource: '@mdx-js/react' }),
       react(),
       viteCompression({
