@@ -200,7 +200,15 @@ test.describe('Crawler: Error Pages & Graceful Degradation — Phase 1+5', () =>
       .catch(() => null);
 
     await page.waitForTimeout(600);
-    const content = (await page.locator('body').textContent()) ?? '';
+    // BlogPostPage (src/pages/BlogPostPage.tsx `if (!post)` branch) renders
+    // "Makale Bulunamadı" — capital B. `.includes('bulunamadı')` against the
+    // raw textContent never matched (case-sensitive substring), so this
+    // check always fell through to `isRedirected`, which is ALSO always
+    // false: /blog/:slug → /perspektifler/:slug (BlogSlugRedirect in
+    // App.tsx) is a canonical-path migration that deliberately PRESERVES
+    // the slug in the new URL, it's not a "bounce away" redirect. Lowercase
+    // before matching so the genuine not-found UI is actually detected.
+    const content = ((await page.locator('body').textContent()) ?? '').toLowerCase();
     const currentUrl = page.url();
 
     const is404 =
@@ -313,18 +321,36 @@ test.describe('Crawler: Error Pages & Graceful Degradation — Phase 1+5', () =>
       return;
     }
 
-    // Submit twice quickly
+    // Submit twice quickly. A successful submit swaps the whole form for a
+    // "Mesajınız Alındı" success panel (AnimatePresence in
+    // src/components/sections/Contact.tsx) — unguarded fills on the 2nd
+    // pass then waited the full actionTimeout for inputs that no longer
+    // exist. Re-check visibility before every fill/click, and use the
+    // panel's own "Yeni Mesaj Gönder" reset CTA to bring the form back for
+    // the 2nd attempt (the one meant to hit the 429 mock).
     for (let i = 0; i < 2; i++) {
+      if (!(await emailInput.isVisible({ timeout: 1_000 }).catch(() => false))) {
+        const resetBtn = page.locator('#contact button:has-text("Yeni Mesaj")').first();
+        if (await resetBtn.isVisible({ timeout: 2_000 }).catch(() => false)) {
+          await resetBtn.click().catch(() => {});
+          await page.waitForTimeout(300);
+        }
+      }
       const nameInput = page.locator('#contact input[type="text"]').first();
       if (await nameInput.isVisible({ timeout: 2_000 }).catch(() => false)) {
         await nameInput.fill(`Rate Limit Test ${i}`);
       }
-      await emailInput.fill(`rl${i}@test.com`);
+      if (await emailInput.isVisible({ timeout: 2_000 }).catch(() => false)) {
+        await emailInput.fill(`rl${i}@test.com`);
+      }
       const textarea = page.locator('#contact textarea').first();
       if (await textarea.isVisible({ timeout: 2_000 }).catch(() => false)) {
         await textarea.fill('Rate limit test');
       }
-      await page.locator('#contact button[type="submit"]').click();
+      const submitBtn = page.locator('#contact button[type="submit"]').first();
+      if (await submitBtn.isVisible({ timeout: 2_000 }).catch(() => false)) {
+        await submitBtn.click().catch(() => {});
+      }
       await page.waitForTimeout(400);
     }
     await page.waitForTimeout(1_500);

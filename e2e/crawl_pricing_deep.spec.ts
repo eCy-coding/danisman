@@ -201,7 +201,16 @@ test.describe('Crawler: Pricing Deep — Phase 2+5', () => {
 
     const hasCurrency = await page.evaluate(() => {
       const text = document.body.textContent ?? '';
-      return text.includes('₺') || text.includes('TRY') || text.includes('$') || text.includes('€');
+      // Tiers render currency as the literal code "USD" (see
+      // src/data/pricing-tiers.ts priceLabel, e.g. "15K–25K USD/ay"), not a
+      // symbol — P-PRC-02 above already accounts for this, this check didn't.
+      return (
+        text.includes('₺') ||
+        text.includes('TRY') ||
+        text.includes('$') ||
+        text.includes('€') ||
+        text.includes('USD')
+      );
     });
     expect(hasCurrency, 'Para birimi sembolü yok').toBeTruthy();
   });

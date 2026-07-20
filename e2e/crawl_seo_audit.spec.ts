@@ -69,7 +69,16 @@ async function auditPage(page: Page, pagePath: string): Promise<SeoResult> {
   const issues: string[] = [];
 
   await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 30000 });
-  await page.waitForTimeout(500); // React hydrate
+  // SKIP_PRERENDER build: static index.html shell has no per-page title/meta/
+  // canonical/JSON-LD until the SEO component's client-side useEffect runs.
+  // A fixed sleep here races hydration under load (flaky score dips e.g. on
+  // /pricing, which also requires JSON-LD) — poll for the canonical tag
+  // (set in the same render pass as title/description/JSON-LD) instead.
+  await page
+    .waitForFunction(() => !!document.querySelector('link[rel="canonical"]') && !!document.title, {
+      timeout: 8000,
+    })
+    .catch(() => {});
 
   const title = await page.title();
   const metaDesc = await page
@@ -322,9 +331,25 @@ test.describe('Crowler: SEO Full Audit (Sitemap Pages)', () => {
   });
 
   test('Canonical: öz-referans (self-referencing canonical)', async ({ page }) => {
+    // NOT: unprefixed legacy route'lar ("/", "/about", ...) src/i18n/canonical.ts'in
+    // bilinçli locale-aware stratejisi gereği HER ZAMAN locale-prefixed URL'e
+    // canonicalize eder (örn. "/" → "https://ecypro.com/tr") — bu bir bug değil,
+    // duplicate-content önleme kararı (bkz. buildCanonical + SEO.tsx yorumları:
+    // "Eski davranış canonical'ı locale-stripped bırakıyordu → Google duplicate
+    // content riski"). Dolayısıyla gerçek "self-reference" denetimi sadece asıl
+    // canonical giriş noktalarında (locale-prefixed URL'ler) anlamlıdır.
     const criticalPaths = ['/', '/about', '/services', '/pricing', '/perspektifler', '/contact'];
     for (const p of criticalPaths) {
-      await page.goto(`${BASE_URL}${p}`, { waitUntil: 'domcontentloaded' });
+      const localePath = `/tr${p === '/' ? '' : p}`;
+      await page.goto(`${BASE_URL}${localePath}`, { waitUntil: 'domcontentloaded' });
+      // SEO component canonical <link>'i client-side useEffect ile yazıyor
+      // (SKIP_PRERENDER build'de statik shell'de yok) — hydration'ı bekle,
+      // sabit waitForTimeout yerine poll et.
+      await page
+        .waitForFunction(() => !!document.querySelector('link[rel="canonical"]'), {
+          timeout: 10000,
+        })
+        .catch(() => {});
       const canonical = await page
         .locator('link[rel="canonical"]')
         .first()
@@ -333,8 +358,10 @@ test.describe('Crowler: SEO Full Audit (Sitemap Pages)', () => {
       if (canonical) {
         // Canonical URL'nin path kısmı sayfayla eşleşmeli
         const canonicalPath = new URL(canonical).pathname.replace(/\/$/, '') || '/';
-        const expectedPath = p.replace(/\/$/, '') || '/';
-        expect(canonicalPath, `[${p}] canonical path mismatch: ${canonical}`).toBe(expectedPath);
+        const expectedPath = localePath.replace(/\/$/, '') || '/';
+        expect(canonicalPath, `[${localePath}] canonical path mismatch: ${canonical}`).toBe(
+          expectedPath,
+        );
       }
     }
   });

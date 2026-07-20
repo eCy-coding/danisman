@@ -77,9 +77,11 @@ test.describe('eCy Logo — Tüm Sayfalarda', () => {
       const markSvg = page.locator('[data-testid="ecy-logo-mark"]').first();
       await expect(markSvg).toBeVisible();
 
-      // SVG viewBox doğru
+      // SVG viewBox doğru — P48 Corporate Logo System EcyLogo.tsx: "0 0 64 64"
+      // (tüm path/circle koordinatları bu grid'e göre). Eski 40x40 wordmark
+      // öncesi tasarımdan kalma bir beklentiydi, güncel bileşenle uyumlu değildi.
       const vb = await markSvg.getAttribute('viewBox');
-      expect(vb).toBe('0 0 40 40');
+      expect(vb).toBe('0 0 64 64');
 
       // Width attribute — size="sm" → 28px, "md" → 36px
       const w = await markSvg.getAttribute('width');

@@ -130,7 +130,14 @@ test.describe('P38-T72: NAP (Name/Address/Phone) Schema Consistency', () => {
     test.setTimeout(15000);
     await mockSetup(page);
     await page.goto('/contact', { waitUntil: 'domcontentloaded' });
-    await page.waitForTimeout(400);
+    // SKIP_PRERENDER build: ContactForm's mailto:/tel: links only exist after
+    // client-side hydration — a fixed 400ms sleep races that under load
+    // (intermittent "NAP yok" fails). Poll for the mailto link instead.
+    await page
+      .waitForSelector('a[href^="mailto:"], a[href^="tel:"], address, [itemprop="address"]', {
+        timeout: 10000,
+      })
+      .catch(() => {});
 
     const hasEmail = await page
       .locator('a[href^="mailto:"], [class*="email"]')

@@ -68,6 +68,29 @@ function loadSitemapPaths(): string[] {
     .slice(0, 46);
 }
 
+// The general 46-URL sample above bounds runtime for the many parametrized
+// tests in this file, but case-study detail pages (/case-studies/<slug>)
+// sort well past position 46 in sitemap.xml (dominated by /perspektifler/*
+// entries first) — so `loadSitemapPaths().filter(...)` always returned an
+// empty array here, producing a vacuous `expect(0).toBeLessThan(0)` failure
+// that looked like "missing JSON-LD" but wasn't. Sample case-study paths
+// from the FULL (unsliced) sitemap instead.
+function loadCaseStudyPaths(): string[] {
+  const sitemapPath = path.resolve(__dirname, '../public/sitemap.xml');
+  if (!fs.existsSync(sitemapPath)) return [];
+  const xml = fs.readFileSync(sitemapPath, 'utf-8');
+  return [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)]
+    .map((m) => {
+      try {
+        return new URL(m[1].trim()).pathname;
+      } catch {
+        return '/';
+      }
+    })
+    .filter((p, i, arr) => arr.indexOf(p) === i)
+    .filter((p) => p.startsWith('/case-studies/'));
+}
+
 const setupMocks = async (page: Page) => {
   await page.route('https://api.ecypro.com/**', (r) => r.fulfill({ status: 200, json: {} }));
   await page.route('**/ingest.sentry.io/**', (r) => r.fulfill({ status: 200 }));
@@ -340,8 +363,7 @@ test.describe('Crowler: JSON-LD Structured Data Deep Validation', () => {
   test('Case study sayfaları: Article veya CreativeWork schema', async ({ page }) => {
     test.setTimeout(30000);
     await setupMocks(page);
-    const sitemapPaths = loadSitemapPaths();
-    const csPaths = sitemapPaths.filter((p) => p.startsWith('/case-studies/')).slice(0, 3);
+    const csPaths = loadCaseStudyPaths().slice(0, 3);
     const missing: string[] = [];
 
     for (const pagePath of csPaths) {

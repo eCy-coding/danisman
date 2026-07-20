@@ -54,8 +54,18 @@ test.describe('P37-T61: Cal.com Booking API', () => {
     await page.goto('/', { waitUntil: 'domcontentloaded' });
     await page.waitForTimeout(500);
 
-    // Booking açan trigger'ları dene
+    // Booking açan trigger'ları dene. `[data-testid="navbar-book-call"]`
+    // (Navbar.tsx) EN ÖNDE — TR locale'de buton metni "Görüşme Planla" olup
+    // "Book"/"Randevu" alt-string'lerini içermiyor, bu yüzden metin tabanlı
+    // seçiciler bu CTA'yı asla eşleştirmiyordu ve döngü sona doğru
+    // `a:has-text("Book")`'a düşüyordu — bu da SmartCTA'nın (yalnızca
+    // scrollY>400 sonrası tıklanabilir, `pointer-events-none` ile gizli)
+    // "Book Discovery Call" linkini yakalayıp `isVisible()` testini geçiyor
+    // (opacity/pointer-events kontrol edilmiyor) ama gerçek `.click()`
+    // altındaki `<main>` div'inin pointer event'leri yutmasıyla 15s
+    // timeout'a düşüyordu. data-testid stabil ve locale-bağımsız.
     const bookingTriggers = [
+      '[data-testid="navbar-book-call"]',
       'text=Book a Meeting',
       'text=Randevu Al',
       'text=Book Now',
@@ -261,8 +271,11 @@ test.describe('P37-T66: Available Slots Calendar Widget', () => {
     await page.goto('/', { waitUntil: 'domcontentloaded' });
     await page.waitForTimeout(500);
 
-    // Booking trigger'ı bul
+    // Booking trigger'ı bul — `[data-testid="navbar-book-call"]` en önde
+    // (bkz. T61-b'deki not: locale-bağımsız + SmartCTA'nın scroll-gated
+    // floating linkiyle çakışmayı önler).
     const triggers = [
+      '[data-testid="navbar-book-call"]',
       'button:has-text("Book")',
       'button:has-text("Randevu")',
       'a:has-text("Book")',
@@ -475,8 +488,14 @@ test.describe('P37: Booking Flow — Genel Altyapı Özeti', () => {
     await page.goto('/', { waitUntil: 'domcontentloaded' });
     await page.waitForTimeout(500);
 
-    // Page başlık + nav en az var
-    await expect(page.locator('nav, header').first()).toBeVisible({ timeout: 8000 });
+    // Page başlık + nav en az var. `nav, header` yerine sadece `nav`: MainLayout
+    // için <header> yalnızca a11y "banner" landmark'ı (MainLayout.tsx) — içindeki
+    // <Navbar/> `position: fixed` olduğundan normal document flow'a katkı vermez
+    // ve <header> her zaman 0 yükseklikte kalır (tasarım gereği, floating nav
+    // pattern'i). `nav, header` seçicisi DOM sırasına göre önce <header>'ı
+    // eşleştiriyor → her zaman "hidden" (0×0) dönüyordu. Gerçek görünür/
+    // tıklanabilir eleman tek `<nav>` (Navbar.tsx).
+    await expect(page.locator('nav').first()).toBeVisible({ timeout: 8000 });
 
     // Booking route /booking 200 (SPA)
     await page.goto(`${BASE_URL}/booking`, { waitUntil: 'domcontentloaded' });

@@ -23,6 +23,9 @@ vi.mock('../lib/api', () => ({
   apiClient: {
     get: vi.fn(),
   },
+  // StatusPage picks the '/api' prefix from this flag; an ESM factory mock
+  // that omits it makes the import itself throw, so the page never renders.
+  IS_SIMULATION_MODE: false,
 }));
 
 // i18n mock

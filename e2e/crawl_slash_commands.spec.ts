@@ -60,13 +60,20 @@ const EXPECTED_COMMANDS: Array<{ slug: string; mustContain?: string[] }> = [
   { slug: 'test-gen', mustContain: ['Vitest', 'Playwright'] },
   { slug: 'commit', mustContain: ['typecheck', 'Conventional'] },
   { slug: 'memory-sync', mustContain: ['brain/memory', 'roadmap'] },
-  { slug: 'phase-status', mustContain: ['✅', 'roadmap'] },
+  // .claude/commands/phase-status.md uses the plain typographic checkmark
+  // "✓" (U+2713) in its output-format block, not the "✅" emoji (U+2705) —
+  // different codepoints. .claude/** is out of scope to edit; match reality.
+  { slug: 'phase-status', mustContain: ['✓', 'roadmap'] },
   { slug: 'publish-check', mustContain: ['lint', 'typecheck'] },
   { slug: 'secret-scan', mustContain: ['gitleaks', 'secret'] },
   { slug: 'typecheck', mustContain: ['tsc', 'typecheck'] },
   { slug: 'lint-fix', mustContain: ['eslint', 'lint'] },
   { slug: 'e2e', mustContain: ['playwright', 'test'] },
-  { slug: 'e2e-fast', mustContain: ['playwright', 'test'] },
+  // .claude/commands/e2e-fast.md describes the flow via
+  // `npm run test:e2e:fast` / "sanity_check spec" / "list reporter" — it
+  // never spells out the literal word "playwright". .claude/** is out of
+  // scope to edit; match reality.
+  { slug: 'e2e-fast', mustContain: ['sanity_check', 'test'] },
 ];
 
 // ─── Yardımcı ────────────────────────────────────────────────────
@@ -270,15 +277,19 @@ test.describe('Slash Commands: Komut Matrix Bütünlüğü', () => {
     }
   });
 
-  test('docs/prompts/ entegrasyonu: en az 5 workflow prompts2 referans içeriyor', () => {
+  test('docs/prompts/ entegrasyonu: en az 5 workflow docs/prompts referans içeriyor', () => {
+    // The knowledge base directory is docs/prompts/ (no "2" suffix) — the
+    // "prompts2" string this test looked for was a stale pre-rename
+    // reference (still findable in archive/prompts-raw/); actual workflows
+    // cite "docs/prompts" directly (11 of 17 files).
     const files = fs.readdirSync(WORKFLOWS_DIR).filter((f) => f.endsWith('.md'));
     const withRef = files.filter((f) => {
       const content = fs.readFileSync(path.join(WORKFLOWS_DIR, f), 'utf-8');
-      return content.includes('prompts2');
+      return content.includes('docs/prompts');
     });
     expect(
       withRef.length,
-      `prompts2 referanslı workflow sayısı: ${withRef.length} < 5`,
+      `docs/prompts referanslı workflow sayısı: ${withRef.length} < 5`,
     ).toBeGreaterThanOrEqual(5);
   });
 
@@ -381,7 +392,9 @@ test.describe('Slash Commands: CLAUDE.md Entegrasyonu', () => {
   });
 
   test('docs/prompts/README.md AI OS yapısı tanımlı', () => {
-    const readmePath = path.join(PROJECT_ROOT, 'prompts2', 'README.md');
+    // Stale pre-rename path — the directory is docs/prompts/, not the old
+    // "prompts2" naming (still findable in archive/prompts-raw/).
+    const readmePath = path.join(PROJECT_ROOT, 'docs', 'prompts', 'README.md');
     expect(fs.existsSync(readmePath), 'docs/prompts/README.md yok').toBeTruthy();
     const content = fs.readFileSync(readmePath, 'utf-8');
     expect(content).toContain('Cascade');

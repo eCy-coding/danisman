@@ -267,7 +267,7 @@ export const ContactForm: React.FC = () => {
               href="/privacy"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-secondary hover:underline"
+              className="text-secondary underline underline-offset-2 hover:text-secondary/80"
               data-cta="privacy"
               data-track="cta-click"
             >

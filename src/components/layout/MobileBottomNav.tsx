@@ -111,7 +111,7 @@ export const MobileBottomNav: React.FC = () => {
                   <div className="w-10 h-10 rounded-xl bg-secondary flex items-center justify-center shadow-lg shadow-secondary/30">
                     <Icon size={18} className="text-white" aria-hidden="true" />
                   </div>
-                  <span className="text-[9px] font-semibold text-secondary leading-none">
+                  <span className="text-xs font-semibold text-secondary leading-none">
                     {lang === 'tr' ? tab.label.tr : tab.label.en}
                   </span>
                 </Link>
@@ -142,7 +142,7 @@ export const MobileBottomNav: React.FC = () => {
                   aria-hidden="true"
                 />
                 <span
-                  className={`text-[9px] font-medium leading-none ${active ? 'text-secondary' : ''}`}
+                  className={`text-xs font-medium leading-none ${active ? 'text-secondary' : ''}`}
                 >
                   {lang === 'tr' ? tab.label.tr : tab.label.en}
                 </span>

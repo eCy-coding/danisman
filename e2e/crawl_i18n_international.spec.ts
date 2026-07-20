@@ -48,6 +48,16 @@ test.describe('P39-T81: hreflang Tags Her Sayfada', () => {
     await mockSetup(page);
     await page.goto('/', { waitUntil: 'domcontentloaded' });
 
+    // SeoManager hreflang <link>'leri client-side useEffect ile yazıyor
+    // (SKIP_PRERENDER build'de statik shell'de yok) — sabit sleep yerine
+    // hydration'ı poll et.
+    await page
+      .waitForFunction(
+        () => document.querySelectorAll('link[rel="alternate"][hreflang]').length >= 3,
+        { timeout: 10000 },
+      )
+      .catch(() => {});
+
     const hreflangLinks = await page.locator('link[rel="alternate"][hreflang]').all();
 
     if (hreflangLinks.length === 0) {
@@ -57,7 +67,11 @@ test.describe('P39-T81: hreflang Tags Her Sayfada', () => {
       });
     } else {
       const hreflangs = await Promise.all(hreflangLinks.map((l) => l.getAttribute('hreflang')));
-      expect(hreflangs).toContain('tr');
+      // src/i18n/canonical.ts buildAlternateLinks() emits RFC 5646 'tr-TR'
+      // (region-specific), not the bare 'tr' — see SeoManager.tsx: `<link
+      // rel="alternate" hrefLang="tr-TR" .../>`. That's the real, deliberate
+      // hreflang scheme (consistent with buildArticleAlternates() too).
+      expect(hreflangs).toContain('tr-TR');
       expect(hreflangs).toContain('en');
       expect(hreflangs).toContain('x-default');
     }
@@ -206,11 +220,15 @@ test.describe('P39-T84: Currency Switcher (TRY/USD/EUR)', () => {
     await page.goto('/pricing', { waitUntil: 'domcontentloaded' });
     await page.waitForTimeout(400);
 
-    const hasCurrency = await page
-      .locator('text=₺, text=TRY, text=TL, text=$, text=€')
-      .first()
-      .isVisible()
-      .catch(() => false);
+    // Pricing tiers (src/data/pricing-tiers.ts) render currency as the
+    // literal code "USD" (e.g. "15K–25K USD/ay"), not a symbol — the old
+    // comma-joined `text=` selector list also never matched "USD". Use an
+    // unambiguous body-text regex instead (mirrors crawl_pricing_deep.spec.ts
+    // P-PRC-02, which already includes 'USD').
+    const hasCurrency = await page.evaluate(() => {
+      const text = document.body.textContent ?? '';
+      return /(₺|TRY|TL|\$|€|USD)/.test(text);
+    });
     expect(hasCurrency, '/pricing: currency symbol yok').toBeTruthy();
   });
 

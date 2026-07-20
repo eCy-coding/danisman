@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 /**
  * EcyPro — Critical User Flows E2E Tests
- * 
+ *
  * Tests the complete user journey from landing to booking.
  */
 
@@ -18,9 +18,15 @@ test.describe('Critical User Flows', () => {
     await expect(hero).toBeVisible();
 
     // Verify primary CTA
+    // Copy is driven by the GrowthBook A/B flag `hero-cta-variant` (book|explore,
+    // see src/components/sections/Hero.tsx) — the literal string never contains
+    // "başla/start/get started" in either variant or language; it reads "Tanışma
+    // Toplantısı Planla"/"Book a Discovery Call" (book, default) or "Hizmetleri
+    // Keşfet"/"Explore Services" (explore). Match the real copy family instead
+    // of a stale placeholder string.
     const contactLink = page.locator('[data-testid="hero-cta-primary"]');
     await expect(contactLink).toBeVisible();
-    await expect(contactLink).toContainText(/başla|start|get started/i);
+    await expect(contactLink).toContainText(/planla|discovery|keşfet|explore/i);
 
     // Verify secondary CTA
     const servicesLink = page.locator('[data-testid="hero-cta-secondary"]');
@@ -119,14 +125,23 @@ test.describe('Critical User Flows', () => {
   });
 
   test('Language switcher works', async ({ page }) => {
-    // Look for language toggle
-    const langToggle = page.locator('[data-testid="lang-toggle"], [aria-label*="language"], button:has-text("TR"), button:has-text("EN")').first();
+    // src/components/LanguageSwitcher.tsx renders two ALWAYS-visible buttons
+    // (data-testid="lang-tr" / "lang-en") and no-ops when clicking the
+    // already-active locale (`if (next === current) return;`). Default
+    // locale is 'tr' (DEFAULT_LANG in src/lib/i18n-react.ts), so the old
+    // loose selector `button:has-text("TR")` deterministically matched the
+    // ALREADY-active TR button first in DOM order → clicking it was a
+    // guaranteed no-op → h1 never changed. Target the switcher's own
+    // testids and click whichever button is NOT currently active.
+    const trBtn = page.locator('[data-testid="lang-tr"]');
+    const enBtn = page.locator('[data-testid="lang-en"]');
 
-    if (await langToggle.isVisible()) {
-      const initialText = await page.locator('h1').textContent();
-      await langToggle.click();
+    if (await enBtn.isVisible().catch(() => false)) {
+      const isTrActive = (await trBtn.getAttribute('aria-pressed')) === 'true';
+      const initialText = await page.locator('h1').first().textContent();
+      await (isTrActive ? enBtn : trBtn).click();
       await page.waitForTimeout(500);
-      const newText = await page.locator('h1').textContent();
+      const newText = await page.locator('h1').first().textContent();
 
       // Text should change after language switch
       if (initialText && newText) {
@@ -137,7 +152,7 @@ test.describe('Critical User Flows', () => {
 
   test('PWA manifest is accessible', async ({ page }) => {
     const manifestLink = page.locator('link[rel="manifest"]');
-    if (await manifestLink.count() > 0) {
+    if ((await manifestLink.count()) > 0) {
       const href = await manifestLink.getAttribute('href');
       expect(href).toBeTruthy();
     }

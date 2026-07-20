@@ -29,31 +29,52 @@ interface ImgAudit {
   hasHeight: boolean;
   decoding: string;
   classes: string;
+  inChrome: boolean;
   issues: string[];
 }
 
 async function auditImages(page: Page): Promise<ImgAudit[]> {
   return page.evaluate(() => {
     const imgs = Array.from(document.querySelectorAll('img'));
-    return imgs.map(img => {
-      const src      = img.getAttribute('src') ?? img.getAttribute('data-src') ?? '';
-      const alt      = img.getAttribute('alt') ?? '';
-      const lazy     = img.getAttribute('loading') ?? '';
+    return imgs.map((img) => {
+      const src = img.getAttribute('src') ?? img.getAttribute('data-src') ?? '';
+      const alt = img.getAttribute('alt') ?? '';
+      const lazy = img.getAttribute('loading') ?? '';
       const priority = img.getAttribute('fetchpriority') ?? img.getAttribute('fetchPriority') ?? '';
-      const hasWidth  = !!img.getAttribute('width');
+      const hasWidth = !!img.getAttribute('width');
       const hasHeight = !!img.getAttribute('height');
-      const decoding  = img.getAttribute('decoding') ?? '';
-      const classes   = img.className ?? '';
+      const decoding = img.getAttribute('decoding') ?? '';
+      const classes = img.className ?? '';
+      // Nav/header chrome (e.g. mega-menu "editor's picks" thumbnails) is
+      // present in the DOM before any page content and is never an LCP
+      // candidate — exclude it from hero-image heuristics below.
+      const inChrome = !!img.closest('nav, header');
       const issues: string[] = [];
 
-      if (!alt.trim()) issues.push('NO_ALT');
+      // WCAG 1.1.1 / axe-core `image-alt`: a MISSING alt attribute is a
+      // violation, but an explicit alt="" is the correct, compliant pattern
+      // for decorative images or images redundant with adjacent visible
+      // text (e.g. a card thumbnail next to its own title). Only flag the
+      // former — matches axe-core's own image-alt semantics.
+      if (!img.hasAttribute('alt')) issues.push('NO_ALT');
       if (!hasWidth || !hasHeight) issues.push('NO_DIMENSIONS');
       if (decoding !== 'async' && decoding !== 'sync' && !priority) issues.push('NO_DECODING');
       // LCP candidate'e lazy koymak yanlış
       if ((priority === 'high' || classes.includes('hero')) && lazy === 'lazy') {
         issues.push('LCP_HAS_LAZY');
       }
-      return { src: src.slice(0, 80), alt: alt.slice(0, 40), lazy, priority, hasWidth, hasHeight, decoding, classes: classes.slice(0, 60), issues };
+      return {
+        src: src.slice(0, 80),
+        alt: alt.slice(0, 40),
+        lazy,
+        priority,
+        hasWidth,
+        hasHeight,
+        decoding,
+        classes: classes.slice(0, 60),
+        inChrome,
+        issues,
+      };
     });
   });
 }
@@ -61,11 +82,14 @@ async function auditImages(page: Page): Promise<ImgAudit[]> {
 // CLS web vital ölçümü (JavaScript performance API ile)
 async function measureCLS(page: Page): Promise<number> {
   return page.evaluate(() => {
-    return new Promise<number>(resolve => {
+    return new Promise<number>((resolve) => {
       let clsValue = 0;
-      const observer = new PerformanceObserver(list => {
+      const observer = new PerformanceObserver((list) => {
         for (const entry of list.getEntries()) {
-          if ((entry as PerformanceEntry & { hadRecentInput?: boolean; value?: number }).hadRecentInput === false) {
+          if (
+            (entry as PerformanceEntry & { hadRecentInput?: boolean; value?: number })
+              .hadRecentInput === false
+          ) {
             clsValue += (entry as PerformanceEntry & { value?: number }).value ?? 0;
           }
         }
@@ -89,9 +113,11 @@ test.describe('Crowler: Image & LCP Performance Audit', () => {
 
   // Dış kaynaklara mock (network delays engellesin)
   const setupMocks = async (page: Page) => {
-    await page.route('https://api.ecypro.com/**', r => r.fulfill({ status: 200, json: {} }));
-    await page.route('**/ingest.sentry.io/**', r => r.fulfill({ status: 200 }));
-    await page.route('**/api.telegram.org/**', r => r.fulfill({ status: 200, json: { ok: true } }));
+    await page.route('https://api.ecypro.com/**', (r) => r.fulfill({ status: 200, json: {} }));
+    await page.route('**/ingest.sentry.io/**', (r) => r.fulfill({ status: 200 }));
+    await page.route('**/api.telegram.org/**', (r) =>
+      r.fulfill({ status: 200, json: { ok: true } }),
+    );
   };
 
   // ── HOMEPAGE ────────────────────────────────────────────────────
@@ -100,18 +126,34 @@ test.describe('Crowler: Image & LCP Performance Audit', () => {
     await page.goto(BASE_URL, { waitUntil: 'domcontentloaded' });
     await page.waitForTimeout(500);
 
-    const imgs = await auditImages(page);
+    // Nav/mega-menu chrome (e.g. "editor's picks" thumbnails) renders before
+    // page content in DOM order but is never an LCP candidate — exclude it
+    // so the imgs[0] fallback below doesn't grab an unrelated nav thumbnail.
+    const imgs = (await auditImages(page)).filter((img) => !img.inChrome);
     if (imgs.length === 0) {
-      test.skip(true, 'Homepage görsel bulunamadı');
+      test.skip(true, 'Homepage görsel bulunamadı (nav chrome hariç)');
       return;
     }
 
     // Hero veya birinci görsel LCP adayıdır
-    const heroImg = imgs.find(img =>
-      img.classes.toLowerCase().includes('hero') ||
-      img.priority === 'high' ||
-      img.src.toLowerCase().includes('hero'),
-    ) ?? imgs[0];
+    const heroImg = imgs.find(
+      (img) =>
+        img.classes.toLowerCase().includes('hero') ||
+        img.priority === 'high' ||
+        img.src.toLowerCase().includes('hero'),
+    );
+    if (!heroImg) {
+      // Src/Hero.tsx (S13-R3-P6): this design deliberately makes the LCP
+      // element a <p> (text), not an image — the one above-fold image
+      // (founder avatar) is intentionally fetchPriority="low" so it doesn't
+      // compete with the text LCP (documented production incident when this
+      // was changed). No image-based hero to assert against.
+      test.info().annotations.push({
+        type: 'note',
+        description: 'Homepage LCP elementi text (<p>) — hero görsel heuristiği eşleşmedi, atlandı',
+      });
+      return;
+    }
 
     // LCP görseli "lazy" olmamalı
     expect(heroImg.lazy, `Hero görsel lazy olmamalı (LCP bozar): ${heroImg.src}`).not.toBe('lazy');
@@ -123,16 +165,18 @@ test.describe('Crowler: Image & LCP Performance Audit', () => {
     await page.waitForTimeout(500);
 
     const imgs = await auditImages(page);
-    const noAlt = imgs.filter(img => img.issues.includes('NO_ALT') && img.src);
-    expect(noAlt, `Alt text eksik görseller: ${noAlt.map(i => i.src).join(', ')}`).toHaveLength(0);
+    const noAlt = imgs.filter((img) => img.issues.includes('NO_ALT') && img.src);
+    expect(noAlt, `Alt text eksik görseller: ${noAlt.map((i) => i.src).join(', ')}`).toHaveLength(
+      0,
+    );
   });
 
   test('Homepage: CLS < 0.1 (Cumulative Layout Shift)', async ({ page }) => {
     test.setTimeout(15000);
     await setupMocks(page);
-    await page.goto(BASE_URL, { waitUntil: 'networkidle', timeout: 15000 }).catch(() =>
-      page.goto(BASE_URL, { waitUntil: 'domcontentloaded' }),
-    );
+    await page
+      .goto(BASE_URL, { waitUntil: 'networkidle', timeout: 15000 })
+      .catch(() => page.goto(BASE_URL, { waitUntil: 'domcontentloaded' }));
     const cls = await measureCLS(page);
     expect(cls, `CLS ${cls.toFixed(3)} — eşiği aştı (> 0.1)`).toBeLessThan(0.15);
   });
@@ -143,17 +187,20 @@ test.describe('Crowler: Image & LCP Performance Audit', () => {
     await page.waitForTimeout(500);
 
     const imgs = await auditImages(page);
-    const belowFold = imgs.filter(img =>
-      !img.classes.includes('hero') && img.priority !== 'high' && img.src,
+    const belowFold = imgs.filter(
+      (img) => !img.classes.includes('hero') && img.priority !== 'high' && img.src,
     );
 
     if (belowFold.length === 0) return; // Görsel yok — skip
 
-    const noLazy = belowFold.filter(img => img.lazy !== 'lazy' && img.lazy !== 'eager');
+    const noLazy = belowFold.filter((img) => img.lazy !== 'lazy' && img.lazy !== 'eager');
     const lazyRatio = 1 - noLazy.length / belowFold.length;
 
     // En az %60 görselde lazy loading olmalı
-    expect(lazyRatio, `Lazy loading oranı düşük: ${(lazyRatio * 100).toFixed(0)}% (min %60)`).toBeGreaterThanOrEqual(0.6);
+    expect(
+      lazyRatio,
+      `Lazy loading oranı düşük: ${(lazyRatio * 100).toFixed(0)}% (min %60)`,
+    ).toBeGreaterThanOrEqual(0.6);
   });
 
   test('Case Studies: görseller alt text içeriyor', async ({ page }) => {
@@ -162,13 +209,17 @@ test.describe('Crowler: Image & LCP Performance Audit', () => {
     await page.waitForTimeout(500);
 
     const imgs = await auditImages(page);
-    const decorativeWithoutAlt = imgs.filter(img =>
-      img.issues.includes('NO_ALT') &&
-      img.src &&
-      !img.src.includes('icon') &&
-      !img.src.includes('logo'),
+    const decorativeWithoutAlt = imgs.filter(
+      (img) =>
+        img.issues.includes('NO_ALT') &&
+        img.src &&
+        !img.src.includes('icon') &&
+        !img.src.includes('logo'),
     );
-    expect(decorativeWithoutAlt.length, `Case studies: ${decorativeWithoutAlt.length} görsel alt text eksik`).toBe(0);
+    expect(
+      decorativeWithoutAlt.length,
+      `Case studies: ${decorativeWithoutAlt.length} görsel alt text eksik`,
+    ).toBe(0);
   });
 
   test('<head> preload: LCP görsel preload linki var', async ({ page }) => {
@@ -177,14 +228,17 @@ test.describe('Crowler: Image & LCP Performance Audit', () => {
 
     // Preload link veya fetchpriority="high" img varlığı
     const preloadLinks = await page.locator('link[rel="preload"][as="image"]').count();
-    const highPriorityImgs = await page.evaluate(() =>
-      document.querySelectorAll('img[fetchpriority="high"], img[fetchPriority="high"]').length,
+    const highPriorityImgs = await page.evaluate(
+      () =>
+        document.querySelectorAll('img[fetchpriority="high"], img[fetchPriority="high"]').length,
     );
 
     // En az biri var olmalı (preload link VEYA fetchpriority)
     const hasLcpHint = preloadLinks > 0 || highPriorityImgs > 0;
     if (!hasLcpHint) {
-      console.warn('⚠ LCP hint yok — performans artırmak için hero img\'ye fetchpriority="high" ekle');
+      console.warn(
+        '⚠ LCP hint yok — performans artırmak için hero img\'ye fetchpriority="high" ekle',
+      );
     }
     // Soft warning — zorunlu değil ama önerilen
     // expect(hasLcpHint).toBeTruthy(); // Aktif etmek için yorumu kaldır
@@ -196,7 +250,9 @@ test.describe('Crowler: Image & LCP Performance Audit', () => {
     await page.waitForTimeout(500);
 
     const imgs = await auditImages(page);
-    expect(imgs.length, `Homepage çok fazla görsel: ${imgs.length} (max 30 önerilir)`).toBeLessThan(40);
+    expect(imgs.length, `Homepage çok fazla görsel: ${imgs.length} (max 30 önerilir)`).toBeLessThan(
+      40,
+    );
   });
 
   // ── SEÇİLMİŞ SAYFALARDA KAPSAMLI AUDIT ──────────────────────────
@@ -213,16 +269,20 @@ test.describe('Crowler: Image & LCP Performance Audit', () => {
       if (imgs.length === 0) return;
 
       // Alt text kontrolü (icon/logo hariç)
-      const noAltContent = imgs.filter(img =>
-        img.issues.includes('NO_ALT') &&
-        img.src &&
-        !img.src.includes('svg') &&
-        img.src.length > 5,
+      const noAltContent = imgs.filter(
+        (img) =>
+          img.issues.includes('NO_ALT') &&
+          img.src &&
+          !img.src.includes('svg') &&
+          img.src.length > 5,
       );
-      expect(noAltContent.length, `[${pagePath}] ${noAltContent.length} görsel alt text eksik`).toBe(0);
+      expect(
+        noAltContent.length,
+        `[${pagePath}] ${noAltContent.length} görsel alt text eksik`,
+      ).toBe(0);
 
       // LCP görseli lazy olmamalı
-      const badLcp = imgs.filter(img => img.issues.includes('LCP_HAS_LAZY'));
+      const badLcp = imgs.filter((img) => img.issues.includes('LCP_HAS_LAZY'));
       expect(badLcp.length, `[${pagePath}] LCP görsel lazy loading var`).toBe(0);
     });
   }
@@ -234,19 +294,25 @@ test.describe('Crowler: Image & LCP Performance Audit', () => {
 
     const imgFormats = await page.evaluate(() => {
       const imgs = Array.from(document.querySelectorAll('img[src]'));
-      return imgs.map(img => {
+      return imgs.map((img) => {
         const src = (img as HTMLImageElement).src;
         const ext = src.split('?')[0].split('.').pop()?.toLowerCase() ?? '';
         return { src: src.slice(0, 60), ext };
       });
     });
 
-    const legacyCount = imgFormats.filter(i => ['jpg', 'jpeg', 'png', 'gif', 'bmp'].includes(i.ext)).length;
-    const nextGenCount = imgFormats.filter(i => ['webp', 'avif'].includes(i.ext)).length;
-    const cdnImages = imgFormats.filter(i => i.src.includes('unsplash') || i.src.includes('pexels')).length;
+    const legacyCount = imgFormats.filter((i) =>
+      ['jpg', 'jpeg', 'png', 'gif', 'bmp'].includes(i.ext),
+    ).length;
+    const nextGenCount = imgFormats.filter((i) => ['webp', 'avif'].includes(i.ext)).length;
+    const cdnImages = imgFormats.filter(
+      (i) => i.src.includes('unsplash') || i.src.includes('pexels'),
+    ).length;
 
     if (imgFormats.length > 0) {
-      console.warn(`Görsel formatları: ${nextGenCount} next-gen, ${legacyCount} legacy, ${cdnImages} CDN`);
+      console.warn(
+        `Görsel formatları: ${nextGenCount} next-gen, ${legacyCount} legacy, ${cdnImages} CDN`,
+      );
       // CDN'den gelen görseller zaten WebP dönüşümlü kabul edilir
       const effectiveLegacy = legacyCount - cdnImages;
       if (effectiveLegacy > 5) {
@@ -276,8 +342,8 @@ test.describe('Crowler: Image & LCP Performance Audit', () => {
 
     const pictureCount = await page.locator('picture').count();
     if (pictureCount > 0) {
-      const webpSources = await page.evaluate(() =>
-        Array.from(document.querySelectorAll('picture source[type="image/webp"]')).length,
+      const webpSources = await page.evaluate(
+        () => Array.from(document.querySelectorAll('picture source[type="image/webp"]')).length,
       );
       expect(webpSources, `<picture> elementleri WebP source içermeli`).toBeGreaterThan(0);
     }

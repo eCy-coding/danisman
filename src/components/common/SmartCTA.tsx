@@ -50,7 +50,7 @@ export const SmartCTA = () => {
             <span className="absolute -top-1 -right-1 w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
           </div>
           <div className="flex flex-col text-left leading-none">
-            <span className="text-[10px] text-gray-400 uppercase tracking-wider font-semibold">
+            <span className="text-xs text-gray-400 uppercase tracking-wider font-semibold">
               Available Now
             </span>
             <span className="font-bold text-sm">Book Discovery Call</span>

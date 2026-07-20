@@ -39,6 +39,7 @@ import { getServiceContent } from '../../data/service-content';
 import { SERVICES } from '../../data/services';
 import { JsonLd } from '../seo/JsonLd';
 import { ServiceIllustration } from './ServiceIllustration';
+import { ServiceLiveTracker } from '../features/consulting/ServiceLiveTracker';
 import { LifecycleNav } from './LifecycleNav';
 import { DetailSectionNav, type DetailSection } from './DetailSectionNav';
 import { getCtaVariants } from '@/data/cta-variants';
@@ -309,10 +310,13 @@ export const ServiceDetailLayout: React.FC<ServiceDetailLayoutProps> = ({
 
           <div className="grid md:grid-cols-[1.5fr_1fr] gap-10 items-center">
             <div>
-              <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-secondary/10 border border-secondary/30 text-[10px] font-bold tracking-[0.25em] text-secondary uppercase mb-6">
-                <Sparkles size={11} aria-hidden="true" />
-                Premium Consulting
-              </span>
+              <div className="flex flex-wrap items-center gap-3 mb-6">
+                <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-secondary/10 border border-secondary/30 text-[10px] font-bold tracking-[0.25em] text-secondary uppercase">
+                  <Sparkles size={11} aria-hidden="true" />
+                  Premium Consulting
+                </span>
+                <ServiceLiveTracker serviceId={content.slug} />
+              </div>
 
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold text-white mb-6 leading-[1.05] tracking-tight text-balance">
                 {title}

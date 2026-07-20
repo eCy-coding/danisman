@@ -21,7 +21,7 @@ import {
   RefreshCw,
 } from 'lucide-react';
 import { motion } from 'motion/react';
-import { apiClient } from '../lib/api';
+import { apiClient, IS_SIMULATION_MODE } from '../lib/api';
 import { useTranslation } from '../lib/i18n';
 
 type IndicatorLevel = 'operational' | 'degraded' | 'partial_outage' | 'major_outage' | 'critical';
@@ -101,13 +101,24 @@ export const StatusPage: React.FC = () => {
 
   const { data, isLoading, isError, refetch, isFetching } = useQuery<StatusResponse>({
     queryKey: ['public-status'],
-    queryFn: () => apiClient.get<StatusResponse>('/status').then((r) => r.data),
+    // IS_SIMULATION_MODE (no VITE_API_URL → apiClient baseURL is '') means a
+    // bare '/status' call resolves RELATIVE TO THE SPA ORIGIN, colliding with
+    // this very page's own client-side route (`/status` in App.tsx) — the
+    // request returns the SPA's index.html instead of JSON, and
+    // `data.status.indicator` throws on a string, which the ErrorBoundary
+    // then rendered as "Hizmet Kesintisi" for every visitor. Force the
+    // `/api` prefix in that mode so the request targets the actual status
+    // endpoint; hybrid mode's baseURL already ends in `/api`.
+    queryFn: () =>
+      apiClient
+        .get<StatusResponse>(IS_SIMULATION_MODE ? '/api/status' : '/status')
+        .then((r) => r.data),
     refetchInterval: 30_000,
     refetchOnWindowFocus: true,
     retry: 2,
   });
 
-  const overallStatus = data?.status.indicator ?? 'operational';
+  const overallStatus = data?.status?.indicator ?? 'operational';
   const overallMeta = getMeta(overallStatus);
   const OverallIcon = overallMeta.icon;
 
@@ -161,7 +172,7 @@ export const StatusPage: React.FC = () => {
                     {overallMeta.label[lang]}
                   </p>
                   <p className="text-xl sm:text-2xl text-white font-medium mt-1">
-                    {data?.status.description ?? (lang === 'tr' ? 'Yükleniyor…' : 'Loading…')}
+                    {data?.status?.description ?? (lang === 'tr' ? 'Yükleniyor…' : 'Loading…')}
                   </p>
                 </div>
               </div>

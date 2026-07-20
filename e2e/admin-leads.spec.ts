@@ -118,6 +118,22 @@ test.describe('Admin Leads Page', () => {
     await page.goto(`${BASE_URL}/admin/leads`);
     await page.waitForLoadState('networkidle');
 
+    // README.md "VITE_ENABLE_ADMIN — Build-time switch — HARD-OFF by
+    // default": when unset (ci.yml `build` job never sets it), /admin/*
+    // isn't routed at all (App.tsx ADMIN_ROUTES_ENABLED guard) and 302s to
+    // "/" regardless of the localStorage auth-token faked above — no
+    // amount of client-side auth state can register a route that was never
+    // compiled in. Skip rather than assert page content against the
+    // homepage.
+    if (new URL(page.url()).pathname !== '/admin/leads') {
+      test.info().annotations.push({
+        type: 'note',
+        description: 'VITE_ENABLE_ADMIN unset in this build — /admin/leads not routed, skipped',
+      });
+      test.skip();
+      return;
+    }
+
     // Table or list showing the mocked lead
     const cell = page.getByText('Ahmet Yılmaz');
     await expect(cell).toBeVisible({ timeout: 8000 });
@@ -159,6 +175,21 @@ test.describe('Admin Leads Page', () => {
 
     await page.goto(`${BASE_URL}/admin/leads`);
     await page.waitForLoadState('networkidle');
+
+    // VITE_ENABLE_ADMIN HARD-OFF (see A-LEADS-02 above) — the homepage
+    // contact form also has an "Ad Soyad" field, so isVisible()-only
+    // detection previously mistook the homepage for the leads page and hit
+    // a strict-mode violation on the homepage's second e-posta field
+    // (contact form + newsletter both match /e-posta/i). Check the actual
+    // route first.
+    if (new URL(page.url()).pathname !== '/admin/leads') {
+      test.info().annotations.push({
+        type: 'note',
+        description: 'VITE_ENABLE_ADMIN unset in this build — /admin/leads not routed, skipped',
+      });
+      test.skip();
+      return;
+    }
 
     // Fill form
     const nameInput = page.getByLabel(/ad soyad/i);

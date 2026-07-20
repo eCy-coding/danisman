@@ -53,6 +53,15 @@ test.describe('GATE-6 axe — perspektifler vertical', () => {
     await page.waitForLoadState('networkidle');
     await page.locator('[data-testid="navbar-link-insights"]').focus();
     await expect(page.locator('[data-testid="mega-menu-insights"]')).toBeVisible();
+    // MegaMenu.tsx fades the panel in via `transition-all duration-250`
+    // (opacity 0→1); toBeVisible() resolves as soon as `visibility` flips,
+    // mid-fade. axe then samples partially-transparent text against the
+    // dark backdrop and reports false-positive contrast violations. Wait
+    // for the opacity transition to actually finish before scanning.
+    await page.waitForFunction(() => {
+      const el = document.querySelector('[data-testid="mega-menu-insights"]');
+      return el ? parseFloat(getComputedStyle(el).opacity) >= 0.99 : false;
+    });
     // Scoped to the nav+panel: the open-menu criterion audits the MENU. The
     // homepage hero behind the backdrop carries a pre-existing contrast debt
     // (slate-400 on gold CTA) — logged in OUT_OF_SCOPE.md, not this vertical.

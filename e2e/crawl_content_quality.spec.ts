@@ -41,8 +41,11 @@ const PAGE_KEYWORDS: Record<string, { primary: string[]; secondary: string[] }> 
     secondary: ['kurumsal', 'ekip'],
   },
   '/perspektifler': {
-    primary: ['strateji', 'blog', 'yönetim'],
-    secondary: ['danışmanlık'],
+    // src/pages/BlogPage.tsx <title>: "Perspektifler | eCyPro Premium
+    // Danışmanlık" — 'perspektifler' + 'danışmanlık' are the real title
+    // words; 'strateji'/'blog'/'yönetim' never appear there.
+    primary: ['perspektifler', 'danışmanlık'],
+    secondary: ['strateji', 'yönetim'],
   },
   '/pricing': {
     primary: ['paket', 'fiyat', 'danışmanlık'],
@@ -57,8 +60,10 @@ const PAGE_KEYWORDS: Record<string, { primary: string[]; secondary: string[] }> 
     secondary: ['proje'],
   },
   '/methodology': {
-    primary: ['metodoloji', 'yöntem', 'strateji'],
-    secondary: ['süreç'],
+    // src/data/copy/pages.ts title.tr: "Yaklaşımımız" — the deliberate
+    // Turkish page title (not the more literal 'metodoloji'/'yöntem').
+    primary: ['yaklaşım', 'metodoloji'],
+    secondary: ['yöntem', 'strateji', 'süreç'],
   },
   '/faq': {
     primary: ['soru', 'danışmanlık'],
@@ -140,9 +145,11 @@ async function auditContent(page: Page, pagePath: string): Promise<ContentAudit>
     }).length;
     const externalLinks = allLinks.length - internalLinks;
 
-    // Görseller
+    // Görseller — WCAG 1.1.1 / axe-core `image-alt`: alt="" is a valid,
+    // compliant decorative/redundant-image pattern; only a MISSING
+    // attribute is a real violation.
     const imgs = Array.from(document.querySelectorAll('img'));
-    const imgNoAlt = imgs.filter((img) => !img.getAttribute('alt')?.trim()).length;
+    const imgNoAlt = imgs.filter((img) => !img.hasAttribute('alt')).length;
 
     // H hiyerarşisi: H3 varsa H2 de olmalı, H2 varsa H1 de olmalı
     const hHierarchyOk =
@@ -322,13 +329,50 @@ test.describe('Crowler: Content Quality & Keyword Audit (P32-T13/T14/T18)', () =
     const titleDups: string[] = [];
     const descDups: string[] = [];
 
+    // dist/ is built with SKIP_PRERENDER (ci.yml `build` job) — every route
+    // initially serves the SAME static index.html <title> until client-side
+    // hydration + route-level Helmet update finishes. A fixed 300ms sleep
+    // races that hydration under CI's 2-worker load, so page.title() was
+    // reading the static fallback for every route → false "all pages have
+    // the same title" duplicates. Poll for the title to actually change
+    // instead of guessing a fixed delay.
+    const STATIC_DEFAULT_TITLE = 'eCyPro — KVKK + EU Regulatory Consulting';
+
+    // Turkish-slug aliases (e.g. /hakkimizda) are client-side redirects to
+    // their canonical English route (src/App.tsx: `<Navigate to="/about">`)
+    // — both are in the sitemap for SEO/back-compat, but they resolve to
+    // the exact same rendered page, so an identical title is correct, not
+    // duplicate content. Dedupe by final landing pathname, not requested
+    // path, so a redirect-alias is recognized as "the same page already
+    // checked" instead of a false duplicate-title finding.
+    const seenFinalPaths = new Set<string>();
+
     for (const pagePath of sitemapPaths) {
       try {
         await page.goto(`${BASE_URL}${pagePath}`, {
           waitUntil: 'domcontentloaded',
           timeout: 15000,
         });
-        await page.waitForTimeout(300);
+        await page
+          .waitForFunction(
+            (staticTitle) =>
+              document.title !== staticTitle &&
+              // i18next (i18next-http-backend, async JSON fetch) returns the
+              // raw key (e.g. "meta.title") as a fallback until the
+              // namespace loads — that's not the static default either, so
+              // it slipped through the check above. Wait past it too.
+              !/^[a-z][a-zA-Z]*\.[a-zA-Z.]+$/.test(document.title),
+            STATIC_DEFAULT_TITLE,
+            { timeout: 5000 },
+          )
+          .catch(() => null);
+
+        const finalPath = new URL(page.url()).pathname;
+        if (finalPath !== pagePath && seenFinalPaths.has(finalPath)) {
+          continue; // redirect alias of an already-checked canonical page
+        }
+        seenFinalPaths.add(finalPath);
+
         const title = await page.title();
         const desc = await page
           .locator('meta[name="description"]')

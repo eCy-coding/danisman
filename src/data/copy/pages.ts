@@ -134,8 +134,8 @@ export const INDUSTRIES_COPY = {
 export const LOCATIONS_COPY = {
   title: { tr: 'Ofislerimiz', en: 'Our Offices' },
   subtitle: {
-    tr: 'Global varlığımızla yanınızdayız.',
-    en: 'We are with you with our global presence.',
+    tr: 'İstanbul merkezli global bir varlıkla, dünyanın dört bir yanındaki kurumsal müşterilerimize stratejik danışmanlık ve dijital dönüşüm hizmetleri sunuyoruz.',
+    en: 'With a global presence based in Istanbul, we deliver strategic consulting and digital transformation services to enterprise clients around the world.',
   },
   // P45: Sahte adres + telefon kartları kaldırıldı. Tek ofis kartı, sadece
   // şehir + ülke bilgisi + iletişim formuna yönlendirme. Gerçek ofis adresi
@@ -181,8 +181,8 @@ export const ABOUT_COPY = {
 export const CAREERS_COPY = {
   title: { tr: 'Kariyer', en: 'Careers' },
   subtitle: {
-    tr: 'Ekibimize katılın ve fark yaratın.',
-    en: 'Join our team and make a difference.',
+    tr: "eCyPro'nun premium danışmanlık pratiğine katkı sağlayacak stratejik, sonuç odaklı profesyonelleri arıyoruz; ekibimize katılın, fark yaratın.",
+    en: "We look for strategic, results-driven professionals to join eCyPro's premium consulting practice — help us make an impact at a global scale.",
   },
   openPositions: { tr: 'Açık Pozisyonlar', en: 'Open Positions' },
   applyNow: { tr: 'Başvur', en: 'Apply Now' },
@@ -191,8 +191,8 @@ export const CAREERS_COPY = {
 export const EVENTS_COPY = {
   title: { tr: 'Etkinlikler', en: 'Events' },
   subtitle: {
-    tr: 'Yaklaşan seminer ve webinarlarımız.',
-    en: 'Our upcoming seminars and webinars.',
+    tr: 'Stratejik büyüme, dijital dönüşüm ve liderlik üzerine düzenlediğimiz seminer, atölye ve webinarlarla sektör liderleriyle bir araya gelin.',
+    en: 'Join sector leaders at our seminars, workshops, and webinars on strategic growth, digital transformation, and leadership.',
   },
   upcoming: { tr: 'Yaklaşan Etkinlikler', en: 'Upcoming Events' },
   noEvents: {
@@ -203,6 +203,9 @@ export const EVENTS_COPY = {
 
 export const FAQ_COPY = {
   title: { tr: 'Sıkça Sorulan Sorular', en: 'FAQ' },
-  subtitle: { tr: 'Aklınıza takılan soruların yanıtları.', en: 'Answers to your questions.' },
+  subtitle: {
+    tr: 'Hizmetlerimiz, fiyatlandırma modelimiz, süreç işleyişimiz ve gizlilik politikamız hakkında en çok sorulan soruların yanıtlarını burada bulabilirsiniz.',
+    en: 'Find answers to the most frequently asked questions about our services, pricing model, engagement process, and privacy policy right here.',
+  },
   questions: [],
 };

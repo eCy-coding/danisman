@@ -71,7 +71,7 @@ interface MegaMenuProps {
 const InsightsColumns: React.FC<{ lang: Lang; onClose: () => void }> = ({ lang, onClose }) => (
   <>
     <div className="p-6">
-      <p className="text-[10px] font-bold tracking-[0.2em] text-slate-500 uppercase mb-4">
+      <p className="text-[10px] font-bold tracking-[0.2em] text-slate-400 uppercase mb-4">
         {lang === 'tr' ? 'Kategoriler' : 'Categories'}
       </p>
       <ul className="space-y-0.5" role="menu">
@@ -86,7 +86,7 @@ const InsightsColumns: React.FC<{ lang: Lang; onClose: () => void }> = ({ lang, 
               <span className="text-sm font-medium text-slate-300 group-hover:text-white transition-colors leading-tight">
                 {cat.label[lang]}
               </span>
-              <span className="text-[10px] tabular-nums text-slate-600 group-hover:text-slate-400 transition-colors">
+              <span className="text-[10px] tabular-nums text-slate-400 group-hover:text-slate-300 transition-colors">
                 {cat.count}
               </span>
             </a>
@@ -97,7 +97,7 @@ const InsightsColumns: React.FC<{ lang: Lang; onClose: () => void }> = ({ lang, 
             href={MENU_HUB_HREF}
             role="menuitem"
             onClick={onClose}
-            className="group flex items-center gap-1.5 px-2.5 py-2 mt-1 text-xs font-bold text-primary hover:text-white transition-colors outline-none focus-visible:ring-2 focus-visible:ring-primary/50 rounded-lg"
+            className="group flex items-center gap-1.5 px-2.5 py-2 mt-1 text-xs font-bold text-blue-400 hover:text-white transition-colors outline-none focus-visible:ring-2 focus-visible:ring-primary/50 rounded-lg"
           >
             {lang === 'tr' ? 'Tüm kategoriler' : 'All categories'}
             <ArrowRight size={12} className="group-hover:translate-x-0.5 transition-transform" />
@@ -107,7 +107,7 @@ const InsightsColumns: React.FC<{ lang: Lang; onClose: () => void }> = ({ lang, 
     </div>
 
     <div className="p-6">
-      <p className="text-[10px] font-bold tracking-[0.2em] text-slate-500 uppercase mb-4">
+      <p className="text-[10px] font-bold tracking-[0.2em] text-slate-400 uppercase mb-4">
         {lang === 'tr' ? 'Formatlar' : 'Formats'}
       </p>
       <ul className="space-y-1" role="menu">
@@ -126,7 +126,7 @@ const InsightsColumns: React.FC<{ lang: Lang; onClose: () => void }> = ({ lang, 
                 <span className="text-sm font-semibold text-slate-200 group-hover:text-white transition-colors leading-tight">
                   {f.label[lang]}
                 </span>
-                <span className="text-[10px] tabular-nums text-slate-600 group-hover:text-slate-400 transition-colors">
+                <span className="text-[10px] tabular-nums text-slate-400 group-hover:text-slate-300 transition-colors">
                   {f.count}
                 </span>
               </span>
@@ -137,7 +137,7 @@ const InsightsColumns: React.FC<{ lang: Lang; onClose: () => void }> = ({ lang, 
     </div>
 
     <div className="p-6">
-      <p className="text-[10px] font-bold tracking-[0.2em] text-slate-500 uppercase mb-4">
+      <p className="text-[10px] font-bold tracking-[0.2em] text-slate-400 uppercase mb-4">
         {lang === 'tr' ? 'Öne Çıkanlar' : 'Editor’s Picks'}
       </p>
       <ul className="space-y-2" role="menu">
@@ -226,7 +226,7 @@ export const MegaMenu: React.FC<MegaMenuProps> = ({
           ) : (
             data.sections.map((section) => (
               <div key={section.id} className="p-6">
-                <p className="text-[10px] font-bold tracking-[0.2em] text-slate-500 uppercase mb-4">
+                <p className="text-[10px] font-bold tracking-[0.2em] text-slate-400 uppercase mb-4">
                   {section.title[lang]}
                 </p>
                 {/* APG Disclosure Navigation: plain link list — ARIA menu
@@ -246,7 +246,7 @@ export const MegaMenu: React.FC<MegaMenuProps> = ({
                           <span className="block text-sm font-semibold text-slate-200 group-hover:text-white transition-colors leading-tight mb-0.5">
                             {item.label[lang]}
                           </span>
-                          <span className="block text-xs text-slate-500 group-hover:text-slate-400 leading-snug transition-colors line-clamp-2">
+                          <span className="block text-xs text-slate-400 group-hover:text-slate-300 leading-snug transition-colors line-clamp-2">
                             {item.description[lang]}
                           </span>
                         </span>
@@ -283,7 +283,7 @@ export const MegaMenu: React.FC<MegaMenuProps> = ({
             <a
               href={data.featured.href}
               onClick={onClose}
-              className="mt-6 inline-flex items-center gap-2 text-xs font-bold text-primary hover:text-white border border-primary/30 hover:border-primary bg-primary/5 hover:bg-primary/20 rounded-lg px-4 py-2.5 transition-all duration-200 group w-fit"
+              className="mt-6 inline-flex items-center gap-2 text-xs font-bold text-blue-400 hover:text-white border border-primary/30 hover:border-primary bg-primary/5 hover:bg-primary/20 rounded-lg px-4 py-2.5 transition-all duration-200 group w-fit"
             >
               {data.featured.cta[lang]}
               <ArrowRight size={13} className="group-hover:translate-x-0.5 transition-transform" />

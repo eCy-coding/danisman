@@ -308,6 +308,40 @@ export const Footer: React.FC = () => {
               </li>
               <li>
                 <Link
+                  to="/pillar/family-business"
+                  className="hover:text-secondary transition-colors block min-h-11 py-2 outline-none focus-visible:text-secondary"
+                >
+                  {lang === 'tr' ? 'Pillar · Aile Şirketleri' : 'Pillar · Family Business'}
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/pillar/operations"
+                  className="hover:text-secondary transition-colors block min-h-11 py-2 outline-none focus-visible:text-secondary"
+                >
+                  {lang === 'tr' ? 'Pillar · Operasyon' : 'Pillar · Operations'}
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/pillar/digital-ai"
+                  className="hover:text-secondary transition-colors block min-h-11 py-2 outline-none focus-visible:text-secondary"
+                >
+                  {lang === 'tr' ? 'Pillar · Dijital & AI' : 'Pillar · Digital & AI'}
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/pillar/sustainability-esg"
+                  className="hover:text-secondary transition-colors block min-h-11 py-2 outline-none focus-visible:text-secondary"
+                >
+                  {lang === 'tr'
+                    ? 'Pillar · Sürdürülebilirlik & ESG'
+                    : 'Pillar · Sustainability & ESG'}
+                </Link>
+              </li>
+              <li>
+                <Link
                   to="/industry-reports/turkey-premium-consulting-2026"
                   className="hover:text-secondary transition-colors block min-h-11 py-2 outline-none focus-visible:text-secondary"
                 >
@@ -320,6 +354,38 @@ export const Footer: React.FC = () => {
                   className="hover:text-secondary transition-colors block min-h-11 py-2 outline-none focus-visible:text-secondary"
                 >
                   {lang === 'tr' ? 'Hızlı Değerlendirme' : 'Quick Check'}
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/team"
+                  className="hover:text-secondary transition-colors block min-h-11 py-2 outline-none focus-visible:text-secondary"
+                >
+                  {lang === 'tr' ? 'Ekip' : 'Team'}
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/partners"
+                  className="hover:text-secondary transition-colors block min-h-11 py-2 outline-none focus-visible:text-secondary"
+                >
+                  {lang === 'tr' ? 'İş Ortaklıkları' : 'Partners'}
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/industries"
+                  className="hover:text-secondary transition-colors block min-h-11 py-2 outline-none focus-visible:text-secondary"
+                >
+                  {lang === 'tr' ? 'Sektörler' : 'Industries'}
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/faq"
+                  className="hover:text-secondary transition-colors block min-h-11 py-2 outline-none focus-visible:text-secondary"
+                >
+                  {lang === 'tr' ? 'Sıkça Sorulan Sorular' : 'FAQ'}
                 </Link>
               </li>
             </ul>
