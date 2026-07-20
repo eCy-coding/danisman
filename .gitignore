@@ -189,3 +189,6 @@ yarn-error.log*
 
 # S14 R9 — .test-write only (AGENTS.md + .sync/ already covered by R3.3 entry above)
 .test-write
+
+# prerender staging dir (promoted into dist/ at the end of the crawl)
+dist-prerender/

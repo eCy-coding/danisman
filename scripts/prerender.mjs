@@ -35,6 +35,9 @@ import { setTimeout as wait } from 'node:timers/promises';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const distDir = path.resolve(__dirname, '..', 'dist');
+// Prerendered HTML lands here first and is promoted into dist/ only after the
+// crawl finishes — see the note in prerenderRoute().
+const stageDir = path.resolve(__dirname, '..', 'dist-prerender');
 // Reassigned in main(): an orphaned preview server (e.g. from a killed prior
 // run) holding the base port must never wedge the whole prerender again —
 // we probe and slide to the first free port instead of failing on strictPort.
@@ -132,6 +135,15 @@ async function launchBrowser() {
   // failure propagates — so FORCE_LOCAL/CI still fails loud, but a clean
   // machine no longer silently ships a shell or needs manual setup.
   const { chromium } = await import('playwright');
+  // Escape hatch for machines whose Playwright browser cache is broken (a
+  // truncated download makes every run re-fetch ~165 MB before it can start).
+  // PRERENDER_BROWSER_CHANNEL=chrome uses the already-installed system browser
+  // and skips the download path entirely.
+  const channel = process.env.PRERENDER_BROWSER_CHANNEL;
+  if (channel) {
+    console.log(`[prerender] using browser channel: ${channel}`);
+    return chromium.launch({ channel });
+  }
   try {
     return await chromium.launch();
   } catch (err) {
@@ -224,9 +236,17 @@ async function prerenderRoute(browser, route) {
     await wait(200);
     const html = '<!DOCTYPE html>\n' + (await page.content());
 
-    // Write to dist/<route>/index.html
+    // Write to the STAGING dir, never straight into dist/. The preview server
+    // serves dist/, so writing there mid-crawl means every later route is
+    // handed the previous route's ~185 kB prerendered HTML instead of the
+    // ~25 kB shell — download + parse + React mount all grow, and the crawl
+    // gets progressively slower (this is what turned a CI deploy into a
+    // 2-hour job). Staging keeps the per-route cost flat; main() promotes the
+    // whole set into dist/ once the crawl is done.
     const target =
-      route === '/' ? path.join(distDir, 'index.html') : path.join(distDir, route.replace(/^\//, ''), 'index.html');
+      route === '/'
+        ? path.join(stageDir, 'index.html')
+        : path.join(stageDir, route.replace(/^\//, ''), 'index.html');
     fs.mkdirSync(path.dirname(target), { recursive: true });
     fs.writeFileSync(target, html, 'utf-8');
     const title = (await page.title()) || '(empty)';
@@ -351,6 +371,23 @@ async function main() {
   const ok = results.filter((r) => r.ok).length;
   const fail = results.length - ok;
   console.log(`[prerender] ${ok}/${results.length} ok, ${fail} fail`);
+
+  // Promote the staged HTML into dist/. Only successful routes move, so a
+  // failed route keeps whatever dist/ already had (the shell) instead of
+  // being left half-written.
+  let promoted = 0;
+  for (const r of results) {
+    if (!r.ok) continue;
+    const rel = r.route === '/' ? 'index.html' : path.join(r.route.replace(/^\//, ''), 'index.html');
+    const from = path.join(stageDir, rel);
+    const to = path.join(distDir, rel);
+    if (!fs.existsSync(from)) continue;
+    fs.mkdirSync(path.dirname(to), { recursive: true });
+    fs.copyFileSync(from, to);
+    promoted += 1;
+  }
+  fs.rmSync(stageDir, { recursive: true, force: true });
+  console.log(`[prerender] promoted ${promoted} file(s) into dist/`);
 
   // Summary file for Vercel inspection
   fs.writeFileSync(
