@@ -199,7 +199,27 @@ async function prerenderRoute(browser, route) {
     ctx = await browser.newContext({ ignoreHTTPSErrors: true, userAgent: 'eCyPro-Prerender/1.0' });
     const page = await ctx.newPage();
     await page.goto(`${baseUrl}${route}`, { waitUntil: 'domcontentloaded', timeout: 30_000 });
-    await page.waitForLoadState('networkidle', { timeout: 15_000 }).catch(() => {});
+    // Wait on the condition we actually care about — React mounted and Helmet
+    // flushed the head — instead of on network quiet. Measured locally:
+    // readiness ~90ms vs networkidle ~780ms per route, and the readiness check
+    // is deterministic where networkidle is not (any late beacon or retry can
+    // stretch it toward its timeout on a loaded CI runner). The 2s cap below
+    // bounds that tail. NOTE: this is NOT what makes the CI deploy slow — that
+    // is CPU-bound React mounting, ~471 routes on a 2-core runner; the real
+    // fix there is sharding the route list across matrix runners.
+    await page
+      .waitForFunction(
+        () => {
+          const root = document.getElementById('root');
+          if (!root || root.children.length === 0) return false;
+          return Boolean(document.querySelector('link[rel="canonical"]'));
+        },
+        { timeout: 15_000 },
+      )
+      .catch(() => {});
+    // Best-effort settle for anything still in flight; bounded low because the
+    // readiness assertion above is the real gate.
+    await page.waitForLoadState('networkidle', { timeout: 2_000 }).catch(() => {});
     // Give Helmet a tick to flush head changes
     await wait(200);
     const html = '<!DOCTYPE html>\n' + (await page.content());
