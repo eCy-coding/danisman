@@ -302,9 +302,16 @@ test.describe("U6 — Admin URL'leri", () => {
       .innerText()
       .catch(() => '');
     // Kabul edilir: /admin/login'e yönlendi, veya login formu içeriyor, veya admin içerik açıldı
+    // README.md "VITE_ENABLE_ADMIN — Build-time switch — HARD-OFF by
+    // default": when unset (ci.yml `build` job never sets it), /admin/* is
+    // not routed at all and 302s straight to bare "/" (App.tsx
+    // ADMIN_ROUTES_ENABLED guard) — none of the substring checks below
+    // match a bare "/". That redirect is itself proof of the correct
+    // anti-brute-force posture.
     const isValid =
       url.includes('/login') ||
       url.includes('/admin') ||
+      new URL(url).pathname === '/' ||
       bodyText.toLowerCase().includes('login') ||
       bodyText.toLowerCase().includes('giriş') ||
       bodyText.toLowerCase().includes('dashboard');
@@ -323,9 +330,16 @@ test.describe("U6 — Admin URL'leri", () => {
       .locator('body')
       .innerText()
       .catch(() => '');
+    // README.md "VITE_ENABLE_ADMIN — Build-time switch — HARD-OFF by
+    // default": when unset (ci.yml `build` job never sets it), /admin/* is
+    // not routed at all and 302s straight to bare "/" (App.tsx
+    // ADMIN_ROUTES_ENABLED guard) — none of the substring checks below
+    // match a bare "/". That redirect is itself proof of the correct
+    // anti-brute-force posture.
     const isValid =
       url.includes('/login') ||
       url.includes('/admin') ||
+      new URL(url).pathname === '/' ||
       bodyText.toLowerCase().includes('login') ||
       bodyText.toLowerCase().includes('giriş') ||
       bodyText.toLowerCase().includes('dashboard');
@@ -434,6 +448,12 @@ test.describe('U9 — 404 Handling', () => {
 
   test('/blog/var-olmayan-yazi → 404 veya blog anasayfaya yönlendirir', async ({ page }) => {
     await page.goto(`${BASE}/blog/bu-post-hic-olmadi-zyx9999`, { waitUntil: 'domcontentloaded' });
+    // src/App.tsx BlogSlugRedirect: `/blog/:slug` → client-side
+    // `<Navigate to="/perspektifler/:slug">` — this only fires after React
+    // hydrates, which is after `domcontentloaded`. Without waiting for it,
+    // page.url() races the redirect and still reads the pre-redirect
+    // "/blog/..." URL, making this test flaky. Wait for it to land.
+    await page.waitForURL(/\/perspektifler/, { timeout: 5000 }).catch(() => null);
     const url = page.url();
     const text = await page
       .locator('body')

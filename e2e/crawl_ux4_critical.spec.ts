@@ -145,8 +145,12 @@ test.describe('Crawler: Kritik UX #4 — Skeleton + TOC + Analytics + Media', ()
     const h1 = page.locator('h1').first();
     await expect(h1).toBeVisible({ timeout: 6_000 });
 
-    // Makale linkleri
-    const postLinks = page.locator('a[href*="/perspektifler/"]');
+    // Makale linkleri — [data-testid="article-card"] (BlogCard.tsx) içinde scope
+    // edilmeli; scope'suz `a[href*="/perspektifler/"]` Navbar'ın "Perspektifler"
+    // dropdown'undaki (kapalıyken gizli) role="menuitem" kategori linklerini de
+    // eşleştiriyor — DOM sırasında Navbar sayfa içeriğinden önce geldiği için
+    // `.first()` o gizli linki seçip 15s "element is not visible" ile patlıyordu.
+    const postLinks = page.locator('[data-testid="article-card"] a[href*="/perspektifler/"]');
     const count = await postLinks.count();
 
     if (count > 0) {
@@ -170,7 +174,9 @@ test.describe('Crawler: Kritik UX #4 — Skeleton + TOC + Analytics + Media', ()
     await page.goto(`${BASE_URL}/blog`, { waitUntil: 'domcontentloaded' });
     await page.waitForTimeout(800);
 
-    const postLinks = page.locator('a[href*="/perspektifler/"]');
+    // Scope edilmiş seçici için P-UX4-03'teki not'a bakınız — Navbar dropdown'daki
+    // gizli kategori linkleriyle çakışmayı önler.
+    const postLinks = page.locator('[data-testid="article-card"] a[href*="/perspektifler/"]');
     if ((await postLinks.count()) === 0) {
       console.warn('⚠ Blog makale linki yok — doğrudan URL dene');
       await page.goto(`${BASE_URL}/blog/example`, { waitUntil: 'domcontentloaded' });

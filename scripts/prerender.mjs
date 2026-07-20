@@ -269,13 +269,35 @@ async function main() {
     /closed|crashed|disconnected|Target (page|closed)|Session closed|Protocol error/i.test(e || '');
   const results = [];
   let sinceRelaunch = 0;
-  for (const r of routes) {
+
+  // Bounded concurrency: one browser, N pages in flight. Sequential rendering
+  // of the full route set took ~2h on a 2-core CI runner (real measurement,
+  // deploy run 29709484891) — long enough to flirt with the job limit, where a
+  // cancellation kills every downstream signal. Each worker keeps the existing
+  // watchdog + browser-death retry semantics; only the scheduling changes.
+  // Vercel's memory-constrained builder stays at 1 to preserve its relaunch
+  // pacing.
+  const CONCURRENCY = ON_VERCEL ? 1 : Number(process.env.PRERENDER_CONCURRENCY ?? 4);
+  console.log(`[prerender] concurrency: ${CONCURRENCY}`);
+
+  const queue = [...routes];
+  const relaunchLock = { busy: false };
+
+  async function renderOne(r) {
     let res = await withWatchdog(prerenderRoute(browser, r), r);
     if (!res.ok && isBrowserDead(res.error)) {
-      console.warn(`[prerender] ↻ ${r}: browser died — relaunch + retry`);
-      try { await browser.close(); } catch { /* already gone */ }
-      browser = await launchBrowser();
-      sinceRelaunch = 0;
+      // Only one worker may relaunch; the others simply retry on the new
+      // browser once the relaunch settles.
+      if (!relaunchLock.busy) {
+        relaunchLock.busy = true;
+        console.warn(`[prerender] ↻ ${r}: browser died — relaunch + retry`);
+        try { await browser.close(); } catch { /* already gone */ }
+        browser = await launchBrowser();
+        sinceRelaunch = 0;
+        relaunchLock.busy = false;
+      } else {
+        while (relaunchLock.busy) await wait(250);
+      }
       res = await withWatchdog(prerenderRoute(browser, r), r);
     }
     results.push(res);
@@ -285,12 +307,24 @@ async function main() {
     } else {
       console.log(`  ✗ ${r}  ${res.error}`);
     }
-    if (sinceRelaunch >= RELAUNCH_EVERY) {
+    if (sinceRelaunch >= RELAUNCH_EVERY && !relaunchLock.busy) {
+      relaunchLock.busy = true;
       try { await browser.close(); } catch { /* already gone */ }
       browser = await launchBrowser();
       sinceRelaunch = 0;
+      relaunchLock.busy = false;
     }
   }
+
+  async function worker() {
+    for (;;) {
+      const r = queue.shift();
+      if (r === undefined) return;
+      await renderOne(r);
+    }
+  }
+
+  await Promise.all(Array.from({ length: CONCURRENCY }, () => worker()));
   try { await browser.close(); } catch { /* already gone */ }
   server.kill('SIGTERM');
 

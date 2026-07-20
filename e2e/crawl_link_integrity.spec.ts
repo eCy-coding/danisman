@@ -172,7 +172,17 @@ test.describe('Crowler: Link Integrity Graf Audit', () => {
             .map((a) => (a as HTMLAnchorElement).pathname)
             .filter((p) => (p && p !== '/') || p.length > 1),
         );
-        hrefs.forEach((h) => allLinked.add(h));
+        hrefs.forEach((h) => {
+          allLinked.add(h);
+          // Footer/legal links go through i18n/helpers.ts localizedHref(),
+          // which always prefixes the target locale ('/tr/privacy/...'),
+          // even from the unprefixed seed pages this crawl visits — while
+          // sitemap.xml lists the bare canonical path. Without stripping the
+          // prefix, a genuinely-linked page (e.g. /privacy/data-rights) is
+          // misreported as orphaned. Register the unprefixed form too.
+          const stripped = h.replace(/^\/(tr|en)(?=\/|$)/, '') || '/';
+          if (stripped !== h) allLinked.add(stripped);
+        });
       } catch {
         /* skip */
       }
@@ -193,22 +203,59 @@ test.describe('Crowler: Link Integrity Graf Audit', () => {
       '/cookies',
       '/events',
       '/locations',
+      // /discovery: production edge (vercel.json) 308-redirects this to
+      // /discovery-call — a disputed, unresolved routing decision tracked
+      // separately (see project memory: "discovery redirect shadows form").
+      // Not nav-linking it here avoids compounding that open question.
+      '/discovery',
     ];
+
+    // src/App.tsx keeps ~19 Turkish-slug routes purely as
+    // `<Navigate replace>` 301-style redirects to their canonical English
+    // counterpart (e.g. /hakkimizda → /about, /sss → /faq) for old bookmarked
+    // / previously-indexed URLs. They are deliberately NOT linked from nav —
+    // linking to a redirect-only route would just bounce the visitor via
+    // history.replace with zero UX value. Real orphan detection should
+    // exclude these by design, same as UTILITY_PATHS above.
+    const TR_ALIAS_REDIRECT_PATHS = [
+      '/hizmetler',
+      '/iletisim',
+      '/fiyatlandirma',
+      '/hakkimizda',
+      '/hizli-kontrol',
+      '/fiyatlandirma-hesabi',
+      '/kariyer',
+      '/vaka-calismalari',
+      '/metodoloji',
+      '/ekip',
+      '/is-ortaklari',
+      '/basin',
+      '/etkinlikler',
+      '/lokasyonlar',
+      '/gizlilik',
+      '/kosullar',
+      '/cerezler',
+      '/sss',
+      '/konusmalar',
+    ];
+
+    const EXEMPT_PATHS = new Set([...UTILITY_PATHS, ...TR_ALIAS_REDIRECT_PATHS]);
 
     const mainPaths = sitemapPaths.filter(
       (p) =>
         !p.startsWith('/perspektifler/') &&
         !p.startsWith('/case-studies/') &&
         p !== '/' &&
-        !UTILITY_PATHS.includes(p),
+        !EXEMPT_PATHS.has(p),
     );
     const orphans = mainPaths.filter((p) => !allLinked.has(p));
 
     if (orphans.length > 0) {
       console.warn(`⚠ Orphan ana sayfalar: ${orphans.join(', ')}`);
     }
-    // Kritik nav sayfaları linked olmalı — utility hariç max 9 orphan
-    // (/faq, /team, /careers, /partners + /services/* gibi deep linkler footer/section'dan)
+    // Kritik nav sayfaları linked olmalı — utility + TR-alias redirect hariç
+    // max 9 orphan (deep-link'ler section'lardan geliyor, /pillar/* gibi
+    // uzak sayfalar bazen sadece footer'dan bir tık uzakta olabilir)
     expect(
       orphans.length,
       `Orphan kritik sayfalar (${orphans.length}): ${orphans.join(', ')}`,

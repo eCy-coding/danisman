@@ -21,9 +21,27 @@
  *   npx playwright test e2e/crawl_newsletter_deep.spec.ts --project=chromium
  */
 
-import { test, expect, type Page } from '@playwright/test';
+import { test, expect, type Page, type Locator } from '@playwright/test';
 
 const BASE_URL = 'http://localhost:4173';
+
+/**
+ * Both newsletter forms (Footer + inline NewsletterSection) gate their
+ * submit button behind an explicit KVKK/GDPR consent checkbox — EDPB
+ * Guidelines 05/2020 forbid pre-ticked consent, so the checkbox defaults
+ * unchecked and the button stays `disabled` until it's ticked. Without
+ * checking it here, `.click()` polls "element is not enabled" until the
+ * 15s actionability timeout — root cause of the booking/newsletter click
+ * timeouts, not a missing wait or a brittle selector.
+ */
+async function checkNewsletterConsent(submitBtn: Locator): Promise<void> {
+  const consentCheckbox = submitBtn
+    .locator('xpath=ancestor::form[1]//input[@type="checkbox"]')
+    .first();
+  if (await consentCheckbox.isVisible().catch(() => false)) {
+    await consentCheckbox.check({ force: true }).catch(() => undefined);
+  }
+}
 
 async function setupMocks(page: Page, newsletterStatus = 200): Promise<void> {
   await page.route('**/api/geo/**', (r) =>
@@ -115,6 +133,7 @@ test.describe('Crawler: Newsletter Deep — Phase 6 Observability', () => {
       .locator('button[type="submit"], button:has-text("Abone"), button:has-text("Subscribe")')
       .last();
     if (await submitBtn.isVisible({ timeout: 2_000 }).catch(() => false)) {
+      await checkNewsletterConsent(submitBtn);
       await submitBtn.click();
       await page.waitForTimeout(1_500);
 
@@ -171,6 +190,7 @@ test.describe('Crawler: Newsletter Deep — Phase 6 Observability', () => {
     await newsletterEmail.fill('already@subscribed.com');
     const submitBtn = page.locator('button:has-text("Abone"), button:has-text("Subscribe")').last();
     if (await submitBtn.isVisible({ timeout: 2_000 }).catch(() => false)) {
+      await checkNewsletterConsent(submitBtn);
       await submitBtn.click();
       await page.waitForTimeout(1_500);
     }
@@ -210,6 +230,7 @@ test.describe('Crawler: Newsletter Deep — Phase 6 Observability', () => {
         .locator('button:has-text("Abone"), button:has-text("Subscribe")')
         .last();
       if (await submitBtn.isVisible({ timeout: 2_000 }).catch(() => false)) {
+        await checkNewsletterConsent(submitBtn);
         await submitBtn.click();
         await page.waitForTimeout(800);
         eventFired = await page.evaluate(
@@ -310,6 +331,7 @@ test.describe('Crawler: Newsletter Deep — Phase 6 Observability', () => {
     await newsletterEmail.fill('loading@test.com');
     const submitBtn = page.locator('button:has-text("Abone"), button:has-text("Subscribe")').last();
     if (await submitBtn.isVisible({ timeout: 2_000 }).catch(() => false)) {
+      await checkNewsletterConsent(submitBtn);
       await submitBtn.click();
       await page.waitForTimeout(200);
       const isLoading = await submitBtn.isDisabled().catch(() => false);

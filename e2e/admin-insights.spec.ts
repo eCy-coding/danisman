@@ -54,8 +54,14 @@ test.describe('Admin insights — public smoke (no auth)', () => {
       await page.goto(`${BASE_URL}${route}`);
       await page.waitForLoadState('domcontentloaded');
       const url = new URL(page.url());
-      // SPA auth-guard: path becomes /admin/login (or stays /admin/login after redirect)
-      expect(url.pathname).toMatch(/^\/admin(\/login)?$/);
+      // README.md "VITE_ENABLE_ADMIN — Build-time switch — HARD-OFF by
+      // default": ci.yml's `build` job never sets it, so /admin/* is not
+      // even routed (App.tsx ADMIN_ROUTES_ENABLED guard) and the whole
+      // subtree 302s to "/" — the documented, deliberate anti-brute-force
+      // posture. When the flag IS set (local `npm run dev`), the SPA
+      // auth-guard instead lands on /admin(/login)?. Either outcome proves
+      // an unauthenticated visitor never reaches protected content.
+      expect(url.pathname).toMatch(/^\/(admin(\/login)?)?$/);
     });
   }
 });

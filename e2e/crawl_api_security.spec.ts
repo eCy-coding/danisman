@@ -132,9 +132,15 @@ test.describe('Crawler: API Security Deep — Pane 10 (OWASP Top 10)', () => {
     });
     await page.waitForTimeout(600);
 
-    const url = page.url();
-    // Should NOT redirect to evil.com
-    expect(url, "Open redirect: evil.com'a yönlendirildi").not.toContain('evil.com');
+    // src/pages/LoginPage.tsx never reads a `redirect` query param at all,
+    // so it cannot navigate anywhere based on it — the string "evil.com"
+    // legitimately appears in the URL we ourselves navigated to (as an
+    // untouched query value), which made a plain substring check on the
+    // whole URL trivially true regardless of whether any redirect
+    // happened. Check the actual navigation target (hostname) instead —
+    // that's what an open-redirect vulnerability would actually change.
+    const url = new URL(page.url());
+    expect(url.hostname, "Open redirect: evil.com'a yönlendirildi").not.toBe('evil.com');
   });
 
   // ─── P-SEC-05: DOM XSS innerHTML ─────────────────────────────

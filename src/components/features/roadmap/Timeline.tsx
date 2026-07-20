@@ -92,9 +92,14 @@ export const Timeline: React.FC<TimelineProps> = ({ steps }) => {
                     </span>
                   </div>
 
-                  <h3 className="text-2xl font-bold text-slate-100 mb-3 group-hover:text-primary transition-colors">
+                  {/* Timeline is only rendered by MethodologyPage, directly
+                      under its single <h1> with no intervening <h2> — an
+                      <h3> here skipped a level (h1 → h3), a real heading
+                      hierarchy defect. <h2> is correct since these are the
+                      page's top-level sections. */}
+                  <h2 className="text-2xl font-bold text-slate-100 mb-3 group-hover:text-primary transition-colors">
                     {getLang(step.title, lang)}
-                  </h3>
+                  </h2>
                   <p className="text-slate-400 leading-relaxed group-hover:text-slate-300 transition-colors">
                     {getLang(step.description, lang)}
                   </p>

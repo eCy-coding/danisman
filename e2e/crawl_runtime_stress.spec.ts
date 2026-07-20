@@ -481,9 +481,17 @@ test.describe('Crawler: Runtime Stress — Phase 5+7 (Uzun Oturum & Yük)', () =
       if (await textarea.isVisible({ timeout: 2_000 }).catch(() => false))
         await textarea.fill('Test');
 
-      // Click submit rapidly 5 times
+      // Click submit rapidly 5 times. Guard each click: on success the form
+      // (incl. submit button) unmounts — AnimatePresence swaps it for a
+      // "Mesajınız Alındı" panel (src/components/sections/Contact.tsx) — so
+      // a later click's locator resolution can wait the full actionTimeout
+      // (15s) for an element that will never reappear. Bound each attempt
+      // and stop once the button is gone instead of burning the whole
+      // per-click timeout 5×.
       for (let i = 0; i < 5; i++) {
-        await submitBtn.click({ force: true }).catch(() => {});
+        const stillThere = await submitBtn.isVisible({ timeout: 500 }).catch(() => false);
+        if (!stillThere) break;
+        await submitBtn.click({ force: true, timeout: 2_000 }).catch(() => {});
         await page.waitForTimeout(80);
       }
       await page.waitForTimeout(1_000);

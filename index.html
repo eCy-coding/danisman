@@ -131,7 +131,14 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-    <link rel="manifest" href="/site.webmanifest" />
+    <!-- P?? — manifest link intentionally NOT hand-authored here: vite-plugin-pwa
+         (vite.config.ts VitePWA({ manifest: {...} })) auto-generates
+         manifest.webmanifest at build time AND injects its own
+         `<link rel="manifest">` into this document. A second hand-authored
+         tag pointing at the stale /site.webmanifest (wrong theme colors, no
+         PWA plugin lineage) produced two `link[rel="manifest"]` elements —
+         a Playwright strict-mode violation and a genuine authoring bug
+         (browsers pick the first one, silently ignoring the real manifest). -->
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />

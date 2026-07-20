@@ -161,10 +161,18 @@ test.describe('Phase 6 Enterprise — E2E', () => {
     // Page loaded (any of: title, nav, or main content visible)
     await page.waitForLoadState('networkidle');
 
-    // Either the page loads or redirects to login — verify no crash
+    // Either the page loads or redirects to login — verify no crash.
+    // README.md "VITE_ENABLE_ADMIN — Build-time switch — HARD-OFF by
+    // default": when unset (ci.yml `build` job never sets it), the whole
+    // /admin/* subtree isn't routed at all and 302s to bare "/" — the
+    // documented anti-brute-force posture. That's a valid "no crash"
+    // outcome too, just not covered by the substring checks below.
     const url = page.url();
     const isOnPage =
-      url.includes('/founder-letters') || url.includes('/admin') || url.includes('/login');
+      url.includes('/founder-letters') ||
+      url.includes('/admin') ||
+      url.includes('/login') ||
+      new URL(url).pathname === '/';
     expect(isOnPage).toBe(true);
   });
 
@@ -175,7 +183,11 @@ test.describe('Phase 6 Enterprise — E2E', () => {
     await page.waitForLoadState('networkidle');
 
     const url = page.url();
-    const isOnPage = url.includes('/esg') || url.includes('/admin') || url.includes('/login');
+    const isOnPage =
+      url.includes('/esg') ||
+      url.includes('/admin') ||
+      url.includes('/login') ||
+      new URL(url).pathname === '/';
     expect(isOnPage).toBe(true);
 
     // No JS errors thrown
@@ -195,7 +207,11 @@ test.describe('Phase 6 Enterprise — E2E', () => {
     await page.waitForLoadState('networkidle');
 
     const url = page.url();
-    const isOnPage = url.includes('/fintech') || url.includes('/admin') || url.includes('/login');
+    const isOnPage =
+      url.includes('/fintech') ||
+      url.includes('/admin') ||
+      url.includes('/login') ||
+      new URL(url).pathname === '/';
     expect(isOnPage).toBe(true);
 
     // Verify no network errors for the main API calls

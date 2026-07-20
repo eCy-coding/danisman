@@ -79,7 +79,7 @@ export const HomeServicePreview: React.FC<HomeServicePreviewProps> = ({ classNam
       <div className="max-w-7xl mx-auto px-6 md:px-12">
         {/* Header */}
         <div className="text-center mb-16">
-          <span className="inline-block py-1 px-3 rounded-full bg-white/5 border border-white/10 text-[10px] font-bold tracking-[0.2em] text-slate-400 uppercase mb-4">
+          <span className="inline-block py-1 px-3 rounded-full bg-white/5 border border-white/10 text-xs font-bold tracking-[0.2em] text-slate-400 uppercase mb-4">
             Hizmet Alanlarımız
           </span>
           <h2 className="text-3xl md:text-5xl font-serif font-medium text-white mb-4">
@@ -112,7 +112,7 @@ export const HomeServicePreview: React.FC<HomeServicePreviewProps> = ({ classNam
               </div>
 
               {/* Subtitle chip */}
-              <p className="text-[10px] font-bold tracking-[0.2em] text-slate-500 uppercase mb-2">
+              <p className="text-xs font-bold tracking-[0.2em] text-slate-500 uppercase mb-2">
                 {cluster.subtitle}
               </p>
 

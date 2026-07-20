@@ -33,6 +33,10 @@ jobs:
   deploy-frontend:
     name: Deploy Frontend (Vercel)
     runs-on: ubuntu-latest
+    # 480-route prerender is minutes-long by design; cap it so a wedged
+    # browser fails loud in ~2h instead of burning the 6h job limit (a 6h
+    # cancellation also skips every downstream signal).
+    timeout-minutes: 120
     # Only on a green CI run, and only when Vercel is configured.
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:

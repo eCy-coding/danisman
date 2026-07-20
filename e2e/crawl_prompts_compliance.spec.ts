@@ -171,8 +171,14 @@ test.describe('docs/prompts/03: Ollama Model Guide — AI Orchestration', () => 
     expect(exists(guide), `${guide} yok`).toBeTruthy();
     const c = read(guide);
     expect(c.length, `${guide} çok kısa`).toBeGreaterThan(200);
-    expect(c.toLowerCase(), 'Model guide: opus referansı yok').toContain('opus');
-    expect(c.toLowerCase(), 'Model guide: sonnet referansı yok').toContain('sonnet');
+    // This guide is deliberately scoped to LOCAL Ollama models (zero-cost
+    // routing, see user CLAUDE.md "LOKAL MODEL ROUTING" table) — it's the
+    // alternative to cloud Opus/Sonnet, not a description of them, so those
+    // words never legitimately appear here. It does document the Claude
+    // Code integration env vars that bridge the two systems — check that
+    // instead of forcing unrelated cloud-tier keywords into local-model doc.
+    expect(c.toLowerCase(), 'Model guide: ollama referansı yok').toContain('ollama');
+    expect(c, 'Model guide: Claude Code entegrasyonu yok').toContain('Claude Code');
   });
 
   test('OL2: /model workflow Opus+Sonnet+Haiku matrisi (istek4.txt)', () => {

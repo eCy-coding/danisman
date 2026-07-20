@@ -224,6 +224,13 @@ test.describe('Crawler: Kritik UX Bileşenleri — istek5.txt Phase 2+4', () => 
     const emailInput = modal.locator('input[type="email"]');
     await emailInput.fill('test@company.com');
 
+    // src/components/common/ExitIntentModal.tsx (P44-T07, KVKK m.5 / GDPR
+    // Art.4(11)): submit is deliberately gated on `!email || !consent` —
+    // an explicit consent checkbox, not just the email field. The button
+    // stays disabled until it's checked too.
+    const consentCheckbox = modal.locator('[data-testid="exit-intent-consent"]');
+    await consentCheckbox.check();
+
     const submitBtn = modal.locator('button[type="submit"]');
     await expect(submitBtn).toBeEnabled({ timeout: 2_000 });
     await submitBtn.click();

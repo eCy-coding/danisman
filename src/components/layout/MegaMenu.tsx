@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Target,
   Handshake,
@@ -71,7 +71,7 @@ interface MegaMenuProps {
 const InsightsColumns: React.FC<{ lang: Lang; onClose: () => void }> = ({ lang, onClose }) => (
   <>
     <div className="p-6">
-      <p className="text-[10px] font-bold tracking-[0.2em] text-slate-500 uppercase mb-4">
+      <p className="text-[10px] font-bold tracking-[0.2em] text-slate-400 uppercase mb-4">
         {lang === 'tr' ? 'Kategoriler' : 'Categories'}
       </p>
       <ul className="space-y-0.5" role="menu">
@@ -86,7 +86,7 @@ const InsightsColumns: React.FC<{ lang: Lang; onClose: () => void }> = ({ lang, 
               <span className="text-sm font-medium text-slate-300 group-hover:text-white transition-colors leading-tight">
                 {cat.label[lang]}
               </span>
-              <span className="text-[10px] tabular-nums text-slate-600 group-hover:text-slate-400 transition-colors">
+              <span className="text-[10px] tabular-nums text-slate-400 group-hover:text-slate-300 transition-colors">
                 {cat.count}
               </span>
             </a>
@@ -97,7 +97,7 @@ const InsightsColumns: React.FC<{ lang: Lang; onClose: () => void }> = ({ lang, 
             href={MENU_HUB_HREF}
             role="menuitem"
             onClick={onClose}
-            className="group flex items-center gap-1.5 px-2.5 py-2 mt-1 text-xs font-bold text-primary hover:text-white transition-colors outline-none focus-visible:ring-2 focus-visible:ring-primary/50 rounded-lg"
+            className="group flex items-center gap-1.5 px-2.5 py-2 mt-1 text-xs font-bold text-blue-400 hover:text-white transition-colors outline-none focus-visible:ring-2 focus-visible:ring-primary/50 rounded-lg"
           >
             {lang === 'tr' ? 'Tüm kategoriler' : 'All categories'}
             <ArrowRight size={12} className="group-hover:translate-x-0.5 transition-transform" />
@@ -107,7 +107,7 @@ const InsightsColumns: React.FC<{ lang: Lang; onClose: () => void }> = ({ lang, 
     </div>
 
     <div className="p-6">
-      <p className="text-[10px] font-bold tracking-[0.2em] text-slate-500 uppercase mb-4">
+      <p className="text-[10px] font-bold tracking-[0.2em] text-slate-400 uppercase mb-4">
         {lang === 'tr' ? 'Formatlar' : 'Formats'}
       </p>
       <ul className="space-y-1" role="menu">
@@ -126,7 +126,7 @@ const InsightsColumns: React.FC<{ lang: Lang; onClose: () => void }> = ({ lang, 
                 <span className="text-sm font-semibold text-slate-200 group-hover:text-white transition-colors leading-tight">
                   {f.label[lang]}
                 </span>
-                <span className="text-[10px] tabular-nums text-slate-600 group-hover:text-slate-400 transition-colors">
+                <span className="text-[10px] tabular-nums text-slate-400 group-hover:text-slate-300 transition-colors">
                   {f.count}
                 </span>
               </span>
@@ -137,7 +137,7 @@ const InsightsColumns: React.FC<{ lang: Lang; onClose: () => void }> = ({ lang, 
     </div>
 
     <div className="p-6">
-      <p className="text-[10px] font-bold tracking-[0.2em] text-slate-500 uppercase mb-4">
+      <p className="text-[10px] font-bold tracking-[0.2em] text-slate-400 uppercase mb-4">
         {lang === 'tr' ? 'Öne Çıkanlar' : 'Editor’s Picks'}
       </p>
       <ul className="space-y-2" role="menu">
@@ -179,6 +179,19 @@ export const MegaMenu: React.FC<MegaMenuProps> = ({
   onMouseLeave,
 }) => {
   const data = MEGA_MENUS[menuId];
+
+  // Perf (mobile LCP/TBT): the panel itself is always mounted so hover-open
+  // stays a pure CSS transition (no mount flicker/jank), but its body — full
+  // department/service grid + descriptions + icons, ~150-200 DOM nodes per
+  // menu — is real weight paid on EVERY page load even though most visitors
+  // never hover it, and on mobile viewports (`hidden lg:flex` ancestor) it
+  // can never even become visible. Mount the body lazily on first open and
+  // keep it mounted afterwards, so repeat opens stay instant.
+  const [everOpened, setEverOpened] = useState(isOpen);
+  useEffect(() => {
+    if (isOpen) setEverOpened(true);
+  }, [isOpen]);
+
   if (!data) return null;
 
   const bottomBar =
@@ -218,93 +231,101 @@ export const MegaMenu: React.FC<MegaMenuProps> = ({
         />
       )}
       {/* Opaque surface (doctrine A9): /98 translucency let the hero H1 ghost
-          through the open panel — solid #0a0f1c kills the overlap garble. */}
-      <div className="bg-[#0a0f1c] rounded-2xl shadow-[0_20px_60px_-15px_rgba(0,0,0,0.7)] border border-white/8 overflow-hidden ring-1 ring-white/5">
-        <div className="grid grid-cols-4 divide-x divide-white/5">
-          {menuId === 'insights' ? (
-            <InsightsColumns lang={lang} onClose={onClose} />
-          ) : (
-            data.sections.map((section) => (
-              <div key={section.id} className="p-6">
-                <p className="text-[10px] font-bold tracking-[0.2em] text-slate-500 uppercase mb-4">
-                  {section.title[lang]}
-                </p>
-                {/* APG Disclosure Navigation: plain link list — ARIA menu
+          through the open panel — solid #0a0f1c kills the overlap garble.
+          Body content mounts lazily (see `everOpened` above) — perf win,
+          zero visual/UX change since the panel is invisible until isOpen
+          anyway. */}
+      {everOpened && (
+        <div className="bg-[#0a0f1c] rounded-2xl shadow-[0_20px_60px_-15px_rgba(0,0,0,0.7)] border border-white/8 overflow-hidden ring-1 ring-white/5">
+          <div className="grid grid-cols-4 divide-x divide-white/5">
+            {menuId === 'insights' ? (
+              <InsightsColumns lang={lang} onClose={onClose} />
+            ) : (
+              data.sections.map((section) => (
+                <div key={section.id} className="p-6">
+                  <p className="text-[10px] font-bold tracking-[0.2em] text-slate-400 uppercase mb-4">
+                    {section.title[lang]}
+                  </p>
+                  {/* APG Disclosure Navigation: plain link list — ARIA menu
                     roles would demand full menubar keyboard semantics. */}
-                <ul className="space-y-1">
-                  {section.items.map((item) => (
-                    <li key={item.id}>
-                      <a
-                        href={item.href}
-                        onClick={onClose}
-                        className="group flex items-start gap-3 p-2.5 rounded-xl hover:bg-white/5 transition-colors duration-150 outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
-                      >
-                        <span className="mt-0.5 shrink-0 w-7 h-7 rounded-lg bg-white/5 border border-white/8 flex items-center justify-center text-slate-400 group-hover:text-primary group-hover:bg-primary/10 group-hover:border-primary/20 transition-all duration-150">
-                          {ICON_MAP[item.iconName] ?? <Target size={16} />}
-                        </span>
-                        <span className="min-w-0">
-                          <span className="block text-sm font-semibold text-slate-200 group-hover:text-white transition-colors leading-tight mb-0.5">
-                            {item.label[lang]}
+                  <ul className="space-y-1">
+                    {section.items.map((item) => (
+                      <li key={item.id}>
+                        <a
+                          href={item.href}
+                          onClick={onClose}
+                          className="group flex items-start gap-3 p-2.5 rounded-xl hover:bg-white/5 transition-colors duration-150 outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
+                        >
+                          <span className="mt-0.5 shrink-0 w-7 h-7 rounded-lg bg-white/5 border border-white/8 flex items-center justify-center text-slate-400 group-hover:text-primary group-hover:bg-primary/10 group-hover:border-primary/20 transition-all duration-150">
+                            {ICON_MAP[item.iconName] ?? <Target size={16} />}
                           </span>
-                          <span className="block text-xs text-slate-500 group-hover:text-slate-400 leading-snug transition-colors line-clamp-2">
-                            {item.description[lang]}
+                          <span className="min-w-0">
+                            <span className="block text-sm font-semibold text-slate-200 group-hover:text-white transition-colors leading-tight mb-0.5">
+                              {item.label[lang]}
+                            </span>
+                            <span className="block text-xs text-slate-400 group-hover:text-slate-300 leading-snug transition-colors line-clamp-2">
+                              {item.description[lang]}
+                            </span>
                           </span>
-                        </span>
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))
-          )}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))
+            )}
 
-          {/* Featured panel */}
-          <div
-            className={`p-6 bg-linear-to-br ${data.featured.gradient} flex flex-col justify-between`}
-          >
-            <div>
-              <span className="inline-block text-[10px] font-bold tracking-[0.2em] text-secondary uppercase border border-secondary/30 bg-secondary/10 rounded-full px-2.5 py-1 mb-4">
-                {data.featured.tag[lang]}
-              </span>
-              {/* S13-P4 F8 — Navbar MegaMenu featured panel was using <h3>, */}
-              {/* placing AI Olgunluk Analizi / 2026 AI Dönüşüm Raporu in the */}
-              {/* document outline BEFORE the <h1> hero, breaking heading */}
-              {/* hierarchy for screen readers and Google's outline parser. */}
-              {/* These are navigation labels (not content), so demote to */}
-              {/* <p> with the same visual class set. Hierarchy now starts */}
-              {/* at the hero <h1>. */}
-              <p className="text-base font-bold text-white leading-snug mb-3">
-                {data.featured.title[lang]}
-              </p>
-              <p className="text-xs text-slate-400 leading-relaxed">
-                {data.featured.description[lang]}
-              </p>
-            </div>
-            <a
-              href={data.featured.href}
-              onClick={onClose}
-              className="mt-6 inline-flex items-center gap-2 text-xs font-bold text-primary hover:text-white border border-primary/30 hover:border-primary bg-primary/5 hover:bg-primary/20 rounded-lg px-4 py-2.5 transition-all duration-200 group w-fit"
+            {/* Featured panel */}
+            <div
+              className={`p-6 bg-linear-to-br ${data.featured.gradient} flex flex-col justify-between`}
             >
-              {data.featured.cta[lang]}
-              <ArrowRight size={13} className="group-hover:translate-x-0.5 transition-transform" />
+              <div>
+                <span className="inline-block text-[10px] font-bold tracking-[0.2em] text-secondary uppercase border border-secondary/30 bg-secondary/10 rounded-full px-2.5 py-1 mb-4">
+                  {data.featured.tag[lang]}
+                </span>
+                {/* S13-P4 F8 — Navbar MegaMenu featured panel was using <h3>, */}
+                {/* placing AI Olgunluk Analizi / 2026 AI Dönüşüm Raporu in the */}
+                {/* document outline BEFORE the <h1> hero, breaking heading */}
+                {/* hierarchy for screen readers and Google's outline parser. */}
+                {/* These are navigation labels (not content), so demote to */}
+                {/* <p> with the same visual class set. Hierarchy now starts */}
+                {/* at the hero <h1>. */}
+                <p className="text-base font-bold text-white leading-snug mb-3">
+                  {data.featured.title[lang]}
+                </p>
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  {data.featured.description[lang]}
+                </p>
+              </div>
+              <a
+                href={data.featured.href}
+                onClick={onClose}
+                className="mt-6 inline-flex items-center gap-2 text-xs font-bold text-blue-400 hover:text-white border border-primary/30 hover:border-primary bg-primary/5 hover:bg-primary/20 rounded-lg px-4 py-2.5 transition-all duration-200 group w-fit"
+              >
+                {data.featured.cta[lang]}
+                <ArrowRight
+                  size={13}
+                  className="group-hover:translate-x-0.5 transition-transform"
+                />
+              </a>
+            </div>
+          </div>
+
+          {/* Bottom bar */}
+          <div className="px-6 py-3 border-t border-white/5 flex items-center justify-between bg-white/1">
+            {/* slate-400: slate-600 measured 2.9:1 on the opaque panel (webkit axe) */}
+            <p className="text-xs text-slate-400">{bottomBar.label}</p>
+            <a
+              href={bottomBar.href}
+              onClick={onClose}
+              className="text-xs font-bold text-slate-400 hover:text-white transition-colors flex items-center gap-1 group"
+            >
+              {bottomBar.cta}
+              <ArrowRight size={12} className="group-hover:translate-x-0.5 transition-transform" />
             </a>
           </div>
         </div>
-
-        {/* Bottom bar */}
-        <div className="px-6 py-3 border-t border-white/5 flex items-center justify-between bg-white/1">
-          {/* slate-400: slate-600 measured 2.9:1 on the opaque panel (webkit axe) */}
-          <p className="text-xs text-slate-400">{bottomBar.label}</p>
-          <a
-            href={bottomBar.href}
-            onClick={onClose}
-            className="text-xs font-bold text-slate-400 hover:text-white transition-colors flex items-center gap-1 group"
-          >
-            {bottomBar.cta}
-            <ArrowRight size={12} className="group-hover:translate-x-0.5 transition-transform" />
-          </a>
-        </div>
-      </div>
+      )}
     </div>
   );
 };

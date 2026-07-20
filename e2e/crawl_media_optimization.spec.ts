@@ -34,12 +34,14 @@ const BASE_URL = 'http://localhost:4173';
 interface ImgEntry {
   src: string;
   alt: string;
+  hasAlt: boolean;
   loading: string;
   fetchpriority: string;
   width: string | null;
   height: string | null;
   decoding: string;
   top: number;
+  inChrome: boolean;
 }
 
 async function collectImages(page: Page): Promise<ImgEntry[]> {
@@ -47,12 +49,21 @@ async function collectImages(page: Page): Promise<ImgEntry[]> {
     return Array.from(document.querySelectorAll('img')).map((img) => ({
       src: img.getAttribute('src') ?? img.getAttribute('data-src') ?? '',
       alt: img.getAttribute('alt') ?? '',
+      // WCAG 1.1.1 / axe-core `image-alt`: alt="" is a valid, compliant
+      // decorative/redundant-image pattern — only a MISSING attribute is a
+      // real violation.
+      hasAlt: img.hasAttribute('alt'),
       loading: img.getAttribute('loading') ?? '',
       fetchpriority: img.getAttribute('fetchpriority') ?? img.getAttribute('fetchPriority') ?? '',
       width: img.getAttribute('width'),
       height: img.getAttribute('height'),
       decoding: img.getAttribute('decoding') ?? '',
       top: img.getBoundingClientRect().top,
+      // Mega-menu "editor's picks" thumbnails sit in the closed nav dropdown
+      // (display:none) — getBoundingClientRect() reports top:0 for them,
+      // which falsely looks like an in-viewport LCP candidate. They are
+      // deliberately loading="lazy" (never the visible LCP element).
+      inChrome: !!img.closest('nav, header'),
     }));
   });
 }
@@ -180,7 +191,7 @@ test.describe('Crawler: Media Optimization — Pane 6 (Phase 3)', () => {
     const imgs = await collectImages(page);
     const noAlt = imgs.filter(
       (i) =>
-        !i.alt.trim() &&
+        !i.hasAlt &&
         i.src &&
         !i.src.includes('icon') &&
         !i.src.includes('logo') &&
@@ -202,8 +213,8 @@ test.describe('Crawler: Media Optimization — Pane 6 (Phase 3)', () => {
     await page.waitForTimeout(600);
 
     const imgs = await collectImages(page);
-    // Viewport içindeki ilk görsel LCP adayıdır
-    const viewportImgs = imgs.filter((i) => i.top < 800 && i.src);
+    // Viewport içindeki ilk görsel LCP adayıdır (nav/mega-menu chrome hariç)
+    const viewportImgs = imgs.filter((i) => i.top < 800 && i.src && !i.inChrome);
     const badLcp = viewportImgs.filter((i) => i.loading === 'lazy');
 
     if (badLcp.length > 0) {
@@ -343,7 +354,7 @@ test.describe('Crawler: Media Optimization — Pane 6 (Phase 3)', () => {
 
     const imgs = await collectImages(page);
     const noAlt = imgs.filter(
-      (i) => !i.alt.trim() && i.src && !i.src.includes('icon') && i.src.length > 5,
+      (i) => !i.hasAlt && i.src && !i.src.includes('icon') && i.src.length > 5,
     );
     expect(noAlt.length, `Services: ${noAlt.length} alt text eksik`).toBe(0);
   });

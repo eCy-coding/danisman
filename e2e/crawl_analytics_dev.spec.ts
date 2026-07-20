@@ -29,11 +29,27 @@
  *   npx playwright test e2e/crawl_analytics_dev.spec.ts --project=chromium
  */
 
-import { test, expect, type Page } from '@playwright/test';
+import { test, expect, type Page, type Locator } from '@playwright/test';
 import { MOCK_URL } from './mock-url';
 
 const BASE_URL = 'http://localhost:4173';
 const API_URL = MOCK_URL;
+
+/**
+ * Every newsletter form (inline NewsletterSection + Footer) gates its
+ * submit button behind an explicit KVKK/GDPR consent checkbox (EDPB
+ * Guidelines 05/2020 — no pre-ticked consent), so the button stays
+ * `disabled` until the box is ticked. Skipping this makes `.click()`
+ * poll "element is not enabled" until the 15s actionability timeout.
+ */
+async function checkNewsletterConsent(submitBtn: Locator): Promise<void> {
+  const consentCheckbox = submitBtn
+    .locator('xpath=ancestor::form[1]//input[@type="checkbox"]')
+    .first();
+  if (await consentCheckbox.isVisible().catch(() => false)) {
+    await consentCheckbox.check({ force: true }).catch(() => undefined);
+  }
+}
 
 interface AnalyticsWindow extends Window {
   dataLayer: unknown[];
@@ -487,6 +503,7 @@ test.describe('Crawler: Analytics-Dev (Pane 9) — GA4/GTM/AnalyticsDevOverlay',
         .first();
       const hasSub = await submitBtn.isVisible({ timeout: 3_000 }).catch(() => false);
       if (hasSub) {
+        await checkNewsletterConsent(submitBtn);
         await submitBtn.click();
         await page.waitForTimeout(800);
       }
