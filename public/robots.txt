@@ -4,6 +4,54 @@ Disallow: /admin/
 Disallow: /app/
 Disallow: /api/
 
+User-agent: GPTBot
+Allow: /
+Disallow: /admin/
+Disallow: /app/
+Disallow: /api/
+
+User-agent: ChatGPT-User
+Allow: /
+Disallow: /admin/
+Disallow: /app/
+Disallow: /api/
+
+User-agent: ClaudeBot
+Allow: /
+Disallow: /admin/
+Disallow: /app/
+Disallow: /api/
+
+User-agent: Claude-Web
+Allow: /
+Disallow: /admin/
+Disallow: /app/
+Disallow: /api/
+
+User-agent: PerplexityBot
+Allow: /
+Disallow: /admin/
+Disallow: /app/
+Disallow: /api/
+
+User-agent: Google-Extended
+Allow: /
+Disallow: /admin/
+Disallow: /app/
+Disallow: /api/
+
+User-agent: CCBot
+Allow: /
+Disallow: /admin/
+Disallow: /app/
+Disallow: /api/
+
+User-agent: Applebot-Extended
+Allow: /
+Disallow: /admin/
+Disallow: /app/
+Disallow: /api/
+
 Sitemap: https://ecypro.com/sitemap-index.xml
 Sitemap: https://ecypro.com/sitemap.xml
 Sitemap: https://ecypro.com/sitemap-tr.xml

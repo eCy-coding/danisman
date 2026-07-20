@@ -352,12 +352,36 @@ async function generateSitemap() {
 
   // Robots.txt — production-grade: admin/app/api isolated, sitemaps + security policy ref
   // P43: merge'lendi — admin/app/api disallow + tüm sitemap referansları + security.txt yorum satırı.
+  // GEO: AI arama/tarayıcı ajanlarına (GPTBot, ClaudeBot, PerplexityBot,
+  // Google-Extended vb.) açık `Allow` bloğu — varsayılan davranış (bunlar
+  // `User-agent: *` grubuna zaten dahil) zaten izin verir; bu bloklar niyeti
+  // belgeler ve üçüncü parti CDN/WAF seviyesinde yanlış yapılandırmayı önler.
+  const AI_CRAWLER_AGENTS = [
+    'GPTBot', // OpenAI — arama + model eğitimi
+    'ChatGPT-User', // OpenAI — ChatGPT canlı tarama
+    'ClaudeBot', // Anthropic — arama + model eğitimi
+    'Claude-Web', // Anthropic — Claude canlı tarama
+    'PerplexityBot', // Perplexity AI arama
+    'Google-Extended', // Google — Gemini/AI Overviews eğitimi
+    'CCBot', // Common Crawl — çoğu LLM'in eğitim kaynağı
+    'Applebot-Extended', // Apple Intelligence
+  ];
+  const aiCrawlerBlocks = AI_CRAWLER_AGENTS.map(
+    (agent) => `
+User-agent: ${agent}
+Allow: /
+Disallow: /admin/
+Disallow: /app/
+Disallow: /api/
+`,
+  ).join('');
+
   const robots = `User-agent: *
 Allow: /
 Disallow: /admin/
 Disallow: /app/
 Disallow: /api/
-
+${aiCrawlerBlocks}
 Sitemap: ${BASE_URL}/sitemap-index.xml
 Sitemap: ${BASE_URL}/sitemap.xml
 Sitemap: ${BASE_URL}/sitemap-tr.xml

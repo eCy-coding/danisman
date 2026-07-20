@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Handshake } from 'lucide-react';
 import { FadeIn } from '../components/common/FadeIn';
+import { SEO } from '../components/common/SEO';
 
 /**
  * P45: Sahte Oracle/Microsoft/Salesforce/SAP "Platinum/Gold/Strategic/Global
@@ -12,6 +13,15 @@ import { FadeIn } from '../components/common/FadeIn';
 export const PartnersPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-neutral pt-32 pb-24 text-slate-300 font-sans">
+      {/* SEO/GEO audit fix: sayfa hiç <SEO> render etmiyordu → prerender
+          sırasında title/canonical bir önceki sayfadan (anasayfa) kalıyor,
+          "Stratejik Danışmanlık & KVKK Uyumu | eCyPro" ile duplike title +
+          yanlış canonical (/tr yerine /tr/partners) üretiyordu. */}
+      <SEO
+        title="Stratejik İş Birlikleri | eCyPro"
+        description="eCyPro; teknoloji, hukuk ve akademik kurumlarla engagement bazında stratejik iş birliği kurar. Ortaklık görüşmesi için iletişime geçin."
+        canonical="/partners"
+      />
       <div className="max-w-3xl mx-auto px-6 md:px-12 text-center">
         <FadeIn>
           <span className="text-secondary font-bold tracking-widest uppercase text-xs mb-4 inline-block">

@@ -1,0 +1,134 @@
+# eCyPro Premium Consulting
+
+> eCyPro Premium Consulting — KVKK, GDPR ve AB regülasyon uyumu için stratejik danışmanlık. Veri yönetişimi, dijital dönüşüm ve kurumsal risk programları.
+
+## Kurumsal
+- [Hakkımızda](https://ecypro.com/about): eCyPro Premium Consulting kuruluş vizyonu, metodoloji ve pratik alanları.
+- [Hizmetler](https://ecypro.com/services): M&A, ESG, Fintech, aile şirketi, insan & organizasyon, risk & kamu, büyüme & operasyon hizmet kataloğu.
+- [Metodoloji](https://ecypro.com/methodology): Danışmanlık engagement sürecinin adımları ve çalışma modeli.
+- [Fiyatlandırma](https://ecypro.com/pricing): Starter, Growth, Enterprise paket yaklaşımı ve fiyatlandırma hesaplayıcısı.
+- [Vaka Çalışmaları](https://ecypro.com/case-studies): Tamamlanan proje ve engagement özetleri.
+- [Ekip](https://ecypro.com/team): Liderlik kadrosu.
+- [Ortaklıklar](https://ecypro.com/partners): Teknoloji, hukuk ve akademik kurumlarla stratejik iş birliği ağı.
+- [Sektörler](https://ecypro.com/industries): Üretim, finans, perakende, teknoloji, ilaç-sağlık sektör çözümleri.
+- [Sıkça Sorulan Sorular](https://ecypro.com/faq): Engagement modeli, kapsam ve süreç hakkında sık sorulan sorular.
+- [İletişim](https://ecypro.com/contact): Ücretsiz strateji görüşmesi talebi ve iletişim kanalları.
+- [Gizlilik Politikası](https://ecypro.com/privacy): KVKK/GDPR kapsamında kişisel veri işleme politikası.
+- [KVKK m.11 Haklar](https://ecypro.com/privacy/data-rights): Kişisel veri sahibi başvuru ve haklar süreci.
+- [Perspektifler](https://ecypro.com/perspektifler): Strateji, yapay zeka, finans, ESG ve liderlik üzerine makale merkezi.
+
+## Hizmetler · M&A
+- [Due Diligence Suite](https://ecypro.com/services/due-diligence-suite): Mali, hukuki, vergi, tekno ve KVKK katmanlarını 90 günde tek elden — Kurucu Emre Can Yalçın tüm süreçte kıdemli ortak olarak masa başındadır.
+- [Şirket Değerleme & QoE](https://ecypro.com/services/company-valuation): DCF, çarpan analizi ve EBITDA kalite testi; Türk mid-market için özel add-back metodolojisi ile savunulabilir değerleme.
+- [İşlem Yapılandırma](https://ecypro.com/services/deal-structuring): Varlık, hisse veya birleşme senaryolarında vergi optimizasyonu ve TTK uyum — yanlış yapı seçimi en pahalı hatadır.
+- [Müzakere & LOI](https://ecypro.com/services/negotiation-loi): NDA'dan bağlayıcı term-sheet'e 4 haftada; deal-breaker'lar müzakere masasına gelmeden tespit edilir ve kaldırılır.
+- [Birleşme Sonrası Entegrasyon](https://ecypro.com/services/post-merger-integration): İlk 100 gün playbook, kültür kırılma noktaları ve sinerji takip panosu — başarısızlığın en sık yaşandığı bu aşama, başlıca uzmanlık alanımızdır.
+
+## Hizmetler · ESG
+- [ESRS Yol Haritası](https://ecypro.com/services/esrs-roadmap): E1-E5, S1-S4 ve G1 standartlarına 6 ayda hazırlık; CSRD Türkiye ve AB çift-yetki raporlaması için somut adım adım program.
+- [Çift Önemlilik Analizi](https://ecypro.com/services/double-materiality): İçten-dışa ve dıştan-içe önemlilik değerlendirmesi; paydaş haritası ve etki-risk matrisi ile ESRS uyumlu çerçeve.
+- [Karbon Muhasebesi](https://ecypro.com/services/carbon-accounting): Scope 1, 2 ve 3 emisyon envanteri, doğrulama hazırlığı ve bilim temelli hedef (SBTi) yol haritası — veri değil, karar desteği.
+- [CSRD Uyumu](https://ecypro.com/services/csrd-compliance): Türk şirketler için AB tedarik zinciri baskısına karşı CSRD hazırlık; Kurucu eşliğiyle yönetim kurulu sunumuna hazır rapor.
+- [Sürdürülebilirlik Raporları](https://ecypro.com/services/esg-strategy): GRI, SASB ve ESRS uyumlu yıllık sürdürülebilirlik raporları; analist sorularına dayanıklı verilerle hazırlanır.
+
+## Hizmetler · Fintech
+- [SPK & CASP Lisansı](https://ecypro.com/services/spk-casp): Kripto varlık hizmet sağlayıcısı lisans süreci; SPK başvurusu, sermaye yapılanması ve uyum çerçevesi tek elden.
+- [MASAK AML/KYC](https://ecypro.com/services/masak-aml): Risk bazlı AML politikası, müşteri kimlik doğrulama prosedürleri ve MASAK uyum programı; denetim öncesi boşluk analizi dahil.
+- [KVKK VERBİS & DSAR](https://ecypro.com/services/data-governance): VERBİS kaydı, kişisel veri envanteri, DSAR süreç tasarımı ve sözleşme şablonları; Kurucu eşliğinde tam uyum paketi.
+- [Açık Bankacılık Uyumu](https://ecypro.com/services/open-banking): TCMB ve BDDK düzenlemelerine uyum; PSD2 eşdeğeri API güvenlik standartları ve lisans başvurusu danışmanlığı.
+- [Kripto & Web3 Hukuku](https://ecypro.com/services/crypto-web3): Token ihracı, DeFi protokol uyum değerlendirmesi ve Türkiye'nin değişen kripto regülasyon ortamında stratejik konum.
+
+## Hizmetler · Aile Şirketi
+- [Kuşak Devri Planlaması](https://ecypro.com/services/succession-planning): 1G'den 2G'ye ya da 2G'den 3G'ye geçişte hisse devri, yönetim devri ve aile üyesi yetkinlik değerlendirmesi — Kurucu eşliğiyle nesil atlama rehberi.
+- [Aile Anayasası](https://ecypro.com/services/family-business): Aile konseyi, atanma kriterleri, kâr payı politikası ve uyuşmazlık çözüm mekanizması; tüm kuşakların imzaladığı yaşayan belge.
+- [Family Office Kurulumu](https://ecypro.com/services/family-office): Tek aile ofisi yapısı, yatırım komitesi, risk politikası ve operasyonel çerçeve; kurumsal miras yönetiminin temeli.
+- [Servet Transferi Planlaması](https://ecypro.com/services/wealth-transfer): Çoklu nesil vergi optimizasyonu, bağış planlaması ve likidite stratejisi; serveti koruyarak aktarmanın mimarisi.
+- [Aile Arabuluculuğu](https://ecypro.com/services/conflict-resolution): Hissedar anlaşmazlıkları, nesil çatışmaları ve çıkış müzakereleri için tarafsız yapılandırılmış arabuluculuk süreci.
+- [Kurumsallaşma & Bağımsız Yönetim](https://ecypro.com/services/family-business-governance): Bağımsız yönetim kurulu üyesi seçimi, komite yapısı ve kurumsal yönetim derecelendirmesi; aile şirketinden kurumsal şirkete dönüşüm.
+
+## Hizmetler · İnsan & Organizasyon
+- [İnsan Kaynakları & Organizasyon Tasarımı](https://ecypro.com/services/hr-transformation): Yetenek matrisleri, performans yönetim sistemleri ve çevik organizasyon tasarımları ile kurumsal kapasiteyi büyütün.
+- [Yetenek Yönetimi & İşveren Markası](https://ecypro.com/services/employer-branding): Nitelikli işgücünü çekmek ve elde tutmak için stratejik işveren markası ve aday deneyimi tasarımı.
+- [Endüstriyel İlişkiler & Sendika](https://ecypro.com/services/industrial-relations): Toplu iş sözleşmesi müzakereleri, sendikal ilişki yönetimi ve çalışma barışını koruyan protokoller.
+- [Bordro Denetimi & İstihdam Teşvikleri](https://ecypro.com/services/payroll-audit): SGK prim teşviklerinden maksimum yararlanma, bordro maliyet optimizasyonu ve uyum denetimi.
+
+## Hizmetler · Risk & Kamu
+- [Makroekonomik Risk & Piyasa Analizi](https://ecypro.com/services/macro-risk): Kur, faiz ve enflasyon projeksiyonları ile C-Level stratejik karar desteği ve senaryo planlaması.
+- [Kriz Yönetimi & İş Sürekliliği](https://ecypro.com/services/crisis-management): Finansal veya operasyonel kriz anlarında acil eylem planları ve kurumsal dayanıklılık mimarisi.
+- [Rekabet Ekonomisi & Regülasyon](https://ecypro.com/services/competition-economics): Antitröst incelemeleri, pazar hakimiyeti analizleri ve regülasyon uyum stratejileri.
+- [Kurumsal İlişkiler & Lobicilik (GR)](https://ecypro.com/services/government-relations): Ankara ve Brüksel nezdinde paydaş haritalama, mevzuat takibi ve stratejik kamu ilişkileri.
+- [Global Diplomasi & Ticari İstihbarat](https://ecypro.com/services/global-intelligence): Jeopolitik risk haritaları, ticari istihbarat ve devletlerarası kriz senaryoları ile küresel görüş.
+- [Akıllı Şehirler & Kamu Politikaları](https://ecypro.com/services/smart-cities): Yerel yönetimler için dijital şehircilik stratejileri, etki analizi ve kamu politikası tasarımı.
+
+## Hizmetler · Büyüme & Operasyon
+- [Uluslararası Pazara Giriş & İhracat](https://ecypro.com/services/market-entry): Hedef pazar araştırması, distribütör ağı kurulumu ve Turquality hazırlık süreçleri ile ihracat büyümesi.
+- [Yatırım Teşvikleri & Hibe Yönetimi](https://ecypro.com/services/investment-incentives): Devlet destekleri, Ar-Ge hibeleri ve proje bazlı yatırım teşvik belgeleri ile finansman optimizasyonu.
+- [Nöropazarlama & Tüketici Deneyimi (CX)](https://ecypro.com/services/neuromarketing): Bilinçdışı tüketici davranış analizi ile veri odaklı marka, fiyat ve deneyim kararları.
+- [Operasyonel Mükemmellik & Tedarik Zinciri](https://ecypro.com/services/operational-excellence): Yalın üretim (Lean), Altı Sigma metodolojileri ve uçtan uca lojistik optimizasyonu.
+
+## Makaleler (Perspektifler — TR)
+- [Proje Yönetimi Best Practices: Türkiye'de Kurumsal Proje Başarısı](https://ecypro.com/perspektifler/proje-yonetimi-best-practices): Kurumsal projelerin %70'i geride kalır veya başarısız olur. Türkiye iş ortamına uygun proje yönetimi best practices, araçlar ve yaygın başarısızlık nedenleri.
+- [KVKK Uyum Süreci: Adım Adım Kurumsal Rehber 2026](https://ecypro.com/perspektifler/kvkk-uyum-sureci-adim-adim): KVKK uyum sürecini nasıl başlatırsınız? 7 adımlı kurumsal kılavuz, zorunlu belgeler, KVKK ihlal cezaları ve yaygın hatalar.
+- [GDPR ve KVKK Farkları: Türk Şirketleri için Karşılaştırmalı Analiz](https://ecypro.com/perspektifler/gdpr-kvkk-farklari): GDPR ile KVKK arasındaki temel farklar: ceza hesaplama, kapsam, ilgili kişi hakları ve veri transferi. AB ile iş yapan Türk şirketleri için pratik rehber.
+- [Dijital Dönüşüm KPI Örnekleri: C-Suite için Ölçüm Rehberi 2026](https://ecypro.com/perspektifler/dijital-donusum-kpi-ornekleri): Dijital dönüşüm projelerinde hangi KPI'ları izlemelisiniz? 12 kritik metrik, ölçüm formülleri ve sektörel benchmark'lar.
+- [Danışmanlık Ücretleri Nasıl Belirlenir? Fiyatlandırma Modelleri Karşılaştırması](https://ecypro.com/perspektifler/danismanlik-ucretleri-nasil-belirlenir): Stratejik danışmanlık ücretleri nasıl hesaplanır? Saat bazlı, proje bazlı ve retainer modellerinin avantaj-dezavantajları, Türkiye piyasa değerleri.
+- [Karbon Muhasebesi: Scope 1-2-3 İçin İlk Adımlar](https://ecypro.com/perspektifler/karbon-muhasebesi-scope-1-2-3-ilk-adimlar): Karbon emisyonu hesabını sıfırdan kurmak isteyen bir şirketin Scope 1, 2 ve 3 kategorilerinde atması gereken ilk adımlar. Pratik veri toplama önerileriyle.
+- [GPT-Tabanlı Müşteri Hizmetleri Otomasyonunun ROI Modeli](https://ecypro.com/perspektifler/gpt-tabanli-musteri-hizmetleri-roi): Büyük dil modeli destekli müşteri hizmetleri çözümlerinin maliyet, fayda ve risk bileşenlerini kapsayan kapsamlı ROI modeli. Gerçek pazar verisiyle.
+- [Üretim Hattında MLOps: İlk 90 Gün](https://ecypro.com/perspektifler/uretim-hattinda-mlops-ilk-90-gun): Bir AI/ML modelini araştırma defterinden gerçek üretim hattına taşımanın ilk üç ayında karşılaşılan organizasyonel ve teknik soruları derinlemesine ele alan re…
+- [Sınır Ötesi M&A'da Değerleme Tuzakları: Kültürel ve Finansal Kör Noktalar](https://ecypro.com/perspektifler/sinir-otesi-ma-degerleme-tuzaklari): Cross-border M&A işlemlerinde değerleme hataları, finansal modellerin ötesinde kültürel ve operasyonel kör noktalardan kaynaklanır. Bu yazı, Türk şirketlerinin…
+- [Kurumsal Kriz Yönetimi: İletişim Çerçevesi ve İlk 72 Saat Protokolü](https://ecypro.com/perspektifler/kriz-yonetimi-iletisim-cercevesi): Kriz anında itibar kaybının büyük bölümü ilk 72 saatte şekillenir. Bu yazı, kurumsal kriz iletişiminin stratejik çerçevesini ve uygulanabilir bir protokolü sun…
+- [İş Uyuşmazlıklarında Arabuluculuk: Stratejik Yaklaşım ve Uygulama Rehberi](https://ecypro.com/perspektifler/is-uyusmazliklari-arabuluculuk-stratejisi): İş hukukunda zorunlu arabuluculuk, şirketler için yalnızca yasal bir gereklilik değil, stratejik bir fırsattır. Bu yazı, arabuluculuk sürecini kurumsal avantaj…
+- [Vizyon-Strateji-Sonuç Trinity Modeli](https://ecypro.com/perspektifler/vizyon-strateji-sonuc-trinity): Vizyon olmadan strateji boşlukta yüzer; strateji olmadan vizyon süslü bir poster olur; sonuç olmadan ikisi de teorik kalır. Trinity modeli, bu üç katmanı birbi…
+- [AI Tabanlı KPI Tahminlemesi: 6 Adımda Hayata Geçirme](https://ecypro.com/perspektifler/ai-tabanli-kpi-tahminlemesi-6-adim): Veri yoğun KPI panolarını ileriye dönük tahminlemeyle güçlendirmek için pratik bir 6 adım rehberi. Veri hazırlığı, model seçimi ve operasyonel entegrasyon dahi…
+- [M&A Sonrası Entegrasyonun 90 Günlük Kuralı](https://ecypro.com/perspektifler/ma-90-gunluk-kural): M&A işlemlerinin değer kaybının büyük çoğunluğu kapanışın ilk 90 gününde yaşanır. Bu yazı, post-merger entegrasyonun ilk üç ayını mimari bir disipline çeviren…
+- [Aile Anayasası: 5 Maddelik Çekirdek Şablon](https://ecypro.com/perspektifler/aile-anayasasi-5-maddelik-cekirdek): Türkiye'deki aile şirketlerinin ilk aile anayasasını hazırlarken üzerinde mutlaka çalışması gereken beş çekirdek madde. Pratik örnekler ve mahremiyet sınırları…
+- [Türk KOBİ'lerinde Lean & Six Sigma Pratiği: Şablon Değil, Tercüme Meselesi](https://ecypro.com/perspektifler/turk-kobi-lean-six-sigma): Lean ve Six Sigma metodolojileri Toyota ve Motorola için kuruldu. Türk KOBİ'sinde aynen uygulamaya çalışmak başarısızlıkla biter. Asıl mesele şablonu değil, ye…
+- [Veri Yönetişimi ve KVKK/GDPR Uyumu: Kurumsal Veri Stratejisi Çerçevesi](https://ecypro.com/perspektifler/veri-yonetisimi-kvkk-gdpr-uyum): KVKK, 2024 yılı incelemeleri sonucunda 552 milyon 668 bin TL idari para cezası uygulamıştır; Avrupa'da GDPR cezaları bir yılda 1,2 milyar Euro'yu bulmuştur.
+- [Uluslararası Pazar Girişi: Turquality'den Küresel Markaya Stratejik Yol Haritası](https://ecypro.com/perspektifler/uluslararasi-pazar-giris-stratejisi-turquality): Türkiye'nin ihracat hacmi 2023'te 255 milyar dolara ulaştı; ancak Türk markalarının küresel marka değeri sıralamasındaki düşük konumu, bu başarının marka değer…
+- [Tedarik Zinciri Optimizasyonu: Lean ve Six Sigma ile Operasyonel Mükemmellik](https://ecypro.com/perspektifler/tedarik-zinciri-optimizasyonu-lean-six-sigma): COVID-19 pandemisi, küresel tedarik zincirlerinin yapısal kırılganlıklarını açığa çıkarmıştır. Japon otomotiv sanayii, ABD elektronik sektörü ve Avrupa imalat…
+- [Nöropazarlama: Bilinçdışı Tüketici Davranışlarını Anlamak ve Strateji Üretmek](https://ecypro.com/perspektifler/noropazarlama-tuketici-davranisi-stratejisi): Harvard Business School profesörü Gerald Zaltman'ın araştırmaları, satın alma kararlarının %95'inin bilinçdışı süreçlerle şekillendiğini ortaya koymaktadır (Za…
+- [Net Sıfır Taahhüdünden Eylem Planına: 5 Kritik Adım](https://ecypro.com/perspektifler/net-zero-eylem-plani): 2015 Paris Anlaşması'ndan bu yana 140'ı aşkın ülke ve binlerce kurum "net sıfır" karbon emisyon taahhüdü vermiştir; ancak bu taahhütlerin önemli bir bölümü ölç…
+- [Makroekonomik Risk Yönetimi: Kur, Enflasyon ve Faiz Baskısında Kurumsal Strateji](https://ecypro.com/perspektifler/makroekonomik-risk-yonetimi-2026): 2024–2026 döneminde küresel ekonomik ortam, kurumsal yöneticiler için olağandışı bir belirsizlik tablosu sergilemektedir: ABD'de enflasyonun yapısal direnci ve…
+- [M&A Due Diligence: Şirket Birleşme ve Satın Almalarında Değerleme Metodolojisi](https://ecypro.com/perspektifler/ma-degerleme-due-diligence-rehberi): McKinsey & Company'nin kapsamlı araştırması, M&A işlemlerinin %70'inin hedeflenen sinerji değerlerini yakalayamadığını ortaya koymaktadır (Christofferson et al…
+- [Lean AI & Operasyonel Mükemmellik: Klasik Yalın Üretim ile Yapay Zekanın Sinerjisi](https://ecypro.com/perspektifler/lean-ai-operational-excellence): Endüstri 4.0 dönüşümünün en güçlü paradoksu, en modern teknolojilerin en köklü metodoloji ile birleştiğinde maksimum değer üretmesidir; Toyota Üretim Sistemi b…
+- [ESG Stratejisi ve Kurumsal Sürdürülebilirlik: C-Suite Rehberi 2026](https://ecypro.com/perspektifler/esg-strateji-kurumsal-surdurulebilirlik): ESG (Environmental, Social, Governance — Çevresel, Sosyal, Yönetişim) kriterleri, son on yılda kurumsal yönetim gündeminin en üst sıralarına yerleşmiştir.
+- [Endüstriyel İlişkiler ve Toplu Sözleşme: Çalışma Barışının Stratejik Yönetimi](https://ecypro.com/perspektifler/endustriyel-iliskiler-toplu-sozlesme-stratejisi): Küresel işgücü piyasasında köklü dönüşümlerin yaşandığı günümüzde endüstriyel ilişkiler yönetimi hiçbir dönemde bu denli stratejik bir anlam taşımamıştır.
+- [CSRD Uyumunda 2026 Hareket Planı](https://ecypro.com/perspektifler/csrd-uyumunda-2026-hareket-plani): Avrupa CSRD (Corporate Sustainability Reporting Directive) regülasyonuna 2026'da uyum sağlaması beklenen Türk şirketleri için adım adım hareket planı.
+- [Belirsizlik Çağında Yönetim Kurulu Çevikliği: Senaryo Planlama ve Karar Hızını Yeniden Tasarlamak](https://ecypro.com/perspektifler/boardroom-agility-uncertainty): 2020-2026 döneminin kurumsal yönetim tarihine bakıldığında, yönetim kurulları hiçbir zaman bu denli karmaşık, hızlı değişen ve belirsiz bir ortamda karar almak…
+- [Akıllı Şehirler ve Dijital Kamu Yönetimi: Yerel Yönetimler için Dönüşüm Rehberi](https://ecypro.com/perspektifler/akilli-sehirler-kamu-politikasi-dijital-yonetim): Birleşmiş Milletler tahminlerine göre, 2030 yılına kadar dünya nüfusunun %60'ı kentlerde yaşayacak; bu demografik gerçeklik şehirleri iklim değişikliği ve alty…
+- [Aile Şirketlerinde Kurumsallaşma ve Yönetişim: Anayasa Modeli](https://ecypro.com/perspektifler/aile-sirketleri-kurumsallasma-yonetisim): Dünya ekonomilerinin omurgasını oluşturan aile şirketleri, küresel GSYH'nin %70'ini ve istihdamın %60'ından fazlasını temsil etmektedir (Family Business Networ…
+- [Stratejik Planlama Nasıl Yapılır? Kurumsal Liderler için Kapsamlı Rehber](https://ecypro.com/perspektifler/stratejik-planlama-rehberi): Yıllık stratejik planlama sürecinin adım adım metodolojisi: hedef belirleme, kaynak tahsisi, uygulama ve ölçüm.
+- [İş Süreçleri Nasıl Standardize Edilir? Adım Adım Metodoloji](https://ecypro.com/perspektifler/surecler-nasil-standardize-edilir): Süreç standardizasyonu nedir, neden gereklidir ve kurumunuzda nasıl uygulanır? Pratik araçlar ve şablonlarla tam rehber.
+- [Nesil Geçişinde 3 Yıllık Sermaye Devir Stratejisi](https://ecypro.com/perspektifler/nesil-gecisinde-3-yillik-sermaye-devir-stratejisi): Aile şirketinde 1. kuşaktan 2. kuşağa veya 2.'den 3.'ye geçişte sermaye yapısını üç yıla yayarak nasıl yapacağınızın pratik adımları. Vergi, kontrol ve duygusa…
+- [Aile Şirketlerinde Stratejik Geçiş: Kuşak Devri Bir Olay Değil, Bir Mimaridir](https://ecypro.com/perspektifler/aile-sirketleri-stratejik-gecis): Kuşak geçişini bir 'CEO atama günü' olarak kuran aile şirketleri kaybediyor. Geçişi mimariye dönüştürenler ise sadece şirketi değil, ailenin bağını da koruyor.…
+- [Kurumsal Kültür Dönüşümü: Adımlar, Engeller ve Başarı Kriterleri](https://ecypro.com/perspektifler/kurumsal-kultur-donusumu): Kültür değişimi neden bu kadar zordur? Kurumsal kültür dönüşümünü başarıyla yönetmek için kanıtlanmış çerçeve ve pratik adımlar.
+- [Veri Odaklı Karar Verme: Kurumsal Yöneticiler için Pratik Rehber](https://ecypro.com/perspektifler/veri-odakli-karar-verme): Sezgiden veriye geçiş: kurumsal karar süreçlerini data-driven yaklaşımla nasıl dönüştürürsünüz?
+- [KPI Belirleme ve Ölçme Yöntemleri: Kapsamlı Kurumsal Rehber](https://ecypro.com/perspektifler/kpi-belirleme-ve-olcme-yontemleri): KPI belirleme sürecinde sık yapılan hatalar ve veri odaklı performans göstergelerini doğru seçmek için adım adım metodoloji.
+- [Dijital Dönüşüm Stratejisi Nasıl Oluşturulur? 7 Adımlı Kurumsal Rehber](https://ecypro.com/perspektifler/dijital-donusum-stratejisi-nasil-olusturulur): Kurumsal dijital dönüşüm stratejisi oluştururken kaçınılması gereken 5 hata ve başarılı dönüşümün 7 kritik adımı.
+- [Stratejik Danışmanlık Firması Nasıl Seçilir? Kurumsal Alıcı Rehberi 2026](https://ecypro.com/perspektifler/stratejik-danismanlik-hizmetleri-secim-kilavuzu): Doğru stratejik danışmanlık firmasını seçmek için değerlendirmeniz gereken 9 kriter ve sormak zorunda olduğunuz 15 soru.
+- [Premium Consulting Neden Komoditeleşemez](https://ecypro.com/perspektifler/premium-consulting-komoditelesemez): Danışmanlık pazarı yıllardır 'demokratikleşiyor', 'self-service'leşiyor, 'AI ile düzleşiyor'. Yine de premium consulting komoditeleşmez. Sebebi metodoloji deği…
+- [Operasyonel Verimlilik Nasıl Artırılır? Kurumlar İçin Kanıtlanmış 6 Strateji](https://ecypro.com/perspektifler/operasyonel-verimlilik-nasil-arttirilir): Operasyonel verimlilik artışının matematiksel boyutu, kâr üzerindeki orantısız etkisi ve kurumsal uygulamada kanıtlanmış 6 metodoloji.
+- [İnsan Kaynakları Stratejisi: Yetenek Yönetimi ile Rekabet Avantajı Oluşturma](https://ecypro.com/perspektifler/insan-kaynaklari-stratejisi-talent-management): Modern yetenek yönetiminin 5 bileşeni, Türkiye'de işveren markası oluşturma stratejileri ve ölçülebilir HR sonuçları için veri odaklı yaklaşım.
+- [Yapay Zeka ile İş Süreçlerini Optimize Etme: Kurumsal Rehber 2026](https://ecypro.com/perspektifler/yapay-zeka-ile-is-sureclerini-optimize-etme): Üretici yapay zekanın iş süreçlerindeki gerçek ROI'si, uygulama tuzakları ve kurumsal AI dönüşümü için 5 aşamalı çerçeve.
+- [Dijital Dönüşümde Değişim Yönetimi: İnsan Faktörü](https://ecypro.com/perspektifler/organizasyonel-degisim-yonetimi): Teknoloji projelerinin %70'i insani direnç nedeniyle başarısız olur. Değişim yönetiminin temel prensipleri ve eCyPro'nun ADAPT çerçevesi.
+- [Yapay Zeka Yatırımının ROI'sini Hesaplamak: CFO Rehberi](https://ecypro.com/perspektifler/ai-yatirim-roi-hesaplama): AI projelerinin gerçek finansal etkisini ölçmek için kanıtlanmış bir çerçeve. Maliyet, fayda ve risk analizi ile net değer hesabı.
+- [Stratejik Dijital Dönüşüm Rehberi 2026](https://ecypro.com/perspektifler/stratejik-dijital-donusum-2026): Yapay zeka ve otomasyon çağında işletmenizi geleceğe hazırlamak için kapsamlı bir yol haritası.
+- [Kurumsal Yönetimde Yapay Zeka Devrimi](https://ecypro.com/perspektifler/yapay-zeka-yonetim-devrimi): Yönetim kurullarından operasyonel süreçlere kadar AI'nın kurumsal yapı üzerindeki dönüştürücü etkisi.
+- [Global Pazarlara Açılma Stratejileri](https://ecypro.com/perspektifler/global-pazarlara-acilma): Yerel başarıdan global bir markaya dönüşmek için izlenmesi gereken stratejik adımlar ve ipuçları.
+
+## Articles (Perspektifler — EN)
+- [The KVKK Compliance Process: A Step-by-Step Corporate Guide (2026)](https://ecypro.com/en/perspektifler/kvkk-compliance-process-step-by-step): How should an organization launch a KVKK compliance program? A seven-step corporate guide to mandatory documentation, KVKK penalties, and common pitfalls.
+- [GDPR vs. KVKK: A Comparative Analysis for Turkish Companies](https://ecypro.com/en/perspektifler/gdpr-vs-kvkk-key-differences): The key differences between GDPR and KVKK: penalty calculation, scope, data subject rights, and cross-border data transfer. A practical guide for Turkish compa…
+- [Carbon Accounting: First Steps for Scope 1–3](https://ecypro.com/en/perspektifler/carbon-accounting-scope-1-2-3-first-steps): The first steps a company should take across the Scope 1, 2, and 3 categories when building a carbon accounting function from scratch, with practical data-coll…
+- [Macroeconomic Risk Management: Corporate Strategy Under Currency, Inflation, and Interest-Rate Pressure](https://ecypro.com/en/perspektifler/macroeconomic-risk-management-2026): Between 2024 and 2026, the global economic environment presents corporate leaders with an unusual degree of uncertainty: structural inflation persistence in th…
+- [M&A Due Diligence: Valuation Methodology for Corporate Mergers and Acquisitions](https://ecypro.com/en/perspektifler/ma-valuation-due-diligence-guide): McKinsey research finds that nearly 70% of M&A transactions fail to achieve the revenue synergies projected by the acquirer's management (Christofferson et al.…
+- [ESG Strategy and Corporate Sustainability: A C-Suite Guide for 2026](https://ecypro.com/en/perspektifler/esg-strategy-corporate-sustainability): ESG (Environmental, Social, Governance) criteria have risen to the top of the corporate governance agenda over the past decade. This guide offers executives an…
+- [Data Governance and KVKK/GDPR Compliance: A Corporate Data Strategy Framework](https://ecypro.com/en/perspektifler/data-governance-kvkk-gdpr-compliance): In 2024, Türkiye's Personal Data Protection Authority (KVKK) imposed 552.67 million Turkish lira in administrative fines, while GDPR authorities in Europe issu…
+- [CSRD Compliance: A 2026 Action Plan](https://ecypro.com/en/perspektifler/csrd-compliance-2026-action-plan): A step-by-step action plan for Turkish companies expected to align with the EU Corporate Sustainability Reporting Directive (CSRD) by 2026.
+- [How to Build a Digital Transformation Strategy: A Seven-Step Corporate Guide](https://ecypro.com/en/perspektifler/how-to-build-a-digital-transformation-strategy): Five mistakes to avoid when building a corporate digital transformation strategy, and the seven critical steps of a successful transformation.
+- [Optimizing Business Processes with AI: An Enterprise Guide for 2026](https://ecypro.com/en/perspektifler/optimizing-business-processes-with-ai): The real ROI of generative AI in business processes, common implementation pitfalls, and a five-stage framework for enterprise AI transformation.
+- [Measuring AI Investment ROI: The CFO Framework](https://ecypro.com/en/perspektifler/measuring-ai-investment-roi): A proven framework to quantify the real financial impact of AI projects. Cost-benefit analysis, risk quantification, and net value calculation.
+
+## Optional
+- [Sitemap](https://ecypro.com/sitemap-index.xml): Tüm sayfaların makine-okunur URL indeksi.
+- [robots.txt](https://ecypro.com/robots.txt): Tarayıcı erişim politikası (AI ajanları dahil).

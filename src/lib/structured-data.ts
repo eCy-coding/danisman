@@ -91,22 +91,48 @@ export function buildOrganizationSchema(): Record<string, unknown> {
       { '@type': 'Language', name: 'English', alternateName: 'en-US' },
     ],
 
-    // Contact
+    // Contact — email + telefon CONTACT_CONFIG (src/data/copy/common.ts) ile
+    // birebir aynı, sitede ContactPage/KvkkLayered/DataRightsPage üzerinden
+    // zaten yayımlanmış gerçek değerler.
+    email: 'info@ecypro.com',
     contactPoint: [
       {
         '@type': 'ContactPoint',
         contactType: 'customer service',
+        email: 'info@ecypro.com',
+        telephone: '+905417143000',
         availableLanguage: ['Turkish', 'English'],
         contactOption: 'TollFree',
         url: `${SITE_URL}/contact`,
       },
+      {
+        '@type': 'ContactPoint',
+        contactType: 'data protection officer',
+        email: 'kvkk@ecypro.com',
+        availableLanguage: ['Turkish', 'English'],
+        url: `${SITE_URL}/privacy/data-rights`,
+      },
     ],
 
-    // Social entity disambiguation (sameAs)
-    sameAs: [
-      'https://www.linkedin.com/company/ecypro',
-      'https://twitter.com/ecypro',
-      'https://www.crunchbase.com/organization/ecypro',
+    // Social entity disambiguation (sameAs) — YALNIZ sitede fiilen
+    // yayımlanmış (tıklanabilir <a href>) profiller. Twitter/Crunchbase
+    // önceden burada listeliydi ama kodda hiçbir sayfada gerçek bir href
+    // olarak yayımlanmamış (Footer'daki ikonlar href'siz dekoratif
+    // butonlar) — GEO/schema doğrulanabilirlik ilkesi gereği kaldırıldı.
+    // Doğrulama: src/pages/ContactPage.tsx L226 (LinkedIn şirket sayfası).
+    sameAs: ['https://www.linkedin.com/company/ecypro'],
+
+    // GEO — hizmet taksonomisinden (src/data/service-taxonomy.ts
+    // SERVICE_DEPARTMENTS) türetilen gerçek uzmanlık alanları; sitedeki
+    // 35 hizmet sayfasının üst kategorileriyle birebir eşleşir.
+    knowsAbout: [
+      'Mergers & Acquisitions',
+      'ESG & Sustainability',
+      'Fintech Compliance',
+      'Family Business Governance',
+      'People & Organization',
+      'Risk & Public Affairs',
+      'Growth & Operations',
     ],
 
     priceRange: '₺₺₺',
