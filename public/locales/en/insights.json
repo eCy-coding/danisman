@@ -21,12 +21,12 @@
     "loadMore": "Load More"
   },
   "tag": {
-    "postsCount": "{{count}} articles",
+    "postsCount": "{count, plural, one {# article} other {# articles}}",
     "relatedTags": "Related Tags"
   },
   "series": {
     "parts": "parts",
-    "published": "{{count}} parts published",
+    "published": "{count, plural, one {# part published} other {# parts published}}",
     "totalParts": "{{total}} parts",
     "progressLabel": "Series Progress",
     "comingSoon": "Coming Soon",
@@ -78,7 +78,7 @@
   },
   "article": {
     "notFoundTitle": "Article Not Found",
-    "backToHub": "Back to Perspektifler",
+    "backToHub": "Back to Insights",
     "trOnlyNotice": "This article is available in Turkish only."
   }
 }
