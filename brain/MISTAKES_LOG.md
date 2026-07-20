@@ -55,3 +55,10 @@ Her kayıt: ne oldu · kök neden · KURAL (bir daha yapma).
 - Gerçek veri (kullanıcının canlı çektiği `ecypro.com/perspektifler` ham prerender HTML'i, 266KB): 12 ld+json bloğu — Organization+ProfessionalService ×2, FAQPage ×2, Person ×2, Organization ×2, WebSite ×2, Service ×1, BreadcrumbList ×1. Yani PROD'da duplikasyon VAR (hatta yerelden fazla).
 - Kök neden (revize): prerender, base index template'inin baked şemaları + route'un kendi enjekte ettiklerini birlikte basıyor → her route template'in setini + kendi setini miras alıyor = sistemik duplikasyon. Yerel SPA-fallback açıklaması yalnızca yerel 10'u açıklıyordu; prod'un 12'sini açıklamıyor.
 - KURAL: Dolaylı kanıttan ("dist/index.html şunu içeriyor") "prod temizdir" SONUCU ÇIKARMA. Prod iddiasını ancak prod'un gerçek (render/served) çıktısıyla doğrula. Çıkarımı "kesin" diye sunmak = yanlış yönlendirme. Bu duplikasyon GERÇEK bir prod SEO/GEO defekti — düzeltilmeli (M8 "non-issue" kararı geçersiz).
+
+## M10 — Prerender'lanmış HTML'i hydration'a çevirme denemesi: ölçüldü, REDDEDİLDİ (2026-07-20)
+- Hipotez: `main.tsx` `createRoot` kullandığı için React prerender'lanmış markup'ı atıp sıfırdan mount ediyor; `hydrateRoot`'a geçmek LCP'yi düşürür.
+- Ölçüm (3 koşu medyanı, LHCI mobil, aynı build metodolojisi): perf 0.47 → 0.47 · FCP 5260→5261ms · LCP 6764→6769ms · TBT 0→0. Fark, gürültü bandının bile altında.
+- Üstelik denenen sürüm **her route'ta** `Minified React error #418` (hydration mismatch) fırlattı; React markup'ı zaten atıp yeniden render ediyordu → hydration'ın tek faydası da gerçekleşmiyordu (DOM node kimliği korunmadı).
+- KURAL: prerender bu projede **SEO/crawler faydası** için vardır; kullanıcı-perf kaldıracı DEĞİLDİR. `hydrateRoot`'a geçmeyi yeniden önermeden önce, prerender anındaki DOM ile ilk client render'ının neden ayrıştığı (locale/consent/client-only dal) izole edilmiş olmalı; aksi halde bu deney tekrar edilmez.
+- Perf kaldıraçları başka yerde: DOM/JS ağırlığı (M-nav: header DOM -75% yapıldı), main-thread iş yükü, CI runner'da TBT 1907ms.
