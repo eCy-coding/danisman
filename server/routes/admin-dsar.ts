@@ -14,8 +14,16 @@ import { requirePermission } from '../middleware/requirePermission';
 import { prisma } from '../config/db';
 import { logger } from '../config/logger';
 import { hashIp } from '../lib/crypto/hashIp';
+import { adminMutationLimiter, ADMIN_MUTATION_LIMITS } from '../middleware/rate-limit-tier';
 
 const router = Router();
+
+// Security hardening — shared bucket across create/update/respond; see
+// rate-limit-tier.ts for rationale.
+const dsarActionLimiter = adminMutationLimiter(
+  'admin:dsar-action',
+  ADMIN_MUTATION_LIMITS.DSAR_ACTION,
+);
 
 /**
  * Mirror each DSAR mutation into the central AuditLog: the KVKK
@@ -86,6 +94,7 @@ router.post(
   '/',
   authenticate,
   requirePermission('dsar.manage'),
+  dsarActionLimiter,
   async (req: AuthRequest, res: Response) => {
     const parsed = createDSARSchema.safeParse(req.body);
     if (!parsed.success) {
@@ -176,6 +185,7 @@ router.patch(
   '/:id',
   authenticate,
   requirePermission('dsar.manage'),
+  dsarActionLimiter,
   async (req: AuthRequest, res: Response) => {
     const { id } = req.params;
     const parsed = updateDSARSchema.safeParse(req.body);
@@ -264,6 +274,7 @@ router.post(
   '/:id/respond',
   authenticate,
   requirePermission('dsar.manage'),
+  dsarActionLimiter,
   async (req: AuthRequest, res: Response) => {
     const { id } = req.params;
     const parsed = respondDSARSchema.safeParse(req.body);

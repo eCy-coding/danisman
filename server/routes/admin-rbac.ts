@@ -7,8 +7,16 @@ import { UserRole } from '@prisma/client';
 import { logger } from '../config/logger';
 import { AuthRequest } from '../middleware/auth';
 import { auditMiddleware } from '../middleware/audit';
+import { adminMutationLimiter, ADMIN_MUTATION_LIMITS } from '../middleware/rate-limit-tier';
 
 const router = Router();
+
+// Security hardening — tighter than the global admin tier; see
+// rate-limit-tier.ts for rationale.
+const rbacChangeLimiter = adminMutationLimiter(
+  'admin:rbac-change',
+  ADMIN_MUTATION_LIMITS.RBAC_CHANGE,
+);
 
 // All RBAC routes require auth + View-As role extraction
 router.use(authenticate, extractViewAsRole);
@@ -63,6 +71,7 @@ router.patch(
   '/matrix',
   auditMiddleware({ action: 'admin.rbac.matrix.update', resourceType: 'RolePermission' }),
   requirePermission('rbac.write'),
+  rbacChangeLimiter,
   async (req: AuthRequest, res: Response) => {
     const { role, permissionKey, granted, reason } = req.body as {
       role: UserRole;

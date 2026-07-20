@@ -23,6 +23,16 @@ export const apiClient = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
+  // Security hardening — admin CSRF double-submit cookie (server/middleware/
+  // csrf.ts). The cookie is not httpOnly, so it never carries the session
+  // itself, but the browser still needs `withCredentials` to (a) store the
+  // Set-Cookie from /auth/login|refresh at all when the API is on a
+  // different origin (api.ecypro.com vs ecypro.com/www.ecypro.com — see
+  // reference_ecypro_cloudflare topology) and (b) send it back so the
+  // server can compare it against X-CSRF-Token. Harmless for public,
+  // unauthenticated calls through this same client — no cookie exists yet,
+  // so nothing is sent.
+  withCredentials: true,
 });
 
 /**
@@ -76,6 +86,21 @@ export function scheduleHealthCheck(): void {
 // Read token from Zustand persisted storage (avoids circular import by reading
 // localStorage directly — same store key, same format)
 
+// Must match CSRF_COOKIE_NAME / CSRF_HEADER_NAME in server/middleware/csrf.ts.
+const CSRF_COOKIE_NAME = 'ecypro_csrf';
+const CSRF_HEADER_NAME = 'X-CSRF-Token';
+const MUTATION_METHODS = new Set(['post', 'put', 'patch', 'delete']);
+const CSRF_COOKIE_RE = new RegExp(`(?:^|;\\s*)${CSRF_COOKIE_NAME}=([^;]+)`);
+
+/** Mirrors server/middleware/csrf.ts's cookie name/shape. Read-only —
+ * the cookie is issued by the server (non-httpOnly) and merely echoed
+ * back here; this file never generates or stores the token itself. */
+function readCsrfCookie(): string | undefined {
+  if (typeof document === 'undefined') return undefined;
+  const match = document.cookie.match(CSRF_COOKIE_RE);
+  return match?.[1] ? decodeURIComponent(match[1]) : undefined;
+}
+
 apiClient.interceptors.request.use((config) => {
   try {
     const stored = localStorage.getItem('ecypro-app-storage');
@@ -88,6 +113,20 @@ apiClient.interceptors.request.use((config) => {
   } catch {
     // ignore parse errors
   }
+
+  // Security hardening — echo the CSRF double-submit cookie on every
+  // state-changing request. Server-side: server/middleware/csrf.ts, applied
+  // to all /admin/** mutation routes + the DSAR bulk-erase endpoint. GET/HEAD
+  // and unauthenticated public-form POSTs (which don't go through this
+  // client — see src/lib/api-client.ts) are unaffected.
+  const method = (config.method ?? 'get').toLowerCase();
+  if (MUTATION_METHODS.has(method)) {
+    const csrfToken = readCsrfCookie();
+    if (csrfToken) {
+      config.headers[CSRF_HEADER_NAME] = csrfToken;
+    }
+  }
+
   return config;
 });
 
@@ -135,9 +174,15 @@ apiClient.interceptors.response.use(
         return Promise.reject(error);
       }
 
-      const { data } = await axios.post<AuthResponse>(`${API_BASE_URL}/auth/refresh`, {
-        refreshToken,
-      });
+      // withCredentials — this bypasses `apiClient` (raw `axios.post`) so it
+      // needs the same cross-origin cookie opt-in for the reissued CSRF
+      // cookie (server/controllers/authController.ts `refresh`) to be
+      // stored by the browser.
+      const { data } = await axios.post<AuthResponse>(
+        `${API_BASE_URL}/auth/refresh`,
+        { refreshToken },
+        { withCredentials: true },
+      );
 
       const { user, token: newToken, refreshToken: newRefresh } = data.data;
       setAuth({

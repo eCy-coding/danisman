@@ -239,3 +239,69 @@ export const _tierTesting = {
   },
   budgets: DEFAULT_BUDGETS,
 };
+
+// ── Security hardening — per-route admin mutation limits ──────────────────────
+//
+// The global `admin` tier budget (1000/15min, above) exists to stop a
+// runaway script from drowning the whole API — it is far too loose to catch
+// abuse of a SPECIFIC sensitive action (e.g. an attacker with a stolen
+// session enumerating + revoking every API key, or mass-adding IPs to the
+// whitelist). Each constant below is sized so a human admin clicking through
+// the UI would never realistically hit it in a session, but a script
+// hammering that one endpoint gets stopped in seconds/minutes, not after
+// 1000 requests. windowMs/maxRequests are deliberately NOT env-overridable
+// like the global tiers — these are hard security ceilings, not traffic
+// knobs an operator should need to loosen.
+export const ADMIN_MUTATION_LIMITS = {
+  /** DELETE /admin/security/api-keys/:id — revoking every key in a loop
+   * would cut off every integration at once; 20/15min covers a legitimate
+   * key-rotation cleanup session with room to spare. */
+  API_KEY_REVOKE: { windowMs: 15 * 60_000, maxRequests: 20 },
+  /** POST/DELETE /admin/security/ip-whitelist(/:ip) — a compromised session
+   * flooding or wiping the whitelist can lock every admin out (self-DoS) or
+   * open the door wide; 20/15min is generous for manual edits. */
+  IP_WHITELIST_WRITE: { windowMs: 15 * 60_000, maxRequests: 20 },
+  /** PATCH /admin/rbac/matrix — a role redesign session toggles many cells
+   * in a row, so this budget is looser than the others; still far below
+   * what an automated privilege-escalation probe would need. */
+  RBAC_CHANGE: { windowMs: 15 * 60_000, maxRequests: 30 },
+  /** POST /admin/breach, POST /admin/breach/:id/report-to-kurul — rare,
+   * regulator-facing (KVKK m.12/5, 72h Kurul deadline) actions. A human
+   * files a handful of breach records per hour at most. */
+  BREACH_REPORT: { windowMs: 60 * 60_000, maxRequests: 10 },
+  /** POST/PATCH /admin/dsar(/:id)(/respond) — DSAR triage can be a busy
+   * queue-clearing session (KVKK m.11, 30-day SLA), so this stays roomier
+   * than breach reporting while still capping a mass-export/mass-close
+   * script. */
+  DSAR_ACTION: { windowMs: 15 * 60_000, maxRequests: 40 },
+  /** DELETE /dsar/comments (bulk erase-by-email) — destructive + unbounded
+   * in blast radius (deletes every comment for an email in one call); a
+   * human erasure request is a one-off, not a loop. */
+  BULK_DELETE: { windowMs: 60 * 60_000, maxRequests: 5 },
+} as const satisfies Record<string, TierBudget>;
+
+/**
+ * Build a fixed-budget limiter for one sensitive admin mutation, reusing the
+ * tiered rate-limit core (atomic Redis Lua INCR, in-memory fallback,
+ * `X-RateLimit-*` headers, `RATE_LIMIT_EXCEEDED` 429 contract) instead of a
+ * bespoke implementation. The same budget applies regardless of the caller's
+ * classified tier — these routes are already `requireRole('ADMIN')` /
+ * `requirePermission(...)`-gated, so tier will always resolve to `admin`,
+ * but pinning all four tiers to the same budget keeps the limiter correct
+ * even if auth ordering ever changes.
+ *
+ * @param bucket - stable identity for this specific action's counter, e.g.
+ *   `admin:api-key-revoke`. Pass explicitly (not derived from the route
+ *   path) so the limit survives route refactors.
+ */
+export function adminMutationLimiter(bucket: string, budget: TierBudget) {
+  return tierRateLimit({
+    bucket,
+    budgets: {
+      anonymous: budget,
+      auth: budget,
+      admin: budget,
+      'api-key': budget,
+    },
+  });
+}
