@@ -53,7 +53,7 @@ vi.mock('@/lib/api', () => ({
   },
 }));
 
-import { useAdminAuth } from '../../hooks/useAdminAuth';
+import { useAdminAuth, __resetMeSingleFlightForTests } from '../../hooks/useAdminAuth';
 
 const wrapper = ({ children }: { children: React.ReactNode }) => (
   <MemoryRouter>{children}</MemoryRouter>
@@ -62,6 +62,7 @@ const wrapper = ({ children }: { children: React.ReactNode }) => (
 describe('useAdminAuth — isAuthenticated', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    __resetMeSingleFlightForTests();
     mockStoreState = {
       user: null,
       token: null,
@@ -127,6 +128,7 @@ describe('useAdminAuth — isAuthenticated', () => {
 describe('useAdminAuth — isLoading', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    __resetMeSingleFlightForTests();
     mockStoreState = {
       user: null,
       token: null,
@@ -164,6 +166,7 @@ describe('useAdminAuth — isLoading', () => {
 describe('useAdminAuth — login', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    __resetMeSingleFlightForTests();
     mockStoreState = {
       user: null,
       token: null,
@@ -274,6 +277,7 @@ describe('useAdminAuth — login', () => {
 describe('useAdminAuth — logout', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    __resetMeSingleFlightForTests();
     mockStoreState = {
       user: null,
       token: null,
@@ -309,5 +313,94 @@ describe('useAdminAuth — logout', () => {
 
     expect(mockStoreLogout).toHaveBeenCalledTimes(1);
     expect(mockNavigate).toHaveBeenCalledWith('/admin/login');
+  });
+});
+
+// M2 smoke fix — ProtectedRoute + AdminGuard + AdminSidebar each call
+// useAdminAuth, which used to fire one GET /auth/me per consumer (5-6 per
+// admin page load). Concurrent consumers must share one in-flight request.
+describe('useAdminAuth — getMe single-flight', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    __resetMeSingleFlightForTests();
+    mockStoreState = {
+      user: {
+        id: '1',
+        email: 'a@b.com',
+        name: 'A',
+        role: 'ADMIN',
+        totpEnabled: false,
+      },
+      token: 'shared-token',
+      totpRequired: false,
+      totpVerified: false,
+      setAuth: mockSetAuth,
+      logout: mockStoreLogout,
+    };
+  });
+
+  it('two concurrent consumers share a single getMe request', async () => {
+    mockAuthApiGetMe.mockResolvedValue({
+      data: {
+        data: {
+          user: { id: '1', email: 'a@b.com', name: 'A', role: 'ADMIN', totpEnabled: false },
+        },
+      },
+    });
+
+    const first = renderHook(() => useAdminAuth(), { wrapper });
+    const second = renderHook(() => useAdminAuth(), { wrapper });
+
+    await waitFor(() => expect(first.result.current.isLoading).toBe(false));
+    await waitFor(() => expect(second.result.current.isLoading).toBe(false));
+
+    expect(mockAuthApiGetMe).toHaveBeenCalledTimes(1);
+    expect(first.result.current.isAuthenticated).toBe(true);
+    expect(second.result.current.isAuthenticated).toBe(true);
+  });
+
+  it('failure clears the cache so a later mount retries', async () => {
+    mockAuthApiGetMe.mockRejectedValue(new Error('401'));
+
+    const first = renderHook(() => useAdminAuth(), { wrapper });
+    await waitFor(() => expect(first.result.current.isLoading).toBe(false));
+    expect(mockStoreLogout).toHaveBeenCalledTimes(1);
+    first.unmount();
+
+    mockAuthApiGetMe.mockResolvedValue({
+      data: {
+        data: {
+          user: { id: '1', email: 'a@b.com', name: 'A', role: 'ADMIN', totpEnabled: false },
+        },
+      },
+    });
+
+    const second = renderHook(() => useAdminAuth(), { wrapper });
+    await waitFor(() => expect(second.result.current.isLoading).toBe(false));
+
+    expect(mockAuthApiGetMe).toHaveBeenCalledTimes(2);
+    expect(second.result.current.isAuthenticated).toBe(true);
+  });
+
+  it('successful result is reused by consumers mounting later in the session', async () => {
+    mockAuthApiGetMe.mockResolvedValue({
+      data: {
+        data: {
+          user: { id: '1', email: 'a@b.com', name: 'A', role: 'ADMIN', totpEnabled: false },
+        },
+      },
+    });
+
+    const first = renderHook(() => useAdminAuth(), { wrapper });
+    await waitFor(() => expect(first.result.current.isLoading).toBe(false));
+    first.unmount();
+
+    // Simulates navigating to another admin page: new mounts reuse the
+    // resolved flight instead of re-fetching.
+    const second = renderHook(() => useAdminAuth(), { wrapper });
+    await waitFor(() => expect(second.result.current.isLoading).toBe(false));
+
+    expect(mockAuthApiGetMe).toHaveBeenCalledTimes(1);
+    expect(second.result.current.isAuthenticated).toBe(true);
   });
 });

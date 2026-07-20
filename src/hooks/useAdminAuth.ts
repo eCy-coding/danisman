@@ -7,6 +7,27 @@ interface LoginResult {
   requiresTotp: boolean;
 }
 
+// Single-flight cache for GET /auth/me. ProtectedRoute, AdminGuard (route +
+// page level) and AdminSidebar all call useAdminAuth, which used to fire one
+// getMe per consumer (5-6 requests per admin page load). All concurrent
+// consumers now share one in-flight promise per token; a failure clears the
+// cache so a later mount can retry, and a token change starts a fresh flight.
+let meFlight: { token: string; promise: ReturnType<typeof authApi.getMe> } | null = null;
+
+const getMeSingleFlight = (token: string): ReturnType<typeof authApi.getMe> => {
+  if (meFlight?.token === token) return meFlight.promise;
+  const promise = authApi.getMe().catch((err) => {
+    if (meFlight?.token === token) meFlight = null;
+    throw err;
+  });
+  meFlight = { token, promise };
+  return promise;
+};
+
+export const __resetMeSingleFlightForTests = (): void => {
+  meFlight = null;
+};
+
 export const useAdminAuth = () => {
   const {
     user,
@@ -26,8 +47,7 @@ export const useAdminAuth = () => {
       setIsLoading(false);
       return;
     }
-    authApi
-      .getMe()
+    getMeSingleFlight(token)
       .then((res) => {
         const { user: apiUser, token: freshToken } = res.data.data;
         setAuth({
